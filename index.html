@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CARTOGRAFFECT</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +12,45 @@
     <style>
         body {
             font-family: 'DM Sans', sans-serif;
+        }
+        .chart-container {
+            background-color: #1e293b; /* bg-slate-800 */
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            position: relative;
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            background: #f1f5f9; /* slate-100 */
+            color: #1e293b; /* slate-800 */
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        #animateBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: #6366f1; /* indigo-500 */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #animateBtn:hover {
+            background-color: #4f46e5; /* indigo-600 */
         }
     </style>
 </head>
@@ -32,6 +72,15 @@
                 <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed text-slate-400">
                     Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
                 </p>
+            </section>
+
+            <section class="mb-24 text-center">
+                <div class="controls">
+                    <button id="animateBtn">Animer</button>
+                </div>
+                <div class="chart-container max-w-3xl mx-auto">
+                    <svg id="genericChart"></svg>
+                </div>
             </section>
 
             <section class="grid md:grid-cols-3 gap-10">
@@ -69,5 +118,88 @@
         </footer>
 
     </div>
+
+    <script>
+        // --- VOS DONNÉES ---
+        const pointsData = [
+            { name: "", x: 0, y: 0, category: 1, group: "Orientation" },
+            { name: "", x: 0, y: 0.5, category: 1, group: "Orientation" }, { name: "", x: 0, y: -0.5, category: 1, group: "Orientation" }, { name: "", x: 0, y: 2, category: 2, group: "Joie" }, { name: "", x: 0, y: -2, category: 2, group: "Tristesse" }, { name: "", x: -2, y: 0, category: 2, group: "Peur" }, { name: "", x: 2, y: 0, category: 2, group: "Courage" }, { name: "", x: -1, y: 1, category: 2, group: "Colère" }, { name: "", x: 1, y: -1, category: 2, group: "Calme" }, { name: "", x: 1, y: 1, category: 2, group: "Désir" }, { name: "", x: -1, y: -1, category: 2, group: "Dégoût" }, { name: "", x: 0, y: 4, category: 3, group: "Joie" }, { name: "", x: -1, y: 3, category: 3, group: "Joie" }, { name: "", x: 1, y: 3, category: 3, group: "Joie" }, { name: "", x: 0, y: -4, category: 3, group: "Tristesse" }, { name: "", x: 1, y: -3, category: 3, group: "Tristesse" }, { name: "", x: -1, y: -3, category: 3, group: "Tristesse" }, { name: "", x: -4, y: 0, category: 3, group: "Peur" }, { name: "", x: -3, y: 1, category: 3, group: "Peur" }, { name: "", x: -3, y: -1, category: 3, group: "Peur" }, { name: "", x: 4, y: 0, category: 3, group: "Courage" }, { name: "", x: 3, y: 1, category: 3, group: "Courage" }, { name: "", x: 3, y: -1, category: 3, group: "Courage" }, { name: "", x: -2, y: 2, category: 3, group: "Colère" }, { name: "", x: 2, y: -2, category: 3, group: "Calme" }, { name: "", x: 2, y: 2, category: 3, group: "Désir" }, { name: "", x: -2, y: -2, category: 3, group: "Dégoût" }, { name: "", x: 0, y: 6, category: 4, group: "Joie" }, { name: "", x: -2, y: 4, category: 4, group: "Joie" }, { name: "", x: -1, y: 5, category: 4, group: "Joie" }, { name: "", x: 1, y: 5, category: 4, group: "Joie" }, { name: "", x: 2, y: 4, category: 4, group: "Joie" }, { name: "", x: 0, y: -6, category: 4, group: "Tristesse" }, { name: "", x: 2, y: -4, category: 4, group: "Tristesse" }, { name: "", x: 1, y: -5, category: 4, group: "Tristesse" }, { name: "", x: -2, y: -4, category: 4, group: "Tristesse" }, { name: "", x: -1, y: -5, category: 4, group: "Tristesse" }, { name: "", x: -4, y: 2, category: 4, group: "Peur" }, { name: "", x: -5, y: 1, category: 4, group: "Peur" }, { name: "", x: -5, y: -1, category: 4, group: "Peur" }, { name: "", x: -4, y: -2, category: 4, group: "Peur" }, { name: "", x: -6, y: 0, category: 4, group: "Peur" }, { name: "", x: 6, y: 0, category: 4, group: "Courage" }, { name: "", x: 4, y: 2, category: 4, group: "Courage" }, { name: "", x: 5, y: 1, category: 4, group: "Courage" }, { name: "", x: 5, y: -1, category: 4, group: "Courage" }, { name: "", x: 4, y: -2, category: 4, group: "Courage" }, { name: "", x: -3, y: 3, category: 4, group: "Colère" }, { name: "", x: 3, y: -3, category: 4, group: "Calme" }, { name: "", x: 3, y: 3, category: 4, group: "Désir" }, { name: "", x: -3, y: -3, category: 4, group: "Dégoût" }, { name: "", x: 0, y: 8, category: 5, group: "Joie" }, { name: "", x: 1, y: 7, category: 5, group: "Joie" }, { name: "", x: 2, y: 6, category: 5, group: "Joie" }, { name: "", x: 3, y: 5, category: 5, group: "Joie" }, { name: "", x: -2, y: 6, category: 5, group: "Joie" }, { name: "", x: -3, y: 5, category: 5, group: "Joie" }, { name: "", x: -1, y: 7, category: 5, group: "Joie" }, { name: "", x: 0, y: -8, category: 5, group: "Tristesse" }, { name: "", x: 2, y: -6, category: 5, group: "Tristesse" }, { name: "", x: 3, y: -5, category: 5, group: "Tristesse" }, { name: "", x: 1, y: -7, category: 5, group: "Tristesse" }, { name: "", x: -2, y: -6, category: 5, group: "Tristesse" }, { name: "", x: -3, y: -5, category: 5, group: "Tristesse" }, { name: "", x: -1, y: -7, category: 5, group: "Tristesse" }, { name: "", x: -8, y: 0, category: 5, group: "Peur" }, { name: "", x: -6, y: 2, category: 5, group: "Peur" }, { name: "", x: -5, y: 3, category: 5, group: "Peur" }, { name: "", x: -7, y: 1, category: 5, group: "Peur" }, { name: "", x: -7, y: -1, category: 5, group: "Peur" }, { name: "", x: -6, y: -2, category: 5, group: "Peur" }, { name: "", x: -5, y: -3, category: 5, group: "Peur" }, { name: "", x: 8, y: 0, category: 5, group: "Courage" }, { name: "", x: 6, y: 2, category: 5, group: "Courage" }, { name: "", x: 5, y: 3, category: 5, group: "Courage" }, { name: "", x: 7, y: 1, category: 5, group: "Courage" }, { name: "", x: 6, y: -2, category: 5, group: "Courage" }, { name: "", x: 5, y: -3, category: 5, group: "Courage" }, { name: "", x: 7, y: -1, category: 5, group: "Courage" }, { name: "", x: -4, y: 4, category: 5, group: "Colère" }, { name: "", x: 4, y: -4, category: 5, group: "Calme" }, { name: "", x: 4, y: 4, category: 5, group: "Désir" }, { name: "", x: -4, y: -4, category: 5, group: "Dégoût" }
+        ];
+        // ---------------------------------
+
+        const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        const width = 700 - margin.left - margin.right;
+        const height = 700 - margin.top - margin.bottom;
+
+        const svg = d3.select("#genericChart")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const domainLimit = 8.5;
+        const xScale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([0, width]);
+        const yScale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([height, 0]);
+
+        const colorGroups = {
+            "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
+            "Colère": "#fca5a5", "Calme": "#67e8f9", "Désir": "#f9a8d4", "Dégoût": "#9ca3af",
+            "Orientation": "#a5b4fc"
+        };
+        const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
+
+        const radiusScale = d3.scaleOrdinal()
+            .domain([1, 2, 3, 4, 5])
+            .range([5, 6, 7, 8, 9]); // Augmentation de la taille pour meilleure visibilité
+
+        const tooltip = d3.select("body").append("div").attr("class", "tooltip");
+
+        // Dessiner les points
+        svg.selectAll(".data-point")
+            .data(pointsData)
+            .enter().append("circle")
+            .attr("class", "data-point cursor-pointer")
+            .attr("cx", d => xScale(d.x))
+            .attr("cy", d => yScale(d.y))
+            .attr("r", d => radiusScale(d.category))
+            .attr("fill", d => colorScale(d.group))
+            .attr("stroke", "#f1f5f9") // Updated for dark theme
+            .attr("stroke-width", 1)
+            .style("opacity", 0.85)
+            .on("mouseover", (event, d) => {
+                d3.select(event.currentTarget).transition().duration(150).attr("r", radiusScale(d.category) + 4).style("opacity", 1);
+                tooltip.transition().duration(200).style("opacity", 1);
+                tooltip.html(`X: ${d.x}, Y: ${d.y}`)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 15) + "px");
+            })
+            .on("mouseout", (event, d) => {
+                d3.select(event.currentTarget).transition().duration(150).attr("r", radiusScale(d.category));
+                tooltip.transition().duration(300).style("opacity", 0);
+            });
+
+        // Fonction d'animation (version corrigée et simplifiée)
+        function animatePoints() {
+            svg.selectAll(".data-point")
+                // Transition vers le centre
+                .transition()
+                .duration(1000)
+                .delay((d, i) => i * 5) // Délai déterministe pour éviter les conflits
+                .ease(d3.easeCubicInOut)
+                .attr("cx", xScale(0))
+                .attr("cy", yScale(0))
+                // Transition de retour, chaînée pour s'exécuter après la première
+                .transition()
+                .duration(1200)
+                .ease(d3.easeElastic.period(0.6))
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y));
+        }
+
+        // Lier l'animation au clic du bouton
+        d3.select("#animateBtn").on("click", animatePoints);
+
+    </script>
+
 </body>
 </html>
