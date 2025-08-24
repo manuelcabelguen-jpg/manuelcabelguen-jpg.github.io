@@ -14,10 +14,9 @@
             font-family: 'DM Sans', sans-serif;
         }
         .chart-container {
-            background-color: #1e293b; /* bg-slate-800 */
+            background-color: transparent; /* Make chart container transparent */
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
             position: relative;
         }
         .tooltip {
@@ -34,35 +33,19 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 10;
         }
-        .controls {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        #animateBtn {
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            background-color: #6366f1; /* indigo-500 */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        #animateBtn:hover {
-            background-color: #4f46e5; /* indigo-600 */
-        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-300">
 
-    <div class="container mx-auto px-4 py-12">
+    <div class="container mx-auto px-4">
 
-        <header class="h-screen flex flex-col items-center justify-center text-center p-4 -mt-12">
-            <h1 class="text-6xl md:text-8xl lg:text-9xl font-bold text-indigo-400 tracking-tighter">
-                CARTOGRAFFECT
-            </h1>
-            <p class="text-xl md:text-2xl mt-4 text-slate-400">
+        <header class="h-screen flex flex-col items-center justify-center text-center">
+            <!-- Animation is now the hero content -->
+            <div class="chart-container w-full max-w-5xl mx-auto" style="height: 300px;">
+                <canvas id="textCanvas" style="display: none;"></canvas>
+                <svg id="genericChart" class="w-full h-full"></svg>
+            </div>
+             <p class="text-xl md:text-2xl mt-8 text-slate-400">
                 Explorez la carte de vos émotions
             </p>
         </header>
@@ -72,13 +55,6 @@
                 <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed text-slate-400">
                     Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
                 </p>
-            </section>
-
-            <section class="mb-24 text-center">
-                <canvas id="textCanvas" style="display: none;"></canvas>
-                <div class="chart-container max-w-4xl mx-auto" style="height: 250px;">
-                    <svg id="genericChart" class="w-full h-full"></svg>
-                </div>
             </section>
 
             <section class="grid md:grid-cols-3 gap-10">
@@ -128,13 +104,14 @@
             canvas.height = svgHeight;
 
             context.fillStyle = "white";
-            context.font = "bold 120px 'DM Sans', sans-serif";
+            context.font = "bold 90px 'DM Sans', sans-serif";
             context.textAlign = "center";
             context.textBaseline = "middle";
             context.fillText("CARTOGRAFFECT", svgWidth / 2, svgHeight / 2);
 
             const imageData = context.getImageData(0, 0, svgWidth, svgHeight);
             const pixelData = imageData.data;
+            
             const coordinates = [];
             const sampling = 4; // Sample every 4th pixel to reduce density
 
@@ -154,6 +131,9 @@
         document.addEventListener("DOMContentLoaded", () => {
             const textCoords = getTextCoordinates();
             let pointsData = [];
+            
+            const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+            
             // Use the container's full size
             const container = d3.select(".chart-container");
             const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
@@ -171,6 +151,7 @@
             };
             const colorKeys = Object.keys(colorGroups);
             const colorScale = d3.scaleOrdinal().domain(colorKeys).range(Object.values(colorGroups));
+            
             // Shuffle the target coordinates for a more dynamic animation
             const shuffledTextCoords = d3.shuffle(textCoords.slice());
 
