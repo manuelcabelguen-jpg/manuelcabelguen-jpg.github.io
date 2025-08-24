@@ -135,7 +135,6 @@
 
             const imageData = context.getImageData(0, 0, svgWidth, svgHeight);
             const pixelData = imageData.data;
-            
             const coordinates = [];
             const sampling = 4; // Sample every 4th pixel to reduce density
 
@@ -155,9 +154,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             const textCoords = getTextCoordinates();
             let pointsData = [];
-            
-            const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-            
             // Use the container's full size
             const container = d3.select(".chart-container");
             const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
@@ -175,7 +171,6 @@
             };
             const colorKeys = Object.keys(colorGroups);
             const colorScale = d3.scaleOrdinal().domain(colorKeys).range(Object.values(colorGroups));
-            
             // Shuffle the target coordinates for a more dynamic animation
             const shuffledTextCoords = d3.shuffle(textCoords.slice());
 
