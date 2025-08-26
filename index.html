@@ -41,13 +41,10 @@
 
         <header class="h-screen flex flex-col items-center justify-center text-center">
             <!-- Animation is now the hero content -->
-            <div class="chart-container w-full max-w-5xl mx-auto" style="height: 300px;">
+            <div class="chart-container w-full max-w-5xl mx-auto" style="height: 400px;">
                 <canvas id="textCanvas" style="display: none;"></canvas>
                 <svg id="genericChart" class="w-full h-full"></svg>
             </div>
-             <p class="text-xl md:text-2xl mt-8 text-slate-400">
-                Explorez la carte de vos émotions
-            </p>
         </header>
 
         <main class="py-16">
@@ -98,13 +95,15 @@
             const canvas = document.getElementById('textCanvas');
             const context = canvas.getContext('2d', { willReadFrequently: true });
 
-            const svgWidth = 700;
-            const svgHeight = 250;
+            // Increased canvas size for a larger title
+            const svgWidth = 1200; 
+            const svgHeight = 400;
             canvas.width = svgWidth;
             canvas.height = svgHeight;
 
             context.fillStyle = "white";
-            context.font = "bold 90px 'DM Sans', sans-serif";
+            // Increased font size for more impact
+            context.font = "bold 140px 'DM Sans', sans-serif"; 
             context.textAlign = "center";
             context.textBaseline = "middle";
             context.fillText("CARTOGRAFFECT", svgWidth / 2, svgHeight / 2);
@@ -113,12 +112,12 @@
             const pixelData = imageData.data;
             
             const coordinates = [];
-            const sampling = 4; // Sample every 4th pixel to reduce density
+            // Decreased sampling rate for a denser, clearer word
+            const sampling = 3; 
 
             for (let y = 0; y < svgHeight; y += sampling) {
                 for (let x = 0; x < svgWidth; x += sampling) {
                     const index = (y * svgWidth + x) * 4;
-                    // Check the alpha channel
                     if (pixelData[index + 3] > 128) {
                         coordinates.push({ x: x, y: y });
                     }
@@ -127,20 +126,18 @@
             return coordinates;
         }
 
-        // --- Main D3 Logic ---
         document.addEventListener("DOMContentLoaded", () => {
             const textCoords = getTextCoordinates();
             let pointsData = [];
             
             const margin = { top: 0, right: 0, bottom: 0, left: 0 };
             
-            // Use the container's full size
             const container = d3.select(".chart-container");
             const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
             const height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
 
             const svg = d3.select("#genericChart")
-                .attr("viewBox", `0 0 ${width} ${height}`) // Use viewBox for responsiveness
+                .attr("viewBox", `0 0 1200 400`) // Match canvas dimensions
                 .append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -152,48 +149,39 @@
             const colorKeys = Object.keys(colorGroups);
             const colorScale = d3.scaleOrdinal().domain(colorKeys).range(Object.values(colorGroups));
             
-            // Shuffle the target coordinates for a more dynamic animation
             const shuffledTextCoords = d3.shuffle(textCoords.slice());
 
-            // Prepare data points
             for(let i = 0; i < shuffledTextCoords.length; i++) {
                 pointsData.push({
-                    // Start at a random position
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    // Assign target coordinates from the shuffled text data
                     targetX: shuffledTextCoords[i].x,
                     targetY: shuffledTextCoords[i].y,
-                    // Assign a color group cyclically
                     group: colorKeys[i % colorKeys.length]
                 });
             }
 
-            // Draw the points
             const points = svg.selectAll(".data-point")
                 .data(pointsData)
                 .enter().append("circle")
                 .attr("class", "data-point")
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y)
-                .attr("r", 2) // Smaller radius for a more detailed text effect
+                .attr("r", 2.5) // Slightly larger points
                 .attr("fill", d => colorScale(d.group))
-                .style("opacity", 0.7);
+                .style("opacity", 0.8);
 
-            // Animation function
             function animateToText() {
                 points.transition()
-                    .duration(2500) // Slower transition to be more graceful
-                    .delay((d, i) => i * 1.5) // Stagger the start of each point's animation
+                    .duration(2500)
+                    .delay((d, i) => i * 1.5)
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.targetX)
                     .attr("cy", d => d.targetY);
             }
 
-            // Start the animation after a short delay on page load
             setTimeout(animateToText, 500);
         });
-
     </script>
 
 </body>
