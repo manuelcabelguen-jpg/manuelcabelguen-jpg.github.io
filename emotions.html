@@ -3,80 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Territoire des ÉMOTIONS - Cartograffect</title>
+    <title>CARTOGRAFFECT</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
         }
-        /* Styles for the active tab */
-        .tab-btn.active {
-            border-color: #4f46e5; /* indigo-600 */
-            color: #3730a3; /* indigo-800 */
-        }
-
-        /* Styles from the original chart file */
         .chart-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            background-color: transparent;
             position: relative;
-            margin-top: 10px;
-            max-width: 840px; /* To contain the 800px chart + padding */
-            margin-left: auto;
-            margin-right: auto;
+            width: 100%;
+            height: 100%;
         }
-        .chart-container svg {
-            cursor: default;
-        }
-        .controls {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-size: 14px;
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .controls div {
-            margin-bottom: 5px;
-        }
-        .controls label {
-            cursor: pointer;
-            color: #2c3e50;
-            margin-left: 5px;
-        }
-        .controls input[type="checkbox"] {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        #resetPathBtn {
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid #d1d5db;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        #resetPathBtn:hover {
-            background-color: #f3f4f6;
-        }
-        #category-filters { text-align: left; }
         .tooltip {
             position: absolute;
             text-align: center;
-            padding: 10px;
-            font-size: 13px;
-            background: rgba(40, 50, 60, 0.9);
-            color: white;
-            border: 0px;
+            padding: 8px;
+            font-size: 12px;
+            background: #f1f5f9; /* slate-100 */
+            color: #1e293b; /* slate-800 */
             border-radius: 6px;
             pointer-events: none;
             opacity: 0;
@@ -84,829 +33,150 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 10;
         }
-        .axis-label {
-            font-size: 15px;
-            fill: #2c3e50;
-            font-weight: 600;
-        }
-        .tick text {
-            font-size: 10px;
-            fill: #555;
-        }
-        .quadrant-label {
-            font-size: 10px;
-            fill: #7f8c8d;
-            text-anchor: middle;
-            font-style: italic;
-        }
-        .emotion-label-text {
-            font-size: 8px;
-            fill: #1a202c;
-            pointer-events: none;
-            font-weight: bold;
-        }
-        .label-background {
-            fill: white;
-            stroke: #e2e8f0;
-            stroke-width: 1px;
-            opacity: 0.85;
-            rx: 3;
-            ry: 3;
-        }
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-right: 12px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .legend-item:hover {
-            background-color: #f0f4f8;
-        }
-        .legend-color {
-            width: 14px;
-            height: 14px;
-            margin-right: 6px;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-        }
-        .controlateral-line {
-            stroke: #a0aec0;
-            stroke-width: 1px;
-            stroke-dasharray: "3,3";
-        }
-        .symetrical-line {
-             stroke: #718096;
-             stroke-width: 1.2px;
-        }
-        .path-line {
-            stroke: #2c3e50;
-            stroke-width: 2px;
-            fill: none;
-        }
-        .path-point-highlight {
-            stroke: #e53e3e !important;
-            stroke-width: 3px !important;
-        }
-        .intensity-circle {
-            stroke: #4a5568;
-            stroke-width: 1.5px;
-            stroke-dasharray: "4,4";
-            fill: none;
-        }
-        .dynamic-circle {
-            fill: none;
-            stroke: #4a5568;
-            stroke-width: 1.5px;
-            stroke-dasharray: "6,6";
-        }
-        .dynamic-arrow-path {
-            fill: none;
-            stroke: none;
-            marker-end: url(#dynamicArrowhead);
-        }
-        .grid .tick line {
-            stroke: #e0e0e0;
-            stroke-dasharray: 2,2;
-        }
-        .grid path.domain { stroke: none; }
-        .axis-center-line {
-            stroke: #7f8c8d;
-            stroke-width: 1.5px;
-        }
-        .ia-response-container {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .ia-response-container h2 {
-            color: #1e3a8a;
-            margin-bottom: 10px;
-        }
-        .ia-response-content {
-            min-height: 50px;
-            padding:10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            background-color: #f9fafb;
-            color: #374151;
-            white-space: pre-wrap;
-        }
-        .identity-card-section h4 { font-weight: 600; color: #4338ca; margin-bottom: 0.25rem; }
-        .identity-card-section p { font-size: 0.9rem; color: #374151; }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .controls label, .legend-item span, #iaResponseContent {
-            font-weight: bold;
-        }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-slate-900 text-slate-300">
 
-    <div class="container mx-auto px-4 py-12">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-blue-600">Territoire 1 : ÉMOTIONS</h1>
-            <p class="text-xl mt-2 text-gray-600">Les Fondations de la Carte</p>
+    <div class="container mx-auto px-4">
+
+        <header class="h-screen flex flex-col items-center justify-center text-center">
+            <!-- Animation is now the hero content -->
+            <div class="chart-container">
+                <canvas id="textCanvas" style="display: none;"></canvas>
+                <svg id="genericChart" class="w-full h-full"></svg>
+            </div>
         </header>
 
-        <!-- Tab Navigation -->
-        <div class="border-b border-gray-300">
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <button class="tab-btn active border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="cartograffect">
-                    Cartograffect (Graphique)
-                </button>
-                <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="noyau">
-                    Noyau Affectif
-                </button>
-                <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="matrice">
-                    Matrice Affective
-                </button>
-            </nav>
-        </div>
+        <main class="py-16">
+            <section class="text-center mb-24">
+                <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed text-slate-400">
+                    Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
+                </p>
+            </section>
 
-        <!-- Tab Content -->
-        <main class="mt-8">
-            <div id="cartograffect" class="tab-content">
-
-                <!-- Chart HTML starts here -->
-                <div class="controls bg-white p-4 rounded-lg shadow mb-4">
-                    <div class="text-center">
-                        <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showNamesToggle" class="mr-2 align-middle" checked>
-                            <label for="showNamesToggle" class="text-sm text-gray-700">Afficher les noms</label>
-                        </div>
-                         <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showIntensityCircleToggle" class="mr-2 align-middle">
-                            <label for="showIntensityCircleToggle" class="text-sm text-gray-700">Afficher le cercle d'intensité</label>
-                        </div>
+            <section class="grid md:grid-cols-3 gap-10">
+                <!-- Territoire 1: ÉMOTIONS -->
+                <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-blue-500/50 hover:-translate-y-2">
+                    <div class="flex-grow">
+                        <h2 class="text-2xl font-bold text-blue-400 mb-4">Territoire 1 : ÉMOTIONS</h2>
+                        <p class="mb-8 text-slate-400"><strong>Les Fondations de la Carte.</strong><br>Cette section explique les éléments de base de votre carte : ce que sont les émotions, leur utilité, etc.</p>
                     </div>
-                     <div class="mt-3 pt-3 border-t border-gray-200 text-center">
-                        <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showControlateralToggle" class="mr-2 align-middle">
-                            <label for="showControlateralToggle" class="text-sm text-gray-700">Correspondances controlatérales</label>
-                        </div>
-                        <div class="inline-block text-left">
-                            <input type="checkbox" id="showSymetricalToggle" class="mr-2 align-middle">
-                            <label for="showSymetricalToggle" class="text-sm text-gray-700">Correspondances symétriques</label>
-                        </div>
+                    <a href="emotions.html" class="mt-auto inline-block bg-blue-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors text-center">Explorer les Émotions</a>
+                </div>
+
+                <!-- Territoire 2: CRIMES -->
+                <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-purple-500/50 hover:-translate-y-2">
+                    <div class="flex-grow">
+                        <h2 class="text-2xl font-bold text-purple-400 mb-4">Territoire 2 : CRIMES</h2>
+                        <p class="mb-8 text-slate-400"><strong>Les Zones d'Ombre de la Carte.</strong><br>Cette section décrit les "territoires difficiles" ou les schémas comportementaux résultant d'une navigation émotionnelle compliquée.</p>
                     </div>
-                    <div class="mt-3 pt-3 border-t border-gray-200 text-center">
-                        <input type="checkbox" id="pathModeToggle" class="mr-2 align-middle">
-                        <label for="pathModeToggle" class="text-sm text-gray-700 font-semibold">Mode "Chemin Émotionnel"</label>
-                        <button id="resetPathBtn" style="display: none;">Réinitialiser le chemin</button>
+                    <a href="crimes.html" class="mt-auto inline-block bg-purple-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors text-center">Découvrir les Zones d'Ombre</a>
+                </div>
+
+                <!-- Territoire 3: MIRACLES -->
+                <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-green-500/50 hover:-translate-y-2">
+                    <div class="flex-grow">
+                        <h2 class="text-2xl font-bold text-green-400 mb-4">Territoire 3 : MIRACLES</h2>
+                        <p class="mb-8 text-slate-400"><strong>Les Itinéraires vers l'Équilibre.</strong><br>Ici, vous proposez les "itinéraires" ou les "boussoles" pour mieux naviguer.</p>
                     </div>
-                    <div id="category-filters" class="mt-3 pt-3 border-t border-gray-200">
-                        <h4 class="text-sm font-semibold mb-2 text-gray-600 text-center">Filtrer par Catégorie :</h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-sm">
-                            <div><input type="checkbox" id="cat-1" class="category-filter" value="1" checked><label for="cat-1"> 1. Orientation</label></div>
-                            <div><input type="checkbox" id="cat-2" class="category-filter" value="2" checked><label for="cat-2"> 2. Fondamentales</label></div>
-                            <div><input type="checkbox" id="cat-3" class="category-filter" value="3" checked><label for="cat-3"> 3. Complexes</label></div>
-                            <div><input type="checkbox" id="cat-4" class="category-filter" value="4" checked><label for="cat-4"> 4. Relationnelles</label></div>
-                            <div><input type="checkbox" id="cat-5" class="category-filter" value="5" checked><label for="cat-5"> 5. Dispositions</label></div>
-                        </div>
-                         <div class="mt-2 text-xs text-gray-500 text-center italic">
-                            Note: La taille des points varie selon la catégorie de l'émotion (1 à 5).
-                        </div>
-                    </div>
+                    <a href="miracles.html" class="mt-auto inline-block bg-green-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-600 transition-colors text-center">Trouver son Itinéraire</a>
                 </div>
-
-                <div class="chart-container bg-white p-5 rounded-xl shadow-lg">
-                    <svg id="emotionChart"></svg>
-                </div>
-
-                <div id="scenarioAnalysisContainer" class="ia-response-container">
-                    <h2 class="text-xl font-semibold text-purple-700 mb-3">🔎 ✨ Analyse de Scénario par l'IA</h2>
-                    <textarea id="scenarioInput" class="w-full p-2 border border-gray-300 rounded-md" rows="3" placeholder="Décrivez une situation ou un scénario ici... (ex: 'J'ai une présentation importante demain matin')"></textarea>
-                    <button id="analyzeScenarioBtn" class="mt-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">Analyser et Tracer le Chemin ✨</button>
-                </div>
-
-                <div id="iaResponseContainer" class="ia-response-container hidden">
-                    <h2 id="iaResponseTitle" class="text-xl font-semibold text-indigo-700 mb-3">Fiche d'Identité de l'Émotion</h2>
-                    <div id="iaResponseContent" class="ia-response-content">
-                        Cliquez sur une émotion pour voir sa fiche d'identité générée par l'IA. ✨
-                    </div>
-                </div>
-
-                <div id="legend" class="legend mt-6 bg-white p-3 rounded-lg shadow"></div>
-                <!-- Chart HTML ends here -->
-
-            </div>
-            <div id="noyau" class="tab-content hidden">
-                <div class="bg-white p-8 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold mb-4">Noyau Affectif</h2>
-                    <p>Le contenu pour le Noyau Affectif sera ajouté ici. Cette section décrira les états affectifs les plus fondamentaux et bruts.</p>
-                </div>
-            </div>
-            <div id="matrice" class="tab-content hidden">
-                <div class="bg-white p-8 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold mb-4">Matrice Affective</h2>
-                    <p>Le contenu pour la Matrice Affective sera ajouté ici. Cette section explorera comment les émotions de base se combinent pour former des sentiments plus complexes.</p>
-                </div>
-            </div>
+            </section>
         </main>
 
-        <div class="mt-12 text-center">
-            <a href="index.html" class="text-indigo-600 hover:underline">Retour à l'accueil</a>
-        </div>
+        <footer class="text-center mt-16 text-slate-500">
+            <p>&copy; 2024 Cartograffect.</p>
+        </footer>
+
     </div>
 
     <script>
-        // D3 Chart script starts here
-        const emotionsData = [
-            // Catégorie 1: Orientation
-            { name: "Attente", code: "A0/V0", category: 1, group: "Orientation" },
-            { name: "Surprise", code: "A0,5/V0", category: 1, group: "Orientation" },
-            { name: "Anticipation", code: "A-0,5/V0", category: 1, group: "Orientation" },
-            // Catégorie 2: Émotions fondamentales
-            { name: "Joie", code: "A+2/V0", category: 2, group: "Joie" },
-            { name: "Tristesse", code: "A-2/V0", category: 2, group: "Tristesse" },
-            { name: "Peur", code: "A0/V-2", category: 2, group: "Peur" },
-            { name: "Courage", code: "A0/V+2", category: 2, group: "Courage" },
-            { name: "Colère", code: "A+1/V-1", category: 2, group: "Colère" },
-            { name: "Calme", code: "A-1/V+1", category: 2, group: "Calme" },
-            { name: "Désir", code: "A+1/V+1", category: 2, group: "Désir" },
-            { name: "Dégoût", code: "A-1/V-1", category: 2, group: "Dégoût" },
-            // Catégorie 3: Émotions complexes
-            { name: "Confusion", code: "A+4/V0", category: 3, group: "Joie" },
-            { name: "Consternation", code: "A+3/V-1", category: 3, group: "Joie" },
-            { name: "Euphorie", code: "A+3/V+1", category: 3, group: "Joie" },
-            { name: "Engourdissement", code: "A-4/V0", category: 3, group: "Tristesse" },
-            { name: "Réconfort", code: "A-3/V+1", category: 3, group: "Tristesse" },
-            { name: "Chagrin", code: "A-3/V-1", category: 3, group: "Tristesse" },
-            { name: "Stupeur", code: "A0/V-4", category: 3, group: "Peur" },
-            { name: "Panique", code: "A+1/V-3", category: 3, group: "Peur" },
-            { name: "Frisson", code: "A-1/V-3", category: 3, group: "Peur" },
-            { name: "Curiosité", code: "A0/V+4", category: 3, group: "Courage" },
-            { name: "Émerveillement", code: "A+1/V+3", category: 3, group: "Courage" },
-            { name: "Enchantement", code: "A-1/V+3", category: 3, group: "Courage" },
-            { name: "Exaspération", code: "A+2/V-2", category: 3, group: "Colère" },
-            { name: "Soulagement", code: "A-2/V+2", category: 3, group: "Calme" },
-            { name: "Exaltation", code: "A+2/V+2", category: 3, group: "Désir" },
-            { name: "Déception", code: "A-2/V-2", category: 3, group: "Dégoût" },
-            // Catégorie 4: Émotions relationnelles
-            { name: "Ambivalence", code: "A+6/V0", category: 4, group: "Joie" },
-            { name: "Envie", code: "A+4/V-2", category: 4, group: "Joie" },
-            { name: "Haine", code: "A+5/V-1", category: 4, group: "Joie" },
-            { name: "Amour", code: "A+5/V+1", category: 4, group: "Joie" },
-            { name: "Assurance", code: "A+4/V+2", category: 4, group: "Joie" },
-            { name: "Indifférence", code: "A-6/V0", category: 4, group: "Tristesse" },
-            { name: "Sérénité", code: "A-4/V+2", category: 4, group: "Tristesse" },
-            { name: "Plénitude", code: "A-5/V+1", category: 4, group: "Tristesse" },
-            { name: "Honte", code: "A-4/V-2", category: 4, group: "Tristesse" },
-            { name: "Vide", code: "A-5/V-1", category: 4, group: "Tristesse" },
-            { name: "Anxiété", code: "A+2/V-4", category: 4, group: "Peur" },
-            { name: "Manque", code: "A+1/V-5", category: 4, group: "Peur" },
-            { name: "Mépris", code: "A-1/V-5", category: 4, group: "Peur" },
-            { name: "Crainte", code: "A-2/V-4", category: 4, group: "Peur" },
-            { name: "Doute", code: "A0/V-6", category: 4, group: "Peur" },
-            { name: "Conviction", code: "A0/V+6", category: 4, group: "Courage" },
-            { name: "Fierté", code: "A+2/V+4", category: 4, group: "Courage" },
-            { name: "Épanouissement", code: "A+1/V+5", category: 4, group: "Courage" },
-            { name: "Affection", code: "A-1/V+5", category: 4, group: "Courage" },
-            { name: "Admiration", code: "A-2/V+4", category: 4, group: "Courage" },
-            { name: "Frustration", code: "A+3/V-3", category: 4, group: "Colère" },
-            { name: "Acceptation", code: "A-3/V+3", category: 4, group: "Calme" },
-            { name: "Engagement", code: "A+3/V+3", category: 4, group: "Désir" },
-            { name: "Rejet", code: "A-3/V-3", category: 4, group: "Dégoût" },
-            // Catégorie 5: Dispositions
-            { name: "Agitation", code: "A+8/V0", category: 5, group: "Joie" },
-            { name: "Invulnérabilité", code: "A+7/V+1", category: 5, group: "Joie" },
-            { name: "Puissance", code: "A+6/V+2", category: 5, group: "Joie" },
-            { name: "Confiance", code: "A+5/V+3", category: 5, group: "Joie" },
-            { name: "Intolérance", code: "A+6/V-2", category: 5, group: "Joie" },
-            { name: "Injustice", code: "A+5/V-3", category: 5, group: "Joie" },
-            { name: "Imprudence", code: "A+7/V-1", category: 5, group: "Joie" },
-            { name: "Apathie", code: "A-8/V0", category: 5, group: "Tristesse" },
-            { name: "Sécurité", code: "A-6/V+2", category: 5, group: "Tristesse" },
-            { name: "Quiétude", code: "A-5/V+3", category: 5, group: "Tristesse" },
-            { name: "Patience", code: "A-7/V+1", category: 5, group: "Tristesse" },
-            { name: "Pessimisme", code: "A-6/V-2", category: 5, group: "Tristesse" },
-            { name: "Déshonneur", code: "A-5/V-3", category: 5, group: "Tristesse" },
-            { name: "Désespoir", code: "A-7/V-1", category: 5, group: "Tristesse" },
-            { name: "Incertitude", code: "A0/V-8", category: 5, group: "Peur" },
-            { name: "Insécurité", code: "A+2/V-6", category: 5, group: "Peur" },
-            { name: "Inquiétude", code: "A+3/V-5", category: 5, group: "Peur" },
-            { name: "Impatience", code: "A+1/V-7", category: 5, group: "Peur" },
-            { name: "Vulnérabilité", code: "A-1/V-7", category: 5, group: "Peur" },
-            { name: "Impuissance", code: "A-2/V-6", category: 5, group: "Peur" },
-            { name: "Méfiance", code: "A-3/V-5", category: 5, group: "Peur" },
-            { name: "Certitude", code: "A0/V+8", category: 5, group: "Courage" },
-            { name: "Optimisme", code: "A+2/V+6", category: 5, group: "Courage" },
-            { name: "Honneur", code: "A+3/V+5", category: 5, group: "Courage" },
-            { name: "Espoir", code: "A+1/V+7", category: 5, group: "Courage" },
-            { name: "Tolérance", code: "A-2/V+6", category: 5, "group": "Courage" },
-            { name: "Justice", code: "A-3/V+5", category: 5, group: "Courage" },
-            { name: "Prudence", code: "A-1/V+7", category: 5, group: "Courage" },
-            { name: "Mécontentement", code: "A+4/V-4", category: 5, group: "Colère" },
-            { name: "Contentement", code: "A-4/V+4", category: 5, group: "Calme" },
-            { name: "Intérêt", code: "A+4/V+4", category: 5, group: "Désir" },
-            { name: "Désintérêt", code: "A-4/V-4", category: 5, group: "Dégoût" }
-        ];
+        function getTextCoordinates(width, height) {
+            const canvas = document.getElementById('textCanvas');
+            const context = canvas.getContext('2d', { willReadFrequently: true });
+            canvas.width = width;
+            canvas.height = height;
 
-        let emotionalPath = [];
+            // Responsive font size - calculated to fit the word in the container
+            const fontSize = Math.min(width / 10, height / 1.5); 
 
-        function parseCode(emotion) {
-            const parts = emotion.code.split('/');
-            const activationStr = parts[0].replace('A', '').replace(',', '.');
-            const valenceStr = parts[1].replace('V', '').replace(',', '.');
-            return {
-                activation: parseFloat(activationStr),
-                valence: parseFloat(valenceStr)
-            };
-        }
+            context.fillStyle = "white";
+            context.font = `bold ${fontSize}px 'DM Sans', sans-serif`;
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.fillText("CARTOGRAFFECT", width / 2, height / 2);
 
-        const processedData = emotionsData.map(d => {
-            const { activation, valence } = parseCode(d);
-            return { ...d, activation, valence };
-        }).filter(d => !isNaN(d.activation) && !isNaN(d.valence));
+            const imageData = context.getImageData(0, 0, width, height);
+            const pixelData = imageData.data;
+            const coordinates = [];
+            
+            // Adjust sampling based on screen size to maintain density
+            const sampling = width > 768 ? 4 : 3; 
 
-        const allEmotionNames = processedData.map(e => e.name);
-
-        const margin = { top: 10, right: 20, bottom: 40, left: 40 };
-        const width = 800 - margin.left - margin.right;
-        const height = 800 - margin.top - margin.bottom;
-
-        const svg = d3.select("#emotionChart")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-
-        svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden");
-        svg.append("g").attr("class", "controlateral-lines-group").style("visibility", "hidden");
-        svg.append("g").attr("class", "path-group");
-        svg.append("circle").attr("class", "intensity-circle").style("visibility", "hidden");
-
-        const xScale = d3.scaleLinear().domain([-8.5, 8.5]).range([0, width]);
-        const yScale = d3.scaleLinear().domain([-8.5, 8.5]).range([height, 0]);
-
-        const colorGroups = {
-            "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
-            "Colère": "#fca5a5", "Calme": "#67e8f9", "Désir": "#f9a8d4", "Dégoût": "#9ca3af",
-            "Orientation": "#a5b4fc"
-        };
-        const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
-
-        const radiusScale = d3.scaleOrdinal()
-            .domain([1, 2, 3, 4, 5])
-            .range([4, 5, 6, 7, 8]);
-
-        const defs = svg.append("defs");
-        defs.append("marker")
-            .attr("id", "arrowhead")
-            .attr("viewBox", "-0 -5 10 10").attr("refX", 15).attr("refY", 0)
-            .attr("orient", "auto").attr("markerWidth", 6).attr("markerHeight", 6)
-            .attr("xoverflow", "visible").append("svg:path")
-            .attr("d", "M 0,-5 L 10 ,0 L 0,5").attr("fill", "#2c3e50").style("stroke","none");
-
-        defs.append("marker")
-            .attr("id", "dynamicArrowhead")
-            .attr("viewBox", "0 0 10 10")
-            .attr("refX", 5)
-            .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .attr("fill", "#4a5568");
-
-        svg.on("click", function(event) {
-            if (event.target === this || event.target.className.baseVal.includes('quadrant-bg')) {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(300)
-                    .style("opacity", 0.85).attr("stroke-width", 1);
-            }
-        });
-
-        const quadrantData = [
-            { x: xScale(0), y: yScale(8.5), width: xScale(8.5) - xScale(0), height: yScale(0) - yScale(8.5), color: "rgba(134, 239, 172, 0.07)", label: "V+ / A+", lx: xScale(4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(8.5), width: xScale(0) - xScale(-8.5), height: yScale(0) - yScale(8.5), color: "rgba(252, 165, 165, 0.07)", label: "V- / A+", lx: xScale(-4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(0), width: xScale(0) - xScale(-8.5), height: yScale(-8.5) - yScale(0), color: "rgba(147, 197, 253, 0.07)", label: "V- / A-", lx: xScale(-4.25), ly: yScale(-8) },
-            { x: xScale(0), y: yScale(0), width: xScale(8.5) - xScale(0), height: yScale(-8.5) - yScale(0), color: "rgba(103, 232, 249, 0.07)", label: "V+ / A-", lx: xScale(4.25), ly: yScale(-8) }
-        ];
-        svg.selectAll(".quadrant-bg").data(quadrantData).enter().append("rect")
-            .attr("class", "quadrant-bg").attr("x", d => d.x).attr("y", d => d.y).attr("width", d => d.width).attr("height", d => d.height).attr("fill", d => d.color);
-
-        const xAxisGrid = d3.axisBottom(xScale).tickSize(-height).tickFormat("").ticks(17);
-        const yAxisGrid = d3.axisLeft(yScale).tickSize(-width).tickFormat("").ticks(17);
-        svg.append("g").attr("class", "grid x-grid").attr("transform", `translate(0,${height})`).call(xAxisGrid);
-        svg.append("g").attr("class", "grid y-grid").call(yAxisGrid);
-
-        svg.append("line").attr("x1", xScale(0)).attr("y1", 0).attr("x2", xScale(0)).attr("y2", height).attr("class", "axis-center-line");
-        svg.append("line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", width).attr("y2", yScale(0)).attr("class", "axis-center-line");
-
-        const surprise = processedData.find(d => d.name === 'Surprise');
-        const attente = processedData.find(d => d.name === 'Attente');
-
-        if (surprise && attente) {
-            const cx = xScale(attente.valence);
-            const cy = yScale(attente.activation);
-            const radius = Math.abs(yScale(attente.activation) - yScale(surprise.activation));
-            svg.append("circle")
-                .attr("class", "dynamic-circle")
-                .attr("cx", cx)
-                .attr("cy", cy)
-                .attr("r", radius);
-            const arrowGroup = svg.append("g");
-            const arrowSize = 10;
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx - arrowSize/2},${cy - radius} L ${cx + arrowSize/2},${cy - radius}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx + arrowSize/2},${cy + radius} L ${cx - arrowSize/2},${cy + radius}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx + radius},${cy - arrowSize/2} L ${cx + radius},${cy + arrowSize/2}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx - radius},${cy + arrowSize/2} L ${cx - radius},${cy - arrowSize/2}`);
-        }
-
-        const symetricalPairs = [["Joie", "Tristesse"], ["Peur", "Courage"], ["Confusion", "Engourdissement"], ["Curiosité", "Stupeur"], ["Ambivalence", "Indifférence"], ["Conviction", "Doute"], ["Agitation", "Apathie"], ["Certitude", "Incertitude"]];
-        const controlateralPairs = [["Colère", "Calme"], ["Désir", "Dégoût"], ["Consternation", "Enchantement"], ["Exaspération", "Soulagement"], ["Panique", "Réconfort"], ["Euphorie", "Frisson"], ["Exaltation", "Déception"], ["Émerveillement", "Chagrin"], ["Haine", "Affection"], ["Envie", "Admiration"], ["Frustration", "Acceptation"], ["Anxiété", "Sérénité"], ["Manque", "Plénitude"], ["Amour", "Mépris"], ["Assurance", "Crainte"], ["Engagement", "Rejet"], ["Fierté", "Honte"], ["Épanouissement", "Vide"], ["Vulnérabilité", "Invulnérabilité"], ["Puissance", "Impuissance"], ["Confiance", "Méfiance"], ["Intérêt", "Désintérêt"], ["Honneur", "Déshonneur"], ["Optimisme", "Pessimisme"], ["Espoir", "Désespoir"], ["Prudence", "Imprudence"], ["Tolérance", "Intolérance"], ["Justice", "Injustice"], ["Contentement", "Mécontentement"], ["Sécurité", "Insécurité"], ["Patience", "Impatience"], ["Quiétude", "Inquiétude"]];
-
-        const xAxis = d3.axisBottom(xScale).ticks(17).tickFormat(d3.format("d"));
-        const yAxis = d3.axisLeft(yScale).ticks(17).tickFormat(d3.format("d"));
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
-        svg.append("g").call(yAxis);
-
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", width / 2).attr("y", height + margin.bottom - 5).text("Valence (V)");
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -height / 2).attr("y", -margin.left + 15).text("Activation (A)");
-        svg.selectAll(".quadrant-label-text").data(quadrantData).enter().append("text").attr("class", "quadrant-label").attr("x", d => d.lx).attr("y", d => d.ly).text(d => d.label);
-
-        const tooltip = d3.select("body").append("div").attr("class", "tooltip");
-        const iaResponseContainer = d3.select("#iaResponseContainer");
-        const iaResponseTitle = d3.select("#iaResponseTitle");
-        const iaResponseContent = d3.select("#iaResponseContent");
-        const analyzeScenarioBtn = d3.select("#analyzeScenarioBtn");
-
-        async function callGeminiAPI(prompt, isJson = false) {
-            // IMPORTANT: Remplacez "VOTRE_CLÉ_API_GEMINI_ICI" par votre propre clé API de Google AI Studio.
-            // Vous pouvez en obtenir une en visitant https://aistudio.google.com/app/apikey
-            const apiKey = "VOTRE_CLÉ_API_GEMINI_ICI";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: prompt }] }]
-            };
-
-            if (isJson) {
-                payload.generationConfig = {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: { type: "STRING" }
+            for (let y = 0; y < height; y += sampling) {
+                for (let x = 0; x < width; x += sampling) {
+                    const index = (y * width + x) * 4;
+                    if (pixelData[index + 3] > 128) {
+                        coordinates.push({ x: x, y: y });
                     }
-                };
+                }
             }
+            return coordinates;
+        }
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+        document.addEventListener("DOMContentLoaded", () => {
+            const container = d3.select(".chart-container");
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+
+            const textCoords = getTextCoordinates(width, height);
+            let pointsData = [];
+            
+            const svg = d3.select("#genericChart")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .append("g");
+
+            const colorGroups = {
+                "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
+                "Colère": "#fca5a5", "Calme": "#67e8f9", "Désir": "#f9a8d4", "Dégoût": "#9ca3af",
+                "Orientation": "#a5b4fc"
+            };
+            const colorKeys = Object.keys(colorGroups);
+            const colorScale = d3.scaleOrdinal().domain(colorKeys).range(Object.values(colorGroups));
+            
+            const shuffledTextCoords = d3.shuffle(textCoords.slice());
+
+            for(let i = 0; i < shuffledTextCoords.length; i++) {
+                pointsData.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    targetX: shuffledTextCoords[i].x,
+                    targetY: shuffledTextCoords[i].y,
+                    group: colorKeys[i % colorKeys.length]
                 });
-
-                if (!response.ok) {
-                    throw new Error(`Erreur API: ${response.statusText}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    return result.candidates[0].content.parts[0].text;
-                } else {
-                    throw new Error("Réponse de l'API invalide ou vide.");
-                }
-            } catch (error) {
-                console.error("Erreur lors de l'appel à l'API Gemini:", error);
-                return null;
-            }
-        }
-
-        async function fetchEmotionIdentityCard(emotion) {
-            iaResponseContainer.classed("hidden", false);
-            iaResponseTitle.text(`✨ Fiche d'Identité : ${emotion.name}`);
-            iaResponseContent.html('<div class="loading-spinner"></div>');
-
-            const prompt = `
-                Agis comme un psychologue expert. Crée une "fiche d'identité" pour l'émotion "${emotion.name}".
-                Structure ta réponse avec les sections suivantes, chacune suivie d'un paragraphe concis:
-                - **Définition:**
-                - **Déclencheurs Typiques:**
-                - **Fonction Adaptative:**
-                - **Manifestations Physiques:**
-                - **Pensées Associées:**
-            `;
-
-            const responseText = await callGeminiAPI(prompt);
-
-            if (responseText) {
-                const formattedHtml = responseText
-                    .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')
-                    .replace(/^- (.*?):/gm, '<h4>$1</h4>')
-                    .replace(/\n\n/g, '<br>')
-                    .replace(/\n/g, '<br>');
-                iaResponseContent.html(`<div class="identity-card-section">${formattedHtml}</div>`);
-            } else {
-                iaResponseContent.text("Désolé, une erreur est survenue lors de la génération de la fiche d'identité.");
-            }
-        }
-
-        async function analyzeScenario() {
-            const scenarioText = d3.select("#scenarioInput").property("value");
-            if (!scenarioText.trim()) {
-                iaResponseContent.text("Veuillez entrer un scénario.");
-                iaResponseContainer.classed("hidden", false);
-                return;
             }
 
-            analyzeScenarioBtn.property("disabled", true).html('<div class="loading-spinner" style="width:20px; height:20px; border-width:2px; margin:0 auto;"></div>');
-
-            const prompt = `
-                Étant donné le scénario suivant, identifie la séquence la plus probable d'émotions qu'une personne ressentirait.
-                La séquence doit comporter entre 3 et 5 émotions.
-                Tu dois impérativement choisir parmi la liste d'émotions valides suivante : ${allEmotionNames.join(', ')}.
-                Ta réponse doit être un tableau JSON de chaînes de caractères, par exemple : ["Surprise", "Joie", "Euphorie"].
-
-                Scénario: "${scenarioText}"
-            `;
-
-            const responseJsonString = await callGeminiAPI(prompt, true);
-            analyzeScenarioBtn.property("disabled", false).text("Analyser et Tracer le Chemin ✨");
-
-            if (responseJsonString) {
-                try {
-                    const emotionNames = JSON.parse(responseJsonString);
-                    const path = emotionNames
-                        .map(name => processedData.find(d => d.name.toLowerCase() === name.toLowerCase()))
-                        .filter(Boolean);
-
-                    if (path.length > 0) {
-                        emotionalPath = path;
-                        d3.select("#pathModeToggle").property("checked", true);
-                        d3.select("#resetPathBtn").style("display", "inline-block");
-                        drawEmotionalPath();
-                        svg.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
-                    } else {
-                         iaResponseContent.text("L'IA n'a pas pu identifier un chemin émotionnel valide pour ce scénario.");
-                         iaResponseContainer.classed("hidden", false);
-                    }
-                } catch (e) {
-                    console.error("Erreur de parsing JSON:", e);
-                    iaResponseContent.text("Désolé, l'IA a retourné une réponse dans un format inattendu.");
-                    iaResponseContainer.classed("hidden", false);
-                }
-            } else {
-                iaResponseContent.text("Désolé, une erreur est survenue lors de l'analyse du scénario.");
-                iaResponseContainer.classed("hidden", false);
-            }
-        }
-
-        function drawEmotionalPath() {
-            const pathGroup = svg.select(".path-group");
-            pathGroup.html("");
-
-            if (emotionalPath.length < 2) return;
-
-            const lineGenerator = d3.line()
-                .x(d => xScale(d.valence))
-                .y(d => yScale(d.activation))
-                .curve(d3.curveCatmullRom);
-
-            pathGroup.append("path")
-                .datum(emotionalPath)
-                .attr("class", "path-line")
-                .attr("d", lineGenerator)
-                .attr("marker-end", "url(#arrowhead)");
-        }
-
-        function updateChart(data) {
-            const t = svg.transition().duration(500);
-
-            const circles = svg.selectAll(".emotion-point").data(data, d => d.name);
-            circles.exit().transition(t).attr("r", 0).remove();
-
-            circles.enter().append("circle")
-                .attr("class", "emotion-point cursor-pointer")
-                .attr("r", 0)
-                .merge(circles)
-                .on("mouseover", (event, d) => {
-                    d3.select(event.currentTarget).transition().duration(100).attr("r", radiusScale(d.category) + 2).style("opacity", 1).attr("stroke-width", 2);
-                    tooltip.transition().duration(100).style("opacity", 1);
-                    tooltip.html(`<strong>${d.name}</strong><br/>Code: ${d.code}<br/>(A: ${d.activation}, V: ${d.valence})`)
-                        .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 15) + "px");
-                })
-                .on("mouseout", (event, d) => {
-                    d3.select(event.currentTarget).transition().duration(100).attr("r", radiusScale(d.category)).style("opacity", 0.85).attr("stroke-width", 1);
-                    tooltip.transition().duration(300).style("opacity", 0);
-                })
-                .on("click", (event, d) => {
-                    event.stopPropagation();
-                    if (d3.select("#pathModeToggle").property("checked")) {
-                        if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
-                            emotionalPath.push(d);
-                            drawEmotionalPath();
-                            svg.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
-                        }
-                    } else {
-                        fetchEmotionIdentityCard(d);
-                        const allPairs = [...controlateralPairs, ...symetricalPairs];
-                        const oppositePair = allPairs.find(p => p[0] === d.name || p[1] === d.name);
-                        const oppositeName = oppositePair ? (oppositePair[0] === d.name ? oppositePair[1] : oppositePair[0]) : null;
-                        svg.selectAll(".emotion-point")
-                            .transition().duration(300)
-                            .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 0.85 : 0.1)
-                            .attr("stroke-width", p => p.name === d.name ? 2 : 1);
-                    }
-                })
-                .transition(t)
-                .attr("cx", d => xScale(d.valence))
-                .attr("cy", d => yScale(d.activation))
-                .attr("r", d => radiusScale(d.category))
+            const points = svg.selectAll(".data-point")
+                .data(pointsData)
+                .enter().append("circle")
+                .attr("class", "data-point")
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .attr("r", 2)
                 .attr("fill", d => colorScale(d.group))
-                .attr("stroke", "#2c3e50").attr("stroke-width", 1).style("opacity", 0.85);
+                .style("opacity", 0.8);
 
-            const labels = svg.selectAll(".emotion-label-group").data(data, d => d.name);
-            labels.exit().transition(t).style("opacity", 0).remove();
-
-            const labelsEnter = labels.enter().append("g")
-                .attr("class", "emotion-label-group")
-                .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
-                .style("opacity", 0);
-
-            labelsEnter.append("rect").attr("class", "label-background");
-            labelsEnter.append("text").attr("class", "emotion-label-text").attr("dy", "0.35em").text(d => d.name);
-
-            const mergedLabels = labelsEnter.merge(labels);
-
-            mergedLabels.transition(t)
-                .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
-                .style("opacity", 1)
-                .style("visibility", d3.select("#showNamesToggle").property("checked") ? "visible" : "hidden");
-
-            mergedLabels.each(function() {
-                const textNode = d3.select(this).select("text").node();
-                if (textNode) {
-                    const bbox = textNode.getBBox();
-                    const padding = 3;
-                    d3.select(this).select("rect")
-                        .attr("x", bbox.x - padding)
-                        .attr("y", bbox.y - padding)
-                        .attr("width", bbox.width + (padding * 2))
-                        .attr("height", bbox.height + (padding * 2));
-                }
-            });
-
-            const controlateralLinesGroup = svg.select(".controlateral-lines-group");
-            controlateralLinesGroup.selectAll("*").remove();
-            controlateralPairs.forEach(pair => {
-                const emotion1 = data.find(d => d.name === pair[0]);
-                const emotion2 = data.find(d => d.name === pair[1]);
-                if (emotion1 && emotion2) {
-                    controlateralLinesGroup.append("line").attr("class", "controlateral-line")
-                        .attr("x1", xScale(emotion1.valence)).attr("y1", yScale(emotion1.activation))
-                        .attr("x2", xScale(emotion2.valence)).attr("y2", yScale(emotion2.activation))
-                        .style("opacity", 0).transition(t).style("opacity", 1);
-                }
-            });
-
-            const symetricalLinesGroup = svg.select(".symetrical-lines-group");
-            symetricalLinesGroup.selectAll("*").remove();
-            symetricalPairs.forEach(pair => {
-                const emotion1 = data.find(d => d.name === pair[0]);
-                const emotion2 = data.find(d => d.name === pair[1]);
-                if (emotion1 && emotion2) {
-                    symetricalLinesGroup.append("line").attr("class", "symetrical-line")
-                        .attr("x1", xScale(emotion1.valence)).attr("y1", yScale(emotion1.activation))
-                        .attr("x2", xScale(emotion2.valence)).attr("y2", yScale(emotion2.activation))
-                        .style("opacity", 0).transition(t).style("opacity", 1);
-                }
-            });
-        }
-
-        function handleFilterUpdate() {
-            const selectedCategories = [];
-            d3.selectAll(".category-filter:checked").each(function() {
-                selectedCategories.push(+this.value);
-            });
-            const filteredData = processedData.filter(d => selectedCategories.includes(d.category));
-            updateChart(filteredData);
-        }
-
-        handleFilterUpdate();
-
-        d3.selectAll(".category-filter").on("change", handleFilterUpdate);
-        d3.select("#showNamesToggle").on("change", function(event) {
-            svg.selectAll(".emotion-label-group").style("visibility", event.target.checked ? "visible" : "hidden");
-        });
-        d3.select("#showControlateralToggle").on("change", function(event) {
-            svg.select(".controlateral-lines-group").style("visibility", event.target.checked ? "visible" : "hidden");
-        });
-        d3.select("#showSymetricalToggle").on("change", function(event) {
-            svg.select(".symetrical-lines-group").style("visibility", event.target.checked ? "visible" : "hidden");
-        });
-        d3.select("#showIntensityCircleToggle").on("change", function(event) {
-            const isChecked = event.target.checked;
-            const attente = processedData.find(d => d.name === 'Attente');
-            let maxDistanceSq = 0;
-            processedData.forEach(d => {
-                const distanceSq = d.valence * d.valence + d.activation * d.activation;
-                if (distanceSq > maxDistanceSq) maxDistanceSq = distanceSq;
-            });
-            const radius = xScale(Math.sqrt(maxDistanceSq)) - xScale(0);
-            svg.select(".intensity-circle")
-                .attr("cx", xScale(attente.valence))
-                .attr("cy", yScale(attente.activation))
-                .attr("r", radius)
-                .style("visibility", isChecked ? "visible" : "hidden");
-        });
-        d3.select("#pathModeToggle").on("change", function(event) {
-            d3.select("#resetPathBtn").style("display", event.target.checked ? "inline-block" : "none");
-            if (!event.target.checked) {
-                emotionalPath = [];
-                svg.select(".path-group").html("");
-                svg.selectAll(".emotion-point").classed("path-point-highlight", false);
+            function animateToText() {
+                points.transition()
+                    .duration(1500) // Reduced duration
+                    .delay((d, i) => i * 0.75) // Reduced stagger delay
+                    .ease(d3.easeCubicInOut)
+                    .attr("cx", d => d.targetX)
+                    .attr("cy", d => d.targetY);
             }
-        });
-        d3.select("#resetPathBtn").on("click", function() {
-            emotionalPath = [];
-            svg.select(".path-group").html("");
-            svg.selectAll(".emotion-point").classed("path-point-highlight", false);
-        });
-        analyzeScenarioBtn.on("click", analyzeScenario);
 
-        const legendContainer = d3.select("#legend");
-        Object.entries(colorGroups).forEach(([groupName, color]) => {
-            const legendItem = legendContainer.append("div").attr("class", "legend-item");
-            legendItem.append("div").attr("class", "legend-color").style("background-color", color);
-            legendItem.append("span").text(groupName);
-            legendItem.on("mouseover", function() {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(200)
-                    .style("opacity", d => d.group === groupName ? 1.0 : 0.1)
-                    .attr("stroke-width", d => d.group === groupName ? 2 : 1);
-            })
-            .on("mouseout", function() {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(200)
-                    .style("opacity", 0.85)
-                    .attr("stroke-width", 1);
-            });
-        });
-        // D3 Chart script ends here
-    </script>
-    <script>
-        // Tab switching script
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabButtons[0].classList.add('active');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                tabContents.forEach(content => content.classList.add('hidden'));
-
-                const targetId = button.getAttribute('data-tab');
-                document.getElementById(targetId).classList.remove('hidden');
-            });
+            // Use a timeout to ensure the animation starts after the page is fully laid out
+            setTimeout(animateToText, 100);
         });
     </script>
 
