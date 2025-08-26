@@ -14,10 +14,10 @@
             font-family: 'DM Sans', sans-serif;
         }
         .chart-container {
-            background-color: transparent; /* Make chart container transparent */
-            padding: 20px;
-            border-radius: 12px;
+            background-color: transparent;
             position: relative;
+            width: 100%;
+            height: 100%;
         }
         .tooltip {
             position: absolute;
@@ -41,7 +41,7 @@
 
         <header class="h-screen flex flex-col items-center justify-center text-center">
             <!-- Animation is now the hero content -->
-            <div class="chart-container w-full max-w-5xl mx-auto" style="height: 400px;">
+            <div class="chart-container">
                 <canvas id="textCanvas" style="display: none;"></canvas>
                 <svg id="genericChart" class="w-full h-full"></svg>
             </div>
@@ -91,33 +91,31 @@
     </div>
 
     <script>
-        function getTextCoordinates() {
+        function getTextCoordinates(width, height) {
             const canvas = document.getElementById('textCanvas');
             const context = canvas.getContext('2d', { willReadFrequently: true });
+            canvas.width = width;
+            canvas.height = height;
 
-            // Increased canvas size for a larger title
-            const svgWidth = 1200; 
-            const svgHeight = 400;
-            canvas.width = svgWidth;
-            canvas.height = svgHeight;
+            // Responsive font size - calculated to fit the word in the container
+            const fontSize = Math.min(width / 10, height / 1.5); 
 
             context.fillStyle = "white";
-            // Increased font size for more impact
-            context.font = "bold 140px 'DM Sans', sans-serif"; 
+            context.font = `bold ${fontSize}px 'DM Sans', sans-serif`;
             context.textAlign = "center";
             context.textBaseline = "middle";
-            context.fillText("CARTOGRAFFECT", svgWidth / 2, svgHeight / 2);
+            context.fillText("CARTOGRAFFECT", width / 2, height / 2);
 
-            const imageData = context.getImageData(0, 0, svgWidth, svgHeight);
+            const imageData = context.getImageData(0, 0, width, height);
             const pixelData = imageData.data;
-            
             const coordinates = [];
-            // Decreased sampling rate for a denser, clearer word
-            const sampling = 3; 
+            
+            // Adjust sampling based on screen size to maintain density
+            const sampling = width > 768 ? 4 : 3; 
 
-            for (let y = 0; y < svgHeight; y += sampling) {
-                for (let x = 0; x < svgWidth; x += sampling) {
-                    const index = (y * svgWidth + x) * 4;
+            for (let y = 0; y < height; y += sampling) {
+                for (let x = 0; x < width; x += sampling) {
+                    const index = (y * width + x) * 4;
                     if (pixelData[index + 3] > 128) {
                         coordinates.push({ x: x, y: y });
                     }
@@ -127,19 +125,16 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const textCoords = getTextCoordinates();
+            const container = d3.select(".chart-container");
+            const width = container.node().getBoundingClientRect().width;
+            const height = container.node().getBoundingClientRect().height;
+
+            const textCoords = getTextCoordinates(width, height);
             let pointsData = [];
             
-            const margin = { top: 0, right: 0, bottom: 0, left: 0 };
-            
-            const container = d3.select(".chart-container");
-            const width = container.node().getBoundingClientRect().width - margin.left - margin.right;
-            const height = container.node().getBoundingClientRect().height - margin.top - margin.bottom;
-
             const svg = d3.select("#genericChart")
-                .attr("viewBox", `0 0 1200 400`) // Match canvas dimensions
-                .append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .append("g");
 
             const colorGroups = {
                 "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
@@ -167,20 +162,21 @@
                 .attr("class", "data-point")
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y)
-                .attr("r", 2.5) // Slightly larger points
+                .attr("r", 2)
                 .attr("fill", d => colorScale(d.group))
                 .style("opacity", 0.8);
 
             function animateToText() {
                 points.transition()
                     .duration(2500)
-                    .delay((d, i) => i * 1.5)
+                    .delay((d, i) => i * 2)
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.targetX)
                     .attr("cy", d => d.targetY);
             }
 
-            setTimeout(animateToText, 500);
+            // Use a timeout to ensure the animation starts after the page is fully laid out
+            setTimeout(animateToText, 100);
         });
     </script>
 
