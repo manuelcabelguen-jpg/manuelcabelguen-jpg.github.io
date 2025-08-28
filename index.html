@@ -86,38 +86,50 @@
 
         <footer class="text-center mt-16 text-slate-500">
             <p>&copy; 2024 Cartograffect.</p>
+            <div class="my-4">
+                <button onclick="animateToMenu()" class="bg-indigo-500 text-white p-2 rounded-lg m-4 hover:bg-indigo-600">Test Menu Animation</button>
+            </div>
         </footer>
 
     </div>
 
     <script>
-        function getTextCoordinates(width, height) {
+        function getTextCoordinates({
+            text,
+            font,
+            canvasWidth,
+            canvasHeight,
+            sampling = 4,
+            offsetX = 0,
+            offsetY = 0,
+            align = "center",
+            baseline = "middle"
+        }) {
             const canvas = document.getElementById('textCanvas');
             const context = canvas.getContext('2d', { willReadFrequently: true });
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
 
-            // Responsive font size - calculated to fit the word in the container
-            const fontSize = Math.min(width / 10, height / 1.5); 
-
+            context.clearRect(0, 0, canvas.width, canvas.height);
             context.fillStyle = "white";
-            context.font = `bold ${fontSize}px 'DM Sans', sans-serif`;
-            context.textAlign = "center";
-            context.textBaseline = "middle";
-            context.fillText("CARTOGRAFFECT", width / 2, height / 2);
+            context.font = font;
+            context.textAlign = align;
+            context.textBaseline = baseline;
+            
+            let textX = align === "center" ? canvasWidth / 2 : (align === "left" ? 0 : canvasWidth);
+            let textY = baseline === "middle" ? canvasHeight / 2 : (baseline === "top" ? 0 : canvasHeight);
 
-            const imageData = context.getImageData(0, 0, width, height);
+            context.fillText(text, textX, textY);
+
+            const imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
             const pixelData = imageData.data;
             const coordinates = [];
-            
-            // Adjust sampling based on screen size to maintain density
-            const sampling = width > 768 ? 4 : 3; 
 
-            for (let y = 0; y < height; y += sampling) {
-                for (let x = 0; x < width; x += sampling) {
-                    const index = (y * width + x) * 4;
+            for (let y = 0; y < canvasHeight; y += sampling) {
+                for (let x = 0; x < canvasWidth; x += sampling) {
+                    const index = (y * canvasWidth + x) * 4;
                     if (pixelData[index + 3] > 128) {
-                        coordinates.push({ x: x, y: y });
+                        coordinates.push({ x: x + offsetX, y: y + offsetY });
                     }
                 }
             }
@@ -128,34 +140,73 @@
             const container = d3.select(".chart-container");
             const width = container.node().getBoundingClientRect().width;
             const height = container.node().getBoundingClientRect().height;
-
-            const textCoords = getTextCoordinates(width, height);
-            let pointsData = [];
             
             const svg = d3.select("#genericChart")
                 .attr("viewBox", `0 0 ${width} ${height}`)
                 .append("g");
 
-            const colorGroups = {
-                "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
-                "Colère": "#fca5a5", "Calme": "#67e8f9", "Désir": "#f9a8d4", "Dégoût": "#9ca3af",
-                "Orientation": "#a5b4fc"
-            };
-            const colorKeys = Object.keys(colorGroups);
-            const colorScale = d3.scaleOrdinal().domain(colorKeys).range(Object.values(colorGroups));
-            
-            const shuffledTextCoords = d3.shuffle(textCoords.slice());
+            // --- Generate coordinates for both states ---
 
-            for(let i = 0; i < shuffledTextCoords.length; i++) {
+            // State 1: Large Title
+            const titleFontSize = Math.min(width / 9, height / 1.5);
+            const titleCoords = getTextCoordinates({
+                text: "CARTOGRAFFECT",
+                font: `bold ${titleFontSize}px 'DM Sans', sans-serif`,
+                canvasWidth: width,
+                canvasHeight: height,
+                sampling: width > 768 ? 4 : 3
+            });
+
+            // State 2: Top-Left Menu
+            const menuLogoCoords = getTextCoordinates({
+                text: "CARTOGRAFFECT",
+                font: "bold 20px 'DM Sans', sans-serif",
+                canvasWidth: 200, canvasHeight: 25, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 40, sampling: 2
+            });
+            const menuEmoCoords = getTextCoordinates({
+                text: "ÉMOTIONS",
+                font: "16px 'DM Sans', sans-serif",
+                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 80, sampling: 1
+            });
+            const menuCriCoords = getTextCoordinates({
+                text: "CRIMES",
+                font: "16px 'DM Sans', sans-serif",
+                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 110, sampling: 1
+            });
+            const menuMirCoords = getTextCoordinates({
+                text: "MIRACLES",
+                font: "16px 'DM Sans', sans-serif",
+                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 140, sampling: 1
+            });
+            const menuCoords = [...menuLogoCoords, ...menuEmoCoords, ...menuCriCoords, ...menuMirCoords];
+
+            // --- Map data points to both states ---
+            const numPoints = Math.max(titleCoords.length, menuCoords.length);
+            let pointsData = [];
+
+            const colorKeys = Object.keys({ "Joie":0, "Tristesse":0, "Peur":0, "Courage":0, "Colère":0, "Calme":0, "Désir":0, "Dégoût":0, "Orientation":0 });
+            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+            for(let i = 0; i < numPoints; i++) {
+                const titlePoint = titleCoords[i % titleCoords.length];
+                const menuPoint = menuCoords[i % menuCoords.length];
+                
                 pointsData.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    targetX: shuffledTextCoords[i].x,
-                    targetY: shuffledTextCoords[i].y,
-                    group: colorKeys[i % colorKeys.length]
+                    titleX: titlePoint.x,
+                    titleY: titlePoint.y,
+                    menuX: menuPoint.x,
+                    menuY: menuPoint.y,
+                    color: colorScale(i % colorKeys.length)
                 });
             }
 
+            // --- D3 Drawing and Animation ---
             const points = svg.selectAll(".data-point")
                 .data(pointsData)
                 .enter().append("circle")
@@ -163,20 +214,28 @@
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y)
                 .attr("r", 2)
-                .attr("fill", d => colorScale(d.group))
-                .style("opacity", 0.8);
+                .attr("fill", d => d.color);
 
-            function animateToText() {
+            function animateToTitle() {
                 points.transition()
-                    .duration(2500)
-                    .delay((d, i) => i * 2)
+                    .duration(1500)
+                    .delay((d, i) => i * 0.75)
                     .ease(d3.easeCubicInOut)
-                    .attr("cx", d => d.targetX)
-                    .attr("cy", d => d.targetY);
+                    .attr("cx", d => d.titleX)
+                    .attr("cy", d => d.titleY);
+            }
+            
+            // This function will be triggered by the button in the next step
+            window.animateToMenu = function() {
+                 points.transition()
+                    .duration(1500)
+                    .delay((d, i) => i * 0.75)
+                    .ease(d3.easeCubicInOut)
+                    .attr("cx", d => d.menuX)
+                    .attr("cy", d => d.menuY);
             }
 
-            // Use a timeout to ensure the animation starts after the page is fully laid out
-            setTimeout(animateToText, 100);
+            setTimeout(animateToTitle, 100);
         });
     </script>
 
