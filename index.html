@@ -160,27 +160,27 @@
             // State 2: Top-Left Menu (with larger fonts and adjusted layout)
             const menuLogoCoords = getTextCoordinates({
                 text: "CARTOGRAFFECT",
-                font: "bold 30px 'DM Sans', sans-serif",
-                canvasWidth: 320, canvasHeight: 40, align: 'left', baseline: 'top',
+                font: "bold 40px 'DM Sans', sans-serif",
+                canvasWidth: 400, canvasHeight: 50, align: 'left', baseline: 'top',
                 offsetX: 40, offsetY: 40, sampling: 2
             });
             const menuEmoCoords = getTextCoordinates({
                 text: "ÉMOTIONS",
-                font: "22px 'DM Sans', sans-serif",
-                canvasWidth: 150, canvasHeight: 30, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 90, sampling: 1
+                font: "28px 'DM Sans', sans-serif",
+                canvasWidth: 180, canvasHeight: 35, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 100, sampling: 1
             });
             const menuCriCoords = getTextCoordinates({
                 text: "CRIMES",
-                font: "22px 'DM Sans', sans-serif",
-                canvasWidth: 120, canvasHeight: 30, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 125, sampling: 1
+                font: "28px 'DM Sans', sans-serif",
+                canvasWidth: 150, canvasHeight: 35, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 145, sampling: 1
             });
             const menuMirCoords = getTextCoordinates({
                 text: "MIRACLES",
-                font: "22px 'DM Sans', sans-serif",
-                canvasWidth: 150, canvasHeight: 30, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 160, sampling: 1
+                font: "28px 'DM Sans', sans-serif",
+                canvasWidth: 180, canvasHeight: 35, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 190, sampling: 1
             });
             const menuCoords = [...menuLogoCoords, ...menuEmoCoords, ...menuCriCoords, ...menuMirCoords];
 
@@ -233,8 +233,8 @@
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.menuX)
                     .attr("cy", d => d.menuY)
-                    .attr("r", 2.5) // Make points slightly larger for menu visibility
-                    .attr("fill", "white"); // Change color to uniform white
+                    .attr("r", 2.5)
+                    .attr("fill", "white");
             }
 
             setTimeout(animateToTitle, 100);
