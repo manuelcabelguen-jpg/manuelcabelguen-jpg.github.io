@@ -39,11 +39,17 @@
 
     <div class="container mx-auto px-4">
 
-        <header class="h-screen flex flex-col items-center justify-center text-center">
-            <!-- Animation is now the hero content -->
-            <div class="chart-container">
-                <canvas id="textCanvas" style="display: none;"></canvas>
-                <svg id="genericChart" class="w-full h-full"></svg>
+        <header class="h-screen flex items-center justify-center p-8">
+            <!-- Two-column layout -->
+            <div class="flex w-full max-w-7xl">
+                <!-- Left Column (for menu animation) -->
+                <div class="w-1/3 h-full p-4">
+                    <svg id="menuAnimation" class="w-full h-full"></svg>
+                </div>
+                <!-- Right Column (for pulsar animation) -->
+                <div class="w-2/3 h-full p-4">
+                    <svg id="pulsarAnimation" class="w-full h-full"></svg>
+                </div>
             </div>
         </header>
 
