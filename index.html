@@ -157,30 +157,30 @@
                 sampling: width > 768 ? 4 : 3
             });
 
-            // State 2: Top-Left Menu
+            // State 2: Top-Left Menu (with larger fonts and adjusted layout)
             const menuLogoCoords = getTextCoordinates({
                 text: "CARTOGRAFFECT",
-                font: "bold 20px 'DM Sans', sans-serif",
-                canvasWidth: 200, canvasHeight: 25, align: 'left', baseline: 'top',
+                font: "bold 30px 'DM Sans', sans-serif",
+                canvasWidth: 320, canvasHeight: 40, align: 'left', baseline: 'top',
                 offsetX: 40, offsetY: 40, sampling: 2
             });
             const menuEmoCoords = getTextCoordinates({
                 text: "ÉMOTIONS",
-                font: "16px 'DM Sans', sans-serif",
-                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 80, sampling: 1
+                font: "22px 'DM Sans', sans-serif",
+                canvasWidth: 150, canvasHeight: 30, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 90, sampling: 1
             });
             const menuCriCoords = getTextCoordinates({
                 text: "CRIMES",
-                font: "16px 'DM Sans', sans-serif",
-                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 110, sampling: 1
+                font: "22px 'DM Sans', sans-serif",
+                canvasWidth: 120, canvasHeight: 30, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 125, sampling: 1
             });
             const menuMirCoords = getTextCoordinates({
                 text: "MIRACLES",
-                font: "16px 'DM Sans', sans-serif",
-                canvasWidth: 100, canvasHeight: 20, align: 'left', baseline: 'top',
-                offsetX: 40, offsetY: 140, sampling: 1
+                font: "22px 'DM Sans', sans-serif",
+                canvasWidth: 150, canvasHeight: 30, align: 'left', baseline: 'top',
+                offsetX: 40, offsetY: 160, sampling: 1
             });
             const menuCoords = [...menuLogoCoords, ...menuEmoCoords, ...menuCriCoords, ...menuMirCoords];
 
@@ -222,17 +222,18 @@
                     .delay((d, i) => i * 0.75)
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.titleX)
-                    .attr("cy", d => d.titleY);
+                    .attr("cy", d => d.titleY)
+                    .attr("r", 2);
             }
             
-            // This function will be triggered by the button in the next step
             window.animateToMenu = function() {
                  points.transition()
                     .duration(1500)
                     .delay((d, i) => i * 0.75)
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.menuX)
-                    .attr("cy", d => d.menuY);
+                    .attr("cy", d => d.menuY)
+                    .attr("r", 2.5); // Make points slightly larger for menu visibility
             }
 
             setTimeout(animateToTitle, 100);
