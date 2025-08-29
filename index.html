@@ -233,7 +233,8 @@
                     .ease(d3.easeCubicInOut)
                     .attr("cx", d => d.menuX)
                     .attr("cy", d => d.menuY)
-                    .attr("r", 2.5); // Make points slightly larger for menu visibility
+                    .attr("r", 2.5) // Make points slightly larger for menu visibility
+                    .attr("fill", "white"); // Change color to uniform white
             }
 
             setTimeout(animateToTitle, 100);
