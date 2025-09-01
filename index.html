@@ -10,7 +10,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'DM Sans', sans-serif; }
+        body { font-family: 'DM Sans', sans-serif; overflow: hidden; }
+        
+        /* --- Screen Transition Styles --- */
+        #title-screen {
+            opacity: 1;
+            transition: opacity 1s ease-out;
+            will-change: opacity;
+        }
+        #title-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+            will-change: opacity;
+        }
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* --- Pulsar Animation Styles --- */
         .pulsar-container {
             background-color: #1f2937;
             padding: 20px;
@@ -29,7 +50,13 @@
 </head>
 <body class="bg-slate-900 text-slate-300 min-h-screen flex items-center justify-center p-8">
 
-    <div class="flex w-full max-w-screen-2xl h-[85vh]">
+    <!-- Fullscreen Title Animation -->
+    <div id="title-screen" class="fixed inset-0 bg-slate-900 flex items-center justify-center">
+        <svg id="title-animation"></svg>
+    </div>
+
+    <!-- Main Content (initially hidden) -->
+    <div id="main-content" class="hidden w-full max-w-screen-2xl h-[85vh]">
         <!-- Left Column: Menu -->
         <div class="w-1/3 flex flex-col justify-between p-8">
             <div>
@@ -62,41 +89,122 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const container = d3.select(".pulsar-container");
-            const size = Math.min(container.node().getBoundingClientRect().width, container.node().getBoundingClientRect().height);
-            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-            const width = size - margin.left - margin.right;
-            const height = size - margin.top - margin.bottom;
+            const titleScreen = document.getElementById('title-screen');
+            const mainContent = document.getElementById('main-content');
 
-            const svg = d3.select("#pulsarAnimation")
-                .attr("width", size)
-                .attr("height", size)
-                .append("g")
-                .attr("transform", `translate(${size/2}, ${size/2})`);
+            function runTitleAnimation(callback) {
+                const svg = d3.select("#title-animation");
+                const width = window.innerWidth;
+                const height = window.innerHeight;
+                svg.attr("width", width).attr("height", height);
 
-            const pointsData = [ {id:0,x:0,y:0},{id:1,x:0,y:0.5},{id:2,x:0,y:-0.5},{id:3,x:0,y:2},{id:4,x:0,y:-2},{id:5,x:-2,y:0},{id:6,x:2,y:0},{id:7,x:-1,y:1},{id:8,x:1,y:-1},{id:9,x:1,y:1},{id:10,x:-1,y:-1} ];
-            const domainLimit = 3;
-            const scale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([-width/2, width/2]);
-            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+                const textString = "CARTOGRAFFECT";
+                const fontSize = Math.min(width / 11, 100);
 
-            const defs = svg.append("defs");
-            const filter = defs.append("filter").attr("id", "glow");
-            filter.append("feGaussianBlur").attr("stdDeviation", "3.5").attr("result", "coloredBlur");
-            const feMerge = filter.append("feMerge");
-            feMerge.append("feMergeNode").attr("in", "coloredBlur");
-            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const context = canvas.getContext('2d');
+                context.font = `bold ${fontSize}px "DM Sans", sans-serif`;
+                context.fillStyle = "white";
+                context.textAlign = "center";
+                context.textBaseline = "middle";
+                context.fillText(textString, width / 2, height / 2);
 
-            const points = svg.selectAll(".pulsar-point").data(pointsData).enter().append("circle")
-                .attr("class", "pulsar-point").attr("cx", d => scale(d.x)).attr("cy", d => scale(d.y))
-                .attr("r", 8).attr("fill", (d,i) => colorScale(i)).style("filter", "url(#glow)");
+                const imageData = context.getImageData(0, 0, width, height);
+                const data = imageData.data;
+                const points = [];
+                const step = 4;
 
-            function pulse(selection) {
-                selection.transition().duration(1000 + Math.random() * 500).attr("r", 12)
-                    .transition().duration(1200 + Math.random() * 500).attr("r", 8)
-                    .on("end", function() { pulse(d3.select(this)); });
+                for (let y = 0; y < height; y += step) {
+                    for (let x = 0; x < width; x += step) {
+                        const alpha = data[((y * width + x) * 4) + 3];
+                        if (alpha > 128) {
+                            points.push({ x: x, y: y });
+                        }
+                    }
+                }
+
+                const sampleSize = Math.min(points.length, 2500);
+                const sampledPoints = d3.shuffle(points.slice()).slice(0, sampleSize);
+
+                svg.selectAll("circle")
+                    .data(sampledPoints)
+                    .enter().append("circle")
+                    .attr("cx", () => Math.random() * width)
+                    .attr("cy", () => Math.random() * height)
+                    .attr("r", 1)
+                    .style("fill", "#f0abfc")
+                    .style("opacity", 0)
+                    .transition()
+                    .duration(1000)
+                    .style("opacity", 1)
+                    .transition()
+                    .duration(2000)
+                    .delay((d, i) => i * 1.5)
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y)
+                    .on("end", (d, i) => {
+                        if (i === sampledPoints.length - 1) {
+                            setTimeout(callback, 1500); // Wait 1.5s after animation ends
+                        }
+                    });
             }
 
-            points.each(function() { pulse(d3.select(this)); });
+            function runPulsarAnimation() {
+                const container = d3.select(".pulsar-container");
+                if (!container.node()) return;
+                
+                // Clear any previous SVG content
+                container.select("svg").selectAll("*").remove();
+
+                const size = Math.min(container.node().getBoundingClientRect().width, container.node().getBoundingClientRect().height);
+                const svg = container.select("svg").attr("width", size).attr("height", size);
+                const g = svg.append("g").attr("transform", `translate(${size/2}, ${size/2})`);
+
+                const pointsData = [ {id:0,x:0,y:0},{id:1,x:0,y:0.5},{id:2,x:0,y:-0.5},{id:3,x:0,y:2},{id:4,x:0,y:-2},{id:5,x:-2,y:0},{id:6,x:2,y:0},{id:7,x:-1,y:1},{id:8,x:1,y:-1},{id:9,x:1,y:1},{id:10,x:-1,y:-1} ];
+                const domainLimit = 3;
+                const scale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([-(size/2)*0.8, (size/2)*0.8]);
+                const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+                const defs = g.append("defs");
+                const filter = defs.append("filter").attr("id", "glow");
+                filter.append("feGaussianBlur").attr("stdDeviation", "3.5").attr("result", "coloredBlur");
+                const feMerge = filter.append("feMerge");
+                feMerge.append("feMergeNode").attr("in", "coloredBlur");
+                feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+                const points = g.selectAll(".pulsar-point").data(pointsData).enter().append("circle")
+                    .attr("class", "pulsar-point").attr("cx", d => scale(d.x)).attr("cy", d => scale(d.y))
+                    .attr("r", 8).attr("fill", (d,i) => colorScale(i)).style("filter", "url(#glow)");
+
+                function pulse(selection) {
+                    selection.transition().duration(1000 + Math.random() * 500).attr("r", 12)
+                        .transition().duration(1200 + Math.random() * 500).attr("r", 8)
+                        .on("end", function() { pulse(d3.select(this)); });
+                }
+                points.each(function() { pulse(d3.select(this)); });
+            }
+
+            function transitionToMainContent() {
+                titleScreen.classList.add('hidden');
+                
+                mainContent.classList.remove('hidden');
+                mainContent.classList.add('flex'); // Make it visible
+                
+                setTimeout(() => {
+                    mainContent.classList.add('visible');
+                    requestAnimationFrame(() => {
+                       runPulsarAnimation();
+                    });
+                }, 50);
+
+                setTimeout(() => {
+                    titleScreen.remove();
+                }, 1000); // Remove after transition ends
+            }
+
+            runTitleAnimation(transitionToMainContent);
         });
     </script>
 </body>
