@@ -190,18 +190,20 @@
                 titleScreen.classList.add('hidden');
                 
                 mainContent.classList.remove('hidden');
-                mainContent.classList.add('flex'); // Make it visible
+                mainContent.classList.add('flex');
                 
-                setTimeout(() => {
+                // Use requestAnimationFrame to ensure 'display' is applied before adding 'visible' for the transition
+                requestAnimationFrame(() => {
                     mainContent.classList.add('visible');
-                    requestAnimationFrame(() => {
-                       runPulsarAnimation();
-                    });
-                }, 50);
+                });
 
+                // Run the animation after a delay that allows the layout to be computed.
+                setTimeout(runPulsarAnimation, 400);
+
+                // Remove the title screen from the DOM after its own transition is complete.
                 setTimeout(() => {
                     titleScreen.remove();
-                }, 1000); // Remove after transition ends
+                }, 1000); // Matches the CSS transition duration for #title-screen
             }
 
             runTitleAnimation(transitionToMainContent);
