@@ -10,204 +10,94 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
-        .pulsar-container { background-color: #1f2937; padding: 20px; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); height: 100%; }
+        body { font-family: 'DM Sans', sans-serif; }
+        .pulsar-container {
+            background-color: #1f2937;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            width: 100%;
+            height: 100%;
+        }
         .pulsar-point { transition: r 0.3s ease-in-out; }
         .orbital-path { fill: none; stroke: #374151; stroke-width: 0.5px; }
         .structural-line { stroke: #4b5563; stroke-width: 0.75px; opacity: 0.5; }
         .axis-line { stroke: #6b7280; stroke-width: 1px; stroke-dasharray: 4, 4; }
-        .energy-wave { fill: none; stroke: #f0abfc; stroke-width: 2.5px; stroke-linecap: round; filter: url(#glowPulsar); }
-        .orbital-spark { fill: #f0abfc; stroke: white; stroke-width: 1.5px; filter: url(#glowPulsar); }
-        #hero, #dashboard { transition: opacity 0.7s ease-in-out; }
+        .energy-wave { fill: none; stroke: #f0abfc; stroke-width: 2.5px; stroke-linecap: round; filter: url(#glow); }
+        .orbital-spark { fill: #f0abfc; stroke: white; stroke-width: 1.5px; filter: url(#glow); }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-300">
+<body class="bg-slate-900 text-slate-300 min-h-screen flex items-center justify-center p-8">
 
-    <div id="content-container">
-        <header id="hero" class="h-screen flex items-center justify-center p-8 fixed top-0 left-0 w-full">
-            <div id="title-animation-container" class="w-full h-full">
-                 <canvas id="textCanvas" style="display: none;"></canvas>
-                 <svg id="titleAnimation" class="w-full h-full"></svg>
+    <div class="flex w-full max-w-screen-2xl h-[85vh]">
+        <!-- Left Column: Menu -->
+        <div class="w-1/3 flex flex-col justify-between p-8">
+            <div>
+                <h1 class="text-5xl font-bold text-white mb-12">CARTOGRAFFECT</h1>
+                <nav class="flex flex-col space-y-6">
+                    <a href="emotions.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">ÉMOTIONS</a>
+                    <a href="crimes.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">CRIMES</a>
+                    <a href="miracles.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">MIRACLES</a>
+                </nav>
             </div>
-        </header>
-        
-        <div style="height: 100vh;"></div>
+            <footer class="text-slate-500">
+                <p>&copy; 2024 Cartograffect.</p>
+            </footer>
+        </div>
 
-        <main class="py-16 relative z-10 bg-slate-900">
-            <div id="dashboard" class="hidden fixed top-0 left-0 w-full h-screen items-center justify-center p-8 opacity-0">
-                 <div class="flex w-full max-w-7xl h-5/6">
-                    <div id="menu-container" class="w-1/3 h-full p-4">
-                        <svg id="menuAnimation" class="w-full h-full"></svg>
-                    </div>
-                    <div id="pulsar-container" class="w-2/3 h-full p-4">
-                         <div class="pulsar-container">
-                            <svg id="pulsarAnimation" class="w-full h-full"></svg>
-                         </div>
-                    </div>
+        <!-- Right Column: Animation and Text -->
+        <div class="w-2/3 flex flex-col">
+            <div class="flex-grow p-4">
+                <div class="pulsar-container">
+                    <svg id="pulsarAnimation" class="w-full h-full"></svg>
                 </div>
             </div>
-
-            <section class="text-center mb-24">
-                <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed text-slate-400">
-                    Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>...
+            <div class="p-8">
+                <p class="text-slate-400 text-lg leading-relaxed">
+                    Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
                 </p>
-            </section>
-            <section class="grid md:grid-cols-3 gap-10">
-                 <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-blue-500/50 hover:-translate-y-2">
-                    <div class="flex-grow">
-                        <h2 class="text-2xl font-bold text-blue-400 mb-4">Territoire 1 : ÉMOTIONS</h2>
-                        <p class="mb-8 text-slate-400"><strong>Les Fondations de la Carte.</strong><br>Cette section explique les éléments de base de votre carte : ce que sont les émotions, leur utilité, etc.</p>
-                    </div>
-                    <a href="emotions.html" class="mt-auto inline-block bg-blue-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors text-center">Explorer les Émotions</a>
-                </div>
-                 <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-purple-500/50 hover:-translate-y-2">
-                    <div class="flex-grow">
-                        <h2 class="text-2xl font-bold text-purple-400 mb-4">Territoire 2 : CRIMES</h2>
-                        <p class="mb-8 text-slate-400"><strong>Les Zones d'Ombre de la Carte.</strong><br>Cette section décrit les "territoires difficiles" ou les schémas comportementaux résultant d'une navigation émotionnelle compliquée.</p>
-                    </div>
-                    <a href="crimes.html" class="mt-auto inline-block bg-purple-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors text-center">Découvrir les Zones d'Ombre</a>
-                </div>
-                <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-green-500/50 hover:-translate-y-2">
-                    <div class="flex-grow">
-                        <h2 class="text-2xl font-bold text-green-400 mb-4">Territoire 3 : MIRACLES</h2>
-                        <p class="mb-8 text-slate-400"><strong>Les Itinéraires vers l'Équilibre.</strong><br>Ici, vous proposez les "itinéraires" ou les "boussoles" pour mieux naviguer.</p>
-                    </div>
-                    <a href="miracles.html" class="mt-auto inline-block bg-green-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-600 transition-colors text-center">Trouver son Itinéraire</a>
-                </div>
-            </section>
-        </main>
-        <footer class="text-center mt-16 text-slate-500 relative z-10 bg-slate-900 py-8">
-            <p>&copy; 2024 Cartograffect.</p>
-        </footer>
+            </div>
+        </div>
     </div>
 
     <script>
-        // --- Animation Orchestrator ---
         document.addEventListener("DOMContentLoaded", () => {
-            const hero = document.getElementById('hero');
-            const dashboard = document.getElementById('dashboard');
-            let isDashboardActive = false;
-
-            setupTitleAnimation();
-            setupMenu();
-            const pulsarAnimation = setupPulsarAnimation();
-
-            window.addEventListener('scroll', () => {
-                const scrollPosition = window.scrollY;
-                const heroHeight = hero.offsetHeight;
-
-                if (scrollPosition > heroHeight / 2 && !isDashboardActive) {
-                    isDashboardActive = true;
-                    hero.style.opacity = 0;
-                    dashboard.classList.remove('hidden');
-                    setTimeout(() => dashboard.style.opacity = 1, 50);
-                    pulsarAnimation.start();
-                } else if (scrollPosition <= heroHeight / 2 && isDashboardActive) {
-                    isDashboardActive = false;
-                    hero.style.opacity = 1;
-                    dashboard.style.opacity = 0;
-                    setTimeout(() => dashboard.classList.add('hidden'), 700);
-                    pulsarAnimation.stop();
-                }
-            });
-        });
-
-        function getTextCoordinates({ text, font, canvasWidth, canvasHeight, sampling = 4, align = "center", baseline = "middle" }) {
-            const canvas = document.getElementById('textCanvas');
-            const context = canvas.getContext('2d', { willReadFrequently: true });
-            canvas.width = canvasWidth;
-            canvas.height = canvasHeight;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.fillStyle = "white";
-            context.font = font;
-            context.textAlign = align;
-            context.textBaseline = baseline;
-            let textX = align === "center" ? canvasWidth / 2 : (align === "left" ? 40 : canvasWidth - 40);
-            let textY = baseline === "middle" ? canvasHeight / 2 : 40;
-            context.fillText(text, textX, textY);
-            const imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
-            const pixelData = imageData.data;
-            const coordinates = [];
-            for (let y = 0; y < canvasHeight; y += sampling) {
-                for (let x = 0; x < canvasWidth; x += sampling) {
-                    if (pixelData[(y * canvasWidth + x) * 4 + 3] > 128) { coordinates.push({ x: x, y: y }); }
-                }
-            }
-            return coordinates;
-        }
-
-        function setupTitleAnimation() {
-            const container = d3.select("#title-animation-container");
-            const width = container.node().getBoundingClientRect().width;
-            const height = container.node().getBoundingClientRect().height;
-            const svg = d3.select("#titleAnimation").attr("viewBox", `0 0 ${width} ${height}`).append("g");
-            const titleFontSize = Math.min(width / 9, height / 1.5);
-            const coordinates = getTextCoordinates({
-                text: "CARTOGRAFFECT", font: `bold ${titleFontSize}px 'DM Sans', sans-serif`,
-                canvasWidth: width, canvasHeight: height, sampling: width > 768 ? 4 : 2
-            });
-            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-            const pointsData = coordinates.map((d, i) => ({
-                x: Math.random() * width, y: Math.random() * height,
-                targetX: d.x, targetY: d.y, color: colorScale(i % 10)
-            }));
-            const points = svg.selectAll(".data-point").data(pointsData).enter().append("circle")
-                .attr("class", "data-point").attr("cx", d => d.x).attr("cy", d => d.y)
-                .attr("r", 2).attr("fill", d => d.color);
-            points.transition().duration(2000).delay((d, i) => i * 1).ease(d3.easeCubicInOut)
-                .attr("cx", d => d.targetX).attr("cy", d => d.targetY);
-        }
-
-        function setupMenu() {
-            const svg = d3.select("#menuAnimation");
-            const menuItems = [
-                { text: "CARTOGRAFFECT", size: "30px", weight: "bold", y: 60 },
-                { text: "ÉMOTIONS", size: "22px", weight: "normal", y: 110 },
-                { text: "CRIMES", size: "22px", weight: "normal", y: 145 },
-                { text: "MIRACLES", size: "22px", weight: "normal", y: 180 },
-            ];
-            svg.selectAll("text").data(menuItems).enter().append("text")
-                .attr("x", 40).attr("y", d => d.y).text(d => d.text)
-                .attr("font-size", d => d.size).attr("font-weight", d => d.weight)
-                .attr("fill", "white").style("opacity", 0).transition().duration(1000).style("opacity", 1);
-        }
-
-        function setupPulsarAnimation() {
             const container = d3.select(".pulsar-container");
             const size = Math.min(container.node().getBoundingClientRect().width, container.node().getBoundingClientRect().height);
-            const svg = d3.select("#pulsarAnimation").attr("viewBox", `0 0 ${size} ${size}`).append("g")
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+            const width = size - margin.left - margin.right;
+            const height = size - margin.top - margin.bottom;
+
+            const svg = d3.select("#pulsarAnimation")
+                .attr("width", size)
+                .attr("height", size)
+                .append("g")
                 .attr("transform", `translate(${size/2}, ${size/2})`);
+
+            const pointsData = [ {id:0,x:0,y:0},{id:1,x:0,y:0.5},{id:2,x:0,y:-0.5},{id:3,x:0,y:2},{id:4,x:0,y:-2},{id:5,x:-2,y:0},{id:6,x:2,y:0},{id:7,x:-1,y:1},{id:8,x:1,y:-1},{id:9,x:1,y:1},{id:10,x:-1,y:-1} ];
+            const domainLimit = 3;
+            const scale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([-width/2, width/2]);
+            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
             const defs = svg.append("defs");
-            const filter = defs.append("filter").attr("id", "glowPulsar");
+            const filter = defs.append("filter").attr("id", "glow");
             filter.append("feGaussianBlur").attr("stdDeviation", "3.5").attr("result", "coloredBlur");
             const feMerge = filter.append("feMerge");
             feMerge.append("feMergeNode").attr("in", "coloredBlur");
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-            const pointsData = [ {id:0,x:0,y:0},{id:1,x:0,y:0.5},{id:2,x:0,y:-0.5},{id:3,x:0,y:2},{id:4,x:0,y:-2},{id:5,x:-2,y:0},{id:6,x:2,y:0},{id:7,x:-1,y:1},{id:8,x:1,y:-1},{id:9,x:1,y:1},{id:10,x:-1,y:-1} ];
-            const domainLimit = 3;
-            const scale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([-size/2 + 50, size/2 - 50]);
-            const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+
             const points = svg.selectAll(".pulsar-point").data(pointsData).enter().append("circle")
-                .attr("class", "pulsar-point").attr("id", d => `point-${d.id}`).attr("cx", d => scale(d.x)).attr("cy", d => scale(d.y))
-                .attr("r", 8).attr("fill", (d,i) => colorScale(i)).style("filter", "url(#glowPulsar)");
-            let isAnimating = false;
+                .attr("class", "pulsar-point").attr("cx", d => scale(d.x)).attr("cy", d => scale(d.y))
+                .attr("r", 8).attr("fill", (d,i) => colorScale(i)).style("filter", "url(#glow)");
+
             function pulse(selection) {
-                if (!isAnimating) return;
                 selection.transition().duration(1000 + Math.random() * 500).attr("r", 12)
                     .transition().duration(1200 + Math.random() * 500).attr("r", 8)
                     .on("end", function() { pulse(d3.select(this)); });
             }
-            function start() {
-                if (isAnimating) return;
-                isAnimating = true;
-                points.each(function() { pulse(d3.select(this)); });
-            }
-            function stop() {
-                isAnimating = false;
-                points.interrupt().transition().duration(500).attr("r", 8);
-            }
-            return { start, stop };
-        }
+
+            points.each(function() { pulse(d3.select(this)); });
+        });
     </script>
 </body>
 </html>
