@@ -16,12 +16,55 @@
 </head>
 <body class="bg-slate-900 text-slate-300">
 
-    <header class="h-screen border-2 border-red-500 p-4">
-        <p>Header (Section du haut)</p>
+    <header class="h-screen flex items-center justify-center p-8 border-2 border-red-500">
+        <!-- Two-column layout -->
+        <div class="flex w-full max-w-7xl h-5/6 border border-yellow-400">
+            <!-- Left Column -->
+            <div class="w-1/3 h-full p-4 border border-purple-400">
+                <p>Colonne de Gauche (1/3)</p>
+            </div>
+            <!-- Right Column -->
+            <div class="w-2/3 h-full p-4 border border-cyan-400">
+                <p>Colonne de Droite (2/3)</p>
+            </div>
+        </div>
     </header>
 
-    <main class="border-2 border-green-500 p-4">
-        <p>Main (Contenu principal)</p>
+    <main class="py-16">
+        <section class="text-center mb-24">
+            <p class="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed text-slate-400">
+                Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
+            </p>
+        </section>
+
+        <section class="grid md:grid-cols-3 gap-10">
+            <!-- Territoire 1: ÉMOTIONS -->
+            <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-blue-500/50 hover:-translate-y-2">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-blue-400 mb-4">Territoire 1 : ÉMOTIONS</h2>
+                    <p class="mb-8 text-slate-400"><strong>Les Fondations de la Carte.</strong><br>Cette section explique les éléments de base de votre carte : ce que sont les émotions, leur utilité, etc.</p>
+                </div>
+                <a href="emotions.html" class="mt-auto inline-block bg-blue-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors text-center">Explorer les Émotions</a>
+            </div>
+
+            <!-- Territoire 2: CRIMES -->
+            <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-purple-500/50 hover:-translate-y-2">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-purple-400 mb-4">Territoire 2 : CRIMES</h2>
+                    <p class="mb-8 text-slate-400"><strong>Les Zones d'Ombre de la Carte.</strong><br>Cette section décrit les "territoires difficiles" ou les schémas comportementaux résultant d'une navigation émotionnelle compliquée.</p>
+                </div>
+                <a href="crimes.html" class="mt-auto inline-block bg-purple-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-purple-600 transition-colors text-center">Découvrir les Zones d'Ombre</a>
+            </div>
+
+            <!-- Territoire 3: MIRACLES -->
+            <div class="bg-slate-800/50 border border-slate-700 p-8 rounded-2xl shadow-lg flex flex-col transition duration-300 hover:border-green-500/50 hover:-translate-y-2">
+                <div class="flex-grow">
+                    <h2 class="text-2xl font-bold text-green-400 mb-4">Territoire 3 : MIRACLES</h2>
+                    <p class="mb-8 text-slate-400"><strong>Les Itinéraires vers l'Équilibre.</strong><br>Ici, vous proposez les "itinéraires" ou les "boussoles" pour mieux naviguer.</p>
+                </div>
+                <a href="miracles.html" class="mt-auto inline-block bg-green-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-green-600 transition-colors text-center">Trouver son Itinéraire</a>
+            </div>
+        </section>
     </main>
 
     <footer class="border-2 border-blue-500 p-4">
