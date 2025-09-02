@@ -168,13 +168,13 @@
                     .duration(1000)
                     .style("opacity", 1)
                     .transition()
-                    .duration(2000)
-                    .delay((d, i) => i * 1.5)
+                    .duration(1000)
+                    .delay((d, i) => i * 0.75)
                     .attr("cx", d => d.x)
                     .attr("cy", d => d.y)
                     .on("end", (d, i) => {
                         if (i === sampledPoints.length - 1) {
-                            setTimeout(callback, 1500); // Wait 1.5s after animation ends
+                            setTimeout(callback, 750); // Wait 0.75s after animation ends
                         }
                     });
             }
