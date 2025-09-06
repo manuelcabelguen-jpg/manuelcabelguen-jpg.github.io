@@ -82,6 +82,13 @@
             pointer-events: none; /* Important so it doesn't block interactions */
             opacity: 1;
         }
+        .emotion-emoji-popup {
+            font-size: 24px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            pointer-events: none;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-300 min-h-screen flex items-center justify-center p-8">
@@ -196,10 +203,27 @@
                 const svgContainer = d3.select("#logoCanvas");
                 if (!svgContainer.node()) return;
 
-                // Clear any previous animation content
                 svgContainer.selectAll("*").remove();
 
-                // --- DONNÉES ---
+                const specificEmotionEmojis = {
+                    "Attente": "⏳", "Surprise": "😮", "Anticipation": "🤔", "Joie": "😄", "Tristesse": "😢", "Peur": "😨",
+                    "Courage": "💪", "Colère": "😠", "Calme": "😌", "Désir": "😍", "Dégoût": "🤢", "Confusion": "😕",
+                    "Consternation": "😧", "Euphorie": "🥳", "Engourdissement": "😵", "Réconfort": "🤗", "Chagrin": "😥",
+                    "Stupeur": "😲", "Panique": "😱", "Effroi": "🥶", "Appréhension": "🧐", "Émerveillement": "🤩",
+                    "Enchantement": "✨", "Exaspération": "😤", "Soulagement": "😮‍💨", "Excitation": "🤪", "Déception": "😞",
+                    "Ambivalence": "🤷", "Envie": "😏", "Haine": "😡", "Amour": "❤️", "Assurance": "😎", "Indifférence": "😐",
+                    "Sérénité": "😇", "Plénitude": "🙏", "Honte": "😳", "Vide": "😶‍🌫️", "Anxiété": "😰", "Manque": "💔",
+                    "Mépris": "😒", "Crainte": "😟", "Doute": "🤨", "Conviction": "✅", "Fierté": "🦁", "Épanouissement": "🌸",
+                    "Affection": "🥰", "Admiration": "🙌", "Frustration": "😫", "Acceptation": "👌", "Engagement": "🤝",
+                    "Rejet": "🙅‍♂️", "Agitation": "🏃‍♀️", "Invulnérabilité": "🛡️", "Puissance": "⚡", "Confiance": "👍",
+                    "Intolérance": "🚫", "Injustice": "⚖️", "Imprudence": "🙈", "Apathie": "😑", "Sécurité": "🔒",
+                    "Quiétude": "🏞️", "Patience": "🧘‍♀️", "Pessimisme": "🌧️", "Déshonneur": "🤦‍♂️", "Désespoir": "😩",
+                    "Incertitude": "❓", "Insécurité": "😥", "Inquiétude": "🤔", "Impatience": "😤", "Vulnérabilité": "💔",
+                    "Impuissance": "🤷‍♂️", "Méfiance": "😒", "Certitude": "💯", "Optimisme": "😊", "Honneur": "🎖️",
+                    "Espoir": "✨", "Tolérance": "🤗", "Justice": "⚖️", "Prudence": "🧐", "Mécontentement": "😕",
+                    "Contentement": "😊", "Intérêt": "💡", "Désintérêt": "😴"
+                };
+                
                 const pointsData = [
                     { id: 0, name: "Attente", x: 0, y: 0, category: 1, group: "Orientation" },
                     { id: 1, name: "Surprise", x: 0, y: 0.5, category: 1, group: "Orientation" },
@@ -286,20 +310,21 @@
                     { id: 82, name: "Désintérêt", x: -4, y: -4, category: 5, group: "Dégoût" }
                 ];
 
-                const size = 700;
-                const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-                const width = size - margin.left - margin.right;
-                const height = size - margin.top - margin.bottom;
+                const SIZE = 700;
+                const MARGIN = { top: 20, right: 20, bottom: 20, left: 20 };
+                const DOMAIN_LIMIT = 8.5;
+
+                const width = SIZE - MARGIN.left - MARGIN.right;
+                const height = SIZE - MARGIN.top - MARGIN.bottom;
 
                 const svg = svgContainer
-                    .attr("width", size)
-                    .attr("height", size)
+                    .attr("width", SIZE)
+                    .attr("height", SIZE)
                     .append("g")
-                    .attr("transform", `translate(${margin.left},${margin.top})`);
+                    .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
-                const domainLimit = 8.5;
-                const xScale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([0, width]);
-                const yScale = d3.scaleLinear().domain([-domainLimit, domainLimit]).range([height, 0]);
+                const xScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([0, width]);
+                const yScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([height, 0]);
                 
                 const colorGroups = {
                     "Joie": "#a78bfa", "Tristesse": "#38bdf8", "Peur": "#f472b6", "Courage": "#4ade80",
@@ -327,10 +352,8 @@
                 pointsData.forEach(p => adjacencyList.set(p.id, []));
                 const lineData = [];
                 const connections = new Set();
-
                 const centralPoints = pointsData.filter(p => p.id <= 2);
                 const firstLayerPoints = pointsData.filter(p => p.category === 2);
-
                 for (const centerP of centralPoints) {
                     for (const layer1P of firstLayerPoints) {
                         const connectionKey = [centerP.id, layer1P.id].sort((a,b) => a-b).join('-');
@@ -342,7 +365,6 @@
                         }
                     }
                 }
-                
                 const k = 3;
                 const outerLayersPoints = pointsData.filter(p => p.category > 1);
                 for (const p1 of outerLayersPoints) {
@@ -366,24 +388,28 @@
                     }
                 }
                 
-                svg.append("g").attr("class", "structural-lines-group").selectAll("line").data(lineData).enter().append("line")
-                    .attr("class", "structural-line").attr("x1", d => xScale(d.source.x)).attr("y1", d => yScale(d.source.y))
-                    .attr("x2", d => xScale(d.target.x)).attr("y2", d => yScale(d.target.y));
+                const lines = svg.append("g").selectAll("line")
+                    .data(lineData)
+                    .enter()
+                    .append("line")
+                    .attr("class", "structural-line")
+                    .attr("stroke", "#4b5563")
+                    .attr("stroke-width", 0.75)
+                    .attr("opacity", 0.3)
+                    .attr("x1", d => xScale(d.source.x))
+                    .attr("y1", d => yScale(d.source.y))
+                    .attr("x2", d => xScale(d.target.x))
+                    .attr("y2", d => yScale(d.target.y));
 
                 const points = svg.selectAll(".data-point").data(pointsData).enter().append("circle")
                     .attr("class", "data-point").attr("id", d => `point-${d.id}`).attr("cx", d => xScale(d.x)).attr("cy", d => yScale(d.y))
                     .attr("r", d => radiusScale(d.category)).attr("fill", d => colorScale(d.group)).style("filter", "url(#glow)");
                 
-                const orbitalRadius = yScale(0) - yScale(0.5);
-                svg.append("path").attr("class", "orbital-path").attr("d", d3.arc()({ innerRadius: orbitalRadius, outerRadius: orbitalRadius, startAngle: 0, endAngle: 2 * Math.PI }))
-                    .attr("transform", `translate(${xScale(0)}, ${yScale(0)})`);
-
-                const orbitalSpark = svg.append("circle").attr("r", 4).attr("class", "orbital-spark");
-
-                function findRandomWavePath(startPoint, maxSteps = 10) {
+                function findRandomWavePath(startPoint, adjacencyList) {
                     let path = [startPoint];
                     let currentPoint = startPoint;
                     let visited = new Set([startPoint.id]);
+                    const maxSteps = 8 + Math.floor(Math.random() * 8);
 
                     for (let i = 0; i < maxSteps; i++) {
                         const neighborsIds = adjacencyList.get(currentPoint.id) || [];
@@ -391,8 +417,8 @@
                             .map(id => pointsData.find(p => p.id === id))
                             .filter(p => p && !visited.has(p.id));
 
-                        if (unvisitedNeighbors.length === 0) break; 
-                        
+                        if (unvisitedNeighbors.length === 0) break;
+
                         const nextPoint = unvisitedNeighbors[Math.floor(Math.random() * unvisitedNeighbors.length)];
                         path.push(nextPoint);
                         visited.add(nextPoint.id);
@@ -403,114 +429,100 @@
 
                 function animateWave(pathPoints) {
                     if (pathPoints.length < 2) return;
-
-                    const waveDuration = 3000; // Slowed down
-                    const lineGenerator = d3.line()
-                        .x(d => xScale(d.x))
-                        .y(d => yScale(d.y))
-                        .curve(d3.curveCatmullRom.alpha(0.5));
-
-                    const path = svg.append("path")
-                        .datum(pathPoints)
-                        .attr("class", "energy-wave")
-                        .attr("d", lineGenerator);
-
+                    const waveDuration = 1500;
+                    const lineGenerator = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).curve(d3.curveCatmullRom.alpha(0.5));
+                    const path = svg.append("path").datum(pathPoints).attr("fill", "none").attr("stroke", "#f0abfc").attr("stroke-width", "2.5px").style("filter", "url(#glow)").attr("d", lineGenerator);
                     const length = path.node().getTotalLength();
-
-                    path.attr("stroke-dasharray", length + " " + length)
-                        .attr("stroke-dashoffset", length)
-                        .transition()
-                        .duration(waveDuration)
-                        .ease(d3.easeLinear)
-                        .attr("stroke-dashoffset", 0)
-                        .transition()
-                        .duration(500)
-                        .style("opacity", 0)
-                        .remove();
-
+                    path.attr("stroke-dasharray", `${length} ${length}`).attr("stroke-dashoffset", length).transition().duration(waveDuration).ease(d3.easeLinear).attr("stroke-dashoffset", 0).transition().duration(500).style("opacity", 0).remove();
+                    
                     pathPoints.forEach((point, i) => {
                         const delay = (waveDuration / (pathPoints.length - 1)) * i;
                         setTimeout(() => {
-                            d3.select(`#point-${point.id}`)
-                                .transition()
-                                .duration(200)
-                                .attr("r", d => radiusScale(d.category) + 5)
-                                .transition()
-                                .duration(600)
-                                .attr("r", d => radiusScale(d.category));
-
-                            if (point.name) {
-                                const startX = xScale(point.x);
-                                const startY = yScale(point.y);
-                                const center = { x: xScale(0), y: yScale(0) };
-
-                                let dirX = startX - center.x;
-                                let dirY = startY - center.y;
-                                const mag = Math.sqrt(dirX * dirX + dirY * dirY);
+                            d3.select(`#point-${point.id}`).transition().duration(200).attr("r", d => radiusScale(d.category) + 5).transition().duration(600).attr("r", d => radiusScale(d.category));
+                            
+                            const startX = xScale(point.x), startY = yScale(point.y);
+                            let [dirX, dirY] = [startX - xScale(0), startY - yScale(0)];
+                            const mag = Math.sqrt(dirX * dirX + dirY * dirY);
+                            if (mag > 0) { [dirX, dirY] = [dirX / mag, dirY / mag]; } else { [dirX, dirY] = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2]; }
+                            
+                            svg.append("text").attr("class", "emotion-label-popup").attr("x", startX).attr("y", startY).text(point.name).attr("fill", "#e5e7eb").attr("font-size", "14px").attr("font-weight", "600").attr("text-anchor", "middle").style("pointer-events", "none").transition().duration(2500).ease(d3.easeQuadOut).attr("x", startX + dirX * 120).attr("y", startY + dirY * 120).style("opacity", 0).remove();
+                        
+                            const emoji = specificEmotionEmojis[point.name];
+                            if (emoji) {
+                                const emojiDriftX = (Math.random() - 0.5) * 40;
+                                const emojiDriftY = (Math.random() - 0.5) * 40;
                                 
-                                if (mag > 0) {
-                                    dirX /= mag;
-                                    dirY /= mag;
-                                } else { 
-                                    dirX = (Math.random() - 0.5) * 2;
-                                    dirY = (Math.random() - 0.5) * 2;
-                                }
-
-                                const travelDistance = 250; // Increased distance
-                                const endX = startX + dirX * travelDistance;
-                                const endY = startY + dirY * travelDistance;
-
                                 svg.append("text")
-                                    .attr("class", "emotion-label-popup")
+                                    .attr("class", "emotion-emoji-popup")
                                     .attr("x", startX)
                                     .attr("y", startY)
-                                    .text(point.name)
+                                    .text(emoji)
                                     .transition()
-                                    .duration(3500) // Increased duration
+                                    .duration(2800)
                                     .ease(d3.easeQuadOut)
-                                    .attr("x", endX)
-                                    .attr("y", endY)
+                                    .attr("x", startX + dirX * 140 + emojiDriftX)
+                                    .attr("y", startY + dirY * 140 + emojiDriftY)
+                                    .attr("transform", `rotate(${(Math.random() - 0.5) * 30}, ${startX}, ${startY})`)
                                     .style("opacity", 0)
                                     .remove();
                             }
                         }, delay);
                     });
-                }
-
-                function startContinuousAnimation() {
-                    points.each(function() {
-                        const selection = d3.select(this);
-                        function pulse() {
-                            selection.transition()
-                                .duration(1200 + Math.random() * 600)
-                                .attr("r", d => radiusScale(d.category) + 2)
-                                .transition()
-                                .duration(1200 + Math.random() * 600)
-                                .attr("r", d => radiusScale(d.category))
-                                .on("end", pulse);
-                        }
-                        pulse();
-                    });
-
-                    d3.timer(elapsed => {
-                        const speedMultiplier = 0.005;
-                        const angle = elapsed * speedMultiplier;
-                        const x = xScale(0) + orbitalRadius * Math.cos(angle);
-                        const y = yScale(0) + orbitalRadius * Math.sin(angle);
-                        orbitalSpark.attr("transform", `translate(${x}, ${y})`);
-                    });
-
-                    function launchWaveLoop() {
-                        const startPoint = pointsData.find(p => p.id === 0);
-                        const path = findRandomWavePath(startPoint, 8 + Math.floor(Math.random() * 8));
-                        animateWave(path);
-                        
-                        setTimeout(launchWaveLoop, 1000 + Math.random() * 800);
+                };
+                
+                points.each(function(p) {
+                    const point = p;
+                    const selection = d3.select(this);
+                    function pulse() {
+                        selection.transition()
+                            .duration(2000 + Math.random() * 1500)
+                            .ease(d3.easeSinInOut)
+                            .attr("r", radiusScale(point.category) + 1.5)
+                            .transition()
+                            .duration(2000 + Math.random() * 1500)
+                            .ease(d3.easeSinInOut)
+                            .attr("r", radiusScale(point.category))
+                            .on("end", pulse);
                     }
-                    launchWaveLoop();
-                }
+                    pulse();
+                });
+                
+                const pointEntities = pointsData.map(d => ({
+                    id: d.id,
+                    selection: d3.select(`#point-${d.id}`),
+                    originalCx: xScale(d.x),
+                    originalCy: yScale(d.y),
+                    orbitRadius: 2 + Math.random() * 2.5,
+                    orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
+                    startAngle: Math.random() * 2 * Math.PI,
+                }));
 
-                startContinuousAnimation();
+                const pointPositions = new Map();
+
+                d3.timer(elapsed => {
+                    pointEntities.forEach(p => {
+                        const angle = p.startAngle + elapsed * p.orbitSpeed;
+                        const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
+                        const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
+                        p.selection.attr('cx', newCx).attr('cy', newCy);
+                        pointPositions.set(p.id, { x: newCx, y: newCy });
+                    });
+
+                    lines
+                        .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
+                        .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
+                        .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
+                        .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
+                });
+
+                function launchWaveLoop() {
+                    if (document.hidden) return; // Pause if tab is not visible
+                    const startPoint = pointsData.find(p => p.id === 0);
+                    const path = findRandomWavePath(startPoint, adjacencyList);
+                    animateWave(path);
+                    setTimeout(launchWaveLoop, 1500 + Math.random() * 1000);
+                };
+                launchWaveLoop();
             }
 
             function transitionToMainContent() {
