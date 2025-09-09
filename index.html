@@ -512,14 +512,35 @@
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
+                    // Lemniscate motion for the core points (id <= 2)
+                    const speedMultiplier = 0.002;
+                    const coreAngle = elapsed * speedMultiplier;
+                    const radiusY = yScale(0) - yScale(0.5); // y-radius in pixels
+                    const radiusX = radiusY * 1.5;           // x-radius in pixels, wider
+                    
+                    // Calculate the offset based on the lemniscate path formula provided by the user
+                    const x_offset = radiusX * Math.sin(2 * coreAngle);
+                    const y_offset = radiusY * Math.cos(coreAngle);
+
                     pointEntities.forEach(p => {
-                        const angle = p.startAngle + elapsed * p.orbitSpeed;
-                        const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
-                        const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
+                        let newCx, newCy;
+
+                        if (p.id <= 2) {
+                            // Apply the unified lemniscate motion to the three core points
+                            newCx = p.originalCx + x_offset;
+                            newCy = p.originalCy + y_offset;
+                        } else {
+                            // Apply individual circular orbit to all other points
+                            const angle = p.startAngle + elapsed * p.orbitSpeed;
+                            newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
+                            newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
+                        }
+                        
                         p.selection.attr('cx', newCx).attr('cy', newCy);
                         pointPositions.set(p.id, { x: newCx, y: newCy });
                     });
 
+                    // Update lines to follow the moving points
                     lines
                         .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
