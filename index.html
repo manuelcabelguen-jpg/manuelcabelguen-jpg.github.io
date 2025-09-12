@@ -512,40 +512,101 @@
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
-                    // Lemniscate motion for the core points (id <= 2)
-                    const speedMultiplier = 0.002;
-                    const coreAngle = elapsed * speedMultiplier;
-                    const radiusY = yScale(0) - yScale(0.5); // y-radius in pixels
-                    const radiusX = radiusY * 1.5;           // x-radius in pixels, wider
-                    
-                    // Calculate the offset based on the lemniscate path formula provided by the user
-                    const x_offset = radiusX * Math.sin(2 * coreAngle);
-                    const y_offset = radiusY * Math.cos(coreAngle);
-
                     pointEntities.forEach(p => {
-                        let newCx, newCy;
-
-                        if (p.id <= 2) {
-                            // Apply the unified lemniscate motion to the three core points
-                            newCx = p.originalCx + x_offset;
-                            newCy = p.originalCy + y_offset;
-                        } else {
-                            // Apply individual circular orbit to all other points
+                        // Animate non-core points in their circular orbit
+                        if (p.id > 2) {
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
-                            newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
-                            newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
+                            const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
+                            const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
+                            p.selection.attr('cx', newCx).attr('cy', newCy);
+                            pointPositions.set(p.id, { x: newCx, y: newCy });
+                        } else {
+                            // Ensure the static core points are in the position map for line drawing
+                            if (!pointPositions.has(p.id)) {
+                                pointPositions.set(p.id, { x: p.originalCx, y: p.originalCy });
+                            }
                         }
-                        
-                        p.selection.attr('cx', newCx).attr('cy', newCy);
-                        pointPositions.set(p.id, { x: newCx, y: newCy });
                     });
 
-                    // Update lines to follow the moving points
                     lines
                         .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
                         .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
+                });
+
+                // Create 8 sparks for the new circuit animation, initially at the center
+                const sparks = [];
+                for (let i = 0; i < 8; i++) {
+                    sparks.push(
+                        svg.append("circle")
+                            .attr("r", 4.5)
+                            .attr("fill", "#f472b6")
+                            .style("filter", "url(#glow)")
+                            .attr("cx", xScale(0))
+                            .attr("cy", yScale(0))
+                    );
+                }
+
+                // --- Définition de l'animation du circuit ---
+                const targetPoints = {
+                    center: { x: xScale(0), y: yScale(0) },
+                    joie: { x: xScale(pointsData.find(p=>p.name==="Joie").x), y: yScale(pointsData.find(p=>p.name==="Joie").y) },
+                    tristesse: { x: xScale(pointsData.find(p=>p.name==="Tristesse").x), y: yScale(pointsData.find(p=>p.name==="Tristesse").y) },
+                    peur: { x: xScale(pointsData.find(p=>p.name==="Peur").x), y: yScale(pointsData.find(p=>p.name==="Peur").y) },
+                    courage: { x: xScale(pointsData.find(p=>p.name==="Courage").x), y: yScale(pointsData.find(p=>p.name==="Courage").y) },
+                    colere: { x: xScale(pointsData.find(p=>p.name==="Colère").x), y: yScale(pointsData.find(p=>p.name==="Colère").y) },
+                    calme: { x: xScale(pointsData.find(p=>p.name==="Calme").x), y: yScale(pointsData.find(p=>p.name==="Calme").y) },
+                    desir: { x: xScale(pointsData.find(p=>p.name==="Désir").x), y: yScale(pointsData.find(p=>p.name==="Désir").y) },
+                    degout: { x: xScale(pointsData.find(p=>p.name==="Dégoût").x), y: yScale(pointsData.find(p=>p.name==="Dégoût").y) }
+                };
+
+                const paths = [
+                    { spark: sparks[0], p1: targetPoints.joie, p2: targetPoints.colere },
+                    { spark: sparks[1], p1: targetPoints.joie, p2: targetPoints.desir },
+                    { spark: sparks[2], p1: targetPoints.tristesse, p2: targetPoints.degout },
+                    { spark: sparks[3], p1: targetPoints.tristesse, p2: targetPoints.calme },
+                    { spark: sparks[4], p1: targetPoints.peur, p2: targetPoints.colere },
+                    { spark: sparks[5], p1: targetPoints.peur, p2: targetPoints.degout },
+                    { spark: sparks[6], p1: targetPoints.courage, p2: targetPoints.desir },
+                    { spark: sparks[7], p1: targetPoints.courage, p2: targetPoints.calme }
+                ];
+
+                function animateSpark(path, delay = 0) {
+                    const spark = path.spark;
+                    const p1 = path.p1;
+                    const p2 = path.p2;
+                    const center = targetPoints.center;
+                    const totalDuration = 3000 + Math.random() * 500;
+
+                    spark.attr("cx", center.x).attr("cy", center.y);
+
+                    function loop() {
+                        spark
+                            .transition()
+                            .delay(delay)
+                            .duration(totalDuration / 3)
+                            .ease(d3.easeCubicInOut)
+                            .attr("cx", p1.x)
+                            .attr("cy", p1.y)
+                            .transition()
+                            .duration(totalDuration / 3)
+                            .ease(d3.easeCubicInOut)
+                            .attr("cx", p2.x)
+                            .attr("cy", p2.y)
+                            .transition()
+                            .duration(totalDuration / 3)
+                            .ease(d3.easeCubicInOut)
+                            .attr("cx", center.x)
+                            .attr("cy", center.y)
+                            .on("end", loop);
+                    }
+                    loop();
+                }
+
+                paths.forEach((path, i) => {
+                    const delay = Math.floor(i / 2) * (3000 / 4);
+                    animateSpark(path, delay);
                 });
 
                 function launchWaveLoop() {
