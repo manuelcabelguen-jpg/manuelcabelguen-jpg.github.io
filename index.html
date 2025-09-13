@@ -512,22 +512,53 @@
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
+                    const orbitSpeed = 0.001;
+                    const rotationAngle = elapsed * orbitSpeed;
+                    const orbitRadius = 0.5; // Domain distance from center
+
+                    // --- Animate Core Points ---
+                    // Surprise (ID 1) - clockwise orbit
+                    const surpriseAngle = (Math.PI / 2) - rotationAngle;
+                    const surpriseX = orbitRadius * Math.cos(surpriseAngle);
+                    const surpriseY = orbitRadius * Math.sin(surpriseAngle);
+                    const surpriseEntity = pointEntities.find(p => p.id === 1);
+                    if (surpriseEntity) {
+                        const newCx = xScale(surpriseX);
+                        const newCy = yScale(surpriseY);
+                        surpriseEntity.selection.attr('cx', newCx).attr('cy', newCy);
+                        pointPositions.set(1, { x: newCx, y: newCy });
+                    }
+
+                    // Anticipation (ID 2) - counter-clockwise orbit
+                    const anticipationAngle = (-Math.PI / 2) + rotationAngle;
+                    const anticipationX = orbitRadius * Math.cos(anticipationAngle);
+                    const anticipationY = orbitRadius * Math.sin(anticipationAngle);
+                    const anticipationEntity = pointEntities.find(p => p.id === 2);
+                    if (anticipationEntity) {
+                        const newCx = xScale(anticipationX);
+                        const newCy = yScale(anticipationY);
+                        anticipationEntity.selection.attr('cx', newCx).attr('cy', newCy);
+                        pointPositions.set(2, { x: newCx, y: newCy });
+                    }
+
+                    // Attente (ID 0) - remains static
+                    const attenteEntity = pointEntities.find(p => p.id === 0);
+                    if (attenteEntity && !pointPositions.has(0)) {
+                        pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
+                    }
+
+                    // --- Animate Outer Points ---
                     pointEntities.forEach(p => {
-                        // Animate non-core points in their circular orbit
                         if (p.id > 2) {
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
                             const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
                             const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
                             p.selection.attr('cx', newCx).attr('cy', newCy);
                             pointPositions.set(p.id, { x: newCx, y: newCy });
-                        } else {
-                            // Ensure the static core points are in the position map for line drawing
-                            if (!pointPositions.has(p.id)) {
-                                pointPositions.set(p.id, { x: p.originalCx, y: p.originalCy });
-                            }
                         }
                     });
 
+                    // Update all lines
                     lines
                         .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
@@ -572,19 +603,18 @@
                     { spark: sparks[7], p1: targetPoints.courage, p2: targetPoints.calme }
                 ];
 
-                function animateSpark(path, delay = 0) {
+                function animateSpark(path) {
                     const spark = path.spark;
                     const p1 = path.p1;
                     const p2 = path.p2;
                     const center = targetPoints.center;
-                    const totalDuration = 3000 + Math.random() * 500;
+                    const totalDuration = 3000; // Fixed duration
 
                     spark.attr("cx", center.x).attr("cy", center.y);
 
                     function loop() {
                         spark
                             .transition()
-                            .delay(delay)
                             .duration(totalDuration / 3)
                             .ease(d3.easeCubicInOut)
                             .attr("cx", p1.x)
@@ -604,9 +634,8 @@
                     loop();
                 }
 
-                paths.forEach((path, i) => {
-                    const delay = Math.floor(i / 2) * (3000 / 4);
-                    animateSpark(path, delay);
+                paths.forEach(path => {
+                    animateSpark(path);
                 });
 
                 function launchWaveLoop() {
