@@ -512,7 +512,7 @@
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
-                    const orbitSpeed = 0.001;
+                    const orbitSpeed = 0.0025; // Increased speed
                     const rotationAngle = elapsed * orbitSpeed;
                     const orbitRadius = 0.5; // Domain distance from center
 
@@ -603,12 +603,12 @@
                     { spark: sparks[7], p1: targetPoints.courage, p2: targetPoints.calme }
                 ];
 
-                function animateSpark(path) {
+                function animateSpark(path, index) {
                     const spark = path.spark;
                     const p1 = path.p1;
                     const p2 = path.p2;
                     const center = targetPoints.center;
-                    const totalDuration = 3000; // Fixed duration
+                    const totalDuration = 3000;
 
                     spark.attr("cx", center.x).attr("cy", center.y);
 
@@ -629,13 +629,19 @@
                             .ease(d3.easeCubicInOut)
                             .attr("cx", center.x)
                             .attr("cy", center.y)
-                            .on("end", loop);
+                            .on("end", () => {
+                                // The first spark (index 0) triggers the wave animation for the group
+                                if (index === 0) {
+                                    launchWaveLoop();
+                                }
+                                loop(); // Continue the loop for the current spark
+                            });
                     }
                     loop();
                 }
 
-                paths.forEach(path => {
-                    animateSpark(path);
+                paths.forEach((path, i) => {
+                    animateSpark(path, i);
                 });
 
                 function launchWaveLoop() {
@@ -643,9 +649,8 @@
                     const startPoint = pointsData.find(p => p.id === 0);
                     const path = findRandomWavePath(startPoint, adjacencyList);
                     animateWave(path);
-                    setTimeout(launchWaveLoop, 1500 + Math.random() * 1000);
                 };
-                launchWaveLoop();
+                // launchWaveLoop is now triggered by the spark animation cycle
             }
 
             function transitionToMainContent() {
