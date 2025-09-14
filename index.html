@@ -417,11 +417,31 @@
                     .attr("class", "data-point").attr("id", d => `point-${d.id}`).attr("cx", d => xScale(d.x)).attr("cy", d => yScale(d.y))
                     .attr("r", d => radiusScale(d.category)).attr("fill", d => colorScale(d.group)).style("filter", "url(#glow)");
                 
-                function findRandomWavePath(startPoint, adjacencyList) {
-                    let path = [startPoint];
-                    let currentPoint = startPoint;
-                    let visited = new Set([startPoint.id]);
-                    const maxSteps = 8 + Math.floor(Math.random() * 8);
+                function findRandomWavePath(startPoint, tempTarget, adjacencyList) {
+                    // Find the real point closest to the temporary snapshot target
+                    let closestPoint = null;
+                    let minDistance = Infinity;
+                    pointsData.forEach(p => {
+                        if (p.id === 0) return;
+                        const dist = Math.sqrt(Math.pow(p.x - tempTarget.x, 2) + Math.pow(p.y - tempTarget.y, 2));
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            closestPoint = p;
+                        }
+                    });
+
+                    let path = [startPoint, tempTarget];
+                    let currentPoint;
+
+                    if(closestPoint) {
+                        path.push(closestPoint);
+                        currentPoint = closestPoint;
+                    } else {
+                        return [startPoint]; // Fallback
+                    }
+                    
+                    let visited = new Set([startPoint.id, currentPoint.id]);
+                    const maxSteps = 6 + Math.floor(Math.random() * 6); // Shorter path after the target
 
                     for (let i = 0; i < maxSteps; i++) {
                         const neighborsIds = adjacencyList.get(currentPoint.id) || [];
@@ -508,34 +528,46 @@
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
                     startAngle: Math.random() * 2 * Math.PI,
+                    // Add individual oscillation speeds for core points
+                    oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
+
+                const resultantPoint = svg.append("circle")
+                    .attr("r", 5.5)
+                    .attr("fill", "white")
+                    .style("filter", "url(#glow)");
 
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
-                    const osc_speed = 0.002;
-                    const osc_angle = elapsed * osc_speed;
                     const amplitude = 1.0; 
 
                     // --- Animate Core Points ---
-                    // Surprise (ID 1) oscillates vertically around its starting y-position
+                    // Surprise (ID 1) oscillates vertically with its own random speed
                     const surpriseEntity = pointEntities.find(p => p.id === 1);
                     if (surpriseEntity) {
-                        const newY = surpriseEntity.originalData.y + amplitude * Math.sin(osc_angle);
+                        const newY = surpriseEntity.originalData.y + amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
                         const newCy = yScale(newY);
                         surpriseEntity.selection.attr('cy', newCy);
                         pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
                     }
 
-                    // Anticipation (ID 2) oscillates horizontally around its starting x-position
+                    // Anticipation (ID 2) oscillates horizontally with its own random speed
                     const anticipationEntity = pointEntities.find(p => p.id === 2);
                     if (anticipationEntity) {
-                        const newX = anticipationEntity.originalData.x + amplitude * Math.sin(osc_angle);
+                        const newX = anticipationEntity.originalData.x + amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
                         const newCx = xScale(newX);
                         anticipationEntity.selection.attr('cx', newCx);
                         pointPositions.set(2, { x: newCx, y: anticipationEntity.originalCy });
                     }
                     
+                    // --- Animate Resultant Point ---
+                    const surprisePos = pointPositions.get(1);
+                    const anticipationPos = pointPositions.get(2);
+                    if (surprisePos && anticipationPos) {
+                        resultantPoint.attr('cx', anticipationPos.x).attr('cy', surprisePos.y);
+                    }
+
                     // Attente (ID 0) remains static
                     const attenteEntity = pointEntities.find(p => p.id === 0);
                     if (attenteEntity && !pointPositions.has(0)) {
@@ -640,8 +672,20 @@
 
                 function launchWaveLoop() {
                     if (document.hidden) return;
+
+                    // Snapshot the resultant point's current screen position
+                    const resultantCx = resultantPoint.attr('cx');
+                    const resultantCy = resultantPoint.attr('cy');
+                    
+                    if (!resultantCx || !resultantCy) return; // Don't launch if point not ready
+
+                    // Convert screen coords back to domain coords for the path
+                    const targetX_domain = xScale.invert(resultantCx);
+                    const targetY_domain = yScale.invert(resultantCy);
+                    const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
+
                     const startPoint = pointsData.find(p => p.id === 0);
-                    const path = findRandomWavePath(startPoint, adjacencyList);
+                    const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
                     animateWave(path);
                 };
             }
