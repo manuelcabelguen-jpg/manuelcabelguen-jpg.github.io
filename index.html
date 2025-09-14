@@ -595,81 +595,71 @@
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
                 });
 
-                // Create 8 sparks for the new circuit animation, initially at the center
-                const sparks = [];
-                for (let i = 0; i < 8; i++) {
-                    sparks.push(
-                        svg.append("circle")
-                            .attr("r", 4.5)
-                            .attr("fill", "#f472b6")
-                            .style("filter", "url(#glow)")
-                            .attr("cx", xScale(0))
-                            .attr("cy", yScale(0))
-                    );
-                }
+                // The circuit animation is now handled by drawing paths directly.
 
-                // --- Définition de l'animation du circuit ---
+                // --- Définition de l'animation des traces ---
                 const targetPoints = {
-                    center: { x: xScale(0), y: yScale(0) },
-                    joie: { x: xScale(pointsData.find(p=>p.name==="Joie").x), y: yScale(pointsData.find(p=>p.name==="Joie").y) },
-                    tristesse: { x: xScale(pointsData.find(p=>p.name==="Tristesse").x), y: yScale(pointsData.find(p=>p.name==="Tristesse").y) },
-                    peur: { x: xScale(pointsData.find(p=>p.name==="Peur").x), y: yScale(pointsData.find(p=>p.name==="Peur").y) },
-                    courage: { x: xScale(pointsData.find(p=>p.name==="Courage").x), y: yScale(pointsData.find(p=>p.name==="Courage").y) },
-                    colere: { x: xScale(pointsData.find(p=>p.name==="Colère").x), y: yScale(pointsData.find(p=>p.name==="Colère").y) },
-                    calme: { x: xScale(pointsData.find(p=>p.name==="Calme").x), y: yScale(pointsData.find(p=>p.name==="Calme").y) },
-                    desir: { x: xScale(pointsData.find(p=>p.name==="Désir").x), y: yScale(pointsData.find(p=>p.name==="Désir").y) },
-                    degout: { x: xScale(pointsData.find(p=>p.name==="Dégoût").x), y: yScale(pointsData.find(p=>p.name==="Dégoût").y) }
+                    center: [xScale(0), yScale(0)],
+                    joie: [xScale(0), yScale(2)],
+                    tristesse: [xScale(0), yScale(-2)],
+                    peur: [xScale(-2), yScale(0)],
+                    courage: [xScale(2), yScale(0)],
+                    colere: [xScale(-1), yScale(1)],
+                    calme: [xScale(1), yScale(-1)],
+                    desir: [xScale(1), yScale(1)],
+                    degout: [xScale(-1), yScale(-1)]
                 };
 
-                const paths = [
-                    { spark: sparks[0], p1: targetPoints.joie, p2: targetPoints.colere },
-                    { spark: sparks[1], p1: targetPoints.joie, p2: targetPoints.desir },
-                    { spark: sparks[2], p1: targetPoints.tristesse, p2: targetPoints.degout },
-                    { spark: sparks[3], p1: targetPoints.tristesse, p2: targetPoints.calme },
-                    { spark: sparks[4], p1: targetPoints.peur, p2: targetPoints.colere },
-                    { spark: sparks[5], p1: targetPoints.peur, p2: targetPoints.degout },
-                    { spark: sparks[6], p1: targetPoints.courage, p2: targetPoints.desir },
-                    { spark: sparks[7], p1: targetPoints.courage, p2: targetPoints.calme }
+                const pathDefinitions = [
+                    [targetPoints.center, targetPoints.joie, targetPoints.colere, targetPoints.center],
+                    [targetPoints.center, targetPoints.joie, targetPoints.desir, targetPoints.center],
+                    [targetPoints.center, targetPoints.tristesse, targetPoints.degout, targetPoints.center],
+                    [targetPoints.center, targetPoints.tristesse, targetPoints.calme, targetPoints.center],
+                    [targetPoints.center, targetPoints.peur, targetPoints.colere, targetPoints.center],
+                    [targetPoints.center, targetPoints.peur, targetPoints.degout, targetPoints.center],
+                    [targetPoints.center, targetPoints.courage, targetPoints.desir, targetPoints.center],
+                    [targetPoints.center, targetPoints.courage, targetPoints.calme, targetPoints.center]
                 ];
+                
+                const lineGenerator = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
 
-                function animateSpark(path, index) {
-                    const spark = path.spark;
-                    const p1 = path.p1;
-                    const p2 = path.p2;
-                    const center = targetPoints.center;
-                    const totalDuration = 3000;
+                function animateTrace(pathData, index) {
+                    const pathD = lineGenerator(pathData);
+                    const tracePath = svg.append("path")
+                        .attr("d", pathD)
+                        .attr("fill", "none")
+                        .attr("stroke", "#f472b6")
+                        .attr("stroke-width", 2.5)
+                        .style("filter", "url(#glow)");
 
-                    spark.attr("cx", center.x).attr("cy", center.y);
+                    const length = tracePath.node().getTotalLength();
+                    const drawDuration = 2000;
+                    const fadeDuration = 1000;
+                    const delay = 1000;
 
-                    function loop() {
-                        spark
-                            .transition()
-                            .duration(totalDuration / 3)
-                            .ease(d3.easeCubicInOut)
-                            .attr("cx", p1.x)
-                            .attr("cy", p1.y)
-                            .transition()
-                            .duration(totalDuration / 3)
-                            .ease(d3.easeCubicInOut)
-                            .attr("cx", p2.x)
-                            .attr("cy", p2.y)
-                            .transition()
-                            .duration(totalDuration / 3)
-                            .ease(d3.easeCubicInOut)
-                            .attr("cx", center.x)
-                            .attr("cy", center.y)
-                            .on("end", () => {
-                                if (index === 0) {
-                                    launchWaveLoop();
-                                }
-                                loop();
-                            });
-                    }
-                    loop();
+                    tracePath
+                        .attr("stroke-dasharray", length + " " + length)
+                        .attr("stroke-dashoffset", length)
+                        .transition()
+                        .duration(drawDuration)
+                        .ease(d3.easeSinInOut)
+                        .attr("stroke-dashoffset", 0)
+                        .on("end", () => {
+                            if (index === 0) {
+                                launchWaveLoop();
+                            }
+                        })
+                        .transition()
+                        .duration(fadeDuration)
+                        .style("opacity", 0)
+                        .remove()
+                        .on("end", () => {
+                            setTimeout(() => animateTrace(pathData, index), delay);
+                        });
                 }
 
-                paths.forEach((path, i) => {
-                    animateSpark(path, i);
+                pathDefinitions.forEach((pathData, i) => {
+                    setTimeout(() => animateTrace(pathData, i), i * 300);
                 });
 
                 function launchWaveLoop() {
