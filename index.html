@@ -355,6 +355,19 @@
                 const feMerge = filter.append("feMerge");
                 feMerge.append("feMergeNode").attr("in", "coloredBlur");
                 feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+                const rainbowGradient = defs.append("linearGradient")
+                    .attr("id", "rainbow-gradient")
+                    .attr("gradientUnits", "userSpaceOnUse")
+                    .attr("x1", 0).attr("y1", yScale(DOMAIN_LIMIT))
+                    .attr("x2", 0).attr("y2", yScale(-DOMAIN_LIMIT));
+                
+                const rainbowColors = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#4f46e5", "#8b5cf6"];
+                rainbowGradient.selectAll("stop")
+                    .data(rainbowColors)
+                    .enter().append("stop")
+                    .attr("offset", (d,i) => i / (rainbowColors.length - 1))
+                    .attr("stop-color", d => d);
                 
                 const axisGroup = svg.append("g").attr("class", "axis-group");
                 axisGroup.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", width).attr("y2", yScale(0));
@@ -628,7 +641,7 @@
                     const tracePath = svg.append("path")
                         .attr("d", pathD)
                         .attr("fill", "none")
-                        .attr("stroke", "#f472b6")
+                        .attr("stroke", "url(#rainbow-gradient)") // Use the rainbow gradient
                         .attr("stroke-width", 2.5)
                         .style("filter", "url(#glow)");
 
@@ -654,12 +667,14 @@
                         .style("opacity", 0)
                         .remove()
                         .on("end", () => {
+                            // The delay is now inside the recursive call to ensure loops don't overlap too fast
                             setTimeout(() => animateTrace(pathData, index), delay);
                         });
                 }
 
                 pathDefinitions.forEach((pathData, i) => {
-                    setTimeout(() => animateTrace(pathData, i), i * 300);
+                    // No stagger, all start at the same time
+                    animateTrace(pathData, i);
                 });
 
                 function launchWaveLoop() {
