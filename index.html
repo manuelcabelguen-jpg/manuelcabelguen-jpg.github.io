@@ -490,24 +490,60 @@
                             const mag = Math.sqrt(dirX * dirX + dirY * dirY);
                             if (mag > 0) { [dirX, dirY] = [dirX / mag, dirY / mag]; } else { [dirX, dirY] = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2]; }
                             
-                            svg.append("text").attr("class", "emotion-label-popup").attr("x", startX).attr("y", startY).text(point.name).attr("fill", "#e5e7eb").attr("font-size", "14px").attr("font-weight", "600").attr("text-anchor", "middle").style("pointer-events", "none").transition().duration(2500).ease(d3.easeQuadOut).attr("x", startX + dirX * 120).attr("y", startY + dirY * 120).style("opacity", 0).remove();
+                            const label = svg.append("text")
+                                .attr("class", "emotion-label-popup")
+                                .attr("x", startX)
+                                .attr("y", startY)
+                                .text(point.name)
+                                .attr("fill", "#e5e7eb")
+                                .attr("font-size", "0px")
+                                .attr("font-weight", "600")
+                                .attr("text-anchor", "middle")
+                                .style("pointer-events", "none")
+                                .style("opacity", 0);
+
+                            label.transition()
+                                .duration(800)
+                                .ease(d3.easeElasticOut.amplitude(1.2).period(0.5))
+                                .attr("font-size", "18px")
+                                .style("opacity", 1)
+                                .transition()
+                                .duration(2000)
+                                .ease(d3.easeQuadOut)
+                                .attr("x", startX + dirX * 120)
+                                .attr("y", startY + dirY * 120)
+                                .attr("font-size", "8px")
+                                .style("opacity", 0)
+                                .remove();
                         
                             const emoji = specificEmotionEmojis[point.name];
                             if (emoji) {
                                 const emojiDriftX = (Math.random() - 0.5) * 40;
                                 const emojiDriftY = (Math.random() - 0.5) * 40;
                                 
-                                svg.append("text")
+                                const emojiPopup = svg.append("text")
                                     .attr("class", "emotion-emoji-popup")
                                     .attr("x", startX)
                                     .attr("y", startY)
                                     .text(emoji)
+                                    .attr("font-size", "0px")
+                                    .style("opacity", 0)
+                                    .attr("text-anchor", "middle")
+                                    .attr("dominant-baseline", "central");
+
+                                emojiPopup.transition()
+                                    .duration(800)
+                                    .delay(100)
+                                    .ease(d3.easeElasticOut.amplitude(1.2).period(0.5))
+                                    .attr("font-size", "30px")
+                                    .style("opacity", 1)
                                     .transition()
-                                    .duration(2800)
+                                    .duration(2300)
                                     .ease(d3.easeQuadOut)
                                     .attr("x", startX + dirX * 140 + emojiDriftX)
                                     .attr("y", startY + dirY * 140 + emojiDriftY)
-                                    .attr("transform", `rotate(${(Math.random() - 0.5) * 30}, ${startX}, ${startY})`)
+                                    .attr("font-size", "10px")
+                                    .attr("transform", `rotate(${(Math.random() - 0.5) * 30}, ${startX + dirX * 140 + emojiDriftX}, ${startY + dirY * 140 + emojiDriftY})`)
                                     .style("opacity", 0)
                                     .remove();
                             }
