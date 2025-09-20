@@ -90,6 +90,17 @@
             opacity: 1;
         }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
+    "d3": "https://aistudiocdn.com/d3@^7.9.0"
+  }
+}
+</script>
 </head>
 <body class="bg-slate-900 text-slate-300 py-8">
 
@@ -614,7 +625,6 @@
                     originalCy: yScale(d.y),
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
-                    startAngle: Math.random() * 2 * Math.PI,
                     // Add individual oscillation speeds for core points
                     oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
