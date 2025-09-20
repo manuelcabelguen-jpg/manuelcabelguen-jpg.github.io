@@ -337,6 +337,43 @@
 
                 const xScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([0, width]);
                 const yScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([height, 0]);
+
+                const centerX = xScale(0);
+                const centerY = yScale(0);
+
+                const quadrantGroup = svg.insert("g", ":first-child").attr("class", "quadrant-group");
+
+                const q1 = quadrantGroup.append("rect") // Top-Right
+                    .attr("x", centerX)
+                    .attr("y", 0)
+                    .attr("width", width - centerX)
+                    .attr("height", centerY)
+                    .attr("fill", "#FBBF24")
+                    .style("opacity", 0);
+
+                const q2 = quadrantGroup.append("rect") // Top-Left
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", centerX)
+                    .attr("height", centerY)
+                    .attr("fill", "#F87171")
+                    .style("opacity", 0);
+
+                const q3 = quadrantGroup.append("rect") // Bottom-Left
+                    .attr("x", 0)
+                    .attr("y", centerY)
+                    .attr("width", centerX)
+                    .attr("height", height - centerY)
+                    .attr("fill", "#818CF8")
+                    .style("opacity", 0);
+
+                const q4 = quadrantGroup.append("rect") // Bottom-Right
+                    .attr("x", centerX)
+                    .attr("y", centerY)
+                    .attr("width", width - centerX)
+                    .attr("height", height - centerY)
+                    .attr("fill", "#22D3EE")
+                    .style("opacity", 0);
                 
                 const colorGroups = {
                     "Joie": "#a78bfa", "Tristesse": "#38bdf8", "Peur": "#f472b6", "Courage": "#4ade80",
@@ -490,10 +527,11 @@
                             const mag = Math.sqrt(dirX * dirX + dirY * dirY);
                             if (mag > 0) { [dirX, dirY] = [dirX / mag, dirY / mag]; } else { [dirX, dirY] = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2]; }
                             
+                            const labelYOffset = 25;
                             const label = svg.append("text")
                                 .attr("class", "emotion-label-popup")
                                 .attr("x", startX)
-                                .attr("y", startY)
+                                .attr("y", startY + labelYOffset)
                                 .text(point.name)
                                 .attr("fill", "#e5e7eb")
                                 .attr("font-size", "0px")
@@ -511,7 +549,7 @@
                                 .duration(3500)
                                 .ease(d3.easeQuadOut)
                                 .attr("x", startX + dirX * 180)
-                                .attr("y", startY + dirY * 180)
+                                .attr("y", startY + labelYOffset + dirY * 180)
                                 .attr("font-size", "8px")
                                 .style("opacity", 0)
                                 .remove();
@@ -617,6 +655,37 @@
                     const anticipationPos = pointPositions.get(2);
                     if (surprisePos && anticipationPos) {
                         resultantPoint.attr('cx', anticipationPos.x).attr('cy', surprisePos.y);
+
+                        const cx = anticipationPos.x;
+                        const cy = surprisePos.y;
+
+                        // --- Quadrant Highlighting Logic ---
+                        const transitionDuration = 750;
+                        
+                        // Top-Right
+                        if (cx > centerX && cy < centerY) {
+                            q1.transition().duration(transitionDuration).style("opacity", 0.15);
+                        } else {
+                            q1.transition().duration(transitionDuration).style("opacity", 0);
+                        }
+                        // Top-Left
+                        if (cx < centerX && cy < centerY) {
+                            q2.transition().duration(transitionDuration).style("opacity", 0.15);
+                        } else {
+                            q2.transition().duration(transitionDuration).style("opacity", 0);
+                        }
+                        // Bottom-Left
+                        if (cx < centerX && cy > centerY) {
+                            q3.transition().duration(transitionDuration).style("opacity", 0.15);
+                        } else {
+                            q3.transition().duration(transitionDuration).style("opacity", 0);
+                        }
+                        // Bottom-Right
+                        if (cx > centerX && cy > centerY) {
+                            q4.transition().duration(transitionDuration).style("opacity", 0.15);
+                        } else {
+                            q4.transition().duration(transitionDuration).style("opacity", 0);
+                        }
                     }
 
                     // Attente (ID 0) remains static
