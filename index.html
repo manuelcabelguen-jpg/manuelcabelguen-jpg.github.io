@@ -622,99 +622,157 @@
                     id: d.id,
                     originalData: d,
                     selection: d3.select(`#point-${d.id}`),
-                    originalCx: xScale(d.x),
-                    originalCy: yScale(d.y),
+                    cx: xScale(d.x), // Use mutable properties
+                    cy: yScale(d.y),
+                    r: radiusScale(d.category),
+                    color: colorScale(d.group),
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
                     startAngle: Math.random() * 2 * Math.PI,
-                    // Add individual oscillation speeds for core points
                     oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
 
+                const resultantState = {
+                    x: xScale(0),
+                    y: yScale(0),
+                    vx: 0,
+                    vy: 0,
+                    r: 5.5
+                };
+
                 const resultantPoint = svg.append("circle")
-                    .attr("r", 5.5)
+                    .attr("r", resultantState.r)
                     .attr("fill", "white")
                     .style("filter", "url(#glow)");
 
-                const pointPositions = new Map();
+                const maxDistSq = Math.pow(DOMAIN_LIMIT, 2);
 
                 d3.timer(elapsed => {
-                    const amplitude = 8.5; // This is the domain amplitude, from center to edge (e.g., to Joie at y=2)
+                    const amplitude = 8.5; 
 
-                    // --- Animate Core Points ---
-                    // Surprise (ID 1) oscillates vertically between Joie and Tristesse
-                    const surpriseEntity = pointEntities.find(p => p.id === 1);
-                    if (surpriseEntity) {
-                        const newY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
-                        const newCy = yScale(newY);
-                        surpriseEntity.selection.attr('cy', newCy);
-                        pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
-                    }
-
-                    // Anticipation (ID 2) oscillates horizontally between Peur and Courage
-                    const anticipationEntity = pointEntities.find(p => p.id === 2);
-                    if (anticipationEntity) {
-                        const newX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
-                        const newCx = xScale(newX);
-                        // Corrected: Set cy to the central axis (y=0) instead of its original y
-                        const centralY = yScale(0);
-                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
-                        pointPositions.set(2, { x: newCx, y: centralY });
-                    }
-                    
-                    // --- Animate Resultant Point ---
-                    const surprisePos = pointPositions.get(1);
-                    const anticipationPos = pointPositions.get(2);
-                    if (surprisePos && anticipationPos) {
-                        resultantPoint.attr('cx', anticipationPos.x).attr('cy', surprisePos.y);
-
-                        const cx = anticipationPos.x;
-                        const cy = surprisePos.y;
-
-                        // --- Quadrant Highlighting Logic ---
-                        const transitionDuration = 750;
-                        const activeOpacity = 0.3; // Increased from 0.15
-                        
-                        let activeQuadrant = 0;
-                        if (cx > centerX && cy < centerY) {
-                            activeQuadrant = 1; // Top-right
-                        } else if (cx < centerX && cy < centerY) {
-                            activeQuadrant = 2; // Top-left
-                        } else if (cx < centerX && cy > centerY) {
-                            activeQuadrant = 3; // Bottom-left
-                        } else if (cx > centerX && cy > centerY) {
-                            activeQuadrant = 4; // Bottom-right
-                        }
-
-                        q1.transition().duration(transitionDuration).style("opacity", activeQuadrant === 1 ? activeOpacity : 0);
-                        q2.transition().duration(transitionDuration).style("opacity", activeQuadrant === 2 ? activeOpacity : 0);
-                        q3.transition().duration(transitionDuration).style("opacity", activeQuadrant === 3 ? activeOpacity : 0);
-                        q4.transition().duration(transitionDuration).style("opacity", activeQuadrant === 4 ? activeOpacity : 0);
-                    }
-
-                    // Attente (ID 0) remains static
-                    const attenteEntity = pointEntities.find(p => p.id === 0);
-                    if (attenteEntity && !pointPositions.has(0)) {
-                        pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
-                    }
-
-                    // --- Animate Outer Points ---
+                    // --- Animate All Other Points ---
                     pointEntities.forEach(p => {
-                        if (p.id > 2) {
+                        if (p.originalData.id === 1) { // Surprise (vertical)
+                            const newY = amplitude * Math.sin(elapsed * p.oscSpeed);
+                            p.cy = yScale(newY);
+                        } else if (p.originalData.id === 2) { // Anticipation (horizontal)
+                            const newX = amplitude * Math.sin(elapsed * p.oscSpeed);
+                            p.cx = xScale(newX);
+                            p.cy = yScale(0); // Keep it on the axis
+                        } else if (p.originalData.id > 2) { // Outer points orbit
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
-                            const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
-                            const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
-                            p.selection.attr('cx', newCx).attr('cy', newCy);
-                            pointPositions.set(p.id, { x: newCx, y: newCy });
+                            const originalX = xScale(p.originalData.x);
+                            const originalY = yScale(p.originalData.y);
+                            p.cx = originalX + p.orbitRadius * Math.cos(angle);
+                            p.cy = originalY + p.orbitRadius * Math.sin(angle);
+                        }
+                        // Update selection
+                        p.selection.attr('cx', p.cx).attr('cy', p.cy);
+                    });
+
+                    // --- Physics for Resultant Point ---
+                    const attractor = {
+                        x: pointEntities.find(p=>p.id===2).cx,
+                        y: pointEntities.find(p=>p.id===1).cy
+                    };
+
+                    const dx = attractor.x - resultantState.x;
+                    const dy = attractor.y - resultantState.y;
+                    const attractionStrength = 0.0005;
+                    resultantState.vx += dx * attractionStrength;
+                    resultantState.vy += dy * attractionStrength;
+                    
+                    const damping = 0.95;
+                    resultantState.vx *= damping;
+                    resultantState.vy *= damping;
+
+                    resultantState.x += resultantState.vx;
+                    resultantState.y += resultantState.vy;
+
+                    // --- Boundary Constraint ---
+                    const domainX = xScale.invert(resultantState.x);
+                    const domainY = yScale.invert(resultantState.y);
+                    const distSq = domainX * domainX + domainY * domainY;
+
+                    if (distSq > maxDistSq) {
+                        const dist = Math.sqrt(distSq);
+                        const normalX = domainX / dist;
+                        const normalY = domainY / dist;
+                        
+                        resultantState.x = xScale(normalX * DOMAIN_LIMIT);
+                        resultantState.y = yScale(normalY * DOMAIN_LIMIT);
+
+                        const pixelNormalX = resultantState.x - centerX;
+                        const pixelNormalY = resultantState.y - centerY;
+                        const pixelNormalMag = Math.sqrt(pixelNormalX*pixelNormalX + pixelNormalY*pixelNormalY);
+                        const normPx = pixelNormalX / pixelNormalMag;
+                        const normPy = pixelNormalY / pixelNormalMag;
+                        const dot = resultantState.vx * normPx + resultantState.vy * normPy;
+                        resultantState.vx -= 2 * dot * normPx;
+                        resultantState.vy -= 2 * dot * normPy;
+                    }
+
+                    // --- Point Collision ---
+                    pointEntities.forEach(p => {
+                        if (p.id === 0) return; // Don't collide with center point
+                        const coll_dx = p.cx - resultantState.x;
+                        const coll_dy = p.cy - resultantState.y;
+                        const coll_dist = Math.sqrt(coll_dx * coll_dx + coll_dy * coll_dy);
+                        const min_dist = p.r + resultantState.r;
+
+                        if (coll_dist < min_dist) {
+                            // Flipper effect
+                            p.selection.transition().duration(100)
+                                .attr("r", p.r + 5).style("fill", "#fff")
+                                .transition().duration(400)
+                                .attr("r", p.r).style("fill", p.color);
+                            
+                            // Bounce
+                            const normalX = coll_dx / coll_dist;
+                            const normalY = coll_dy / coll_dist;
+                            const dot = resultantState.vx * normalX + resultantState.vy * normalY;
+
+                            resultantState.vx -= 2 * dot * normalX;
+                            resultantState.vy -= 2 * dot * normalY;
+
+                            // Separation
+                            const overlap = min_dist - coll_dist;
+                            resultantState.x -= overlap * normalX;
+                            resultantState.y -= overlap * normalY;
                         }
                     });
 
+                    // Update SVG
+                    resultantPoint.attr('cx', resultantState.x).attr('cy', resultantState.y);
+
+                    // --- Quadrant Highlighting ---
+                    const cx = resultantState.x;
+                    const cy = resultantState.y;
+
+                    const transitionDuration = 750;
+                    const activeOpacity = 0.3;
+                    
+                    let activeQuadrant = 0;
+                    if (cx > centerX && cy < centerY) {
+                        activeQuadrant = 1; // Top-right
+                    } else if (cx < centerX && cy < centerY) {
+                        activeQuadrant = 2; // Top-left
+                    } else if (cx < centerX && cy > centerY) {
+                        activeQuadrant = 3; // Bottom-left
+                    } else if (cx > centerX && cy > centerY) {
+                        activeQuadrant = 4; // Bottom-right
+                    }
+
+                    q1.transition().duration(transitionDuration).style("opacity", activeQuadrant === 1 ? activeOpacity : 0);
+                    q2.transition().duration(transitionDuration).style("opacity", activeQuadrant === 2 ? activeOpacity : 0);
+                    q3.transition().duration(transitionDuration).style("opacity", activeQuadrant === 3 ? activeOpacity : 0);
+                    q4.transition().duration(transitionDuration).style("opacity", activeQuadrant === 4 ? activeOpacity : 0);
+
                     // Update all lines
-                    lines
-                        .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
-                        .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
-                        .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
-                        .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
+                    lines.attr('x1', d => pointEntities.find(p => p.id === d.source.id)?.cx || 0)
+                         .attr('y1', d => pointEntities.find(p => p.id === d.source.id)?.cy || 0)
+                         .attr('x2', d => pointEntities.find(p => p.id === d.target.id)?.cx || 0)
+                         .attr('y2', d => pointEntities.find(p => p.id === d.target.id)?.cy || 0);
                 });
 
                 // The circuit animation is now handled by drawing paths directly.
