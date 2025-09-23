@@ -524,7 +524,7 @@
                 function animateWave(pathPoints) {
                     if (pathPoints.length < 2) return;
                     const waveDuration = 1500;
-                    const lineGenerator = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).curve(d3.curveCatmullRom.alpha(0.5));
+                    const lineGenerator = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y));
                     const path = svg.append("path").datum(pathPoints).attr("fill", "none").attr("stroke", "#f0abfc").attr("stroke-width", "2.5px").style("filter", "url(#glow)").attr("d", lineGenerator);
                     const length = path.node().getTotalLength();
                     path.attr("stroke-dasharray", `${length} ${length}`).attr("stroke-dashoffset", length).transition().duration(waveDuration).ease(d3.easeLinear).attr("stroke-dashoffset", 0).transition().duration(500).style("opacity", 0).remove();
@@ -743,7 +743,7 @@
                     [targetPoints.center, targetPoints.courage, targetPoints.calme, targetPoints.center]
                 ];
                 
-                const lineGenerator = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
+                const lineGenerator = d3.line();
 
                 function animateTrace(pathData, index) {
                     const pathD = lineGenerator(pathData);
