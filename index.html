@@ -422,20 +422,43 @@
                 axisGroup.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", width).attr("y2", yScale(0));
                 axisGroup.append("line").attr("class", "axis-line").attr("x1", xScale(0)).attr("y1", 0).attr("x2", xScale(0)).attr("y2", height);
 
+                const adjacencyList = new Map();
+                pointsData.forEach(p => adjacencyList.set(p.id, []));
                 const lineData = [];
-                const processedIds = new Set();
-
-                for (const p1 of pointsData) {
-                    if (processedIds.has(p1.id)) continue;
-                    
-                    if (p1.id <= 2) continue; // Skip the three most central, non-paired points
-
-                    const p2 = pointsData.find(p => p.x === -p1.x && p.y === -p1.y && p.id !== p1.id);
-
-                    if (p2) {
-                        lineData.push({ source: p1, target: p2 });
-                        processedIds.add(p1.id);
-                        processedIds.add(p2.id);
+                const connections = new Set();
+                const centralPoints = pointsData.filter(p => p.id <= 2);
+                const firstLayerPoints = pointsData.filter(p => p.category === 2);
+                for (const centerP of centralPoints) {
+                    for (const layer1P of firstLayerPoints) {
+                        const connectionKey = [centerP.id, layer1P.id].sort((a,b) => a-b).join('-');
+                        if (!connections.has(connectionKey)) {
+                            lineData.push({ source: centerP, target: layer1P });
+                            adjacencyList.get(centerP.id).push(layer1P.id);
+                            adjacencyList.get(layer1P.id).push(centerP.id);
+                            connections.add(connectionKey);
+                        }
+                    }
+                }
+                const k = 3;
+                const outerLayersPoints = pointsData.filter(p => p.category > 1);
+                for (const p1 of outerLayersPoints) {
+                    const distances = [];
+                    for (const p2 of outerLayersPoints) {
+                        if (p1.id === p2.id) continue;
+                        const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+                        distances.push({ point: p2, distance: dist });
+                    }
+                    distances.sort((a, b) => a.distance - b.distance);
+                    const neighbors = distances.slice(0, k);
+                    for (const neighbor of neighbors) {
+                        const p2 = neighbor.point;
+                        const connectionKey = [p1.id, p2.id].sort((a, b) => a - b).join('-');
+                        if (!connections.has(connectionKey)) {
+                            lineData.push({ source: p1, target: p2 });
+                            adjacencyList.get(p1.id).push(p2.id);
+                            adjacencyList.get(p2.id).push(p1.id);
+                            connections.add(connectionKey);
+                        }
                     }
                 }
                 
