@@ -683,10 +683,22 @@
                     const surprisePos = pointPositions.get(1);
                     const anticipationPos = pointPositions.get(2);
                     if (surprisePos && anticipationPos) {
-                        resultantPoint.attr('cx', anticipationPos.x).attr('cy', surprisePos.y);
+                        let cx = anticipationPos.x;
+                        let cy = surprisePos.y;
 
-                        const cx = anticipationPos.x;
-                        const cy = surprisePos.y;
+                        // --- Boundary Constraint ---
+                        const domainX = xScale.invert(cx);
+                        const domainY = yScale.invert(cy);
+                        const distSq = domainX * domainX + domainY * domainY;
+                        const maxRadiusSq = maxRadius * maxRadius;
+
+                        if (distSq > maxRadiusSq) {
+                            const dist = Math.sqrt(distSq);
+                            cx = xScale((domainX / dist) * maxRadius);
+                            cy = yScale((domainY / dist) * maxRadius);
+                        }
+
+                        resultantPoint.attr('cx', cx).attr('cy', cy);
 
                         // --- Quadrant Highlighting Logic ---
                         const transitionDuration = 750;
