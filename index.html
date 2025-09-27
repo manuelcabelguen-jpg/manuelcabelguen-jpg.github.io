@@ -648,6 +648,15 @@
                     oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
 
+                // Get the entities for Surprise and Anticipation
+                const surpriseEntity = pointEntities.find(p => p.id === 1);
+                const anticipationEntity = pointEntities.find(p => p.id === 2);
+
+                if (surpriseEntity && anticipationEntity) {
+                    // Set Anticipation's speed to be half of Surprise's
+                    anticipationEntity.oscSpeed = surpriseEntity.oscSpeed / 2;
+                }
+
                 const resultantPoint = svg.append("circle")
                     .attr("r", 5.5)
                     .attr("fill", "white")
