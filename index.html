@@ -353,39 +353,6 @@
                 const centerX = xScale(0);
                 const centerY = yScale(0);
 
-                const quadrantGroup = svg.insert("g", ":first-child").attr("class", "quadrant-group");
-
-                const q1 = quadrantGroup.append("rect") // Top-Right
-                    .attr("x", centerX)
-                    .attr("y", 0)
-                    .attr("width", width - centerX)
-                    .attr("height", centerY)
-                    .attr("fill", "#FBBF24")
-                    .style("opacity", 0);
-
-                const q2 = quadrantGroup.append("rect") // Top-Left
-                    .attr("x", 0)
-                    .attr("y", 0)
-                    .attr("width", centerX)
-                    .attr("height", centerY)
-                    .attr("fill", "#F87171")
-                    .style("opacity", 0);
-
-                const q3 = quadrantGroup.append("rect") // Bottom-Left
-                    .attr("x", 0)
-                    .attr("y", centerY)
-                    .attr("width", centerX)
-                    .attr("height", height - centerY)
-                    .attr("fill", "#818CF8")
-                    .style("opacity", 0);
-
-                const q4 = quadrantGroup.append("rect") // Bottom-Right
-                    .attr("x", centerX)
-                    .attr("y", centerY)
-                    .attr("width", width - centerX)
-                    .attr("height", height - centerY)
-                    .attr("fill", "#22D3EE")
-                    .style("opacity", 0);
                 
                 const colorGroups = {
                     "Joie": "#a78bfa", "Tristesse": "#38bdf8", "Peur": "#f472b6", "Courage": "#4ade80",
@@ -646,6 +613,7 @@
                     startAngle: Math.random() * 2 * Math.PI,
                     // Add individual oscillation speeds for core points
                     oscSpeed: 0.001 + Math.random() * 0.001,
+                    isAnimating: false,
                 }));
 
                 // Get the entities for Surprise and Anticipation
@@ -708,26 +676,6 @@
                         }
 
                         resultantPoint.attr('cx', cx).attr('cy', cy);
-
-                        // --- Quadrant Highlighting Logic ---
-                        const transitionDuration = 750;
-                        const activeOpacity = 0.3; // Increased from 0.15
-                        
-                        let activeQuadrant = 0;
-                        if (cx > centerX && cy < centerY) {
-                            activeQuadrant = 1; // Top-right
-                        } else if (cx < centerX && cy < centerY) {
-                            activeQuadrant = 2; // Top-left
-                        } else if (cx < centerX && cy > centerY) {
-                            activeQuadrant = 3; // Bottom-left
-                        } else if (cx > centerX && cy > centerY) {
-                            activeQuadrant = 4; // Bottom-right
-                        }
-
-                        q1.transition().duration(transitionDuration).style("opacity", activeQuadrant === 1 ? activeOpacity : 0);
-                        q2.transition().duration(transitionDuration).style("opacity", activeQuadrant === 2 ? activeOpacity : 0);
-                        q3.transition().duration(transitionDuration).style("opacity", activeQuadrant === 3 ? activeOpacity : 0);
-                        q4.transition().duration(transitionDuration).style("opacity", activeQuadrant === 4 ? activeOpacity : 0);
                     }
 
                     // Attente (ID 0) remains static
@@ -753,6 +701,31 @@
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
                         .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
+
+                    // --- Proximity Activation ---
+                    const resultantPos = { x: resultantPoint.attr('cx'), y: resultantPoint.attr('cy') };
+                    pointEntities.forEach(p => {
+                        if (p.isAnimating || p.id <= 2) return;
+
+                        const currentPos = pointPositions.get(p.id);
+                        if (!currentPos) return;
+
+                        const dist = Math.sqrt(Math.pow(currentPos.x - resultantPos.x, 2) + Math.pow(currentPos.y - resultantPos.y, 2));
+                        const activation_radius = 30; // pixels
+
+                        if (dist < activation_radius) {
+                            p.isAnimating = true;
+                            p.selection.transition().duration(150)
+                                .ease(d3.easeQuadOut)
+                                .attr("r", radiusScale(p.originalData.category) + 7)
+                                .transition().duration(350)
+                                .ease(d3.easeQuadIn)
+                                .attr("r", radiusScale(p.originalData.category))
+                                .on("end", () => {
+                                    p.isAnimating = false;
+                                });
+                        }
+                    });
                 });
 
                 // The circuit animation is now handled by drawing paths directly.
