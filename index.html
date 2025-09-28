@@ -652,8 +652,9 @@
                     const anticipationEntity = pointEntities.find(p => p.id === 2);
                     if (anticipationEntity) {
                         const newCx = xScale(domainX);
-                        anticipationEntity.selection.attr('cx', newCx);
-                        pointPositions.set(2, { x: newCx, y: xScale(0) }); // Use xScale(0) for y
+                        const centralY = yScale(0);
+                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
+                        pointPositions.set(2, { x: newCx, y: centralY });
                     }
                     
                     // --- Animate Resultant Point ---
