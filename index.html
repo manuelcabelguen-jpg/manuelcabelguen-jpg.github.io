@@ -633,48 +633,35 @@
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
-                    const amplitude = maxRadius; // This is the domain amplitude, from center to edge (e.g., to Joie at y=2)
+                    const angularSpeed = 0.0005;
+                    const angle = elapsed * angularSpeed;
+                    
+                    const domainX = maxRadius * Math.cos(angle);
+                    const domainY = maxRadius * Math.sin(angle);
 
                     // --- Animate Core Points ---
-                    // Surprise (ID 1) oscillates vertically between Joie and Tristesse
+                    // Surprise (ID 1) on Y-axis
                     const surpriseEntity = pointEntities.find(p => p.id === 1);
                     if (surpriseEntity) {
-                        const newY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
-                        const newCy = yScale(newY);
+                        const newCy = yScale(domainY);
                         surpriseEntity.selection.attr('cy', newCy);
                         pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
                     }
 
-                    // Anticipation (ID 2) oscillates horizontally between Peur and Courage
+                    // Anticipation (ID 2) on X-axis
                     const anticipationEntity = pointEntities.find(p => p.id === 2);
                     if (anticipationEntity) {
-                        const newX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
-                        const newCx = xScale(newX);
-                        // Corrected: Set cy to the central axis (y=0) instead of its original y
-                        const centralY = yScale(0);
-                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
-                        pointPositions.set(2, { x: newCx, y: centralY });
+                        const newCx = xScale(domainX);
+                        anticipationEntity.selection.attr('cx', newCx);
+                        pointPositions.set(2, { x: newCx, y: xScale(0) }); // Use xScale(0) for y
                     }
                     
                     // --- Animate Resultant Point ---
                     const surprisePos = pointPositions.get(1);
                     const anticipationPos = pointPositions.get(2);
                     if (surprisePos && anticipationPos) {
-                        let cx = anticipationPos.x;
-                        let cy = surprisePos.y;
-
-                        // --- Boundary Constraint ---
-                        const domainX = xScale.invert(cx);
-                        const domainY = yScale.invert(cy);
-                        const distSq = domainX * domainX + domainY * domainY;
-                        const maxRadiusSq = maxRadius * maxRadius;
-
-                        if (distSq > maxRadiusSq) {
-                            const dist = Math.sqrt(distSq);
-                            cx = xScale((domainX / dist) * maxRadius);
-                            cy = yScale((domainY / dist) * maxRadius);
-                        }
-
+                        const cx = xScale(domainX);
+                        const cy = yScale(domainY);
                         resultantPoint.attr('cx', cx).attr('cy', cy);
                     }
 
