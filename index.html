@@ -652,8 +652,8 @@
                     
                     // --- Animation for First Pulsar (Counter-Clockwise) ---
                     const angle1 = elapsed * angularSpeed;
-                    const domainX1 = maxRadius * Math.cos(angle1);
-                    const domainY1 = maxRadius * Math.sin(angle1);
+                    const domainX1 = maxRadius * -Math.sin(angle1); // Shifted by 90deg
+                    const domainY1 = maxRadius * Math.cos(angle1);  // Shifted by 90deg
 
                     const surpriseEntity = pointEntities.find(p => p.id === 1);
                     if (surpriseEntity) {
@@ -672,8 +672,8 @@
 
                     // --- Animation for Second Pulsar (Clockwise) ---
                     const angle2 = -elapsed * angularSpeed;
-                    const domainX2 = maxRadius * Math.cos(angle2);
-                    const domainY2 = maxRadius * Math.sin(angle2);
+                    const domainX2 = maxRadius * -Math.sin(angle2); // Shifted by 90deg
+                    const domainY2 = maxRadius * Math.cos(angle2);  // Shifted by 90deg
 
                     surpriseEntity2.attr('cx', xScale(0)).attr('cy', yScale(domainY2));
                     anticipationEntity2.attr('cx', xScale(domainX2)).attr('cy', yScale(0));
