@@ -611,83 +611,54 @@
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
                     startAngle: Math.random() * 2 * Math.PI,
-                    // Add individual oscillation speeds for core points
-                    oscSpeed: 0.001 + Math.random() * 0.001,
                     isAnimating: false,
                 }));
 
-                // Get the entities for Surprise and Anticipation
-                const surpriseEntity = pointEntities.find(p => p.id === 1);
-                const anticipationEntity = pointEntities.find(p => p.id === 2);
-
-                if (surpriseEntity && anticipationEntity) {
-                    // Set Anticipation's speed to be half of Surprise's
-                    anticipationEntity.oscSpeed = surpriseEntity.oscSpeed / 2;
+                const pulsars = [];
+                const pulsarColors = ["#FFFFFF", "#a78bfa", "#38bdf8", "#f472b6"]; // White, Joie, Tristesse, Peur
+                for (let i = 0; i < 4; i++) {
+                    pulsars.push(
+                        svg.append("circle")
+                           .attr("r", 5.5)
+                           .attr("fill", pulsarColors[i])
+                           .style("filter", "url(#glow)")
+                    );
                 }
-
-                const resultantPoint = svg.append("circle")
-                    .attr("r", 5.5)
-                    .attr("fill", "white")
-                    .style("filter", "url(#glow)");
-                
-                const anticipationEntity2 = svg.append("circle")
-                    .attr("class", "data-point")
-                    .attr("r", radiusScale(1))
-                    .attr("fill", "#818CF8");
-                
-                const surpriseEntity2 = svg.append("circle")
-                    .attr("class", "data-point")
-                    .attr("r", radiusScale(1))
-                    .attr("fill", "#818CF8");
-
-                const resultantPoint2 = svg.append("circle")
-                    .attr("r", 5.5)
-                    .attr("fill", "#818CF8")
-                    .style("filter", "url(#glow)");
+                // The first pulsar will trigger the waves
+                const resultantPoint = pulsars[0];
 
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
                     const angularSpeed = (2 * Math.PI) / 4000; // 4-second rotation
-                    
-                    // --- Animation for First Pulsar (Counter-Clockwise) ---
-                    const angle1 = elapsed * angularSpeed;
-                    const domainX1 = maxRadius * -Math.sin(angle1); // Shifted by 90deg
-                    const domainY1 = maxRadius * Math.cos(angle1);  // Shifted by 90deg
+                    const baseAngle = elapsed * angularSpeed;
 
-                    const surpriseEntity = pointEntities.find(p => p.id === 1);
-                    if (surpriseEntity) {
-                        const newCy = yScale(domainY1);
-                        surpriseEntity.selection.attr('cy', newCy);
-                        pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
-                    }
-                    const anticipationEntity = pointEntities.find(p => p.id === 2);
-                    if (anticipationEntity) {
-                        const newCx = xScale(domainX1);
-                        const centralY = yScale(0);
-                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
-                        pointPositions.set(2, { x: newCx, y: centralY });
-                    }
-                    resultantPoint.attr('cx', xScale(domainX1)).attr('cy', yScale(domainY1));
+                    pulsars.forEach((pulsar, i) => {
+                        // Each pulsar is offset by 90 degrees (PI / 2 radians)
+                        const angle = baseAngle + (i * Math.PI / 2);
+                        
+                        // Calculate position on the circle
+                        const domainX = maxRadius * Math.cos(angle);
+                        const domainY = maxRadius * Math.sin(angle);
 
-                    // --- Animation for Second Pulsar (Clockwise) ---
-                    const angle2 = -elapsed * angularSpeed;
-                    const domainX2 = maxRadius * -Math.sin(angle2); // Shifted by 90deg
-                    const domainY2 = maxRadius * Math.cos(angle2);  // Shifted by 90deg
-
-                    surpriseEntity2.attr('cx', xScale(0)).attr('cy', yScale(domainY2));
-                    anticipationEntity2.attr('cx', xScale(domainX2)).attr('cy', yScale(0));
-                    resultantPoint2.attr('cx', xScale(domainX2)).attr('cy', yScale(domainY2));
+                        // Update the pulsar's position on the SVG
+                        pulsar.attr('cx', xScale(domainX)).attr('cy', yScale(domainY));
+                    });
 
                     // Attente (ID 0) remains static
                     const attenteEntity = pointEntities.find(p => p.id === 0);
                     if (attenteEntity && !pointPositions.has(0)) {
                         pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
                     }
-
-                    // --- Animate Outer Points ---
+                    
+                    // The axis points (Surprise, Anticipation) no longer need special animation.
+                    // We'll handle all points uniformly now.
                     pointEntities.forEach(p => {
-                        if (p.id > 2) {
+                         // Attente (ID 0) is already handled and static
+                        if (p.id === 0) return;
+
+                        // Give the other central points (1 and 2) a slight orbit like the rest
+                        if (p.id > 0) {
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
                             const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
                             const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
@@ -704,6 +675,7 @@
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
 
                     // --- Proximity Activation ---
+                    // The resultantPoint is now the first pulsar in our array
                     const resultantPos = { x: resultantPoint.attr('cx'), y: resultantPoint.attr('cy') };
                     pointEntities.forEach(p => {
                         if (p.isAnimating || p.id <= 2) return;
