@@ -545,53 +545,68 @@
                     oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
 
-                const resultantPoint = svg.append("circle")
-                    .attr("r", 5.5)
-                    .attr("fill", "white")
+                const surpriseEntity2 = svg.append("circle")
+                    .attr("class", "data-point")
+                    .attr("cx", xScale(0)) // Explicitly set the horizontal position to the center
+                    .attr("r", radiusScale(1))
+                    .attr("fill", colorScale("Orientation"))
                     .style("filter", "url(#glow)");
+
+                const pulsars = [];
+                const pulsarColors = ["#FFFFFF", "#FFFFFF", "#a78bfa", "#a78bfa"];
+                for (let i = 0; i < 4; i++) {
+                    pulsars.push(
+                        svg.append("circle")
+                           .attr("r", 6.5)
+                           .attr("fill", pulsarColors[i])
+                           .style("filter", "url(#glow)")
+                    );
+                }
+                const resultantPoint = pulsars[0];
 
                 const pointPositions = new Map();
 
-                d3.timer(elapsed => {
-                    const amplitude = 2.0; // This is the domain amplitude, from center to edge (e.g., to Joie at y=2)
+                let lastWaveTime = 0;
+                const waveInterval = 2000; // ms
 
-                    // --- Animate Core Points ---
-                    // Surprise (ID 1) oscillates vertically between Joie and Tristesse
+                d3.timer(elapsed => {
+                    const amplitude = 2.0;
+
+                    // --- Animate Core Axis Points ---
+                    let domainX = 0, domainY = 0;
+
                     const surpriseEntity = pointEntities.find(p => p.id === 1);
                     if (surpriseEntity) {
-                        const newY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
-                        const newCy = yScale(newY);
+                        domainY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
+                        const newCy = yScale(domainY);
                         surpriseEntity.selection.attr('cy', newCy);
+                        surpriseEntity2.attr('cy', yScale(-domainY)); // Animate opposite point
                         pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
                     }
 
-                    // Anticipation (ID 2) oscillates horizontally between Peur and Courage
                     const anticipationEntity = pointEntities.find(p => p.id === 2);
                     if (anticipationEntity) {
-                        const newX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
-                        const newCx = xScale(newX);
-                        // Corrected: Set cy to the central axis (y=0) instead of its original y
+                        domainX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
+                        const newCx = xScale(domainX);
                         const centralY = yScale(0);
                         anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
                         pointPositions.set(2, { x: newCx, y: centralY });
                     }
                     
-                    // --- Animate Resultant Point ---
-                    const surprisePos = pointPositions.get(1);
-                    const anticipationPos = pointPositions.get(2);
-                    if (surprisePos && anticipationPos) {
-                        resultantPoint.attr('cx', anticipationPos.x).attr('cy', surprisePos.y);
-                    }
+                    // --- Animate Four Pulsars ---
+                    pulsars[0].attr('cx', xScale(domainX)).attr('cy', yScale(domainY));
+                    pulsars[1].attr('cx', xScale(domainX)).attr('cy', yScale(-domainY));
+                    pulsars[2].attr('cx', xScale(-domainX)).attr('cy', yScale(domainY));
+                    pulsars[3].attr('cx', xScale(-domainX)).attr('cy', yScale(-domainY));
 
-                    // Attente (ID 0) remains static
+                    // --- Handle Static and Orbiting Points ---
                     const attenteEntity = pointEntities.find(p => p.id === 0);
                     if (attenteEntity && !pointPositions.has(0)) {
                         pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
                     }
 
-                    // --- Animate Outer Points ---
                     pointEntities.forEach(p => {
-                        if (p.id > 2) {
+                        if (p.id > 2) { // Orbit all other points
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
                             const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
                             const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
@@ -606,11 +621,55 @@
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
                         .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
+
+                    // --- Proximity and Wave Animations ---
+
+                    // Proximity Pulse Effect
+                    pulsars.forEach(pulsar => {
+                        const pulsarPos = { x: pulsar.attr('cx'), y: pulsar.attr('cy') };
+                        if (pulsarPos.x && pulsarPos.y) {
+                            pointEntities.forEach(p => {
+                                if (p.isAnimating || p.id <= 0) return;
+
+                                const currentPos = pointPositions.get(p.id);
+                                if (!currentPos) return;
+
+                                const dist = Math.sqrt(Math.pow(currentPos.x - pulsarPos.x, 2) + Math.pow(currentPos.y - pulsarPos.y, 2));
+                                const activation_radius = 40;
+
+                                if (dist < activation_radius) {
+                                    p.isAnimating = true;
+                                    p.selection.transition().duration(150)
+                                        .ease(d3.easeQuadOut)
+                                        .attr("r", radiusScale(p.originalData.category) + 7)
+                                        .transition().duration(350)
+                                        .ease(d3.easeQuadIn)
+                                        .attr("r", radiusScale(p.originalData.category))
+                                        .on("end", () => { p.isAnimating = false; });
+                                }
+                            });
+                        }
+                    });
+
+                    // Periodic Wave Animation
+                    if (elapsed - lastWaveTime > waveInterval) {
+                        lastWaveTime = elapsed;
+
+                        pulsars.forEach(pulsar => {
+                            const pulsarCx = pulsar.attr('cx');
+                            const pulsarCy = pulsar.attr('cy');
+
+                            if (pulsarCx !== null && pulsarCy !== null) {
+                                const targetX_domain = xScale.invert(pulsarCx);
+                                const targetY_domain = yScale.invert(pulsarCy);
+                                const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
+                                const startPoint = pointsData.find(p => p.id === 0);
+                                const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
+                                animateWave(path);
+                            }
+                        });
+                    }
                 });
-
-                // The circuit animation is now handled by drawing paths directly.
-
-                // --- Définition de l'animation des traces ---
                 const targetPoints = {
                     center: [xScale(0), yScale(0)],
                     joie: [xScale(0), yScale(2)],
