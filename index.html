@@ -541,68 +541,54 @@
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
                     startAngle: Math.random() * 2 * Math.PI,
-                    // Add individual oscillation speeds for core points
-                    oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
 
-                const surpriseEntity2 = svg.append("circle")
-                    .attr("class", "data-point")
-                    .attr("r", radiusScale(1))
-                    .attr("fill", colorScale("Orientation"))
-                    .style("filter", "url(#glow)");
-
                 const pulsars = [];
-                const pulsarColors = ["#FFFFFF", "#FFFFFF", "#a78bfa", "#a78bfa"];
+                // Using white and the primary emotion group colors for the pulsars
+                const pulsarColors = ["#FFFFFF", "#a78bfa", "#38bdf8", "#f472b6"];
                 for (let i = 0; i < 4; i++) {
                     pulsars.push(
                         svg.append("circle")
-                           .attr("r", 6.5)
+                           .attr("r", 6.5) // Slightly larger for better visibility
                            .attr("fill", pulsarColors[i])
                            .style("filter", "url(#glow)")
                     );
                 }
+                // Re-assign the main pulsar for proximity effects to the first new circle
                 const resultantPoint = pulsars[0];
 
                 const pointPositions = new Map();
+                
+                let maxRadius = 0;
+                pointsData.forEach(p => {
+                    const dist = Math.sqrt(p.x * p.x + p.y * p.y);
+                    if (dist > maxRadius) {
+                        maxRadius = dist;
+                    }
+                });
+
+                let lastWaveTime = 0;
+                const waveInterval = 2000; // ms
 
                 d3.timer(elapsed => {
-                    const amplitude = 2.0; 
+                    const angularSpeed = (2 * Math.PI) / 6000; // 6-second rotation
+                    const angle = elapsed * angularSpeed;
 
-                    // --- Animate Core Axis Points ---
-                    let domainX = 0, domainY = 0;
-
-                    const surpriseEntity = pointEntities.find(p => p.id === 1);
-                    if (surpriseEntity) {
-                        domainY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
-                        const newCy = yScale(domainY);
-                        surpriseEntity.selection.attr('cy', newCy);
-                        surpriseEntity2.attr('cy', yScale(-domainY)); // Animate opposite point
-                        pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
-                    }
-
-                    const anticipationEntity = pointEntities.find(p => p.id === 2);
-                    if (anticipationEntity) {
-                        domainX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
-                        const newCx = xScale(domainX);
-                        const centralY = yScale(0);
-                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
-                        pointPositions.set(2, { x: newCx, y: centralY });
-                    }
+                    const virtualX = maxRadius * Math.cos(angle);
+                    const virtualY = maxRadius * Math.sin(angle);
                     
-                    // --- Animate Four Pulsars ---
-                    pulsars[0].attr('cx', xScale(domainX)).attr('cy', yScale(domainY));
-                    pulsars[1].attr('cx', xScale(domainX)).attr('cy', yScale(-domainY));
-                    pulsars[2].attr('cx', xScale(-domainX)).attr('cy', yScale(domainY));
-                    pulsars[3].attr('cx', xScale(-domainX)).attr('cy', yScale(-domainY));
+                    pulsars[0].attr('cx', xScale(virtualX)).attr('cy', yScale(virtualY));
+                    pulsars[1].attr('cx', xScale(-virtualX)).attr('cy', yScale(virtualY));
+                    pulsars[2].attr('cx', xScale(virtualX)).attr('cy', yScale(-virtualY));
+                    pulsars[3].attr('cx', xScale(-virtualX)).attr('cy', yScale(-virtualY));
 
-                    // --- Handle Static and Orbiting Points ---
                     const attenteEntity = pointEntities.find(p => p.id === 0);
                     if (attenteEntity && !pointPositions.has(0)) {
                         pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
                     }
 
                     pointEntities.forEach(p => {
-                        if (p.id > 2) { // Orbit all other points
+                        if (p.id > 0) {
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
                             const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
                             const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
@@ -611,15 +597,50 @@
                         }
                     });
 
-                    // Update all lines
                     lines
                         .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
                         .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
                         .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
-                });
 
-                // The circuit animation is now handled by drawing paths directly.
+                    const resultantPos = { x: resultantPoint.attr('cx'), y: resultantPoint.attr('cy') };
+                    if (resultantPos.x && resultantPos.y) {
+                        pointEntities.forEach(p => {
+                            if (p.isAnimating || p.id <= 0) return;
+
+                            const currentPos = pointPositions.get(p.id);
+                            if (!currentPos) return;
+
+                            const dist = Math.sqrt(Math.pow(currentPos.x - resultantPos.x, 2) + Math.pow(currentPos.y - resultantPos.y, 2));
+                            const activation_radius = 40;
+
+                            if (dist < activation_radius) {
+                                p.isAnimating = true;
+                                p.selection.transition().duration(150)
+                                    .ease(d3.easeQuadOut)
+                                    .attr("r", radiusScale(p.originalData.category) + 7)
+                                    .transition().duration(350)
+                                    .ease(d3.easeQuadIn)
+                                    .attr("r", radiusScale(p.originalData.category))
+                                    .on("end", () => { p.isAnimating = false; });
+                            }
+                        });
+                    }
+
+                    if (elapsed - lastWaveTime > waveInterval) {
+                        lastWaveTime = elapsed;
+                        const resultantCx = resultantPoint.attr('cx');
+                        const resultantCy = resultantPoint.attr('cy');
+                        if (resultantCx !== null && resultantCy !== null) {
+                            const targetX_domain = xScale.invert(resultantCx);
+                            const targetY_domain = yScale.invert(resultantCy);
+                            const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
+                            const startPoint = pointsData.find(p => p.id === 0);
+                            const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
+                            animateWave(path);
+                        }
+                    }
+                });
 
                 // --- Définition de l'animation des traces ---
                 const targetPoints = {
@@ -652,7 +673,7 @@
                     const tracePath = svg.append("path")
                         .attr("d", pathD)
                         .attr("fill", "none")
-                        .attr("stroke", "url(#rainbow-gradient)") // Use the rainbow gradient
+                        .attr("stroke", "url(#rainbow-gradient)")
                         .attr("stroke-width", 2.5)
                         .style("filter", "url(#glow)");
 
@@ -668,44 +689,18 @@
                         .duration(drawDuration)
                         .ease(d3.easeSinInOut)
                         .attr("stroke-dashoffset", 0)
-                        .on("end", () => {
-                            if (index === 0) {
-                                launchWaveLoop();
-                            }
-                        })
                         .transition()
                         .duration(fadeDuration)
                         .style("opacity", 0)
                         .remove()
                         .on("end", () => {
-                            // The delay is now inside the recursive call to ensure loops don't overlap too fast
                             setTimeout(() => animateTrace(pathData, index), delay);
                         });
                 }
 
                 pathDefinitions.forEach((pathData, i) => {
-                    // No stagger, all start at the same time
                     animateTrace(pathData, i);
                 });
-
-                function launchWaveLoop() {
-                    if (document.hidden) return;
-
-                    // Snapshot the resultant point's current screen position
-                    const resultantCx = resultantPoint.attr('cx');
-                    const resultantCy = resultantPoint.attr('cy');
-                    
-                    if (!resultantCx || !resultantCy) return; // Don't launch if point not ready
-
-                    // Convert screen coords back to domain coords for the path
-                    const targetX_domain = xScale.invert(resultantCx);
-                    const targetY_domain = yScale.invert(resultantCy);
-                    const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
-
-                    const startPoint = pointsData.find(p => p.id === 0);
-                    const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
-                    animateWave(path);
-                };
             }
 
             function transitionToMainContent() {
