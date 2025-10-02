@@ -541,37 +541,68 @@
                     orbitRadius: 2 + Math.random() * 2.5,
                     orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
                     startAngle: Math.random() * 2 * Math.PI,
+                    // Add individual oscillation speeds for core points
+                    oscSpeed: 0.001 + Math.random() * 0.001,
                 }));
 
+                const surpriseEntity2 = svg.append("circle")
+                    .attr("class", "data-point")
+                    .attr("r", radiusScale(1))
+                    .attr("fill", colorScale("Orientation"))
+                    .style("filter", "url(#glow)");
+
                 const pulsars = [];
-                // Using white and the primary emotion group colors for the pulsars
-                const pulsarColors = ["#FFFFFF", "#a78bfa", "#38bdf8", "#f472b6"];
+                const pulsarColors = ["#FFFFFF", "#FFFFFF", "#a78bfa", "#a78bfa"];
                 for (let i = 0; i < 4; i++) {
                     pulsars.push(
                         svg.append("circle")
-                           .attr("r", 6.5) // Slightly larger for better visibility
+                           .attr("r", 6.5)
                            .attr("fill", pulsarColors[i])
                            .style("filter", "url(#glow)")
                     );
                 }
-                // Re-assign the main pulsar for proximity effects to the first new circle
                 const resultantPoint = pulsars[0];
 
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
-                    // The animation logic for the pulsars will be implemented in the next step.
-                    // This timer will currently just handle the background point orbits.
+                    const amplitude = 2.0; 
 
-                    // Attente (ID 0) remains static
+                    // --- Animate Core Axis Points ---
+                    let domainX = 0, domainY = 0;
+
+                    const surpriseEntity = pointEntities.find(p => p.id === 1);
+                    if (surpriseEntity) {
+                        domainY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
+                        const newCy = yScale(domainY);
+                        surpriseEntity.selection.attr('cy', newCy);
+                        surpriseEntity2.attr('cy', yScale(-domainY)); // Animate opposite point
+                        pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
+                    }
+
+                    const anticipationEntity = pointEntities.find(p => p.id === 2);
+                    if (anticipationEntity) {
+                        domainX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
+                        const newCx = xScale(domainX);
+                        const centralY = yScale(0);
+                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
+                        pointPositions.set(2, { x: newCx, y: centralY });
+                    }
+                    
+                    // --- Animate Four Pulsars ---
+                    pulsars[0].attr('cx', xScale(domainX)).attr('cy', yScale(domainY));
+                    pulsars[1].attr('cx', xScale(domainX)).attr('cy', yScale(-domainY));
+                    pulsars[2].attr('cx', xScale(-domainX)).attr('cy', yScale(domainY));
+                    pulsars[3].attr('cx', xScale(-domainX)).attr('cy', yScale(-domainY));
+
+                    // --- Handle Static and Orbiting Points ---
                     const attenteEntity = pointEntities.find(p => p.id === 0);
                     if (attenteEntity && !pointPositions.has(0)) {
                         pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
                     }
 
-                    // Animate all other points (including former axis points) with a gentle orbit
                     pointEntities.forEach(p => {
-                        if (p.id > 0) { // All points except the static center
+                        if (p.id > 2) { // Orbit all other points
                             const angle = p.startAngle + elapsed * p.orbitSpeed;
                             const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
                             const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
@@ -580,7 +611,7 @@
                         }
                     });
 
-                    // Update all lines to follow the orbiting points
+                    // Update all lines
                     lines
                         .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
                         .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
