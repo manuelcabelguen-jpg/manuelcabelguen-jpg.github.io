@@ -570,7 +570,7 @@
                 const waveInterval = 2000; // ms
 
                 d3.timer(elapsed => {
-                    const amplitude = 2.0;
+
 
                     // --- Animate Core Axis Points ---
                     let domainX = 0, domainY = 0;
@@ -654,10 +654,6 @@
                     // Periodic Wave Animation
                     if (elapsed - lastWaveTime > waveInterval) {
                         lastWaveTime = elapsed;
-
-                        pulsars.forEach(pulsar => {
-                            const pulsarCx = pulsar.attr('cx');
-                            const pulsarCy = pulsar.attr('cy');
 
                             if (pulsarCx !== null && pulsarCy !== null) {
                                 const targetX_domain = xScale.invert(pulsarCx);
