@@ -650,6 +650,16 @@
                     .attr("r", radiusScale(1))
                     .attr("fill", "#c4b5fd");
 
+                const resultantPoint3 = svg.append("circle")
+                    .attr("r", 5.5)
+                    .attr("fill", "#FFD700")
+                    .style("filter", "url(#glow)");
+
+                const resultantPoint4 = svg.append("circle")
+                    .attr("r", 5.5)
+                    .attr("fill", "#FFD700")
+                    .style("filter", "url(#glow)");
+
                 const pointPositions = new Map();
 
                 d3.timer(elapsed => {
@@ -666,7 +676,6 @@
                         surpriseEntity.selection.attr('cy', newCy);
                         pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
                     }
-                    oppositeSurpriseEntity.attr('cx', xScale(0)).attr('cy', yScale(-domainY1));
                     const anticipationEntity = pointEntities.find(p => p.id === 2);
                     if (anticipationEntity) {
                         const newCx = xScale(domainX1);
@@ -675,6 +684,7 @@
                         pointPositions.set(2, { x: newCx, y: centralY });
                     }
                     resultantPoint.attr('cx', xScale(domainX1)).attr('cy', yScale(domainY1));
+                    resultantPoint3.attr('cx', xScale(-domainX1)).attr('cy', yScale(-domainY1));
 
                     // --- Animation for Second Pulsar (Clockwise) ---
                     const angle2 = -elapsed * angularSpeed;
@@ -682,8 +692,10 @@
                     const domainY2 = maxRadius * Math.cos(angle2);  // Shifted by 90deg
 
                     surpriseEntity2.attr('cx', xScale(0)).attr('cy', yScale(domainY2));
+                    oppositeSurpriseEntity.attr('cx', xScale(0)).attr('cy', yScale(-domainY1));
                     anticipationEntity2.attr('cx', xScale(domainX2)).attr('cy', yScale(0));
                     resultantPoint2.attr('cx', xScale(domainX2)).attr('cy', yScale(domainY2));
+                    resultantPoint4.attr('cx', xScale(-domainX2)).attr('cy', yScale(-domainY2));
 
                     // Attente (ID 0) remains static
                     const attenteEntity = pointEntities.find(p => p.id === 0);
