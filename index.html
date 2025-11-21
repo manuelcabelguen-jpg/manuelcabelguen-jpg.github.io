@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@300;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script type="importmap">
     {
@@ -17,11 +17,11 @@
     }
     </script>
 </head>
-<body class="bg-slate-900 text-slate-300 py-8">
+<body class="bg-[#0f172a] text-slate-300 py-8 min-h-screen selection:bg-purple-500 selection:text-white">
 
     <!-- Fullscreen Title Animation -->
-    <div id="title-screen" class="fixed inset-0 bg-slate-900 flex items-center justify-center">
-        <svg id="title-animation"></svg>
+    <div id="title-screen" class="fixed inset-0 bg-[#0f172a] z-50 flex items-center justify-center">
+        <!-- Canvas will be injected here by script.js -->
     </div>
 
     <!-- Main Content (initially hidden) -->
@@ -32,16 +32,25 @@
         </div>
 
         <!-- Col 2: Title & Menu -->
-        <div class="w-full lg:w-4/12 flex flex-col justify-between p-8 text-center lg:text-left">
+        <div class="w-full lg:w-4/12 flex flex-col justify-between p-8 text-center lg:text-left z-10">
             <div>
-                <h1 class="text-4xl lg:text-5xl font-bold text-white mb-8 lg:mb-12">CARTOGRAFFECT</h1>
-                <nav class="flex flex-col space-y-6">
-                    <a href="emotions.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">ÉMOTIONS</a>
-                    <a href="crimes.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">CRIMES</a>
-                    <a href="miracles.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">MIRACLES</a>
+                <h1 class="text-4xl lg:text-6xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-white mb-8 lg:mb-16 tracking-tight brand-font">CARTOGRAFFECT</h1>
+                <nav class="flex flex-col space-y-8">
+                    <a href="emotions.html" class="group flex items-center justify-center lg:justify-start space-x-4 text-2xl lg:text-3xl text-slate-400 hover:text-white transition-all duration-300">
+                        <span class="w-0 group-hover:w-8 h-[2px] bg-purple-400 transition-all duration-300"></span>
+                        <span class="brand-font font-light tracking-wide group-hover:tracking-wider transition-all duration-300">ÉMOTIONS</span>
+                    </a>
+                    <a href="crimes.html" class="group flex items-center justify-center lg:justify-start space-x-4 text-2xl lg:text-3xl text-slate-400 hover:text-white transition-all duration-300">
+                        <span class="w-0 group-hover:w-8 h-[2px] bg-purple-400 transition-all duration-300"></span>
+                        <span class="brand-font font-light tracking-wide group-hover:tracking-wider transition-all duration-300">CRIMES</span>
+                    </a>
+                    <a href="miracles.html" class="group flex items-center justify-center lg:justify-start space-x-4 text-2xl lg:text-3xl text-slate-400 hover:text-white transition-all duration-300">
+                        <span class="w-0 group-hover:w-8 h-[2px] bg-purple-400 transition-all duration-300"></span>
+                        <span class="brand-font font-light tracking-wide group-hover:tracking-wider transition-all duration-300">MIRACLES</span>
+                    </a>
                 </nav>
             </div>
-            <footer class="text-slate-500 mt-12 lg:mt-0">
+            <footer class="text-slate-600 mt-12 lg:mt-0 font-medium tracking-wide text-sm">
                 <p>&copy; 2024 Cartograffect.</p>
             </footer>
         </div>
@@ -53,22 +62,24 @@
                     <svg id="logoCanvas" class="w-full h-auto"></svg>
                 </div>
             </div>
-            <div class="p-8">
-                <p class="text-slate-400 text-lg leading-relaxed">
-                    Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-6">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Fusce consectetuer risus a nunc. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi. Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.
-                </p>
-                 <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna.
-                </p>
+            <div class="p-8 lg:p-12">
+                <div class="bg-slate-800/30 backdrop-blur-sm p-8 rounded-2xl border border-white/5 shadow-2xl">
+                    <p class="text-slate-300 text-lg leading-loose font-light">
+                        Bienvenue. L'objectif de ce site est de vous aider à <strong class="text-white font-medium">cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-loose font-light mt-6">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-loose font-light mt-4">
+                        Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam.
+                    </p>
+                    <p class="text-slate-400 text-lg leading-loose font-light mt-4">
+                        Fusce consectetuer risus a nunc. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi. Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.
+                    </p>
+                     <p class="text-slate-400 text-lg leading-loose font-light mt-4">
+                        Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna.
+                    </p>
+                </div>
             </div>
         </div>
     </div>

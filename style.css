@@ -1,4 +1,12 @@
-body { font-family: 'DM Sans', sans-serif; }
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: radial-gradient(circle at top, #1e293b, #0f172a);
+    background-attachment: fixed;
+}
+
+h1, h2, h3, .brand-font {
+    font-family: 'Space Grotesk', sans-serif;
+}
 
 /* --- Screen Transition Styles --- */
 #title-screen {
