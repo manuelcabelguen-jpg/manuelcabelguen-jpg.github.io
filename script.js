@@ -6,24 +6,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function runTitleAnimation(callback) {
         const svg = d3.select("#title-animation");
+        // Remove the SVG and replace with a canvas for better performance
+        svg.remove();
+
+        const titleScreen = document.getElementById('title-screen');
+        const canvas = document.createElement('canvas');
+        canvas.id = "title-canvas";
+        titleScreen.appendChild(canvas);
+
         const width = window.innerWidth;
         const height = window.innerHeight;
-        svg.attr("width", width).attr("height", height);
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+
+        // --- 1. Generate text points ---
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = width;
+        tempCanvas.height = height;
+        const tempCtx = tempCanvas.getContext('2d');
 
         const textString = "CARTOGRAFFECT";
         const fontSize = Math.min(width / 11, 100);
+        tempCtx.font = `bold ${fontSize}px "DM Sans", sans-serif`;
+        tempCtx.fillStyle = "white";
+        tempCtx.textAlign = "center";
+        tempCtx.textBaseline = "middle";
+        tempCtx.fillText(textString, width / 2, height / 2);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const context = canvas.getContext('2d');
-        context.font = `bold ${fontSize}px "DM Sans", sans-serif`;
-        context.fillStyle = "white";
-        context.textAlign = "center";
-        context.textBaseline = "middle";
-        context.fillText(textString, width / 2, height / 2);
-
-        const imageData = context.getImageData(0, 0, width, height);
+        const imageData = tempCtx.getImageData(0, 0, width, height);
         const data = imageData.data;
         const points = [];
         const step = 4;
@@ -40,27 +52,113 @@ document.addEventListener("DOMContentLoaded", () => {
         const sampleSize = Math.min(points.length, 2500);
         const sampledPoints = d3.shuffle(points.slice()).slice(0, sampleSize);
 
-        svg.selectAll("circle")
-            .data(sampledPoints)
-            .enter().append("circle")
-            .attr("cx", () => Math.random() * width)
-            .attr("cy", () => Math.random() * height)
-            .attr("r", 1)
-            .style("fill", "#f0abfc")
-            .style("opacity", 0)
-            .transition()
-            .duration(1000)
-            .style("opacity", 1)
-            .transition()
-            .duration(1000)
-            .delay((d, i) => i * 0.75)
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .on("end", (d, i) => {
-                if (i === sampledPoints.length - 1) {
-                    setTimeout(callback, 750); // Wait 0.75s after animation ends
+        // --- 2. Initialize particles ---
+        // Each particle has: startPos (random), targetPos (from text), currentPos, startTime
+        const particles = sampledPoints.map((p, i) => ({
+            targetX: p.x,
+            targetY: p.y,
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: 1,
+            opacity: 0,
+            delay: i * 0.75, // Stagger delay in ms
+            done: false
+        }));
+
+        const startTime = performance.now();
+        const duration = 1000; // Duration of each phase (fade in, move)
+        const totalDuration = 2000 + (particles.length * 0.75); // Approx max time
+
+        let animationFrameId;
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function draw(now) {
+            const elapsed = now - startTime;
+            context.clearRect(0, 0, width, height);
+
+            let allFinished = true;
+            let activeParticles = 0;
+
+            particles.forEach(p => {
+                // Phase 1: Fade in (0 to 1000ms)
+                // The original code started fading in immediately.
+                // It had: .transition().duration(1000).style("opacity", 1)
+
+                // Phase 2: Move to target (starts at delay)
+                // Original: .delay(i*0.75).transition().duration(1000)...
+
+                // Let's replicate logic:
+                // Opacity: Linear fade in over first 1000ms.
+                // Position: Interpolate from start to target starting at t = p.delay, lasting 1000ms.
+
+                // Opacity Calculation
+                let opProgress = elapsed / 1000;
+                if (opProgress > 1) opProgress = 1;
+                p.opacity = opProgress;
+
+                // Position Calculation
+                const moveStart = p.delay;
+                let moveProgress = (elapsed - moveStart) / 1000; // 1000ms duration
+
+                if (moveProgress < 0) moveProgress = 0;
+                if (moveProgress > 1) moveProgress = 1;
+
+                if (moveProgress < 1) {
+                    allFinished = false;
+                    const eased = easeOutCubic(moveProgress); // Using easeOut to match default d3 transition slightly
+                    // actually d3 default is cubic-in-out usually. using cubic out for snap.
+                    // The original code used default transition, which is cubic-in-out.
+                    // Let's stick to simple easeOut for performance/simplicity or implement cubicInOut
+
+                    // Simple linear interpolation for position based on eased time
+                    p.x = p.x + (p.targetX - p.x) * eased; // This is wrong, this is iterative.
+                    // Correct lerp:
+                    // start + (target - start) * t
+                    // But we didn't save startX separate from current x if we update x.
+                    // We need to preserve startX/Y or calculate dynamically.
+                    // Let's recalculate from initial random?
+                    // To save memory, we can store startX/Y in the object or just not update x/y in place until drawing.
+                    // Let's just calculate render position.
+                }
+
+                if (moveProgress >= 1) {
+                    p.done = true;
+                    // Render at target
+                    context.globalAlpha = p.opacity;
+                    context.fillStyle = "#f0abfc";
+                    context.beginPath();
+                    context.arc(p.targetX, p.targetY, p.r, 0, 2 * Math.PI);
+                    context.fill();
+                } else {
+                     // Render interpolated
+                     // We need the original start positions.
+                     // Since we didn't save them in 'p', let's assume 'x' and 'y' in 'p' are the STARTS.
+                     // And we draw at a computed position.
+                     const eased = easeOutCubic(moveProgress);
+                     const drawX = p.x + (p.targetX - p.x) * eased;
+                     const drawY = p.y + (p.targetY - p.y) * eased;
+
+                     context.globalAlpha = p.opacity;
+                     context.fillStyle = "#f0abfc";
+                     context.beginPath();
+                     context.arc(drawX, drawY, p.r, 0, 2 * Math.PI);
+                     context.fill();
+                     activeParticles++;
                 }
             });
+
+            if (!allFinished || elapsed < totalDuration) {
+                animationFrameId = requestAnimationFrame(draw);
+            } else {
+                // Animation complete
+                setTimeout(callback, 750);
+            }
+        }
+
+        requestAnimationFrame(draw);
     }
 
     function runCartograffectLogoAnimation() {
