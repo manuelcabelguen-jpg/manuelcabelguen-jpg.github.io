@@ -25,32 +25,32 @@
     </div>
 
     <!-- Main Content (initially hidden) -->
-    <div id="main-content" class="hidden w-full max-w-screen-2xl mx-auto">
+    <div id="main-content" class="hidden flex-col lg:flex-row w-full max-w-screen-2xl mx-auto">
         <!-- Col 1: Logo -->
-        <div class="w-1/12 flex flex-col items-center justify-start p-4 pt-8">
-            <img src="https://i.imgur.com/QP6YNSw.png" alt="Cartograffect Logo" class="w-24">
+        <div class="w-full lg:w-1/12 flex flex-col items-center justify-start p-4 pt-8">
+            <img src="https://i.imgur.com/QP6YNSw.png" alt="Cartograffect Logo" class="w-16 lg:w-24">
         </div>
 
         <!-- Col 2: Title & Menu -->
-        <div class="w-4/12 flex flex-col justify-between p-8">
+        <div class="w-full lg:w-4/12 flex flex-col justify-between p-8 text-center lg:text-left">
             <div>
-                <h1 class="text-5xl font-bold text-white mb-12">CARTOGRAFFECT</h1>
+                <h1 class="text-4xl lg:text-5xl font-bold text-white mb-8 lg:mb-12">CARTOGRAFFECT</h1>
                 <nav class="flex flex-col space-y-6">
-                    <a href="emotions.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">ÉMOTIONS</a>
-                    <a href="crimes.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">CRIMES</a>
-                    <a href="miracles.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">MIRACLES</a>
+                    <a href="emotions.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">ÉMOTIONS</a>
+                    <a href="crimes.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">CRIMES</a>
+                    <a href="miracles.html" class="text-2xl lg:text-3xl text-slate-400 hover:text-white transition-colors duration-300">MIRACLES</a>
                 </nav>
             </div>
-            <footer class="text-slate-500">
+            <footer class="text-slate-500 mt-12 lg:mt-0">
                 <p>&copy; 2024 Cartograffect.</p>
             </footer>
         </div>
 
         <!-- Col 3: Animation -->
-        <div class="w-7/12 flex flex-col">
+        <div class="w-full lg:w-7/12 flex flex-col">
             <div class="flex-grow p-4">
                 <div class="pulsar-container">
-                    <svg id="logoCanvas"></svg>
+                    <svg id="logoCanvas" class="w-full h-auto"></svg>
                 </div>
             </div>
             <div class="p-8">

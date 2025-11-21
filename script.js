@@ -280,8 +280,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const height = SIZE - MARGIN.top - MARGIN.bottom;
 
         const svg = svgContainer
-            .attr("width", SIZE)
-            .attr("height", SIZE)
+            .attr("viewBox", `0 0 ${SIZE} ${SIZE}`)
+            .attr("preserveAspectRatio", "xMidYMid meet")
             .append("g")
             .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
 
