@@ -348,7 +348,8 @@ document.addEventListener("DOMContentLoaded", () => {
         pointsData.forEach(p => adjacencyList.set(p.id, []));
         const lineData = [];
         const connections = new Set();
-        const centralPoints = pointsData.filter(p => p.id <= 2);
+                // Exclude moving points (1: Surprise, 2: Anticipation) from structural lines
+                const centralPoints = pointsData.filter(p => p.id === 0);
         const firstLayerPoints = pointsData.filter(p => p.category === 2);
         for (const centerP of centralPoints) {
             for (const layer1P of firstLayerPoints) {
