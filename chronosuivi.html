@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChronoSuivi v5.8.7 - Correctif Babel</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Babel pour compiler le JSX/TypeScript dans le navigateur (Version fixée pour stabilité) -->
+    <script src="https://unpkg.com/@babel/standalone@7.23.6/babel.min.js"></script>
+
+    <!-- Import Map pour React et Lucide -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.292.0"
+      }
+    }
+    </script>
+
+    <style>
+        @media print {
+          .print\:hidden { display: none !important; }
+          .print\:block { display: block !important; }
+          .print\:bg-white { background-color: white !important; }
+          .print\:pb-0 { padding-bottom: 0 !important; }
+          .print-only { display: block !important; }
+          .break-inside-avoid { break-inside: avoid; }
+          body { -webkit-print-color-adjust: exact; }
+          /* Masquer le contenu principal si le rapport est ouvert pour n'imprimer que le rapport */
+          body:has(.report-modal-open) > div > main,
+          body:has(.report-modal-open) > div > header {
+              display: none !important;
+          }
+          .report-modal-open .modal-content {
+              position: static;
+              width: 100%;
+              max-height: none;
+              box-shadow: none;
+              overflow: visible;
+          }
+          .report-modal-open .modal-backdrop {
+              position: static;
+              background: white;
+              padding: 0;
+          }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          height: 16px; width: 16px;
+          border-radius: 50%; background: #3b82f6;
+          cursor: pointer; margin-top: -6px;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+          width: 100%; height: 4px;
+          cursor: pointer; background: #e2e8f0; border-radius: 2px;
+        }
+
+        .accordion-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module" data-presets="typescript,react">
+        import React, { useState, useEffect, useMemo, useRef } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import {
+          Clock, User, RotateCcw, Printer, CalendarRange, Layers, AlertTriangle,
+          ArrowRight, Shield, Plus, Trash2, ChevronUp, ChevronDown,
+          Calendar as CalendarIcon, CheckCircle2, XCircle, Download, Upload,
+          FileJson, FileSpreadsheet, Hourglass, Flag, AlignLeft, Users, Calculator,
+          Sun, Moon, Briefcase, CalendarDays, Eye, EyeOff, Hash, Settings, ChevronRight,
+          ClipboardList, AlertCircle, FileText, UserMinus, UserPlus, PauseCircle,
+          ArrowDownCircle, PlayCircle, StopCircle, RefreshCw, LayoutTemplate,
+          UserCheck, Search, FileCheck, X
+        } from 'lucide-react';
+
+        // --- TYPES ---
+
+        interface DaySchedule { dayIndex: number; label: string; am: boolean; pm: boolean; }
+        type StageType = 'work' | 'delay' | 'milestone';
+        type CalcMode = 'fixed' | 'fixed_sessions' | 'linear_1d' | 'linear_0.5d' | 'capacity_4d';
+        type SchedulingMode = 'program_schedule' | 'any_weekday';
+        type EventType = 'abandon' | 'suspension' | 'transfert' | 'liberation' | 'ajout';
+        type ConstraintType = 'full' | 'am' | 'pm';
+        type ProgramPhase = 'avant' | 'pendant' | 'apres';
+        type ParticipantStatus = 'active' | 'completed' | 'suspended' | 'abandoned';
+
+        interface Stage {
+          id: string; name: string; type: StageType; calcMode: CalcMode; schedulingMode: SchedulingMode;
+          phase: ProgramPhase;
+          duration: number; description: string; participantOverride?: number;
+        }
+        interface Constraint { id: string; name: string; startDate: string; endDate: string; type: ConstraintType; }
+        interface AdminTask { label: string; deadlineDescription: string; dueDate?: Date; type: 'form' | 'note' | 'rdi' | 'eval'; }
+
+        interface Participant {
+            id: string;
+            code: string;
+            name: string;
+            status: ParticipantStatus;
+            profileSummary: string;
+            completedStageIds: string[]; // IDs of completed stages
+        }
+
+        interface ParticipantEvent {
+            id: string;
+            date: string;
+            type: EventType;
+            participantName: string;
+            change: number;
+        }
+
+        interface ScheduleChange {
+            id: string;
+            date: string;
+            newSchedule: DaySchedule[];
+        }
+
+        interface CalculatedStage extends Stage {
+          startDate: Date; endDate: Date; realDuration: number; effectiveWorkDays: number; usedParticipantCount: number;
+          adminTasks: AdminTask[];
+          eventsDuringStage: ParticipantEvent[];
+        }
+
+        // --- TEMPLATES ---
+        const PROGRAM_TEMPLATES = [
+            {
+                id: 'mpci',
+                label: 'Programme MPCI-DS-IÉ (Complet)',
+                defaultName: 'Programme MPCI-DS-IÉ',
+                defaultParticipants: 10,
+                stages: [
+                    { id: '1', name: 'Signature des consentements', type: 'milestone', phase: 'avant', calcMode: 'fixed', schedulingMode: 'any_weekday', duration: 0, description: 'Point de départ (SCC 1288)' },
+                    { id: '2', name: 'Analyse et rédaction', type: 'work', phase: 'avant', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 1, description: '1 jour/participant (Lecture dossiers, Frames, Objectifs)' },
+                    { id: '3', name: 'Rencontres individuelles pré-programme', type: 'work', phase: 'avant', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: '1 entrevue par demi-journée (2/jour)' },
+                    { id: '4', name: 'Préparation logistique', type: 'work', phase: 'avant', calcMode: 'fixed', schedulingMode: 'any_weekday', duration: 1, description: 'Impression manuels et cahiers (1 jour)' },
+                    { id: '5', name: 'Module 1', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 13, description: '13 Séances de groupe' },
+                    { id: '6', name: 'Entrevue M1', type: 'work', phase: 'pendant', calcMode: 'capacity_4d', schedulingMode: 'any_weekday', duration: 1, description: '1 entrevue (4/jour)' },
+                    { id: '7', name: 'Module 2', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 26, description: '26 Séances de groupe' },
+                    { id: '8', name: 'Entrevues M2', type: 'work', phase: 'pendant', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: '2 entrevues/participant (0.5j/p)' },
+                    { id: '9', name: 'Module 3', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 25, description: '25 Séances de groupe' },
+                    { id: '10', name: 'Entrevues M3', type: 'work', phase: 'pendant', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: '2 entrevues/participant (0.5j/p)' },
+                    { id: '11', name: 'Module 4', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 19, description: '19 Séances de groupe' },
+                    { id: '12', name: 'Module 5', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 13, description: '13 Séances individuelles' },
+                    { id: '13', name: 'Séance individuelle finale', type: 'work', phase: 'pendant', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: 'Bilan (0.5j/p) - Déclencheur Rapport' },
+                    { id: '14', name: 'Rapport final', type: 'work', phase: 'apres', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 1, description: 'Rédaction (1j/participant)' },
+                ]
+            },
+            {
+                id: 'alpha',
+                label: 'Programme Correctionnel Alpha',
+                defaultName: 'Programme Correctionnel Alpha',
+                defaultParticipants: 12,
+                stages: [
+                    { id: '1', name: 'Évaluation Initiale', type: 'work', phase: 'avant', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 2, description: 'Entretiens individuels' },
+                    { id: '2', name: 'Module de Réintégration', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 20, description: 'Cours de groupe' },
+                    { id: '3', name: 'Stage Pratique', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 10, description: 'Mise en situation' },
+                    { id: '4', name: 'Bilan final', type: 'work', phase: 'apres', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: 'Retour sur objectifs' },
+                    { id: '5', name: 'Rapport de clôture', type: 'work', phase: 'apres', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 1, description: 'Rédaction' }
+                ]
+            },
+            {
+                id: 'maintien',
+                label: 'Programme de Maintien',
+                defaultName: 'Maintien des Acquis',
+                defaultParticipants: 8,
+                stages: [
+                    { id: '1', name: 'Entrevue accueil', type: 'work', phase: 'avant', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: '0.5j/p' },
+                    { id: '2', name: 'Séances de maintien', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 12, description: '1 séance/mois' },
+                    { id: '3', name: 'Bilan de sortie', type: 'work', phase: 'apres', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: '0.5j/p' }
+                ]
+            },
+            {
+                id: 'custom',
+                label: 'Modèle Vierge',
+                defaultName: 'Nouveau Programme',
+                defaultParticipants: 10,
+                stages: []
+            }
+        ];
+
+        // --- UTILS ---
+
+        const formatDateFr = (date) => new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+        const formatDateShort = (date) => new Intl.DateTimeFormat('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(date);
+        const parseDate = (dateStr) => { const [y, m, d] = dateStr.split('-').map(Number); return new Date(y, m - 1, d, 12, 0, 0); };
+        const addDays = (date, days) => { const result = new Date(date); result.setDate(result.getDate() + days); return result; };
+        const toInputDate = (date) => date.toISOString().split('T')[0];
+
+        const getConstraintStatus = (d, constraints) => {
+            const t = d.getTime();
+            let am = false;
+            let pm = false;
+            constraints.forEach(c => {
+                const s = parseDate(c.startDate).getTime();
+                const e = parseDate(c.endDate).getTime();
+                const cType = c.type || 'full';
+                if (t >= s && t <= e) {
+                    if (cType === 'full') { am = true; pm = true; }
+                    else if (cType === 'am') { am = true; }
+                    else if (cType === 'pm') { pm = true; }
+                }
+            });
+            return { am, pm };
+        };
+
+        const addWorkingDays = (date, daysToAdd, constraints) => {
+            let currentDate = new Date(date);
+            let added = 0;
+            while (added < daysToAdd) {
+                currentDate = addDays(currentDate, 1);
+                const day = currentDate.getDay();
+                const { am, pm } = getConstraintStatus(currentDate, constraints);
+                const isFullyBlocked = am && pm;
+                if (day !== 0 && day !== 6 && !isFullyBlocked) added++;
+            }
+            return currentDate;
+        };
+
+        const generateFederalHolidays = () => {
+             const holidays = [
+                { name: "Jour de l'An", date: '2025-01-01' }, { name: "Vendredi Saint", date: '2025-04-18' },
+                { name: "Lundi de Pâques", date: '2025-04-21' }, { name: "Jrnée nle des patriotes", date: '2025-05-19' },
+                { name: "Fête nationale (QC)", date: '2025-06-24' }, { name: "Fête du Canada", date: '2025-07-01' },
+                { name: "Fête du Travail", date: '2025-09-01' }, { name: "Jrnée nle vérité/réconciliation", date: '2025-09-30' },
+                { name: "Action de grâce", date: '2025-10-13' }, { name: "Jour du Souvenir", date: '2025-11-11' },
+                { name: "Noël", date: '2025-12-25' }, { name: "Lendemain de Noël", date: '2025-12-26' },
+                { name: "Jour de l'An", date: '2026-01-01' }, { name: "Vendredi Saint", date: '2026-04-03' },
+                { name: "Lundi de Pâques", date: '2026-04-06' }, { name: "Jrnée nle des patriotes", date: '2026-05-18' },
+                { name: "Fête nationale (QC)", date: '2026-06-24' }, { name: "Fête du Canada", date: '2026-07-01' },
+                { name: "Fête du Travail", date: '2026-09-07' }, { name: "Jrnée nle vérité/réconciliation", date: '2026-09-30' },
+                { name: "Action de grâce", date: '2026-10-12' }, { name: "Jour du Souvenir", date: '2026-11-11' },
+                { name: "Noël", date: '2026-12-25' }, { name: "Lendemain de Noël", date: '2026-12-26' }
+            ];
+            return holidays.map((h, i) => ({ id: `def_hol_${i}`, name: h.name, startDate: h.date, endDate: h.date, type: 'full' }));
+        };
+
+        // --- CALCULATION ENGINE ---
+        const calculateEffectiveDuration = (stage, globalCount) => {
+          if (stage.type !== 'work') return { duration: stage.duration, usedCount: 0 };
+          const effectiveCount = (stage.participantOverride && stage.participantOverride > 0) ? stage.participantOverride : globalCount;
+          switch (stage.calcMode) {
+            case 'fixed_sessions': return { duration: stage.duration * 0.5, usedCount: 0 };
+            case 'linear_1d': return { duration: Math.max(0.5, effectiveCount * 1.0), usedCount: effectiveCount };
+            case 'linear_0.5d': return { duration: Math.max(0.5, effectiveCount * 0.5), usedCount: effectiveCount };
+            case 'capacity_4d': return { duration: Math.ceil(effectiveCount / 2) * 0.5, usedCount: effectiveCount };
+            case 'fixed': default: return { duration: stage.duration, usedCount: 0 };
+          }
+        };
+
+        const getAdminTasksForStage = (stageName, stageStart, stageEnd, constraints, isLastModule) => {
+            const tasks = [];
+            const name = stageName.toLowerCase();
+            if (name.includes("signature des consentements") || name.includes("obtention des consentements")) {
+                tasks.push({ label: "Formulaire SCC 1288 (Consentement)", deadlineDescription: "À faire signer immédiatement", type: "form", dueDate: stageEnd });
+                tasks.push({ label: "Avis d'entrevue", deadlineDescription: "Immédiat après identification", type: "note" });
+            }
+            if (name.includes("analyse") || name.includes("lecture")) {
+                tasks.push({ label: "Constitution Frames & Objectifs", deadlineDescription: "Basé sur PC et Rapports antérieurs", type: "eval" });
+            }
+            if (name.includes("rencontres individuelles") || name.includes("entrevues individuelles")) {
+                tasks.push({ label: "RDI (Résultat entrevue)", deadlineDescription: "1 jour ouvrable après", type: "rdi", dueDate: addWorkingDays(stageEnd, 1, constraints) });
+                if (name.includes("pré-programme") || name.includes("initiales")) {
+                    tasks.push({ label: "Assignation finale des participants", deadlineDescription: "Liste finale à produire", type: "note", dueDate: stageEnd });
+                }
+            }
+            if (name.includes("préparation") || name.includes("logistique")) {
+                tasks.push({ label: "Impression Manuels & Cahiers", deadlineDescription: "Pour tous les participants", type: "note" });
+            }
+            if (name.includes("module")) {
+                tasks.push({ label: "Notes évolutives", deadlineDescription: "Après chaque séance", type: "note" });
+                if (name.includes("module 1")) {
+                    const seance2Date = addWorkingDays(stageStart, 5, constraints);
+                    tasks.push({ label: "Évaluations initiales (MGRP + Obj.)", deadlineDescription: "10j ouvrables post-Séance 2", type: "eval", dueDate: addWorkingDays(seance2Date, 10, constraints) });
+                }
+            }
+            if (name.includes("séance individuelle finale") || name.includes("séance finale") || isLastModule) {
+                 tasks.push({ label: "RDI (Séance ind. finale)", deadlineDescription: "1 jour ouvrable après", type: "rdi", dueDate: addWorkingDays(stageEnd, 1, constraints) });
+                 tasks.push({ label: "Cotation Finale (MGRP/Objectifs)", deadlineDescription: "10j ouvrables après dernière rencontre", type: "eval", dueDate: addWorkingDays(stageEnd, 10, constraints) });
+                 tasks.push({ label: "Cotation STABLE-2007 / AIGU-2007", deadlineDescription: "10j ouvrables après complétion", type: "eval", dueDate: addWorkingDays(stageEnd, 10, constraints) });
+            }
+            if (name.includes("rapport final")) {
+                tasks.push({ label: "Transmission CQ GRP", deadlineDescription: "2j ouvrables après soumission", type: "rdi", dueDate: addWorkingDays(stageEnd, 2, constraints) });
+            }
+            return tasks;
+        };
+
+        const calculateTimeline = (startStr, stages, constraints, schedule, globalParticipantCount, events, scheduleChanges) => {
+          let currentDate = parseDate(startStr);
+          let nextAvailableSlotDate = new Date(currentDate);
+          let startIsPM = false;
+          const results = [];
+          const MAX_ITERATIONS = 365 * 5;
+
+          const sortedScheduleChanges = [...scheduleChanges].sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
+          const getEffectiveScheduleMap = (date) => {
+              const t = date.getTime();
+              let currentSched = schedule;
+              for (const change of sortedScheduleChanges) {
+                  if (t >= parseDate(change.date).getTime()) {
+                      currentSched = change.newSchedule;
+                  }
+              }
+              return new Map(currentSched.map(s => [s.dayIndex, s]));
+          };
+
+          const workStages = stages.filter(s => s.type === 'work');
+          const lastWorkStageId = workStages.length > 0 ? workStages[workStages.length - 1].id : null;
+          const sortedEvents = [...events].sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
+
+          stages.forEach((stage, idx) => {
+            let stageStart = null;
+            let stageEnd = null;
+
+            const currentTimestamp = nextAvailableSlotDate.getTime();
+            let activeParticipants = globalParticipantCount;
+            sortedEvents.forEach(ev => {
+                if (parseDate(ev.date).getTime() <= currentTimestamp) {
+                    activeParticipants += ev.change;
+                }
+            });
+            activeParticipants = Math.max(0, activeParticipants);
+
+            const { duration: effortNeeded, usedCount } = calculateEffectiveDuration(stage, activeParticipants);
+
+            if (stage.type === 'milestone') {
+              let checkDate = new Date(nextAvailableSlotDate);
+              let iterations = 0;
+              while (iterations < 60) {
+                 const { am, pm } = getConstraintStatus(checkDate, constraints);
+                 if (!(am && pm)) break;
+                 checkDate = addDays(checkDate, 1);
+                 startIsPM = false;
+                 iterations++;
+              }
+              stageStart = checkDate;
+              stageEnd = checkDate;
+
+            } else if (stage.type === 'delay') {
+              stageStart = new Date(nextAvailableSlotDate);
+              const daysToAdd = Math.max(0, Math.ceil(effortNeeded) - 1);
+              stageEnd = addDays(stageStart, daysToAdd);
+              nextAvailableSlotDate = addDays(stageEnd, 1);
+              startIsPM = false;
+
+            } else {
+              // WORK
+              let effortRemaining = effortNeeded;
+              let currentCheck = new Date(nextAvailableSlotDate);
+              let checkingPM = startIsPM;
+              let iterations = 0;
+
+              while (effortRemaining > 0 && iterations < MAX_ITERATIONS) {
+                const dayIndex = currentCheck.getDay();
+                const { am: amBlocked, pm: pmBlocked } = getConstraintStatus(currentCheck, constraints);
+                let isAmAvailable = false;
+                let isPmAvailable = false;
+
+                if (stage.schedulingMode === 'any_weekday') {
+                    if (dayIndex >= 1 && dayIndex <= 5) { isAmAvailable = true; isPmAvailable = true; }
+                } else {
+                    const daySched = getEffectiveScheduleMap(currentCheck).get(dayIndex);
+                    if (daySched) { isAmAvailable = daySched.am; isPmAvailable = daySched.pm; }
+                }
+
+                if (!checkingPM) {
+                  if (!amBlocked && isAmAvailable) {
+                     if (!stageStart) stageStart = new Date(currentCheck);
+                     effortRemaining -= 0.5;
+                     stageEnd = new Date(currentCheck);
+                  }
+                }
+                if (effortRemaining > 0) {
+                  if (!pmBlocked && isPmAvailable) {
+                     if (!stageStart) stageStart = new Date(currentCheck);
+                     effortRemaining -= 0.5;
+                     stageEnd = new Date(currentCheck);
+                  }
+                }
+                if (effortRemaining > 0) {
+                  currentCheck = addDays(currentCheck, 1);
+                  checkingPM = false;
+                }
+                iterations++;
+              }
+              if (!stageStart) stageStart = nextAvailableSlotDate;
+              nextAvailableSlotDate = addDays(stageEnd, 1);
+              startIsPM = false;
+            }
+
+            const isLastModule = stage.id === lastWorkStageId;
+            const adminTasks = getAdminTasksForStage(stage.name, stageStart || new Date(), stageEnd || new Date(), constraints, isLastModule);
+            const eventsDuring = sortedEvents.filter(ev => {
+                const t = parseDate(ev.date).getTime();
+                return t >= (stageStart?.getTime() || 0) && t <= (stageEnd?.getTime() || 0);
+            });
+
+            results.push({
+              ...stage,
+              startDate: stageStart,
+              endDate: stageEnd,
+              realDuration: Math.ceil((stageEnd.getTime() - stageStart.getTime()) / (1000 * 60 * 60 * 24)) + 1,
+              effectiveWorkDays: effortNeeded,
+              usedParticipantCount: usedCount,
+              adminTasks: adminTasks,
+              eventsDuringStage: eventsDuring
+            });
+          });
+          return results;
+        };
+
+        // --- COMPONENTS ---
+
+        const SectionCard = ({ title, icon: Icon, children, defaultOpen = true, actions = null }) => {
+            const [isOpen, setIsOpen] = useState(defaultOpen);
+            return (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-4">
+                    <div
+                        className="p-4 flex items-center justify-between cursor-pointer bg-slate-50/50 hover:bg-slate-50 transition-colors"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide flex items-center gap-2 select-none"><div className="p-1.5 bg-white border border-slate-200 rounded-md shadow-sm text-blue-600"><Icon className="w-4 h-4" /></div>{title}</h3>
+                        <div className="flex items-center gap-2">{actions && <div onClick={e => e.stopPropagation()}>{actions}</div>}<div className={`text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}><ChevronDown className="w-4 h-4" /></div></div>
+                    </div>
+                    {isOpen && <div className="p-5 border-t border-slate-100">{children}</div>}
+                </div>
+            );
+        };
+
+        const ScheduleGrid = ({ schedule, onToggleDay, onToggleSlot }) => (
+             <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                {schedule.filter(d => d.dayIndex !== 0 && d.dayIndex !== 6).map((day) => {
+                  const isActive = day.am || day.pm;
+                  return (
+                    <div key={day.dayIndex} className={`flex flex-col items-center border rounded-lg p-2 transition-all w-16 ${isActive ? 'border-blue-300 bg-blue-50 shadow-sm' : 'border-slate-100 bg-slate-50 opacity-70 hover:opacity-100'}`}>
+                       <button onClick={() => onToggleDay(day.dayIndex)} className={`text-xs font-bold uppercase mb-2 ${isActive ? 'text-blue-700' : 'text-slate-500'}`}>{day.label}</button>
+                       <div className="flex flex-col gap-1 w-full">
+                         <button onClick={() => onToggleSlot(day.dayIndex, 'am')} className={`flex items-center justify-center gap-1 text-[10px] py-1 px-1 rounded transition-all ${day.am ? 'bg-blue-500 text-white shadow-sm' : 'bg-white text-slate-400 border border-slate-200 hover:border-blue-300'}`} title="Matin"><Sun className="w-3 h-3" /> AM</button>
+                         <button onClick={() => onToggleSlot(day.dayIndex, 'pm')} className={`flex items-center justify-center gap-1 text-[10px] py-1 px-1 rounded transition-all ${day.pm ? 'bg-indigo-500 text-white shadow-sm' : 'bg-white text-slate-400 border border-slate-200 hover:border-indigo-300'}`} title="Après-midi"><Moon className="w-3 h-3" /> PM</button>
+                       </div>
+                    </div>
+                  );
+                })}
+              </div>
+        );
+
+        const ScheduleManager = ({ schedule, setSchedule }) => {
+          const toggleSlot = (dayIdx, slot) => setSchedule(schedule.map(d => d.dayIndex === dayIdx ? { ...d, [slot]: !d[slot] } : d));
+          const toggleDay = (dayIdx) => {
+             const day = schedule.find(d => d.dayIndex === dayIdx);
+             const newState = !(day.am || day.pm);
+             setSchedule(schedule.map(d => d.dayIndex === dayIdx ? { ...d, am: newState, pm: newState } : d));
+          };
+          return (
+            <SectionCard title="Horaire Programme (Initial)" icon={CalendarDays}>
+              <ScheduleGrid schedule={schedule} onToggleDay={toggleDay} onToggleSlot={toggleSlot} />
+              <p className="text-[10px] text-slate-400 mt-3 text-center bg-slate-50 p-2 rounded border border-slate-100"><span className="font-bold">Note :</span> Cet horaire s'applique au début du programme.</p>
+            </SectionCard>
+          );
+        };
+
+        const ScheduleChangeManager = ({ changes, setChanges, initialSchedule }) => {
+            const [date, setDate] = useState('');
+            const [tempSchedule, setTempSchedule] = useState([...initialSchedule]);
+            const toggleSlot = (dayIdx, slot) => setTempSchedule(tempSchedule.map(d => d.dayIndex === dayIdx ? { ...d, [slot]: !d[slot] } : d));
+            const toggleDay = (dayIdx) => {
+                const day = tempSchedule.find(d => d.dayIndex === dayIdx);
+                const newState = !(day.am || day.pm);
+                setTempSchedule(tempSchedule.map(d => d.dayIndex === dayIdx ? { ...d, am: newState, pm: newState } : d));
+            };
+            const addChange = () => { if(!date) return; setChanges([...changes, { id: crypto.randomUUID(), date, newSchedule: tempSchedule }]); setDate(''); };
+            const removeChange = (id) => setChanges(changes.filter(c => c.id !== id));
+            return (
+                <SectionCard title="Modifications d'Horaire (En cours)" icon={RefreshCw} defaultOpen={false}>
+                    <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-100">
+                        <div className="mb-3">
+                            <label className="text-xs font-bold text-blue-700 block mb-1">Date d'effet du nouvel horaire :</label>
+                            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="text-xs rounded border-slate-200 w-full" />
+                        </div>
+                        <div className="mb-3">
+                             <label className="text-xs font-bold text-blue-700 block mb-1">Nouvel horaire hebdomadaire :</label>
+                             <div className="bg-white p-2 rounded border border-blue-100">
+                                <ScheduleGrid schedule={tempSchedule} onToggleDay={toggleDay} onToggleSlot={toggleSlot} />
+                             </div>
+                        </div>
+                        <button onClick={addChange} disabled={!date} className="w-full bg-blue-600 text-white text-xs font-bold py-1.5 rounded hover:bg-blue-700 disabled:opacity-50">Appliquer ce changement</button>
+                    </div>
+                     <div className="space-y-2 max-h-[150px] overflow-y-auto custom-scrollbar">
+                        {changes.map(ch => (
+                            <div key={ch.id} className="flex items-center justify-between text-xs bg-white border border-slate-200 p-2 rounded shadow-sm">
+                                <div><div className="font-bold text-slate-700 flex items-center gap-2"><CalendarIcon className="w-3 h-3 text-blue-500" /> À partir du {formatDateShort(parseDate(ch.date))}</div><div className="text-[10px] text-slate-400 mt-1">Nouv. horaire défini</div></div>
+                                <button onClick={() => removeChange(ch.id)} className="text-slate-300 hover:text-red-500"><XCircle className="w-4 h-4" /></button>
+                            </div>
+                        ))}
+                    </div>
+                </SectionCard>
+            )
+        }
+
+        const ParticipantManager = ({ participants, setParticipants, onAddEvent }) => {
+            const [code, setCode] = useState('');
+            const [name, setName] = useState('');
+            const [editingId, setEditingId] = useState(null);
+
+            const addParticipant = () => {
+                if(!code) return;
+                const newId = crypto.randomUUID();
+                setParticipants([...participants, {
+                    id: newId,
+                    code,
+                    name: name || `Participant ${code}`,
+                    status: 'active',
+                    profileSummary: '',
+                    completedStageIds: []
+                }]);
+                setCode(''); setName('');
+            }
+
+            const updateParticipant = (id, field, value) => {
+                setParticipants(participants.map(p => p.id === id ? { ...p, [field]: value } : p));
+            }
+
+            return (
+                 <SectionCard title="Gestion des Participants" icon={Users}>
+                    <div className="mb-4">
+                        <div className="bg-blue-50 rounded-lg p-3 border border-blue-100 mb-4">
+                             <div className="grid grid-cols-12 gap-2">
+                                <div className="col-span-3">
+                                    <input type="text" value={code} onChange={e => setCode(e.target.value)} placeholder="Code (ex: P-001)" className="text-xs w-full rounded border-slate-200" />
+                                </div>
+                                <div className="col-span-6">
+                                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Nom complet (Optionnel)" className="text-xs w-full rounded border-slate-200" />
+                                </div>
+                                <div className="col-span-3">
+                                    <button onClick={addParticipant} disabled={!code} className="w-full bg-blue-600 text-white text-xs font-bold py-1.5 rounded hover:bg-blue-700 disabled:opacity-50">Inscrire</button>
+                                </div>
+                             </div>
+                        </div>
+
+                        {participants.length > 0 ? (
+                            <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar">
+                                {participants.map(p => (
+                                    <div key={p.id} className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+                                        <div
+                                            className="p-2 flex items-center justify-between bg-slate-50 cursor-pointer hover:bg-slate-100"
+                                            onClick={() => setEditingId(editingId === p.id ? null : p.id)}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-mono font-bold text-blue-600 bg-blue-50 px-1.5 rounded border border-blue-100 text-xs">{p.code}</span>
+                                                <span className="text-sm font-medium text-slate-700">{p.name}</span>
+                                                <span className={`text-[10px] px-1.5 rounded uppercase font-bold ${p.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>{p.status}</span>
+                                            </div>
+                                            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${editingId === p.id ? 'rotate-180' : ''}`} />
+                                        </div>
+
+                                        {editingId === p.id && (
+                                            <div className="p-3 border-t border-slate-100 bg-white">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="text-[10px] uppercase font-bold text-slate-400 mb-1 block">Résumé de Profil</label>
+                                                        <textarea
+                                                            className="w-full text-xs border-slate-200 rounded h-24 p-2"
+                                                            placeholder="Notes, observations, problématiques..."
+                                                            value={p.profileSummary}
+                                                            onChange={e => updateParticipant(p.id, 'profileSummary', e.target.value)}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-[10px] uppercase font-bold text-slate-400 mb-1 block">Progression & Statut</label>
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <span className="text-xs text-slate-600">Statut:</span>
+                                                            <select
+                                                                value={p.status}
+                                                                onChange={e => updateParticipant(p.id, 'status', e.target.value)}
+                                                                className="text-xs border-slate-200 rounded py-1"
+                                                            >
+                                                                <option value="active">Actif</option>
+                                                                <option value="completed">Complété</option>
+                                                                <option value="suspended">Suspendu</option>
+                                                                <option value="abandoned">Abandonné</option>
+                                                            </select>
+                                                        </div>
+                                                        <div className="text-[10px] text-slate-400 mb-1">Cochez les étapes complétées :</div>
+                                                        <div className="max-h-20 overflow-y-auto border border-slate-100 rounded p-1">
+                                                            <div className="text-xs text-slate-400 italic">Voir fiche complète pour détails</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-4 text-slate-400 text-xs italic border border-dashed border-slate-200 rounded">Aucun participant inscrit.</div>
+                        )}
+                    </div>
+                 </SectionCard>
+            );
+        };
+
+        const ParticipantEventManager = ({ events, setEvents, participants }) => {
+            const [date, setDate] = useState('');
+            const [type, setType] = useState('abandon');
+            const [participantId, setParticipantId] = useState('');
+            const [manualName, setManualName] = useState('');
+
+            const addEvent = () => {
+                if(!date) return;
+                const change = type === 'ajout' ? 1 : -1;
+
+                let pName = manualName;
+                if (participantId) {
+                    const p = participants.find(p => p.id === participantId);
+                    if (p) pName = `${p.code} - ${p.name}`;
+                }
+
+                setEvents([...events, { id: crypto.randomUUID(), date, type, participantName: pName || 'Inconnu', change }]);
+                setDate(''); setManualName(''); setParticipantId('');
+            }
+
+            const removeEvent = (id) => setEvents(events.filter(e => e.id !== id));
+            const getTypeLabel = (t) => { switch(t) { case 'abandon': return 'Abandon'; case 'suspension': return 'Suspension'; case 'transfert': return 'Transfert'; case 'liberation': return 'Libération'; case 'ajout': return 'Ajout Tardif'; default: return t; } }
+
+            return (
+                <SectionCard title="Journal des Mouvements (Abandons/Ajouts)" icon={UserMinus} defaultOpen={false}>
+                    <div className="bg-red-50 rounded-lg p-3 mb-4 border border-red-100">
+                        <div className="grid grid-cols-1 gap-2">
+                            <div className="flex gap-2">
+                                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="flex-1 text-xs rounded border-slate-200" />
+                                <select value={type} onChange={(e) => setType(e.target.value)} className="flex-1 text-xs rounded border-slate-200"><option value="abandon">Abandon (-1)</option><option value="suspension">Suspension (-1)</option><option value="transfert">Transfert (-1)</option><option value="liberation">Libération (-1)</option><option value="ajout">Ajout (+1)</option></select>
+                            </div>
+
+                            <div className="flex gap-2">
+                                {participants.length > 0 ? (
+                                    <select value={participantId} onChange={(e) => setParticipantId(e.target.value)} className="flex-1 text-xs rounded border-slate-200">
+                                        <option value="">-- Sélectionner un participant --</option>
+                                        {participants.map(p => (
+                                            <option key={p.id} value={p.id}>{p.code} - {p.name}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    <input type="text" value={manualName} onChange={(e) => setManualName(e.target.value)} placeholder="Nom du participant" className="flex-1 text-xs rounded border-slate-200" />
+                                )}
+                            </div>
+
+                            <button onClick={addEvent} disabled={!date} className="w-full bg-red-600 text-white text-xs font-bold py-1.5 rounded hover:bg-red-700 disabled:opacity-50">Enregistrer l'événement</button>
+                        </div>
+                    </div>
+                    <div className="space-y-2 max-h-[150px] overflow-y-auto custom-scrollbar">
+                        {events.map(ev => (
+                            <div key={ev.id} className="flex items-center justify-between text-xs bg-white border border-slate-200 p-2 rounded shadow-sm">
+                                <div>
+                                    <div className="font-bold text-slate-700 flex items-center gap-2">{formatDateShort(parseDate(ev.date))}<span className={`px-1.5 py-0.5 rounded text-[10px] uppercase ${ev.change > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{getTypeLabel(ev.type)}</span></div>
+                                    <div className="text-slate-500">{ev.participantName || 'Participant inconnu'}</div>
+                                </div>
+                                <button onClick={() => removeEvent(ev.id)} className="text-slate-300 hover:text-red-500"><XCircle className="w-4 h-4" /></button>
+                            </div>
+                        ))}
+                    </div>
+                </SectionCard>
+            );
+        }
+
+        const PhaseBlock = ({ title, stages, color, calculatedStages, showAdminTasks }) => {
+            const [isOpen, setIsOpen] = useState(true);
+            const getTypeStyles = (type) => { switch(type) { case 'milestone': return { dot: 'bg-purple-500', icon: <Flag className="w-3.5 h-3.5 text-purple-600" />, label: 'Jalon' }; case 'delay': return { dot: 'bg-slate-400', icon: <Hourglass className="w-3.5 h-3.5 text-slate-600" />, label: 'Attente' }; default: return { dot: 'bg-blue-500', icon: <Layers className="w-3.5 h-3.5 text-blue-600" />, label: 'Travail' }; } };
+            const getAdminTaskIcon = (type) => { switch(type) { case 'form': return <FileText className="w-3 h-3 text-amber-500" />; case 'rdi': return <AlertCircle className="w-3 h-3 text-red-500" />; case 'eval': return <ClipboardList className="w-3 h-3 text-blue-500" />; default: return <CheckCircle2 className="w-3 h-3 text-slate-400" />; } };
+
+            if (stages.length === 0) return null;
+
+            let headerBg = "bg-slate-50";
+            let borderColor = "border-slate-200";
+            if (color.includes("indigo")) { headerBg = "bg-indigo-50"; borderColor = "border-indigo-200"; }
+            else if (color.includes("blue")) { headerBg = "bg-blue-50"; borderColor = "border-blue-200"; }
+            else if (color.includes("emerald")) { headerBg = "bg-emerald-50"; borderColor = "border-emerald-200"; }
+
+            return (
+                <div className={`mb-6 rounded-lg border ${borderColor} overflow-hidden transition-all duration-300 shadow-sm`}>
+                     <div className={`flex items-center justify-between cursor-pointer px-4 py-3 select-none ${headerBg} hover:opacity-90`} onClick={() => setIsOpen(!isOpen)}>
+                        <h4 className="text-sm font-bold uppercase tracking-widest text-slate-700 flex items-center gap-2">{title}</h4>
+                        <div className="flex items-center gap-3"><span className="text-xs font-medium text-slate-500 bg-white/50 px-2 py-0.5 rounded-full border border-slate-200/50">{stages.length} étapes</span><div className={`text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}><ChevronDown className="w-4 h-4" /></div></div>
+                    </div>
+                    {isOpen && (
+                        <div className="p-4 space-y-6 bg-white animate-in fade-in slide-in-from-top-1 duration-200 relative">
+                             <div className="absolute left-[27px] top-6 bottom-6 w-0.5 border-l-2 border-dotted border-slate-100 z-0"></div>
+                             <div className="relative">
+                                {stages.map((stage) => {
+                                    const styles = getTypeStyles(stage.type);
+                                    const globalIdx = calculatedStages.findIndex(s => s.id === stage.id) + 1;
+                                    return (
+                                        <div key={stage.id} className="relative pl-8 group mb-6 last:mb-0">
+                                            <div className={`absolute left-0 top-4 w-3 h-3 rounded-full ring-2 ring-white shadow-sm z-10 ${styles.dot}`}></div>
+                                            <div className="flex flex-col gap-2">
+                                                {stage.eventsDuringStage && stage.eventsDuringStage.length > 0 && (
+                                                    <div className="mb-2 space-y-1">
+                                                        {stage.eventsDuringStage.map(ev => (
+                                                            <div key={ev.id} className="bg-red-50 border border-red-200 rounded p-2 text-xs flex items-center gap-2 text-red-800 shadow-sm animate-pulse"><UserMinus className="w-4 h-4" /><span className="font-bold">{formatDateShort(parseDate(ev.date))} :</span><span>{ev.type.toUpperCase()} - {ev.participantName} (Impact: {ev.change} part.)</span></div>
+                                                        ))}
+                                                        <div className="ml-4 pl-2 border-l-2 border-red-200">
+                                                            <div className="flex items-center gap-2 text-[10px] text-red-600"><FileText className="w-3 h-3" /> Rapport Final (1j ouvrable) à faire hors-séance</div>
+                                                            <div className="flex items-center gap-2 text-[10px] text-red-600"><ClipboardList className="w-3 h-3" /> STABLE-2007 + Objectifs à compléter</div>
+                                                            <div className="flex items-center gap-2 text-[10px] text-red-600"><FileText className="w-3 h-3" /> Formulaire SCC 1188 (48h)</div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 p-4 rounded-lg bg-white border border-slate-100 hover:border-blue-300 hover:shadow-md transition-all duration-200 z-10 relative">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider"># {globalIdx}</span>
+                                                        <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded border ${stage.type === 'milestone' ? 'text-purple-600 border-purple-200 bg-purple-50' : stage.type === 'delay' ? 'text-slate-600 border-slate-200 bg-slate-50' : 'text-blue-600 border-blue-200 bg-blue-50'}`}>{styles.label}</span>
+                                                        {stage.type === 'work' && (<span className="text-[10px] text-slate-500 flex items-center gap-1 border border-slate-200 bg-slate-50 rounded px-1.5 py-0.5">{stage.schedulingMode === 'any_weekday' ? <><Briefcase className="w-3 h-3" /> Bureau</> : <><CalendarDays className="w-3 h-3" /> Prog.</>}</span>)}
+                                                        </div>
+                                                        <h4 className="font-bold text-slate-800 text-base">{stage.name}</h4>
+                                                        {stage.description && <p className="text-xs text-slate-500 mt-2 bg-slate-50 p-2 rounded border border-slate-100 italic">"{stage.description}"</p>}
+                                                        <div className="flex items-center gap-4 text-xs text-slate-500 mt-2">
+                                                        {stage.type !== 'milestone' && (<span className="flex items-center gap-1.5 bg-slate-100 px-2 py-1 rounded">{styles.icon} {stage.calcMode === 'fixed_sessions' ? <>{stage.duration} séances</> : <>{stage.effectiveWorkDays}j effort</>}</span>)}
+                                                        {stage.type !== 'milestone' && <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {stage.realDuration}j (cal.)</span>}
+                                                        {(stage.usedParticipantCount > 0) && <span className="flex items-center gap-1.5 text-slate-600 bg-yellow-50 border border-yellow-100 px-2 py-1 rounded"><Users className="w-3 h-3" /> {stage.usedParticipantCount}</span>}
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-right sm:text-right flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-slate-100 pt-3 sm:pt-0 mt-2 sm:mt-0 min-w-[100px]">
+                                                        {stage.type === 'milestone' ? (
+                                                            <div><span className="block text-[10px] font-bold text-purple-600 uppercase">Date Cible</span><span className="font-mono font-bold text-slate-900 bg-purple-50 px-2 py-0.5 rounded border border-purple-100">{formatDateShort(stage.startDate)}</span></div>
+                                                        ) : (
+                                                        <>
+                                                            <div className="mb-2"><span className="block text-[10px] font-bold text-green-600 uppercase">Début</span><span className="font-mono font-medium text-slate-700">{formatDateShort(stage.startDate)}</span></div>
+                                                            <div><span className="block text-[10px] font-bold text-red-500 uppercase">Fin Estimée</span><span className="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">{formatDateShort(stage.endDate)}</span></div>
+                                                        </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                {showAdminTasks && stage.adminTasks && stage.adminTasks.length > 0 && (
+                                                    <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 ml-4 text-xs shadow-inner">
+                                                        <h5 className="font-bold text-slate-500 uppercase text-[10px] mb-2 flex items-center gap-1"><ClipboardList className="w-3 h-3" /> Tâches Administratives & Délais</h5>
+                                                        <ul className="space-y-2">
+                                                            {stage.adminTasks.map((task, tIdx) => (
+                                                                <li key={tIdx} className="flex items-start gap-2">
+                                                                    <div className="mt-0.5">{getAdminTaskIcon(task.type)}</div>
+                                                                    <div className="flex-1"><span className="font-medium text-slate-700 block">{task.label}</span><span className="text-slate-400">{task.deadlineDescription}</span></div>
+                                                                    {task.dueDate && (<div className="text-right"><span className="block text-[10px] font-bold text-red-500 uppercase">Échéance</span><span className="font-mono font-bold text-slate-800 bg-white px-1 py-0.5 rounded border border-slate-200">{formatDateShort(task.dueDate)}</span></div>)}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                             </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Timeline = ({ calculatedStages }) => {
+          const [showAdminTasks, setShowAdminTasks] = useState(true);
+          if (calculatedStages.length === 0) return <div className="h-full flex flex-col items-center justify-center text-slate-400 bg-white rounded-xl border-2 border-dashed border-slate-200 p-10"><CalendarRange className="w-12 h-12 mb-4 opacity-50" /><p>Configurez le programme.</p></div>;
+
+          const phases = {
+              avant: calculatedStages.filter(s => s.phase === 'avant'),
+              pendant: calculatedStages.filter(s => s.phase === 'pendant'),
+              apres: calculatedStages.filter(s => s.phase === 'apres')
+          };
+
+          return (
+            <div className="bg-white rounded-xl shadow-lg shadow-slate-200/50 border border-slate-200">
+              <div className="p-5 border-b border-slate-100 bg-slate-50 flex justify-between items-center">
+                <h3 className="font-bold text-slate-700 flex items-center gap-2"><CalendarRange className="w-5 h-5 text-blue-600" /> Échéancier Prévisionnel</h3>
+                <div className="flex items-center gap-2">
+                    <button onClick={() => setShowAdminTasks(!showAdminTasks)} className="text-[10px] flex items-center gap-1 px-2 py-1 rounded border border-slate-200 hover:bg-slate-50 text-slate-500">{showAdminTasks ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />} Plan d'action</button>
+                    <span className="text-xs font-bold bg-blue-100 text-blue-700 px-2 py-1 rounded-full">{calculatedStages.length} Étapes</span>
+                </div>
+              </div>
+              <div className="relative p-6">
+                 <PhaseBlock title="Phase 1 : Avant le Programme" stages={phases.avant} color="indigo" calculatedStages={calculatedStages} showAdminTasks={showAdminTasks} />
+                 <PhaseBlock title="Phase 2 : Pendant le Programme" stages={phases.pendant} color="blue" calculatedStages={calculatedStages} showAdminTasks={showAdminTasks} />
+                 <PhaseBlock title="Phase 3 : Post-Programme" stages={phases.apres} color="emerald" calculatedStages={calculatedStages} showAdminTasks={showAdminTasks} />
+              </div>
+            </div>
+          );
+        };
+
+        const ManagementReport = ({ onClose, data }) => {
+            const { programName, startDate, calculatedTimeline, participants, participantEvents, constraints, marginPercent } = data;
+
+            // Stats
+            const totalDurationDays = calculatedTimeline.length > 0
+                ? Math.ceil((calculatedTimeline[calculatedTimeline.length - 1].endDate.getTime() - parseDate(startDate).getTime()) / (1000 * 3600 * 24))
+                : 0;
+            const safeDate = calculatedTimeline.length > 0
+                ? addDays(calculatedTimeline[calculatedTimeline.length - 1].endDate, Math.ceil(totalDurationDays * (marginPercent / 100)))
+                : new Date();
+
+            // Admin Tasks extraction
+            const allAdminTasks = calculatedTimeline.flatMap(s =>
+                (s.adminTasks || []).map(t => ({
+                    ...t,
+                    stageName: s.name,
+                    stageDate: s.endDate // Approximate for sorting context
+                }))
+            ).sort((a,b) => (a.dueDate || a.stageDate).getTime() - (b.dueDate || b.stageDate).getTime());
+
+            return (
+                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 print:p-0 report-modal-open">
+                    <div className="bg-white w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-xl shadow-2xl print:max-h-none print:rounded-none print:shadow-none modal-content">
+                        {/* Header */}
+                        <div className="bg-slate-900 text-white p-6 print:bg-white print:text-black print:border-b-2 print:border-black flex justify-between items-start">
+                            <div>
+                                <h2 className="text-2xl font-bold uppercase tracking-wider mb-2">Rapport de Gestion & Contrôle</h2>
+                                <p className="text-blue-200 print:text-slate-600 font-medium">{programName}</p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm opacity-70">Généré le {new Date().toLocaleDateString('fr-FR')}</p>
+                                <button onClick={onClose} className="mt-4 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded text-sm print:hidden"><X className="w-4 h-4 inline mr-1"/> Fermer</button>
+                            </div>
+                        </div>
+
+                        <div className="p-8 space-y-8">
+                            {/* 1. Résumé Exécutif */}
+                            <section>
+                                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2"><Clock className="w-5 h-5 text-blue-600"/> Résumé Exécutif</h3>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <div className="text-xs text-slate-500 uppercase font-bold">Début</div>
+                                        <div className="text-lg font-bold text-slate-800">{formatDateFr(parseDate(startDate))}</div>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <div className="text-xs text-slate-500 uppercase font-bold">Fin Estimée</div>
+                                        <div className="text-lg font-bold text-blue-600">{formatDateFr(calculatedTimeline[calculatedTimeline.length-1]?.endDate || new Date())}</div>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <div className="text-xs text-slate-500 uppercase font-bold">Date de Sécurité (+{marginPercent}%)</div>
+                                        <div className="text-lg font-bold text-emerald-600">{formatDateFr(safeDate)}</div>
+                                    </div>
+                                    <div className="bg-slate-50 p-3 rounded border border-slate-100">
+                                        <div className="text-xs text-slate-500 uppercase font-bold">Participants Actifs</div>
+                                        <div className="text-lg font-bold text-slate-800">{participants.filter(p => p.status === 'active').length} / {participants.length}</div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* 2. Contrôle de Conformité (Admin Tasks) */}
+                            <section className="break-inside-avoid">
+                                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2"><FileCheck className="w-5 h-5 text-amber-600"/> Contrôle des Normes (Échéancier Admin)</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm text-left border-collapse">
+                                        <thead>
+                                            <tr className="bg-slate-100 text-slate-600 uppercase text-xs">
+                                                <th className="p-2 border-b border-slate-200">Date Butoir</th>
+                                                <th className="p-2 border-b border-slate-200">Action / Norme</th>
+                                                <th className="p-2 border-b border-slate-200">Étape Liée</th>
+                                                <th className="p-2 border-b border-slate-200">Type</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {allAdminTasks.map((task, idx) => (
+                                                <tr key={idx} className="border-b border-slate-50 hover:bg-slate-50">
+                                                    <td className="p-2 font-mono font-bold text-blue-700">
+                                                        {task.dueDate ? formatDateShort(task.dueDate) : '-'}
+                                                    </td>
+                                                    <td className="p-2">
+                                                        <div className="font-medium text-slate-800">{task.label}</div>
+                                                        <div className="text-xs text-slate-500 italic">{task.deadlineDescription}</div>
+                                                    </td>
+                                                    <td className="p-2 text-slate-600">{task.stageName}</td>
+                                                    <td className="p-2">
+                                                        <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${
+                                                            task.type === 'rdi' ? 'bg-red-100 text-red-700' :
+                                                            task.type === 'form' ? 'bg-amber-100 text-amber-700' :
+                                                            task.type === 'eval' ? 'bg-blue-100 text-blue-700' :
+                                                            'bg-slate-100 text-slate-600'
+                                                        }`}>
+                                                            {task.type === 'rdi' ? 'RDI' : task.type === 'form' ? 'Form.' : task.type === 'eval' ? 'Éval.' : 'Note'}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            {/* 3. Mouvements de Participants */}
+                            {participantEvents.length > 0 && (
+                                <section className="break-inside-avoid">
+                                    <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2"><UserMinus className="w-5 h-5 text-red-600"/> Journal des Mouvements</h3>
+                                    <ul className="space-y-2">
+                                        {participantEvents.map(ev => (
+                                            <li key={ev.id} className="flex gap-4 text-sm p-2 bg-slate-50 rounded border border-slate-100">
+                                                <span className="font-mono font-bold text-slate-600">{formatDateShort(parseDate(ev.date))}</span>
+                                                <span className="font-bold text-red-700 uppercase">{ev.type}</span>
+                                                <span className="text-slate-700">{ev.participantName}</span>
+                                                <span className="text-slate-400 text-xs italic ml-auto">Impact sur échéancier futur : {ev.change > 0 ? '+' : ''}{ev.change} part.</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            )}
+
+                             {/* 4. Liste des Étapes Simplifiée */}
+                             <section className="break-inside-avoid">
+                                <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 flex items-center gap-2"><Layers className="w-5 h-5 text-slate-600"/> Calendrier des Modules</h3>
+                                <div className="grid grid-cols-1 gap-1">
+                                    {calculatedTimeline.map((s, i) => (
+                                        <div key={s.id} className="flex text-xs p-1 border-b border-slate-50">
+                                            <div className="w-8 font-bold text-slate-300">#{i+1}</div>
+                                            <div className="w-24 font-mono text-slate-600">{formatDateShort(s.startDate)}</div>
+                                            <div className="flex-1 font-medium text-slate-800">{s.name}</div>
+                                            <div className="w-24 text-right font-mono text-slate-600">{formatDateShort(s.endDate)}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const StageBuilder = ({ stages, setStages, participantCount }) => {
+            const [isEditing, setIsEditing] = useState(null);
+
+            const addStage = () => {
+                const newStage = {
+                    id: crypto.randomUUID(),
+                    name: "Nouvelle étape",
+                    type: "work",
+                    phase: "pendant",
+                    calcMode: "fixed",
+                    schedulingMode: "program_schedule",
+                    duration: 1,
+                    description: "",
+                    participantOverride: 0
+                };
+                setStages([...stages, newStage]);
+                setIsEditing(newStage.id);
+            };
+
+            const updateStage = (id, field, value) => {
+                setStages(stages.map(s => s.id === id ? { ...s, [field]: value } : s));
+            };
+
+            const removeStage = (id) => {
+                if (confirm("Supprimer cette étape ?")) {
+                    setStages(stages.filter(s => s.id !== id));
+                }
+            };
+
+            const moveStage = (index, direction) => {
+                const newStages = [...stages];
+                if (direction === 'up' && index > 0) {
+                    [newStages[index], newStages[index - 1]] = [newStages[index - 1], newStages[index]];
+                } else if (direction === 'down' && index < newStages.length - 1) {
+                    [newStages[index], newStages[index + 1]] = [newStages[index + 1], newStages[index]];
+                }
+                setStages(newStages);
+            };
+
+            return (
+                <SectionCard title="Configuration des Étapes" icon={Layers}>
+                    <div className="mb-4">
+                        <button onClick={addStage} className="w-full py-2 border-2 border-dashed border-blue-200 rounded-lg text-blue-600 font-bold text-xs hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                            <Plus className="w-4 h-4" /> Ajouter une étape
+                        </button>
+                    </div>
+                    <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar p-1">
+                        {stages.map((stage, index) => (
+                            <div key={stage.id} className="bg-white border border-slate-200 rounded-lg shadow-sm group">
+                                <div className="p-3 flex items-center gap-3">
+                                    <div className="flex flex-col gap-1">
+                                        <button onClick={() => moveStage(index, 'up')} disabled={index === 0} className="text-slate-300 hover:text-blue-600 disabled:opacity-30"><ChevronUp className="w-3 h-3" /></button>
+                                        <button onClick={() => moveStage(index, 'down')} disabled={index === stages.length - 1} className="text-slate-300 hover:text-blue-600 disabled:opacity-30"><ChevronDown className="w-3 h-3" /></button>
+                                    </div>
+                                    <div className="flex-1 cursor-pointer" onClick={() => setIsEditing(isEditing === stage.id ? null : stage.id)}>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase">{index + 1}</span>
+                                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${stage.phase === 'avant' ? 'bg-indigo-50 text-indigo-600' : stage.phase === 'pendant' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}`}>{stage.phase}</span>
+                                            <span className="font-bold text-sm text-slate-700">{stage.name}</span>
+                                        </div>
+                                        <div className="text-[10px] text-slate-400 flex gap-2">
+                                            <span>{stage.type === 'work' ? 'Travail' : stage.type === 'milestone' ? 'Jalon' : 'Attente'}</span>
+                                            <span>•</span>
+                                            <span>{stage.duration} {stage.calcMode === 'fixed_sessions' ? 'séances' : 'jours'}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                         <button onClick={() => setIsEditing(isEditing === stage.id ? null : stage.id)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"><Settings className="w-4 h-4" /></button>
+                                         <button onClick={() => removeStage(stage.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
+                                    </div>
+                                </div>
+
+                                {isEditing === stage.id && (
+                                    <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                                        <div className="grid grid-cols-12 gap-3">
+                                            <div className="col-span-8">
+                                                <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Nom de l'étape</label>
+                                                <input type="text" value={stage.name} onChange={(e) => updateStage(stage.id, 'name', e.target.value)} className="w-full text-xs border-slate-200 rounded" />
+                                            </div>
+                                            <div className="col-span-4">
+                                                <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Phase</label>
+                                                <select value={stage.phase} onChange={(e) => updateStage(stage.id, 'phase', e.target.value)} className="w-full text-xs border-slate-200 rounded">
+                                                    <option value="avant">Avant</option>
+                                                    <option value="pendant">Pendant</option>
+                                                    <option value="apres">Après</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-12 gap-3">
+                                            <div className="col-span-4">
+                                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Type</label>
+                                                 <select value={stage.type} onChange={(e) => updateStage(stage.id, 'type', e.target.value)} className="w-full text-xs border-slate-200 rounded">
+                                                    <option value="work">Travail</option>
+                                                    <option value="milestone">Jalon (Date fixe)</option>
+                                                    <option value="delay">Attente (Délai)</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-span-4">
+                                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Durée / Qté</label>
+                                                 <input type="number" min="0" step="0.5" value={stage.duration} onChange={(e) => updateStage(stage.id, 'duration', parseFloat(e.target.value))} className="w-full text-xs border-slate-200 rounded" />
+                                            </div>
+                                            <div className="col-span-4">
+                                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Mode Calcul</label>
+                                                 <select value={stage.calcMode} onChange={(e) => updateStage(stage.id, 'calcMode', e.target.value)} disabled={stage.type !== 'work'} className="w-full text-xs border-slate-200 rounded disabled:opacity-50">
+                                                    <option value="fixed">Fixe (Jours)</option>
+                                                    <option value="fixed_sessions">Fixe (Séances)</option>
+                                                    <option value="linear_1d">Linéaire (1j/p)</option>
+                                                    <option value="linear_0.5d">Linéaire (0.5j/p)</option>
+                                                    <option value="capacity_4d">Capacité (4/j)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-12 gap-3">
+                                            <div className="col-span-6">
+                                                <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Planification</label>
+                                                <select value={stage.schedulingMode} onChange={(e) => updateStage(stage.id, 'schedulingMode', e.target.value)} disabled={stage.type !== 'work'} className="w-full text-xs border-slate-200 rounded disabled:opacity-50">
+                                                    <option value="any_weekday">Jours ouvrables (Lun-Ven)</option>
+                                                    <option value="program_schedule">Selon Horaire Programme</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-span-6">
+                                                 <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Participants (Override)</label>
+                                                 <input type="number" min="0" placeholder={`Défaut: ${participantCount}`} value={stage.participantOverride || ''} onChange={(e) => updateStage(stage.id, 'participantOverride', parseInt(e.target.value) || 0)} className="w-full text-xs border-slate-200 rounded" />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Description</label>
+                                            <input type="text" value={stage.description} onChange={(e) => updateStage(stage.id, 'description', e.target.value)} className="w-full text-xs border-slate-200 rounded" />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </SectionCard>
+            );
+        };
+
+        const ConstraintManager = ({ constraints, setConstraints }) => {
+            const [newConstraint, setNewConstraint] = useState({ name: '', startDate: '', endDate: '', type: 'full' });
+
+            const addConstraint = () => {
+                if (!newConstraint.name || !newConstraint.startDate || !newConstraint.endDate) return;
+                setConstraints([...constraints, { id: crypto.randomUUID(), ...newConstraint }]);
+                setNewConstraint({ name: '', startDate: '', endDate: '', type: 'full' });
+            };
+
+            const removeConstraint = (id) => {
+                setConstraints(constraints.filter(c => c.id !== id));
+            };
+
+            return (
+                <SectionCard title="Jours Fériés & Contraintes" icon={AlertTriangle} defaultOpen={false}>
+                    <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 mb-4">
+                        <div className="grid grid-cols-12 gap-2 mb-2">
+                             <div className="col-span-4">
+                                <label className="text-[10px] font-bold text-amber-700 uppercase block mb-1">Nom</label>
+                                <input type="text" value={newConstraint.name} onChange={e => setNewConstraint({...newConstraint, name: e.target.value})} className="w-full text-xs border-amber-200 rounded" placeholder="Ex: Congé..." />
+                             </div>
+                             <div className="col-span-3">
+                                <label className="text-[10px] font-bold text-amber-700 uppercase block mb-1">Début</label>
+                                <input type="date" value={newConstraint.startDate} onChange={e => setNewConstraint({...newConstraint, startDate: e.target.value})} className="w-full text-xs border-amber-200 rounded" />
+                             </div>
+                             <div className="col-span-3">
+                                <label className="text-[10px] font-bold text-amber-700 uppercase block mb-1">Fin</label>
+                                <input type="date" value={newConstraint.endDate} onChange={e => setNewConstraint({...newConstraint, endDate: e.target.value})} className="w-full text-xs border-amber-200 rounded" />
+                             </div>
+                             <div className="col-span-2">
+                                <label className="text-[10px] font-bold text-amber-700 uppercase block mb-1">Type</label>
+                                <select value={newConstraint.type} onChange={e => setNewConstraint({...newConstraint, type: e.target.value})} className="w-full text-xs border-amber-200 rounded">
+                                    <option value="full">Jour complet</option>
+                                    <option value="am">Matin (AM)</option>
+                                    <option value="pm">Après-midi (PM)</option>
+                                </select>
+                             </div>
+                        </div>
+                        <button onClick={addConstraint} className="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-1.5 rounded transition-colors">Ajouter la contrainte</button>
+                    </div>
+
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar">
+                        {constraints.length === 0 && <p className="text-center text-xs text-slate-400 italic py-2">Aucune contrainte définie.</p>}
+                        {constraints.map(c => (
+                            <div key={c.id} className="flex items-center justify-between bg-white border border-slate-200 p-2 rounded shadow-sm text-xs">
+                                <div>
+                                    <div className="font-bold text-slate-700">{c.name}</div>
+                                    <div className="text-slate-500 flex gap-2">
+                                        <span>{formatDateShort(parseDate(c.startDate))} {c.startDate !== c.endDate && `au ${formatDateShort(parseDate(c.endDate))}`}</span>
+                                        <span className="uppercase bg-slate-100 px-1 rounded text-[10px]">{c.type === 'full' ? 'Complet' : c.type}</span>
+                                    </div>
+                                </div>
+                                <button onClick={() => removeConstraint(c.id)} className="text-slate-300 hover:text-red-500"><XCircle className="w-4 h-4" /></button>
+                            </div>
+                        ))}
+                    </div>
+                </SectionCard>
+            );
+        };
+
+        // --- MAIN APP ---
+
+        const STORAGE_KEY = 'chronosuivi_v586_final_fix';
+        const loadState = (key, defaultValue) => {
+          try { const saved = localStorage.getItem(STORAGE_KEY + '_' + key); return saved ? JSON.parse(saved) : defaultValue; }
+          catch (e) { return defaultValue; }
+        };
+
+        function App() {
+          const fileInputRef = useRef(null);
+          const [programName, setProgramName] = useState(() => loadState('programName', 'Programme MPCI-DS-IÉ'));
+          const [intervenantName, setIntervenantName] = useState(() => loadState('intervenantName', ''));
+          const [participantCount, setParticipantCount] = useState(() => loadState('participantCount', 10));
+          const [marginPercent, setMarginPercent] = useState(() => loadState('marginPercent', 15));
+          const [startDate, setStartDate] = useState(() => loadState('startDate', new Date().toISOString().split('T')[0]));
+
+          const defaultScheduleNew = [
+            { dayIndex: 1, label: 'Lun', am: true, pm: true },
+            { dayIndex: 2, label: 'Mar', am: true, pm: true },
+            { dayIndex: 3, label: 'Mer', am: true, pm: true },
+            { dayIndex: 4, label: 'Jeu', am: true, pm: true },
+            { dayIndex: 5, label: 'Ven', am: true, pm: true },
+            { dayIndex: 6, label: 'Sam', am: false, pm: false },
+            { dayIndex: 0, label: 'Dim', am: false, pm: false },
+          ];
+
+          const [schedule, setSchedule] = useState(() => {
+             const saved = loadState('schedule', null);
+             if (!saved) return defaultScheduleNew;
+             if (saved.length > 0 && 'active' in saved[0]) return saved.map(s => ({ dayIndex: s.dayIndex, label: s.label, am: s.active, pm: s.active }));
+             return saved;
+          });
+
+          const [scheduleChanges, setScheduleChanges] = useState(() => loadState('scheduleChanges', []));
+
+          // Load stages or default from MPCI template
+          const [stages, setStages] = useState(() => {
+             const saved = loadState('stages', null);
+             if (!saved) return PROGRAM_TEMPLATES[0].stages; // Default to MPCI
+             return saved.map(s => ({
+                 ...s,
+                 phase: s.phase || 'pendant',
+                 calcMode: s.calcMode || 'fixed',
+                 schedulingMode: s.schedulingMode || 'any_weekday',
+                 participantOverride: s.participantOverride
+             }));
+          });
+
+          const [selectedTemplate, setSelectedTemplate] = useState('mpci');
+
+          const [constraints, setConstraints] = useState(() => {
+              const saved = loadState('constraints', null);
+              if (saved && saved.length > 0) return saved;
+              return generateFederalHolidays();
+          });
+
+          const [participantEvents, setParticipantEvents] = useState(() => loadState('participantEvents', []));
+
+          // NEW STATE: PARTICIPANTS
+          const [participants, setParticipants] = useState(() => loadState('participants', []));
+
+          // NEW STATE: REPORT
+          const [showReport, setShowReport] = useState(false);
+
+          const [isSaved, setIsSaved] = useState(true);
+
+          useEffect(() => {
+            setIsSaved(false);
+            const timer = setTimeout(() => {
+              localStorage.setItem(STORAGE_KEY + '_programName', JSON.stringify(programName));
+              localStorage.setItem(STORAGE_KEY + '_intervenantName', JSON.stringify(intervenantName));
+              localStorage.setItem(STORAGE_KEY + '_participantCount', JSON.stringify(participantCount));
+              localStorage.setItem(STORAGE_KEY + '_startDate', JSON.stringify(startDate));
+              localStorage.setItem(STORAGE_KEY + '_schedule', JSON.stringify(schedule));
+              localStorage.setItem(STORAGE_KEY + '_scheduleChanges', JSON.stringify(scheduleChanges));
+              localStorage.setItem(STORAGE_KEY + '_stages', JSON.stringify(stages));
+              localStorage.setItem(STORAGE_KEY + '_constraints', JSON.stringify(constraints));
+              localStorage.setItem(STORAGE_KEY + '_marginPercent', JSON.stringify(marginPercent));
+              localStorage.setItem(STORAGE_KEY + '_participantEvents', JSON.stringify(participantEvents));
+              localStorage.setItem(STORAGE_KEY + '_participants', JSON.stringify(participants));
+              setIsSaved(true);
+            }, 500);
+            return () => clearTimeout(timer);
+          }, [programName, intervenantName, participantCount, startDate, schedule, scheduleChanges, stages, constraints, marginPercent, participantEvents, participants]);
+
+          // Sync participant count with active list if list is used
+          useEffect(() => {
+              if (participants.length > 0) {
+                  const activeCount = participants.filter(p => p.status === 'active').length;
+                  if (activeCount > 0 && activeCount !== participantCount) {
+                      setParticipantCount(activeCount);
+                  }
+              }
+          }, [participants]);
+
+          const calculatedTimeline = useMemo(() => {
+            return calculateTimeline(startDate, stages, constraints, schedule, participantCount, participantEvents, scheduleChanges);
+          }, [startDate, stages, constraints, schedule, participantCount, participantEvents, scheduleChanges]);
+
+          const totalSessions = calculatedTimeline.filter(s => s.type === 'work').reduce((acc, s) => acc + (s.effectiveWorkDays || 0), 0);
+          const finishDate = calculatedTimeline.length > 0 ? calculatedTimeline[calculatedTimeline.length - 1].endDate : parseDate(startDate);
+          const startObj = parseDate(startDate);
+          let totalDurationDays = 0;
+          if (!isNaN(startObj.getTime()) && !isNaN(finishDate.getTime())) totalDurationDays = Math.ceil((finishDate.getTime() - startObj.getTime()) / (1000 * 3600 * 24));
+          const safeDate = addDays(finishDate, Math.ceil(totalDurationDays * (marginPercent / 100)));
+
+          const handleApplyTemplate = () => {
+             if (window.confirm("Attention : Appliquer ce modèle remplacera toutes les étapes actuelles. Continuer ?")) {
+                 const tpl = PROGRAM_TEMPLATES.find(t => t.id === selectedTemplate);
+                 if (tpl) {
+                     setProgramName(tpl.defaultName);
+                     setParticipantCount(tpl.defaultParticipants);
+                     // Generate new IDs to avoid key conflicts
+                     const newStages = tpl.stages.map(s => ({ ...s, id: crypto.randomUUID() }));
+                     setStages(newStages);
+                 }
+             }
+          };
+
+          const handleReset = () => {
+            if (window.confirm("Tout réinitialiser ?")) {
+              const keys = ['programName', 'intervenantName', 'participantCount', 'startDate', 'schedule', 'scheduleChanges', 'stages', 'constraints', 'marginPercent', 'participantEvents', 'participants'];
+              keys.forEach(k => localStorage.removeItem(STORAGE_KEY + '_' + k));
+              window.location.reload();
+            }
+          };
+
+          const handleExportJSON = () => {
+            const data = { programName, intervenantName, participantCount, startDate, schedule, scheduleChanges, stages, constraints, marginPercent, participantEvents, participants, version: "5.8" };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = `config_chrono_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+          };
+
+          const handleImportClick = () => fileInputRef.current?.click();
+          const handleFileChange = (e) => {
+            const file = e.target.files?.[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              try {
+                const data = JSON.parse(event.target.result);
+                if (data.programName) setProgramName(data.programName);
+                if (data.participantCount) setParticipantCount(data.participantCount);
+                if (data.stages) setStages(data.stages.map(s => ({ ...s, phase: s.phase || 'pendant', calcMode: s.calcMode || 'fixed' })));
+                if (data.schedule) setSchedule(data.schedule);
+                if (data.scheduleChanges) setScheduleChanges(data.scheduleChanges);
+                if (data.constraints) setConstraints(data.constraints);
+                if (data.participantEvents) setParticipantEvents(data.participantEvents);
+                if (data.participants) setParticipants(data.participants);
+                alert("Configuration chargée !");
+              } catch (err) { alert("Erreur fichier."); }
+            };
+            reader.readAsText(file); e.target.value = '';
+          };
+
+          const handleExportCSV = () => {
+             let csvContent = "data:text/csv;charset=utf-8,Phase,Type,Mode,Étape,Description,Durée,Participants Actifs,Date Début,Date Fin,Tâches Admin\n";
+             calculatedTimeline.forEach(s => {
+               const adminSummary = s.adminTasks ? s.adminTasks.map(t => `${t.label}`).join('; ') : '';
+               csvContent += `${s.phase},${s.type},${s.schedulingMode},"${s.name}","${s.description}",${s.effectiveWorkDays}j,${s.usedParticipantCount},${formatDateShort(s.startDate)},${formatDateShort(s.endDate)},"${adminSummary}"\n`;
+             });
+             const link = document.createElement("a"); link.setAttribute("href", encodeURI(csvContent)); link.setAttribute("download", "export.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link);
+          };
+
+          return (
+            <div className="min-h-screen bg-slate-100 pb-20 print:bg-white print:pb-0 font-sans">
+              <div className="fixed inset-0 z-[-1] bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none"></div>
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".json" />
+
+              {/* Management Report Modal */}
+              {showReport && (
+                <ManagementReport
+                  onClose={() => setShowReport(false)}
+                  data={{ programName, startDate, calculatedTimeline, participants, participantEvents, constraints, marginPercent }}
+                />
+              )}
+
+              <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 print:hidden shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-gradient-to-tr from-blue-700 to-blue-600 p-2 rounded-lg shadow-md shadow-blue-500/20"><Clock className="text-white w-6 h-6" /></div>
+                    <div><h1 className="text-xl font-bold text-slate-800 leading-none">ChronoSuivi</h1><p className="text-[10px] uppercase font-bold text-blue-500 tracking-wider mt-0.5">Gestion de délais</p></div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`hidden md:flex text-xs font-bold items-center gap-1.5 px-3 py-1.5 rounded-full ${isSaved ? 'text-green-700 bg-green-50 border border-green-100' : 'text-amber-700 bg-amber-50 border border-amber-100'}`}><span className={`w-2 h-2 rounded-full ${isSaved ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}></span>{isSaved ? 'Enregistré' : '...'}</span>
+                    <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
+                    <div className="flex gap-2">
+                       <button onClick={() => setShowReport(true)} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Rapport de Gestion"><FileText className="w-5 h-5 text-blue-600" /></button>
+                       <button onClick={handleImportClick} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Importer"><Upload className="w-5 h-5" /></button>
+                       <button onClick={handleExportJSON} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Sauvegarder"><FileJson className="w-5 h-5" /></button>
+                       <button onClick={handleExportCSV} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Excel"><FileSpreadsheet className="w-5 h-5" /></button>
+                       <button onClick={() => window.print()} className="p-2 hover:bg-blue-50 text-blue-600 rounded-lg transition-all" title="Imprimer"><Printer className="w-5 h-5" /></button>
+                    </div>
+                    <button onClick={handleReset} className="ml-2 text-slate-400 hover:text-red-600 p-2 rounded-lg transition-colors hover:bg-red-50"><RotateCcw className="w-5 h-5" /></button>
+                  </div>
+                </div>
+              </header>
+
+              <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+                {/* DASHBOARD */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 print:hidden">
+                  <div className="md:col-span-8 bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl shadow-blue-900/20 relative overflow-hidden group hover:shadow-2xl transition-all duration-300">
+                    <div className="absolute -top-10 -right-10 p-10 opacity-10 group-hover:opacity-20 transition-opacity transform group-hover:rotate-12 duration-700"><CalendarRange className="w-64 h-64" /></div>
+                    <div className="relative z-10 flex flex-col justify-between h-full">
+                      <div><p className="text-blue-100 text-sm font-bold uppercase tracking-widest mb-1 opacity-80">Fin Optimale Estimée</p><h2 className="text-5xl sm:text-6xl font-extrabold tracking-tight mb-8 text-white drop-shadow-sm">{formatDateFr(finishDate)}</h2></div>
+                      <div className="flex flex-wrap items-center gap-4">
+                          <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/10 flex items-center gap-4 hover:bg-white/20 transition-colors">
+                            <div className="bg-white/20 p-2.5 rounded-lg"><ArrowRight className="w-5 h-5 text-white" /></div>
+                            <div><p className="text-[10px] text-blue-100 font-bold uppercase tracking-wider">Durée Totale</p><p className="text-xl font-bold">{totalDurationDays} jours</p></div>
+                          </div>
+                          <div className="bg-white/10 backdrop-blur-md px-5 py-3 rounded-xl border border-white/10 flex items-center gap-4 hover:bg-white/20 transition-colors">
+                            <div className="bg-white/20 p-2.5 rounded-lg"><Shield className="w-5 h-5 text-white" /></div>
+                            <div><p className="text-[10px] text-blue-100 font-bold uppercase tracking-wider">Sécurité (+{marginPercent}%)</p><p className="text-xl font-bold">{formatDateFr(safeDate)}</p></div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="md:col-span-4 flex flex-col gap-4">
+                    <div className="flex-1 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-center group hover:border-blue-200 transition-colors">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-4"><div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-all"><Layers className="w-6 h-6" /></div><span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Jours de Travail</span></div>
+                          <span className="text-4xl font-bold text-slate-800">{totalSessions}</span>
+                        </div>
+                        <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden"><div className="bg-blue-500 h-full rounded-full" style={{ width: '100%' }}></div></div>
+                        <p className="text-right text-xs text-slate-400 mt-2 font-medium">Jours ouvrés requis</p>
+                    </div>
+                    <div className="flex-1 bg-white rounded-2xl p-6 border border-slate-100 shadow-sm flex flex-col justify-center group hover:border-amber-200 transition-colors">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-4"><div className="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-all"><AlertTriangle className="w-6 h-6" /></div><span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Contraintes</span></div>
+                          <span className="text-4xl font-bold text-slate-800">{constraints.length}</span>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  <div className="lg:col-span-4 space-y-6">
+                    <SectionCard title="Paramètres du Programme" icon={Settings}>
+                      <div className="space-y-4">
+                         {/* TEMPLATE SELECTOR */}
+                         <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-2">
+                             <label className="text-[10px] font-bold text-blue-700 uppercase tracking-wider mb-1 block flex items-center gap-1"><LayoutTemplate className="w-3 h-3" /> Modèle de Programme</label>
+                             <div className="flex gap-2">
+                                 <select
+                                    value={selectedTemplate}
+                                    onChange={(e) => setSelectedTemplate(e.target.value)}
+                                    className="flex-1 text-xs border-slate-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                                 >
+                                     {PROGRAM_TEMPLATES.map(tpl => (
+                                         <option key={tpl.id} value={tpl.id}>{tpl.label}</option>
+                                     ))}
+                                 </select>
+                                 <button
+                                    onClick={handleApplyTemplate}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow-sm transition-colors"
+                                 >
+                                     Appliquer
+                                 </button>
+                             </div>
+                         </div>
+
+                        <div><label className="block text-xs font-semibold text-slate-500 mb-1">Nom du Programme</label><input type="text" value={programName} onChange={(e) => setProgramName(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-blue-500/50 outline-none" placeholder="Ex: Programme Alpha" /></div>
+                        <div><label className="block text-xs font-semibold text-slate-500 mb-1">Date de démarrage</label><input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium focus:ring-2 focus:ring-blue-500/50 outline-none" /></div>
+                        <div>
+                          <label className="block text-xs font-semibold text-blue-600 mb-1">Nombre de Participants (Actifs)</label>
+                          <div className="relative">
+                            <Users className="absolute left-3 top-2.5 text-blue-400 w-4 h-4" />
+                            <input type="number" min="1" value={participantCount} onChange={(e) => setParticipantCount(Math.max(1, parseInt(e.target.value) || 1))} className="w-full bg-blue-50 border border-blue-200 rounded-lg pl-9 pr-3 py-2 text-sm font-bold text-blue-900 focus:ring-2 focus:ring-blue-500 outline-none" />
+                          </div>
+                          <p className="text-[10px] text-slate-400 mt-1">Calculé automatiquement si des participants sont ajoutés.</p>
+                        </div>
+                        <div className="pt-2 border-t border-slate-100">
+                           <div className="flex justify-between items-center mb-1"><label className="block text-xs font-semibold text-slate-500">Marge de sécurité</label><span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{marginPercent}%</span></div>
+                           <input type="range" min="0" max="50" step="5" value={marginPercent} onChange={(e) => setMarginPercent(parseInt(e.target.value))} className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer" />
+                        </div>
+                      </div>
+                    </SectionCard>
+
+                    <ParticipantManager participants={participants} setParticipants={setParticipants} onAddEvent={setParticipantEvents} />
+                    <ParticipantEventManager events={participantEvents} setEvents={setParticipantEvents} participants={participants} />
+
+                    <div className="print:hidden"><ScheduleManager schedule={schedule} setSchedule={setSchedule} /></div>
+                    <div className="print:hidden"><ScheduleChangeManager changes={scheduleChanges} setChanges={setScheduleChanges} initialSchedule={schedule} /></div>
+
+                    <StageBuilder stages={stages} setStages={setStages} participantCount={participantCount} />
+                    <ConstraintManager constraints={constraints} setConstraints={setConstraints} />
+                  </div>
+                  <div className="lg:col-span-8">
+                    <div className="print-only mb-6 hidden"><h1 className="text-2xl font-bold mb-2">{programName}</h1><p>Date de début : {formatDateFr(new Date(startDate))}</p><p>Participants : {participantCount}</p></div>
+                    <Timeline calculatedStages={calculatedTimeline} />
+                    <div className="mt-4 text-center print:hidden"><p className="text-xs text-slate-400">Le calcul exclut les jours non travaillés et les contraintes.</p></div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          );
+        }
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
