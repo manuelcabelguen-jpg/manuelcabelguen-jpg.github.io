@@ -1,28 +1,29 @@
 import React, { useState, useRef } from 'react';
 import { Layers, Plus, Settings, Trash2, Download, Upload, GripVertical } from 'lucide-react';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import SectionCard from './SectionCard';
 import { generateUUID } from '../utils/helpers';
 
-const SortableStageItem = ({ stage, index, participantCount, onEdit, onDelete, isEditing, children }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: stage.id });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
-
+// Pure Presentation Component
+const StageCard = ({ stage, index, onEdit, onDelete, isDragging, isOverlay, style, attributes, listeners, setNodeRef }) => {
     return (
-        <div ref={setNodeRef} style={style} className="bg-white border border-slate-200 rounded-lg shadow-sm group mb-2 touch-none">
+        <div
+            ref={setNodeRef}
+            style={style}
+            className={`
+                bg-white border border-slate-200 rounded-lg shadow-sm group mb-2 touch-none
+                ${isDragging ? 'opacity-30 border-dashed border-blue-300' : ''}
+                ${isOverlay ? 'shadow-xl scale-105 rotate-1 border-blue-500 cursor-grabbing z-50' : ''}
+            `}
+        >
             <div className="p-3 flex items-center gap-3">
-                {/* Drag Handle */}
-                <div {...attributes} {...listeners} className="text-slate-300 hover:text-slate-600 cursor-grab active:cursor-grabbing p-1">
+                <div {...attributes} {...listeners} className="text-slate-300 hover:text-slate-600 cursor-grab active:cursor-grabbing p-1 outline-none">
                     <GripVertical className="w-4 h-4" />
                 </div>
 
-                <div className="flex-1 cursor-pointer" onClick={() => onEdit(stage.id)}>
+                <div className="flex-1 cursor-pointer" onClick={() => !isDragging && onEdit && onEdit(stage.id)}>
                     <div className="flex items-center gap-2 mb-1">
                         <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 uppercase">{index + 1}</span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${stage.phase === 'avant' ? 'bg-indigo-50 text-indigo-600' : stage.phase === 'pendant' ? 'bg-blue-50 text-blue-600' : 'bg-emerald-50 text-emerald-600'}`}>{stage.phase}</span>
@@ -34,38 +35,65 @@ const SortableStageItem = ({ stage, index, participantCount, onEdit, onDelete, i
                         <span>{stage.duration} {stage.calcMode === 'fixed_sessions' ? 'séances' : 'jours'}</span>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                     <button onClick={() => onEdit(stage.id)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"><Settings className="w-4 h-4" /></button>
-                     <button onClick={() => onDelete(stage.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
-                </div>
+                {!isOverlay && (
+                    <div className="flex items-center gap-2">
+                        <button onClick={() => onEdit(stage.id)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded"><Settings className="w-4 h-4" /></button>
+                        <button onClick={() => onDelete(stage.id)} className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                )}
             </div>
-            {children}
+        </div>
+    );
+};
+
+// Sortable Wrapper
+const SortableStageItem = ({ stage, index, onEdit, onDelete, children }) => {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: stage.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
+    return (
+        <div ref={setNodeRef} style={style}>
+            <StageCard
+                stage={stage}
+                index={index}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                isDragging={isDragging}
+                attributes={attributes}
+                listeners={listeners}
+            />
+            {/* Hide edit form while dragging to avoid clutter */}
+            {!isDragging && children}
         </div>
     );
 };
 
 const StageBuilder = ({ stages, setStages, participantCount }) => {
     const [isEditing, setIsEditing] = useState(null);
+    const [activeId, setActiveId] = useState(null);
     const fileInputRef = useRef(null);
 
     const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: {
-                distance: 8,
-            },
-        }),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        })
+        useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
     );
+
+    const handleDragStart = (event) => {
+        setActiveId(event.active.id);
+    };
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
-        if (active.id !== over.id) {
+        if (over && active.id !== over.id) {
             const oldIndex = stages.findIndex((i) => i.id === active.id);
             const newIndex = stages.findIndex((i) => i.id === over.id);
             setStages(arrayMove(stages, oldIndex, newIndex));
         }
+        setActiveId(null);
     };
 
     const addStage = () => {
@@ -135,17 +163,15 @@ const StageBuilder = ({ stages, setStages, participantCount }) => {
                 </button>
             </div>
             <div className="space-y-3 max-h-[600px] overflow-y-auto custom-scrollbar p-1">
-                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+                <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
                     <SortableContext items={stages.map(s => s.id)} strategy={verticalListSortingStrategy}>
                         {stages.map((stage, index) => (
                             <SortableStageItem
                                 key={stage.id}
                                 stage={stage}
                                 index={index}
-                                participantCount={participantCount}
                                 onEdit={(id) => setIsEditing(isEditing === id ? null : id)}
                                 onDelete={removeStage}
-                                isEditing={isEditing === stage.id}
                             >
                                 {isEditing === stage.id && (
                                     <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-3 animate-in fade-in slide-in-from-top-1 duration-200">
@@ -212,6 +238,15 @@ const StageBuilder = ({ stages, setStages, participantCount }) => {
                             </SortableStageItem>
                         ))}
                     </SortableContext>
+                    <DragOverlay>
+                        {activeId ? (
+                            <StageCard
+                                stage={stages.find(s => s.id === activeId)}
+                                index={stages.findIndex(s => s.id === activeId)}
+                                isOverlay
+                            />
+                        ) : null}
+                    </DragOverlay>
                 </DndContext>
             </div>
         </SectionCard>
