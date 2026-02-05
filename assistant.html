@@ -75,67 +75,39 @@
         const SectionType = { FIXED: 'fixed', DYNAMIC: 'dynamic' };
         const SourceType = { TEXT: 'Text', PDF: 'PDF' };
 
-        // Configuration par défaut avec des variables
-        const DEFAULT_TEMPLATES = [
-            { id: 'tpl_struct', label: 'Squelette Standard', isStructure: true, content: "<h3>Contexte pour {{nom}} ({{fps}})</h3><p>Rédigez ici...</p><h3>Analyse</h3><p>...</p>" },
-            { id: 'tpl_secu', label: 'Analyse Incidents (Sécurité)', content: "Agis comme un analyste de sécurité. Analyse le dossier de {{nom}}. Liste les incidents récents. Mentionne son FPS ({{fps}}) au début." },
-            { id: 'tpl_psy', label: 'Synthèse Clinique', content: "Résume l'état mental de {{nom}}, ses progrès introspectifs et facteurs de risque." },
-            { id: 'tpl_reco', label: 'Recommandation Agent', content: "Formule une recommandation finale pour {{nom}} basée sur les risques." },
-
-            // --- NOUVEAUX PROMPTS SPECIFIQUES ---
-            // MPCI
-            { id: 'tpl_mpci_assiduite', label: 'MPCI - Assiduité', content: "Pour {{nom}} (FPS: {{fps}}), analyse l'assiduité et la participation active au programme. Note les absences, les retards et l'engagement global dans les séances." },
-            { id: 'tpl_mpci_vie_perso', label: 'MPCI - Vie Personnelle', content: "Analyse le facteur de risque dynamique 'Vie personnelle et affective' pour {{nom}}. Identifie les stabilités et instabilités récentes." },
-            { id: 'tpl_mpci_toxico', label: 'MPCI - Toxicomanie', content: "Évalue le facteur 'Toxicomanie' pour {{nom}}. Note les progrès, les rechutes éventuelles ou le maintien de la sobriété." },
-            { id: 'tpl_mpci_famille', label: 'MPCI - Famille', content: "Analyse les 'Relations matrimoniales et familiales' de {{nom}}. Le soutien familial est-il un facteur de protection ou de risque ?" },
-            { id: 'tpl_mpci_freq', label: 'MPCI - Fréquentations', content: "Examine les fréquentations de {{nom}}. Y a-t-il des associations avec des pairs délinquants ou pro-sociaux ?" },
-            { id: 'tpl_mpci_emploi', label: 'MPCI - Emploi/Études', content: "Fais le point sur la situation 'Emploi et études' de {{nom}}. Stabilité, recherche d'emploi ou formation en cours." },
-            { id: 'tpl_mpci_attitudes', label: 'MPCI - Attitudes', content: "Analyse les attitudes de {{nom}} envers la criminalité, l'autorité et le changement. Note les distorsions cognitives observées." },
-            { id: 'tpl_mpci_comportement', label: 'MPCI - Comportement', content: "Décris le comportement de {{nom}} dans la collectivité. Respect des règles, interactions sociales." },
-            { id: 'tpl_mpci_maitrise', label: 'MPCI - Maîtrise de soi', content: "Évalue les plans de maîtrise de soi de {{nom}}. Utilise-t-il les stratégies apprises pour gérer ses émotions et impulsions ?" },
-            { id: 'tpl_mpci_reco', label: 'MPCI - Recommandations', content: "Rédige les défis anticipés, les prochaines étapes et les stratégies de surveillance recommandées pour {{nom}}." },
-
-            // Génériques
-            { id: 'tpl_gen_intro', label: 'Intro Générique', content: "Rédige une introduction formelle pour le dossier de {{nom}}, résumant le contexte de l'évaluation." },
-            { id: 'tpl_gen_analyse', label: 'Analyse Générique', content: "Effectue une analyse détaillée des éléments fournis pour {{nom}}, en mettant en évidence les points clés et les observations." },
-            { id: 'tpl_gen_conclusion', label: 'Conclusion Générique', content: "Synthétise les observations pour {{nom}} et formule une conclusion claire." },
-            { id: 'tpl_gen_bilan', label: 'Bilan des Acquis', content: "Fais le bilan des compétences acquises et des progrès réalisés par {{nom}} durant la période visée." },
-            { id: 'tpl_gen_objectifs', label: 'Objectifs Futurs', content: "Propose des objectifs concrets et mesurables pour la prochaine période concernant {{nom}}." }
-        ];
-
-        // --- STRUCTURES DE RAPPORTS ---
-        const REPORT_STRUCTURES = [
+        // --- DATA DEFAULTS ---
+        const DEFAULT_REPORT_STRUCTURES = [
             {
                 id: 'rep_mpci',
                 label: 'Rapport de programme MPCI – Délinquance sexuelle',
                 sections: [
-                    { title: "1. Assiduité et participation", content: "<h3>INTRODUCTION :</h3><p>Rédiger ici...</p><h3>ASSIDUITÉ ET PARTICIPATION :</h3><p>Rédiger ici...</p>", templateId: 'tpl_mpci_assiduite' },
-                    { title: "2. Progrès - Vie personnelle", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Vie personnelle et affective</h3><p>Analyse...</p>", templateId: 'tpl_mpci_vie_perso' },
-                    { title: "2. Progrès - Toxicomanie", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Toxicomanie</h3><p>Analyse...</p>", templateId: 'tpl_mpci_toxico' },
-                    { title: "2. Progrès - Relations fam.", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Relations matrimoniales et familiales</h3><p>Analyse...</p>", templateId: 'tpl_mpci_famille' },
-                    { title: "2. Progrès - Fréquentations", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Fréquentations</h3><p>Analyse...</p>", templateId: 'tpl_mpci_freq' },
-                    { title: "2. Progrès - Emploi/Études", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Emploi et études</h3><p>Analyse...</p>", templateId: 'tpl_mpci_emploi' },
-                    { title: "2. Progrès - Attitudes", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Attitudes</h3><p>Analyse...</p>", templateId: 'tpl_mpci_attitudes' },
-                    { title: "2. Progrès - Comportement", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Comportement dans la collectivité</h3><p>Analyse...</p>", templateId: 'tpl_mpci_comportement' },
-                    { title: "2. Progrès - Maîtrise de soi", content: "<h3>ÉVALUATION DE L’AGENT(E) DE PROGRAMMES DES PLANS DE MAÎTRISE DE SOI</h3><p>Analyse...</p>", templateId: 'tpl_mpci_maitrise' },
-                    { title: "3. Recommandations", content: "<h3>DÉFIS ANTICIPÉS</h3><p>...</p><h3>PROCHAINES ÉTAPES</h3><p>...</p><h3>STRATÉGIES DE SURVEILLANCE</h3><p>...</p><h3>RÉSUMÉ DE L’ANALYSE DU RISQUE/DES BESOINS :</h3><p>...</p>", templateId: 'tpl_mpci_reco' }
+                    { title: "1. Assiduité et participation", content: "<h3>INTRODUCTION :</h3><p>Rédiger ici...</p><h3>ASSIDUITÉ ET PARTICIPATION :</h3><p>Rédiger ici...</p>", genPrompt: "Pour {{nom}} (FPS: {{fps}}), analyse l'assiduité et la participation active au programme. Note les absences, les retards et l'engagement global.", verifPrompt: "Vérifie si le texte mentionne le taux de présence, les retards éventuels et qualifie le niveau de participation active." },
+                    { title: "2. Progrès - Vie personnelle", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Vie personnelle et affective</h3><p>Analyse...</p>", genPrompt: "Analyse le facteur de risque dynamique 'Vie personnelle et affective' pour {{nom}}. Identifie les stabilités et instabilités récentes.", verifPrompt: "Vérifie la présence d'une analyse des relations affectives et de la stabilité résidentielle/personnelle." },
+                    { title: "2. Progrès - Toxicomanie", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Toxicomanie</h3><p>Analyse...</p>", genPrompt: "Évalue le facteur 'Toxicomanie' pour {{nom}}. Note les progrès, les rechutes éventuelles ou le maintien de la sobriété.", verifPrompt: "Vérifie si l'abstinence ou la consommation est clairement établie et si les risques de rechute sont évalués." },
+                    { title: "2. Progrès - Relations fam.", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Relations matrimoniales et familiales</h3><p>Analyse...</p>", genPrompt: "Analyse les 'Relations matrimoniales et familiales' de {{nom}}. Le soutien familial est-il un facteur de protection ou de risque ?", verifPrompt: "Vérifie si la nature des relations familiales (soutien vs conflit) est décrite." },
+                    { title: "2. Progrès - Fréquentations", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Fréquentations</h3><p>Analyse...</p>", genPrompt: "Examine les fréquentations de {{nom}}. Y a-t-il des associations avec des pairs délinquants ou pro-sociaux ?", verifPrompt: "Vérifie la mention des fréquentations positives ou négatives." },
+                    { title: "2. Progrès - Emploi/Études", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Emploi et études</h3><p>Analyse...</p>", genPrompt: "Fais le point sur la situation 'Emploi et études' de {{nom}}. Stabilité, recherche d'emploi ou formation en cours.", verifPrompt: "Vérifie si le statut d'emploi ou d'étude est actuel." },
+                    { title: "2. Progrès - Attitudes", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Attitudes</h3><p>Analyse...</p>", genPrompt: "Analyse les attitudes de {{nom}} envers la criminalité, l'autorité et le changement. Note les distorsions cognitives observées.", verifPrompt: "Vérifie si les attitudes pro-criminelles ou pro-sociales sont analysées." },
+                    { title: "2. Progrès - Comportement", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Comportement dans la collectivité</h3><p>Analyse...</p>", genPrompt: "Décris le comportement de {{nom}} dans la collectivité. Respect des règles, interactions sociales.", verifPrompt: "Vérifie si le respect des conditions et le comportement social sont abordés." },
+                    { title: "2. Progrès - Maîtrise de soi", content: "<h3>ÉVALUATION DE L’AGENT(E) DE PROGRAMMES DES PLANS DE MAÎTRISE DE SOI</h3><p>Analyse...</p>", genPrompt: "Évalue les plans de maîtrise de soi de {{nom}}. Utilise-t-il les stratégies apprises pour gérer ses émotions et impulsions ?", verifPrompt: "Vérifie si l'application des stratégies de maîtrise de soi est évaluée." },
+                    { title: "3. Recommandations", content: "<h3>DÉFIS ANTICIPÉS</h3><p>...</p><h3>PROCHAINES ÉTAPES</h3><p>...</p><h3>STRATÉGIES DE SURVEILLANCE</h3><p>...</p><h3>RÉSUMÉ DE L’ANALYSE DU RISQUE/DES BESOINS :</h3><p>...</p>", genPrompt: "Rédige les défis anticipés, les prochaines étapes et les stratégies de surveillance recommandées pour {{nom}}.", verifPrompt: "Vérifie la présence des défis, des prochaines étapes et des stratégies de surveillance." }
                 ]
             },
             {
                 id: 'rep_prep',
                 label: 'Rapport Préparatoire (Exemple)',
                 sections: [
-                    { title: "1. Introduction", content: "<p>Introduction du rapport préparatoire...</p>", templateId: 'tpl_gen_intro' },
-                    { title: "2. Analyse des facteurs", content: "<p>Analyse...</p>", templateId: 'tpl_gen_analyse' },
-                    { title: "3. Conclusion et recommandations", content: "<p>Conclusion...</p>", templateId: 'tpl_gen_conclusion' }
+                    { title: "1. Introduction", content: "<p>Introduction du rapport préparatoire...</p>", genPrompt: "Rédige une introduction formelle pour le dossier de {{nom}}.", verifPrompt: "Vérifie la présence du contexte légal et des dates clés." },
+                    { title: "2. Analyse des facteurs", content: "<p>Analyse...</p>", genPrompt: "Effectue une analyse détaillée des éléments fournis pour {{nom}}.", verifPrompt: "Vérifie que tous les facteurs de risque pertinents sont couverts." },
+                    { title: "3. Conclusion", content: "<p>Conclusion...</p>", genPrompt: "Synthétise les observations pour {{nom}} et formule une conclusion claire.", verifPrompt: "Vérifie la présence d'une recommandation finale claire." }
                 ]
             },
             {
                 id: 'rep_maintien',
                 label: 'Rapport de Maintien des Acquis (Exemple)',
                 sections: [
-                    { title: "1. Bilan de la période", content: "<p>Bilan des acquis...</p>", templateId: 'tpl_gen_bilan' },
-                    { title: "2. Objectifs futurs", content: "<p>Nouveaux objectifs...</p>", templateId: 'tpl_gen_objectifs' }
+                    { title: "1. Bilan de la période", content: "<p>Bilan des acquis...</p>", genPrompt: "Fais le bilan des compétences acquises et des progrès réalisés par {{nom}}.", verifPrompt: "Vérifie si les progrès concrets sont listés." },
+                    { title: "2. Objectifs futurs", content: "<p>Nouveaux objectifs...</p>", genPrompt: "Propose des objectifs concrets et mesurables pour la prochaine période.", verifPrompt: "Vérifie si les objectifs sont SMART." }
                 ]
             }
         ];
@@ -157,11 +129,11 @@
         };
 
         // --- MOTEUR IA AVEC VARIABLES ---
-        const generateSectionContent = async (promptTemplate, sources, context, existingContent = "") => {
+        const generateSectionContent = async (promptText, sources, context, existingContent = "") => {
             return new Promise((resolve) => {
                 setTimeout(() => {
                     // 1. Remplacement des variables
-                    let finalPrompt = promptTemplate
+                    let finalPrompt = promptText
                         .replace(/{{nom}}/g, context.nom || "[NOM]")
                         .replace(/{{fps}}/g, context.fps || "[FPS]")
                         .replace(/{{date_naissance}}/g, context.dateNaissance || "[DATE]");
@@ -186,50 +158,70 @@
             });
         };
 
-        // --- PANNEAU CONFIG ADMIN ---
-        const AdminConfigPanel = ({ onClose, templates, onUpdateTemplates, initialTemplateId }) => {
-            const [localTemplates, setLocalTemplates] = useState(templates);
-            const [scrollToId, setScrollToId] = useState(initialTemplateId);
+        // --- PANNEAU CONFIG ADMIN (HIERARCHIQUE) ---
+        const AdminConfigPanel = ({ onClose, reportStructures, onUpdateStructures }) => {
+            const [structures, setStructures] = useState(reportStructures);
+            const [activeTab, setActiveTab] = useState(structures[0].id);
 
-            useEffect(() => {
-                if (scrollToId) {
-                    const el = document.getElementById(`tpl_card_${scrollToId}`);
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, [scrollToId]);
+            const handleSave = () => { onUpdateStructures(structures); onClose(); };
 
-            const handleSave = () => { onUpdateTemplates(localTemplates); onClose(); };
-            const handleChange = (id, field, value) => setLocalTemplates(localTemplates.map(t => t.id === id ? { ...t, [field]: value } : t));
-            const handleAdd = () => {
-                const newId = `tpl_${Date.now()}`;
-                setLocalTemplates([...localTemplates, { id: newId, label: "Nouveau", content: "Prompt pour {{nom}}...", isStructure: false }]);
-                setTimeout(() => setScrollToId(newId), 100);
+            const updatePrompt = (structureId, sectionIndex, field, value) => {
+                const newStructures = structures.map(s => {
+                    if (s.id !== structureId) return s;
+                    const newSections = [...s.sections];
+                    newSections[sectionIndex] = { ...newSections[sectionIndex], [field]: value };
+                    return { ...s, sections: newSections };
+                });
+                setStructures(newStructures);
             };
+
+            const currentStructure = structures.find(s => s.id === activeTab);
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
-                    <div className="bg-white rounded-xl shadow-2xl w-3/4 h-5/6 flex flex-col">
+                    <div className="bg-white rounded-xl shadow-2xl w-5/6 h-5/6 flex flex-col">
                         <div className="bg-slate-800 text-white p-4 flex justify-between items-center rounded-t-xl">
-                            <h2 className="font-bold text-lg flex items-center gap-2"><Icons.Settings className="w-5 h-5"/> Admin : Gestion des Prompts</h2>
+                            <h2 className="font-bold text-lg flex items-center gap-2"><Icons.Settings className="w-5 h-5"/> Admin : Configuration des Rapports</h2>
                             <button onClick={onClose}><Icons.X className="w-6 h-6"/></button>
                         </div>
-                        <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex gap-6">
-                            <div className="flex-1 space-y-4">
-                                {localTemplates.map(t => (
-                                    <div key={t.id} id={`tpl_card_${t.id}`} className={`bg-white border rounded p-4 shadow-sm ${t.id === initialTemplateId ? 'border-2 border-blue-500 ring-2 ring-blue-100' : ''}`}>
-                                        <div className="flex justify-between mb-2">
-                                            <input className="font-bold border-b bg-transparent outline-none focus:border-blue-500" value={t.label} onChange={(e) => handleChange(t.id, 'label', e.target.value)} />
-                                            <span className={`text-[10px] px-2 rounded ${t.isStructure ? 'bg-orange-100 text-orange-700' : 'bg-purple-100 text-purple-700'}`}>{t.isStructure ? 'Structure' : 'IA'}</span>
+
+                        <div className="flex border-b bg-gray-100 px-4 pt-2 gap-2">
+                            {structures.map(s => (
+                                <button key={s.id} onClick={() => setActiveTab(s.id)} className={`px-4 py-2 rounded-t-lg text-sm font-bold ${activeTab === s.id ? 'bg-white text-blue-600 border-t border-x' : 'text-gray-500 hover:bg-gray-200'}`}>
+                                    {s.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-6 bg-white flex gap-6">
+                            <div className="flex-1 space-y-6">
+                                {currentStructure.sections.map((section, idx) => (
+                                    <div key={idx} className="bg-gray-50 border rounded-lg p-4 shadow-sm">
+                                        <div className="font-bold text-slate-800 mb-3 border-b pb-2">{section.title}</div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-purple-600 mb-1 uppercase">Prompt de Génération</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-purple-200 outline-none"
+                                                    value={section.genPrompt || ""}
+                                                    onChange={(e) => updatePrompt(currentStructure.id, idx, 'genPrompt', e.target.value)}
+                                                    placeholder="Instructions pour générer le texte..." />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-green-600 mb-1 uppercase">Prompt de Vérification</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-green-200 outline-none"
+                                                    value={section.verifPrompt || ""}
+                                                    onChange={(e) => updatePrompt(currentStructure.id, idx, 'verifPrompt', e.target.value)}
+                                                    placeholder="Instructions pour vérifier le contenu..." />
+                                            </div>
                                         </div>
-                                        <textarea className="w-full h-20 text-xs font-mono bg-slate-50 border rounded p-2" value={t.content} onChange={(e) => handleChange(t.id, 'content', e.target.value)} />
                                     </div>
                                 ))}
-                                <button onClick={handleAdd} className="w-full py-2 border-2 border-dashed text-gray-400 hover:text-blue-500 font-bold">+ Nouveau Modèle</button>
                             </div>
+
                             {/* Aide-mémoire Variables */}
-                            <div className="w-64 bg-blue-50 p-4 rounded h-fit border border-blue-100">
+                            <div className="w-64 shrink-0 bg-blue-50 p-4 rounded h-fit border border-blue-100 sticky top-0">
                                 <h4 className="font-bold text-blue-800 mb-2 text-sm">Variables Disponibles</h4>
-                                <p className="text-xs text-blue-600 mb-2">Utilisez ces balises dans vos prompts pour insérer automatiquement les infos du dossier.</p>
+                                <p className="text-xs text-blue-600 mb-2">Utilisez ces balises dans vos prompts.</p>
                                 <ul className="text-xs font-mono space-y-1 text-slate-700">
                                     <li className="bg-white p-1 rounded border">{`{{nom}}`}</li>
                                     <li className="bg-white p-1 rounded border">{`{{fps}}`}</li>
@@ -239,7 +231,7 @@
                         </div>
                         <div className="p-4 border-t bg-white flex justify-end gap-3 rounded-b-xl">
                             <button onClick={onClose} className="px-4 py-2 text-gray-600">Annuler</button>
-                            <button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 shadow flex items-center gap-2"><Icons.Save className="w-4 h-4"/> Enregistrer</button>
+                            <button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 shadow flex items-center gap-2"><Icons.Save className="w-4 h-4"/> Enregistrer Tout</button>
                         </div>
                     </div>
                 </div>
@@ -247,7 +239,7 @@
         };
 
         // --- MODAL SELECTION RAPPORT ---
-        const ReportSelectModal = ({ onClose, onSelect }) => (
+        const ReportSelectModal = ({ onClose, onSelect, structures }) => (
             <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
                 <div className="bg-white rounded-xl shadow-2xl w-96 p-6 flex flex-col">
                     <div className="flex justify-between items-center mb-4">
@@ -255,12 +247,28 @@
                         <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
                     </div>
                     <div className="space-y-2 flex-1 overflow-y-auto max-h-96">
-                        {REPORT_STRUCTURES.map(r => (
+                        {structures.map(r => (
                             <button key={r.id} onClick={() => onSelect(r)} className="w-full text-left p-3 rounded border hover:bg-blue-50 hover:border-blue-300 transition-colors group">
                                 <div className="font-bold text-sm text-slate-700 group-hover:text-blue-700">{r.label}</div>
                                 <div className="text-xs text-slate-500">{r.sections.length} sections</div>
                             </button>
                         ))}
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- RESULTAT VERIFICATION ---
+        const VerificationResultModal = ({ result, onClose }) => (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
+                <div className="bg-white rounded-xl shadow-2xl w-1/2 p-6 flex flex-col animate-in slide-in-from-bottom duration-300">
+                    <div className="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 className="font-bold text-lg text-green-700 flex items-center gap-2"><Icons.CheckCircle className="w-5 h-5"/> Résultat Vérification</h2>
+                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
+                    </div>
+                    <div className="flex-1 overflow-y-auto max-h-96 text-sm text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: result }} />
+                    <div className="mt-4 pt-2 border-t flex justify-end">
+                        <button onClick={onClose} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-medium">Fermer</button>
                     </div>
                 </div>
             </div>
@@ -313,14 +321,14 @@
             // Data
             const [sections, setSections] = useState([]);
             const [sources, setSources] = useState([]);
-            const [templates, setTemplates] = useState([]);
             const [activeSectionId, setActiveSectionId] = useState('');
+            const [reportStructures, setReportStructures] = useState(DEFAULT_REPORT_STRUCTURES);
 
             // UI States
             const [isAdminMode, setIsAdminMode] = useState(false);
             const [showConfig, setShowConfig] = useState(false);
-            const [configTargetId, setConfigTargetId] = useState(null); // Pour cibler un template spécifique
             const [showReportModal, setShowReportModal] = useState(false);
+            const [verificationResult, setVerificationResult] = useState(null);
             const [isSidebarOpen, setIsSidebarOpen] = useState(true);
             const [isGenerating, setIsGenerating] = useState(false);
             const [previewSourceId, setPreviewSourceId] = useState(null);
@@ -333,20 +341,19 @@
                     const parsed = JSON.parse(savedData);
                     setSections(parsed.sections || []);
                     setSources(parsed.sources || []);
-                    setTemplates(parsed.templates || DEFAULT_TEMPLATES);
+                    setReportStructures(parsed.structures || DEFAULT_REPORT_STRUCTURES);
                     setCaseContext(parsed.context || { nom: "DOE, John", fps: "123456A" });
                     if(parsed.sections && parsed.sections.length > 0) setActiveSectionId(parsed.sections[0].id);
                 } else {
-                    const initSections = [{ id: 's1', title: "1. Identification", type: SectionType.FIXED, content: "<p>Section d'intro...</p>", templateId: null, selectedSourceIds: [] }];
+                    const initSections = [{ id: 's1', title: "1. Identification", type: SectionType.FIXED, content: "<p>Section d'intro...</p>", selectedSourceIds: [] }];
                     setSections(initSections);
-                    setTemplates(DEFAULT_TEMPLATES);
                     setActiveSectionId('s1');
                 }
             }, []);
 
             useEffect(() => {
-                localStorage.setItem('assistant_data_v10', JSON.stringify({ sections, sources, templates, context: caseContext }));
-            }, [sections, sources, templates, caseContext]);
+                localStorage.setItem('assistant_data_v10', JSON.stringify({ sections, sources, structures: reportStructures, context: caseContext }));
+            }, [sections, sources, reportStructures, caseContext]);
 
             const activeSection = sections.find(s => s.id === activeSectionId);
             const activeSourceData = previewSourceId ? sources.find(s => s.id === previewSourceId) : null;
@@ -355,19 +362,42 @@
             // Handlers
             const handleUpdateContext = (field, val) => setCaseContext(prev => ({...prev, [field]: val}));
 
-            const handleCopilotGenerate = async (mode) => {
+            const handleCopilotGenerate = async (action) => {
                 if (!activeSection) return;
-                const template = templates.find(t => t.id === activeSection.templateId);
-                const promptToUse = template ? template.content : "Analyse standard...";
+
+                // Retrieve the configured prompt for the current section
+                // We stored 'structureId' and 'sectionIndex' in the section object when creating it to link back to config
+                let promptToUse = "";
+
+                if (activeSection.structureId && activeSection.sectionIndex !== undefined) {
+                    const struct = reportStructures.find(s => s.id === activeSection.structureId);
+                    if (struct && struct.sections[activeSection.sectionIndex]) {
+                        if (action === 'verify') {
+                            promptToUse = struct.sections[activeSection.sectionIndex].verifPrompt || "Vérifie ce contenu.";
+                        } else {
+                            promptToUse = struct.sections[activeSection.sectionIndex].genPrompt || "Génère ce contenu.";
+                        }
+                    }
+                } else {
+                    promptToUse = "Analyse standard...";
+                }
 
                 setIsGenerating(true);
                 const relevantSources = sources.filter(s => activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(s.id));
 
-                // PASSAGE DU CONTEXTE GLOBAL A LA FONCTION DE GENERATION
-                const generated = await generateSectionContent(promptToUse, relevantSources, caseContext, mode === 'append' ? (activeSection.content || "") : "");
+                if (action === 'verify') {
+                    // Verification logic: send content + verification prompt
+                    const existingText = activeSection.content || "";
+                    // We simulate verification by appending result
+                    const result = await generateSectionContent(promptToUse, relevantSources, caseContext, existingText);
+                    setVerificationResult(result);
+                } else {
+                    // Generation logic
+                    const generated = await generateSectionContent(promptToUse, relevantSources, caseContext, action === 'append' ? (activeSection.content || "") : "");
+                    const finalContent = action === 'append' ? (activeSection.content || "") + generated : generated;
+                    setSections(prev => prev.map(s => s.id === activeSectionId ? { ...s, content: finalContent, status: 'review_needed' } : s));
+                }
 
-                const finalContent = mode === 'append' ? (activeSection.content || "") + generated : generated;
-                setSections(prev => prev.map(s => s.id === activeSectionId ? { ...s, content: finalContent, status: 'review_needed' } : s));
                 setIsGenerating(false);
             };
 
@@ -395,7 +425,8 @@
                     title: s.title,
                     type: SectionType.DYNAMIC,
                     content: s.content,
-                    templateId: s.templateId || templates[0].id,
+                    structureId: reportTemplate.id, // Link to config
+                    sectionIndex: i, // Link to config
                     selectedSourceIds: []
                 }));
                 setSections(newSections);
@@ -403,15 +434,13 @@
                 setShowReportModal(false);
             };
 
-            const handleEditTemplate = (templateId) => {
+            const handleOpenAdmin = () => {
                 if (isAdminMode) {
-                    setConfigTargetId(templateId);
                     setShowConfig(true);
                 } else {
                     const p = prompt("Mdp Admin:");
                     if (p === 'admin') {
                         setIsAdminMode(true);
-                        setConfigTargetId(templateId);
                         setShowConfig(true);
                     }
                 }
@@ -420,10 +449,13 @@
             return (
                 <div className="flex h-screen overflow-hidden font-sans text-sm">
                     {/* MODAL CONFIG */}
-                    {showConfig && <AdminConfigPanel onClose={() => { setShowConfig(false); setConfigTargetId(null); }} templates={templates} onUpdateTemplates={setTemplates} initialTemplateId={configTargetId} />}
+                    {showConfig && <AdminConfigPanel onClose={() => setShowConfig(false)} reportStructures={reportStructures} onUpdateStructures={setReportStructures} />}
 
                     {/* MODAL REPORT SELECTION */}
-                    {showReportModal && <ReportSelectModal onClose={() => setShowReportModal(false)} onSelect={handleLoadReport} />}
+                    {showReportModal && <ReportSelectModal onClose={() => setShowReportModal(false)} structures={reportStructures} onSelect={handleLoadReport} />}
+
+                    {/* MODAL VERIFICATION RESULT */}
+                    {verificationResult && <VerificationResultModal result={verificationResult} onClose={() => setVerificationResult(null)} />}
 
                     {/* SIDEBAR */}
                     <div className={`${isSidebarOpen ? 'w-72' : 'w-12'} bg-white border-r border-gray-200 flex flex-col transition-all duration-300 shadow-lg z-20`}>
@@ -450,7 +482,7 @@
                                             {s.status === 'review_needed' && <span className="w-2 h-2 bg-orange-400 rounded-full"></span>}
                                         </div>
                                     ))}
-                                    <button onClick={() => {const nid=`s_${Date.now()}`; setSections([...sections, {id:nid, title:"Nouvelle Section", type:SectionType.DYNAMIC, templateId:templates[1].id, content:""}]); setActiveSectionId(nid);}}
+                                    <button onClick={() => {const nid=`s_${Date.now()}`; setSections([...sections, {id:nid, title:"Nouvelle Section", type:SectionType.DYNAMIC, content:"", selectedSourceIds:[]}]); setActiveSectionId(nid);}}
                                         className="w-full mt-2 py-2 border border-dashed border-gray-300 rounded text-gray-500 hover:border-blue-500 hover:text-blue-600 text-xs font-bold flex justify-center items-center gap-2">
                                         <Icons.Plus className="w-3 h-3"/> Ajouter Section
                                     </button>
@@ -458,7 +490,7 @@
 
                                 {/* ADMIN FOOTER */}
                                 <div className="p-3 border-t bg-gray-50">
-                                    <button onClick={() => { if(isAdminMode) setShowConfig(true); else { const p=prompt("Mdp Admin:"); if(p==='admin') { setIsAdminMode(true); setShowConfig(true); } } }}
+                                    <button onClick={handleOpenAdmin}
                                         className={`w-full py-2 rounded flex items-center justify-center gap-2 text-xs font-bold transition-colors ${isAdminMode ? 'bg-slate-800 text-white' : 'text-gray-400 hover:bg-gray-200'}`}>
                                         {isAdminMode ? <React.Fragment><Icons.Settings className="w-4 h-4"/> Config Admin</React.Fragment> : <React.Fragment><Icons.Lock className="w-3 h-3"/> Admin</React.Fragment>}
                                     </button>
@@ -490,25 +522,19 @@
                                                 <div className="flex justify-between items-center mb-3">
                                                     <div className="flex gap-2 text-xs font-bold text-gray-500 uppercase"><Icons.Sparkles className="w-4 h-4 text-purple-600"/> Assistant IA</div>
                                                     <div className="flex gap-2">
-                                                        <button onClick={() => handleCopilotGenerate('append')} disabled={isGenerating} className="px-3 py-1 bg-white border border-purple-200 text-purple-700 rounded text-xs hover:bg-purple-50 flex items-center gap-1"><Icons.ArrowDown className="w-3 h-3"/> Compléter</button>
+                                                        {isAdminMode && (
+                                                            <button onClick={handleOpenAdmin} title="Configurer les prompts de cette section" className="p-1 text-gray-400 hover:text-blue-600 border rounded hover:bg-blue-50 mr-2">
+                                                                <Icons.Settings className="w-4 h-4"/>
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => handleCopilotGenerate('verify')} disabled={isGenerating} className="px-3 py-1 bg-white border border-green-200 text-green-700 rounded text-xs hover:bg-green-50 flex items-center gap-1 font-bold"><Icons.CheckCircle className="w-3 h-3"/> Vérifier</button>
                                                         <button onClick={() => handleCopilotGenerate('replace')} disabled={isGenerating} className="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 flex items-center gap-1"><Icons.Bot className="w-3 h-3"/> Générer</button>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <label className="text-xs font-semibold text-gray-600">Modèle :</label>
-                                                    <div className="flex-1 flex gap-2">
-                                                        <select value={activeSection.templateId || ''} onChange={(e) => {
-                                                            const tpl = templates.find(t=>t.id===e.target.value);
-                                                            if(tpl.isStructure) setSections(sections.map(s=>s.id===activeSectionId?{...s, content:(s.content||"")+tpl.content}:s));
-                                                            else setSections(sections.map(s=>s.id===activeSectionId?{...s, templateId:e.target.value}:s));
-                                                        }} className="text-xs border rounded p-1 outline-none flex-1">
-                                                            {templates.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
-                                                        </select>
-                                                        <button onClick={() => handleEditTemplate(activeSection.templateId)} title="Modifier ce prompt" className="p-1 text-gray-400 hover:text-blue-600 border rounded hover:bg-blue-50">
-                                                            <Icons.Edit className="w-4 h-4"/>
-                                                        </button>
-                                                    </div>
+                                                {/* Le panneau de sélection de modèle a été supprimé car les prompts sont désormais liés à la section */}
+                                                <div className="text-[10px] text-gray-400 mb-2 italic">
+                                                    Les prompts de génération et de vérification sont configurés spécifiquement pour cette section.
                                                 </div>
 
                                                 <div className="flex flex-wrap gap-2">
