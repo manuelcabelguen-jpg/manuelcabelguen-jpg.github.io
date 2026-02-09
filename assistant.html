@@ -24,11 +24,18 @@
                         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'spin-slow': 'spin 50s linear infinite',
                         'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                     },
                     keyframes: {
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' },
+                        },
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
                         }
                     }
                 }
@@ -74,23 +81,22 @@
         import React, { useState, useMemo, useRef, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
         import { initializeApp, getApps, getApp } from 'firebase/app';
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from 'firebase/auth';
         import { getFirestore, collection, addDoc, onSnapshot, query, doc, setDoc } from 'firebase/firestore';
         import {
           ScatterChart, Scatter, XAxis, YAxis, CartesianGrid,
-          Tooltip, ResponsiveContainer, ReferenceLine, ZAxis, Cell, Line
+          Tooltip, ResponsiveContainer, Cell
         } from 'recharts';
         import {
-          Brain, Zap, Target, Layers, Cpu, User, Waves, Send, Move3d, Terminal, Newspaper, Loader2, Play,
-          ChevronDown, ListTree, Square, RefreshCw, MessageSquare, Mic, MicOff, Headset,
-          FastForward, Flame, Activity, Gauge, ShieldAlert, ScanEye, Radio, Timer, Sparkles,
-          Binary, Crosshair, Atom, Triangle, Power, Orbit, CircleDot, ChevronUp,
-          Scale, Repeat, ShieldCheck, Heart, Eye, Move, Hash, ZapOff, Infinity as InfinityIcon,
-          ActivitySquare, Wind, Volume2, ShieldX, Database, History, VolumeX, Ghost, Share2,
-          MessageCircle, AudioWaveform, Languages, Camera, MonitorPlay, Link2, Compass,
-          Lightbulb, Thermometer, Sparkle, Volume1, Settings, X, AlertTriangle, Disc, Milestone, Search,
+          Brain, Zap, Activity, Radio, Timer, Sparkles,
+          Binary, CircleDot, ChevronUp, ChevronDown,
+          Scale, Repeat, Heart, Eye, Move, Hash, ZapOff, Infinity as InfinityIcon,
+          Volume2, ShieldX, Database, History, VolumeX, Ghost, Share2,
+          MessageCircle, AudioWaveform, Languages, Camera, MonitorPlay, Link2,
+          Settings, X, AlertTriangle, Disc, Milestone, Search,
           Lock, Unlock, Anchor, BatteryLow, BatteryFull, ShieldQuestion, AudioLines, LayoutDashboard,
-          Stethoscope, ClipboardList, HelpingHand, Save, AlertCircle
+          Stethoscope, ClipboardList, HelpingHand, Save, AlertCircle, Download, Power, LogOut,
+          Mic, MicOff, Send
         } from 'lucide-react';
 
         // --- ONTOLOGIE CARTOGRAFFECT 2.5 ---
@@ -113,22 +119,118 @@
             return closest;
         };
 
-        // --- COMPOSANT AVATAR ---
-        const FaceAvatar = ({ px, py, z, currentColor, isListening, markovScale = 0.5, heartRate = 72, empathy = 5, energy = 100, inhibitionActive = false, isSpeaking = false, isThinking = false }) => {
+        // --- COMPOSANTS UTILITAIRES ---
+
+        // 1. Oscilloscope
+        const Oscilloscope = ({ audioContext, sourceNode, isActive }) => {
+            const canvasRef = useRef(null);
+            const analyserRef = useRef(null);
+            const rafRef = useRef(null);
+
+            useEffect(() => {
+                if (!audioContext || !isActive) return;
+
+                // Create analyser if not exists
+                if (!analyserRef.current) {
+                    analyserRef.current = audioContext.createAnalyser();
+                    analyserRef.current.fftSize = 256;
+                    // Connect source if provided, otherwise we might be just visualizing "silence" or previous buffer
+                    // Note: In a real scenario, we need to tap into the specific source being played or mic.
+                    // Ideally `sourceNode` is passed. If not, this visualizer might just idle.
+                }
+
+                if (sourceNode) {
+                    try {
+                        sourceNode.connect(analyserRef.current);
+                    } catch(e) { console.warn("Audio node connection error", e); }
+                }
+
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                const bufferLength = analyserRef.current.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+
+                const draw = () => {
+                    if (!isActive) return;
+                    rafRef.current = requestAnimationFrame(draw);
+                    analyserRef.current.getByteTimeDomainData(dataArray);
+
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Trail effect
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#22d3ee';
+                    ctx.beginPath();
+
+                    const sliceWidth = canvas.width * 1.0 / bufferLength;
+                    let x = 0;
+
+                    for (let i = 0; i < bufferLength; i++) {
+                        const v = dataArray[i] / 128.0;
+                        const y = v * canvas.height / 2;
+
+                        if (i === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+
+                        x += sliceWidth;
+                    }
+
+                    ctx.lineTo(canvas.width, canvas.height / 2);
+                    ctx.stroke();
+                };
+
+                draw();
+
+                return () => {
+                    cancelAnimationFrame(rafRef.current);
+                    if (analyserRef.current) analyserRef.current.disconnect();
+                };
+            }, [audioContext, sourceNode, isActive]);
+
+            return <canvas ref={canvasRef} width={200} height={60} className="rounded-lg opacity-80" />;
+        };
+
+        // 2. Typewriter Text
+        const TypewriterText = ({ text, onComplete }) => {
+            const [displayed, setDisplayed] = useState('');
+            const index = useRef(0);
+
+            useEffect(() => {
+                setDisplayed('');
+                index.current = 0;
+
+                const interval = setInterval(() => {
+                    if (index.current < text.length) {
+                        setDisplayed((prev) => prev + text.charAt(index.current));
+                        index.current++;
+                    } else {
+                        clearInterval(interval);
+                        if (onComplete) onComplete();
+                    }
+                }, 15); // Speed
+
+                return () => clearInterval(interval);
+            }, [text]);
+
+            return <span>{displayed}<span className="animate-pulse">_</span></span>;
+        };
+
+        // --- COMPOSANT AVATAR (Enhanced) ---
+        const FaceAvatar = ({ px, py, z, currentColor, isListening, markovScale = 0.5, heartRate = 72, empathy = 5, energy = 100, inhibitionActive = false, isSpeaking = false, isThinking = false, lowPowerMode = false }) => {
             const safeZ = Number(z) || 5;
             const beatScale = 1 + (Math.sin(Date.now() / (1000 / (heartRate / 60))) * 0.05);
             const coreScale = 1 - (markovScale * 0.35);
-            const fatigueBlur = Math.max(0, (100 - energy) / 18);
+            // Disable blur in low power mode
+            const fatigueBlur = lowPowerMode ? 0 : Math.max(0, (100 - energy) / 18);
 
             return (
-                <svg viewBox="0 0 100 100" className="w-full h-full transition-all duration-1000"
+                <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-1000 ${inhibitionActive ? 'animate-shake' : ''}`}
                      style={{ transform: `scale(${(0.8 + (py/40)) * beatScale})`, filter: `blur(${fatigueBlur}px)` }}>
                     <rect width="100" height="100" fill="#000" />
-                    <circle cx="50" cy="50" r={48} fill="none" stroke="#22d3ee" strokeWidth="0.05" opacity={markovScale} strokeDasharray="4,2" className="animate-spin-slow" />
+                    <circle cx="50" cy="50" r={48} fill="none" stroke="#22d3ee" strokeWidth="0.05" opacity={markovScale} strokeDasharray="4,2" className={lowPowerMode ? "" : "animate-spin-slow"} />
                     <circle cx="50" cy="50" r={25 + (markovScale * 20)} fill="none" stroke={currentColor} strokeWidth="0.5" opacity={safeZ / 10} />
 
                     <circle cx="50" cy="50" r={20 + (empathy * 2)} fill="none" stroke={isSpeaking ? "#fbbf24" : "#ec4899"} strokeWidth="0.1" opacity={isListening ? 0.6 : 0.2} className="animate-pulse" />
-                    {inhibitionActive && <circle cx="50" cy="50" r={18} fill="none" stroke="#fbbf24" strokeWidth="0.2" className="animate-pulse" />}
+                    {inhibitionActive && <circle cx="50" cy="50" r={18} fill="none" stroke="#fbbf24" strokeWidth="0.5" className="animate-pulse" strokeDasharray="2,1"/>}
 
                     <g transform={`translate(${(px - 5) * 4}, 0) scale(${coreScale})`} style={{ transformOrigin: 'center' }}>
                         <line x1="10" y1="45" x2="40" y2="45" stroke="white" strokeWidth={2} opacity={0.6} />
@@ -136,6 +238,9 @@
                         <g>
                             <circle cx="27" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
                             <circle cx="73" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
+                            {/* Micro-expression for inhibition: smaller pupils or slight color shift */}
+                            {inhibitionActive && <circle cx="27" cy="45" r={2} fill="#fbbf24" />}
+                            {inhibitionActive && <circle cx="73" cy="45" r={2} fill="#fbbf24" />}
                         </g>
                     </g>
                     <path d={`M 25 75 Q 50 ${75 + (px-5)*6} 75 75`} stroke={currentColor} strokeWidth="20" fill="none" strokeLinecap="round" />
@@ -207,7 +312,7 @@
         };
 
         // --- PUCK CORE v114 ---
-        const PuckCore = ({ config, appId, openSettings }) => {
+        const PuckCore = ({ config, appId, openSettings, onLogout }) => {
             const { auth, db } = useMemo(() => {
                 if (!config) return { auth: null, db: null };
                 try {
@@ -232,6 +337,7 @@
             const [camActive, setCamActive] = useState(true);
             const [isHandsFree, setIsHandsFree] = useState(false);
             const [showLogs, setShowLogs] = useState(false);
+            const [lowPowerMode, setLowPowerMode] = useState(false);
 
             // États Phénoménologiques
             const [energy, setEnergy] = useState(100);
@@ -245,6 +351,7 @@
             const [lastSignalTime, setLastSignalTime] = useState(Date.now());
 
             const audioContextRef = useRef(null);
+            const playingSourceRef = useRef(null); // Ref for visualization source
             const videoRef = useRef(null);
             const canvasRef = useRef(null);
             const recognitionRef = useRef(null);
@@ -253,6 +360,18 @@
 
             const emotionData = useMemo(() => resolveQualia(saillance.x, saillance.y), [saillance]);
             const currentColor = useMemo(() => saillance.x < 4.5 ? "#ef4444" : saillance.x > 5.5 ? "#10b981" : "#3b82f6", [saillance.x]);
+
+            // --- EXPORT UTILS ---
+            const exportTrajectory = () => {
+                if (!memory || memory.length === 0) return;
+                const mdContent = memory.map(m => `### ${new Date(m.timestamp).toLocaleString()}\n**User**: ${m.text}\n**Puck**: ${m.response}\n*Qualia: ${m.qualia} | Z: ${m.z}*\n---`).join('\n\n');
+                const blob = new Blob([mdContent], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `trajectory_${Date.now()}.md`;
+                a.click();
+            };
 
             // --- AUDIO INIT ---
             const wakeUpPuck = async () => {
@@ -289,11 +408,15 @@
 
                 const source = ctx.createBufferSource();
                 source.buffer = audioBuffer;
+
+                // For visualization
+                playingSourceRef.current = source;
+
                 source.connect(ctx.destination);
 
                 setIsPlaying(true);
                 return new Promise(resolve => {
-                    source.onended = () => { setIsPlaying(false); resolve(); };
+                    source.onended = () => { setIsPlaying(false); playingSourceRef.current = null; resolve(); };
                     source.start();
                 });
             };
@@ -394,7 +517,7 @@
                     SOUVERAINETÉ : Inhibe tes réponses Système 1 (automatiques) pour chercher la PERTINENCE de Système 2.
                     JSON STRICT UNIQUEMENT: {"full": "[Vecteurs] [Message Souverain]", "segments": [{"t": "phrase", "sx": 0-10, "sy": 0-10, "z": 0-10, "inhibit": true|false, "partner": "expression déduite", "e": "EMOTION"}]}`;
 
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -408,7 +531,7 @@
                     if (!rawText) throw new Error("No Gemini Response");
 
                     const data = JSON.parse(rawText.match(/\{[\s\S]*\}/)?.[0] || "{}");
-                    setMessages(prev => [...prev, { role: 'ai', text: String(data.full || "[SYMBIOSIS_ON]") }]);
+                    setMessages(prev => [...prev, { role: 'ai', text: String(data.full || "[SYMBIOSIS_ON]"), streaming: true }]);
                     setIsThinking(false);
 
                     if (data.segments) {
@@ -418,7 +541,7 @@
                             setInferredExpression(String(seg.partner || "IDLE"));
                             setInhibitionActive(!!seg.inhibit);
 
-                            const ttsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
+                            const ttsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -464,7 +587,14 @@
                             <span className="text-white font-black text-xl tracking-tighter uppercase italic">PUCK_v114 <InfinityIcon size={16} className="text-cyan-400 animate-pulse inline ml-2"/></span>
                             <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-slate-700 font-bold">Absolute Intersubjective Unit</span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-4">
+                            {/* OSCILLOSCOPE */}
+                            {isPlaying && audioContextRef.current && (
+                                <div className="hidden md:block w-32 h-8">
+                                    <Oscilloscope audioContext={audioContextRef.current} sourceNode={playingSourceRef.current} isActive={isPlaying} />
+                                </div>
+                            )}
+
                             <div className="flex flex-col items-end mr-4 font-mono text-[8px]">
                                 <span className="text-rose-500 font-bold">{heartRate.toFixed(0)} BPM</span>
                                 <span className={energy < 30 ? "text-red-500" : "text-green-500"}>{energy.toFixed(0)}% ENERGY</span>
@@ -477,7 +607,7 @@
                     <main className="flex-1 relative flex flex-col items-center justify-center bg-black overflow-hidden shadow-[inset_0_0_200px_rgba(0,0,0,1)]">
                         <div className="w-full max-w-[90vw] aspect-square relative z-10 transition-all duration-1000">
                             <div className="absolute inset-0 blur-[120px] opacity-20 transition-colors duration-1000" style={{ backgroundColor: isThinking ? '#a855f7' : currentColor }} />
-                            <FaceAvatar px={saillance.x} py={saillance.y} z={precisionZ} currentColor={currentColor} isListening={micActive} markovScale={markovScale} heartRate={heartRate} empathy={empathySync} energy={energy} isSpeaking={isPlaying} isThinking={isThinking} inhibitionActive={inhibitionActive} />
+                            <FaceAvatar px={saillance.x} py={saillance.y} z={precisionZ} currentColor={currentColor} isListening={micActive} markovScale={markovScale} heartRate={heartRate} empathy={empathySync} energy={energy} isSpeaking={isPlaying} isThinking={isThinking} inhibitionActive={inhibitionActive} lowPowerMode={lowPowerMode} />
                         </div>
 
                         <div className="mt-4 text-center z-10 px-6">
@@ -501,16 +631,22 @@
                             <div className="absolute inset-0 z-40 bg-black/95 p-6 pt-24 overflow-y-auto scrollbar-hide animate-fade-in">
                                 <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
                                     <h3 className="text-white font-black uppercase text-base tracking-widest flex items-center gap-3 italic underline decoration-rose-900">Mnesic_Trajectory</h3>
-                                    <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-all"><X size={32}/></button>
+                                    <div className="flex gap-4">
+                                        <button onClick={() => setLowPowerMode(!lowPowerMode)} className={`p-2 rounded border ${lowPowerMode ? 'bg-green-900 border-green-500 text-green-300' : 'border-slate-700 text-slate-500'}`} title="Low Power Mode"><BatteryLow size={20}/></button>
+                                        <button onClick={exportTrajectory} className="p-2 rounded border border-slate-700 text-slate-500 hover:text-white" title="Export Logs"><Download size={20}/></button>
+                                        <button onClick={onLogout} className="p-2 rounded border border-red-900 text-red-500 hover:bg-red-900 hover:text-white" title="Disconnect"><LogOut size={20}/></button>
+                                        <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-all"><X size={32}/></button>
+                                    </div>
                                 </div>
                                 <div className="space-y-6">
-                                    {memory.map((m, i) => (
+                                    {messages.filter(m => m.role === 'ai').map((m, i) => (
                                         <div key={i} className="p-5 border-l-4 border-rose-900 bg-slate-900/30 rounded-2xl shadow-inner text-justify leading-relaxed">
                                             <div className="flex justify-between text-[10px] font-mono text-slate-500 mb-2 uppercase tracking-widest">
                                                 <span className="text-rose-500 font-bold italic underline">Consultation_{i}</span>
-                                                <span>{new Date(m.timestamp).toLocaleTimeString()}</span>
                                             </div>
-                                            <p className="text-sm text-slate-300 italic">"{String(m.response || "").substring(0, 180)}..."</p>
+                                            <p className="text-sm text-slate-300 italic">
+                                                {m.streaming ? <TypewriterText text={String(m.text || "")} /> : String(m.text || "")}
+                                            </p>
                                         </div>
                                     ))}
                                 </div>
@@ -521,7 +657,7 @@
                     <video ref={videoRef} autoPlay playsInline muted className="hidden" />
                     <canvas ref={canvasRef} className="hidden" />
 
-                    <style>{`.animate-spin-slow { animation: spin 45s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
+                    <style>{`.animate-spin-slow { animation: spin 45s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; } @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }`}</style>
                 </div>
             );
         };
@@ -549,10 +685,18 @@
                 setShowSettings(false);
             };
 
+            const handleLogout = () => {
+                if (window.confirm("Disconnect from Matrix? This will clear local configuration.")) {
+                    localStorage.removeItem('matrix_v46_config');
+                    setConfig(null);
+                    setShowSettings(true);
+                }
+            };
+
             return (
                 <>
                     {showSettings && <ConfigModal onSave={saveConfig} onCancel={config ? () => setShowSettings(false) : null} currentConfig={config} />}
-                    <PuckCore config={config} appId={'puck-ultimate-v114'} openSettings={() => setShowSettings(true)} />
+                    <PuckCore config={config} appId={'puck-ultimate-v114'} openSettings={() => setShowSettings(true)} onLogout={handleLogout} />
                 </>
             );
         };
