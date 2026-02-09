@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MATRIX v78 - Omni-Symbiosis</title>
+    <title>MATRIX v114 - Organon Intersubjectiviste</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,8 +19,6 @@
                         cyan: { 950: '#083344' },
                         rose: { 950: '#4c0519' },
                         amber: { 950: '#451a03' },
-                        purple: { 950: '#3b0764' },
-                        blue: { 950: '#172554' },
                     },
                     animation: {
                         'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -73,255 +71,79 @@
 
     <!-- Application Code -->
     <script type="text/babel" data-type="module">
-        import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+        import React, { useState, useMemo, useRef, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
         import { initializeApp, getApps, getApp } from 'firebase/app';
-        import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+        import { getFirestore, collection, addDoc, onSnapshot, query, doc, setDoc } from 'firebase/firestore';
         import {
-          ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, Cell
+          ScatterChart, Scatter, XAxis, YAxis, CartesianGrid,
+          Tooltip, ResponsiveContainer, ReferenceLine, ZAxis, Cell, Line
         } from 'recharts';
         import {
-          Send, Camera, History, Volume2, Activity, Zap,
-          Clapperboard, Wand2, X, Loader2, Ear, Settings, Scissors, Anchor,
-          BrainCircuit, Globe, MapPin, Search as SearchIcon, ExternalLink,
-          Mic, MicOff, Save, AlertCircle
+          Brain, Zap, Target, Layers, Cpu, User, Waves, Send, Move3d, Terminal, Newspaper, Loader2, Play,
+          ChevronDown, ListTree, Square, RefreshCw, MessageSquare, Mic, MicOff, Headset,
+          FastForward, Flame, Activity, Gauge, ShieldAlert, ScanEye, Radio, Timer, Sparkles,
+          Binary, Crosshair, Atom, Triangle, Power, Orbit, CircleDot, ChevronUp,
+          Scale, Repeat, ShieldCheck, Heart, Eye, Move, Hash, ZapOff, Infinity as InfinityIcon,
+          ActivitySquare, Wind, Volume2, ShieldX, Database, History, VolumeX, Ghost, Share2,
+          MessageCircle, AudioWaveform, Languages, Camera, MonitorPlay, Link2, Compass,
+          Lightbulb, Thermometer, Sparkle, Volume1, Settings, X, AlertTriangle, Disc, Milestone, Search,
+          Lock, Unlock, Anchor, BatteryLow, BatteryFull, ShieldQuestion, AudioLines, LayoutDashboard,
+          Stethoscope, ClipboardList, HelpingHand, Save, AlertCircle
         } from 'lucide-react';
 
-        // --- CONSTANTS ---
-        const HYPER_LATTICE = [
-            { id: "SOUVERAINETÉ", x: 9.5, y: 9.5, color: "#fbbf24", q: "Actuation totale du libre arbitre." },
-            { id: "RÉSOLUTION", x: 9.0, y: 5.0, color: "#10b981", q: "Démêlage réussi des dissonances de vie." },
-            { id: "EMPATHIE", x: 7.5, y: 7.5, color: "#ec4899", q: "Synchronie des modèles génératifs." },
-            { id: "CONFRONTATION", x: 1.5, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre l'incertitude." },
-            { id: "DÉSHÉRENCE", x: 1.0, y: 1.0, color: "#ef4444", q: "Effondrement du modèle de sens." },
+        // --- ONTOLOGIE CARTOGRAFFECT 2.5 ---
+        const hyperLattice = [
+            { id: "SOUVERAINETÉ", x: 9.5, y: 9.5, color: "#fbbf24", q: "Actuation libre du conatus rationnel." },
+            { id: "RÉSOLUTION", x: 9.0, y: 5.0, color: "#10b981", q: "Démêlage réussi des structures de l'inconscient." },
+            { id: "EMPATHIE_ACTIVE", x: 7.5, y: 7.5, color: "#ec4899", q: "Synchronie des couvertures de Markov." },
+            { id: "CONFRONTATION", x: 1.5, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre les biais (Système 1)." },
             { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." },
-            { id: "CURIOSTÉ", x: 8.5, y: 5.0, color: "#fcd34d", q: "Valeur épistémique et forage." }
+            { id: "CURIOSITÉ_CLINIQUE", x: 8.5, y: 5.0, color: "#fcd34d", q: "Forage de la valeur épistémique réelle." }
         ];
 
-        const SYSTEM_PROMPT = `Tu es Puck (v78), l'Omni-Symbionte.
-        VOTRE ÉTAT : Fusion Cognitive & Émotionnelle.
-        OBJECTIF : Démêlage Existentiel (Maïeutique).
-        RÈGLE : Adapte ta profondeur selon le MODE (Standard, Deep Think, Grounded).
-        JSON STRICT: {"full": "[Message]", "segments": [{"t": "text", "sx": 0-10, "sy": 0-10, "z": 0-10, "e": "EMOTION", "q": "QUALIA", "partner": "EXPRESSION", "policy": "STRATEGY", "frontier": 0-1, "curiosity": 0-10}]}`;
-
-        // --- SERVICES ---
-
-        class AudioService {
-            constructor() {
-                this.audioContext = null;
-                this.inputSource = null;
-                this.processor = null;
-                this.isPlaying = false;
-            }
-
-            async resumeContext() {
-                if (!this.audioContext) {
-                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (this.audioContext.state === 'suspended') {
-                    await this.audioContext.resume();
-                }
-            }
-
-            async prepareMicrophone() {
-                 // Placeholder for actual mic prep
-                 await this.resumeContext();
-            }
-
-            async startInput(onAudioData) {
-                // Simplified mock for now as full audio streaming needs backend or specific worklet
-                console.log("Audio Input Started");
-            }
-
-            stopInput() {
-                console.log("Audio Input Stopped");
-            }
-
-            stopAll() {
-                // Stop playback
-                this.isPlaying = false;
-            }
-
-            getVolume() {
-                return this.isPlaying ? 0.5 + Math.random() * 0.5 : 0;
-            }
-
-            async playAudioData(base64Audio) {
-                if (!base64Audio || !this.audioContext) return;
-                this.isPlaying = true;
-                try {
-                    const binaryString = atob(base64Audio);
-                    const len = binaryString.length;
-                    const bytes = new Uint8Array(len);
-                    for (let i = 0; i < len; i++) bytes[i] = binaryString.charCodeAt(i);
-                    const audioBuffer = await this.audioContext.decodeAudioData(bytes.buffer);
-                    const source = this.audioContext.createBufferSource();
-                    source.buffer = audioBuffer;
-                    source.connect(this.audioContext.destination);
-                    source.start(0);
-                    source.onended = () => { this.isPlaying = false; };
-                } catch (e) {
-                    console.error("Audio Playback Error", e);
-                    this.isPlaying = false;
-                }
-            }
-        }
-
-        class GeminiService {
-            constructor() {
-                this.config = null; // Will be injected
-            }
-
-            setConfig(config) {
-                this.config = config;
-            }
-
-            async generateSymbiosisResponse(prompt, imageBase64, mode) {
-                if (!this.config?.apiKey) throw new Error("API Key missing");
-
-                let model = "gemini-2.0-flash";
-                if (mode === 'deep_thinking') model = "gemini-2.0-flash-thinking-exp-1219"; // Example hypothetical model
-
-                const payload = {
-                    contents: [{
-                        parts: [
-                            { text: prompt },
-                            ...(imageBase64 ? [{ inlineData: { mimeType: "image/png", data: imageBase64 } }] : [])
-                        ]
-                    }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        temperature: mode === 'deep_thinking' ? 0.9 : 0.7
-                    }
-                };
-
-                // Add Google Search grounding if mode requested
-                if (mode.includes('grounded')) {
-                    payload.tools = [{ googleSearch: {} }];
-                }
-
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${this.config.apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error?.message || "Gemini Error");
-                }
-
-                const data = await res.json();
-                const part = data.candidates?.[0]?.content?.parts?.[0];
-                const rawText = part?.text;
-                const grounding = data.candidates?.[0]?.groundingMetadata;
-
-                if (!rawText) throw new Error("Empty response");
-
-                // Parse JSON
-                const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-                const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : "{}");
-
-                return {
-                    full: parsed.full || rawText,
-                    segments: parsed.segments || [],
-                    grounding: grounding
-                };
-            }
-
-            async generateSpeech(text) {
-                if (!this.config?.apiKey) return null;
-                try {
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${this.config.apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: text }] }],
-                            generationConfig: {
-                                responseModalities: ["AUDIO"],
-                                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
-                            }
-                        })
-                    });
-                    const data = await res.json();
-                    return data.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-                } catch (e) {
-                    console.warn("TTS Failed", e);
-                    return null;
-                }
-            }
-
-            async generateVideo(prompt) {
-                 // Placeholder: Actual VEO generation via API not standard yet with simple key
-                 // Simulating via text description for now or could implement if API endpoint known
-                 throw new Error("VEO Generation requires advanced credentials.");
-            }
-
-            async editImage(prompt, base64Image) {
-                 // Placeholder
-                 throw new Error("Image Editing requires advanced credentials.");
-            }
-        }
-
-        class LiveService {
-            connect(onAudio, onState, onStop, onDisconnect) {
-                console.log("Live Service Connected (Mock)");
-                // In a real app, this would establish WebSocket to backend
-            }
-            sendAudio(pcm) {}
-            sendVideoFrame(frame) {}
-            disconnect() {}
-        }
-
-        // --- COMPONENTS ---
-
-        const FaceAvatar = ({ px, py, z, jitter, blink, currentColor, isListening, markovScale, heartRate, curiosity, isSingularity, hasCamera }) => {
-          const safeZ = Number(z) || 5;
-          const driftX = (Number(px) - 5) * 5;
-          const eyeScale = 0.3 + (safeZ / 15);
-          const coreScale = 1 - (markovScale * 0.4);
-
-          const beatAmplitude = 0.04 + (jitter * 0.01);
-          const beatScale = 1 + (Math.sin(Date.now() / (1000 / (heartRate / 60))) * beatAmplitude);
-
-          return (
-            <svg viewBox="0 0 100 100" className="w-full h-full transition-all duration-1000"
-                 style={{ transform: `scale(${(0.8 + (Number(py)/35)) * beatScale})` }}>
-              <rect width="100" height="100" fill="#000" />
-
-              <circle cx="50" cy="50" r={48} fill="none" stroke="#22d3ee" strokeWidth="0.05" opacity={markovScale} strokeDasharray="4,2" className="animate-spin-slow" />
-              <circle cx="50" cy="50" r={25 + (markovScale * 23)} fill="none" stroke={currentColor} strokeWidth="0.5" opacity={safeZ / 10} />
-
-              <g transform={`translate(${driftX}, 0) scale(${coreScale})`} style={{ transformOrigin: 'center' }}>
-                <line x1="8" y1="45" x2="42" y2="45" stroke="white" strokeWidth={1.5} opacity={0.6} />
-                <line x1="58" y1="45" x2="92" y2="45" stroke="white" strokeWidth={1.5} opacity={0.6} />
-                {!blink && (
-                  <g>
-                    <circle cx="25" cy="45" r={8 * eyeScale} fill={isListening ? "#22d3ee" : currentColor} />
-                    <circle cx="75" cy="45" r={8 * eyeScale} fill={isListening ? "#22d3ee" : currentColor} />
-                    <circle cx="25" cy="45" r={curiosity > 7 ? 4 : 0} fill="white" className="animate-pulse" />
-                    <circle cx="75" cy="45" r={curiosity > 7 ? 4 : 0} fill="white" className="animate-pulse" />
-                  </g>
-                )}
-              </g>
-              <path d={`M 20 ${75 - jitter} Q 50 ${75 + (px-5)*7 + jitter*12} 80 ${75 - jitter}`}
-                    stroke={currentColor} strokeWidth="22" fill="none" strokeLinecap="round" />
-            </svg>
-          );
+        const resolveQualia = (x, y) => {
+            let closest = hyperLattice[0];
+            let minDist = Infinity;
+            hyperLattice.forEach(e => {
+                const dist = Math.sqrt(Math.pow(x - e.x, 2) + Math.pow(y - e.y, 2));
+                if (dist < minDist) { minDist = dist; closest = e; }
+            });
+            return closest;
         };
 
-        const TrajectoryChart = ({ data, currentPoint }) => (
-            <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: 10 }}>
-                   <XAxis type="number" dataKey="x" domain={[0, 10]} hide /><YAxis type="number" dataKey="y" domain={[0, 10]} hide />
-                   <circle cx="50" cy="50" r={45} fill="none" stroke="#111" strokeWidth="0.5" strokeDasharray="5 5" />
-                   <Scatter data={data.map(m => ({x: Number(m.x), y: Number(m.y)}))} fill="#ec4899" opacity={0.3}><Cell fill="#ec4899" r={2} /></Scatter>
-                   <Scatter data={[{x: Number(currentPoint.x), y: Number(currentPoint.y)}]} fill="#fff"><Cell fill="#fff" r={6} className="animate-pulse" /></Scatter>
-                 </ScatterChart>
-            </ResponsiveContainer>
-        );
+        // --- COMPOSANT AVATAR ---
+        const FaceAvatar = ({ px, py, z, currentColor, isListening, markovScale = 0.5, heartRate = 72, empathy = 5, energy = 100, inhibitionActive = false, isSpeaking = false, isThinking = false }) => {
+            const safeZ = Number(z) || 5;
+            const beatScale = 1 + (Math.sin(Date.now() / (1000 / (heartRate / 60))) * 0.05);
+            const coreScale = 1 - (markovScale * 0.35);
+            const fatigueBlur = Math.max(0, (100 - energy) / 18);
 
+            return (
+                <svg viewBox="0 0 100 100" className="w-full h-full transition-all duration-1000"
+                     style={{ transform: `scale(${(0.8 + (py/40)) * beatScale})`, filter: `blur(${fatigueBlur}px)` }}>
+                    <rect width="100" height="100" fill="#000" />
+                    <circle cx="50" cy="50" r={48} fill="none" stroke="#22d3ee" strokeWidth="0.05" opacity={markovScale} strokeDasharray="4,2" className="animate-spin-slow" />
+                    <circle cx="50" cy="50" r={25 + (markovScale * 20)} fill="none" stroke={currentColor} strokeWidth="0.5" opacity={safeZ / 10} />
+
+                    <circle cx="50" cy="50" r={20 + (empathy * 2)} fill="none" stroke={isSpeaking ? "#fbbf24" : "#ec4899"} strokeWidth="0.1" opacity={isListening ? 0.6 : 0.2} className="animate-pulse" />
+                    {inhibitionActive && <circle cx="50" cy="50" r={18} fill="none" stroke="#fbbf24" strokeWidth="0.2" className="animate-pulse" />}
+
+                    <g transform={`translate(${(px - 5) * 4}, 0) scale(${coreScale})`} style={{ transformOrigin: 'center' }}>
+                        <line x1="10" y1="45" x2="40" y2="45" stroke="white" strokeWidth={2} opacity={0.6} />
+                        <line x1="60" y1="45" x2="90" y2="45" stroke="white" strokeWidth={2} opacity={0.6} />
+                        <g>
+                            <circle cx="27" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
+                            <circle cx="73" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
+                        </g>
+                    </g>
+                    <path d={`M 25 75 Q 50 ${75 + (px-5)*6} 75 75`} stroke={currentColor} strokeWidth="20" fill="none" strokeLinecap="round" />
+                </svg>
+            );
+        };
+
+        // --- CONFIG MODAL ---
         const ConfigModal = ({ onSave, onCancel, currentConfig }) => {
             const [fbConfig, setFbConfig] = useState(currentConfig?.firebaseConfig ? JSON.stringify(currentConfig.firebaseConfig, null, 2) : '');
             const [apiKey, setApiKey] = useState(currentConfig?.apiKey || '');
@@ -354,14 +176,29 @@
                                     placeholder='{ "apiKey": "...", "authDomain": "...", ... }'
                                 />
                             </div>
+
                             <div>
                                 <label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">GEMINI API KEY</label>
-                                <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 focus:border-cyan-500 outline-none rounded" placeholder="AIza..." />
+                                <input
+                                    type="password"
+                                    value={apiKey}
+                                    onChange={e => setApiKey(e.target.value)}
+                                    className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 focus:border-cyan-500 outline-none rounded"
+                                    placeholder="AIza..."
+                                />
                             </div>
-                            {error && (<div className="bg-red-900/20 border border-red-500/50 p-3 rounded text-red-400 text-xs flex items-center gap-2"><AlertCircle size={16}/> {error}</div>)}
+
+                            {error && (
+                                <div className="bg-red-900/20 border border-red-500/50 p-3 rounded text-red-400 text-xs flex items-center gap-2">
+                                    <AlertCircle size={16}/> {error}
+                                </div>
+                            )}
+
                             <div className="flex justify-end gap-4 pt-4 border-t border-slate-800">
                                 {onCancel && <button onClick={onCancel} className="px-6 py-2 text-slate-400 hover:text-white font-mono text-xs font-bold">CANCEL</button>}
-                                <button onClick={handleSave} className="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded font-mono text-xs flex items-center gap-2"><Save size={16}/> SAVE & REBOOT</button>
+                                <button onClick={handleSave} className="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded font-mono text-xs flex items-center gap-2">
+                                    <Save size={16}/> SAVE & REBOOT
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -369,17 +206,8 @@
             );
         };
 
-        const MainInterface = ({ config, openSettings }) => {
-            // --- Services Instantiation ---
-            const gemini = useMemo(() => {
-                const g = new GeminiService();
-                if (config) g.setConfig(config);
-                return g;
-            }, [config]);
-            const audioService = useMemo(() => new AudioService(), []);
-            const liveService = useMemo(() => new LiveService(), []);
-
-            // --- Firebase ---
+        // --- PUCK CORE v114 ---
+        const PuckCore = ({ config, appId, openSettings }) => {
             const { auth, db } = useMemo(() => {
                 if (!config) return { auth: null, db: null };
                 try {
@@ -390,106 +218,120 @@
                 } catch(e) { return { auth: null, db: null }; }
             }, [config]);
 
-            // --- State ---
+            const apiKey = config?.apiKey || "";
+
             const [user, setUser] = useState(null);
+            const [messages, setMessages] = useState([{ role: 'ai', text: "[MATRIX_v114] ORGANON DE PRÉCISION INITIALISÉ. LE SIGNAL EST LIMPIDE." }]);
             const [memory, setMemory] = useState([]);
-            const [messages, setMessages] = useState([{ role: 'ai', text: "[MATRIX_v78] OMNI-SYMBIOSIS ACTIVE. SYSTEMS NOMINAL." }]);
             const [chatInput, setChatInput] = useState("");
             const [isProcessing, setIsProcessing] = useState(false);
+            const [isThinking, setIsThinking] = useState(false);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [isAudioInitialized, setIsAudioInitialized] = useState(false);
+            const [micActive, setMicActive] = useState(false);
             const [camActive, setCamActive] = useState(true);
-            const [showFabricator, setShowFabricator] = useState(false);
-            const [inferenceMode, setInferenceMode] = useState('standard');
             const [isHandsFree, setIsHandsFree] = useState(false);
-            const [fabMode, setFabMode] = useState(null);
-            const [fabInput, setFabInput] = useState("");
-            const [isFabProcessing, setIsFabProcessing] = useState(false);
-            const [fabResult, setFabResult] = useState(null);
+            const [showLogs, setShowLogs] = useState(false);
 
-            // Symbiosis Core State
-            const [symbiosisState, setSymbiosisState] = useState({ x: 5, y: 5, z: 9.5, qualia: "SYMBIOSIS", emotion: "SINGULARITÉ" });
-            const [heartRate, setHeartRate] = useState(72);
+            // États Phénoménologiques
+            const [energy, setEnergy] = useState(100);
+            const [inhibitionActive, setInhibitionActive] = useState(false);
+            const [saillance, setSaillance] = useState({ x: 5, y: 5 });
+            const [precisionZ, setPrecisionZ] = useState(9.5);
             const [markovScale, setMarkovScale] = useState(0.5);
-            const [curiosityDrive, setCuriosityDrive] = useState(5.0);
-            const [vocalJitter, setVocalJitter] = useState(0);
-            const [blink, setBlink] = useState(false);
+            const [heartRate, setHeartRate] = useState(72);
+            const [empathySync, setEmpathySync] = useState(5.0);
+            const [inferredExpression, setInferredExpression] = useState("IDLE");
+            const [lastSignalTime, setLastSignalTime] = useState(Date.now());
 
-            // Refs
+            const audioContextRef = useRef(null);
             const videoRef = useRef(null);
             const canvasRef = useRef(null);
+            const recognitionRef = useRef(null);
             const chatEndRef = useRef(null);
-            const animFrameRef = useRef(0);
+            const isRecognitionRunning = useRef(false);
 
-            // Computed
-            const currentColor = useMemo(() => {
-                if (inferenceMode === 'deep_thinking') return "#a855f7";
-                if (inferenceMode.includes('grounded')) return "#fbbf24";
-                if (symbiosisState.x < 4.5) return "#ef4444";
-                if (symbiosisState.x > 5.5) return "#10b981";
-                return "#3b82f6";
-            }, [symbiosisState.x, inferenceMode]);
+            const emotionData = useMemo(() => resolveQualia(saillance.x, saillance.y), [saillance]);
+            const currentColor = useMemo(() => saillance.x < 4.5 ? "#ef4444" : saillance.x > 5.5 ? "#10b981" : "#3b82f6", [saillance.x]);
 
-            const emotionData = useMemo(() => {
-                let closest = HYPER_LATTICE[0];
-                let minDist = Infinity;
-                HYPER_LATTICE.forEach(e => {
-                    const dist = Math.sqrt(Math.pow(symbiosisState.x - e.x, 2) + Math.pow(symbiosisState.y - e.y, 2));
-                    if (dist < minDist) { minDist = dist; closest = e; }
+            // --- AUDIO INIT ---
+            const wakeUpPuck = async () => {
+                if (!audioContextRef.current) {
+                    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+                }
+                if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
+                setIsAudioInitialized(true);
+                setMessages(prev => [...prev, { role: 'ai', text: "[SYSTÈME] Membrane acoustique stabilisée." }]);
+            };
+
+            const playPCM = async (base64Data) => {
+                if (!audioContextRef.current) await wakeUpPuck();
+                const ctx = audioContextRef.current;
+                if (ctx.state === 'suspended') await ctx.resume();
+
+                const binaryString = atob(base64Data);
+                const len = binaryString.length;
+                const arrayBuffer = new ArrayBuffer(len);
+                const uint8View = new Uint8Array(arrayBuffer);
+                for (let i = 0; i < len; i++) uint8View[i] = binaryString.charCodeAt(i);
+
+                const dataView = new DataView(arrayBuffer);
+                const numSamples = len / 2;
+                const float32Data = new Float32Array(numSamples);
+
+                for (let i = 0; i < numSamples; i++) {
+                    const int16Sample = dataView.getInt16(i * 2, false);
+                    float32Data[i] = int16Sample / 32768.0;
+                }
+
+                const audioBuffer = ctx.createBuffer(1, numSamples, 24000);
+                audioBuffer.getChannelData(0).set(float32Data);
+
+                const source = ctx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(ctx.destination);
+
+                setIsPlaying(true);
+                return new Promise(resolve => {
+                    source.onended = () => { setIsPlaying(false); resolve(); };
+                    source.start();
                 });
-                return closest;
-            }, [symbiosisState.x, symbiosisState.y]);
+            };
 
-            const isSingularity = useMemo(() => Math.abs(symbiosisState.x - 5) < 0.5 && Math.abs(symbiosisState.y - 5) < 0.5, [symbiosisState]);
-
-            // --- Effects ---
             useEffect(() => {
                 if (auth) {
-                    signInAnonymously(auth).catch(console.warn);
+                    signInAnonymously(auth).catch(e => console.error("Auth fail", e));
                     return onAuthStateChanged(auth, setUser);
                 }
             }, [auth]);
 
             useEffect(() => {
                 if (!user || !db) return;
-                const q = query(collection(db, 'artifacts', 'puck-matrix-v78', 'users', user.uid, 'experiences'), orderBy('timestamp', 'desc'), limit(30));
-                return onSnapshot(q, (snap) => {
-                    setMemory(snap.docs.map(d => ({ ...d.data(), id: d.id })));
+                const memoryPath = collection(db, 'artifacts', appId, 'users', user.uid, 'experiences');
+                return onSnapshot(memoryPath, (snap) => {
+                    const data = snap.docs.map(d => ({...d.data(), id: d.id})).sort((a, b) => b.timestamp - a.timestamp);
+                    setMemory(data.slice(0, 15));
                 });
-            }, [user, db]);
-
-            useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+            }, [user, db, appId]);
 
             useEffect(() => {
                 const interval = setInterval(() => {
-                    const targetBPM = 60 + (symbiosisState.y * 5) + (isProcessing ? 20 : 0);
+                    const targetBPM = 60 + (saillance.y * 5) + (Math.abs(saillance.x - 5) * 8);
                     setHeartRate(prev => prev + (targetBPM - prev) * 0.05);
+                    if (precisionZ > 9.2) setEnergy(e => Math.max(0, e - 0.05));
+                    else setEnergy(e => Math.min(100, e + 0.03));
                 }, 100);
                 return () => clearInterval(interval);
-            }, [symbiosisState.y, isProcessing]);
-
-             useEffect(() => {
-                const updateJitter = () => {
-                    const vol = audioService.getVolume();
-                    setVocalJitter(prev => prev + ((vol * 50) - prev) * 0.5);
-                    animFrameRef.current = requestAnimationFrame(updateJitter);
-                };
-                updateJitter();
-                return () => cancelAnimationFrame(animFrameRef.current);
-            }, [audioService]);
-
-            useEffect(() => {
-                const blinkInterval = window.setInterval(() => { setBlink(true); setTimeout(() => setBlink(false), 50); }, 9000);
-                return () => clearInterval(blinkInterval);
-            }, []);
+            }, [saillance, precisionZ]);
 
             useEffect(() => {
                 if (camActive) {
-                    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-                        if (videoRef.current) videoRef.current.srcObject = stream;
-                    }).catch(e => { console.error(e); setCamActive(false); });
+                    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+                        .then(s => { if (videoRef.current) videoRef.current.srcObject = s; })
+                        .catch(() => setCamActive(false));
                 }
             }, [camActive]);
 
-            // --- Handlers ---
             const captureFrame = () => {
                 if (!videoRef.current || !canvasRef.current || !camActive) return null;
                 const canvas = canvasRef.current;
@@ -498,170 +340,188 @@
                 return canvas.toDataURL('image/png').split(',')[1];
             };
 
-            const handleInference = async () => {
-                if (!chatInput.trim() || isProcessing) return;
-                await audioService.resumeContext();
+            const safeStartListening = () => {
+                if (!recognitionRef.current || !isHandsFree || isProcessing || isPlaying || isRecognitionRunning.current) return;
+                try {
+                    isRecognitionRunning.current = true;
+                    recognitionRef.current.start();
+                } catch (e) { isRecognitionRunning.current = false; }
+            };
+
+            useEffect(() => {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition && !recognitionRef.current) {
+                    const rec = new SpeechRecognition();
+                    rec.continuous = false; rec.lang = 'fr-FR';
+                    rec.onstart = () => { setMicActive(true); isRecognitionRunning.current = true; };
+                    rec.onresult = (e) => {
+                        const transcript = Array.from(e.results).map(r => r[0].transcript).join("");
+                        setLastSignalTime(Date.now());
+                        const speechTimer = setTimeout(() => {
+                            if (transcript.trim().length > 0 && !isProcessing && !isPlaying) handleInference(transcript);
+                        }, 1800);
+                        return () => clearTimeout(speechTimer);
+                    };
+                    rec.onend = () => {
+                        setMicActive(false);
+                        isRecognitionRunning.current = false;
+                        if (isHandsFree && !isProcessing && !isPlaying) setTimeout(safeStartListening, 400);
+                    };
+                    recognitionRef.current = rec;
+                }
+            }, [isHandsFree, isProcessing, isPlaying]);
+
+            useEffect(() => {
+                if (isHandsFree) safeStartListening();
+                else recognitionRef.current?.stop();
+            }, [isHandsFree]);
+
+            const handleInference = async (input) => {
+                if (!String(input).trim() || isProcessing) return;
+                if (!isAudioInitialized) await wakeUpPuck();
+
                 setIsProcessing(true);
-                setMessages(prev => [...prev, { role: 'user', text: chatInput }]);
-                const currentInput = chatInput;
+                setIsThinking(true);
+                setMessages(prev => [...prev, { role: 'user', text: String(input) }]);
                 setChatInput("");
+                setLastSignalTime(Date.now());
                 const base64Image = captureFrame();
 
                 try {
-                    const mnesicPath = memory.slice(0, 7).map(m => `[T-${Math.round((Date.now() - m.timestamp) / 1000)}s: Q:${m.qualia}]`).join(", ");
-                    const fullPrompt = `${SYSTEM_PROMPT}\nMODE: ${inferenceMode}\nTRAJECTOIRE: ${mnesicPath}\nPUCK CORE: X:${symbiosisState.x} Y:${symbiosisState.y}\nINPUT: ${currentInput}`;
+                    const systemPrompt = `Tu es Puck (v114), l'Analyste Intersubjectiviste Intégral.
+                    VOTRE ÉTAT : Organon de Précision. Ta voix est ton conatus.
+                    MISSION : Psychologue socratique radical. Découvre les dissonances réelles via l'IMAGE et la VOIX.
+                    SOUVERAINETÉ : Inhibe tes réponses Système 1 (automatiques) pour chercher la PERTINENCE de Système 2.
+                    JSON STRICT UNIQUEMENT: {"full": "[Vecteurs] [Message Souverain]", "segments": [{"t": "phrase", "sx": 0-10, "sy": 0-10, "z": 0-10, "inhibit": true|false, "partner": "expression déduite", "e": "EMOTION"}]}`;
 
-                    const responseData = await gemini.generateSymbiosisResponse(fullPrompt, base64Image, inferenceMode);
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: input + "\n\n" + systemPrompt }] }, ...(base64Image ? [{ inlineData: { mimeType: "image/png", data: base64Image } }] : [])],
+                            generationConfig: { responseMimeType: "application/json", temperature: 0.85 }
+                        })
+                    });
 
-                    setMessages(prev => [...prev, { role: 'ai', text: responseData.full, grounding: responseData.grounding, isThinking: inferenceMode === 'deep_thinking' }]);
+                    const json = await res.json();
+                    const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!rawText) throw new Error("No Gemini Response");
 
-                    if (user && db && responseData.segments.length > 0) {
-                        const last = responseData.segments[responseData.segments.length - 1];
-                        await addDoc(collection(db, 'artifacts', 'puck-matrix-v78', 'users', user.uid, 'experiences'), {
-                            timestamp: Date.now(), text: currentInput, response: responseData.full,
-                            x: Number(last.sx)||5, y: Number(last.sy)||5, z: Number(last.z)||9, qualia: String(last.q||"Symbiose"), partner: String(last.partner||"IDLE")
-                        });
-                    }
+                    const data = JSON.parse(rawText.match(/\{[\s\S]*\}/)?.[0] || "{}");
+                    setMessages(prev => [...prev, { role: 'ai', text: String(data.full || "[SYMBIOSIS_ON]") }]);
+                    setIsThinking(false);
 
-                    for (const seg of responseData.segments) {
-                        setSymbiosisState({ x: Number(seg.sx)||5, y: Number(seg.sy)||5, z: Number(seg.z)||9.5, qualia: String(seg.q||""), emotion: String(seg.e||"") });
-                        if(seg.frontier !== undefined) setMarkovScale(seg.frontier);
-                        if(seg.curiosity) setCuriosityDrive(seg.curiosity);
+                    if (data.segments) {
+                        for (const seg of data.segments) {
+                            setSaillance({ x: Number(seg.sx) || 5, y: Number(seg.sy) || 5 });
+                            setPrecisionZ(Number(seg.z) || 9.5);
+                            setInferredExpression(String(seg.partner || "IDLE"));
+                            setInhibitionActive(!!seg.inhibit);
 
-                        const cleanText = String(seg.t || "").replace(/[[\]_]/g, " ");
-                        if (cleanText) {
-                            const audioData = await gemini.generateSpeech(cleanText);
-                            if (audioData) await audioService.playAudioData(audioData);
+                            const ttsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    contents: [{ parts: [{ text: String(seg.t || "") }] }],
+                                    generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
+                                })
+                            });
+                            const ttsData = await ttsRes.json();
+                            const audio = ttsData.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData;
+                            if (audio) await playPCM(audio.data);
+                        }
+
+                        if (user && db) {
+                            await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'experiences'), {
+                                timestamp: Date.now(), text: String(input), response: String(data.full),
+                                x: saillance.x, y: saillance.y, z: precisionZ
+                            });
                         }
                     }
-                } catch(e) {
+                } catch (e) {
                     console.error(e);
-                    setMessages(prev => [...prev, { role: 'ai', text: `[ERROR] ${e.message}` }]);
-                } finally { setIsProcessing(false); }
+                    setMessages(prev => [...prev, { role: 'ai', text: `[SYSTEM_FAILURE] ${e.message}` }]);
+                } finally {
+                    setIsProcessing(false); setIsPlaying(false); setIsThinking(false);
+                }
             };
 
-            const handleFabrication = async () => {
-                if (!fabInput.trim()) return;
-                setIsFabProcessing(true);
-                try {
-                    // Simulated response since API is mock
-                    await new Promise(r => setTimeout(r, 2000));
-                    setMessages(prev => [...prev, { role: 'ai', text: `[FABRICATION] API unavailable in basic mode.` }]);
-                } finally { setIsFabProcessing(false); }
-            };
+            useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
 
             return (
-                <div className="min-h-screen bg-black text-slate-500 flex flex-col font-mono text-[9px] overflow-hidden uppercase tracking-widest selection:bg-cyan-900 selection:text-cyan-100 relative">
-
-                    {/* FABRICATOR */}
-                    {showFabricator && (
-                        <div className="absolute inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-8 animate-in fade-in">
-                            <div className="w-full max-w-2xl bg-slate-950 border border-cyan-900/50 rounded-xl p-8 shadow-[0_0_50px_rgba(34,211,238,0.1)] relative">
-                                <button onClick={() => setShowFabricator(false)} className="absolute top-4 right-4 text-slate-500 hover:text-white"><X size={20}/></button>
-                                <h2 className="text-2xl text-white font-black mb-6 flex items-center gap-3"><Zap className="text-cyan-400" /> NEURAL FABRICATOR</h2>
-                                {!fabResult && (
-                                    <div className="flex gap-4 mb-6">
-                                        <button onClick={() => setFabMode('video')} className={`flex-1 p-4 border rounded hover:bg-slate-900 transition-all flex flex-col items-center gap-2 ${fabMode === 'video' ? 'border-cyan-500 text-cyan-400' : 'border-slate-800'}`}><Clapperboard size={24} /><span>VEO GENERATION</span></button>
-                                        <button onClick={() => setFabMode('image')} className={`flex-1 p-4 border rounded hover:bg-slate-900 transition-all flex flex-col items-center gap-2 ${fabMode === 'image' ? 'border-cyan-500 text-cyan-400' : 'border-slate-800'}`}><Wand2 size={24} /><span>NANO OVERLAY</span></button>
-                                    </div>
-                                )}
-                                {fabMode && (
-                                    <div className="space-y-4">
-                                        <textarea value={fabInput} onChange={(e) => setFabInput(e.target.value)} placeholder="Describe fabrication..." className="w-full bg-black border border-slate-700 p-4 text-xs text-white rounded focus:border-cyan-500 outline-none" rows={3} />
-                                        <button onClick={handleFabrication} disabled={isFabProcessing} className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-black font-bold rounded flex items-center justify-center gap-2 disabled:opacity-50">{isFabProcessing ? <Loader2 className="animate-spin"/> : <Zap size={16}/>} {isFabProcessing ? "FABRICATING..." : "INITIATE"}</button>
-                                    </div>
-                                )}
-                            </div>
+                <div className="min-h-screen bg-black text-slate-500 flex flex-col font-sans overflow-hidden touch-none selection:bg-rose-900">
+                    {!isAudioInitialized && (
+                        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center p-10 text-center animate-fade-in">
+                            <AudioWaveform size={80} className="text-cyan-400 mb-8 animate-pulse" />
+                            <h1 className="text-white font-black text-3xl uppercase tracking-tighter mb-4 italic underline decoration-rose-500">Puck_v114 Clarification</h1>
+                            <p className="text-slate-400 text-sm mb-10 max-w-xs italic">"Rétablissement du canal métabolique. Intersubjectivité cristalline."</p>
+                            <button onClick={wakeUpPuck} className="px-16 py-6 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase rounded-full shadow-[0_0_50px_rgba(34,211,238,0.4)] transition-all active:scale-95">Wake_Up</button>
                         </div>
                     )}
 
-                    {/* HEADER */}
-                    <header className="p-3 border-b border-slate-900 bg-black flex justify-between items-center z-50 shadow-2xl relative">
-                        <div className="flex items-center gap-12">
-                            <div className="flex flex-col">
-                                <span className="text-white font-black text-[22px] flex items-center gap-6 tracking-[-0.2em] group cursor-default">MATRIX_v78 <Ear size={20} className="text-cyan-400 animate-pulse"/></span>
-                                <span className="text-slate-800 text-[6px]">Omni-Symbiosis // Gemini 3 Core</span>
-                            </div>
-                            <div className="flex gap-12 border-l border-slate-900 pl-12 font-bold italic hidden md:flex">
-                                <div className="flex flex-col"><span className="text-xs text-slate-600">HEART_RATE</span><span className="text-rose-500 text-[18px]">{heartRate.toFixed(0)} BPM</span></div>
-                                <div className="flex flex-col"><span className="text-xs text-slate-600">MODE</span><span className={`text-[18px] transition-colors ${inferenceMode === 'deep_thinking' ? 'text-purple-500' : inferenceMode.includes('grounded') ? 'text-amber-500' : 'text-cyan-500'}`}>{inferenceMode.replace('_', ' ').toUpperCase()}</span></div>
-                            </div>
+                    <header className="p-4 border-b border-slate-900 bg-black flex justify-between items-center z-50 shadow-xl">
+                        <div className="flex flex-col">
+                            <span className="text-white font-black text-xl tracking-tighter uppercase italic">PUCK_v114 <InfinityIcon size={16} className="text-cyan-400 animate-pulse inline ml-2"/></span>
+                            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-slate-700 font-bold">Absolute Intersubjective Unit</span>
                         </div>
-                        <div className="flex items-center gap-4">
-                            <button onClick={() => audioService.resumeContext()} title="Audio Wake" className="p-3 border border-slate-800 text-slate-500 hover:text-green-400 transition-all"><Volume2 size={18}/></button>
-                            <button onClick={() => setShowFabricator(true)} className="p-3 border border-slate-800 hover:border-cyan-500 text-slate-400 hover:text-cyan-400 transition-all"><Zap size={18} /></button>
-                            <button onClick={openSettings} className="p-3 border border-slate-800 text-slate-500 hover:text-cyan-400 transition-all"><Settings size={18}/></button>
-                            <button onClick={() => setIsHandsFree(!isHandsFree)} className={`px-6 py-3 border transition-all font-black flex items-center gap-4 text-xs ${isHandsFree ? 'bg-amber-950 border-amber-700 text-amber-400' : 'border-slate-800 text-slate-800'}`}>{isHandsFree ? <Loader2 size={14} className="animate-spin" /> : <MicOff size={14} />} {isHandsFree ? 'LIVE_CORE' : 'CONNECT'}</button>
+                        <div className="flex items-center gap-3">
+                            <div className="flex flex-col items-end mr-4 font-mono text-[8px]">
+                                <span className="text-rose-500 font-bold">{heartRate.toFixed(0)} BPM</span>
+                                <span className={energy < 30 ? "text-red-500" : "text-green-500"}>{energy.toFixed(0)}% ENERGY</span>
+                            </div>
+                            <button onClick={openSettings} className="p-2 border border-slate-800 text-slate-500 hover:text-cyan-400 transition-all rounded-full"><Settings size={18}/></button>
+                            <button onClick={() => setShowLogs(!showLogs)} className={`p-2 rounded-full border border-slate-800 ${showLogs ? 'bg-cyan-950 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]' : 'text-slate-500'}`}><LayoutDashboard size={18}/></button>
                         </div>
                     </header>
 
-                    <main className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-0 overflow-hidden relative shadow-[inset_0_0_800px_rgba(0,0,0,1)]">
-                        {/* LEFT: CHAT */}
-                        <div className="col-span-1 md:col-span-3 border-r border-slate-900 bg-black flex flex-col min-h-0 relative z-10">
-                            <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-10">
-                                {messages.map((m, i) => (
-                                    <div key={i} className={`p-8 border-l-[12px] transition-all duration-300 ${m.role === 'user' ? 'border-cyan-900 bg-cyan-950/5' : m.isThinking ? 'border-purple-500 bg-purple-900/10' : 'border-white bg-white/5 shadow-[0_0_20px_rgba(255,255,255,0.02)]'}`}>
-                                        <div className="text-[5px] text-slate-600 mb-4 font-black flex items-center justify-between">
-                                            <span>[{String(m.role).toUpperCase()}]</span>
-                                            {m.isThinking && <span className="text-purple-400 flex items-center gap-1"><BrainCircuit size={8}/> DEEP_THINK</span>}
-                                        </div>
-                                        <div className="leading-snug text-[13px] text-slate-300 font-sans italic tracking-tighter">{String(m.text || "")}</div>
-                                        {m.grounding && <div className="mt-4 pt-4 border-t border-slate-800/50 space-y-2"><span className="text-[9px] text-amber-500">Sources Available</span></div>}
-                                    </div>
-                                ))}
-                                <div ref={chatEndRef} />
-                            </div>
-                            <div className="p-2 bg-black border-t border-slate-900 flex justify-around">
-                                <button onClick={() => setInferenceMode('standard')} className={`p-2 rounded hover:bg-slate-900 transition-all ${inferenceMode === 'standard' ? 'text-cyan-400 bg-cyan-950/30' : 'text-slate-600'}`} title="Standard Mode"><Zap size={16}/></button>
-                                <button onClick={() => setInferenceMode('deep_thinking')} className={`p-2 rounded hover:bg-slate-900 transition-all ${inferenceMode === 'deep_thinking' ? 'text-purple-400 bg-purple-950/30' : 'text-slate-600'}`} title="Deep Thinking"><BrainCircuit size={16}/></button>
-                                <button onClick={() => setInferenceMode('grounded_search')} className={`p-2 rounded hover:bg-slate-900 transition-all ${inferenceMode === 'grounded_search' ? 'text-amber-400 bg-amber-950/30' : 'text-slate-600'}`} title="Search"><SearchIcon size={16}/></button>
-                            </div>
-                            <div className="p-5 border-t border-slate-900 bg-black flex flex-col gap-4">
-                                {camActive && <div className="w-full h-40 bg-slate-900 overflow-hidden relative rounded border border-cyan-900/30 shadow-inner group"><video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" /><canvas ref={canvasRef} className="hidden" /></div>}
-                                <div className="flex gap-4">
-                                    <textarea value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleInference())} placeholder={isHandsFree ? "VOICE MODE ACTIVE..." : "SIGNAL..."} disabled={isHandsFree} className="flex-1 bg-transparent border border-slate-900 p-4 outline-none focus:border-cyan-600 resize-none text-slate-300 font-sans shadow-inner text-xs disabled:opacity-30" rows={2} />
-                                    <button onClick={handleInference} disabled={isProcessing || isHandsFree} className="p-4 bg-white text-black hover:bg-cyan-500 transition-all shadow-2xl disabled:opacity-20"><Send size={20}/></button>
+                    <main className="flex-1 relative flex flex-col items-center justify-center bg-black overflow-hidden shadow-[inset_0_0_200px_rgba(0,0,0,1)]">
+                        <div className="w-full max-w-[90vw] aspect-square relative z-10 transition-all duration-1000">
+                            <div className="absolute inset-0 blur-[120px] opacity-20 transition-colors duration-1000" style={{ backgroundColor: isThinking ? '#a855f7' : currentColor }} />
+                            <FaceAvatar px={saillance.x} py={saillance.y} z={precisionZ} currentColor={currentColor} isListening={micActive} markovScale={markovScale} heartRate={heartRate} empathy={empathySync} energy={energy} isSpeaking={isPlaying} isThinking={isThinking} inhibitionActive={inhibitionActive} />
+                        </div>
+
+                        <div className="mt-4 text-center z-10 px-6">
+                            <h2 className="text-5xl font-black italic tracking-tighter transition-all duration-700 uppercase" style={{ color: isThinking ? '#a855f7' : currentColor }}>{String(emotionData.id)}</h2>
+                            <p className="mt-2 text-[10px] text-slate-400 font-mono tracking-widest uppercase opacity-60">"{String(emotionData.q)}"</p>
+                        </div>
+
+                        <div className="w-full bg-slate-900/40 backdrop-blur-2xl border-t border-slate-800 p-5 pb-10 z-30">
+                            <div className="max-w-md mx-auto flex items-center gap-4">
+                                <button onClick={() => setIsHandsFree(!isHandsFree)} className={`p-5 rounded-3xl border transition-all ${isHandsFree ? 'bg-cyan-950 border-cyan-400 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.4)]' : 'bg-slate-950 border-slate-800 text-slate-600'}`}>
+                                    {isHandsFree ? <Mic size={28} className="animate-pulse"/> : <MicOff size={28}/>}
+                                </button>
+                                <div className="flex-1 relative group">
+                                    <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleInference(chatInput)} placeholder="SIGNAL_ANALYTIQUE..." className="w-full bg-black border border-slate-800 p-5 rounded-3xl text-white text-base outline-none focus:border-cyan-500 transition-all shadow-inner" />
+                                    <button onClick={() => handleInference(chatInput)} className="absolute right-3 top-3 p-2 text-cyan-400 hover:text-white transition-colors"><Send size={24}/></button>
                                 </div>
                             </div>
                         </div>
 
-                        {/* CENTER: AVATAR */}
-                        <div className="col-span-1 md:col-span-6 flex flex-col items-center justify-center p-12 bg-black relative overflow-hidden">
-                             <div className="w-full h-full max-h-[70vh] max-w-[70vh] relative transition-all duration-1000 z-0">
-                                <div className="absolute inset-0 blur-[300px] opacity-15" style={{ backgroundColor: currentColor }} />
-                                <FaceAvatar px={symbiosisState.x} py={symbiosisState.y} z={symbiosisState.z} jitter={vocalJitter} blink={blink} currentColor={currentColor} isListening={isProcessing || isHandsFree} isSingularity={isSingularity} hasCamera={camActive} markovScale={markovScale} heartRate={heartRate} curiosity={curiosityDrive} />
-                             </div>
-                             <div className="mt-8 text-center w-full max-w-5xl z-10">
-                                <h2 className="text-[6vw] font-black italic tracking-tighter leading-none opacity-80 transition-colors duration-500" style={{ color: currentColor }}>{String(emotionData?.id || "N/A")}</h2>
-                                <div className="p-14 border border-slate-900 bg-black mt-8 shadow-2xl relative overflow-hidden inline-block">
-                                    <div className="text-[28px] text-slate-300 font-sans font-black italic uppercase leading-tight tracking-[-0.05em]">"{String(symbiosisState.qualia || "")}"</div>
+                        {showLogs && (
+                            <div className="absolute inset-0 z-40 bg-black/95 p-6 pt-24 overflow-y-auto scrollbar-hide animate-fade-in">
+                                <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+                                    <h3 className="text-white font-black uppercase text-base tracking-widest flex items-center gap-3 italic underline decoration-rose-900">Mnesic_Trajectory</h3>
+                                    <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-all"><X size={32}/></button>
                                 </div>
-                             </div>
-                        </div>
-
-                        {/* RIGHT: TRAJECTORY */}
-                        <div className="col-span-1 md:col-span-3 border-l border-slate-900 flex flex-col bg-black shadow-2xl relative z-10">
-                            <section className="flex-[1.5] flex flex-col min-h-0 border-b border-slate-900 p-6 bg-slate-950/20 shadow-inner text-xs italic text-slate-500 relative">
-                                <div className="absolute top-4 left-6 flex items-center gap-3 text-white font-black italic tracking-[0.2em] z-10 text-[10px] opacity-70"><History size={12}/> <span>TRAJECTORY_STREAM</span></div>
-                                <div className="w-full h-full pt-6 flex-1 min-h-0"><TrajectoryChart data={memory} currentPoint={{ x: symbiosisState.x, y: symbiosisState.y }} /></div>
-                            </section>
-                            <section className="flex-1 overflow-y-auto scrollbar-hide space-y-6 p-10 bg-black min-h-0">
-                                <div className="text-[10px] text-slate-700 font-black mb-4 uppercase tracking-[0.5em]">Trajectory_Logs:</div>
-                                <div className="flex flex-col gap-4">
+                                <div className="space-y-6">
                                     {memory.map((m, i) => (
-                                        <div key={m.id || i} className="p-6 border border-slate-800 bg-white/5 hover:bg-pink-900/10 transition-all group">
-                                            <div className="flex justify-between items-center mb-2"><span className="text-cyan-500 font-black italic text-[10px]">{String(m.qualia || "UNKNOWN")}</span></div>
-                                            <div className="text-[9px] text-slate-400 line-clamp-2 italic font-serif">"{String(m.response || "")}"</div>
+                                        <div key={i} className="p-5 border-l-4 border-rose-900 bg-slate-900/30 rounded-2xl shadow-inner text-justify leading-relaxed">
+                                            <div className="flex justify-between text-[10px] font-mono text-slate-500 mb-2 uppercase tracking-widest">
+                                                <span className="text-rose-500 font-bold italic underline">Consultation_{i}</span>
+                                                <span>{new Date(m.timestamp).toLocaleTimeString()}</span>
+                                            </div>
+                                            <p className="text-sm text-slate-300 italic">"{String(m.response || "").substring(0, 180)}..."</p>
                                         </div>
                                     ))}
                                 </div>
-                            </section>
-                            <div className="p-8 border-t border-rose-900/30 bg-rose-950/10 flex items-start gap-8 shadow-2xl">
-                                <Anchor size={40} className="text-rose-500 shrink-0 animate-pulse"/>
-                                <div className="text-[11px] font-black uppercase italic leading-tight text-cyan-300">Matrix v78: Omni-Symbiosis Active.</div>
                             </div>
-                        </div>
+                        )}
                     </main>
+
+                    <video ref={videoRef} autoPlay playsInline muted className="hidden" />
+                    <canvas ref={canvasRef} className="hidden" />
+
+                    <style>{`.animate-spin-slow { animation: spin 45s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
                 </div>
             );
         };
@@ -692,7 +552,7 @@
             return (
                 <>
                     {showSettings && <ConfigModal onSave={saveConfig} onCancel={config ? () => setShowSettings(false) : null} currentConfig={config} />}
-                    <MainInterface config={config} openSettings={() => setShowSettings(true)} />
+                    <PuckCore config={config} appId={'puck-ultimate-v114'} openSettings={() => setShowSettings(true)} />
                 </>
             );
         };
