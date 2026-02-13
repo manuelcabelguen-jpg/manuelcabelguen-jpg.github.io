@@ -19,6 +19,7 @@
                         'spin-slow': 'spin 50s linear infinite',
                         'breathe': 'breathe 10s ease-in-out infinite',
                         'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'coherence-guide': 'coherence 10s ease-in-out infinite',
                     },
                     keyframes: {
                         breathe: {
@@ -28,6 +29,11 @@
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' },
+                        },
+                        coherence: {
+                            '0%': { transform: 'scale(1)', opacity: '0.5' },
+                            '50%': { transform: 'scale(1.5)', opacity: '1' },
+                            '100%': { transform: 'scale(1)', opacity: '0.5' },
                         }
                     }
                 }
@@ -43,6 +49,7 @@
         .stat-glow { text-shadow: 0 0 10px currentColor; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .summary-gradient { background: linear-gradient(135deg, rgba(8, 51, 68, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); }
+        .color-transition { transition: stroke 3s ease, fill 3s ease, color 3s ease; }
     </style>
 
     <script type="importmap">
@@ -68,16 +75,17 @@
             History, Activity, Heart, Flower2, AlertTriangle, Zap,
             Infinity as InfinityIcon, Battery, Target, BarChart3, Database,
             Waves, ShieldAlert, ChevronRight, Volume2, Sparkles, ClipboardCheck,
-            Lightbulb, RefreshCw, Save, AlertCircle
+            Lightbulb, RefreshCw, Save, AlertCircle, Siren
         } from 'lucide-react';
 
-        // --- ONTOLOGIE CARTOGRAFFECT 6.1 (Cabelguen, 2026) ---
+        // --- ONTOLOGIE CARTOGRAFFECT 6.1 ---
         const LATTICE = [
             { id: "SOUVERAINETÉ", x: 9.5, y: 9.5, color: "#fbbf24", q: "Actuation libre du conatus rationnel." },
             { id: "RÉSOLUTION", x: 8.5, y: 5.0, color: "#10b981", q: "Démêlage des structures de l'inconscient." },
             { id: "EMPATHIE_ACTIVE", x: 7.5, y: 7.5, color: "#ec4899", q: "Synchronie des couvertures de Markov." },
             { id: "CONFRONTATION", x: 2.0, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre les biais Système 1." },
-            { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." }
+            { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." },
+            { id: "DÉTRESSE", x: 0.0, y: 0.0, color: "#ef4444", q: "Rupture de l'homéostasie psychique." }
         ];
 
         const resolveQualia = (x, y) => {
@@ -90,23 +98,17 @@
             return closest;
         };
 
+        const CRISIS_KEYWORDS = ["suicide", "mourir", "finir", "tuer", "mort", "détresse", "panique", "peur", "aide", "urgence"];
+
         // --- AUDIO ENGINE ---
         const pcmToWav = (pcmData, sampleRate) => {
             const buffer = new ArrayBuffer(44 + pcmData.byteLength);
             const view = new DataView(buffer);
             const writeString = (pos, s) => { for (let i = 0; i < s.length; i++) view.setUint8(pos + i, s.charCodeAt(i)); };
-            writeString(0, 'RIFF');
-            view.setUint32(4, 32 + pcmData.byteLength, true);
-            writeString(8, 'WAVE');
-            writeString(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * 2, true);
-            view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true);
-            writeString(36, 'data');
+            writeString(0, 'RIFF'); view.setUint32(4, 32 + pcmData.byteLength, true); writeString(8, 'WAVE'); writeString(12, 'fmt ');
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true); view.setUint16(34, 16, true); writeString(36, 'data');
             view.setUint32(40, pcmData.byteLength, true);
             new Uint8Array(buffer, 44).set(new Uint8Array(pcmData));
             return new Blob([buffer], { type: 'audio/wav' });
@@ -119,13 +121,24 @@
 
             return (
                 <div className={`relative w-80 h-80 mx-auto transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
-                     style={{ transform: `scale(${beat})` }}>
+                     style={{ transform: breathing ? 'none' : `scale(${beat})` }}>
+
+                    {/* Coherence Visualizer Overlay */}
+                    {breathing && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-64 h-64 border-2 border-emerald-500/50 rounded-full animate-coherence-guide" />
+                            <div className="absolute text-emerald-300 font-black text-xl tracking-[0.3em] uppercase animate-pulse">
+                                Respiration
+                            </div>
+                        </div>
+                    )}
+
                     <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(34,211,238,0.2)]">
-                        <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20" />
-                        <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} />
+                        <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20 color-transition" />
+                        <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} className="color-transition" />
                         <g transform={`translate(${(sx-5)*2.8}, 0)`}>
-                            <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
-                            <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
+                            <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
+                            <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
                             {!isThinking && <circle cx="35" cy="45" r={1} fill="white" opacity="0.5" />}
                             {!isThinking && <circle cx="65" cy="45" r={1} fill="white" opacity="0.5" />}
                         </g>
@@ -135,7 +148,7 @@
                             strokeWidth="4"
                             fill="none"
                             strokeLinecap="round"
-                            className="transition-all duration-300"
+                            className="transition-all duration-300 color-transition"
                         />
                     </svg>
                 </div>
@@ -148,7 +161,7 @@
             const [error, setError] = useState(null);
             const handleSave = () => {
                 try {
-                    const parsedFb = JSON.parse(fbConfig || '{}'); // Firebase optional in this version if we don't use it
+                    const parsedFb = JSON.parse(fbConfig || '{}');
                     if (!apiKey) throw new Error("API Key is required");
                     onSave({ firebaseConfig: parsedFb, apiKey });
                 } catch (e) { setError(e.message); }
@@ -174,7 +187,14 @@
         const DrPuckInterface = ({ config, openSettings }) => {
             const apiKey = config?.apiKey || "";
             const [initialized, setInitialized] = useState(false);
-            const [messages, setMessages] = useState([]);
+
+            // Session Memory Restore
+            const [messages, setMessages] = useState(() => {
+                const saved = sessionStorage.getItem('dr_puck_messages');
+                return saved ? JSON.parse(saved) : [];
+            });
+            useEffect(() => { sessionStorage.setItem('dr_puck_messages', JSON.stringify(messages)); }, [messages]);
+
             const [input, setInput] = useState("");
             const [loading, setLoading] = useState(false);
             const [isThinking, setIsThinking] = useState(false);
@@ -182,19 +202,22 @@
             const [isListening, setIsListening] = useState(false);
             const [showLogs, setShowLogs] = useState(false);
             const [breathing, setBreathing] = useState(false);
+            const [isCrisis, setIsCrisis] = useState(false);
 
-            // New LLM-powered states
             const [clinicalSummary, setClinicalSummary] = useState(null);
             const [isSummarizing, setIsSummarizing] = useState(false);
 
             const [coords, setCoords] = useState({ sx: 5, sy: 5, z: 9.5 });
-            const [metabolicEnergy, setMetabolicEnergy] = useState(100);
+            const [metabolicEnergy, setMetabolicEnergy] = useState(() => Number(sessionStorage.getItem('dr_puck_energy')) || 100);
+            useEffect(() => { sessionStorage.setItem('dr_puck_energy', metabolicEnergy); }, [metabolicEnergy]);
+
             const [surprisal, setSurprisal] = useState(0.02);
 
             const currentQualia = useMemo(() => resolveQualia(coords.sx, coords.sy), [coords]);
 
             const audioContextRef = useRef(null);
             const recognitionRef = useRef(null);
+            const currentAudioRef = useRef(null); // Ref to current playing audio for barge-in
             const micEnabled = useRef(false);
             const isProcessingRef = useRef(false);
             const silenceTimerRef = useRef(null);
@@ -249,6 +272,12 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
             };
 
             const speak = async (text) => {
+                // Barge-in Check: Stop previous audio if new speech requested (though this is sequential mostly)
+                if (currentAudioRef.current) {
+                    currentAudioRef.current.pause();
+                    currentAudioRef.current = null;
+                }
+
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
                         method: 'POST',
@@ -269,13 +298,23 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                         if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
                         const audioBlob = pcmToWav(Uint8Array.from(atob(pcmData), c => c.charCodeAt(0)).buffer, 24000);
                         const audio = new Audio(URL.createObjectURL(audioBlob));
+                        currentAudioRef.current = audio; // Track for barge-in
+
                         return new Promise((resolve) => {
                             setIsSpeaking(true);
-                            audio.onended = () => { setIsSpeaking(false); resolve(); };
+                            audio.onended = () => { setIsSpeaking(false); currentAudioRef.current = null; resolve(); };
                             audio.play().catch(resolve);
                         });
                     }
                 } catch (e) { setIsSpeaking(false); }
+            };
+
+            const stopSpeaking = () => {
+                if (currentAudioRef.current) {
+                    currentAudioRef.current.pause();
+                    currentAudioRef.current = null;
+                    setIsSpeaking(false);
+                }
             };
 
             useEffect(() => {
@@ -288,15 +327,20 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                     rec.onstart = () => setIsListening(true);
                     rec.onend = () => {
                         setIsListening(false);
-                        if (micEnabled.current && !isSpeaking && !isProcessingRef.current) {
+                        if (micEnabled.current && !isProcessingRef.current) {
                             setTimeout(() => {
-                                if (micEnabled.current && !isSpeaking && !isProcessingRef.current) {
+                                if (micEnabled.current && !isProcessingRef.current) {
                                     try { rec.start(); } catch(e) {}
                                 }
                             }, 500);
                         }
                     };
                     rec.onresult = (event) => {
+                        // BARGE-IN LOGIC
+                        if (isSpeaking) {
+                            stopSpeaking(); // Cut Puck off immediately
+                        }
+
                         let finalStr = "";
                         for (let i = event.resultIndex; i < event.results.length; ++i) {
                             if (event.results[i].isFinal) finalStr += event.results[i][0].transcript;
@@ -322,6 +366,7 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                 if (isListening || micEnabled.current) {
                     micEnabled.current = false;
                     recognitionRef.current?.stop();
+                    stopSpeaking(); // Stop speaking if mic turned off manually
                     clearTimeout(silenceTimerRef.current);
                 } else {
                     micEnabled.current = true;
@@ -331,8 +376,20 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                 }
             };
 
+            const checkForCrisis = (text) => {
+                const lower = text.toLowerCase();
+                return CRISIS_KEYWORDS.some(k => lower.includes(k));
+            };
+
             const handleInference = async (inputStr) => {
                 if (!inputStr.trim() || isProcessingRef.current) return;
+
+                // Crisis Check
+                if (checkForCrisis(inputStr)) {
+                    setIsCrisis(true);
+                    setCoords({ sx: 0, sy: 0, z: 10 }); // Distress Red
+                }
+
                 isProcessingRef.current = true;
                 setLoading(true);
                 setIsThinking(true);
@@ -340,13 +397,20 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                 setMessages(prev => [...prev, { role: 'user', content: inputStr }]);
                 setInput("");
 
-                const systemPrompt = `Tu es Dr. Puck (v114), psychologue clinicien expert en inférence active.
+                let systemPrompt = `Tu es Dr. Puck (v114), psychologue clinicien expert en inférence active.
 MÉTHODE : Reformulation active ("Si je comprends bien..."), identification des biais Système 1.
 FORMAT JSON REQUIS : {
     "full": "Réponse clinique chaleureuse",
     "metabolic_cost": 1-10, "surprisal": 0-1,
     "segments": [{ "t": "phrase courte", "sx": 0-10, "sy": 0-10, "z": 0-10, "bias": "nom ou null" }]
 }`;
+                // Override for Crisis
+                if (isCrisis || checkForCrisis(inputStr)) {
+                    systemPrompt = `URGENCE PSYCHOLOGIQUE DÉTECTÉE.
+TON RÔLE : Ancrage immédiat. Phrases courtes, apaisantes, directives.
+Ne pas analyser. Calmer. Proposer de respirer.
+FORMAT JSON : { "full": "Message d'urgence", "metabolic_cost": 0, "surprisal": 1, "segments": [{"t": "Message", "sx": 0, "sy": 0, "z": 10}] }`;
+                }
 
                 try {
                     const data = await callGemini(inputStr, systemPrompt);
@@ -361,7 +425,7 @@ FORMAT JSON REQUIS : {
                         }
                     }
                 } catch (e) {
-                    setMessages(prev => [...prev, { role: 'ai', full: "[ERREUR] Déconnexion synaptique: " + e.message }]);
+                    setMessages(prev => [...prev, { role: 'ai', full: "[ERREUR] Déconnexion synaptique." }]);
                 } finally {
                     isProcessingRef.current = false;
                     setLoading(false);
@@ -371,18 +435,14 @@ FORMAT JSON REQUIS : {
 
             if (!initialized) {
                 return (
-                    <div className="h-screen flex flex-col items-center justify-center p-12 text-center bg-[#020617] relative overflow-hidden">
-                        <button onClick={openSettings} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-all"><Settings size={20}/></button>
+                    <div className="h-screen flex flex-col items-center justify-center p-12 text-center bg-[#020617]">
                         <Brain size={100} className="text-cyan-500 animate-pulse-fast mb-12" />
                         <h1 className="text-6xl font-black italic tracking-tighter uppercase mb-6 text-white">PUCK_v114</h1>
                         <p className="text-slate-500 font-mono text-[11px] uppercase tracking-[0.4em] mb-16 opacity-80 italic max-w-sm">
                             Organon Intersubjectiviste & Régulation Allostatique
                         </p>
                         <button
-                            onClick={() => {
-                                if(!audioContextRef.current) audioContextRef.current = new AudioContext();
-                                setInitialized(true);
-                            }}
+                            onClick={() => setInitialized(true)}
                             className="px-24 py-7 bg-cyan-700 hover:bg-cyan-600 text-white font-black rounded-full transition-all active:scale-95 shadow-2xl border border-cyan-400/30 uppercase text-xs"
                         >
                             Initialiser l'Inconscient
@@ -393,6 +453,15 @@ FORMAT JSON REQUIS : {
 
             return (
                 <div className="h-screen flex flex-col relative font-sans animate-fade-in">
+
+                    {/* Crisis Banner */}
+                    {isCrisis && (
+                        <div className="bg-red-600 text-white p-4 text-center font-bold animate-pulse flex items-center justify-center gap-4 z-[60]">
+                            <Siren size={24}/> MODE URGENCE : Respiration recommandée. SOS Amitié : 09 72 39 40 50
+                            <button onClick={() => setIsCrisis(false)} className="underline text-xs ml-4">Désactiver l'alerte</button>
+                        </div>
+                    )}
+
                     <header className="p-5 border-b border-slate-800 bg-slate-950/90 backdrop-blur-3xl flex justify-between items-center z-50">
                         <div className="flex items-center gap-10">
                             <div className="flex flex-col">
@@ -433,7 +502,7 @@ FORMAT JSON REQUIS : {
                         <FaceAvatar sx={coords.sx} sy={coords.sy} z={coords.z} color={currentQualia.color} isThinking={isThinking} isSpeaking={isSpeaking} isListening={isListening} breathing={breathing} energy={metabolicEnergy} />
 
                         <div className="mt-14 text-center z-10 px-8">
-                            <h2 className="text-7xl font-black italic tracking-tighter uppercase transition-all duration-700" style={{ color: isThinking ? '#a855f7' : currentQualia.color }}>
+                            <h2 className="text-7xl font-black italic tracking-tighter uppercase transition-all duration-700 color-transition" style={{ color: isThinking ? '#a855f7' : currentQualia.color }}>
                                 {currentQualia.id}
                             </h2>
                             <p className="mt-5 text-[13px] font-mono text-slate-500 uppercase tracking-[0.4em] opacity-80 italic max-w-lg mx-auto">
@@ -447,7 +516,7 @@ FORMAT JSON REQUIS : {
                                     {isListening ? <Mic size={36} className="animate-pulse"/> : <MicOff size={36}/>}
                                 </button>
                                 <div className="flex-1 relative group">
-                                    <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleInference(input)} placeholder={isListening ? "Échantillonnage (3s silence)..." : "Décrivez votre expérience..."} className="w-full bg-slate-900/80 border border-slate-700 p-8 rounded-[3rem] text-white outline-none focus:border-cyan-500 transition-all text-xl placeholder-slate-700" />
+                                    <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleInference(input)} placeholder={isListening ? "Écoute active (Interruption possible)..." : "Décrivez votre expérience..."} className="w-full bg-slate-900/80 border border-slate-700 p-8 rounded-[3rem] text-white outline-none focus:border-cyan-500 transition-all text-xl placeholder-slate-700" />
                                     <button onClick={() => handleInference(input)} className="absolute right-8 top-7 p-1 text-cyan-400 hover:text-white transition-transform hover:scale-125">
                                         <Send size={32}/>
                                     </button>
