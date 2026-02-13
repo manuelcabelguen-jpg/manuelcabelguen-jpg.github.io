@@ -3,33 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assistant Rédaction Pro - MATRIX v114 Integration</title>
+    <title>Assistant Rédaction Pro - Variables Dynamiques</title>
 
     <!-- 1. Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['DM Sans', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    animation: {
-                        'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'spin-slow': 'spin 50s linear infinite',
-                        'breathe': 'breathe 10s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        breathe: {
-                            '0%, 100%': { transform: 'scale(0.94)' },
-                            '50%': { transform: 'scale(1.06)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
 
     <!-- 2. React Ecosystem -->
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
@@ -39,41 +16,38 @@
     <!-- 3. Packages Pro (Exports) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <!-- 4. Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
     <style>
-        body { background-color: #020617; color: #f1f5f9; overflow: hidden; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(51, 65, 85, 0.4); }
-        .stat-glow { text-shadow: 0 0 10px currentColor; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pulse-blue {
+            0%, 100% { border-color: #0078D4; box-shadow: 0 0 0 0 rgba(0, 120, 212, 0.4); }
+            50% { border-color: #0078D4; box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.1); }
+        }
+        .generating-active { animation: pulse-blue 2s infinite; }
 
-        /* Rich Editor Dark Mode Overrides */
-        .rich-editor { min-height: 300px; outline: none; line-height: 1.6; color: #e2e8f0; }
-        .rich-editor h1 { font-size: 1.5em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; color: #38bdf8; }
-        .rich-editor h2 { font-size: 1.25em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; color: #7dd3fc; }
+        .rich-editor { min-height: 300px; outline: none; line-height: 1.6; }
+        .rich-editor h1 { font-size: 1.5em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; }
+        .rich-editor h2 { font-size: 1.25em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; }
         .rich-editor ul { list-style-type: disc; padding-left: 1.5em; }
         .rich-editor p { margin-bottom: 0.5em; }
-        .rich-editor b, .rich-editor strong { color: #f0f9ff; }
 
         /* Modal Overlay */
-        .modal-overlay { background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); }
+        .modal-overlay { background-color: rgba(0, 0, 0, 0.5); }
     </style>
 </head>
-<body class="selection:bg-cyan-900">
+<body class="bg-[#F3F2F1] text-slate-800">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useRef, useEffect, useMemo } = React;
+        const { useState, useRef, useEffect } = React;
 
-        // --- ICONES (Lucide-like SVG) ---
+        // --- ICONES ---
         const IconBase = ({ children, className }) => (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
         );
         const Icons = {
             ShieldAlert: (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6-8 10-8 10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></IconBase>,
-            Settings: (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>,
+            Settings: (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>,
             Lock: (p) => <IconBase {...p}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></IconBase>,
             Save: (p) => <IconBase {...p}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></IconBase>,
             Bot: (p) => <IconBase {...p}><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></IconBase>,
@@ -95,11 +69,7 @@
             FileWord: (p) => <IconBase {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></IconBase>,
             UserCog: (p) => <IconBase {...p}><circle cx="18" cy="15" r="3"/><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><path d="m21.7 16.4.9.9"/><path d="m15.3 19-.9-.9"/><path d="m21.7 19-.9-.9"/><path d="m15.3 16.4.9.9"/><path d="M19.6 22v-1"/><path d="M19.6 14v-1"/></IconBase>,
             FilePlus: (p) => <IconBase {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></IconBase>,
-            Edit: (p) => <IconBase {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></IconBase>,
-            Mic: (p) => <IconBase {...p}><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></IconBase>,
-            MicOff: (p) => <IconBase {...p}><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></IconBase>,
-            Battery: (p) => <IconBase {...p}><rect x="2" y="7" width="16" height="10" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/></IconBase>,
-            Target: (p) => <IconBase {...p}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></IconBase>
+            Edit: (p) => <IconBase {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></IconBase>
         };
 
         const SectionType = { FIXED: 'fixed', DYNAMIC: 'dynamic' };
@@ -142,119 +112,58 @@
             }
         ];
 
-        // --- FACE AVATAR (Dr Puck) ---
-        const FaceAvatar = ({ sx, sy, z, color, isThinking, isSpeaking, breathing, isListening, energy }) => {
-            const beat = 1 + (Math.sin(Date.now() / 200) * 0.025);
-            const opacityLevel = 0.3 + (energy / 150);
-
-            return (
-                <div className={`relative w-40 h-40 mx-auto transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
-                     style={{ transform: `scale(${beat})` }}>
-                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_20px_rgba(34,211,238,0.2)]">
-                        {/* Halo de Markov */}
-                        <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.5" strokeDasharray="3 3" className="animate-spin-slow opacity-30" />
-
-                        {/* Noyau Allostatique */}
-                        <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="1" opacity={opacityLevel} />
-
-                        {/* Yeux Vectoriels (Inférence Hiérarchique) */}
-                        <g transform={`translate(${(sx-5)*1.5}, 0)`}>
-                            <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
-                            <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
-                            {/* Point de focus Système 2 */}
-                            {!isThinking && <circle cx="35" cy="45" r="1" fill="white" opacity="0.5" />}
-                            {!isThinking && <circle cx="65" cy="45" r="1" fill="white" opacity="0.5" />}
-                        </g>
-
-                        {/* Bouche (Actuation Motrice / Prosodie) */}
-                        <path
-                            d={`M 35 75 Q 50 ${75 + (isSpeaking ? 16 : (sx-5)*3)} 65 75`}
-                            stroke={color}
-                            strokeWidth="3"
-                            fill="none"
-                            strokeLinecap="round"
-                            className="transition-all duration-300"
-                        />
-                    </svg>
-                </div>
-            );
-        };
-
         // --- COMPOSANTS UTILITAIRES ---
         const RichEditor = ({ value, onChange }) => {
             const editorRef = useRef(null);
             useEffect(() => { if (editorRef.current && editorRef.current.innerHTML !== value) editorRef.current.innerHTML = value; }, []);
             return (
-                <div className="flex flex-col h-full border border-slate-700 rounded-lg overflow-hidden glass">
-                    <div className="flex items-center gap-1 p-2 bg-slate-900/50 border-b border-slate-700">
-                        <button onClick={() => {document.execCommand('bold', false); editorRef.current.focus()}} className="p-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded"><Icons.Bold className="w-4 h-4"/></button>
-                        <button onClick={() => {document.execCommand('italic', false); editorRef.current.focus()}} className="p-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded"><Icons.Italic className="w-4 h-4"/></button>
-                        <button onClick={() => {document.execCommand('insertUnorderedList', false); editorRef.current.focus()}} className="p-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded"><Icons.List className="w-4 h-4"/></button>
+                <div className="flex flex-col h-full border border-gray-200 rounded-lg overflow-hidden bg-white">
+                    <div className="flex items-center gap-1 p-2 bg-gray-50 border-b border-gray-200">
+                        <button onClick={() => {document.execCommand('bold', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.Bold className="w-4 h-4"/></button>
+                        <button onClick={() => {document.execCommand('italic', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.Italic className="w-4 h-4"/></button>
+                        <button onClick={() => {document.execCommand('insertUnorderedList', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.List className="w-4 h-4"/></button>
                     </div>
                     <div ref={editorRef} className="rich-editor flex-1 p-4 overflow-y-auto" contentEditable onInput={(e) => onChange(e.target.innerHTML)} dangerouslySetInnerHTML={{ __html: value }} />
                 </div>
             );
         };
 
-        // --- MOTEUR IA AVEC VARIABLES (Gemini Integration) ---
-        const generateSectionContent = async (promptText, sources, context, apiKey, existingContent = "") => {
-            if (!apiKey) return "<p style='color:red'>[ERREUR] Clé API Gemini manquante. Veuillez la configurer dans l'Admin.</p>";
+        // --- MOTEUR IA AVEC VARIABLES ---
+        const generateSectionContent = async (promptText, sources, context, existingContent = "") => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // 1. Remplacement des variables
+                    let finalPrompt = promptText
+                        .replace(/{{nom}}/g, context.nom || "[NOM]")
+                        .replace(/{{fps}}/g, context.fps || "[FPS]")
+                        .replace(/{{date_naissance}}/g, context.dateNaissance || "[DATE]");
 
-            // 1. Remplacement des variables
-            let finalPrompt = promptText
-                .replace(/{{nom}}/g, context.nom || "[NOM]")
-                .replace(/{{fps}}/g, context.fps || "[FPS]")
-                .replace(/{{date_naissance}}/g, context.dateNaissance || "[DATE]");
+                    const formatCitation = (s) => `(${s.docType || 'Doc'} de ${s.author || 'Inconnu'} datée du ${s.date || 'N/D'})`;
 
-            const formatCitation = (s) => `(${s.docType || 'Doc'} de ${s.author || 'Inconnu'} datée du ${s.date || 'N/D'})`;
+                    // 2. Simulation de l'IA (On injecte les variables dans la réponse pour montrer que ça marche)
+                    let response = existingContent.length > 0 ? "<br/><p><strong>[COMPLÉMENT IA] :</strong> " : "<p>";
 
-            const contextText = `
-                Contexte Dossier:
-                Nom: ${context.nom}
-                FPS: ${context.fps}
+                    response += `<em>(Prompt traité : "${finalPrompt}")</em><br/><br/>`;
+                    response += `Analyse concernant <strong>${context.nom} (${context.fps})</strong> : `;
 
-                Sources Disponibles:
-                ${sources.map(s => `- ${s.title}: ${s.content.substring(0, 500)}...`).join('\n')}
-            `;
-
-            const systemInstruction = "Tu es un assistant de rédaction pour les services correctionnels. Tu dois être précis, factuel et utiliser les sources fournies. Analyse les risques et les progrès.";
-
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Contexte:\n${contextText}\n\nTâche:\n${finalPrompt}` }] }],
-                        systemInstruction: { parts: [{ text: systemInstruction }] },
-                        generationConfig: { responseMimeType: "text/plain", temperature: 0.7 }
-                    })
-                });
-                const result = await res.json();
-                let aiText = "Erreur de génération.";
-                if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts[0]) {
-                    aiText = result.candidates[0].content.parts[0].text;
-                }
-
-                // Formattage basique HTML
-                aiText = aiText.replace(/\n/g, "<br/>").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-
-                return aiText;
-            } catch (e) {
-                return `<p style='color:red'>[ERREUR API] ${e.message}</p>`;
-            }
+                    if (sources.length === 0) {
+                        response += "Aucune source spécifique sélectionnée. Analyse basée sur le contexte général.";
+                    } else {
+                        response += `Synthèse basée sur ${sources.length} document(s). `;
+                        sources.forEach(s => response += `L'élément <em>${s.title}</em> indique une observation pertinente ${formatCitation(s)}. `);
+                    }
+                    response += "</p>";
+                    resolve(response);
+                }, 1200);
+            });
         };
 
         // --- PANNEAU CONFIG ADMIN (HIERARCHIQUE) ---
-        const AdminConfigPanel = ({ onClose, reportStructures, onUpdateStructures, apiKey, onUpdateApiKey }) => {
+        const AdminConfigPanel = ({ onClose, reportStructures, onUpdateStructures }) => {
             const [structures, setStructures] = useState(reportStructures);
             const [activeTab, setActiveTab] = useState(structures[0].id);
-            const [localApiKey, setLocalApiKey] = useState(apiKey || "");
 
-            const handleSave = () => {
-                onUpdateStructures(structures);
-                onUpdateApiKey(localApiKey);
-                onClose();
-            };
+            const handleSave = () => { onUpdateStructures(structures); onClose(); };
 
             const updatePrompt = (structureId, sectionIndex, field, value) => {
                 const newStructures = structures.map(s => {
@@ -270,42 +179,36 @@
 
             return (
                 <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
-                    <div className="glass rounded-xl shadow-2xl w-5/6 h-5/6 flex flex-col text-slate-100">
-                        <div className="bg-slate-900/80 p-4 flex justify-between items-center rounded-t-xl border-b border-slate-700">
-                            <h2 className="font-bold text-lg flex items-center gap-2 text-cyan-400"><Icons.Settings className="w-5 h-5"/> Admin : Configuration MATRIX</h2>
-                            <button onClick={onClose}><Icons.X className="w-6 h-6 hover:text-rose-500"/></button>
+                    <div className="bg-white rounded-xl shadow-2xl w-5/6 h-5/6 flex flex-col">
+                        <div className="bg-slate-800 text-white p-4 flex justify-between items-center rounded-t-xl">
+                            <h2 className="font-bold text-lg flex items-center gap-2"><Icons.Settings className="w-5 h-5"/> Admin : Configuration des Rapports</h2>
+                            <button onClick={onClose}><Icons.X className="w-6 h-6"/></button>
                         </div>
 
-                        {/* API KEY CONFIG */}
-                        <div className="p-4 bg-slate-900/50 border-b border-slate-700 flex items-center gap-4">
-                            <label className="text-xs font-mono text-cyan-600 uppercase">Clé API Gemini :</label>
-                            <input type="password" value={localApiKey} onChange={e => setLocalApiKey(e.target.value)} className="bg-slate-800 border border-slate-600 rounded px-2 py-1 text-xs w-64 text-white font-mono focus:border-cyan-500 outline-none" placeholder="AIza..." />
-                        </div>
-
-                        <div className="flex border-b border-slate-700 bg-slate-900/50 px-4 pt-2 gap-2">
+                        <div className="flex border-b bg-gray-100 px-4 pt-2 gap-2">
                             {structures.map(s => (
-                                <button key={s.id} onClick={() => setActiveTab(s.id)} className={`px-4 py-2 rounded-t-lg text-sm font-bold font-mono ${activeTab === s.id ? 'bg-slate-800 text-cyan-400 border-t border-x border-slate-700' : 'text-slate-500 hover:text-slate-300'}`}>
+                                <button key={s.id} onClick={() => setActiveTab(s.id)} className={`px-4 py-2 rounded-t-lg text-sm font-bold ${activeTab === s.id ? 'bg-white text-blue-600 border-t border-x' : 'text-gray-500 hover:bg-gray-200'}`}>
                                     {s.label}
                                 </button>
                             ))}
                         </div>
 
-                        <div className="flex-1 overflow-y-auto p-6 bg-slate-900/80 flex gap-6">
+                        <div className="flex-1 overflow-y-auto p-6 bg-white flex gap-6">
                             <div className="flex-1 space-y-6">
                                 {currentStructure.sections.map((section, idx) => (
-                                    <div key={idx} className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 shadow-sm">
-                                        <div className="font-bold text-slate-300 mb-3 border-b border-slate-700 pb-2">{section.title}</div>
+                                    <div key={idx} className="bg-gray-50 border rounded-lg p-4 shadow-sm">
+                                        <div className="font-bold text-slate-800 mb-3 border-b pb-2">{section.title}</div>
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label className="block text-[10px] font-bold text-purple-400 mb-1 uppercase font-mono">Prompt de Génération</label>
-                                                <textarea className="w-full h-24 text-xs font-mono bg-slate-900 border border-slate-700 rounded p-2 focus:border-purple-500 outline-none text-slate-300"
+                                                <label className="block text-[10px] font-bold text-purple-600 mb-1 uppercase">Prompt de Génération</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-purple-200 outline-none"
                                                     value={section.genPrompt || ""}
                                                     onChange={(e) => updatePrompt(currentStructure.id, idx, 'genPrompt', e.target.value)}
                                                     placeholder="Instructions pour générer le texte..." />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-bold text-emerald-400 mb-1 uppercase font-mono">Prompt de Vérification</label>
-                                                <textarea className="w-full h-24 text-xs font-mono bg-slate-900 border border-slate-700 rounded p-2 focus:border-emerald-500 outline-none text-slate-300"
+                                                <label className="block text-[10px] font-bold text-green-600 mb-1 uppercase">Prompt de Vérification</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-green-200 outline-none"
                                                     value={section.verifPrompt || ""}
                                                     onChange={(e) => updatePrompt(currentStructure.id, idx, 'verifPrompt', e.target.value)}
                                                     placeholder="Instructions pour vérifier le contenu..." />
@@ -316,19 +219,19 @@
                             </div>
 
                             {/* Aide-mémoire Variables */}
-                            <div className="w-64 shrink-0 bg-slate-800/80 p-4 rounded h-fit border border-slate-700 sticky top-0">
-                                <h4 className="font-bold text-cyan-400 mb-2 text-sm font-mono">Variables Disponibles</h4>
-                                <p className="text-xs text-slate-400 mb-2">Balises d'injection contextuelle.</p>
-                                <ul className="text-xs font-mono space-y-1 text-slate-300">
-                                    <li className="bg-slate-900 p-1 rounded border border-slate-700">{`{{nom}}`}</li>
-                                    <li className="bg-slate-900 p-1 rounded border border-slate-700">{`{{fps}}`}</li>
-                                    <li className="bg-slate-900 p-1 rounded border border-slate-700">{`{{date_naissance}}`}</li>
+                            <div className="w-64 shrink-0 bg-blue-50 p-4 rounded h-fit border border-blue-100 sticky top-0">
+                                <h4 className="font-bold text-blue-800 mb-2 text-sm">Variables Disponibles</h4>
+                                <p className="text-xs text-blue-600 mb-2">Utilisez ces balises dans vos prompts.</p>
+                                <ul className="text-xs font-mono space-y-1 text-slate-700">
+                                    <li className="bg-white p-1 rounded border">{`{{nom}}`}</li>
+                                    <li className="bg-white p-1 rounded border">{`{{fps}}`}</li>
+                                    <li className="bg-white p-1 rounded border">{`{{date_naissance}}`}</li>
                                 </ul>
                             </div>
                         </div>
-                        <div className="p-4 border-t border-slate-700 bg-slate-900 flex justify-end gap-3 rounded-b-xl">
-                            <button onClick={onClose} className="px-4 py-2 text-slate-400 hover:text-white">Annuler</button>
-                            <button onClick={handleSave} className="px-6 py-2 bg-cyan-700 hover:bg-cyan-600 text-white font-bold rounded shadow flex items-center gap-2"><Icons.Save className="w-4 h-4"/> Enregistrer Tout</button>
+                        <div className="p-4 border-t bg-white flex justify-end gap-3 rounded-b-xl">
+                            <button onClick={onClose} className="px-4 py-2 text-gray-600">Annuler</button>
+                            <button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 shadow flex items-center gap-2"><Icons.Save className="w-4 h-4"/> Enregistrer Tout</button>
                         </div>
                     </div>
                 </div>
@@ -338,15 +241,15 @@
         // --- MODAL SELECTION RAPPORT ---
         const ReportSelectModal = ({ onClose, onSelect, structures }) => (
             <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
-                <div className="glass rounded-xl shadow-2xl w-96 p-6 flex flex-col text-white">
+                <div className="bg-white rounded-xl shadow-2xl w-96 p-6 flex flex-col">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="font-bold text-lg text-cyan-400">Choisir un Modèle</h2>
-                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-slate-400 hover:text-white"/></button>
+                        <h2 className="font-bold text-lg text-slate-800">Choisir un Modèle</h2>
+                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
                     </div>
                     <div className="space-y-2 flex-1 overflow-y-auto max-h-96">
                         {structures.map(r => (
-                            <button key={r.id} onClick={() => onSelect(r)} className="w-full text-left p-3 rounded border border-slate-700 hover:bg-slate-800 hover:border-cyan-500 transition-colors group">
-                                <div className="font-bold text-sm text-slate-200 group-hover:text-cyan-400 font-mono">{r.label}</div>
+                            <button key={r.id} onClick={() => onSelect(r)} className="w-full text-left p-3 rounded border hover:bg-blue-50 hover:border-blue-300 transition-colors group">
+                                <div className="font-bold text-sm text-slate-700 group-hover:text-blue-700">{r.label}</div>
                                 <div className="text-xs text-slate-500">{r.sections.length} sections</div>
                             </button>
                         ))}
@@ -358,14 +261,14 @@
         // --- RESULTAT VERIFICATION ---
         const VerificationResultModal = ({ result, onClose }) => (
             <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
-                <div className="glass rounded-xl shadow-2xl w-1/2 p-6 flex flex-col animate-in slide-in-from-bottom duration-300 text-white">
-                    <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
-                        <h2 className="font-bold text-lg text-emerald-400 flex items-center gap-2"><Icons.CheckCircle className="w-5 h-5"/> Résultat Vérification</h2>
-                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-slate-400 hover:text-white"/></button>
+                <div className="bg-white rounded-xl shadow-2xl w-1/2 p-6 flex flex-col animate-in slide-in-from-bottom duration-300">
+                    <div className="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 className="font-bold text-lg text-green-700 flex items-center gap-2"><Icons.CheckCircle className="w-5 h-5"/> Résultat Vérification</h2>
+                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
                     </div>
-                    <div className="flex-1 overflow-y-auto max-h-96 text-sm text-slate-300 leading-relaxed" dangerouslySetInnerHTML={{ __html: result }} />
-                    <div className="mt-4 pt-2 border-t border-slate-700 flex justify-end">
-                        <button onClick={onClose} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-slate-200 font-medium">Fermer</button>
+                    <div className="flex-1 overflow-y-auto max-h-96 text-sm text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: result }} />
+                    <div className="mt-4 pt-2 border-t flex justify-end">
+                        <button onClick={onClose} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-medium">Fermer</button>
                     </div>
                 </div>
             </div>
@@ -374,35 +277,35 @@
         // --- PANNEAU INFO DOSSIER ---
         const CaseInfoPanel = ({ context, onUpdateContext, isOpen, toggleOpen }) => {
             if (!isOpen) return (
-                <button onClick={toggleOpen} className="w-full bg-slate-900/50 p-4 border-b border-slate-700 flex items-center gap-3 hover:bg-slate-800 transition">
-                    <div className="w-10 h-10 bg-cyan-700 text-white rounded-full flex items-center justify-center font-bold">{context.nom ? context.nom.substring(0,2).toUpperCase() : '??'}</div>
+                <button onClick={toggleOpen} className="w-full bg-white p-4 border-b border-gray-200 flex items-center gap-3 hover:bg-gray-50 transition">
+                    <div className="w-10 h-10 bg-[#0078D4] text-white rounded-full flex items-center justify-center font-bold">{context.nom ? context.nom.substring(0,2).toUpperCase() : '??'}</div>
                     <div className="text-left">
-                        <div className="font-bold text-slate-200 text-sm">{context.nom || 'Nom Inconnu'}</div>
-                        <div className="text-xs text-slate-500 font-mono">FPS: {context.fps || '---'}</div>
+                        <div className="font-bold text-gray-800 text-sm">{context.nom || 'Nom Inconnu'}</div>
+                        <div className="text-xs text-gray-500">FPS: {context.fps || '---'}</div>
                     </div>
-                    <Icons.UserCog className="w-4 h-4 ml-auto text-slate-600"/>
+                    <Icons.UserCog className="w-4 h-4 ml-auto text-gray-400"/>
                 </button>
             );
 
             return (
-                <div className="bg-slate-900/50 border-b border-slate-700 p-4 shadow-inner">
+                <div className="bg-white border-b border-gray-200 p-4 shadow-inner">
                     <div className="flex justify-between items-center mb-3">
-                        <h3 className="text-xs font-bold text-slate-500 uppercase font-mono">Informations Dossier</h3>
-                        <button onClick={toggleOpen}><Icons.X className="w-4 h-4 text-slate-500 hover:text-white"/></button>
+                        <h3 className="text-xs font-bold text-gray-500 uppercase">Informations Dossier (Variables)</h3>
+                        <button onClick={toggleOpen}><Icons.X className="w-4 h-4 text-gray-400"/></button>
                     </div>
                     <div className="space-y-3">
                         <div>
-                            <label className="block text-[10px] font-bold text-slate-500 mb-1">NOM COMPLET</label>
-                            <input type="text" className="w-full text-sm border border-slate-700 bg-slate-800 text-white p-1 rounded focus:border-cyan-500 outline-none" value={context.nom} onChange={(e) => onUpdateContext('nom', e.target.value)} />
+                            <label className="block text-[10px] font-bold text-gray-500 mb-1">NOM COMPLET</label>
+                            <input type="text" className="w-full text-sm border p-1 rounded" value={context.nom} onChange={(e) => onUpdateContext('nom', e.target.value)} />
                         </div>
                         <div className="flex gap-2">
                             <div className="flex-1">
-                                <label className="block text-[10px] font-bold text-slate-500 mb-1">FPS</label>
-                                <input type="text" className="w-full text-sm border border-slate-700 bg-slate-800 text-white p-1 rounded focus:border-cyan-500 outline-none" value={context.fps} onChange={(e) => onUpdateContext('fps', e.target.value)} />
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">FPS</label>
+                                <input type="text" className="w-full text-sm border p-1 rounded" value={context.fps} onChange={(e) => onUpdateContext('fps', e.target.value)} />
                             </div>
                             <div className="flex-1">
-                                <label className="block text-[10px] font-bold text-slate-500 mb-1">DATE NAISSANCE</label>
-                                <input type="date" className="w-full text-sm border border-slate-700 bg-slate-800 text-white p-1 rounded focus:border-cyan-500 outline-none" value={context.dateNaissance} onChange={(e) => onUpdateContext('dateNaissance', e.target.value)} />
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">DATE NAISSANCE</label>
+                                <input type="date" className="w-full text-sm border p-1 rounded" value={context.dateNaissance} onChange={(e) => onUpdateContext('dateNaissance', e.target.value)} />
                             </div>
                         </div>
                     </div>
@@ -420,7 +323,6 @@
             const [sources, setSources] = useState([]);
             const [activeSectionId, setActiveSectionId] = useState('');
             const [reportStructures, setReportStructures] = useState(DEFAULT_REPORT_STRUCTURES);
-            const [apiKey, setApiKey] = useState("");
 
             // UI States
             const [isAdminMode, setIsAdminMode] = useState(false);
@@ -431,11 +333,6 @@
             const [isGenerating, setIsGenerating] = useState(false);
             const [previewSourceId, setPreviewSourceId] = useState(null);
             const [isDragOver, setIsDragOver] = useState(false);
-            const [isListening, setIsListening] = useState(false); // Voice
-
-            // PUCK Metrics
-            const [coords, setCoords] = useState({ sx: 5, sy: 5, z: 9.5 });
-            const [metabolicEnergy, setMetabolicEnergy] = useState(100);
 
             // Init & Save
             useEffect(() => {
@@ -446,7 +343,6 @@
                     setSources(parsed.sources || []);
                     setReportStructures(parsed.structures || DEFAULT_REPORT_STRUCTURES);
                     setCaseContext(parsed.context || { nom: "DOE, John", fps: "123456A" });
-                    setApiKey(parsed.apiKey || "");
                     if(parsed.sections && parsed.sections.length > 0) setActiveSectionId(parsed.sections[0].id);
                 } else {
                     const initSections = [{ id: 's1', title: "1. Identification", type: SectionType.FIXED, content: "<p>Section d'intro...</p>", selectedSourceIds: [] }];
@@ -456,42 +352,12 @@
             }, []);
 
             useEffect(() => {
-                localStorage.setItem('assistant_data_v10', JSON.stringify({ sections, sources, structures: reportStructures, context: caseContext, apiKey }));
-            }, [sections, sources, reportStructures, caseContext, apiKey]);
+                localStorage.setItem('assistant_data_v10', JSON.stringify({ sections, sources, structures: reportStructures, context: caseContext }));
+            }, [sections, sources, reportStructures, caseContext]);
 
             const activeSection = sections.find(s => s.id === activeSectionId);
             const activeSourceData = previewSourceId ? sources.find(s => s.id === previewSourceId) : null;
             const fileInputRef = useRef(null);
-            const recognitionRef = useRef(null);
-
-            // VOICE LOGIC
-            useEffect(() => {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (SpeechRecognition && !recognitionRef.current) {
-                    const rec = new SpeechRecognition();
-                    rec.continuous = false;
-                    rec.interimResults = false;
-                    rec.lang = 'fr-FR';
-                    rec.onstart = () => setIsListening(true);
-                    rec.onend = () => setIsListening(false);
-                    rec.onresult = (e) => {
-                        const transcript = e.results[0][0].transcript;
-                        if(activeSection) {
-                            const newContent = (activeSection.content || "") + ` ${transcript}`;
-                            setSections(prev => prev.map(s => s.id === activeSectionId ? { ...s, content: newContent } : s));
-                        }
-                    };
-                    recognitionRef.current = rec;
-                }
-            }, [activeSectionId, activeSection]);
-
-            const toggleMic = () => {
-                if (isListening) {
-                    if (recognitionRef.current) recognitionRef.current.stop();
-                } else {
-                    if (recognitionRef.current) recognitionRef.current.start();
-                }
-            };
 
             // Handlers
             const handleUpdateContext = (field, val) => setCaseContext(prev => ({...prev, [field]: val}));
@@ -499,35 +365,39 @@
             const handleCopilotGenerate = async (action) => {
                 if (!activeSection) return;
 
+                // Retrieve the configured prompt for the current section
+                // We stored 'structureId' and 'sectionIndex' in the section object when creating it to link back to config
                 let promptToUse = "";
+
                 if (activeSection.structureId && activeSection.sectionIndex !== undefined) {
                     const struct = reportStructures.find(s => s.id === activeSection.structureId);
                     if (struct && struct.sections[activeSection.sectionIndex]) {
-                        if (action === 'verify') promptToUse = struct.sections[activeSection.sectionIndex].verifPrompt || "Vérifie ce contenu.";
-                        else promptToUse = struct.sections[activeSection.sectionIndex].genPrompt || "Génère ce contenu.";
+                        if (action === 'verify') {
+                            promptToUse = struct.sections[activeSection.sectionIndex].verifPrompt || "Vérifie ce contenu.";
+                        } else {
+                            promptToUse = struct.sections[activeSection.sectionIndex].genPrompt || "Génère ce contenu.";
+                        }
                     }
                 } else {
                     promptToUse = "Analyse standard...";
                 }
 
                 setIsGenerating(true);
-                // Animation PUCK
-                setCoords({ sx: action==='verify'?8.5:7.5, sy: 7.5, z: 2 });
-
                 const relevantSources = sources.filter(s => activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(s.id));
 
                 if (action === 'verify') {
+                    // Verification logic: send content + verification prompt
                     const existingText = activeSection.content || "";
-                    const result = await generateSectionContent(promptToUse, relevantSources, caseContext, apiKey, existingText);
+                    // We simulate verification by appending result
+                    const result = await generateSectionContent(promptToUse, relevantSources, caseContext, existingText);
                     setVerificationResult(result);
                 } else {
-                    const generated = await generateSectionContent(promptToUse, relevantSources, caseContext, apiKey, action === 'append' ? (activeSection.content || "") : "");
+                    // Generation logic
+                    const generated = await generateSectionContent(promptToUse, relevantSources, caseContext, action === 'append' ? (activeSection.content || "") : "");
                     const finalContent = action === 'append' ? (activeSection.content || "") + generated : generated;
                     setSections(prev => prev.map(s => s.id === activeSectionId ? { ...s, content: finalContent, status: 'review_needed' } : s));
                 }
 
-                setMetabolicEnergy(prev => Math.max(0, prev - 5));
-                setCoords({ sx: 5, sy: 5, z: 9.5 }); // Reset
                 setIsGenerating(false);
             };
 
@@ -544,11 +414,7 @@
 
             const handleExportPDF = () => {
                 const element = document.createElement('div');
-                // Simplification for PDF export style (might need specific CSS for white background PDF)
-                element.innerHTML = `
-                    <style>body { color: black; background: white; font-family: sans-serif; }</style>
-                    <h1>Dossier: ${caseContext.nom} (${caseContext.fps})</h1><hr/>` +
-                    sections.map(s => `<h2>${s.title}</h2><div>${s.content}</div>`).join('<br/>');
+                element.innerHTML = `<h1>Dossier: ${caseContext.nom} (${caseContext.fps})</h1><hr/>` + sections.map(s => `<h2>${s.title}</h2><div>${s.content}</div>`).join('<br/>');
                 html2pdf().from(element).save(`Rapport_${caseContext.fps}.pdf`);
             };
 
@@ -559,8 +425,8 @@
                     title: s.title,
                     type: SectionType.DYNAMIC,
                     content: s.content,
-                    structureId: reportTemplate.id,
-                    sectionIndex: i,
+                    structureId: reportTemplate.id, // Link to config
+                    sectionIndex: i, // Link to config
                     selectedSourceIds: []
                 }));
                 setSections(newSections);
@@ -581,9 +447,9 @@
             };
 
             return (
-                <div className="flex h-screen overflow-hidden font-sans text-sm bg-[#020617] text-slate-300">
+                <div className="flex h-screen overflow-hidden font-sans text-sm">
                     {/* MODAL CONFIG */}
-                    {showConfig && <AdminConfigPanel onClose={() => setShowConfig(false)} reportStructures={reportStructures} onUpdateStructures={setReportStructures} apiKey={apiKey} onUpdateApiKey={setApiKey} />}
+                    {showConfig && <AdminConfigPanel onClose={() => setShowConfig(false)} reportStructures={reportStructures} onUpdateStructures={setReportStructures} />}
 
                     {/* MODAL REPORT SELECTION */}
                     {showReportModal && <ReportSelectModal onClose={() => setShowReportModal(false)} structures={reportStructures} onSelect={handleLoadReport} />}
@@ -592,14 +458,10 @@
                     {verificationResult && <VerificationResultModal result={verificationResult} onClose={() => setVerificationResult(null)} />}
 
                     {/* SIDEBAR */}
-                    <div className={`${isSidebarOpen ? 'w-80' : 'w-16'} bg-slate-950 border-r border-slate-800 flex flex-col transition-all duration-300 shadow-2xl z-20`}>
-                        <div className="h-16 flex items-center justify-between px-4 shrink-0 bg-slate-900/50 backdrop-blur">
-                            {isSidebarOpen && (
-                                <div className="flex items-center gap-2 text-cyan-400 font-bold tracking-widest uppercase text-xs">
-                                    <Icons.Bot className="w-5 h-5"/> <span>G-CAS v114</span>
-                                </div>
-                            )}
-                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-slate-500 hover:text-white p-1 transition-transform hover:scale-110">{isSidebarOpen ? <Icons.ChevronLeft className="w-5 h-5"/> : <Icons.ChevronRight className="w-5 h-5"/>}</button>
+                    <div className={`${isSidebarOpen ? 'w-72' : 'w-12'} bg-white border-r border-gray-200 flex flex-col transition-all duration-300 shadow-lg z-20`}>
+                        <div className="h-14 bg-[#002050] flex items-center justify-between px-3 shrink-0">
+                            {isSidebarOpen && <div className="flex items-center gap-2 text-white font-semibold tracking-wide"><Icons.ShieldAlert className="w-5 h-5"/> <span>G-CAS v10</span></div>}
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-white/80 hover:text-white p-1">{isSidebarOpen ? <Icons.ChevronLeft className="w-5 h-5"/> : <Icons.ChevronRight className="w-5 h-5"/>}</button>
                         </div>
 
                         {isSidebarOpen && (
@@ -608,31 +470,29 @@
                                 <CaseInfoPanel context={caseContext} onUpdateContext={handleUpdateContext} isOpen={isInfoOpen} toggleOpen={() => setIsInfoOpen(!isInfoOpen)} />
 
                                 {/* LISTE SECTIONS */}
-                                <div className="flex-1 overflow-y-auto p-2 scrollbar-hide">
-                                    <div className="text-[10px] font-bold text-slate-500 uppercase mb-3 px-3 mt-4 flex justify-between items-center tracking-widest font-mono">
+                                <div className="flex-1 overflow-y-auto p-2">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase mb-2 px-2 mt-2 flex justify-between items-center">
                                         Plan du rapport
-                                        <button onClick={() => setShowReportModal(true)} title="Changer de modèle" className="text-cyan-600 hover:text-cyan-400"><Icons.FilePlus className="w-4 h-4"/></button>
+                                        <button onClick={() => setShowReportModal(true)} title="Changer de modèle" className="text-blue-500 hover:text-blue-700"><Icons.FilePlus className="w-3 h-3"/></button>
                                     </div>
-                                    <div className="space-y-1">
-                                        {sections.map(s => (
-                                            <div key={s.id} onClick={() => { setActiveSectionId(s.id); setPreviewSourceId(null); }}
-                                                 className={`px-4 py-3 rounded-lg cursor-pointer flex items-center justify-between transition-all border ${activeSectionId === s.id ? 'bg-cyan-950/30 border-cyan-500/50 text-cyan-200 shadow-[0_0_15px_rgba(6,182,212,0.15)]' : 'border-transparent text-slate-400 hover:bg-slate-900 hover:text-slate-200'}`}>
-                                                <span className="truncate text-xs font-medium">{s.title}</span>
-                                                {s.status === 'review_needed' && <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>}
-                                            </div>
-                                        ))}
-                                    </div>
+                                    {sections.map(s => (
+                                        <div key={s.id} onClick={() => { setActiveSectionId(s.id); setPreviewSourceId(null); }}
+                                             className={`px-3 py-2 rounded mb-1 cursor-pointer flex items-center justify-between ${activeSectionId === s.id ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-100 text-gray-700'}`}>
+                                            <span className="truncate">{s.title}</span>
+                                            {s.status === 'review_needed' && <span className="w-2 h-2 bg-orange-400 rounded-full"></span>}
+                                        </div>
+                                    ))}
                                     <button onClick={() => {const nid=`s_${Date.now()}`; setSections([...sections, {id:nid, title:"Nouvelle Section", type:SectionType.DYNAMIC, content:"", selectedSourceIds:[]}]); setActiveSectionId(nid);}}
-                                        className="w-full mt-6 py-3 border border-dashed border-slate-700 rounded-lg text-slate-500 hover:border-cyan-500 hover:text-cyan-400 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 transition-colors">
+                                        className="w-full mt-2 py-2 border border-dashed border-gray-300 rounded text-gray-500 hover:border-blue-500 hover:text-blue-600 text-xs font-bold flex justify-center items-center gap-2">
                                         <Icons.Plus className="w-3 h-3"/> Ajouter Section
                                     </button>
                                 </div>
 
                                 {/* ADMIN FOOTER */}
-                                <div className="p-4 border-t border-slate-800 bg-slate-900/30">
+                                <div className="p-3 border-t bg-gray-50">
                                     <button onClick={handleOpenAdmin}
-                                        className={`w-full py-2 rounded flex items-center justify-center gap-2 text-xs font-bold font-mono transition-all uppercase tracking-wider ${isAdminMode ? 'bg-cyan-900/50 text-cyan-400 border border-cyan-700' : 'text-slate-600 hover:text-slate-400'}`}>
-                                        {isAdminMode ? <React.Fragment><Icons.Settings className="w-3 h-3"/> Config Admin</React.Fragment> : <React.Fragment><Icons.Lock className="w-3 h-3"/> Admin</React.Fragment>}
+                                        className={`w-full py-2 rounded flex items-center justify-center gap-2 text-xs font-bold transition-colors ${isAdminMode ? 'bg-slate-800 text-white' : 'text-gray-400 hover:bg-gray-200'}`}>
+                                        {isAdminMode ? <React.Fragment><Icons.Settings className="w-4 h-4"/> Config Admin</React.Fragment> : <React.Fragment><Icons.Lock className="w-3 h-3"/> Admin</React.Fragment>}
                                     </button>
                                 </div>
                             </React.Fragment>
@@ -640,84 +500,54 @@
                     </div>
 
                     {/* MAIN AREA */}
-                    <div className="flex-1 flex flex-col min-w-0 bg-[#020617] relative">
-                        {/* Background Effect */}
-                        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[150px] rounded-full bg-cyan-900" />
-                        </div>
-
+                    <div className="flex-1 flex flex-col min-w-0 bg-white">
                         {/* TOOLBAR */}
-                        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-slate-950/50 backdrop-blur z-10">
-                            <input type="text" value={activeSection ? activeSection.title : ''} onChange={(e) => setSections(sections.map(s => s.id === activeSectionId ? { ...s, title: e.target.value } : s))} className="font-bold text-xl text-slate-200 bg-transparent border-none outline-none focus:ring-0 w-full max-w-md font-sans"/>
-                            <div className="flex gap-3">
-                                <button onClick={handleExportPDF} className="flex items-center gap-2 px-4 py-2 border border-slate-700 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-colors text-xs font-bold uppercase tracking-wider"><Icons.FilePdf className="w-4 h-4 text-rose-500"/> Export PDF</button>
-                                <button className="flex items-center gap-2 px-5 py-2 bg-cyan-700 hover:bg-cyan-600 text-white rounded-lg shadow-lg shadow-cyan-900/20 text-xs font-bold uppercase tracking-wider transition-all active:scale-95"><Icons.Save className="w-4 h-4"/> Sauvegardé</button>
+                        <div className="h-14 border-b border-gray-200 flex items-center justify-between px-6 bg-white shrink-0">
+                            <input type="text" value={activeSection ? activeSection.title : ''} onChange={(e) => setSections(sections.map(s => s.id === activeSectionId ? { ...s, title: e.target.value } : s))} className="font-bold text-lg text-gray-800 bg-transparent border-none outline-none focus:ring-0 w-full max-w-md"/>
+                            <div className="flex gap-2">
+                                <button onClick={handleExportPDF} className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"><Icons.FilePdf className="w-4 h-4 text-red-600"/> Export PDF</button>
+                                <button className="flex items-center gap-2 px-4 py-1.5 bg-[#0078D4] text-white rounded hover:bg-[#106EBE] shadow-sm"><Icons.Save className="w-4 h-4"/> Sauvegardé</button>
                             </div>
                         </div>
 
                         {/* WORKSPACE */}
-                        <div className="flex-1 flex overflow-hidden z-10">
-                            <div className={`flex-1 flex flex-col p-8 transition-all duration-300 ${previewSourceId ? 'w-1/2' : 'w-full'} overflow-hidden gap-6`}>
+                        <div className="flex-1 flex overflow-hidden">
+                            <div className={`flex-1 flex flex-col p-6 transition-all duration-300 ${previewSourceId ? 'w-1/2' : 'w-full'} overflow-hidden`}>
                                 {activeSection && (
                                     <React.Fragment>
-                                        {/* PUCK ASSISTANT PANEL */}
-                                        {activeSection.type === SectionType.DYNAMIC && (
-                                            <div className="glass p-6 rounded-2xl flex gap-6 items-center animate-fade-in border-t border-cyan-900/30">
-                                                <div className="w-24 h-24 shrink-0">
-                                                    <FaceAvatar
-                                                        sx={coords.sx} sy={coords.sy} z={coords.z}
-                                                        color={isGenerating ? "#a855f7" : "#22d3ee"}
-                                                        isThinking={isGenerating}
-                                                        isSpeaking={false}
-                                                        breathing={true}
-                                                        isListening={isListening}
-                                                        energy={metabolicEnergy}
-                                                    />
-                                                </div>
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between items-center mb-3">
-                                                        <div className="flex flex-col">
-                                                            <span className="text-xs font-black text-cyan-400 uppercase tracking-[0.2em]">Dr. Puck v114</span>
-                                                            <span className="text-[10px] text-slate-500 font-mono">Inférence Active</span>
-                                                        </div>
-                                                        <div className="flex gap-3">
-                                                            {isAdminMode && (
-                                                                <button onClick={handleOpenAdmin} title="Configurer les prompts" className="p-2 text-slate-500 hover:text-cyan-400 border border-slate-700 rounded-full hover:bg-slate-800 transition-colors">
-                                                                    <Icons.Settings className="w-4 h-4"/>
-                                                                </button>
-                                                            )}
-                                                            <button onClick={toggleMic} className={`p-2 rounded-full border transition-all ${isListening ? 'bg-rose-900/50 border-rose-500 text-rose-400 animate-pulse' : 'border-slate-700 text-slate-400 hover:text-white'}`} title="Dictée vocale">
-                                                                {isListening ? <Icons.Mic className="w-4 h-4"/> : <Icons.MicOff className="w-4 h-4"/>}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex gap-3">
-                                                        <button onClick={() => handleCopilotGenerate('verify')} disabled={isGenerating} className="flex-1 py-3 bg-emerald-900/20 border border-emerald-900/50 hover:bg-emerald-900/40 text-emerald-400 rounded-xl text-xs font-bold uppercase tracking-wider flex justify-center items-center gap-2 transition-all">
-                                                            <Icons.CheckCircle className="w-4 h-4"/> Vérifier Contenu
-                                                        </button>
-                                                        <button onClick={() => handleCopilotGenerate('replace')} disabled={isGenerating} className="flex-1 py-3 bg-purple-900/20 border border-purple-900/50 hover:bg-purple-900/40 text-purple-400 rounded-xl text-xs font-bold uppercase tracking-wider flex justify-center items-center gap-2 transition-all">
-                                                            <Icons.Bot className="w-4 h-4"/> Générer Rédaction
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
                                         <RichEditor value={activeSection.content} onChange={(val) => setSections(sections.map(s => s.id === activeSectionId ? { ...s, content: val, status: 'draft' } : s))} />
 
                                         {activeSection.type === SectionType.DYNAMIC && (
-                                            <div className="flex flex-wrap gap-2 pt-2">
-                                                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider self-center mr-2">Sources Actives:</span>
-                                                {sources.map(src => {
-                                                    const isSel = activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(src.id);
-                                                    return (
-                                                        <button key={src.id} onClick={() => setSections(sections.map(s=>s.id===activeSectionId?{...s, selectedSourceIds:isSel?s.selectedSourceIds.filter(i=>i!==src.id):[...(s.selectedSourceIds||[]), src.id]}:s))}
-                                                            className={`px-3 py-1 rounded-full text-[10px] border flex items-center gap-2 transition-all ${isSel ? 'bg-cyan-900/40 border-cyan-500/50 text-cyan-300' : 'bg-slate-900 border-slate-700 text-slate-500 hover:text-slate-300'}`}>
-                                                            {src.type === SourceType.PDF ? <Icons.FilePdf className="w-3 h-3"/> : <Icons.FileText className="w-3 h-3"/>} {src.title}
-                                                        </button>
-                                                    );
-                                                })}
+                                            <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                                <div className="flex justify-between items-center mb-3">
+                                                    <div className="flex gap-2 text-xs font-bold text-gray-500 uppercase"><Icons.Sparkles className="w-4 h-4 text-purple-600"/> Assistant IA</div>
+                                                    <div className="flex gap-2">
+                                                        {isAdminMode && (
+                                                            <button onClick={handleOpenAdmin} title="Configurer les prompts de cette section" className="p-1 text-gray-400 hover:text-blue-600 border rounded hover:bg-blue-50 mr-2">
+                                                                <Icons.Settings className="w-4 h-4"/>
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => handleCopilotGenerate('verify')} disabled={isGenerating} className="px-3 py-1 bg-white border border-green-200 text-green-700 rounded text-xs hover:bg-green-50 flex items-center gap-1 font-bold"><Icons.CheckCircle className="w-3 h-3"/> Vérifier</button>
+                                                        <button onClick={() => handleCopilotGenerate('replace')} disabled={isGenerating} className="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 flex items-center gap-1"><Icons.Bot className="w-3 h-3"/> Générer</button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Le panneau de sélection de modèle a été supprimé car les prompts sont désormais liés à la section */}
+                                                <div className="text-[10px] text-gray-400 mb-2 italic">
+                                                    Les prompts de génération et de vérification sont configurés spécifiquement pour cette section.
+                                                </div>
+
+                                                <div className="flex flex-wrap gap-2">
+                                                    {sources.map(src => {
+                                                        const isSel = activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(src.id);
+                                                        return (
+                                                            <button key={src.id} onClick={() => setSections(sections.map(s=>s.id===activeSectionId?{...s, selectedSourceIds:isSel?s.selectedSourceIds.filter(i=>i!==src.id):[...(s.selectedSourceIds||[]), src.id]}:s))}
+                                                                className={`px-2 py-1 rounded text-[10px] border flex items-center gap-1 ${isSel ? 'bg-blue-100 border-blue-300 text-blue-800' : 'bg-white text-gray-500'}`}>
+                                                                {src.type === SourceType.PDF ? <Icons.FilePdf className="w-3 h-3"/> : <Icons.FileText className="w-3 h-3"/>} {src.title}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
                                             </div>
                                         )}
                                     </React.Fragment>
@@ -726,21 +556,21 @@
 
                             {/* PREVIEW PANEL */}
                             {previewSourceId ? (
-                                <div className="w-1/2 border-l border-slate-800 bg-slate-900/80 flex flex-col animate-in slide-in-from-right duration-300 backdrop-blur-sm">
-                                    <div className="h-12 border-b border-slate-800 flex justify-between items-center px-4"><span className="font-bold text-xs uppercase text-slate-400 tracking-widest font-mono">Aperçu Source</span><button onClick={() => setPreviewSourceId(null)}><Icons.X className="w-4 h-4 text-slate-500 hover:text-white"/></button></div>
+                                <div className="w-1/2 border-l border-gray-200 bg-gray-50 flex flex-col animate-in slide-in-from-right duration-300">
+                                    <div className="h-10 bg-white border-b flex justify-between items-center px-4"><span className="font-bold text-xs uppercase text-gray-600">Aperçu Source</span><button onClick={() => setPreviewSourceId(null)}><Icons.X className="w-4 h-4"/></button></div>
                                     <div className="flex-1 p-4 overflow-hidden relative">
-                                        {activeSourceData && activeSourceData.type === SourceType.PDF ? <iframe src={activeSourceData.content} className="w-full h-full bg-white border border-slate-700 rounded-lg opacity-90"></iframe> : <div className="w-full h-full bg-slate-950 border border-slate-800 rounded-lg p-6 overflow-y-auto font-mono text-sm text-slate-400">{activeSourceData ? activeSourceData.content : ''}</div>}
+                                        {activeSourceData && activeSourceData.type === SourceType.PDF ? <iframe src={activeSourceData.content} className="w-full h-full bg-white border"></iframe> : <div className="w-full h-full bg-white border p-4 overflow-y-auto font-mono text-sm">{activeSourceData ? activeSourceData.content : ''}</div>}
                                     </div>
                                 </div>
                             ) : (
-                                <div className="w-72 border-l border-slate-800 bg-slate-950/50 flex flex-col shrink-0" onDragOver={e=>{e.preventDefault(); setIsDragOver(true)}} onDragLeave={()=>setIsDragOver(false)} onDrop={e=>{e.preventDefault(); setIsDragOver(false); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);}}>
-                                    <div className="p-4 border-b border-slate-800 flex justify-between items-center">
-                                        <h3 className="font-bold text-xs text-slate-400 uppercase tracking-widest font-mono">Sources Données</h3>
-                                        <button onClick={()=>fileInputRef.current.click()}><Icons.Upload className="w-4 h-4 text-cyan-600 hover:text-cyan-400"/></button>
+                                <div className="w-64 border-l bg-gray-50 flex flex-col shrink-0" onDragOver={e=>{e.preventDefault(); setIsDragOver(true)}} onDragLeave={()=>setIsDragOver(false)} onDrop={e=>{e.preventDefault(); setIsDragOver(false); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);}}>
+                                    <div className="p-4 bg-white border-b flex justify-between items-center">
+                                        <h3 className="font-bold text-sm text-gray-700">Sources</h3>
+                                        <button onClick={()=>fileInputRef.current.click()}><Icons.Upload className="w-4 h-4 text-blue-600"/></button>
                                         <input type="file" ref={fileInputRef} className="hidden" onChange={e=>e.target.files[0] && processFile(e.target.files[0])}/>
                                     </div>
-                                    <div className={`flex-1 p-3 space-y-2 overflow-y-auto scrollbar-hide ${isDragOver?'bg-cyan-900/20':''}`}>
-                                        {sources.map(s=>(<div key={s.id} onClick={()=>setPreviewSourceId(s.id)} className="bg-slate-900 p-3 border border-slate-800 rounded-lg cursor-pointer hover:border-cyan-700 hover:shadow-lg hover:shadow-cyan-900/20 transition-all text-xs truncate flex gap-3 text-slate-400 group"><Icons.FileText className="w-4 h-4 text-slate-600 group-hover:text-cyan-500"/> {s.title}</div>))}
+                                    <div className={`flex-1 p-2 space-y-2 overflow-y-auto ${isDragOver?'bg-blue-100':''}`}>
+                                        {sources.map(s=>(<div key={s.id} onClick={()=>setPreviewSourceId(s.id)} className="bg-white p-2 border rounded shadow-sm cursor-pointer hover:border-blue-400 text-xs truncate flex gap-2"><Icons.FileText className="w-4 h-4 text-gray-400"/> {s.title}</div>))}
                                     </div>
                                 </div>
                             )}
