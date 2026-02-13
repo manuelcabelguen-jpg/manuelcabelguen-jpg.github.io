@@ -116,16 +116,15 @@
 
         // --- COMPONENTS ---
         const FaceAvatar = ({ sx, sy, z, color, isThinking, isSpeaking, breathing, isListening, energy }) => {
-            const beat = 1 + (Math.sin(Date.now() / 200) * 0.025);
+            // Heartbeat Logic: Explicitly disabled when breathing is active to avoid conflict
+            const beat = breathing ? 1 : 1 + (Math.sin(Date.now() / 200) * 0.025);
             const opacityLevel = 0.3 + (energy / 150);
 
             return (
-                <div className={`relative w-80 h-80 mx-auto transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
-                     style={{ transform: breathing ? 'none' : `scale(${beat})` }}>
-
+                <div className="relative w-80 h-80 mx-auto">
                     {/* Coherence Visualizer Overlay */}
                     {breathing && (
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
                             <div className="w-64 h-64 border-2 border-emerald-500/50 rounded-full animate-coherence-guide" />
                             <div className="absolute text-emerald-300 font-black text-xl tracking-[0.3em] uppercase animate-pulse">
                                 Respiration
@@ -133,24 +132,29 @@
                         </div>
                     )}
 
-                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(34,211,238,0.2)]">
-                        <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20 color-transition" />
-                        <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} className="color-transition" />
-                        <g transform={`translate(${(sx-5)*2.8}, 0)`}>
-                            <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
-                            <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
-                            {!isThinking && <circle cx="35" cy="45" r={1} fill="white" opacity="0.5" />}
-                            {!isThinking && <circle cx="65" cy="45" r={1} fill="white" opacity="0.5" />}
-                        </g>
-                        <path
-                            d={`M 35 75 Q 50 ${75 + (isSpeaking ? 16 : (sx-5)*6)} 65 75`}
-                            stroke={color}
-                            strokeWidth="4"
-                            fill="none"
-                            strokeLinecap="round"
-                            className="transition-all duration-300 color-transition"
-                        />
-                    </svg>
+                    {/* Avatar Container with Conditional Animation */}
+                    <div className={`w-full h-full transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
+                         style={{ transform: breathing ? 'none' : `scale(${beat})` }}>
+
+                        <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                            <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20 color-transition" />
+                            <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} className="color-transition" />
+                            <g transform={`translate(${(sx-5)*2.8}, 0)`}>
+                                <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
+                                <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
+                                {!isThinking && <circle cx="35" cy="45" r={1} fill="white" opacity="0.5" />}
+                                {!isThinking && <circle cx="65" cy="45" r={1} fill="white" opacity="0.5" />}
+                            </g>
+                            <path
+                                d={`M 35 75 Q 50 ${75 + (isSpeaking ? 16 : (sx-5)*6)} 65 75`}
+                                stroke={color}
+                                strokeWidth="4"
+                                fill="none"
+                                strokeLinecap="round"
+                                className="transition-all duration-300 color-transition"
+                            />
+                        </svg>
+                    </div>
                 </div>
             );
         };
@@ -218,7 +222,6 @@
             const audioContextRef = useRef(null);
             const recognitionRef = useRef(null);
             const currentAudioRef = useRef(null); // Ref to current playing audio for barge-in
-            const micEnabled = useRef(false);
             const isProcessingRef = useRef(false);
             const silenceTimerRef = useRef(null);
             const speechAccumulator = useRef("");
@@ -272,7 +275,6 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
             };
 
             const speak = async (text) => {
-                // Barge-in Check: Stop previous audio if new speech requested (though this is sequential mostly)
                 if (currentAudioRef.current) {
                     currentAudioRef.current.pause();
                     currentAudioRef.current = null;
@@ -317,62 +319,69 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                 }
             };
 
-            useEffect(() => {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (SpeechRecognition && !recognitionRef.current) {
-                    const rec = new SpeechRecognition();
-                    rec.continuous = true;
-                    rec.interimResults = true;
-                    rec.lang = 'fr-FR';
-                    rec.onstart = () => setIsListening(true);
-                    rec.onend = () => {
-                        setIsListening(false);
-                        if (micEnabled.current && !isProcessingRef.current) {
-                            setTimeout(() => {
-                                if (micEnabled.current && !isProcessingRef.current) {
-                                    try { rec.start(); } catch(e) {}
-                                }
-                            }, 500);
-                        }
-                    };
-                    rec.onresult = (event) => {
-                        // BARGE-IN LOGIC
-                        if (isSpeaking) {
-                            stopSpeaking(); // Cut Puck off immediately
-                        }
-
-                        let finalStr = "";
-                        for (let i = event.resultIndex; i < event.results.length; ++i) {
-                            if (event.results[i].isFinal) finalStr += event.results[i][0].transcript;
-                        }
-                        if (finalStr || event.results[event.results.length-1][0].transcript) {
-                            speechAccumulator.current += finalStr;
-                            clearTimeout(silenceTimerRef.current);
-                            silenceTimerRef.current = setTimeout(() => {
-                                const text = speechAccumulator.current.trim() || event.results[event.results.length-1][0].transcript.trim();
-                                if (text && !isProcessingRef.current) {
-                                    speechAccumulator.current = "";
-                                    handleInference(text);
-                                }
-                            }, 2500);
-                        }
-                    };
-                    rec.onerror = () => setIsListening(false);
-                    recognitionRef.current = rec;
-                }
-            }, [isSpeaking]);
-
+            // --- FIXED MICROPHONE LOGIC ---
             const toggleMic = () => {
-                if (isListening || micEnabled.current) {
-                    micEnabled.current = false;
-                    recognitionRef.current?.stop();
-                    stopSpeaking(); // Stop speaking if mic turned off manually
+                if (isListening) {
+                    // Stop Listening
+                    if (recognitionRef.current) {
+                        recognitionRef.current.stop();
+                        recognitionRef.current = null; // Kill instance
+                    }
+                    setIsListening(false);
                     clearTimeout(silenceTimerRef.current);
                 } else {
-                    micEnabled.current = true;
-                    speechAccumulator.current = "";
-                    if (!audioContextRef.current) audioContextRef.current = new AudioContext();
-                    try { recognitionRef.current?.start(); } catch(e) {}
+                    // Start Listening
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        alert("Microphone non supporté par ce navigateur.");
+                        return;
+                    }
+
+                    try {
+                        const rec = new SpeechRecognition();
+                        rec.continuous = false; // Easier to manage state manually
+                        rec.interimResults = true;
+                        rec.lang = 'fr-FR';
+
+                        rec.onstart = () => setIsListening(true);
+
+                        rec.onend = () => {
+                            // Automatically restart if we are supposed to be listening (and not speaking/processing)
+                            if (isListening && !isProcessingRef.current && !isSpeaking) {
+                                try { rec.start(); } catch(e) { setIsListening(false); }
+                            } else {
+                                setIsListening(false);
+                            }
+                        };
+
+                        rec.onresult = (event) => {
+                            // Barge-in
+                            if (isSpeaking) stopSpeaking();
+
+                            const transcript = Array.from(event.results)
+                                .map(result => result[0].transcript)
+                                .join('');
+
+                            if (event.results[0].isFinal) {
+                                handleInference(transcript);
+                            } else {
+                                // Interim silence detection (optional, but continuous=false handles 'final' well enough usually)
+                                clearTimeout(silenceTimerRef.current);
+                                silenceTimerRef.current = setTimeout(() => {
+                                    if (transcript.trim() && !isProcessingRef.current) {
+                                        rec.stop(); // Force end to trigger processing
+                                        handleInference(transcript);
+                                    }
+                                }, 2000);
+                            }
+                        };
+
+                        rec.start();
+                        recognitionRef.current = rec;
+                    } catch (e) {
+                        console.error("Mic Error", e);
+                        setIsListening(false);
+                    }
                 }
             };
 
@@ -393,7 +402,8 @@ Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string
                 isProcessingRef.current = true;
                 setLoading(true);
                 setIsThinking(true);
-                recognitionRef.current?.stop();
+                if (recognitionRef.current) recognitionRef.current.stop(); // Ensure mic is off during processing
+
                 setMessages(prev => [...prev, { role: 'user', content: inputStr }]);
                 setInput("");
 
@@ -404,7 +414,6 @@ FORMAT JSON REQUIS : {
     "metabolic_cost": 1-10, "surprisal": 0-1,
     "segments": [{ "t": "phrase courte", "sx": 0-10, "sy": 0-10, "z": 0-10, "bias": "nom ou null" }]
 }`;
-                // Override for Crisis
                 if (isCrisis || checkForCrisis(inputStr)) {
                     systemPrompt = `URGENCE PSYCHOLOGIQUE DÉTECTÉE.
 TON RÔLE : Ancrage immédiat. Phrases courtes, apaisantes, directives.
@@ -430,6 +439,7 @@ FORMAT JSON : { "full": "Message d'urgence", "metabolic_cost": 0, "surprisal": 1
                     isProcessingRef.current = false;
                     setLoading(false);
                     setIsThinking(false);
+                    // Optionally restart listening here if 'Conversation Mode' was desired
                 }
             };
 
