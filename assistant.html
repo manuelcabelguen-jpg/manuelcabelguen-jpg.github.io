@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MATRIX v114 - Organon Intersubjectiviste</title>
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -15,33 +14,20 @@
                         sans: ['DM Sans', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
                     },
-                    colors: {
-                        cyan: { 950: '#083344' },
-                        rose: { 950: '#4c0519' },
-                        amber: { 950: '#451a03' },
-                        emerald: { 950: '#022c22' },
-                    },
                     animation: {
-                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'spin-slow': 'spin 50s linear infinite',
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'breathe': 'breathe 10s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
                     },
                     keyframes: {
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(0.94)' },
+                            '50%': { transform: 'scale(1.06)' },
+                        },
                         fadeIn: {
                             '0%': { opacity: '0' },
                             '100%': { opacity: '1' },
-                        },
-                        shake: {
-                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
-                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
-                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
-                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
-                        },
-                        breathe: {
-                            '0%, 100%': { transform: 'scale(0.85)' },
-                            '50%': { transform: 'scale(1.15)' },
                         }
                     }
                 }
@@ -49,179 +35,110 @@
         }
     </script>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        body { background-color: #000; color: #cbd5e1; }
+        body { background-color: #020617; color: #f1f5f9; overflow: hidden; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(51, 65, 85, 0.4); }
+        .stat-glow { text-shadow: 0 0 10px currentColor; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .summary-gradient { background: linear-gradient(135deg, rgba(8, 51, 68, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); }
     </style>
 
-    <!-- Import Map -->
     <script type="importmap">
     {
         "imports": {
             "react": "https://esm.sh/react@18.2.0",
             "react-dom": "https://esm.sh/react-dom@18.2.0",
             "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "firebase/app": "https://esm.sh/firebase@10.8.0/app",
-            "firebase/auth": "https://esm.sh/firebase@10.8.0/auth",
-            "firebase/firestore": "https://esm.sh/firebase@10.8.0/firestore",
-            "recharts": "https://esm.sh/recharts@2.12.0?external=react,react-dom",
             "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react,react-dom"
         }
     }
     </script>
-
-    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-black text-slate-300 h-screen w-screen overflow-hidden flex flex-col">
-    <div id="root" class="flex-1 flex flex-col h-full"></div>
+<body class="selection:bg-cyan-900">
+    <div id="root"></div>
 
-    <!-- Application Code -->
     <script type="text/babel" data-type="module">
-        import React, { useState, useMemo, useRef, useEffect } from 'react';
+        import React, { useState, useEffect, useRef, useMemo } from 'react';
         import { createRoot } from 'react-dom/client';
-        import { initializeApp, getApps, getApp } from 'firebase/app';
-        import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-        import { getFirestore, collection, addDoc, onSnapshot, query, doc, setDoc } from 'firebase/firestore';
         import {
-          ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, Cell
-        } from 'recharts';
-        import {
-          Brain, Zap, Activity, Radio, Timer, Sparkles,
-          Binary, CircleDot, ChevronUp, ChevronDown,
-          Scale, Repeat, Heart, Eye, Move, Hash, ZapOff, Infinity as InfinityIcon,
-          Volume2, ShieldX, Database, History, VolumeX, Ghost, Share2,
-          MessageCircle, AudioWaveform, Languages, Camera, MonitorPlay, Link2,
-          Settings, X, AlertTriangle, Disc, Milestone, Search,
-          Lock, Unlock, Anchor, BatteryLow, BatteryFull, ShieldQuestion, AudioLines, LayoutDashboard,
-          Stethoscope, ClipboardList, HelpingHand, Save, AlertCircle, Download, Power, LogOut,
-          Mic, MicOff, Send, Flower2, BookOpen
+            Brain, Mic, MicOff, Send, Settings, LayoutDashboard, X,
+            History, Activity, Heart, Flower2, AlertTriangle, Zap,
+            Infinity as InfinityIcon, Battery, Target, BarChart3, Database,
+            Waves, ShieldAlert, ChevronRight, Volume2, Sparkles, ClipboardCheck,
+            Lightbulb, RefreshCw, Save, AlertCircle
         } from 'lucide-react';
 
-        // --- ONTOLOGIE CARTOGRAFFECT 2.5 ---
-        const hyperLattice = [
+        // --- ONTOLOGIE CARTOGRAFFECT 6.1 (Cabelguen, 2026) ---
+        const LATTICE = [
             { id: "SOUVERAINETÉ", x: 9.5, y: 9.5, color: "#fbbf24", q: "Actuation libre du conatus rationnel." },
-            { id: "RÉSOLUTION", x: 9.0, y: 5.0, color: "#10b981", q: "Démêlage réussi des structures de l'inconscient." },
+            { id: "RÉSOLUTION", x: 8.5, y: 5.0, color: "#10b981", q: "Démêlage des structures de l'inconscient." },
             { id: "EMPATHIE_ACTIVE", x: 7.5, y: 7.5, color: "#ec4899", q: "Synchronie des couvertures de Markov." },
-            { id: "CONFRONTATION", x: 1.5, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre les biais (Système 1)." },
-            { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." },
-            { id: "CURIOSITÉ_CLINIQUE", x: 8.5, y: 5.0, color: "#fcd34d", q: "Forage de la valeur épistémique réelle." }
+            { id: "CONFRONTATION", x: 2.0, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre les biais Système 1." },
+            { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." }
         ];
 
         const resolveQualia = (x, y) => {
-            let closest = hyperLattice[0];
+            let closest = LATTICE[0];
             let minDist = Infinity;
-            hyperLattice.forEach(e => {
-                const dist = Math.sqrt(Math.pow(x - e.x, 2) + Math.pow(y - e.y, 2));
-                if (dist < minDist) { minDist = dist; closest = e; }
+            LATTICE.forEach(p => {
+                const d = Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2));
+                if (d < minDist) { minDist = d; closest = p; }
             });
             return closest;
         };
 
-        // --- UTILS ---
-        const Oscilloscope = ({ audioContext, sourceNode, isActive }) => {
-            const canvasRef = useRef(null);
-            const analyserRef = useRef(null);
-            const rafRef = useRef(null);
-
-            useEffect(() => {
-                if (!audioContext || !isActive) return;
-                if (!analyserRef.current) {
-                    analyserRef.current = audioContext.createAnalyser();
-                    analyserRef.current.fftSize = 256;
-                }
-                if (sourceNode) {
-                    try { sourceNode.connect(analyserRef.current); } catch(e) {}
-                }
-                const canvas = canvasRef.current;
-                const ctx = canvas.getContext('2d');
-                const bufferLength = analyserRef.current.frequencyBinCount;
-                const dataArray = new Uint8Array(bufferLength);
-
-                const draw = () => {
-                    if (!isActive) return;
-                    rafRef.current = requestAnimationFrame(draw);
-                    analyserRef.current.getByteTimeDomainData(dataArray);
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = '#22d3ee';
-                    ctx.beginPath();
-                    const sliceWidth = canvas.width * 1.0 / bufferLength;
-                    let x = 0;
-                    for (let i = 0; i < bufferLength; i++) {
-                        const v = dataArray[i] / 128.0;
-                        const y = v * canvas.height / 2;
-                        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                        x += sliceWidth;
-                    }
-                    ctx.lineTo(canvas.width, canvas.height / 2);
-                    ctx.stroke();
-                };
-                draw();
-                return () => {
-                    cancelAnimationFrame(rafRef.current);
-                    if (analyserRef.current) analyserRef.current.disconnect();
-                };
-            }, [audioContext, sourceNode, isActive]);
-            return <canvas ref={canvasRef} width={200} height={60} className="rounded-lg opacity-80" />;
+        // --- AUDIO ENGINE ---
+        const pcmToWav = (pcmData, sampleRate) => {
+            const buffer = new ArrayBuffer(44 + pcmData.byteLength);
+            const view = new DataView(buffer);
+            const writeString = (pos, s) => { for (let i = 0; i < s.length; i++) view.setUint8(pos + i, s.charCodeAt(i)); };
+            writeString(0, 'RIFF');
+            view.setUint32(4, 32 + pcmData.byteLength, true);
+            writeString(8, 'WAVE');
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true);
+            view.setUint16(34, 16, true);
+            writeString(36, 'data');
+            view.setUint32(40, pcmData.byteLength, true);
+            new Uint8Array(buffer, 44).set(new Uint8Array(pcmData));
+            return new Blob([buffer], { type: 'audio/wav' });
         };
 
-        const TypewriterText = ({ text, onComplete }) => {
-            const [displayed, setDisplayed] = useState('');
-            const index = useRef(0);
-            useEffect(() => {
-                setDisplayed('');
-                index.current = 0;
-                const interval = setInterval(() => {
-                    if (index.current < text.length) {
-                        setDisplayed((prev) => prev + text.charAt(index.current));
-                        index.current++;
-                    } else {
-                        clearInterval(interval);
-                        if (onComplete) onComplete();
-                    }
-                }, 20); // Slightly slower for natural feel
-                return () => clearInterval(interval);
-            }, [text]);
-            return <span>{displayed}<span className="animate-pulse">_</span></span>;
-        };
-
-        // --- AVATAR ---
-        const FaceAvatar = ({ px, py, z, currentColor, isListening, markovScale = 0.5, heartRate = 72, empathy = 5, energy = 100, inhibitionActive = false, isSpeaking = false, isThinking = false, lowPowerMode = false, breathingMode = false }) => {
-            const safeZ = Number(z) || 5;
-            const beatScale = 1 + (Math.sin(Date.now() / (1000 / (heartRate / 60))) * 0.05);
-            const coreScale = 1 - (markovScale * 0.35);
-            const fatigueBlur = lowPowerMode ? 0 : Math.max(0, (100 - energy) / 18);
+        // --- COMPONENTS ---
+        const FaceAvatar = ({ sx, sy, z, color, isThinking, isSpeaking, breathing, isListening, energy }) => {
+            const beat = 1 + (Math.sin(Date.now() / 200) * 0.025);
+            const opacityLevel = 0.3 + (energy / 150);
 
             return (
-                <svg viewBox="0 0 100 100" className={`w-full h-full transition-all duration-1000 ${inhibitionActive ? 'animate-shake' : ''} ${breathingMode ? 'animate-breathe' : ''}`}
-                     style={{ transform: breathingMode ? 'none' : `scale(${(0.8 + (py/40)) * beatScale})`, filter: `blur(${fatigueBlur}px)` }}>
-                    <rect width="100" height="100" fill="#000" />
-                    <circle cx="50" cy="50" r={48} fill="none" stroke="#22d3ee" strokeWidth="0.05" opacity={markovScale} strokeDasharray="4,2" className={lowPowerMode || breathingMode ? "" : "animate-spin-slow"} />
-                    <circle cx="50" cy="50" r={25 + (markovScale * 20)} fill="none" stroke={currentColor} strokeWidth="0.5" opacity={safeZ / 10} />
-
-                    <circle cx="50" cy="50" r={20 + (empathy * 2)} fill="none" stroke={isSpeaking ? "#fbbf24" : "#ec4899"} strokeWidth="0.1" opacity={isListening ? 0.6 : 0.2} className="animate-pulse" />
-                    {inhibitionActive && <circle cx="50" cy="50" r={18} fill="none" stroke="#fbbf24" strokeWidth="0.5" className="animate-pulse" strokeDasharray="2,1"/>}
-
-                    <g transform={`translate(${(px - 5) * 4}, 0) scale(${coreScale})`} style={{ transformOrigin: 'center' }}>
-                        <line x1="10" y1="45" x2="40" y2="45" stroke="white" strokeWidth={2} opacity={0.6} />
-                        <line x1="60" y1="45" x2="90" y2="45" stroke="white" strokeWidth={2} opacity={0.6} />
-                        <g>
-                            <circle cx="27" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
-                            <circle cx="73" cy="45" r={8 * (0.3 + safeZ/16)} fill={isListening ? "#22d3ee" : isThinking ? "#a855f7" : currentColor} />
-                            {inhibitionActive && <circle cx="27" cy="45" r={2} fill="#fbbf24" />}
-                            {inhibitionActive && <circle cx="73" cy="45" r={2} fill="#fbbf24" />}
+                <div className={`relative w-80 h-80 mx-auto transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
+                     style={{ transform: `scale(${beat})` }}>
+                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                        <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20" />
+                        <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} />
+                        <g transform={`translate(${(sx-5)*2.8}, 0)`}>
+                            <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
+                            <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} />
+                            {!isThinking && <circle cx="35" cy="45" r={1} fill="white" opacity="0.5" />}
+                            {!isThinking && <circle cx="65" cy="45" r={1} fill="white" opacity="0.5" />}
                         </g>
-                    </g>
-                    <path d={`M 25 75 Q 50 ${75 + (px-5)*6} 75 75`} stroke={currentColor} strokeWidth="20" fill="none" strokeLinecap="round" />
-                </svg>
+                        <path
+                            d={`M 35 75 Q 50 ${75 + (isSpeaking ? 16 : (sx-5)*6)} 65 75`}
+                            stroke={color}
+                            strokeWidth="4"
+                            fill="none"
+                            strokeLinecap="round"
+                            className="transition-all duration-300"
+                        />
+                    </svg>
+                </div>
             );
         };
 
@@ -231,7 +148,7 @@
             const [error, setError] = useState(null);
             const handleSave = () => {
                 try {
-                    const parsedFb = JSON.parse(fbConfig);
+                    const parsedFb = JSON.parse(fbConfig || '{}'); // Firebase optional in this version if we don't use it
                     if (!apiKey) throw new Error("API Key is required");
                     onSave({ firebaseConfig: parsedFb, apiKey });
                 } catch (e) { setError(e.message); }
@@ -241,7 +158,7 @@
                     <div className="bg-slate-900 border border-slate-700 p-8 rounded-xl max-w-2xl w-full shadow-2xl">
                         <h2 className="text-2xl font-black text-white mb-6 flex items-center gap-3 tracking-tighter"><Settings className="text-cyan-400" /> SYSTEM CONFIGURATION</h2>
                         <div className="space-y-6">
-                            <div><label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">FIREBASE CONFIGURATION (JSON)</label><textarea value={fbConfig} onChange={e => setFbConfig(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 h-48 focus:border-cyan-500 outline-none rounded" placeholder='{ "apiKey": "...", ... }'/></div>
+                            <div><label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">FIREBASE CONFIGURATION (OPTIONAL)</label><textarea value={fbConfig} onChange={e => setFbConfig(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 h-24 focus:border-cyan-500 outline-none rounded" placeholder='{ "apiKey": "...", ... }'/></div>
                             <div><label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">GEMINI API KEY</label><input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 focus:border-cyan-500 outline-none rounded" placeholder="AIza..." /></div>
                             {error && <div className="bg-red-900/20 border border-red-500/50 p-3 rounded text-red-400 text-xs flex items-center gap-2"><AlertCircle size={16}/> {error}</div>}
                             <div className="flex justify-end gap-4 pt-4 border-t border-slate-800">
@@ -254,320 +171,353 @@
             );
         };
 
-        const PuckCore = ({ config, appId, openSettings, onLogout }) => {
-            const { auth, db } = useMemo(() => {
-                if (!config) return { auth: null, db: null };
-                try {
-                    let app;
-                    if (getApps().length === 0) app = initializeApp(config.firebaseConfig); else app = getApp();
-                    return { auth: getAuth(app), db: getFirestore(app) };
-                } catch(e) { return { auth: null, db: null }; }
-            }, [config]);
+        const DrPuckInterface = ({ config, openSettings }) => {
             const apiKey = config?.apiKey || "";
-
-            const [user, setUser] = useState(null);
-            const [messages, setMessages] = useState([{ role: 'ai', text: "[MATRIX_v114] ASSISTANT PSYCHOLOGIQUE ACTIVÉ. MÉTADONNÉES EN LIGNE." }]);
-            const [memory, setMemory] = useState([]);
-            const [chatInput, setChatInput] = useState("");
-            const [isProcessing, setIsProcessing] = useState(false);
+            const [initialized, setInitialized] = useState(false);
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState("");
+            const [loading, setLoading] = useState(false);
             const [isThinking, setIsThinking] = useState(false);
-            const [isPlaying, setIsPlaying] = useState(false);
-            const [isAudioInitialized, setIsAudioInitialized] = useState(false);
-            const [micActive, setMicActive] = useState(false);
-            const [camActive, setCamActive] = useState(true);
-            const [isHandsFree, setIsHandsFree] = useState(false);
+            const [isSpeaking, setIsSpeaking] = useState(false);
+            const [isListening, setIsListening] = useState(false);
             const [showLogs, setShowLogs] = useState(false);
-            const [lowPowerMode, setLowPowerMode] = useState(false);
-            const [breathingMode, setBreathingMode] = useState(false);
-            const [showTools, setShowTools] = useState(false);
+            const [breathing, setBreathing] = useState(false);
 
-            const [energy, setEnergy] = useState(100);
-            const [inhibitionActive, setInhibitionActive] = useState(false);
-            const [saillance, setSaillance] = useState({ x: 5, y: 5 });
-            const [precisionZ, setPrecisionZ] = useState(9.5);
-            const [markovScale, setMarkovScale] = useState(0.5);
-            const [heartRate, setHeartRate] = useState(72);
-            const [empathySync, setEmpathySync] = useState(5.0);
-            const [inferredExpression, setInferredExpression] = useState("IDLE");
+            // New LLM-powered states
+            const [clinicalSummary, setClinicalSummary] = useState(null);
+            const [isSummarizing, setIsSummarizing] = useState(false);
+
+            const [coords, setCoords] = useState({ sx: 5, sy: 5, z: 9.5 });
+            const [metabolicEnergy, setMetabolicEnergy] = useState(100);
+            const [surprisal, setSurprisal] = useState(0.02);
+
+            const currentQualia = useMemo(() => resolveQualia(coords.sx, coords.sy), [coords]);
 
             const audioContextRef = useRef(null);
-            const playingSourceRef = useRef(null);
-            const videoRef = useRef(null);
-            const canvasRef = useRef(null);
             const recognitionRef = useRef(null);
-            const chatEndRef = useRef(null);
-            const isRecognitionRunning = useRef(false);
+            const micEnabled = useRef(false);
+            const isProcessingRef = useRef(false);
+            const silenceTimerRef = useRef(null);
+            const speechAccumulator = useRef("");
 
-            const emotionData = useMemo(() => resolveQualia(saillance.x, saillance.y), [saillance]);
-            const currentColor = useMemo(() => saillance.x < 4.5 ? "#ef4444" : saillance.x > 5.5 ? "#10b981" : "#3b82f6", [saillance.x]);
-
-            const exportTrajectory = () => {
-                if (!memory || memory.length === 0) return;
-                const mdContent = memory.map(m => `### ${new Date(m.timestamp).toLocaleString()}\n**User**: ${m.text}\n**Puck**: ${m.response}\n*Qualia: ${m.qualia} | Bias: ${m.bias || 'None'}*\n---`).join('\n\n');
-                const blob = new Blob([mdContent], { type: 'text/markdown' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `trajectory_${Date.now()}.md`;
-                a.click();
+            const callGemini = async (prompt, system, isJson = true) => {
+                let delay = 1000;
+                for (let i = 0; i < 3; i++) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: prompt }] }],
+                                systemInstruction: { parts: [{ text: system }] },
+                                generationConfig: isJson ? { responseMimeType: "application/json", temperature: 0.8 } : { temperature: 0.8 }
+                            })
+                        });
+                        const result = await res.json();
+                        if (result.error) throw new Error(result.error.message);
+                        const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        return isJson ? JSON.parse(text) : text;
+                    } catch (e) {
+                        console.warn("Retrying API...", e);
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2;
+                    }
+                }
+                throw new Error("Échec du réseau synaptique.");
             };
 
-            const wakeUpPuck = async () => {
-                if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
-                if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
-                setIsAudioInitialized(true);
+            const generateSummary = async () => {
+                if (messages.length < 2 || isSummarizing) return;
+                setIsSummarizing(true);
+                const history = messages.map(m => `${m.role}: ${m.full || m.content}`).join("\n");
+                const system = `Tu es une instance supérieure de Dr. Puck spécialisée en Psychiatrie Computationnelle.
+Analyse l'historique de cette session. Produit un 'Bilan d'Allostasie' structuré :
+1. Croyances de base identifiées (Priors).
+2. Évolution de l'incertitude (Surprisal).
+3. Proposition de Politique d'Action (exercice métacognitif système 3).
+Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string), 'action_policy' (string).`;
+
+                try {
+                    const data = await callGemini(history, system);
+                    setClinicalSummary(data);
+                    setShowLogs(true);
+                } catch (e) {
+                    console.error(e);
+                } finally {
+                    setIsSummarizing(false);
+                }
             };
 
-            const playPCM = async (base64Data) => {
-                if (!audioContextRef.current) await wakeUpPuck();
-                const ctx = audioContextRef.current;
-                if (ctx.state === 'suspended') await ctx.resume();
-                const binaryString = atob(base64Data);
-                const len = binaryString.length;
-                const arrayBuffer = new ArrayBuffer(len);
-                const uint8View = new Uint8Array(arrayBuffer);
-                for (let i = 0; i < len; i++) uint8View[i] = binaryString.charCodeAt(i);
-                const dataView = new DataView(arrayBuffer);
-                const numSamples = len / 2;
-                const float32Data = new Float32Array(numSamples);
-                for (let i = 0; i < numSamples; i++) float32Data[i] = dataView.getInt16(i * 2, false) / 32768.0;
-                const audioBuffer = ctx.createBuffer(1, numSamples, 24000);
-                audioBuffer.getChannelData(0).set(float32Data);
-                const source = ctx.createBufferSource();
-                source.buffer = audioBuffer;
-                playingSourceRef.current = source;
-                source.connect(ctx.destination);
-                setIsPlaying(true);
-                return new Promise(resolve => {
-                    source.onended = () => { setIsPlaying(false); playingSourceRef.current = null; resolve(); };
-                    source.start();
-                });
-            };
+            const speak = async (text) => {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `Say naturally: ${text}` }] }],
+                            generationConfig: {
+                                responseModalities: ["AUDIO"],
+                                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
+                            }
+                        })
+                    });
+                    const result = await res.json();
+                    const pcmData = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
 
-            useEffect(() => {
-                if (auth) { signInAnonymously(auth).catch(console.error); return onAuthStateChanged(auth, setUser); }
-            }, [auth]);
-
-            useEffect(() => {
-                if (!user || !db) return;
-                return onSnapshot(collection(db, 'artifacts', appId, 'users', user.uid, 'experiences'), (snap) => {
-                    setMemory(snap.docs.map(d => ({...d.data(), id: d.id})).sort((a, b) => b.timestamp - a.timestamp).slice(0, 15));
-                });
-            }, [user, db, appId]);
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    const targetBPM = 60 + (saillance.y * 5) + (Math.abs(saillance.x - 5) * 8);
-                    setHeartRate(prev => prev + (targetBPM - prev) * 0.05);
-                    setEnergy(e => precisionZ > 9.2 ? Math.max(0, e - 0.05) : Math.min(100, e + 0.03));
-                }, 100);
-                return () => clearInterval(interval);
-            }, [saillance, precisionZ]);
-
-            useEffect(() => {
-                if (camActive) navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } }).then(s => { if (videoRef.current) videoRef.current.srcObject = s; }).catch(() => setCamActive(false));
-            }, [camActive]);
-
-            const captureFrame = () => {
-                if (!videoRef.current || !canvasRef.current || !camActive) return null;
-                const canvas = canvasRef.current;
-                canvas.width = 320; canvas.height = 240;
-                canvas.getContext('2d').drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-                return canvas.toDataURL('image/png').split(',')[1];
-            };
-
-            const safeStartListening = () => {
-                if (!recognitionRef.current || !isHandsFree || isProcessing || isPlaying || isRecognitionRunning.current) return;
-                try { isRecognitionRunning.current = true; recognitionRef.current.start(); } catch (e) { isRecognitionRunning.current = false; }
+                    if (pcmData) {
+                        if (!audioContextRef.current) audioContextRef.current = new AudioContext();
+                        if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
+                        const audioBlob = pcmToWav(Uint8Array.from(atob(pcmData), c => c.charCodeAt(0)).buffer, 24000);
+                        const audio = new Audio(URL.createObjectURL(audioBlob));
+                        return new Promise((resolve) => {
+                            setIsSpeaking(true);
+                            audio.onended = () => { setIsSpeaking(false); resolve(); };
+                            audio.play().catch(resolve);
+                        });
+                    }
+                } catch (e) { setIsSpeaking(false); }
             };
 
             useEffect(() => {
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                 if (SpeechRecognition && !recognitionRef.current) {
                     const rec = new SpeechRecognition();
-                    rec.continuous = false; rec.lang = 'fr-FR';
-                    rec.onstart = () => { setMicActive(true); isRecognitionRunning.current = true; };
-                    rec.onresult = (e) => {
-                        const transcript = Array.from(e.results).map(r => r[0].transcript).join("");
-                        setTimeout(() => { if (transcript.trim().length > 0 && !isProcessing && !isPlaying) handleInference(transcript); }, 1800);
-                    };
+                    rec.continuous = true;
+                    rec.interimResults = true;
+                    rec.lang = 'fr-FR';
+                    rec.onstart = () => setIsListening(true);
                     rec.onend = () => {
-                        setMicActive(false); isRecognitionRunning.current = false;
-                        if (isHandsFree && !isProcessing && !isPlaying) setTimeout(safeStartListening, 400);
+                        setIsListening(false);
+                        if (micEnabled.current && !isSpeaking && !isProcessingRef.current) {
+                            setTimeout(() => {
+                                if (micEnabled.current && !isSpeaking && !isProcessingRef.current) {
+                                    try { rec.start(); } catch(e) {}
+                                }
+                            }, 500);
+                        }
                     };
+                    rec.onresult = (event) => {
+                        let finalStr = "";
+                        for (let i = event.resultIndex; i < event.results.length; ++i) {
+                            if (event.results[i].isFinal) finalStr += event.results[i][0].transcript;
+                        }
+                        if (finalStr || event.results[event.results.length-1][0].transcript) {
+                            speechAccumulator.current += finalStr;
+                            clearTimeout(silenceTimerRef.current);
+                            silenceTimerRef.current = setTimeout(() => {
+                                const text = speechAccumulator.current.trim() || event.results[event.results.length-1][0].transcript.trim();
+                                if (text && !isProcessingRef.current) {
+                                    speechAccumulator.current = "";
+                                    handleInference(text);
+                                }
+                            }, 2500);
+                        }
+                    };
+                    rec.onerror = () => setIsListening(false);
                     recognitionRef.current = rec;
                 }
-            }, [isHandsFree, isProcessing, isPlaying]);
+            }, [isSpeaking]);
 
-            useEffect(() => { if (isHandsFree) safeStartListening(); else recognitionRef.current?.stop(); }, [isHandsFree]);
+            const toggleMic = () => {
+                if (isListening || micEnabled.current) {
+                    micEnabled.current = false;
+                    recognitionRef.current?.stop();
+                    clearTimeout(silenceTimerRef.current);
+                } else {
+                    micEnabled.current = true;
+                    speechAccumulator.current = "";
+                    if (!audioContextRef.current) audioContextRef.current = new AudioContext();
+                    try { recognitionRef.current?.start(); } catch(e) {}
+                }
+            };
 
-            const handleInference = async (input, context = "") => {
-                if (!String(input).trim() || isProcessing) return;
-                if (!isAudioInitialized) await wakeUpPuck();
-
-                setIsProcessing(true);
+            const handleInference = async (inputStr) => {
+                if (!inputStr.trim() || isProcessingRef.current) return;
+                isProcessingRef.current = true;
+                setLoading(true);
                 setIsThinking(true);
-                setMessages(prev => [...prev, { role: 'user', text: String(input) }]);
-                setChatInput("");
-                const base64Image = captureFrame();
+                recognitionRef.current?.stop();
+                setMessages(prev => [...prev, { role: 'user', content: inputStr }]);
+                setInput("");
+
+                const systemPrompt = `Tu es Dr. Puck (v114), psychologue clinicien expert en inférence active.
+MÉTHODE : Reformulation active ("Si je comprends bien..."), identification des biais Système 1.
+FORMAT JSON REQUIS : {
+    "full": "Réponse clinique chaleureuse",
+    "metabolic_cost": 1-10, "surprisal": 0-1,
+    "segments": [{ "t": "phrase courte", "sx": 0-10, "sy": 0-10, "z": 0-10, "bias": "nom ou null" }]
+}`;
 
                 try {
-                    const systemPrompt = `Tu es Dr. Puck (v114), un Psychologue Clinicien & Métacognitif.
-                    MISSION : Aider l'utilisateur à démêler ses pensées avec bienveillance et méthode.
-                    MÉTHODE :
-                    1. REFORMULATION ACTIVE : Commence souvent par "Si je comprends bien..." pour valider.
-                    2. DÉTECTION DES BIAIS : Repère les distorsions cognitives (tout ou rien, généralisation, catastrophisme) et nomme-les doucement.
-                    3. FLUIDITÉ : Sois conversationnel. Utilise des marqueurs de discours naturels.
-                    CONTEXTE SUPPLÉMENTAIRE : ${context}
-                    JSON STRICT : {"full": "[Vecteurs] [Message]", "segments": [{"t": "phrase", "sx": 0-10, "sy": 0-10, "z": 0-10, "inhibit": boolean, "bias": "Nom du Biais ou null", "reformulation": "Synthèse courte"}]}`;
-
-                    // Simulate latency for complexity
-                    const latency = Math.random() * 1000 + 500;
-                    await new Promise(r => setTimeout(r, latency));
-
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: input + "\n\n" + systemPrompt }] }, ...(base64Image ? [{ inlineData: { mimeType: "image/png", data: base64Image } }] : [])],
-                            generationConfig: { responseMimeType: "application/json", temperature: 0.85 }
-                        })
-                    });
-
-                    const json = await res.json();
-                    const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
-                    const data = JSON.parse(rawText?.match(/\{[\s\S]*\}/)?.[0] || "{}");
-
-                    const reformulation = data.segments?.[0]?.reformulation;
-                    const bias = data.segments?.[0]?.bias;
-
-                    setMessages(prev => [...prev, {
-                        role: 'ai',
-                        text: String(data.full || "[ERROR]"),
-                        streaming: true,
-                        bias: bias,
-                        reformulation: reformulation
-                    }]);
+                    const data = await callGemini(inputStr, systemPrompt);
+                    setMessages(prev => [...prev, { role: 'ai', ...data }]);
+                    setMetabolicEnergy(prev => Math.max(10, prev - (data.metabolic_cost || 4)));
+                    setSurprisal(data.surprisal || 0.05);
                     setIsThinking(false);
-
                     if (data.segments) {
                         for (const seg of data.segments) {
-                            setSaillance({ x: Number(seg.sx)||5, y: Number(seg.sy)||5 });
-                            setInhibitionActive(!!seg.inhibit);
-                            const ttsRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    contents: [{ parts: [{ text: String(seg.t || "") }] }],
-                                    generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
-                                })
-                            });
-                            const ttsData = await ttsRes.json();
-                            const audio = ttsData.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData;
-                            if (audio) await playPCM(audio.data);
+                            setCoords({ sx: seg.sx, sy: seg.sy, z: seg.z });
+                            await speak(seg.t);
                         }
-                        if (user && db) await addDoc(collection(db, 'artifacts', appId, 'users', user.uid, 'experiences'), { timestamp: Date.now(), text: String(input), response: String(data.full), x: saillance.x, y: saillance.y, bias: bias });
                     }
-                } catch (e) { console.error(e); setMessages(prev => [...prev, { role: 'ai', text: "[ERREUR COGNITIVE]" }]); }
-                finally { setIsProcessing(false); setIsPlaying(false); setIsThinking(false); }
+                } catch (e) {
+                    setMessages(prev => [...prev, { role: 'ai', full: "[ERREUR] Déconnexion synaptique: " + e.message }]);
+                } finally {
+                    isProcessingRef.current = false;
+                    setLoading(false);
+                    setIsThinking(false);
+                }
             };
 
-            const triggerScenario = (scenario) => {
-                setMessages(prev => [...prev, { role: 'system', text: `[SCÉNARIO CHARGÉ] : ${scenario}` }]);
-                handleInference(`Je lance une session sur le thème : ${scenario}. Guide-moi.`, `SCÉNARIO ACTIF: ${scenario}`);
-                setShowTools(false);
-            };
-
-            useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages]);
+            if (!initialized) {
+                return (
+                    <div className="h-screen flex flex-col items-center justify-center p-12 text-center bg-[#020617] relative overflow-hidden">
+                        <button onClick={openSettings} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-all"><Settings size={20}/></button>
+                        <Brain size={100} className="text-cyan-500 animate-pulse-fast mb-12" />
+                        <h1 className="text-6xl font-black italic tracking-tighter uppercase mb-6 text-white">PUCK_v114</h1>
+                        <p className="text-slate-500 font-mono text-[11px] uppercase tracking-[0.4em] mb-16 opacity-80 italic max-w-sm">
+                            Organon Intersubjectiviste & Régulation Allostatique
+                        </p>
+                        <button
+                            onClick={() => {
+                                if(!audioContextRef.current) audioContextRef.current = new AudioContext();
+                                setInitialized(true);
+                            }}
+                            className="px-24 py-7 bg-cyan-700 hover:bg-cyan-600 text-white font-black rounded-full transition-all active:scale-95 shadow-2xl border border-cyan-400/30 uppercase text-xs"
+                        >
+                            Initialiser l'Inconscient
+                        </button>
+                    </div>
+                );
+            }
 
             return (
-                <div className="min-h-screen bg-black text-slate-500 flex flex-col font-sans overflow-hidden touch-none selection:bg-rose-900 relative">
-                    {!isAudioInitialized && (
-                        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-3xl flex flex-col items-center justify-center p-10 text-center animate-fade-in">
-                            <AudioWaveform size={80} className="text-cyan-400 mb-8 animate-pulse" />
-                            <h1 className="text-white font-black text-3xl uppercase tracking-tighter mb-4 italic underline decoration-rose-500">Dr. Puck v114</h1>
-                            <p className="text-slate-400 text-sm mb-10 max-w-xs italic">"Psychologie Métacognitive & Intersubjective."</p>
-                            <button onClick={wakeUpPuck} className="px-16 py-6 bg-cyan-600 hover:bg-cyan-500 text-white font-black uppercase rounded-full shadow-[0_0_50px_rgba(34,211,238,0.4)] transition-all active:scale-95">COMMENCER LA SÉANCE</button>
+                <div className="h-screen flex flex-col relative font-sans animate-fade-in">
+                    <header className="p-5 border-b border-slate-800 bg-slate-950/90 backdrop-blur-3xl flex justify-between items-center z-50">
+                        <div className="flex items-center gap-10">
+                            <div className="flex flex-col">
+                                <span className="text-cyan-400 font-black tracking-tighter flex items-center gap-3 uppercase italic text-2xl">
+                                    PUCK_v114 <InfinityIcon size={20} className="text-rose-600 animate-pulse"/>
+                                </span>
+                                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Intersubjectivité Active</span>
+                            </div>
+                            <div className="hidden lg:flex gap-8 border-l border-slate-800 pl-10 h-10 items-center">
+                                <div className="flex items-center gap-3 text-emerald-500" title="Énergie Métabolique">
+                                    <Battery size={18}/> <span className="text-xs font-mono font-bold">{Math.round(metabolicEnergy)}%</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-rose-500" title="Incertitude">
+                                    <Target size={18}/> <span className="text-xs font-mono font-bold">{(surprisal).toFixed(3)}</span>
+                                </div>
+                            </div>
                         </div>
-                    )}
-
-                    <header className="p-4 border-b border-slate-900 bg-black flex justify-between items-center z-50 shadow-xl">
-                        <div className="flex flex-col">
-                            <span className="text-white font-black text-xl tracking-tighter uppercase italic">PUCK_v114 <InfinityIcon size={16} className="text-cyan-400 animate-pulse inline ml-2"/></span>
-                            <span className="text-[8px] font-mono uppercase tracking-[0.2em] text-slate-700 font-bold">Psychologue Intersubjectiviste</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            {isPlaying && audioContextRef.current && <div className="hidden md:block w-32 h-8"><Oscilloscope audioContext={audioContextRef.current} sourceNode={playingSourceRef.current} isActive={isPlaying} /></div>}
-                            <button onClick={() => setBreathingMode(!breathingMode)} className={`p-2 rounded-full border ${breathingMode ? 'border-green-500 text-green-400 bg-green-950' : 'border-slate-800 text-slate-500'} transition-all`} title="Cohérence Cardiaque"><Flower2 size={18}/></button>
-                            <button onClick={() => setShowTools(!showTools)} className={`p-2 rounded-full border border-slate-800 ${showTools ? 'bg-amber-950 text-amber-400' : 'text-slate-500'}`}><BookOpen size={18}/></button>
-                            <button onClick={openSettings} className="p-2 border border-slate-800 text-slate-500 hover:text-cyan-400 transition-all rounded-full"><Settings size={18}/></button>
-                            <button onClick={() => setShowLogs(!showLogs)} className={`p-2 rounded-full border border-slate-800 ${showLogs ? 'bg-cyan-950 text-cyan-400' : 'text-slate-500'}`}><LayoutDashboard size={18}/></button>
+                        <div className="flex gap-4">
+                            <button onClick={generateSummary} disabled={isSummarizing || messages.length < 2} className="flex items-center gap-2 px-4 py-2 bg-amber-900/30 border border-amber-500/50 rounded-full text-amber-400 text-xs font-bold hover:bg-amber-900/50 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                                {isSummarizing ? <RefreshCw className="animate-spin" size={14}/> : <Sparkles size={14}/>}
+                                ✨ BILAN CLINIQUE ✨
+                            </button>
+                            <button onClick={() => setBreathing(!breathing)} className={`p-3 rounded-full border transition-all ${breathing ? 'bg-emerald-900 border-emerald-500 text-emerald-400' : 'border-slate-800 text-slate-500'}`}>
+                                <Flower2 size={24}/>
+                            </button>
+                            <button onClick={() => setShowLogs(!showLogs)} className={`p-3 rounded-full border border-slate-800 ${showLogs ? 'bg-cyan-900 text-cyan-400' : 'text-slate-500'}`}>
+                                <LayoutDashboard size={24}/>
+                            </button>
                         </div>
                     </header>
 
-                    {showTools && (
-                        <div className="absolute top-20 right-4 z-50 bg-slate-900 border border-slate-700 p-4 rounded-xl shadow-2xl w-64 animate-fade-in">
-                            <h3 className="text-white font-bold mb-4 flex items-center gap-2"><HelpingHand size={16}/> Situations Types</h3>
-                            <div className="space-y-2">
-                                <button onClick={() => triggerScenario("Stress au Travail")} className="w-full text-left p-2 bg-black/50 hover:bg-cyan-900/30 text-xs text-slate-300 rounded transition-colors">Stress au Travail</button>
-                                <button onClick={() => triggerScenario("Conflit Relationnel")} className="w-full text-left p-2 bg-black/50 hover:bg-cyan-900/30 text-xs text-slate-300 rounded transition-colors">Conflit Relationnel</button>
-                                <button onClick={() => triggerScenario("Anxiété Sociale")} className="w-full text-left p-2 bg-black/50 hover:bg-cyan-900/30 text-xs text-slate-300 rounded transition-colors">Anxiété Sociale</button>
-                                <button onClick={() => triggerScenario("Prise de Décision")} className="w-full text-left p-2 bg-black/50 hover:bg-cyan-900/30 text-xs text-slate-300 rounded transition-colors">Prise de Décision</button>
-                            </div>
-                        </div>
-                    )}
-
-                    <main className="flex-1 relative flex flex-col items-center justify-center bg-black overflow-hidden shadow-[inset_0_0_200px_rgba(0,0,0,1)]">
-                        <div className="w-full max-w-[90vw] aspect-square relative z-10 transition-all duration-1000">
-                            <div className="absolute inset-0 blur-[120px] opacity-20 transition-colors duration-1000" style={{ backgroundColor: isThinking ? '#a855f7' : breathingMode ? '#059669' : currentColor }} />
-                            {breathingMode && <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"><span className="text-white font-black text-2xl animate-pulse tracking-widest uppercase">Inspirez... Expirez...</span></div>}
-                            <FaceAvatar px={saillance.x} py={saillance.y} z={precisionZ} currentColor={breathingMode ? '#10b981' : currentColor} isListening={micActive} markovScale={markovScale} heartRate={breathingMode ? 60 : heartRate} empathy={empathySync} energy={energy} isSpeaking={isPlaying} isThinking={isThinking} inhibitionActive={inhibitionActive} lowPowerMode={lowPowerMode} breathingMode={breathingMode} />
+                    <main className="flex-1 flex flex-col items-center justify-center p-6 relative">
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] blur-[180px] rounded-full transition-colors duration-1000"
+                                 style={{ background: isThinking ? '#a855f7' : (isListening ? '#22d3ee' : currentQualia.color) }} />
                         </div>
 
-                        <div className="mt-4 text-center z-10 px-6">
-                            <h2 className="text-5xl font-black italic tracking-tighter transition-all duration-700 uppercase" style={{ color: isThinking ? '#a855f7' : currentColor }}>{String(emotionData.id)}</h2>
-                            <p className="mt-2 text-[10px] text-slate-400 font-mono tracking-widest uppercase opacity-60">"{String(emotionData.q)}"</p>
+                        <FaceAvatar sx={coords.sx} sy={coords.sy} z={coords.z} color={currentQualia.color} isThinking={isThinking} isSpeaking={isSpeaking} isListening={isListening} breathing={breathing} energy={metabolicEnergy} />
+
+                        <div className="mt-14 text-center z-10 px-8">
+                            <h2 className="text-7xl font-black italic tracking-tighter uppercase transition-all duration-700" style={{ color: isThinking ? '#a855f7' : currentQualia.color }}>
+                                {currentQualia.id}
+                            </h2>
+                            <p className="mt-5 text-[13px] font-mono text-slate-500 uppercase tracking-[0.4em] opacity-80 italic max-w-lg mx-auto">
+                                "{currentQualia.q}"
+                            </p>
                         </div>
 
-                        <div className="w-full bg-slate-900/40 backdrop-blur-2xl border-t border-slate-800 p-5 pb-10 z-30">
-                            <div className="max-w-md mx-auto flex items-center gap-4">
-                                <button onClick={() => setIsHandsFree(!isHandsFree)} className={`p-5 rounded-3xl border transition-all ${isHandsFree ? 'bg-cyan-950 border-cyan-400 text-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.4)]' : 'bg-slate-950 border-slate-800 text-slate-600'}`}>
-                                    {isHandsFree ? <Mic size={28} className="animate-pulse"/> : <MicOff size={28}/>}
+                        <div className="w-full max-w-lg mt-auto mb-16 z-30">
+                            <div className="flex gap-6 items-center">
+                                <button onClick={toggleMic} className={`p-8 glass rounded-[3rem] transition-all shadow-2xl ${isListening ? 'text-cyan-400 border-cyan-400 scale-105' : 'text-slate-500 border-slate-800'}`}>
+                                    {isListening ? <Mic size={36} className="animate-pulse"/> : <MicOff size={36}/>}
                                 </button>
                                 <div className="flex-1 relative group">
-                                    <input value={chatInput} onChange={(e) => setChatInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleInference(chatInput)} placeholder="Décrivez votre ressenti..." className="w-full bg-black border border-slate-800 p-5 rounded-3xl text-white text-base outline-none focus:border-cyan-500 transition-all shadow-inner" />
-                                    <button onClick={() => handleInference(chatInput)} className="absolute right-3 top-3 p-2 text-cyan-400 hover:text-white transition-colors"><Send size={24}/></button>
+                                    <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleInference(input)} placeholder={isListening ? "Échantillonnage (3s silence)..." : "Décrivez votre expérience..."} className="w-full bg-slate-900/80 border border-slate-700 p-8 rounded-[3rem] text-white outline-none focus:border-cyan-500 transition-all text-xl placeholder-slate-700" />
+                                    <button onClick={() => handleInference(input)} className="absolute right-8 top-7 p-1 text-cyan-400 hover:text-white transition-transform hover:scale-125">
+                                        <Send size={32}/>
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </main>
 
-                        {showLogs && (
-                            <div className="absolute inset-0 z-40 bg-black/95 p-6 pt-24 overflow-y-auto scrollbar-hide animate-fade-in">
-                                <div className="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                                    <h3 className="text-white font-black uppercase text-base tracking-widest flex items-center gap-3 italic underline decoration-rose-900">Mnesic_Trajectory</h3>
-                                    <div className="flex gap-4">
-                                        <button onClick={() => setLowPowerMode(!lowPowerMode)} className={`p-2 rounded border ${lowPowerMode ? 'bg-green-900 border-green-500 text-green-300' : 'border-slate-700 text-slate-500'}`}><BatteryLow size={20}/></button>
-                                        <button onClick={exportTrajectory} className="p-2 rounded border border-slate-700 text-slate-500 hover:text-white"><Download size={20}/></button>
-                                        <button onClick={onLogout} className="p-2 rounded border border-red-900 text-red-500 hover:bg-red-900 hover:text-white"><LogOut size={20}/></button>
-                                        <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-all"><X size={32}/></button>
-                                    </div>
+                    {showLogs && (
+                        <div className="absolute inset-0 bg-slate-950/98 z-[100] p-8 pt-24 overflow-y-auto animate-fade-in scrollbar-hide">
+                            <div className="max-w-3xl mx-auto space-y-12">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-10">
+                                    <h3 className="text-white font-black uppercase text-sm tracking-[0.6em] italic flex items-center gap-5">
+                                        <History className="text-rose-600 animate-pulse" size={24}/> Trajectoire_Mnésique
+                                    </h3>
+                                    <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-transform hover:scale-110"><X size={48}/></button>
                                 </div>
-                                <div className="space-y-6">
+
+                                {clinicalSummary && (
+                                    <div className="p-8 summary-gradient border border-amber-500/30 rounded-[3rem] shadow-2xl animate-fade-in">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <Sparkles className="text-amber-400" size={32} />
+                                            <h4 className="text-amber-400 font-black uppercase text-xl italic tracking-tighter">Bilan d'Allostasie</h4>
+                                        </div>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h5 className="text-slate-400 font-mono text-[10px] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    <Target size={14}/> Croyances (Priors) Détectées
+                                                </h5>
+                                                <ul className="flex flex-wrap gap-2">
+                                                    {clinicalSummary.priors.map((p, idx) => (
+                                                        <li key={idx} className="bg-amber-950/50 border border-amber-500/20 px-3 py-1 rounded-full text-amber-200 text-xs italic">{p}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h5 className="text-slate-400 font-mono text-[10px] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    <Waves size={14}/> Dynamique de l'Incertitude
+                                                </h5>
+                                                <p className="text-slate-200 text-sm leading-relaxed">{clinicalSummary.surprisal_analysis}</p>
+                                            </div>
+                                            <div className="bg-cyan-950/30 border border-cyan-500/20 p-6 rounded-3xl">
+                                                <h5 className="text-cyan-400 font-mono text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                                                    <ShieldAlert size={14}/> ✨ Politique d'Action Métacognitive (Système 3)
+                                                </h5>
+                                                <p className="text-cyan-100 text-md italic font-medium">"{clinicalSummary.action_policy}"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-16 pb-20">
                                     {messages.filter(m => m.role === 'ai').map((m, i) => (
-                                        <div key={i} className="p-5 border-l-4 border-rose-900 bg-slate-900/30 rounded-2xl shadow-inner text-justify leading-relaxed">
-                                            {m.bias && <div className="mb-2 text-amber-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2"><AlertTriangle size={12}/> Biais Détecté: {m.bias}</div>}
-                                            {m.reformulation && <div className="mb-2 text-blue-400 text-xs italic border-l-2 border-blue-500 pl-2">"{m.reformulation}"</div>}
-                                            <p className="text-sm text-slate-300 italic">{m.streaming ? <TypewriterText text={String(m.text || "")} /> : String(m.text || "")}</p>
+                                        <div key={i} className="p-12 glass rounded-[4rem] border-l-[12px] border-cyan-600 shadow-2xl relative">
+                                            {m.segments?.[0]?.bias && (
+                                                <div className="mb-8 bg-amber-950/40 border border-amber-500/30 p-5 rounded-3xl flex items-center gap-5 text-amber-500 text-xs font-bold uppercase tracking-widest">
+                                                    <ShieldAlert size={24}/> Script Rigide identifié : {m.segments[0].bias}
+                                                </div>
+                                            )}
+                                            <div className="text-slate-200 text-2xl leading-relaxed italic tracking-wide font-medium">{m.full}</div>
+                                            <div className="mt-10 pt-8 border-t border-slate-800 flex gap-10 opacity-30">
+                                                <div className="text-xs font-mono uppercase bg-slate-800 px-4 py-2 rounded-full">MET_LOAD: {m.metabolic_cost}</div>
+                                                <div className="text-xs font-mono uppercase bg-slate-800 px-4 py-2 rounded-full">SURP: {m.surprisal}</div>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                        )}
-                    </main>
-
-                    <video ref={videoRef} autoPlay playsInline muted className="hidden" />
-                    <canvas ref={canvasRef} className="hidden" />
-                    <style>{`.animate-spin-slow { animation: spin 45s linear infinite; } @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; } @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } } .animate-shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; } @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } } .animate-breathe { animation: breathe 10s ease-in-out infinite; } @keyframes breathe { 0%, 100% { transform: scale(0.85); } 50% { transform: scale(1.15); } }`}</style>
+                        </div>
+                    )}
                 </div>
             );
         };
@@ -575,16 +525,30 @@
         const App = () => {
             const [config, setConfig] = useState(null);
             const [showSettings, setShowSettings] = useState(false);
+
             useEffect(() => {
                 const stored = localStorage.getItem('matrix_v46_config');
-                if (stored) { try { setConfig(JSON.parse(stored)); } catch { setShowSettings(true); } } else { setShowSettings(true); }
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (parsed.apiKey) setConfig(parsed);
+                        else setShowSettings(true);
+                    } catch { setShowSettings(true); }
+                } else {
+                    setShowSettings(true);
+                }
             }, []);
-            const saveConfig = (newConfig) => { localStorage.setItem('matrix_v46_config', JSON.stringify(newConfig)); setConfig(newConfig); setShowSettings(false); };
-            const handleLogout = () => { if (window.confirm("Déconnexion ?")) { localStorage.removeItem('matrix_v46_config'); setConfig(null); setShowSettings(true); } };
+
+            const saveConfig = (newConfig) => {
+                localStorage.setItem('matrix_v46_config', JSON.stringify(newConfig));
+                setConfig(newConfig);
+                setShowSettings(false);
+            };
+
             return (
                 <>
                     {showSettings && <ConfigModal onSave={saveConfig} onCancel={config ? () => setShowSettings(false) : null} currentConfig={config} />}
-                    <PuckCore config={config} appId={'puck-ultimate-v114'} openSettings={() => setShowSettings(true)} onLogout={handleLogout} />
+                    <DrPuckInterface config={config} openSettings={() => setShowSettings(true)} />
                 </>
             );
         };
