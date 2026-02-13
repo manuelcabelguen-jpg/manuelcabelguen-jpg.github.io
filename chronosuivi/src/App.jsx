@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
     Clock, RotateCcw, Printer, ArrowRight, Shield, Layers, AlertTriangle,
     Settings, Upload, FileJson, FileSpreadsheet, LayoutTemplate, Users,
-    FileText, Undo, Redo, LayoutDashboard, List
+    FileText, Undo, Redo, LayoutDashboard, List, Archive
 } from 'lucide-react';
 import { PROGRAM_TEMPLATES } from './data/templates';
 import { calculateTimeline, generateFederalHolidays } from './utils/calculation';
@@ -21,6 +21,7 @@ import Timeline from './components/Timeline';
 import ManagementReport from './components/ManagementReport';
 import ParticipantReport from './components/ParticipantReport';
 import Dashboard from './components/Dashboard';
+import ArchiveManager from './components/ArchiveManager';
 
 const STORAGE_KEY = 'chronosuivi_v590_react';
 
@@ -71,6 +72,7 @@ function App() {
     const [selectedTemplate, setSelectedTemplate] = useState('mpci');
     const [showReport, setShowReport] = useState(false);
     const [selectedParticipantForReport, setSelectedParticipantForReport] = useState(null);
+    const [showArchives, setShowArchives] = useState(false);
     const [isSaved, setIsSaved] = useState(true);
     const [viewMode, setViewMode] = useState('list'); // 'list' | 'dashboard'
 
@@ -192,6 +194,13 @@ function App() {
                     onClose={() => setSelectedParticipantForReport(null)}
                 />
             )}
+            {showArchives && (
+                <ArchiveManager
+                    currentState={state}
+                    onLoadState={(data) => setState(data)}
+                    onClose={() => setShowArchives(false)}
+                />
+            )}
 
             {/* Header */}
             <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 print:hidden shadow-sm">
@@ -217,6 +226,8 @@ function App() {
                         <span className={`hidden md:flex text-xs font-bold items-center gap-1.5 px-3 py-1.5 rounded-full ${isSaved ? 'text-green-700 bg-green-50 border border-green-100' : 'text-amber-700 bg-amber-50 border border-amber-100'}`}><span className={`w-2 h-2 rounded-full ${isSaved ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`}></span>{isSaved ? 'Enregistré' : '...'}</span>
                         <div className="h-8 w-px bg-slate-200 mx-1 hidden sm:block"></div>
                         <div className="flex gap-2">
+                            <button onClick={() => setShowArchives(true)} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Gérer les Archives (Dossier Local)"><Archive className="w-5 h-5 text-indigo-600" /></button>
+                            <div className="w-px h-8 bg-slate-200 mx-1"></div>
                             <button onClick={() => setShowReport(true)} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Rapport de Gestion"><FileText className="w-5 h-5 text-blue-600" /></button>
                             <button onClick={() => fileInputRef.current?.click()} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Importer Configuration"><Upload className="w-5 h-5" /></button>
                             <button onClick={handleExportJSON} className="p-2 hover:bg-slate-100 text-slate-600 rounded-lg transition-all" title="Sauvegarder"><FileJson className="w-5 h-5" /></button>
