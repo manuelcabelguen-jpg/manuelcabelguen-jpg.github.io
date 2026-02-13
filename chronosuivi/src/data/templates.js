@@ -23,19 +23,6 @@ export const PROGRAM_TEMPLATES = [
         ]
     },
     {
-        id: 'alpha',
-        label: 'Programme Correctionnel Alpha',
-        defaultName: 'Programme Correctionnel Alpha',
-        defaultParticipants: 12,
-        stages: [
-            { id: '1', name: 'Évaluation Initiale', type: 'work', phase: 'avant', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 2, description: 'Entretiens individuels' },
-            { id: '2', name: 'Module de Réintégration', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 20, description: 'Cours de groupe' },
-            { id: '3', name: 'Stage Pratique', type: 'work', phase: 'pendant', calcMode: 'fixed_sessions', schedulingMode: 'program_schedule', duration: 10, description: 'Mise en situation' },
-            { id: '4', name: 'Bilan final', type: 'work', phase: 'apres', calcMode: 'linear_0.5d', schedulingMode: 'any_weekday', duration: 1, description: 'Retour sur objectifs' },
-            { id: '5', name: 'Rapport de clôture', type: 'work', phase: 'apres', calcMode: 'linear_1d', schedulingMode: 'any_weekday', duration: 1, description: 'Rédaction' }
-        ]
-    },
-    {
         id: 'maintien',
         label: 'Programme de Maintien',
         defaultName: 'Maintien des Acquis',
