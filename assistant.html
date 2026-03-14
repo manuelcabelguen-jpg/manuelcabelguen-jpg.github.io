@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G-CAS v10.2.21.0 – Moteur Léger</title>
+  <style>
+    :root{
+      --bg:#f3f2f1; --panel:#ffffff; --soft:#f8fafc; --border:#e5e7eb; --text:#0f172a; --muted:#64748b;
+      --blue:#0078d4; --blue2:#106ebe; --green:#15803d; --warn:#fb923c; --danger:#b91c1c; --nav:#002050;
+      --shadow:0 8px 24px rgba(15,23,42,.08); --radius:12px;
+      --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}
+    .app{display:grid; grid-template-columns:var(--side-w) 4px 1fr 4px var(--right-w); height:100vh; overflow:hidden}
+    .sidebar,.main,.right{min-width:0;overflow:hidden;display:flex;flex-direction:column}
+    .sidebar{background:#fff;border-right:1px solid var(--border)}
+    .main{background:#fff}
+    .right{background:var(--soft);border-left:1px solid var(--border)}
+    .resizer { background: var(--border); cursor: col-resize; z-index: 10; transition: background 0.2s; }
+    .resizer:hover, .resizer.active { background: var(--blue); }
+    body.resizing { user-select: none; cursor: col-resize; }
+    .header{height:56px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:800;letter-spacing:.2px}
+    .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:8px 12px;flex-wrap:wrap;background:#fff}
+    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;color:#334155;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:800;font-size:12px}
+    .btn:hover{background:#f8fafc}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn.primary:hover{background:var(--blue2);border-color:var(--blue2)}
+    .btn.success{color:var(--green);border-color:#bbf7d0}
+    .btn.danger{color:var(--danger);border-color:#fecaca}
+    .panel{padding:12px;border-bottom:1px solid var(--border);background:#fff}
+    .panelTitle{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:900;margin-bottom:10px}
+    .field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+    .label{font-size:10px;letter-spacing:.6px;color:var(--muted);font-weight:900;text-transform:uppercase}
+    .input,.textarea,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px;background:#fff;font:inherit}
+    .textarea{min-height:92px;resize:vertical}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .scroll{overflow:auto;min-height:0}
+    .sectionsWrap{padding:10px;overflow:auto;min-height:0}
+    .sectionItem{padding:10px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:6px}
+    .sectionItem:hover{background:#f3f4f6}
+    .sectionItem.active{background:#eff6ff;color:#1d4ed8;font-weight:900}
+    .sectionMeta{font-size:11px;color:var(--muted);margin-top:2px}
+    .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid var(--border);background:#fff;color:#475569}
+    .badge.off{color:#9ca3af}
+    .editor{padding:16px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:12px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+    .cardTitle{font-weight:900;margin-bottom:8px}
+    .templatePreview{border:1px solid var(--border);border-radius:12px;background:#fff;padding:14px;line-height:1.6;min-height:220px}
+    .slotBox{border:1px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
+    .slotBox h4{margin:0 0 8px;font-size:12px;color:#334155}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .titleInput{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-weight:800;width:min(100%,600px)}
+    .right .panel{background:var(--soft)}
+    .sourceItem{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
+    .sourceName{font-size:12px;font-weight:900;color:#334155}
+    .sourceMeta{font-size:11px;color:#94a3b8}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    .chip{font-size:11px;font-weight:800;border:1px solid var(--border);background:#fff;color:#475569;padding:6px 8px;border-radius:999px;cursor:pointer}
+    .chip.on{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:999px;box-shadow:var(--shadow);font-size:13px;font-weight:900;display:none;z-index:9999;text-align:center;}
+    .toast.show{display:block}
+    details{border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:10px;overflow:hidden}
+    summary{cursor:pointer;padding:10px 12px;font-weight:900;background:#f9fafb}
+    details > div{padding:12px}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .chk-field { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: var(--text); }
+    .move-arrows { display: flex; flex-direction: column; margin-right: 8px; align-items: center; justify-content: center; }
+    .btn-move { background: transparent; border: none; padding: 2px 4px; font-size: 10px; color: #94a3b8; cursor: pointer; line-height: 1; }
+    .btn-move:hover { color: var(--blue); background: #e2e8f0; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<div class="app" id="appRoot" style="--side-w: 320px; --right-w: 420px;">
+
+  <aside class="sidebar">
+    <div class="header">G-CAS v10 <span id="versionTag">2.21.0</span></div>
+    <div class="panel scroll" id="casePanel"></div>
+    <div class="sectionsWrap" id="sectionsList"></div>
+  </aside>
+
+  <div class="resizer" id="resizerLeft"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="btn primary" id="btnLoadJson">⬆ Charger JSON</button>
+      <input id="jsonFileInput" type="file" accept="application/json" style="display:none">
+      <button class="btn" id="btnSaveJson">💾 Sauvegarder JSON</button>
+      <button class="btn" id="btnExportWord">📝 Export Word</button>
+      <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1;">☁️ Config IA</button>
+      <button class="btn success" id="btnGenerateAI">✦ Générateur IA</button>
+      <button class="btn danger" id="btnResetSection">↺ Réinitialiser</button>
+      <span class="badge" id="saveState">En attente</span>
+    </div>
+    <div class="editor" id="editorHost"></div>
+  </main>
+
+  <div class="resizer" id="resizerRight"></div>
+
+  <aside class="right">
+    <div class="panel">
+      <div class="panelTitle">Sources</div>
+      <button class="btn" id="btnUploadSource">⬆ Ajouter une source</button>
+      <input id="sourceFileInput" type="file" style="display:none">
+      <div id="sourcesList" style="margin-top:10px"></div>
+    </div>
+  </aside>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- MODAL CONFIGURATION AZURE OPENAI -->
+<div id="azureModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
+  <div style="background:#fff; width:450px; border-radius:12px; padding:20px; box-shadow:var(--shadow);">
+    <h2 style="margin-top:0; color:var(--nav); display:flex; align-items:center; gap:8px;">
+      <span style="font-size:24px;">☁️</span> Configuration Azure OpenAI
+    </h2>
+    <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:20px;">
+      Ces informations sont nécessaires pour interroger l'IA. Pour des raisons de sécurité (Protégé B/C), <strong>elles ne sont sauvegardées qu'en session</strong> et disparaîtront à la fermeture du navigateur.
+    </p>
+
+    <div class="field">
+      <div class="label">Point de terminaison (Endpoint URL)</div>
+      <input type="text" id="azureEndpoint" class="input" placeholder="https://votre-ressource.openai.azure.com/" />
+    </div>
+
+    <div class="field">
+      <div class="label">Clé API (API Key)</div>
+      <input type="password" id="azureApiKey" class="input" placeholder="••••••••••••••••••••••••••••••••" />
+    </div>
+
+    <div class="field">
+      <div class="label">Nom du déploiement (Modèle)</div>
+      <input type="text" id="azureDeployment" class="input" placeholder="gpt-4" />
+    </div>
+
+    <div class="field">
+      <div class="label">Version de l'API</div>
+      <input type="text" id="azureApiVersion" class="input" placeholder="2024-02-15-preview" value="2024-02-15-preview" />
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+      <button class="btn" id="btnAzureCancel">Annuler</button>
+      <button class="btn primary" id="btnAzureSave">Mémoriser pour la session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var embeddedData = {};
+  var state = { data: normalizeData(embeddedData), activeSectionKey: null, dirty: false, activeSlotKey: null, isAdmin: false };
+
+  // Paramètres Azure en mémoire uniquement (volatile)
+  var azureConfig = {
+      endpoint: sessionStorage.getItem('azure_endpoint') || '',
+      apiKey: sessionStorage.getItem('azure_api_key') || '',
+      deployment: sessionStorage.getItem('azure_deployment') || '',
+      apiVersion: sessionStorage.getItem('azure_api_version') || '2024-02-15-preview'
+  };
+
+  function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function $(id){ return document.getElementById(id); }
+  function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},3000); }
+  function setDirty(flag, msg){ state.dirty = !!flag; $('saveState').textContent = flag ? '● Modifié' : '✓ Sauvegardé'; if(msg){ $('saveState').title = msg; } }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+  function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
+  function nowDate(){ return new Date().toISOString().slice(0,10); }
+
+  function normalizeData(raw){
+    var d = clone(raw || {});
+    if(!d.reportDefinitions) d.reportDefinitions = {};
+    if(!d.reportInstance) d.reportInstance = { reportId:'', sections:[] };
+    if(!d.caseContext) d.caseContext = {};
+    if(!d.factors) d.factors = {};
+    if(!d.prompts) d.prompts = {};
+    if(!d.sources) d.sources = [];
+    if(!d.uiSchema) d.uiSchema = {};
+
+    if(typeof d.caseContext.estAutochtone !== 'boolean') d.caseContext.estAutochtone = false;
+    if(typeof d.caseContext.derogationActive !== 'boolean') d.caseContext.derogationActive = false;
+
+    var reportId = d.reportInstance.reportId || Object.keys(d.reportDefinitions)[0] || '';
+    d.reportInstance.reportId = reportId;
+    var def = d.reportDefinitions[reportId] || { sections:[] };
+    var instMap = {};
+    (d.reportInstance.sections || []).forEach(function(s){ instMap[s.sectionKey] = s; });
+
+    d.reportInstance.sections = (def.sections || []).map(function(defSec){
+      var ex = instMap[defSec.sectionKey] || {};
+      var slotOutputs = ex.slotOutputs || {};
+      (defSec.slots || []).forEach(function(sl){ if(typeof slotOutputs[sl.slotKey] !== 'string'){ slotOutputs[sl.slotKey] = ''; } });
+      return {
+        sectionKey: defSec.sectionKey,
+        titleOverride: typeof ex.titleOverride === 'string' ? ex.titleOverride : '',
+        enabled: typeof ex.enabled === 'boolean' ? ex.enabled : true,
+        status: ex.status || 'draft',
+        selectedSourceIds: Array.isArray(ex.selectedSourceIds) ? ex.selectedSourceIds : [],
+        slotOutputs: slotOutputs
+      };
+    });
+    return d;
+  }
+
+  function getReportDef(){ return state.data.reportDefinitions[state.data.reportInstance.reportId] || { sections:[] }; }
+  function getInstanceSection(sectionKey){
+    var list = state.data.reportInstance.sections || [];
+    for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
+    return null;
+  }
+  function getSectionDef(sectionKey){
+    var list = getReportDef().sections || [];
+    for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
+    return null;
+  }
+  function getDisplayTitle(sectionKey){
+    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
+    return (inst && inst.titleOverride) ? inst.titleOverride : (def ? def.title : sectionKey);
+  }
+  function getValueByPath(obj, path){
+    var parts = String(path||'').split('.');
+    var cur = obj;
+    for(var i=0;i<parts.length;i++){ if(cur == null) return ''; cur = cur[parts[i]]; }
+    return cur == null ? '' : cur;
+  }
+
+  function templateVarsContext(){
+    var root = {};
+    var cc = state.data.caseContext || {};
+    var factors = state.data.factors || {};
+    Object.keys(cc).forEach(function(k){ root[k] = cc[k]; });
+    root.factors = factors;
+    root.sed = cc.fps || '';
+
+    root.animationDynamic = (function(){
+       var a1Name = cc.animateurNom || "";
+       var a1Title = cc.animateurTitre || "";
+       var a2Name = cc.coAnimateurNom || "";
+       var a2Title = cc.coAnimateurTitre || "";
+       var a1Full = a1Name ? ("<strong>" + a1Name + "</strong>" + (a1Title ? ", " + a1Title : "")) : "";
+       var a2Full = a2Name ? ("<strong>" + a2Name + "</strong>" + (a2Title ? ", " + a2Title : "")) : "";
+       if(a1Full && a2Full) return "coanimé par " + a1Full + " et " + a2Full;
+       if(a1Full) return "animé par " + a1Full;
+       if(a2Full) return "animé par " + a2Full;
+       return "animé par [Animateur(s) à définir]";
+    })();
+
+    root.introDynamic = (function(){
+        var t = cc.typeProgramme || "Préparatoire complété";
+        var isAuto = cc.estAutochtone === true;
+        var out = "";
+        var p1 = "";
+
+        if(t === "Hybride") {
+            p1 = "Ce rapport donnera un aperçu du cheminement/cycle criminel du participant, " + (isAuto ? "des Antécédents Sociaux Autochtones, " : "") + "et des facteurs de risque dynamiques. De plus, il décrira les lacunes à aborder dans les futurs programmes. Ce rapport décrira également les progrès continus du participant pour atteindre les objectifs personnels nécessaires pour gérer les domaines facteurs de risque criminogènes dynamiques (plus communément appelés « Facteurs de risque » dans le présent rapport).";
+        } else if(t === "Communautaire") {
+            p1 = "Le programme communautaire du MPCI est conçu pour les participants qui n’ont pas terminé leur programme correctionnel avant d’être libérés dans la collectivité. Ce programme ne remplace pas les programmes requis; il est conçu pour fournir aux participants un niveau de compréhension et de compétences de base qui seront développées et renforcées par le Programme de maintien des acquis en communauté. Ce rapport final du programme Communautaire mettra l’accent sur le cheminement/cycle criminel du participant, les domaines des facteurs de risque dynamiques" + (isAuto ? ", les Antécédents Sociaux Autochtones" : "") + ", et les stratégies spécifiques du programme (objectifs personnels pour gérer les facteurs de risque dynamiques). Ce rapport servira de fondation pour tous les rapports ultérieurs.";
+        } else if(t === "Adapté") {
+            p1 = "Les programmes adaptés du Modèle de Programmes Correctionnels Intégrés (MPCI) sont conçus pour répondre aux besoins de réceptivité uniques des délinquants ayant une ou plusieurs conditions susceptibles d’affecter leur fonctionnement de manière significative, comme des déficiences cognitives, des problèmes de santé mentale ou des troubles d’apprentissage. L’impact sur le fonctionnement doit être suffisamment grave pour que le délinquant ait des difficultés à terminer un programme classique.";
+        } else {
+            p1 = "Ce rapport fait suite au dernier rapport du programme du Modèle de programme correctionnel intégré (MPCI)" + (isAuto ? " ou du Modèle de programme correctionnel intégré – Autochtones (MPCIA)" : "") + ". Ce rapport, ainsi que les rapports précédents, fourniront au lecteur l’ensemble de l’histoire du risque et des besoins initiaux du participant" + (isAuto ? ", des Antécédents Sociaux Autochtones" : "") + " et des progrès réalisés à ce jour pour gérer ses principaux facteurs de risques dynamiques. Consultez le rapport final du programme préparatoire daté du " + esc(cc.dateRapportPrep || "XXXX-XX-XX") + " pour l'analyse du cheminement initial.";
+        }
+        out += "<p>" + p1 + "</p>\n";
+        out += "<p>Veuillez noter que ce rapport se réfère aux termes suivants concernant l’évaluation de la capacité actuelle du participant à gérer les facteurs de risque dynamiques identifiés : a besoin de beaucoup d’amélioration, a besoin de quelques améliorations, est modérée, bonne, ou excellente. Ces termes seront utilisés tout au long du processus de rapport pour suivre les progrès de manière cohérente.</p>\n";
+        if(isAuto) {
+            out += "<p>En tant que délinquant autochtone, des facteurs uniques des Antécédents Sociaux Autochtones sont pris en compte dans ce rapport. Ces antécédents ont influencé ses croyances, pensées, émotions, comportements, relations et sa connexion à la culture, qui ont façonné sa vie personnelle. Les facteurs internes et externes apportés par les antécédents sociaux autochtones ont contribué au cheminement/cycle criminel et font donc partie intégrante de l’histoire du participant. Des observations holistiques concernant les facteurs de risque dynamiques et les interventions culturelles pour gérer ces risques ont été fournies par l’Aîné " + esc(cc.nomAine || "[Nom de l'Aîné]") + ", qui faisait partie du programme. Ces observations holistiques sont intégrées tout au long de ce rapport.</p>";
+        }
+        return out;
+    })();
+
+    root.derogationDynamic = (function(){
+        if(cc.derogationActive) {
+            var dDate = cc.dateDerogation || "XXXX-XX-XX";
+            var intens = cc.intensiteMPCI || "élevée ou modérée";
+            return " Cependant, selon le comité de dérogation, daté du " + esc(dDate) + ", plusieurs critères de dérogation étaient présents, justifiant de l'orienter vers le programme d'intensité " + esc(intens) + ".";
+        }
+        return "";
+    })();
+
+    root.cycleCriminelDynamic = (function(){
+        var t = cc.typeProgramme || "";
+        if(t === "Hybride" || t === "Communautaire" || t === "Adapté") {
+            var out = "<h3>Cheminement/Cycle criminel :</h3>\n<p>Tout au long du programme, le participant a exploré les facteurs qui l’ont conduit à la perpétration de ses crimes, à son comportement criminel et à son incarcération actuelle. Le cheminement/cycle criminel suivant découle des contributions du participant et de l’examen des renseignements disponibles au dossier au moment de la rédaction.</p>";
+            if(cc.estAutochtone) {
+                out += "\n<p>Les Antécédents Sociaux Autochtones de " + esc(cc.nom || 'X') + " ont eu un impact sur des domaines de vie significatifs et contribué à sa criminalité, notamment sur sa vision de lui-même, des autres et du monde. Les Antécédents Sociaux Autochtones ont directement affecté la Roue de Médecine du participant dans ses quatre dimensions.</p>";
+            }
+            out += "\n<p>[SLOT:sec.cycle_criminel.main]</p>";
+            return out;
+        }
+        return "";
+    })();
+
+    root.strategiesDynamic = (function(){
+        if(cc.estAutochtone) {
+            return "Une description de chaque facteur de risque dynamique (initialement identifié comme nécessitant un besoin dans le Plan correctionnel), de son lien avec le cheminement/cycle criminel, de l’objectif personnel qui y est associé, ainsi que de la façon dont ce facteur de risque a été influencé par les Antécédents Sociaux Autochtones est fournie ci-dessous. Des compétences/interventions culturelles associées à chaque objectif personnel sont identifiées, ce qui permettra au participant de gérer les facteurs de risque dynamiques qui contribuent à son cheminement/cycle criminel ou qui nécessitent un besoin d'amélioration. Une évaluation de la capacité actuelle du participant et de son engagement à utiliser les compétences nécessaires pour atteindre l'objectif personnel est également fournie.";
+        } else {
+            return "Une description de chaque facteur de risque dynamique (initialement identifié comme nécessitant un besoin dans le Plan correctionnel), de son lien avec le cheminement/cycle criminel, de l’objectif personnel qui y est associé, est fournie ci-dessous. Des compétences associées à chaque objectif personnel sont identifiées, ce qui permettra au participant de gérer les facteurs de risque dynamiques qui contribuent à son cheminement/cycle criminel ou qui nécessitent un besoin d'amélioration. Une évaluation de la capacité actuelle du participant et de son engagement à utiliser les compétences nécessaires pour atteindre l'objectif personnel est également fournie.";
+        }
+    })();
+
+    root.pcStatutDynamic = (function(){
+       var s = cc.planCorrectionnelStatut || "Finalisé";
+       if(s === "Non finalisé lors du programme") return "Considérant que le Plan correctionnel n’était pas encore finalisé lors du programme du participant, l’identification des objectifs personnels est fondée sur la documentation du participant dans le SGD, les documents du programme complétés et les entrevues du programme.";
+       if(s === "Mis à jour") return "Considérant que le Plan correctionnel a été mis à jour depuis le programme précédent du participant, les facteurs de risque dynamiques nouvellement identifiés et les objectifs personnels qui y sont associés seront maintenant abordés dans le rapport.";
+       return "";
+    })();
+
+    root.plansMaitriseIntroDynamic = (function(){
+        var out = "<p>Tout au long de chaque module de ce programme, le participant a élaboré un plan de maîtrise de soi. Voici les points forts des objectifs et des plans d’action établis par le participant.</p>";
+        if(cc.estAutochtone) {
+            out += "\n<p>Dans le cadre du continuum du MPCIA, les participants développent et renforcent leurs plans de maîtrise de soi. Ces plans permettent aux participants de réfléchir à la manière dont leurs Antécédents Sociaux Autochtones (ASA) ont influencé leurs dimensions spirituelle, émotionnelle, mentale et physique. Ils élaborent des plans détaillés sur la manière de gérer leurs facteurs de risque dans ces domaines.</p>";
+        }
+        return out;
+    })();
+
+    return root;
+  }
+
+  // === MOTEUR D'ANONYMISATION (PROTÉGÉ B/C) ===
+  // Cette fonction remplace les données identifiantes par des balises neutres
+  // avant de les envoyer à Azure OpenAI
+  function sanitizeForAI(text) {
+    if (!text) return "";
+    var cc = state.data.caseContext || {};
+    var sanitized = text;
+
+    // Liste des remplacements (du plus spécifique au plus général pour éviter les conflits)
+    var replacements = [
+      { val: cc.fps, tag: "[SED_ID]" },
+      { val: cc.nom, tag: "[LE PARTICIPANT]" },
+      { val: cc.dateNaissance, tag: "[DATE_DE_NAISSANCE]" },
+      { val: cc.nomAine, tag: "[L'AÎNÉ(E)]" },
+      { val: cc.animateurNom, tag: "[L'ANIMATEUR PRINCIPAL]" },
+      { val: cc.coAnimateurNom, tag: "[LE CO-ANIMATEUR]" }
+    ];
+
+    replacements.forEach(function(r) {
+      if (r.val && typeof r.val === 'string' && r.val.trim() !== '') {
+        // Échapper les caractères spéciaux regex
+        var escapedVal = r.val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // Remplacement global, insensible à la casse
+        var regex = new RegExp(escapedVal, 'gi');
+        sanitized = sanitized.replace(regex, r.tag);
+      }
+    });
+
+    return sanitized;
+  }
+
+  // Fonction inverse : remettre les vraies données à la réception de l'IA (Optionnel selon le besoin final,
+  // mais souvent on laisse les balises ou l'IA reformule de façon neutre).
+  function desanitizeFromAI(text) {
+    if (!text) return "";
+    var cc = state.data.caseContext || {};
+    var desanitized = text;
+
+    var replacements = [
+      { tag: "\\[SED_ID\\]", val: cc.fps || "" },
+      { tag: "\\[LE PARTICIPANT\\]", val: cc.nom || "le participant" },
+      { tag: "\\[DATE_DE_NAISSANCE\\]", val: cc.dateNaissance || "" },
+      { tag: "\\[L'AÎNÉ\\(E\\)\\]", val: cc.nomAine || "l'Aîné" },
+      { tag: "\\[L'ANIMATEUR PRINCIPAL\\]", val: cc.animateurNom || "l'animateur" },
+      { tag: "\\[LE CO-ANIMATEUR\\]", val: cc.coAnimateurNom || "le co-animateur" }
+    ];
+
+    replacements.forEach(function(r) {
+      var regex = new RegExp(r.tag, 'gi');
+      desanitized = desanitized.replace(regex, r.val);
+    });
+
+    return desanitized;
+  }
+  // ============================================
+
+  function replaceVars(htmlText){
+    var ctx = templateVarsContext();
+    return String(htmlText || '').replace(/{{\s*([^}]+?)\s*}}/g, function(_, path){
+      var val = getValueByPath(ctx, path.trim());
+      return val == null ? '' : String(val);
+    });
+  }
+
+  function renderSectionHtml(sectionKey){
+    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
+    if(!def || !inst) return '';
+    var htmlText = replaceVars(def.templateHtml || '');
+    (def.slots || []).forEach(function(sl){
+      var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\\\]', 'g');
+      var content = inst.slotOutputs && typeof inst.slotOutputs[sl.slotKey] === 'string' ? inst.slotOutputs[sl.slotKey] : '';
+      htmlText = htmlText.replace(re, content || '[' + sl.label + ']');
+    });
+    return htmlText;
+  }
+
+  function buildSelect(id, currentValue, optionsList, cssClass) {
+    var sel = '<select class="' + (cssClass||'input') + '" id="' + esc(id) + '">';
+    sel += '<option value="">-- Sélectionner --</option>';
+    optionsList.forEach(function(opt) {
+      var isSelected = (currentValue === opt) ? ' selected' : '';
+      sel += '<option value="' + esc(opt) + '"' + isSelected + '>' + esc(opt) + '</option>';
+    });
+    sel += '</select>';
+    return sel;
+  }
+
+  function renderCasePanel(){
+    var host = $('casePanel');
+    if (Object.keys(state.data.reportDefinitions).length === 0) {
+        host.innerHTML = '<div class="empty-state small">Système en attente des variables...</div>'; return;
+    }
+
+    var cc = state.data.caseContext || {};
+    var schema = state.data.uiSchema || {};
+
+    var optEvol = schema.evaluationsEvolution || [];
+    var optCap = schema.evaluationsCapacite || [];
+    var optIntensite = schema.intensiteOptions || [];
+    var optProg = schema.typeProgrammeOptions || [];
+    var optPC = schema.planCorrectionnelOptions || [];
+    var optPlans = schema.evaluationsPlans || [];
+
+    host.innerHTML = '' +
+      '<details open><summary>Informations et Profil</summary><div>' +
+        '<div class="field"><div class="label">Type de programme</div>' + buildSelect('inpTypeProg', cc.typeProgramme, optProg) + '</div>' +
+        '<div class="field"><label class="chk-field"><input type="checkbox" id="chkAuto" ' + (cc.estAutochtone ? 'checked' : '') + '> Participant Autochtone</label></div>' +
+        '<div class="field"><div class="label">Nom de l\'Aîné(e) (si applicable)</div><input class="input" id="inpAine" value="' + esc(cc.nomAine || '') + '"></div>' +
+        '<div class="field"><div class="label">Nom complet</div><input class="input" id="inpNom" value="' + esc(cc.nom || '') + '"></div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">SED</div><input class="input" id="inpSed" value="' + esc(cc.fps || '') + '"></div>' +
+          '<div class="field"><div class="label">Date naissance</div><input class="input" type="date" id="inpDob" value="' + esc(cc.dateNaissance || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Début programme</div><input class="input" type="date" id="inpDebProg" value="' + esc(cc.dateDebutProgramme || '') + '"></div>' +
+          '<div class="field"><div class="label">Fin programme</div><input class="input" type="date" id="inpFinProg" value="' + esc(cc.dateFinProgramme || '') + '"></div>' +
+        '</div>' +
+        '<div class="field"><div class="label">Statut Plan Correctionnel</div>' + buildSelect('inpStatutPC', cc.planCorrectionnelStatut, optPC) + '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Date rapport préparatoire</div><input class="input" type="date" id="inpDatePrep" value="' + esc(cc.dateRapportPrep || '') + '"></div>' +
+          '<div class="field"><div class="label">Date plan correctionnel</div><input class="input" type="date" id="inpDatePlan" value="' + esc(cc.datePlanCorrectionnel || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Cote IRC</div><input class="input" id="inpCoteIRC" value="' + esc(cc.coteIRC || '') + '"></div>' +
+          '<div class="field"><div class="label">Statique 99-R</div><input class="input" id="inpCoteStat" value="' + esc(cc.coteStatique99R || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">STABLE-2007</div><input class="input" id="inpCoteStable" value="' + esc(cc.coteStable2007 || '') + '"></div>' +
+          '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Animateur principal</div><input class="input" id="inpAnimNom" value="' + esc(cc.animateurNom || '') + '"></div>' +
+          '<div class="field"><div class="label">Titre animateur</div><input class="input" id="inpAnimTitre" value="' + esc(cc.animateurTitre || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Co-animateur (Optionnel)</div><input class="input" id="inpCoAnimNom" value="' + esc(cc.coAnimateurNom || '') + '"></div>' +
+          '<div class="field"><div class="label">Titre co-animateur</div><input class="input" id="inpCoAnimTitre" value="' + esc(cc.coAnimateurTitre || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Nb séances assistées</div><input class="input" id="inpNbAss" value="' + esc(cc.nbSeancesAssistees || '') + '"></div>' +
+          '<div class="field"><div class="label">Nb séances totales</div><input class="input" id="inpNbTot" value="' + esc(cc.nbSeancesTotales || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2" style="background:#fef3c7; padding:10px; border-radius:8px; border:1px solid #fdba74; margin-top:10px;">' +
+          '<div class="field"><label class="chk-field"><input type="checkbox" id="chkDerogation" ' + (cc.derogationActive ? 'checked' : '') + '> Comité de dérogation</label></div>' +
+          '<div class="field"><div class="label">Date de dérogation</div><input class="input" type="date" id="inpDateDerogation" value="' + esc(cc.dateDerogation || '') + '"></div>' +
+        '</div>' +
+        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évol. de l\'impact (Sec. 2)</div>' + buildSelect('inpImpactEvol', cc.impactEvolution, optEvol) +
+        '</div>' +
+        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évaluation globale des plans de maîtrise</div>' + buildSelect('inpEvalPlans', cc.evaluationPlansMaitrise, optPlans) +
+        '</div>' +
+        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évolution globale (Sec. 3)</div>' + buildSelect('inpGlobalEvol', cc.globalEvolution, optEvol) +
+        '</div>' +
+      '</div></details>' +
+      '<details><summary>Facteurs dynamiques</summary><div id="factorsHost"></div></details>';
+
+    bindCaseInputs();
+    renderFactors();
+  }
+
+  function renderFactors(){
+    var host = $('factorsHost');
+    var factors = state.data.factors || {};
+    var schema = state.data.uiSchema || {};
+
+    var orderedFactorKeys = [];
+    var defSecs = getReportDef().sections || [];
+    defSecs.forEach(function(s) {
+        if (s.rfKey && factors[s.rfKey]) {
+            orderedFactorKeys.push(s.rfKey);
+        }
+    });
+    Object.keys(factors).forEach(function(k) {
+        if (orderedFactorKeys.indexOf(k) === -1) orderedFactorKeys.push(k);
+    });
+
+    var out = '';
+    var optionsEvolution = schema.evaluationsEvolution || [];
+    var optionsCapacite = schema.evaluationsCapacite || [];
+    var optionsType = ["Contributif", "non Contributif"];
+
+    function buildSelectInline(currentValue, optionsList, dataK, dataP) {
+      var sel = '<select class="input factor-input" data-k="' + esc(dataK) + '" data-p="' + esc(dataP) + '">';
+      sel += '<option value="">-</option>';
+      optionsList.forEach(function(opt) {
+        var isSelected = (currentValue === opt) ? ' selected' : '';
+        sel += '<option value="' + esc(opt) + '"' + isSelected + '>' + esc(opt) + '</option>';
+      });
+      sel += '</select>';
+      return sel;
+    }
+
+    orderedFactorKeys.forEach(function(k){
+      var x = factors[k] || {};
+      out += '<div class="card" style="margin-bottom:10px">' +
+        '<div class="cardTitle">' + esc(x.label || k) + ' <span class="badge">' + esc(k) + '</span></div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Type</div>' + buildSelectInline(x.type, optionsType, k, 'type') + '</div>' +
+          '<div class="field"><div class="label">Évolution</div>' + buildSelectInline(x.evolution, optionsEvolution, k, 'evolution') + '</div>' +
+        '</div>' +
+        '<div class="field"><div class="label">Niveau</div>' + buildSelectInline(x.niveau, optionsCapacite, k, 'niveau') + '</div>' +
+      '</div>';
+    });
+
+    if(!out) out = '<div class="empty-state small">Aucun facteur dynamique configuré.</div>';
+    host.innerHTML = out;
+
+    Array.prototype.forEach.call(document.querySelectorAll('.factor-input'), function(inp){
+      inp.addEventListener('change', function(){
+        var k = this.getAttribute('data-k');
+        var p = this.getAttribute('data-p');
+        var val = this.value;
+
+        state.data.factors[k][p] = val;
+
+        // MODIFICATION AUTOMATIQUE DE LA PHRASE DESCRIPTIVE SELON LE TYPE DE FACTEUR
+        if(p === 'type') {
+            if(val === 'Contributif') {
+                state.data.factors[k].descriptionType = "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...";
+            } else if(val === 'non Contributif') {
+                state.data.factors[k].descriptionType = "Bien que ce domaine n'ait pas contribué aux infractions passées du participant, les déficits présentent des défis potentiels pour une réinsertion réussie de la manière suivante…";
+            } else {
+                state.data.factors[k].descriptionType = "";
+            }
+        }
+
+        setDirty(true, 'Facteurs modifiés');
+        refreshEditorPreviewOnly();
+        if(state.activeSectionKey && state.activeSectionKey !== '__PROMPTS__') renderEditor();
+      });
+    });
+  }
+
+  function bindCaseInputs(){
+    function bind(id, path, isCheckbox){
+      var el = $(id); if(!el) return;
+      var eventType = isCheckbox || (el.tagName.toLowerCase() === 'select') ? 'change' : 'input';
+      el.addEventListener(eventType, function(){
+        state.data.caseContext[path] = isCheckbox ? this.checked : this.value;
+        setDirty(true, 'Variables modifiées');
+        refreshEditorPreviewOnly();
+        if (path === 'estAutochtone' || path === 'typeProgramme') {
+            renderEditor(); // Force maj bibliothèque et aperçu
+        }
+      });
+    }
+    bind('inpNom','nom'); bind('inpSed','fps'); bind('inpDob','dateNaissance'); bind('inpDatePrep','dateRapportPrep'); bind('inpDatePlan','datePlanCorrectionnel');
+    bind('inpDebProg','dateDebutProgramme'); bind('inpFinProg','dateFinProgramme');
+    bind('inpCoteIRC','coteIRC'); bind('inpCoteStat','coteStatique99R'); bind('inpCoteStable','coteStable2007');
+    bind('inpAnimNom','animateurNom'); bind('inpAnimTitre','animateurTitre');
+    bind('inpCoAnimNom','coAnimateurNom'); bind('inpCoAnimTitre','coAnimateurTitre');
+    bind('inpNbAss','nbSeancesAssistees'); bind('inpNbTot','nbSeancesTotales');
+    bind('inpIntensite','intensiteMPCI');
+    bind('inpTypeProg','typeProgramme'); bind('inpAine','nomAine'); bind('inpStatutPC','planCorrectionnelStatut');
+    bind('inpImpactEvol','impactEvolution'); bind('inpEvalPlans','evaluationPlansMaitrise'); bind('inpGlobalEvol','globalEvolution');
+    bind('chkAuto','estAutochtone', true);
+    bind('chkDerogation','derogationActive', true);
+    bind('inpDateDerogation','dateDerogation');
+  }
+
+  function renderSectionsList(){
+    var host = $('sectionsList');
+    var def = getReportDef();
+    if(!def.sections || def.sections.length === 0) {
+        host.innerHTML = '<div class="panelTitle">Plan du rapport</div><div class="empty-state small">Données structurelles absentes. Veuillez charger le JSON.</div>'; return;
+    }
+    if(!state.activeSectionKey && def.sections && def.sections.length){ state.activeSectionKey = def.sections[0].sectionKey; }
+
+    var out = '<div class="panelTitle">Administration</div>';
+    var activePrompt = state.activeSectionKey === '__PROMPTS__';
+    out += '<div class="sectionItem' + (activePrompt ? ' active' : '') + '" data-key="__PROMPTS__" style="background:#f8fafc; border:1px dashed #cbd5e1; margin-bottom:15px;">' +
+             '<div style="min-width:0;flex:1"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:900;color:#1e3a8a;">🔒 Bibliothèque des Prompts</div></div>' +
+           '</div>';
+
+    out += '<div class="panelTitle">Plan du rapport</div>';
+    (def.sections || []).forEach(function(s, i){
+      var inst = getInstanceSection(s.sectionKey) || {};
+      var active = state.activeSectionKey === s.sectionKey;
+      var title = getDisplayTitle(s.sectionKey);
+
+      var arrows = '<div class="move-arrows">' +
+                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="-1" title="Monter">▲</button>' +
+                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="1" title="Descendre">▼</button>' +
+                   '</div>';
+
+      out += '<div class="sectionItem' + (active ? ' active' : '') + '" data-key="' + esc(s.sectionKey) + '">' +
+               '<div style="min-width:0;flex:1;display:flex;align-items:center;">' +
+                 arrows +
+                 '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(title) + '</div>' +
+               '</div>' +
+               '<span class="badge' + (inst.enabled ? '' : ' off') + '">' + (inst.enabled ? 'Actif' : 'Masqué') + '</span>' +
+             '</div>';
+    });
+    host.innerHTML = out;
+
+    Array.prototype.forEach.call(host.querySelectorAll('.sectionItem'), function(item){
+      item.addEventListener('click', function(e){
+          if(e.target.classList.contains('btn-move')) return;
+          var targetKey = this.getAttribute('data-key');
+
+          if (targetKey === '__PROMPTS__' && !state.isAdmin) {
+              var pwd = prompt("ACCÈS RESTREINT. Veuillez entrer le mot de passe administrateur :");
+              if (pwd !== "admin") {
+                  alert("Accès refusé. Clé de sécurité invalide.");
+                  return;
+              }
+              state.isAdmin = true;
+              toast("Authentification réussie. Mode administrateur activé.");
+          }
+
+          state.activeSectionKey = targetKey;
+          state.activeSlotKey = null;
+          renderEditor();
+      });
+    });
+
+    Array.prototype.forEach.call(host.querySelectorAll('.btn-move'), function(btn){
+      btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          var sk = this.getAttribute('data-sk');
+          var dir = parseInt(this.getAttribute('data-dir'));
+
+          var defSecs = getReportDef().sections;
+          var idx = defSecs.findIndex(function(s) { return s.sectionKey === sk; });
+
+          if (idx !== -1 && idx + dir >= 0 && idx + dir < defSecs.length) {
+              var temp = defSecs[idx];
+              defSecs[idx] = defSecs[idx + dir];
+              defSecs[idx + dir] = temp;
+
+              var instSecs = state.data.reportInstance.sections;
+              var newInstSecs = [];
+              defSecs.forEach(function(ds) {
+                  var isec = instSecs.find(function(is) { return is.sectionKey === ds.sectionKey; });
+                  if(isec) newInstSecs.push(isec);
+              });
+              state.data.reportInstance.sections = newInstSecs;
+
+              setDirty(true, 'Ordre du rapport modifié');
+              renderSectionsList();
+              renderFactors();
+              refreshEditorPreviewOnly();
+          }
+      });
+    });
+  }
+
+  function renderEditor(){
+    var host = $('editorHost');
+
+    if (state.activeSectionKey === '__PROMPTS__') {
+        var isAuto = state.data.caseContext.estAutochtone;
+        var progType = state.data.caseContext.typeProgramme;
+
+        var html = '<div class="card"><div class="cardTitle" style="color:#1e3a8a; font-size:16px;">⚙️ Bibliothèque globale des Prompts et Directives</div>';
+        html += '<div class="small muted" style="margin-bottom:15px;">Ces instructions sont filtrées selon le profil actuel du délinquant (gauche). Le système combinera ces blocs automatiquement lors de la génération. Ne modifiez pas les clés (titres).</div>';
+
+        var pKeys = Object.keys(state.data.prompts).filter(function(pk) {
+            if (pk.startsWith('dir.autochtone.')) return isAuto;
+            if (pk.startsWith('dir.adapte.')) return progType === 'Adapté';
+            if (pk.startsWith('dir.hybride.')) return progType === 'Hybride';
+            if (pk.startsWith('dir.communautaire.')) return progType === 'Communautaire';
+            if (pk === 'gen.sec.cycle_criminel') return (progType === 'Hybride' || progType === 'Adapté' || progType === 'Communautaire');
+            return true;
+        }).sort();
+
+        pKeys.forEach(function(pk) {
+            html += '<div class="slotBox" style="margin-bottom:10px;">' +
+                    '<h4 style="color:#334155; font-size:11px; text-transform:uppercase;">Clé : ' + esc(pk) + '</h4>' +
+                    '<textarea class="textarea mono global-prompt-editor" data-pk="' + esc(pk) + '">' + esc(state.data.prompts[pk]) + '</textarea>' +
+                    '</div>';
+        });
+
+        if(pKeys.length === 0) { html += '<div class="empty-state small">Aucun prompt disponible pour ce profil.</div>'; }
+
+        html += '</div>';
+        host.innerHTML = html;
+
+        Array.prototype.forEach.call(document.querySelectorAll('.global-prompt-editor'), function(ta){
+            ta.addEventListener('input', function(){
+                state.data.prompts[this.getAttribute('data-pk')] = this.value;
+                setDirty(true, 'Prompt global modifié');
+            });
+        });
+        refreshEditorPreviewOnly();
+        return;
+    }
+
+    var key = state.activeSectionKey;
+    var def = getSectionDef(key), inst = getInstanceSection(key);
+    if(!def || !inst){ host.innerHTML = '<div class="empty-state">Aucune section active identifiée.</div>'; return; }
+
+    var slotsHtml = '';
+    (def.slots || []).forEach(function(sl, idx){
+      var promptText = state.data.prompts[sl.promptKey] || '';
+      var val = inst.slotOutputs[sl.slotKey] || '';
+      var progType = state.data.caseContext.typeProgramme;
+
+      if (progType === 'Hybride' && state.data.prompts['dir.hybride.general']) {
+          promptText += "\n\n" + state.data.prompts['dir.hybride.general'];
+      } else if (progType === 'Communautaire' && state.data.prompts['dir.communautaire.general']) {
+          promptText += "\n\n" + state.data.prompts['dir.communautaire.general'];
+      } else if (progType === 'Adapté') {
+          if (sl.slotKey === 'sec.assiduite.main' && state.data.prompts['dir.adapte.assiduite']) {
+              promptText += "\n\n" + state.data.prompts['dir.adapte.assiduite'];
+          } else if (state.data.prompts['dir.adapte.general']) {
+              promptText += "\n\n" + state.data.prompts['dir.adapte.general'];
+          }
+      }
+
+      if(state.data.caseContext.estAutochtone) {
+          if(sl.slotKey === 'sec.cycle_criminel.main') {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.cycle_criminel'] || '');
+          } else if(sl.slotKey === 'sec.progres.main') {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.progres'] || '');
+          } else if(sl.slotKey.indexOf('.facteur') > -1) {
+              var fKey = sl.slotKey.split('.')[1];
+              var isNonContrib = state.data.factors && state.data.factors[fKey] && state.data.factors[fKey].type === 'non Contributif';
+              if (isNonContrib) { promptText += "\n\n" + (state.data.prompts['dir.autochtone.facteur_non_contrib'] || ''); }
+              else { promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || ''); }
+          } else if(sl.slotKey.indexOf('.objectif') > -1) {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.objectif'] || '');
+          } else if(sl.slotKey === 'sec.plansMaitrise.analyse') {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.plans_maitrise'] || '');
+          } else if(sl.slotKey === 'sec.recommandations.etapes') {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.etapes'] || '');
+          } else {
+              promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || '');
+          }
+      }
+
+      slotsHtml += '<div class="slotBox">' +
+          '<h4>' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
+          '<div class="field"><div class="label" style="color:#0ea5e9;">Prompt compilé final (Aperçu Lecture Seule)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; cursor:not-allowed;" title="Passez par la Bibliothèque des Prompts pour modifier la structure.">' + esc(promptText) + '</textarea></div>' +
+          '<div class="field"><div class="label">Texte généré / sortie du slot</div><textarea class="textarea slot-editor" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
+        '</div>';
+    });
+
+    host.innerHTML = '<div class="card">' +
+        '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
+        '<div class="chips" id="sourceChips"></div>' +
+        '<div class="field" style="margin-top:10px"><label><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export</label></div>' +
+      '</div>' +
+      '<div class="card"><div class="cardTitle">Slots de la section</div>' + slotsHtml + '</div>' +
+      '<div class="card"><div class="cardTitle">Aperçu du rendu combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
+
+    bindEditor();
+    renderSourceChips();
+    refreshEditorPreviewOnly();
+  }
+
+  function renderSourceChips(){
+    var key = state.activeSectionKey;
+    var inst = getInstanceSection(key);
+    var host = $('sourceChips');
+    if(!host || !inst) return;
+    var out = '';
+    (state.data.sources || []).forEach(function(src){
+      var on = (inst.selectedSourceIds || []).indexOf(src.id) >= 0;
+      out += '<button class="chip' + (on ? ' on' : '') + '" data-id="' + esc(src.id) + '">' + esc(src.title || src.name || src.id) + '</button>';
+    });
+    if(!out){ out = '<span class="small muted">Aucune source chargée dans l\'interface.</span>'; }
+    host.innerHTML = out;
+    Array.prototype.forEach.call(host.querySelectorAll('.chip'), function(btn){
+      btn.addEventListener('click', function(){
+        var id = this.getAttribute('data-id');
+        var arr = inst.selectedSourceIds || [];
+        var ix = arr.indexOf(id);
+        if(ix >= 0){ arr.splice(ix,1); } else { arr.push(id); }
+        inst.selectedSourceIds = arr;
+        setDirty(true, 'Sources associées modifiées');
+        renderSourceChips();
+      });
+    });
+  }
+
+  function bindEditor(){
+    var key = state.activeSectionKey;
+    var inst = getInstanceSection(key);
+    $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = (this.value === getSectionDef(key).title) ? '' : this.value; setDirty(true); renderSectionsList(); });
+    $('chkEnabled').addEventListener('change', function(){ inst.enabled = !!this.checked; setDirty(true); renderSectionsList(); });
+    Array.prototype.forEach.call(document.querySelectorAll('.slot-editor'), function(ta){
+      ta.addEventListener('input', function(){ inst.slotOutputs[this.getAttribute('data-slotkey')] = this.value; setDirty(true); refreshEditorPreviewOnly(); });
+    });
+  }
+
+  function refreshEditorPreviewOnly(){
+    var host = $('templatePreview');
+    if(host) {
+        if(state.activeSectionKey === '__PROMPTS__') host.innerHTML = '';
+        else host.innerHTML = renderSectionHtml(state.activeSectionKey);
+    }
+  }
+
+  function renderSourcesList(){
+    var host = $('sourcesList');
+    var out = '';
+    (state.data.sources || []).forEach(function(src){
+      out += '<div class="sourceItem">' +
+        '<div class="sourceName">' + esc(src.title || src.name || src.id) + '</div>' +
+        '<div class="sourceMeta">' + esc(src.type || 'Source') + (src.date ? ' · ' + esc(src.date) : '') + '</div>' +
+        '<div style="margin-top:8px"><button class="btn danger btnDelSrc" data-id="' + esc(src.id) + '">Suppr.</button></div>' +
+      '</div>';
+    });
+    if(!out){ out = '<div class="small muted">Aucune source documentée.</div>'; }
+    host.innerHTML = out;
+    Array.prototype.forEach.call(host.querySelectorAll('.btnDelSrc'), function(btn){
+      btn.addEventListener('click', function(){
+        var id = this.getAttribute('data-id');
+        state.data.sources = (state.data.sources || []).filter(function(s){ return s.id !== id; });
+        (state.data.reportInstance.sections || []).forEach(function(sec){ sec.selectedSourceIds = (sec.selectedSourceIds || []).filter(function(x){ return x !== id; }); });
+        setDirty(true, 'Source supprimée');
+        renderSourcesList();
+        renderEditor();
+      });
+    });
+  }
+
+  // === APPEL RÉSEAU AZURE OPENAI ===
+  async function callAzureOpenAI(systemPrompt, userPrompt) {
+    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
+      throw new Error("Configuration Azure OpenAI manquante. Veuillez configurer les paramètres via le bouton '☁️ Config IA'.");
+    }
+
+    // Assurer que l'endpoint se termine par une barre oblique et construire l'URL correctement
+    let baseUrl = azureConfig.endpoint;
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+    // Format Azure OpenAI URL: https://{endpoint}/openai/deployments/{deployment-id}/chat/completions?api-version={api-version}
+    const url = `${baseUrl}openai/deployments/${azureConfig.deployment}/chat/completions?api-version=${azureConfig.apiVersion}`;
+
+    const headers = {
+      "Content-Type": "application/json",
+      "api-key": azureConfig.apiKey
+    };
+
+    // Anonymisation des prompts avant l'envoi
+    const sanitizedSystemPrompt = sanitizeForAI(systemPrompt);
+    const sanitizedUserPrompt = sanitizeForAI(userPrompt);
+
+    const body = JSON.stringify({
+      messages: [
+        { role: "system", content: sanitizedSystemPrompt },
+        { role: "user", content: sanitizedUserPrompt }
+      ],
+      temperature: 0.3, // Température basse pour les rapports formels (diminue les hallucinations)
+      max_tokens: 1500,
+      top_p: 0.9
+    });
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: body
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `Erreur réseau ${response.status} : ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (data.choices && data.choices.length > 0) {
+      const generatedContent = data.choices[0].message.content;
+      // On dé-anonymise la réponse (remet le vrai nom si l'IA a utilisé [LE PARTICIPANT])
+      return desanitizeFromAI(generatedContent);
+    } else {
+      throw new Error("Réponse vide d'Azure OpenAI");
+    }
+  }
+  // =================================
+
+  function saveJson(){
+    if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Base de données JSON absente.');
+        return;
+    }
+    var payload = clone(state.data); payload.exportedAt = new Date().toISOString();
+    var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json;charset=utf-8'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'MPCI-DS-IE-2.21.0.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    setDirty(false); toast('Exportation JSON confirmée.');
+  }
+
+  function loadJsonFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{ state.data = normalizeData(JSON.parse(e.target.result)); state.activeSectionKey = (getReportDef().sections[0] || {}).sectionKey || null; renderAll(); setDirty(false); toast('Liaison de données établie avec succès.'); }
+      catch(err){ alert('Alerte de sécurité : Format JSON corrompu (' + err.message + ')'); }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  function resetActiveSection(){
+    var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
+    if(!inst || !def) return;
+    if(!confirm('Alerte de processus : Purger les emplacements de cette section ?')) return;
+    inst.titleOverride = '';
+    inst.status = 'draft';
+    (def.slots || []).forEach(function(sl){ inst.slotOutputs[sl.slotKey] = ''; });
+    setDirty(true, 'Section réinitialisée');
+    renderEditor();
+  }
+
+  async function generateAIForEmptySlots() {
+    try {
+      if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Chargement du fichier JSON requis.');
+        return;
+      }
+
+      if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
+        showAzureModal();
+        return;
+      }
+
+      var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
+      if(!inst || !def) {
+        toast('Erreur système : Aucune section active ciblée.');
+        return;
+      }
+
+      // 1. Récupérer le contenu de toutes les sources sélectionnées pour cette section
+      let sourcesContent = "";
+      if (inst.selectedSourceIds && inst.selectedSourceIds.length > 0) {
+        sourcesContent = "Voici les documents justificatifs et notes de suivi à utiliser comme source exclusive d'information :\n\n";
+        inst.selectedSourceIds.forEach(function(srcId) {
+          var srcObj = (state.data.sources || []).find(s => s.id === srcId);
+          if (srcObj) {
+            sourcesContent += `--- DÉBUT SOURCE : ${srcObj.title} ---\n${srcObj.content}\n--- FIN SOURCE ---\n\n`;
+          }
+        });
+      }
+
+      var emptySlots = (def.slots || []).filter(sl => !inst.slotOutputs[sl.slotKey] || inst.slotOutputs[sl.slotKey].trim() === '');
+
+      if (emptySlots.length === 0) {
+        toast('Avis : Aucun emplacement vide détecté dans cette section.');
+        return;
+      }
+
+      $('btnGenerateAI').disabled = true;
+      $('btnGenerateAI').innerHTML = '⏳ Génération en cours...';
+
+      let updated = false;
+
+      // 2. Traiter chaque slot vide séquentiellement
+      for (let i = 0; i < emptySlots.length; i++) {
+        let sl = emptySlots[i];
+
+        // Reconstruire le prompt final pour ce slot (incluant les directives globales du type de programme)
+        let promptText = state.data.prompts[sl.promptKey] || '';
+        var progType = state.data.caseContext.typeProgramme;
+
+        if (progType === 'Hybride' && state.data.prompts['dir.hybride.general']) promptText += "\n\n" + state.data.prompts['dir.hybride.general'];
+        else if (progType === 'Communautaire' && state.data.prompts['dir.communautaire.general']) promptText += "\n\n" + state.data.prompts['dir.communautaire.general'];
+        else if (progType === 'Adapté') {
+            if (sl.slotKey === 'sec.assiduite.main' && state.data.prompts['dir.adapte.assiduite']) promptText += "\n\n" + state.data.prompts['dir.adapte.assiduite'];
+            else if (state.data.prompts['dir.adapte.general']) promptText += "\n\n" + state.data.prompts['dir.adapte.general'];
+        }
+
+        if(state.data.caseContext.estAutochtone) {
+            if(sl.slotKey === 'sec.cycle_criminel.main') promptText += "\n\n" + (state.data.prompts['dir.autochtone.cycle_criminel'] || '');
+            else if(sl.slotKey === 'sec.progres.main') promptText += "\n\n" + (state.data.prompts['dir.autochtone.progres'] || '');
+            else if(sl.slotKey.indexOf('.facteur') > -1) {
+                var fKey = sl.slotKey.split('.')[1];
+                var isNonContrib = state.data.factors && state.data.factors[fKey] && state.data.factors[fKey].type === 'non Contributif';
+                if (isNonContrib) promptText += "\n\n" + (state.data.prompts['dir.autochtone.facteur_non_contrib'] || '');
+                else promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || '');
+            } else if(sl.slotKey.indexOf('.objectif') > -1) promptText += "\n\n" + (state.data.prompts['dir.autochtone.objectif'] || '');
+            else if(sl.slotKey === 'sec.plansMaitrise.analyse') promptText += "\n\n" + (state.data.prompts['dir.autochtone.plans_maitrise'] || '');
+            else if(sl.slotKey === 'sec.recommandations.etapes') promptText += "\n\n" + (state.data.prompts['dir.autochtone.etapes'] || '');
+            else promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || '');
+        }
+
+        // Combiner le system prompt (règles et sources) et le user prompt (instruction spécifique)
+        let systemPrompt = "Vous êtes un assistant IA spécialisé dans la rédaction de rapports correctionnels officiels (MPCI). Votre ton doit être objectif, professionnel, factuel, et en français.\n" + sourcesContent;
+        let userPrompt = "Instructions pour cette section :\n" + promptText + "\n\nRédige la réponse en format HTML simple (utilisez <p>, <ul>, <li> si nécessaire, pas de balise Markdown ```html).";
+
+        toast(`Génération du slot : ${sl.label}...`);
+
+        try {
+          // Appel API Azure OpenAI
+          let aiResponse = await callAzureOpenAI(systemPrompt, userPrompt);
+
+          // Nettoyer les éventuelles balises Markdown résiduelles
+          aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+          inst.slotOutputs[sl.slotKey] = aiResponse;
+          updated = true;
+
+          // Mettre à jour l'interface visuellement au fur et à mesure
+          renderEditor();
+        } catch (apiError) {
+          alert(`Erreur IA pour "${sl.label}" : ` + apiError.message);
+          break; // Stop le processus si l'API échoue
+        }
+      }
+
+      if(updated) {
+        inst.status = 'review_needed';
+        setDirty(true, 'Injection de texte IA terminée');
+        renderEditor();
+        toast('Opération réussie : Génération IA appliquée.');
+      }
+
+    } catch(err) {
+      alert('Alerte critique lors de la génération IA : ' + err.message);
+    } finally {
+      // Restaurer le bouton
+      $('btnGenerateAI').disabled = false;
+      $('btnGenerateAI').innerHTML = '✦ Générateur IA';
+    }
+  }
+
+  function addSourceFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      state.data.sources = state.data.sources || [];
+      state.data.sources.push({
+        id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
+        title: file.name,
+        type: file.type || 'local-file',
+        date: nowDate(),
+        content: typeof e.target.result === 'string' ? e.target.result.slice(0,20000) : ''
+      });
+      setDirty(true, 'Source ajoutée');
+      renderSourcesList();
+      renderEditor();
+      toast('Nouvelle source ajoutée au répertoire.');
+    };
+    if((file.type || '').indexOf('text') === 0 || /\.(txt|md|csv|json|html)$/i.test(file.name)){ reader.readAsText(file, 'utf-8'); }
+    else { reader.readAsDataURL(file); }
+  }
+
+  function exportWord(){
+    try {
+      if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Chargement du fichier JSON requis.');
+        return;
+      }
+      var parts = [];
+      (getReportDef().sections || []).forEach(function(sec){
+        var inst = getInstanceSection(sec.sectionKey);
+        if(!inst || !inst.enabled) return;
+        parts.push('<h2 style="font-family:Arial,sans-serif;font-size:14pt;color:#000;border-bottom:1px solid #000;padding-bottom:4px;margin-top:24pt;margin-bottom:12pt;text-transform:uppercase;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
+        parts.push('<div style="font-family:Arial,sans-serif;font-size:11pt;line-height:1.5;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
+      });
+      var cc = state.data.caseContext || {};
+      var nom = esc(cc.nom || '________________');
+      var fps = esc(cc.fps || '________');
+      var progType = esc(cc.typeProgramme || 'Programme');
+
+      var docHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Rapport_' + fps + '</title>' +
+                    '<style>p { margin: 0 0 10pt 0; line-height: 1.5; } h3, h4 { margin-top: 16pt; margin-bottom: 8pt; }</style>' +
+                    '</head><body style="font-family:Arial,sans-serif;margin:40px;color:#000000;">' +
+                    '<div style="text-align:center;margin-bottom:40px;">' +
+                    '<h1 style="font-size:16pt;margin-bottom:10px;text-transform:uppercase;">RAPPORT FINAL - MPCI DÉLINQUANCE SEXUELLE</h1>' +
+                    '<div style="font-size:12pt;font-weight:bold;margin-bottom:5px;">Type de programme : ' + progType + '</div>' +
+                    '<div style="font-size:12pt;margin-bottom:5px;">Nom du participant : <strong>' + nom + '</strong></div>' +
+                    '<div style="font-size:12pt;margin-bottom:5px;">SED : <strong>' + fps + '</strong></div>' +
+                    '<div style="font-size:12pt;">Date d\'exportation : ' + esc(nowDate()) + '</div>' +
+                    '</div>' + parts.join('\n') + '</body></html>';
+      var blob = new Blob(['\ufeff', docHtml], {type:'application/msword;charset=utf-8'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Rapport_' + slugify(cc.fps || 'DOSSIER') + '.doc';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      }, 1000);
+      toast('Opération réussie : Fichier Word professionnel généré.');
+    } catch(err) {
+      alert('Alerte critique lors de l\'exportation : ' + err.message);
+    }
+  }
+
+  function initResizers() {
+    var appRoot = $('appRoot');
+    var resLeft = $('resizerLeft');
+    var resRight = $('resizerRight');
+    var isDraggingLeft = false;
+    var isDraggingRight = false;
+
+    resLeft.addEventListener('mousedown', function(e) {
+      isDraggingLeft = true;
+      document.body.classList.add('resizing');
+      resLeft.classList.add('active');
+    });
+
+    resRight.addEventListener('mousedown', function(e) {
+      isDraggingRight = true;
+      document.body.classList.add('resizing');
+      resRight.classList.add('active');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDraggingLeft && !isDraggingRight) return;
+      if (isDraggingLeft) { var newW = Math.max(200, Math.min(e.clientX, 800)); appRoot.style.setProperty('--side-w', newW + 'px'); }
+      if (isDraggingRight) { var newW = Math.max(200, Math.min(window.innerWidth - e.clientX, 1000)); appRoot.style.setProperty('--right-w', newW + 'px'); }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isDraggingLeft || isDraggingRight) {
+        isDraggingLeft = false;
+        isDraggingRight = false;
+        document.body.classList.remove('resizing');
+        resLeft.classList.remove('active');
+        resRight.classList.remove('active');
+      }
+    });
+  }
+
+  function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); renderSourcesList(); }
+
+  // === CONFIGURATION AZURE OPENAI ===
+  function showAzureModal(){
+    $('azureEndpoint').value = azureConfig.endpoint;
+    $('azureApiKey').value = azureConfig.apiKey;
+    $('azureDeployment').value = azureConfig.deployment;
+    $('azureApiVersion').value = azureConfig.apiVersion;
+    $('azureModal').style.display = 'flex';
+  }
+
+  function hideAzureModal(){
+    $('azureModal').style.display = 'none';
+  }
+
+  function saveAzureConfig(){
+    azureConfig.endpoint = $('azureEndpoint').value.trim();
+    azureConfig.apiKey = $('azureApiKey').value.trim();
+    azureConfig.deployment = $('azureDeployment').value.trim();
+    azureConfig.apiVersion = $('azureApiVersion').value.trim();
+
+    // On conserve la config le temps de la session du navigateur, mais ce n'est jamais exporté.
+    sessionStorage.setItem('azure_endpoint', azureConfig.endpoint);
+    sessionStorage.setItem('azure_api_key', azureConfig.apiKey);
+    sessionStorage.setItem('azure_deployment', azureConfig.deployment);
+    sessionStorage.setItem('azure_api_version', azureConfig.apiVersion);
+
+    hideAzureModal();
+    toast('Configuration Azure sauvegardée en session.');
+  }
+
+  // ===================================
+
+  function bindGlobalEvents(){
+    $('btnSaveJson').addEventListener('click', saveJson);
+    $('btnConfigAzure').addEventListener('click', showAzureModal);
+    $('btnAzureCancel').addEventListener('click', hideAzureModal);
+    $('btnAzureSave').addEventListener('click', saveAzureConfig);
+    $('btnLoadJson').addEventListener('click', function(){ $('jsonFileInput').click(); });
+    $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
+    $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
+    $('btnResetSection').addEventListener('click', resetActiveSection);
+    $('btnExportWord').addEventListener('click', exportWord);
+    $('btnUploadSource').addEventListener('click', function(){ $('sourceFileInput').click(); });
+    $('sourceFileInput').addEventListener('change', function(){ addSourceFile(this.files[0]); this.value=''; });
+    initResizers();
+  }
+
+  bindGlobalEvents();
+})();
+</script>
+</body>
+</html>
