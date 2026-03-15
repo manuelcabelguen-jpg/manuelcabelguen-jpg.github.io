@@ -22,22 +22,30 @@
     .resizer { background: var(--border); cursor: col-resize; z-index: 10; transition: background 0.2s; }
     .resizer:hover, .resizer.active { background: var(--blue); }
     body.resizing { user-select: none; cursor: col-resize; }
-    .header{height:56px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-weight:800;letter-spacing:.2px}
-    .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:8px 12px;flex-wrap:wrap;background:#fff}
-    .btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;color:#334155;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:800;font-size:12px}
-    .btn:hover{background:#f8fafc}
+    .header{height:56px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-weight:800;letter-spacing:.5px; font-size:15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index:10;}
+    .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:8px 16px;flex-wrap:wrap;background:#fff; box-shadow: 0 2px 5px rgba(15,23,42,0.02);}
+    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;color:#334155;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;transition:all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04);}
+    .btn:hover{background:#f8fafc; border-color:#cbd5e1; transform:translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.06);}
+    .btn:active{transform:translateY(0); box-shadow:none;}
     .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
     .btn.primary:hover{background:var(--blue2);border-color:var(--blue2)}
-    .btn.success{color:var(--green);border-color:#bbf7d0}
-    .btn.danger{color:var(--danger);border-color:#fecaca}
-    .panel{padding:12px;border-bottom:1px solid var(--border);background:#fff}
-    .panelTitle{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:900;margin-bottom:10px}
-    .field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-    .label{font-size:10px;letter-spacing:.6px;color:var(--muted);font-weight:900;text-transform:uppercase}
-    .input,.textarea,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:8px;background:#fff;font:inherit}
-    .textarea{min-height:92px;resize:vertical}
-    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn.success{background:#f0fdf4; color:var(--green);border-color:#bbf7d0}
+    .btn.success:hover{background:#dcfce7;}
+    .btn.danger{background:#fef2f2; color:var(--danger);border-color:#fecaca}
+    .btn.danger:hover{background:#fee2e2;}
+    .panel{padding:16px;border-bottom:1px solid var(--border);background:#fff}
+    .panelTitle{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:12px; display:flex; align-items:center; gap:6px;}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .label{font-size:11px;letter-spacing:.4px;color:#475569;font-weight:700;text-transform:uppercase}
+    .input,.textarea,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px;background:#fff;font:inherit; color:#1e293b; transition: border-color 0.2s, box-shadow 0.2s;}
+    .input:focus,.textarea:focus,select:focus{outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px rgba(0,120,212,0.15);}
+    .textarea{min-height:92px;resize:vertical; line-height:1.5;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .scroll{overflow:auto;min-height:0}
+
+    /* Animation pour le bouton de génération */
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(21, 128, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); } }
+    .btn.generating { animation: pulse-ring 1.5s infinite; background:#e6f4ea; color:#166534; border-color:#86efac; cursor:wait; }
     .sectionsWrap{padding:10px;overflow:auto;min-height:0}
     .sectionItem{padding:10px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:6px}
     .sectionItem:hover{background:#f3f4f6}
@@ -425,59 +433,69 @@
     var optPlans = schema.evaluationsPlans || [];
 
     host.innerHTML = '' +
-      '<details open><summary>Informations et Profil</summary><div>' +
-        '<div class="field"><div class="label">Type de programme</div>' + buildSelect('inpTypeProg', cc.typeProgramme, optProg) + '</div>' +
-        '<div class="field"><label class="chk-field"><input type="checkbox" id="chkAuto" ' + (cc.estAutochtone ? 'checked' : '') + '> Participant Autochtone</label></div>' +
-        '<div class="field"><div class="label">Nom de l\'Aîné(e) (si applicable)</div><input class="input" id="inpAine" value="' + esc(cc.nomAine || '') + '"></div>' +
+      '<details open><summary>👤 Profil du Participant</summary><div>' +
         '<div class="field"><div class="label">Nom complet</div><input class="input" id="inpNom" value="' + esc(cc.nom || '') + '"></div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">SED</div><input class="input" id="inpSed" value="' + esc(cc.fps || '') + '"></div>' +
-          '<div class="field"><div class="label">Date naissance</div><input class="input" type="date" id="inpDob" value="' + esc(cc.dateNaissance || '') + '"></div>' +
+          '<div class="field"><div class="label">Date de naissance</div><input class="input" type="date" id="inpDob" value="' + esc(cc.dateNaissance || '') + '"></div>' +
+        '</div>' +
+        '<div class="field" style="margin-top:8px;"><label class="chk-field"><input type="checkbox" id="chkAuto" ' + (cc.estAutochtone ? 'checked' : '') + '> Identification Autochtone</label></div>' +
+        '<div class="field" id="wrapAine" style="display:' + (cc.estAutochtone ? 'block' : 'none') + '; margin-top:4px;"><div class="label">Nom de l\'Aîné(e) impliqué(e)</div><input class="input" id="inpAine" value="' + esc(cc.nomAine || '') + '"></div>' +
+      '</div></details>' +
+
+      '<details><summary>📋 Informations sur le Programme</summary><div>' +
+        '<div class="field"><div class="label">Type de programme</div>' + buildSelect('inpTypeProg', cc.typeProgramme, optProg) + '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Date de début</div><input class="input" type="date" id="inpDebProg" value="' + esc(cc.dateDebutProgramme || '') + '"></div>' +
+          '<div class="field"><div class="label">Date de fin</div><input class="input" type="date" id="inpFinProg" value="' + esc(cc.dateFinProgramme || '') + '"></div>' +
         '</div>' +
         '<div class="row2">' +
-          '<div class="field"><div class="label">Début programme</div><input class="input" type="date" id="inpDebProg" value="' + esc(cc.dateDebutProgramme || '') + '"></div>' +
-          '<div class="field"><div class="label">Fin programme</div><input class="input" type="date" id="inpFinProg" value="' + esc(cc.dateFinProgramme || '') + '"></div>' +
-        '</div>' +
-        '<div class="field"><div class="label">Statut Plan Correctionnel</div>' + buildSelect('inpStatutPC', cc.planCorrectionnelStatut, optPC) + '</div>' +
-        '<div class="row2">' +
-          '<div class="field"><div class="label">Date rapport préparatoire</div><input class="input" type="date" id="inpDatePrep" value="' + esc(cc.dateRapportPrep || '') + '"></div>' +
-          '<div class="field"><div class="label">Date plan correctionnel</div><input class="input" type="date" id="inpDatePlan" value="' + esc(cc.datePlanCorrectionnel || '') + '"></div>' +
-        '</div>' +
-        '<div class="row2">' +
-          '<div class="field"><div class="label">Cote IRC</div><input class="input" id="inpCoteIRC" value="' + esc(cc.coteIRC || '') + '"></div>' +
-          '<div class="field"><div class="label">Statique 99-R</div><input class="input" id="inpCoteStat" value="' + esc(cc.coteStatique99R || '') + '"></div>' +
-        '</div>' +
-        '<div class="row2">' +
-          '<div class="field"><div class="label">STABLE-2007</div><input class="input" id="inpCoteStable" value="' + esc(cc.coteStable2007 || '') + '"></div>' +
-          '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
+          '<div class="field"><div class="label">Séances assistées</div><input class="input" type="number" id="inpNbAss" value="' + esc(cc.nbSeancesAssistees || '') + '"></div>' +
+          '<div class="field"><div class="label">Séances totales</div><input class="input" type="number" id="inpNbTot" value="' + esc(cc.nbSeancesTotales || '') + '"></div>' +
         '</div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">Animateur principal</div><input class="input" id="inpAnimNom" value="' + esc(cc.animateurNom || '') + '"></div>' +
-          '<div class="field"><div class="label">Titre animateur</div><input class="input" id="inpAnimTitre" value="' + esc(cc.animateurTitre || '') + '"></div>' +
+          '<div class="field"><div class="label">Titre</div><input class="input" id="inpAnimTitre" value="' + esc(cc.animateurTitre || '') + '"></div>' +
         '</div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">Co-animateur (Optionnel)</div><input class="input" id="inpCoAnimNom" value="' + esc(cc.coAnimateurNom || '') + '"></div>' +
-          '<div class="field"><div class="label">Titre co-animateur</div><input class="input" id="inpCoAnimTitre" value="' + esc(cc.coAnimateurTitre || '') + '"></div>' +
-        '</div>' +
-        '<div class="row2">' +
-          '<div class="field"><div class="label">Nb séances assistées</div><input class="input" id="inpNbAss" value="' + esc(cc.nbSeancesAssistees || '') + '"></div>' +
-          '<div class="field"><div class="label">Nb séances totales</div><input class="input" id="inpNbTot" value="' + esc(cc.nbSeancesTotales || '') + '"></div>' +
-        '</div>' +
-        '<div class="row2" style="background:#fef3c7; padding:10px; border-radius:8px; border:1px solid #fdba74; margin-top:10px;">' +
-          '<div class="field"><label class="chk-field"><input type="checkbox" id="chkDerogation" ' + (cc.derogationActive ? 'checked' : '') + '> Comité de dérogation</label></div>' +
-          '<div class="field"><div class="label">Date de dérogation</div><input class="input" type="date" id="inpDateDerogation" value="' + esc(cc.dateDerogation || '') + '"></div>' +
-        '</div>' +
-        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
-          '<div class="label" style="color:#1e3a8a;">Évol. de l\'impact (Sec. 2)</div>' + buildSelect('inpImpactEvol', cc.impactEvolution, optEvol) +
-        '</div>' +
-        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
-          '<div class="label" style="color:#1e3a8a;">Évaluation globale des plans de maîtrise</div>' + buildSelect('inpEvalPlans', cc.evaluationPlansMaitrise, optPlans) +
-        '</div>' +
-        '<div class="field" style="margin-top:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
-          '<div class="label" style="color:#1e3a8a;">Évolution globale (Sec. 3)</div>' + buildSelect('inpGlobalEvol', cc.globalEvolution, optEvol) +
+          '<div class="field"><div class="label">Titre</div><input class="input" id="inpCoAnimTitre" value="' + esc(cc.coAnimateurTitre || '') + '"></div>' +
         '</div>' +
       '</div></details>' +
-      '<details><summary>Facteurs dynamiques</summary><div id="factorsHost"></div></details>';
+
+      '<details><summary>📊 Évaluations Initiales & Plan</summary><div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Cote IRC</div><input class="input" id="inpCoteIRC" value="' + esc(cc.coteIRC || '') + '"></div>' +
+          '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Statique 99-R</div><input class="input" id="inpCoteStat" value="' + esc(cc.coteStatique99R || '') + '"></div>' +
+          '<div class="field"><div class="label">STABLE-2007</div><input class="input" id="inpCoteStable" value="' + esc(cc.coteStable2007 || '') + '"></div>' +
+        '</div>' +
+        '<div class="row2" style="background:#fef3c7; padding:10px; border-radius:8px; border:1px solid #fdba74; margin-top:10px; margin-bottom:10px;">' +
+          '<div class="field"><label class="chk-field"><input type="checkbox" id="chkDerogation" ' + (cc.derogationActive ? 'checked' : '') + '> Comité de dérogation</label></div>' +
+          '<div class="field"><div class="label">Date de dérogation</div><input class="input" type="date" id="inpDateDerogation" value="' + esc(cc.dateDerogation || '') + '" style="display:' + (cc.derogationActive ? 'block' : 'none') + '"></div>' +
+        '</div>' +
+        '<div class="field"><div class="label">Statut du Plan Correctionnel</div>' + buildSelect('inpStatutPC', cc.planCorrectionnelStatut, optPC) + '</div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Date PC</div><input class="input" type="date" id="inpDatePlan" value="' + esc(cc.datePlanCorrectionnel || '') + '"></div>' +
+          '<div class="field"><div class="label">Date Rapport Prép.</div><input class="input" type="date" id="inpDatePrep" value="' + esc(cc.dateRapportPrep || '') + '"></div>' +
+        '</div>' +
+      '</div></details>' +
+
+      '<details><summary>🧩 Facteurs dynamiques</summary><div id="factorsHost"></div></details>' +
+
+      '<details><summary>🏁 Évaluations Finales (Bilan)</summary><div>' +
+        '<div class="field" style="margin-bottom:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évolution de la compréhension de l\'impact (Sec. 2)</div>' + buildSelect('inpImpactEvol', cc.impactEvolution, optEvol) +
+        '</div>' +
+        '<div class="field" style="margin-bottom:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évaluation globale des plans de maîtrise de soi</div>' + buildSelect('inpEvalPlans', cc.evaluationPlansMaitrise, optPlans) +
+        '</div>' +
+        '<div class="field" style="padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
+          '<div class="label" style="color:#1e3a8a;">Évolution globale de la capacité de gestion (Sec. 3)</div>' + buildSelect('inpGlobalEvol', cc.globalEvolution, optEvol) +
+        '</div>' +
+      '</div></details>';
 
     bindCaseInputs();
     renderFactors();
@@ -579,7 +597,25 @@
     bind('inpTypeProg','typeProgramme'); bind('inpAine','nomAine'); bind('inpStatutPC','planCorrectionnelStatut');
     bind('inpImpactEvol','impactEvolution'); bind('inpEvalPlans','evaluationPlansMaitrise'); bind('inpGlobalEvol','globalEvolution');
     bind('chkAuto','estAutochtone', true);
+
+    // Toggle visuel spécifique pour le champ Aîné et Dérogation
+    var chkAutoEl = $('chkAuto');
+    if(chkAutoEl) {
+      chkAutoEl.addEventListener('change', function() {
+        var wrap = $('wrapAine');
+        if(wrap) wrap.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+
     bind('chkDerogation','derogationActive', true);
+    var chkDerogationEl = $('chkDerogation');
+    if(chkDerogationEl) {
+      chkDerogationEl.addEventListener('change', function() {
+        var wrap = $('inpDateDerogation');
+        if(wrap) wrap.style.display = this.checked ? 'block' : 'none';
+      });
+    }
+
     bind('inpDateDerogation','dateDerogation');
   }
 
@@ -603,6 +639,11 @@
       var active = state.activeSectionKey === s.sectionKey;
       var title = getDisplayTitle(s.sectionKey);
 
+      var icon = s.icon || '📄'; // Utilise l'icône du JSON si elle existe, sinon icône par défaut
+      if (s.sectionKey.indexOf('rf.') === 0) icon = '⚠️';
+      if (s.sectionKey === 'sec.plansMaitrise' || s.sectionKey === 'sec.progres') icon = '📈';
+      if (s.sectionKey === 'sec.recommandations') icon = '🎯';
+
       var arrows = '<div class="move-arrows">' +
                    '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="-1" title="Monter">▲</button>' +
                    '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="1" title="Descendre">▼</button>' +
@@ -611,7 +652,8 @@
       out += '<div class="sectionItem' + (active ? ' active' : '') + '" data-key="' + esc(s.sectionKey) + '">' +
                '<div style="min-width:0;flex:1;display:flex;align-items:center;">' +
                  arrows +
-                 '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(title) + '</div>' +
+                 '<span style="margin-right:8px; font-size:14px;">' + icon + '</span>' +
+                 '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="' + esc(title) + '">' + esc(title) + '</div>' +
                '</div>' +
                '<span class="badge' + (inst.enabled ? '' : ' off') + '">' + (inst.enabled ? 'Actif' : 'Masqué') + '</span>' +
              '</div>';
@@ -755,23 +797,43 @@
       }
 
       slotsHtml += '<div class="slotBox">' +
-          '<h4>' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+            '<h4 style="margin:0;">' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
+            '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
+          '</div>' +
           '<div class="field"><div class="label" style="color:#0ea5e9;">Prompt compilé final (Aperçu Lecture Seule)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; cursor:not-allowed;" title="Passez par la Bibliothèque des Prompts pour modifier la structure.">' + esc(promptText) + '</textarea></div>' +
-          '<div class="field"><div class="label">Texte généré / sortie du slot</div><textarea class="textarea slot-editor" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
+          '<div class="field"><div class="label">Texte généré / sortie du slot</div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
         '</div>';
     });
 
-    host.innerHTML = '<div class="card">' +
+    host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue);">' +
         '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
+        '<div class="label" style="margin-top:10px; margin-bottom:4px;">📎 Sources de contexte pour l\'IA</div>' +
         '<div class="chips" id="sourceChips"></div>' +
-        '<div class="field" style="margin-top:10px"><label><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export</label></div>' +
+        '<div class="field" style="margin-top:14px"><label class="chk-field"><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export Word</label></div>' +
       '</div>' +
-      '<div class="card"><div class="cardTitle">Slots de la section</div>' + slotsHtml + '</div>' +
-      '<div class="card"><div class="cardTitle">Aperçu du rendu combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
+      '<div class="card"><div class="cardTitle" style="display:flex; justify-content:space-between; align-items:center;"><span>Contenu de la section (Slots)</span></div>' + slotsHtml + '</div>' +
+      '<div class="card"><div class="cardTitle">Aperçu du rendu final combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
 
     bindEditor();
     renderSourceChips();
     refreshEditorPreviewOnly();
+
+    // Bouton de copie
+    Array.prototype.forEach.call(document.querySelectorAll('.btnCopySlot'), function(btn){
+      btn.addEventListener('click', function(){
+        var sk = this.getAttribute('data-slotkey');
+        var textToCopy = inst.slotOutputs[sk] || '';
+
+        // Strip HTML for clipboard text if needed, or copy as is
+        // On copie tel quel pour garder les balises <p> si désiré
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            toast('Contenu copié dans le presse-papier !');
+        }, function(err) {
+            alert('Impossible de copier : ', err);
+        });
+      });
+    });
   }
 
   function renderSourceChips(){
@@ -966,7 +1028,8 @@
       }
 
       $('btnGenerateAI').disabled = true;
-      $('btnGenerateAI').innerHTML = '⏳ Génération en cours...';
+      $('btnGenerateAI').classList.add('generating');
+      $('btnGenerateAI').innerHTML = '✨ Génération IA en cours...';
 
       let updated = false;
 
@@ -1035,6 +1098,7 @@
     } finally {
       // Restaurer le bouton
       $('btnGenerateAI').disabled = false;
+      $('btnGenerateAI').classList.remove('generating');
       $('btnGenerateAI').innerHTML = '✦ Générateur IA';
     }
   }
