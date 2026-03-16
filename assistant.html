@@ -1063,8 +1063,10 @@
         }
 
         // Combiner le system prompt (règles et sources) et le user prompt (instruction spécifique)
-        let systemPrompt = "Vous êtes un assistant IA spécialisé dans la rédaction de rapports correctionnels officiels (MPCI). Votre ton doit être objectif, professionnel, factuel, et en français.\n" + sourcesContent;
-        let userPrompt = "Instructions pour cette section :\n" + promptText + "\n\nRédige la réponse en format HTML simple (utilisez <p>, <ul>, <li> si nécessaire, pas de balise Markdown ```html).";
+        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction de rapports correctionnels officiels (MPCI).";
+
+        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
+        let userPrompt = "INSTRUCTIONS SPÉCIFIQUES POUR CETTE SECTION :\n" + promptText + "\n\n(Rappel format: Rédige la réponse en format HTML simple, utilise uniquement <p>, <ul>, <li> si nécessaire, aucune balise Markdown ```html).";
 
         toast(`Génération du slot : ${sl.label}...`);
 
