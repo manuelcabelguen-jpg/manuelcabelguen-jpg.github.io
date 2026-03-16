@@ -722,7 +722,54 @@
         var html = '<div class="card"><div class="cardTitle" style="color:#1e3a8a; font-size:16px;">⚙️ Bibliothèque globale des Prompts et Directives</div>';
         html += '<div class="small muted" style="margin-bottom:15px;">Ces instructions sont filtrées selon le profil actuel du délinquant (gauche). Le système combinera ces blocs automatiquement lors de la génération. Ne modifiez pas les clés (titres).</div>';
 
-        var pKeys = Object.keys(state.data.prompts).filter(function(pk) {
+        // 1. GOUVERNANCE GLOBALE AU SOMMET
+        if (state.data.prompts['global.gouvernance'] !== undefined) {
+            html += '<div class="slotBox" style="margin-bottom:20px; border:2px solid #1e40af; background:#eff6ff;">' +
+                    '<h4 style="color:#1e3a8a; font-size:13px; text-transform:uppercase; display:flex; align-items:center; gap:8px;">' +
+                    '<span>🛡️</span> Prompt de Gouvernance Globale (Système)</h4>' +
+                    '<p class="small muted" style="margin-top:-5px; margin-bottom:8px;">Ces règles s\'appliquent à TOUTES les générations et priment sur le reste.</p>' +
+                    '<textarea class="textarea mono global-prompt-editor" data-pk="global.gouvernance" style="min-height:150px; background:#fff;">' + esc(state.data.prompts['global.gouvernance']) + '</textarea>' +
+                    '</div>';
+        }
+
+        // 2. MAPPAGE DES PROMPTS PAR SECTION
+        var def = getReportDef();
+        var mappedPrompts = {};
+        var sectionsHtml = '';
+
+        (def.sections || []).forEach(function(sec) {
+            var secTitle = getDisplayTitle(sec.sectionKey);
+            var slotsHtml = '';
+            (sec.slots || []).forEach(function(sl) {
+                var pk = sl.promptKey;
+                if (pk && state.data.prompts[pk] !== undefined) {
+                    mappedPrompts[pk] = true;
+                    slotsHtml += '<div class="slotBox" style="margin-bottom:10px; margin-left:15px; border-left:3px solid #cbd5e1; background:#f8fafc;">' +
+                                 '<h4 style="color:#334155; font-size:11px; text-transform:uppercase;">Correspondance : ' + esc(sl.label) + ' <span class="badge" style="font-weight:normal;">Clé: ' + esc(pk) + '</span></h4>' +
+                                 '<textarea class="textarea mono global-prompt-editor" data-pk="' + esc(pk) + '">' + esc(state.data.prompts[pk]) + '</textarea>' +
+                                 '</div>';
+                }
+            });
+
+            if (slotsHtml !== '') {
+                var icon = sec.icon || '📄';
+                if (sec.sectionKey.indexOf('rf.') === 0) icon = '⚠️';
+                if (sec.sectionKey === 'sec.plansMaitrise' || sec.sectionKey === 'sec.progres') icon = '📈';
+                if (sec.sectionKey === 'sec.recommandations') icon = '🎯';
+
+                sectionsHtml += '<div style="margin-bottom:20px;">' +
+                                '<h3 style="font-size:14px; color:#0f172a; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:4px; display:flex; align-items:center; gap:8px;">' +
+                                '<span>' + icon + '</span> Section : ' + esc(secTitle) + '</h3>' +
+                                slotsHtml +
+                                '</div>';
+            }
+        });
+
+        html += sectionsHtml;
+
+        // 3. PROMPTS RESTANTS (DIRECTIVES/CONDITIONNELS)
+        var remainingKeys = Object.keys(state.data.prompts).filter(function(pk) {
+            if (pk === 'global.gouvernance' || mappedPrompts[pk]) return false;
             if (pk.startsWith('dir.autochtone.')) return isAuto;
             if (pk.startsWith('dir.adapte.')) return progType === 'Adapté';
             if (pk.startsWith('dir.hybride.')) return progType === 'Hybride';
@@ -731,14 +778,22 @@
             return true;
         }).sort();
 
-        pKeys.forEach(function(pk) {
-            html += '<div class="slotBox" style="margin-bottom:10px;">' +
-                    '<h4 style="color:#334155; font-size:11px; text-transform:uppercase;">Clé : ' + esc(pk) + '</h4>' +
-                    '<textarea class="textarea mono global-prompt-editor" data-pk="' + esc(pk) + '">' + esc(state.data.prompts[pk]) + '</textarea>' +
-                    '</div>';
-        });
+        if (remainingKeys.length > 0) {
+            html += '<div style="margin-bottom:20px;">' +
+                    '<h3 style="font-size:14px; color:#0f172a; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:4px; display:flex; align-items:center; gap:8px;">' +
+                    '<span>🔧</span> Directives Transversales et Conditionnelles</h3>';
+            remainingKeys.forEach(function(pk) {
+                html += '<div class="slotBox" style="margin-bottom:10px; margin-left:15px; border-left:3px dashed #cbd5e1; background:#f8fafc;">' +
+                        '<h4 style="color:#334155; font-size:11px; text-transform:uppercase;">Directive : <span class="badge" style="font-weight:normal;">Clé: ' + esc(pk) + '</span></h4>' +
+                        '<textarea class="textarea mono global-prompt-editor" data-pk="' + esc(pk) + '">' + esc(state.data.prompts[pk]) + '</textarea>' +
+                        '</div>';
+            });
+            html += '</div>';
+        }
 
-        if(pKeys.length === 0) { html += '<div class="empty-state small">Aucun prompt disponible pour ce profil.</div>'; }
+        if (Object.keys(mappedPrompts).length === 0 && remainingKeys.length === 0 && state.data.prompts['global.gouvernance'] === undefined) {
+            html += '<div class="empty-state small">Aucun prompt disponible.</div>';
+        }
 
         html += '</div>';
         host.innerHTML = html;
