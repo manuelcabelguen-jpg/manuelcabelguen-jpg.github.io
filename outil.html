@@ -274,7 +274,7 @@
     (def.slots || []).forEach(function(sl){
       var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\\\]', 'g');
       var content = inst.slotOutputs && typeof inst.slotOutputs[sl.slotKey] === 'string' ? inst.slotOutputs[sl.slotKey] : '';
-      htmlText = htmlText.replace(re, content || '[' + sl.label + ']');
+      htmlText = htmlText.replace(re, content || '');
     });
     return htmlText;
   }
