@@ -116,7 +116,6 @@
     if(!d.reportInstance) d.reportInstance = { reportId:'', sections:[] };
     if(!d.caseContext) d.caseContext = {};
     if(!d.factors) d.factors = {};
-    if(!d.prompts) d.prompts = {};
     if(!d.sources) d.sources = [];
     if(!d.uiSchema) d.uiSchema = {};
 
@@ -227,7 +226,7 @@
             if(cc.estAutochtone) {
                 out += "\n<p>Les Antécédents Sociaux Autochtones de " + esc(cc.nom || 'X') + " ont eu un impact sur des domaines de vie significatifs et contribué à sa criminalité, notamment sur sa vision de lui-même, des autres et du monde. Les Antécédents Sociaux Autochtones ont directement affecté la Roue de Médecine du participant dans ses quatre dimensions.</p>";
             }
-            out += "\n<p>[SLOT:sec.cycle_criminel.main]</p>";
+            out += "\n ";
             return out;
         }
         return "";
@@ -272,7 +271,7 @@
     if(!def || !inst) return '';
     var htmlText = replaceVars(def.templateHtml || '');
     (def.slots || []).forEach(function(sl){
-      var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\\\]', 'g');
+      var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') + '\\\\]', 'g');
       var content = inst.slotOutputs && typeof inst.slotOutputs[sl.slotKey] === 'string' ? inst.slotOutputs[sl.slotKey] : '';
       htmlText = htmlText.replace(re, content || '');
     });
