@@ -14,11 +14,10 @@
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}
-    .app{display:grid; grid-template-columns:var(--side-w) 4px 1fr 4px var(--right-w); height:100vh; overflow:hidden}
-    .sidebar,.main,.right{min-width:0;overflow:hidden;display:flex;flex-direction:column}
+    .app{display:grid; grid-template-columns:var(--side-w) 4px 1fr; height:100vh; overflow:hidden}
+    .sidebar,.main{min-width:0;overflow:hidden;display:flex;flex-direction:column}
     .sidebar{background:#fff;border-right:1px solid var(--border)}
     .main{background:#fff}
-    .right{background:var(--soft);border-left:1px solid var(--border)}
     .resizer { background: var(--border); cursor: col-resize; z-index: 10; transition: background 0.2s; }
     .resizer:hover, .resizer.active { background: var(--blue); }
     body.resizing { user-select: none; cursor: col-resize; }
@@ -58,13 +57,6 @@
     .muted{color:var(--muted)}
     .small{font-size:12px}
     .titleInput{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-weight:800;width:min(100%,600px)}
-    .right .panel{background:var(--soft)}
-    .sourceItem{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
-    .sourceName{font-size:12px;font-weight:900;color:#334155}
-    .sourceMeta{font-size:11px;color:#94a3b8}
-    .chips{display:flex;flex-wrap:wrap;gap:6px}
-    .chip{font-size:11px;font-weight:800;border:1px solid var(--border);background:#fff;color:#475569;padding:6px 8px;border-radius:999px;cursor:pointer}
-    .chip.on{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:999px;box-shadow:var(--shadow);font-size:13px;font-weight:900;display:none;z-index:9999;text-align:center;}
     .toast.show{display:block}
     details{border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:10px;overflow:hidden}
@@ -79,7 +71,7 @@
   </style>
 </head>
 <body>
-<div class="app" id="appRoot" style="--side-w: 320px; --right-w: 420px;">
+<div class="app" id="appRoot" style="--side-w: 320px;">
 
   <aside class="sidebar">
     <div class="header">G-CAS v10 <span id="versionTag">2.21.0</span></div>
@@ -100,17 +92,6 @@
     </div>
     <div class="editor" id="editorHost"></div>
   </main>
-
-  <div class="resizer" id="resizerRight"></div>
-
-  <aside class="right">
-    <div class="panel">
-      <div class="panelTitle">Sources</div>
-      <button class="btn" id="btnUploadSource">⬆ Ajouter une source</button>
-      <input id="sourceFileInput" type="file" style="display:none">
-      <div id="sourcesList" style="margin-top:10px"></div>
-    </div>
-  </aside>
 
 </div>
 <div class="toast" id="toast"></div>
@@ -598,72 +579,14 @@
     var def = getSectionDef(key), inst = getInstanceSection(key);
     if(!def || !inst){ host.innerHTML = '<div class="empty-state">Aucune section active identifiée.</div>'; return; }
 
-    var slotsHtml = '';
-    (def.slots || []).forEach(function(sl, idx){
-      var val = inst.slotOutputs[sl.slotKey] || '';
-
-      slotsHtml += '<div class="slotBox">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
-            '<h4 style="margin:0;">' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
-            '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
-          '</div>' +
-          '<div class="field"><div class="label">Texte généré / sortie du slot</div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
-        '</div>';
-    });
-
-    host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue);">' +
+    host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue); margin-bottom: 12px;">' +
         '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
-        '<div class="label" style="margin-top:10px; margin-bottom:4px;">📎 Sources de contexte</div>' +
-        '<div class="chips" id="sourceChips"></div>' +
         '<div class="field" style="margin-top:14px"><label class="chk-field"><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export Word</label></div>' +
       '</div>' +
-      '<div class="card"><div class="cardTitle" style="display:flex; justify-content:space-between; align-items:center;"><span>Contenu de la section (Slots)</span></div>' + slotsHtml + '</div>' +
       '<div class="card"><div class="cardTitle">Aperçu du rendu final combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
 
     bindEditor();
-    renderSourceChips();
     refreshEditorPreviewOnly();
-
-    // Bouton de copie
-    Array.prototype.forEach.call(document.querySelectorAll('.btnCopySlot'), function(btn){
-      btn.addEventListener('click', function(){
-        var sk = this.getAttribute('data-slotkey');
-        var textToCopy = inst.slotOutputs[sk] || '';
-
-        // Strip HTML for clipboard text if needed, or copy as is
-        // On copie tel quel pour garder les balises <p> si désiré
-        navigator.clipboard.writeText(textToCopy).then(function() {
-            toast('Contenu copié dans le presse-papier !');
-        }, function(err) {
-            alert('Impossible de copier : ', err);
-        });
-      });
-    });
-  }
-
-  function renderSourceChips(){
-    var key = state.activeSectionKey;
-    var inst = getInstanceSection(key);
-    var host = $('sourceChips');
-    if(!host || !inst) return;
-    var out = '';
-    (state.data.sources || []).forEach(function(src){
-      var on = (inst.selectedSourceIds || []).indexOf(src.id) >= 0;
-      out += '<button class="chip' + (on ? ' on' : '') + '" data-id="' + esc(src.id) + '">' + esc(src.title || src.name || src.id) + '</button>';
-    });
-    if(!out){ out = '<span class="small muted">Aucune source chargée dans l\'interface.</span>'; }
-    host.innerHTML = out;
-    Array.prototype.forEach.call(host.querySelectorAll('.chip'), function(btn){
-      btn.addEventListener('click', function(){
-        var id = this.getAttribute('data-id');
-        var arr = inst.selectedSourceIds || [];
-        var ix = arr.indexOf(id);
-        if(ix >= 0){ arr.splice(ix,1); } else { arr.push(id); }
-        inst.selectedSourceIds = arr;
-        setDirty(true, 'Sources associées modifiées');
-        renderSourceChips();
-      });
-    });
   }
 
   function bindEditor(){
@@ -671,9 +594,6 @@
     var inst = getInstanceSection(key);
     $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = (this.value === getSectionDef(key).title) ? '' : this.value; setDirty(true); renderSectionsList(); });
     $('chkEnabled').addEventListener('change', function(){ inst.enabled = !!this.checked; setDirty(true); renderSectionsList(); });
-    Array.prototype.forEach.call(document.querySelectorAll('.slot-editor'), function(ta){
-      ta.addEventListener('input', function(){ inst.slotOutputs[this.getAttribute('data-slotkey')] = this.value; setDirty(true); refreshEditorPreviewOnly(); });
-    });
   }
 
   function refreshEditorPreviewOnly(){
@@ -683,29 +603,6 @@
     }
   }
 
-  function renderSourcesList(){
-    var host = $('sourcesList');
-    var out = '';
-    (state.data.sources || []).forEach(function(src){
-      out += '<div class="sourceItem">' +
-        '<div class="sourceName">' + esc(src.title || src.name || src.id) + '</div>' +
-        '<div class="sourceMeta">' + esc(src.type || 'Source') + (src.date ? ' · ' + esc(src.date) : '') + '</div>' +
-        '<div style="margin-top:8px"><button class="btn danger btnDelSrc" data-id="' + esc(src.id) + '">Suppr.</button></div>' +
-      '</div>';
-    });
-    if(!out){ out = '<div class="small muted">Aucune source documentée.</div>'; }
-    host.innerHTML = out;
-    Array.prototype.forEach.call(host.querySelectorAll('.btnDelSrc'), function(btn){
-      btn.addEventListener('click', function(){
-        var id = this.getAttribute('data-id');
-        state.data.sources = (state.data.sources || []).filter(function(s){ return s.id !== id; });
-        (state.data.reportInstance.sections || []).forEach(function(sec){ sec.selectedSourceIds = (sec.selectedSourceIds || []).filter(function(x){ return x !== id; }); });
-        setDirty(true, 'Source supprimée');
-        renderSourcesList();
-        renderEditor();
-      });
-    });
-  }
 
   function saveJson(){
     if (Object.keys(state.data.reportDefinitions).length === 0) {
@@ -740,26 +637,6 @@
     renderEditor();
   }
 
-  function addSourceFile(file){
-    if(!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e){
-      state.data.sources = state.data.sources || [];
-      state.data.sources.push({
-        id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
-        title: file.name,
-        type: file.type || 'local-file',
-        date: nowDate(),
-        content: typeof e.target.result === 'string' ? e.target.result.slice(0,20000) : ''
-      });
-      setDirty(true, 'Source ajoutée');
-      renderSourcesList();
-      renderEditor();
-      toast('Nouvelle source ajoutée au répertoire.');
-    };
-    if((file.type || '').indexOf('text') === 0 || /\.(txt|md|csv|json|html)$/i.test(file.name)){ reader.readAsText(file, 'utf-8'); }
-    else { reader.readAsDataURL(file); }
-  }
 
   function exportWord(){
     try {
@@ -808,9 +685,7 @@
   function initResizers() {
     var appRoot = $('appRoot');
     var resLeft = $('resizerLeft');
-    var resRight = $('resizerRight');
     var isDraggingLeft = false;
-    var isDraggingRight = false;
 
     resLeft.addEventListener('mousedown', function(e) {
       isDraggingLeft = true;
@@ -818,30 +693,21 @@
       resLeft.classList.add('active');
     });
 
-    resRight.addEventListener('mousedown', function(e) {
-      isDraggingRight = true;
-      document.body.classList.add('resizing');
-      resRight.classList.add('active');
-    });
-
     document.addEventListener('mousemove', function(e) {
-      if (!isDraggingLeft && !isDraggingRight) return;
+      if (!isDraggingLeft) return;
       if (isDraggingLeft) { var newW = Math.max(200, Math.min(e.clientX, 800)); appRoot.style.setProperty('--side-w', newW + 'px'); }
-      if (isDraggingRight) { var newW = Math.max(200, Math.min(window.innerWidth - e.clientX, 1000)); appRoot.style.setProperty('--right-w', newW + 'px'); }
     });
 
     document.addEventListener('mouseup', function(e) {
-      if (isDraggingLeft || isDraggingRight) {
+      if (isDraggingLeft) {
         isDraggingLeft = false;
-        isDraggingRight = false;
         document.body.classList.remove('resizing');
         resLeft.classList.remove('active');
-        resRight.classList.remove('active');
       }
     });
   }
 
-  function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); renderSourcesList(); }
+  function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); }
 
   function bindGlobalEvents(){
     $('btnSaveJson').addEventListener('click', saveJson);
@@ -849,8 +715,6 @@
     $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
     $('btnResetSection').addEventListener('click', resetActiveSection);
     $('btnExportWord').addEventListener('click', exportWord);
-    $('btnUploadSource').addEventListener('click', function(){ $('sourceFileInput').click(); });
-    $('sourceFileInput').addEventListener('change', function(){ addSourceFile(this.files[0]); this.value=''; });
     initResizers();
   }
 
