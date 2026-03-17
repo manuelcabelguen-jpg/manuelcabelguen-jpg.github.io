@@ -187,29 +187,6 @@
        return "animé par [Animateur(s) à définir]";
     })();
 
-    root.introDynamic = (function(){
-        var t = cc.typeProgramme || "Préparatoire complété";
-        var isAuto = cc.estAutochtone === true;
-        var out = "";
-        var p1 = "";
-
-        if(t === "Hybride") {
-            p1 = "Ce rapport donnera un aperçu du cheminement/cycle criminel du participant, " + (isAuto ? "des Antécédents Sociaux Autochtones, " : "") + "et des facteurs de risque dynamiques. De plus, il décrira les lacunes à aborder dans les futurs programmes. Ce rapport décrira également les progrès continus du participant pour atteindre les objectifs personnels nécessaires pour gérer les domaines facteurs de risque criminogènes dynamiques (plus communément appelés « Facteurs de risque » dans le présent rapport).";
-        } else if(t === "Communautaire") {
-            p1 = "Le programme communautaire du MPCI est conçu pour les participants qui n’ont pas terminé leur programme correctionnel avant d’être libérés dans la collectivité. Ce programme ne remplace pas les programmes requis; il est conçu pour fournir aux participants un niveau de compréhension et de compétences de base qui seront développées et renforcées par le Programme de maintien des acquis en communauté. Ce rapport final du programme Communautaire mettra l’accent sur le cheminement/cycle criminel du participant, les domaines des facteurs de risque dynamiques" + (isAuto ? ", les Antécédents Sociaux Autochtones" : "") + ", et les stratégies spécifiques du programme (objectifs personnels pour gérer les facteurs de risque dynamiques). Ce rapport servira de fondation pour tous les rapports ultérieurs.";
-        } else if(t === "Adapté") {
-            p1 = "Les programmes adaptés du Modèle de Programmes Correctionnels Intégrés (MPCI) sont conçus pour répondre aux besoins de réceptivité uniques des délinquants ayant une ou plusieurs conditions susceptibles d’affecter leur fonctionnement de manière significative, comme des déficiences cognitives, des problèmes de santé mentale ou des troubles d’apprentissage. L’impact sur le fonctionnement doit être suffisamment grave pour que le délinquant ait des difficultés à terminer un programme classique.";
-        } else {
-            p1 = "Ce rapport fait suite au dernier rapport du programme du Modèle de programme correctionnel intégré (MPCI)" + (isAuto ? " ou du Modèle de programme correctionnel intégré – Autochtones (MPCIA)" : "") + ". Ce rapport, ainsi que les rapports précédents, fourniront au lecteur l’ensemble de l’histoire du risque et des besoins initiaux du participant" + (isAuto ? ", des Antécédents Sociaux Autochtones" : "") + " et des progrès réalisés à ce jour pour gérer ses principaux facteurs de risques dynamiques. Consultez le rapport final du programme préparatoire daté du " + esc(cc.dateRapportPrep || "XXXX-XX-XX") + " pour l'analyse du cheminement initial.";
-        }
-        out += "<p>" + p1 + "</p>\n";
-        out += "<p>Veuillez noter que ce rapport se réfère aux termes suivants concernant l’évaluation de la capacité actuelle du participant à gérer les facteurs de risque dynamiques identifiés : a besoin de beaucoup d’amélioration, a besoin de quelques améliorations, est modérée, bonne, ou excellente. Ces termes seront utilisés tout au long du processus de rapport pour suivre les progrès de manière cohérente.</p>\n";
-        if(isAuto) {
-            out += "<p>En tant que délinquant autochtone, des facteurs uniques des Antécédents Sociaux Autochtones sont pris en compte dans ce rapport. Ces antécédents ont influencé ses croyances, pensées, émotions, comportements, relations et sa connexion à la culture, qui ont façonné sa vie personnelle. Les facteurs internes et externes apportés par les antécédents sociaux autochtones ont contribué au cheminement/cycle criminel et font donc partie intégrante de l’histoire du participant. Des observations holistiques concernant les facteurs de risque dynamiques et les interventions culturelles pour gérer ces risques ont été fournies par l’Aîné " + esc(cc.nomAine || "[Nom de l'Aîné]") + ", qui faisait partie du programme. Ces observations holistiques sont intégrées tout au long de ce rapport.</p>";
-        }
-        return out;
-    })();
-
     root.autochtoneIntroDynamic = (function(){
         if(cc.estAutochtone) {
             var nAine = cc.nomAine || "l’Aîné X";
@@ -234,18 +211,6 @@
         return "";
     })();
 
-    root.cycleCriminelDynamic = (function(){
-        var t = cc.typeProgramme || "";
-        if(t === "Hybride" || t === "Communautaire" || t === "Adapté") {
-            var out = "<h3>Cheminement/Cycle criminel :</h3>\n<p>Tout au long du programme, le participant a exploré les facteurs qui l’ont conduit à la perpétration de ses crimes, à son comportement criminel et à son incarcération actuelle. Le cheminement/cycle criminel suivant découle des contributions du participant et de l’examen des renseignements disponibles au dossier au moment de la rédaction.</p>";
-            if(cc.estAutochtone) {
-                out += "\n<p>Les Antécédents Sociaux Autochtones de " + esc(cc.nom || 'X') + " ont eu un impact sur des domaines de vie significatifs et contribué à sa criminalité, notamment sur sa vision de lui-même, des autres et du monde. Les Antécédents Sociaux Autochtones ont directement affecté la Roue de Médecine du participant dans ses quatre dimensions.</p>";
-            }
-            out += "\n ";
-            return out;
-        }
-        return "";
-    })();
 
     root.strategiesDynamic = (function(){
         if(cc.estAutochtone) {
@@ -308,9 +273,8 @@
     var optEvol = schema.evaluationsEvolution || [];
     var optCap = schema.evaluationsCapacite || [];
     var optIntensite = schema.intensiteOptions || [];
-    var optVolet = schema.voletProgrammeOptions || ['Multicibles', 'Délinquance sexuelle'];
     var optNivGlob = schema.evaluationsGlobalNiveau || [];
-    var optProg = schema.typeProgrammeOptions || [];
+    var optProg = schema.voletProgrammeOptions || ['Multicibles', 'En délinquance sexuelle', 'Autochtones'];
     var optPC = schema.planCorrectionnelOptions || [];
     var optPlans = schema.evaluationsPlans || [];
 
@@ -348,7 +312,6 @@
       '<details><summary>📊 Évaluations Initiales & Plan</summary><div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">Cote IRC</div><input class="input" id="inpCoteIRC" value="' + esc(cc.coteIRC || '') + '"></div>' +
-          '<div class="field"><div class="label">Volet du programme</div>' + buildSelect('inpVolet', cc.voletProgramme, optVolet) + '</div>' +
         '</div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
@@ -473,8 +436,8 @@
     bind('inpAnimNom','animateurNom'); bind('inpAnimTitre','animateurTitre');
     bind('inpCoAnimNom','coAnimateurNom'); bind('inpCoAnimTitre','coAnimateurTitre');
     bind('inpNbAss','nbSeancesAssistees'); bind('inpNbTot','nbSeancesTotales');
-    bind('inpIntensite','intensiteMPCI'); bind('inpVolet','voletProgramme');
-    bind('inpTypeProg','typeProgramme'); bind('inpAine','nomAine'); bind('inpStatutPC','planCorrectionnelStatut');
+    bind('inpIntensite','intensiteMPCI');
+    bind('inpTypeProg','typeProgramme'); bind('inpTypeProg','voletProgramme'); bind('inpAine','nomAine'); bind('inpStatutPC','planCorrectionnelStatut');
     bind('inpImpactEvol','impactEvolution'); bind('inpGlobalNiveau','globalNiveau');
     bind('chkAuto','estAutochtone', true);
 
