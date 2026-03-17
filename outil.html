@@ -210,6 +210,21 @@
         return out;
     })();
 
+    root.autochtoneIntroDynamic = (function(){
+        if(cc.estAutochtone) {
+            var nAine = cc.nomAine || "l’Aîné X";
+            return "<p>“En tant que délinquant autochtone, des facteurs uniques des Antécédents Sociaux Autochtones sont pris en compte dans ce rapport. Bien que cela ne constitue pas en soi un facteur de risque pour des infractions futures, les antécédents sociaux autochtones du participant ont influencé ses croyances, pensées, émotions, comportements, relations et sa connexion à la culture, à la famille et à la communauté, qui ont façonné sa vie personnelle et ses expériences. Les facteurs internes et externes apportés par les antécédents sociaux autochtones ont contribué au cheminement/cycle criminel et font donc partie intégrante de l’histoire du participant. Des observations holistiques concernant les facteurs de risque dynamiques et les interventions culturelles pour gérer ces risques ont été fournies par " + esc(nAine) + ", qui faisait partie du programme. Ces observations holistiques sont intégrées tout au long de ce rapport.”</p><p>“" + esc(nAine) + ", qui a fourni ses services dans le programme, a également contribué à ce rapport en fournissant des observations holistiques sur les progrès du participant. Ces observations holistiques sont intégrées tout au long du rapport et font référence aux interventions culturellement pertinentes utilisées dans le programme.”</p>";
+        }
+        return "";
+    })();
+    root.autochtoneCycleDynamic = (function(){
+        if(cc.estAutochtone) {
+            var nAine = cc.nomAine || "l’Aîné";
+            return "<p>Les observations holistiques de " + esc(nAine) + ".</p>";
+        }
+        return "";
+    })();
+
     root.derogationDynamic = (function(){
         if(cc.derogationActive) {
             var dDate = cc.dateDerogation || "XXXX-XX-XX";
@@ -245,14 +260,6 @@
        if(s === "Non finalisé lors du programme") return "Considérant que le Plan correctionnel n’était pas encore finalisé lors du programme du participant, l’identification des objectifs personnels est fondée sur la documentation du participant dans le SGD, les documents du programme complétés et les entrevues du programme.";
        if(s === "Mis à jour") return "Considérant que le Plan correctionnel a été mis à jour depuis le programme précédent du participant, les facteurs de risque dynamiques nouvellement identifiés et les objectifs personnels qui y sont associés seront maintenant abordés dans le rapport.";
        return "";
-    })();
-
-    root.plansMaitriseIntroDynamic = (function(){
-        var out = "<p>Tout au long de chaque module de ce programme, le participant a élaboré un plan de maîtrise de soi. Voici les points forts des objectifs et des plans d’action établis par le participant.</p>";
-        if(cc.estAutochtone) {
-            out += "\n<p>Dans le cadre du continuum du MPCIA, les participants développent et renforcent leurs plans de maîtrise de soi. Ces plans permettent aux participants de réfléchir à la manière dont leurs Antécédents Sociaux Autochtones (ASA) ont influencé leurs dimensions spirituelle, émotionnelle, mentale et physique. Ils élaborent des plans détaillés sur la manière de gérer leurs facteurs de risque dans ces domaines.</p>";
-        }
-        return out;
     })();
 
     return root;
@@ -301,6 +308,8 @@
     var optEvol = schema.evaluationsEvolution || [];
     var optCap = schema.evaluationsCapacite || [];
     var optIntensite = schema.intensiteOptions || [];
+    var optVolet = schema.voletProgrammeOptions || ['Multicibles', 'Délinquance sexuelle'];
+    var optNivGlob = schema.evaluationsGlobalNiveau || [];
     var optProg = schema.typeProgrammeOptions || [];
     var optPC = schema.planCorrectionnelOptions || [];
     var optPlans = schema.evaluationsPlans || [];
@@ -339,9 +348,10 @@
       '<details><summary>📊 Évaluations Initiales & Plan</summary><div>' +
         '<div class="row2">' +
           '<div class="field"><div class="label">Cote IRC</div><input class="input" id="inpCoteIRC" value="' + esc(cc.coteIRC || '') + '"></div>' +
-          '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
+          '<div class="field"><div class="label">Volet du programme</div>' + buildSelect('inpVolet', cc.voletProgramme, optVolet) + '</div>' +
         '</div>' +
         '<div class="row2">' +
+          '<div class="field"><div class="label">Intensité MPCI</div>' + buildSelect('inpIntensite', cc.intensiteMPCI, optIntensite) + '</div>' +
           '<div class="field"><div class="label">Statique 99-R</div><input class="input" id="inpCoteStat" value="' + esc(cc.coteStatique99R || '') + '"></div>' +
           '<div class="field"><div class="label">STABLE-2007</div><input class="input" id="inpCoteStable" value="' + esc(cc.coteStable2007 || '') + '"></div>' +
         '</div>' +
@@ -362,11 +372,8 @@
         '<div class="field" style="margin-bottom:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
           '<div class="label" style="color:#1e3a8a;">Évolution de la compréhension de l\'impact (Sec. 2)</div>' + buildSelect('inpImpactEvol', cc.impactEvolution, optEvol) +
         '</div>' +
-        '<div class="field" style="margin-bottom:10px; padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
-          '<div class="label" style="color:#1e3a8a;">Évaluation globale des plans de maîtrise de soi</div>' + buildSelect('inpEvalPlans', cc.evaluationPlansMaitrise, optPlans) +
-        '</div>' +
         '<div class="field" style="padding:10px; background:#eff6ff; border-radius:8px; border:1px solid #bfdbfe;">' +
-          '<div class="label" style="color:#1e3a8a;">Évolution globale de la capacité de gestion (Sec. 3)</div>' + buildSelect('inpGlobalEvol', cc.globalEvolution, optEvol) +
+          '<div class="label" style="color:#1e3a8a;">Capacité globale de gestion (Sec. 3)</div>' + buildSelect('inpGlobalNiveau', cc.globalNiveau, optNivGlob) +
         '</div>' +
       '</div></details>';
 
@@ -466,9 +473,9 @@
     bind('inpAnimNom','animateurNom'); bind('inpAnimTitre','animateurTitre');
     bind('inpCoAnimNom','coAnimateurNom'); bind('inpCoAnimTitre','coAnimateurTitre');
     bind('inpNbAss','nbSeancesAssistees'); bind('inpNbTot','nbSeancesTotales');
-    bind('inpIntensite','intensiteMPCI');
+    bind('inpIntensite','intensiteMPCI'); bind('inpVolet','voletProgramme');
     bind('inpTypeProg','typeProgramme'); bind('inpAine','nomAine'); bind('inpStatutPC','planCorrectionnelStatut');
-    bind('inpImpactEvol','impactEvolution'); bind('inpEvalPlans','evaluationPlansMaitrise'); bind('inpGlobalEvol','globalEvolution');
+    bind('inpImpactEvol','impactEvolution'); bind('inpGlobalNiveau','globalNiveau');
     bind('chkAuto','estAutochtone', true);
 
     // Toggle visuel spécifique pour le champ Aîné et Dérogation
@@ -510,7 +517,7 @@
 
       var icon = s.icon || '📄'; // Utilise l'icône du JSON si elle existe, sinon icône par défaut
       if (s.sectionKey.indexOf('rf.') === 0) icon = '⚠️';
-      if (s.sectionKey === 'sec.plansMaitrise' || s.sectionKey === 'sec.progres') icon = '📈';
+      if (s.sectionKey === 'sec.progres') icon = '📈';
       if (s.sectionKey === 'sec.recommandations') icon = '🎯';
 
       var arrows = '<div class="move-arrows">' +
