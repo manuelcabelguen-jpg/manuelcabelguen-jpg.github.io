@@ -202,6 +202,23 @@
         return "";
     })();
 
+    root.assiduiteIntroDynamic = (function(){
+        var t = cc.typeProgramme || "";
+        var mpciName = cc.estAutochtone ? "Modèle de Programme Correctionnel Intégré Autochtone" : "Modèle de Programme Correctionnel Intégré";
+
+        var dateDeb = cc.dateDebutProgramme || "[Date de début]";
+        var dateFin = cc.dateFinProgramme || "[Date de fin]";
+        var nbAss = cc.nbSeancesAssistees || "[X]";
+        var nbTot = cc.nbSeancesTotales || "[Y]";
+
+        var progStr = "";
+        if(t && t !== "Préparatoire complété") {
+             progStr = " " + t.toLowerCase();
+        }
+
+        return "<p>« Le participant a participé au Programme Préparatoire du " + mpciName + progStr + " du " + esc(dateDeb) + " au " + esc(dateFin) + ". Le participant a assisté à " + esc(nbAss) + " sur " + esc(nbTot) + " séances. »</p>";
+    })();
+
     root.derogationDynamic = (function(){
         if(cc.derogationActive) {
             var dDate = cc.dateDerogation || "XXXX-XX-XX";
