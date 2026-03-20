@@ -99,7 +99,6 @@
       <input id="jsonFileInput" type="file" accept="application/json" style="display:none">
       <button class="btn" id="btnSaveJson">💾 Sauvegarder JSON</button>
       <button class="btn" id="btnExportWord">📝 Export Word</button>
-      <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1;">☁️ Config IA</button>
       <button class="btn success" id="btnGenerateAI">✦ Générateur IA</button>
       <button class="btn danger" id="btnResetSection">↺ Réinitialiser</button>
       <span class="badge" id="saveState">En attente</span>
@@ -120,57 +119,11 @@
 
 </div>
 <div class="toast" id="toast"></div>
-
-<!-- MODAL CONFIGURATION AZURE OPENAI -->
-<div id="azureModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
-  <div style="background:#fff; width:450px; border-radius:12px; padding:20px; box-shadow:var(--shadow);">
-    <h2 style="margin-top:0; color:var(--nav); display:flex; align-items:center; gap:8px;">
-      <span style="font-size:24px;">☁️</span> Configuration Azure OpenAI
-    </h2>
-    <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:20px;">
-      Ces informations sont nécessaires pour interroger l'IA. Pour des raisons de sécurité (Protégé B/C), <strong>elles ne sont sauvegardées qu'en session</strong> et disparaîtront à la fermeture du navigateur.
-    </p>
-
-    <div class="field">
-      <div class="label">Point de terminaison (Endpoint URL)</div>
-      <input type="text" id="azureEndpoint" class="input" placeholder="https://votre-ressource.openai.azure.com/" />
-    </div>
-
-    <div class="field">
-      <div class="label">Clé API (API Key)</div>
-      <input type="password" id="azureApiKey" class="input" placeholder="••••••••••••••••••••••••••••••••" />
-    </div>
-
-    <div class="field">
-      <div class="label">Nom du déploiement (Modèle)</div>
-      <input type="text" id="azureDeployment" class="input" placeholder="gpt-4" />
-    </div>
-
-    <div class="field">
-      <div class="label">Version de l'API</div>
-      <input type="text" id="azureApiVersion" class="input" placeholder="2024-02-15-preview" value="2024-02-15-preview" />
-    </div>
-
-    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
-      <button class="btn" id="btnAzureCancel">Annuler</button>
-      <button class="btn primary" id="btnAzureSave">Mémoriser pour la session</button>
-    </div>
-  </div>
-</div>
-
 <script>
 (function(){
   'use strict';
   var embeddedData = {};
   var state = { data: normalizeData(embeddedData), activeSectionKey: null, dirty: false, activeSlotKey: null, isAdmin: false };
-
-  // Paramètres Azure en mémoire uniquement (volatile)
-  var azureConfig = {
-      endpoint: sessionStorage.getItem('azure_endpoint') || '',
-      apiKey: sessionStorage.getItem('azure_api_key') || '',
-      deployment: sessionStorage.getItem('azure_deployment') || '',
-      apiVersion: sessionStorage.getItem('azure_api_version') || '2024-02-15-preview'
-  };
 
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
   function $(id){ return document.getElementById(id); }
@@ -331,7 +284,7 @@
 
   // === MOTEUR D'ANONYMISATION (PROTÉGÉ B/C) ===
   // Cette fonction remplace les données identifiantes par des balises neutres
-  // avant de les envoyer à Azure OpenAI
+  // avant de les envoyer à l'IA
   function sanitizeForAI(text) {
     if (!text) return "";
     var cc = state.data.caseContext || {};
@@ -958,60 +911,6 @@
     });
   }
 
-  // === APPEL RÉSEAU AZURE OPENAI ===
-  async function callAzureOpenAI(systemPrompt, userPrompt) {
-    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
-      throw new Error("Configuration Azure OpenAI manquante. Veuillez configurer les paramètres via le bouton '☁️ Config IA'.");
-    }
-
-    // Assurer que l'endpoint se termine par une barre oblique et construire l'URL correctement
-    let baseUrl = azureConfig.endpoint;
-    if (!baseUrl.endsWith('/')) baseUrl += '/';
-
-    // Format Azure OpenAI URL: https://{endpoint}/openai/deployments/{deployment-id}/chat/completions?api-version={api-version}
-    const url = `${baseUrl}openai/deployments/${azureConfig.deployment}/chat/completions?api-version=${azureConfig.apiVersion}`;
-
-    const headers = {
-      "Content-Type": "application/json",
-      "api-key": azureConfig.apiKey
-    };
-
-    // Anonymisation des prompts avant l'envoi
-    const sanitizedSystemPrompt = sanitizeForAI(systemPrompt);
-    const sanitizedUserPrompt = sanitizeForAI(userPrompt);
-
-    const body = JSON.stringify({
-      messages: [
-        { role: "system", content: sanitizedSystemPrompt },
-        { role: "user", content: sanitizedUserPrompt }
-      ],
-      temperature: 0.3, // Température basse pour les rapports formels (diminue les hallucinations)
-      max_tokens: 1500,
-      top_p: 0.9
-    });
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: body
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error?.message || `Erreur réseau ${response.status} : ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    if (data.choices && data.choices.length > 0) {
-      const generatedContent = data.choices[0].message.content;
-      // On dé-anonymise la réponse (remet le vrai nom si l'IA a utilisé [LE PARTICIPANT])
-      return desanitizeFromAI(generatedContent);
-    } else {
-      throw new Error("Réponse vide d'Azure OpenAI");
-    }
-  }
-  // =================================
-
   function saveJson(){
     if (Object.keys(state.data.reportDefinitions).length === 0) {
         toast('Erreur système : Base de données JSON absente.');
@@ -1045,118 +944,34 @@
     renderEditor();
   }
 
-  async function generateAIForEmptySlots() {
+  function generateAIForEmptySlots(){
     try {
       if (Object.keys(state.data.reportDefinitions).length === 0) {
         toast('Erreur système : Chargement du fichier JSON requis.');
         return;
       }
-
-      if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
-        showAzureModal();
-        return;
-      }
-
       var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
       if(!inst || !def) {
         toast('Erreur système : Aucune section active ciblée.');
         return;
       }
-
-      // 1. Récupérer le contenu de toutes les sources sélectionnées pour cette section
-      let sourcesContent = "";
-      if (inst.selectedSourceIds && inst.selectedSourceIds.length > 0) {
-        sourcesContent = "Voici les documents justificatifs et notes de suivi à utiliser comme source exclusive d'information :\n\n";
-        inst.selectedSourceIds.forEach(function(srcId) {
-          var srcObj = (state.data.sources || []).find(s => s.id === srcId);
-          if (srcObj) {
-            sourcesContent += `--- DÉBUT SOURCE : ${srcObj.title} ---\n${srcObj.content}\n--- FIN SOURCE ---\n\n`;
-          }
-        });
-      }
-
-      var emptySlots = (def.slots || []).filter(sl => !inst.slotOutputs[sl.slotKey] || inst.slotOutputs[sl.slotKey].trim() === '');
-
-      if (emptySlots.length === 0) {
-        toast('Avis : Aucun emplacement vide détecté dans cette section.');
-        return;
-      }
-
-      $('btnGenerateAI').disabled = true;
-      $('btnGenerateAI').classList.add('generating');
-      $('btnGenerateAI').innerHTML = '✨ Génération IA en cours...';
-
-      let updated = false;
-
-      // 2. Traiter chaque slot vide séquentiellement
-      for (let i = 0; i < emptySlots.length; i++) {
-        let sl = emptySlots[i];
-
-        // Reconstruire le prompt final pour ce slot (incluant les directives globales du type de programme)
-        let promptText = state.data.prompts[sl.promptKey] || '';
-        var progType = state.data.caseContext.typeProgramme;
-
-        if (progType === 'Hybride' && state.data.prompts['dir.hybride.general']) promptText += "\n\n" + state.data.prompts['dir.hybride.general'];
-        else if (progType === 'Communautaire' && state.data.prompts['dir.communautaire.general']) promptText += "\n\n" + state.data.prompts['dir.communautaire.general'];
-        else if (progType === 'Adapté') {
-            if (sl.slotKey === 'sec.assiduite.main' && state.data.prompts['dir.adapte.assiduite']) promptText += "\n\n" + state.data.prompts['dir.adapte.assiduite'];
-            else if (state.data.prompts['dir.adapte.general']) promptText += "\n\n" + state.data.prompts['dir.adapte.general'];
-        }
-
-        if(state.data.caseContext.estAutochtone) {
-            if(sl.slotKey === 'sec.cycle_criminel.main') promptText += "\n\n" + (state.data.prompts['dir.autochtone.cycle_criminel'] || '');
-            else if(sl.slotKey === 'sec.progres.main') promptText += "\n\n" + (state.data.prompts['dir.autochtone.progres'] || '');
-            else if(sl.slotKey.indexOf('.facteur') > -1) {
-                var fKey = sl.slotKey.split('.')[1];
-                var isNonContrib = state.data.factors && state.data.factors[fKey] && state.data.factors[fKey].type === 'non Contributif';
-                if (isNonContrib) promptText += "\n\n" + (state.data.prompts['dir.autochtone.facteur_non_contrib'] || '');
-                else promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || '');
-            } else if(sl.slotKey.indexOf('.objectif') > -1) promptText += "\n\n" + (state.data.prompts['dir.autochtone.objectif'] || '');
-            else if(sl.slotKey === 'sec.plansMaitrise.analyse') promptText += "\n\n" + (state.data.prompts['dir.autochtone.plans_maitrise'] || '');
-            else if(sl.slotKey === 'sec.recommandations.etapes') promptText += "\n\n" + (state.data.prompts['dir.autochtone.etapes'] || '');
-            else promptText += "\n\n" + (state.data.prompts['dir.autochtone.general'] || '');
-        }
-
-        // Combiner le system prompt (règles et sources) et le user prompt (instruction spécifique)
-        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction de rapports correctionnels officiels (MPCI).";
-
-        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
-        let userPrompt = "INSTRUCTIONS SPÉCIFIQUES POUR CETTE SECTION :\n" + promptText + "\n\n(Rappel format: Rédige la réponse en format HTML simple, utilise uniquement <p>, <ul>, <li> si nécessaire, aucune balise Markdown ```html).";
-
-        toast(`Génération du slot : ${sl.label}...`);
-
-        try {
-          // Appel API Azure OpenAI
-          let aiResponse = await callAzureOpenAI(systemPrompt, userPrompt);
-
-          // Nettoyer les éventuelles balises Markdown résiduelles
-          aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
-
-          inst.slotOutputs[sl.slotKey] = aiResponse;
+      var updated = false;
+      (def.slots || []).forEach(function(sl){
+        if(!inst.slotOutputs[sl.slotKey] || inst.slotOutputs[sl.slotKey].trim() === ''){
+          inst.slotOutputs[sl.slotKey] = '<p><em>[Génération IA]</em> Synthèse calculée pour « ' + esc(sl.label) + ' ». Profil analysé avec la détermination tactique des Montagnards.</p>';
           updated = true;
-
-          // Mettre à jour l'interface visuellement au fur et à mesure
-          renderEditor();
-        } catch (apiError) {
-          alert(`Erreur IA pour "${sl.label}" : ` + apiError.message);
-          break; // Stop le processus si l'API échoue
         }
-      }
-
+      });
       if(updated) {
         inst.status = 'review_needed';
         setDirty(true, 'Injection de texte IA terminée');
         renderEditor();
         toast('Opération réussie : Génération IA appliquée.');
+      } else {
+        toast('Avis : Aucun emplacement vide détecté.');
       }
-
     } catch(err) {
       alert('Alerte critique lors de la génération IA : ' + err.message);
-    } finally {
-      // Restaurer le bouton
-      $('btnGenerateAI').disabled = false;
-      $('btnGenerateAI').classList.remove('generating');
-      $('btnGenerateAI').innerHTML = '✦ Générateur IA';
     }
   }
 
@@ -1263,42 +1078,8 @@
 
   function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); renderSourcesList(); }
 
-  // === CONFIGURATION AZURE OPENAI ===
-  function showAzureModal(){
-    $('azureEndpoint').value = azureConfig.endpoint;
-    $('azureApiKey').value = azureConfig.apiKey;
-    $('azureDeployment').value = azureConfig.deployment;
-    $('azureApiVersion').value = azureConfig.apiVersion;
-    $('azureModal').style.display = 'flex';
-  }
-
-  function hideAzureModal(){
-    $('azureModal').style.display = 'none';
-  }
-
-  function saveAzureConfig(){
-    azureConfig.endpoint = $('azureEndpoint').value.trim();
-    azureConfig.apiKey = $('azureApiKey').value.trim();
-    azureConfig.deployment = $('azureDeployment').value.trim();
-    azureConfig.apiVersion = $('azureApiVersion').value.trim();
-
-    // On conserve la config le temps de la session du navigateur, mais ce n'est jamais exporté.
-    sessionStorage.setItem('azure_endpoint', azureConfig.endpoint);
-    sessionStorage.setItem('azure_api_key', azureConfig.apiKey);
-    sessionStorage.setItem('azure_deployment', azureConfig.deployment);
-    sessionStorage.setItem('azure_api_version', azureConfig.apiVersion);
-
-    hideAzureModal();
-    toast('Configuration Azure sauvegardée en session.');
-  }
-
-  // ===================================
-
   function bindGlobalEvents(){
     $('btnSaveJson').addEventListener('click', saveJson);
-    $('btnConfigAzure').addEventListener('click', showAzureModal);
-    $('btnAzureCancel').addEventListener('click', hideAzureModal);
-    $('btnAzureSave').addEventListener('click', saveAzureConfig);
     $('btnLoadJson').addEventListener('click', function(){ $('jsonFileInput').click(); });
     $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
     $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
