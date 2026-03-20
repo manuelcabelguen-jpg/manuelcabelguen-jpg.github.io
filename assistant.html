@@ -21,7 +21,10 @@
     .right{background:var(--soft);border-left:1px solid var(--border)}
     .resizer { background: var(--border); cursor: col-resize; z-index: 10; transition: background 0.2s; }
     .resizer:hover, .resizer.active { background: var(--blue); }
-    body.resizing { user-select: none; cursor: col-resize; }
+    .resizer-h { background: var(--border); cursor: row-resize; z-index: 10; transition: background 0.2s; height: 4px; width: 100%; flex-shrink: 0; }
+    .resizer-h:hover, .resizer-h.active { background: var(--blue); }
+    body.resizing-col { user-select: none; cursor: col-resize; }
+    body.resizing-row { user-select: none; cursor: row-resize; }
     .header{height:56px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-weight:800;letter-spacing:.5px; font-size:15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index:10;}
     .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:8px 16px;flex-wrap:wrap;background:#fff; box-shadow: 0 2px 5px rgba(15,23,42,0.02);}
     .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;color:#334155;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;transition:all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04);}
@@ -53,10 +56,18 @@
     .sectionMeta{font-size:11px;color:var(--muted);margin-top:2px}
     .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid var(--border);background:#fff;color:#475569}
     .badge.off{color:#9ca3af}
-    .editor{padding:16px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:12px}
+    .editor{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+    .editor-wrapper{padding:16px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+    .editor-top{padding:16px;overflow:auto;min-height:200px;display:flex;flex-direction:column;gap:12px;flex:1}
+    .editor-bottom{padding:16px;overflow:auto;min-height:200px;display:flex;flex-direction:column;gap:12px;height:var(--preview-h, 40%)}
     .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:0 2px 10px rgba(15,23,42,.04)}
     .cardTitle{font-weight:900;margin-bottom:8px}
-    .templatePreview{border:1px solid var(--border);border-radius:12px;background:#fff;padding:14px;line-height:1.6;min-height:220px}
+    .templatePreview{border:1px solid var(--border);border-radius:12px;background:#fff;padding:14px;line-height:1.6;min-height:220px;flex:1;overflow:auto;outline:none;}
+    .templatePreview:focus {border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,120,212,.2)}
+    .toolbar{display:flex;align-items:center;gap:4px;margin-bottom:8px;padding:4px;background:#f8fafc;border:1px solid var(--border);border-radius:8px;}
+    .btn-tool{background:transparent;border:1px solid transparent;border-radius:4px;padding:4px 8px;cursor:pointer;font-size:14px;color:#475569;}
+    .btn-tool:hover{background:#e2e8f0;color:#0f172a;}
+    .btn-tool.active{background:#cbd5e1;color:#000;font-weight:bold;}
     .slotBox{border:1px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
     .slotBox h4{margin:0 0 8px;font-size:12px;color:#334155}
     .muted{color:var(--muted)}
@@ -162,7 +173,9 @@
         enabled: typeof ex.enabled === 'boolean' ? ex.enabled : true,
         status: ex.status || 'draft',
         selectedSourceIds: Array.isArray(ex.selectedSourceIds) ? ex.selectedSourceIds : [],
-        slotOutputs: slotOutputs
+        slotOutputs: slotOutputs,
+        isCustomized: !!ex.isCustomized,
+        customPreviewHtml: typeof ex.customPreviewHtml === 'string' ? ex.customPreviewHtml : ''
       };
     });
     return d;
@@ -672,7 +685,7 @@
         var isAuto = state.data.caseContext.estAutochtone;
         var progType = state.data.caseContext.typeProgramme;
 
-        var html = '<div class="card"><div class="cardTitle" style="color:#1e3a8a; font-size:16px;">⚙️ Bibliothèque globale des Prompts et Directives</div>';
+        var html = '<div class="editor-wrapper"><div class="card"><div class="cardTitle" style="color:#1e3a8a; font-size:16px;">⚙️ Bibliothèque globale des Prompts et Directives</div>';
         html += '<div class="small muted" style="margin-bottom:15px;">Ces instructions sont filtrées selon le profil actuel du délinquant (gauche). Le système combinera ces blocs automatiquement lors de la génération. Ne modifiez pas les clés (titres).</div>';
 
         // 1. GOUVERNANCE GLOBALE AU SOMMET
@@ -748,7 +761,7 @@
             html += '<div class="empty-state small">Aucun prompt disponible.</div>';
         }
 
-        html += '</div>';
+        html += '</div></div>';
         host.innerHTML = html;
 
         Array.prototype.forEach.call(document.querySelectorAll('.global-prompt-editor'), function(ta){
@@ -814,18 +827,39 @@
         '</div>';
     });
 
-    host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue);">' +
+    host.innerHTML = '<div class="editor-top">' +
+      '<div class="card" style="border-left:4px solid var(--blue);">' +
         '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
         '<div class="label" style="margin-top:10px; margin-bottom:4px;">📎 Sources de contexte pour l\'IA</div>' +
         '<div class="chips" id="sourceChips"></div>' +
         '<div class="field" style="margin-top:14px"><label class="chk-field"><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export Word</label></div>' +
       '</div>' +
       '<div class="card"><div class="cardTitle" style="display:flex; justify-content:space-between; align-items:center;"><span>Contenu de la section (Slots)</span></div>' + slotsHtml + '</div>' +
-      '<div class="card"><div class="cardTitle">Aperçu du rendu final combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
+      '</div>' +
+      '<div class="resizer-h" id="resizerH"></div>' +
+      '<div class="editor-bottom">' +
+      '<div class="card" style="display:flex;flex-direction:column;flex:1;min-height:0;padding:12px 12px 0 12px;">' +
+        '<div class="cardTitle" style="display:flex; justify-content:space-between; align-items:center;margin-bottom:0;">' +
+           'Aperçu du rendu final combiné (Modifiable)' +
+        '</div>' +
+        '<div class="toolbar" style="margin-top:8px;">' +
+            '<button class="btn-tool" onclick="document.execCommand(\'bold\',false,null)" title="Gras"><b>B</b></button>' +
+            '<button class="btn-tool" onclick="document.execCommand(\'italic\',false,null)" title="Italique"><i>I</i></button>' +
+            '<button class="btn-tool" onclick="document.execCommand(\'underline\',false,null)" title="Souligné"><u>U</u></button>' +
+            '<div style="width:1px;height:16px;background:#cbd5e1;margin:0 4px;"></div>' +
+            '<button class="btn-tool" onclick="document.execCommand(\'fontSize\',false,\'2\')" title="Petit">A-</button>' +
+            '<button class="btn-tool" onclick="document.execCommand(\'fontSize\',false,\'3\')" title="Normal">A</button>' +
+            '<button class="btn-tool" onclick="document.execCommand(\'fontSize\',false,\'5\')" title="Grand">A+</button>' +
+            '<div style="flex:1"></div>' +
+            '<button class="btn-tool" id="btnSyncPreview" title="Recharger depuis les slots (Efface les modifications manuelles)" style="font-size:12px;display:flex;align-items:center;gap:4px;">🔄 Réinitialiser l\'aperçu</button>' +
+        '</div>' +
+        '<div class="templatePreview" id="templatePreview" contenteditable="true" style="margin-bottom:12px;"></div>' +
+      '</div></div>';
 
     bindEditor();
     renderSourceChips();
     refreshEditorPreviewOnly();
+    initResizerH();
 
     // Bouton de copie
     Array.prototype.forEach.call(document.querySelectorAll('.btnCopySlot'), function(btn){
@@ -872,18 +906,43 @@
   function bindEditor(){
     var key = state.activeSectionKey;
     var inst = getInstanceSection(key);
+    if(!inst) return;
     $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = (this.value === getSectionDef(key).title) ? '' : this.value; setDirty(true); renderSectionsList(); });
     $('chkEnabled').addEventListener('change', function(){ inst.enabled = !!this.checked; setDirty(true); renderSectionsList(); });
     Array.prototype.forEach.call(document.querySelectorAll('.slot-editor'), function(ta){
       ta.addEventListener('input', function(){ inst.slotOutputs[this.getAttribute('data-slotkey')] = this.value; setDirty(true); refreshEditorPreviewOnly(); });
     });
+
+    var preview = $('templatePreview');
+    if (preview) {
+        preview.addEventListener('input', function() {
+            inst.isCustomized = true;
+            inst.customPreviewHtml = this.innerHTML;
+            setDirty(true, 'Aperçu modifié manuellement');
+        });
+    }
+
+    var btnSync = $('btnSyncPreview');
+    if (btnSync) {
+        btnSync.addEventListener('click', function() {
+            if (confirm("Voulez-vous écraser vos modifications manuelles et recharger le texte à partir des slots générés ?")) {
+                inst.isCustomized = false;
+                inst.customPreviewHtml = '';
+                setDirty(true, 'Aperçu réinitialisé');
+                refreshEditorPreviewOnly();
+                toast('Aperçu synchronisé avec les slots.');
+            }
+        });
+    }
   }
 
   function refreshEditorPreviewOnly(){
     var host = $('templatePreview');
+    var inst = getInstanceSection(state.activeSectionKey);
     if(host) {
-        if(state.activeSectionKey === '__PROMPTS__') host.innerHTML = '';
-        else host.innerHTML = renderSectionHtml(state.activeSectionKey);
+        if(state.activeSectionKey === '__PROMPTS__') { host.innerHTML = ''; }
+        else if(inst && inst.isCustomized) { host.innerHTML = inst.customPreviewHtml || ''; }
+        else { host.innerHTML = renderSectionHtml(state.activeSectionKey); }
     }
   }
 
@@ -1007,7 +1066,8 @@
         var inst = getInstanceSection(sec.sectionKey);
         if(!inst || !inst.enabled) return;
         parts.push('<h2 style="font-family:Arial,sans-serif;font-size:14pt;color:#000;border-bottom:1px solid #000;padding-bottom:4px;margin-top:24pt;margin-bottom:12pt;text-transform:uppercase;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
-        parts.push('<div style="font-family:Arial,sans-serif;font-size:11pt;line-height:1.5;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
+        var content = inst.isCustomized ? (inst.customPreviewHtml || '') : renderSectionHtml(sec.sectionKey);
+        parts.push('<div style="font-family:Arial,sans-serif;font-size:11pt;line-height:1.5;text-align:justify;color:#000;">' + content + '</div>');
       });
       var cc = state.data.caseContext || {};
       var nom = esc(cc.nom || '________________');
@@ -1049,13 +1109,13 @@
 
     resLeft.addEventListener('mousedown', function(e) {
       isDraggingLeft = true;
-      document.body.classList.add('resizing');
+      document.body.classList.add('resizing-col');
       resLeft.classList.add('active');
     });
 
     resRight.addEventListener('mousedown', function(e) {
       isDraggingRight = true;
-      document.body.classList.add('resizing');
+      document.body.classList.add('resizing-col');
       resRight.classList.add('active');
     });
 
@@ -1069,9 +1129,39 @@
       if (isDraggingLeft || isDraggingRight) {
         isDraggingLeft = false;
         isDraggingRight = false;
-        document.body.classList.remove('resizing');
+        document.body.classList.remove('resizing-col');
         resLeft.classList.remove('active');
         resRight.classList.remove('active');
+      }
+    });
+  }
+
+  function initResizerH() {
+    var resizer = $('resizerH');
+    if (!resizer) return;
+    var editor = $('editorHost');
+    var isDragging = false;
+
+    resizer.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      document.body.classList.add('resizing-row');
+      resizer.classList.add('active');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      var editorRect = editor.getBoundingClientRect();
+      var bottomHeight = editorRect.bottom - e.clientY;
+      // Constraint height between 100px and 80% of editor
+      bottomHeight = Math.max(100, Math.min(bottomHeight, editorRect.height * 0.8));
+      editor.style.setProperty('--preview-h', bottomHeight + 'px');
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isDragging) {
+        isDragging = false;
+        document.body.classList.remove('resizing-row');
+        resizer.classList.remove('active');
       }
     });
   }
