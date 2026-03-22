@@ -106,7 +106,8 @@
       const [view, setView] = useState('dashboard');
       const [geminiApiKey, setGeminiApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
       const [showApiKeyInput, setShowApiKeyInput] = useState(!geminiApiKey);
-      const [useMockMarketData, setUseMockMarketData] = useState(true);
+      const [useMockMarketData, setUseMockMarketData] = useState(false); // Default to real API since requested
+      const [useAiAgent, setUseAiAgent] = useState(false); // Toggle for Gemini AI Governing Agent
 
       // Configuration du Portefeuille de l'utilisateur
       const [portfolio, setPortfolio] = useState(() => {
@@ -120,8 +121,9 @@
 
       // Flux de données de marché
       const [marketData, setMarketData] = useState({
-        veqtPrice: 40.20,
-        vix: 14.5,
+        vix: { price: 14.5, change: 0, percent: 0 },
+        veqt: { price: 40.20, change: 0, percent: 0 },
+        cash: { price: 50.00, change: 0, percent: 0 },
         interestRate: 4.5,
         lastSync: new Date().toLocaleTimeString()
       });
@@ -150,35 +152,44 @@
         } catch(e) { console.error(e) }
       }, [user, db]);
 
-      // --- FETCH REAL MARKET DATA (Yahoo Finance via public proxy) ---
+      // --- FETCH REAL MARKET DATA (Yahoo Finance & Bank of Canada) ---
       const fetchRealMarketData = async () => {
         setIsSyncing(true);
         try {
-          // Note: using a public proxy for Yahoo finance data in a real app might hit rate limits.
-          // In production, you'd use a real backend or a paid API key (Alpha Vantage, Finnhub, etc).
-          // For this example, we'll try a common free proxy or fallback to stochastic.
-          const resVeqt = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/VEQT.TO?interval=1d').catch(() => null);
-          const resVix = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/^VIX?interval=1d').catch(() => null);
+          // Fetch data for symbols, requesting 5d range to get chartPreviousClose
+          const fetchSymbol = async (sym) => {
+              const res = await fetch(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=5d&interval=1d`);
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              const data = await res.json();
+              const meta = data.chart.result[0].meta;
+              const price = meta.regularMarketPrice;
+              // Some assets have previousClose, others only chartPreviousClose in the 5d view
+              const prev = meta.previousClose || meta.chartPreviousClose || price;
+              const change = price - prev;
+              const percent = prev !== 0 ? (change / prev) * 100 : 0;
+              return { price, change, percent };
+          };
 
-          let veqtPrice = marketData.veqtPrice;
-          let vixPrice = marketData.vix;
+          // Fetch Bank of Canada Target Overnight Rate
+          const fetchBocRate = async () => {
+              const res = await fetch('https://www.bankofcanada.ca/valet/observations/V39079/json?recent=1');
+              if (!res.ok) return marketData.interestRate;
+              const data = await res.json();
+              return parseFloat(data.observations[0].V39079.v);
+          };
 
-          if (resVeqt && resVeqt.ok) {
-            const dataVeqt = await resVeqt.json();
-            veqtPrice = dataVeqt.chart.result[0].meta.regularMarketPrice;
-          } else {
-             throw new Error("Impossible de récupérer VEQT via l'API publique.");
-          }
-
-          if (resVix && resVix.ok) {
-            const dataVix = await resVix.json();
-            vixPrice = dataVix.chart.result[0].meta.regularMarketPrice;
-          }
+          const [vixData, veqtData, cashData, bocRate] = await Promise.all([
+             fetchSymbol('^VIX'),
+             fetchSymbol('VEQT.TO'),
+             fetchSymbol('CASH.TO'),
+             fetchBocRate()
+          ]);
 
           setMarketData({
-            veqtPrice: parseFloat(veqtPrice.toFixed(2)),
-            vix: parseFloat(vixPrice.toFixed(2)),
-            interestRate: marketData.interestRate, // Taux statique pour l'instant
+            vix: vixData,
+            veqt: veqtData,
+            cash: cashData,
+            interestRate: bocRate,
             lastSync: new Date().toLocaleTimeString()
           });
 
@@ -195,21 +206,26 @@
         setIsSyncing(true);
         setTimeout(() => {
           // Simulation réaliste de variations de marché
-          // VIX a tendance à revenir vers sa moyenne (mean reversion)
           const vixMean = 18;
-          const vixPull = (vixMean - marketData.vix) * 0.1;
-          const newVix = Math.max(10, Math.min(45, marketData.vix + vixPull + (Math.random() * 6 - 3)));
+          const currentVix = marketData.vix.price;
+          const vixPull = (vixMean - currentVix) * 0.1;
+          const newVixPrice = Math.max(10, Math.min(45, currentVix + vixPull + (Math.random() * 6 - 3)));
+          const vixChange = newVixPrice - currentVix;
 
-          // Corrélation négative forte entre VIX et prix des actions
-          const marketShock = (marketData.vix - newVix) * 0.15;
-
-          // Drift haussier naturel + choc de volatilité + bruit
+          const marketShock = (currentVix - newVixPrice) * 0.15;
           const drift = 0.05;
-          const newVeqt = Math.max(20, marketData.veqtPrice + drift + marketShock + (Math.random() * 0.8 - 0.4));
+          const currentVeqt = marketData.veqt.price;
+          const newVeqtPrice = Math.max(20, currentVeqt + drift + marketShock + (Math.random() * 0.8 - 0.4));
+          const veqtChange = newVeqtPrice - currentVeqt;
+
+          const currentCash = marketData.cash.price;
+          const newCashPrice = currentCash + (Math.random() * 0.01 - 0.002);
+          const cashChange = newCashPrice - currentCash;
 
           setMarketData({
-            veqtPrice: parseFloat(newVeqt.toFixed(2)),
-            vix: parseFloat(newVix.toFixed(2)),
+            vix: { price: newVixPrice, change: vixChange, percent: (vixChange/currentVix)*100 },
+            veqt: { price: newVeqtPrice, change: veqtChange, percent: (veqtChange/currentVeqt)*100 },
+            cash: { price: newCashPrice, change: cashChange, percent: (cashChange/currentCash)*100 },
             interestRate: marketData.interestRate,
             lastSync: new Date().toLocaleTimeString()
           });
@@ -228,7 +244,7 @@
       // --- MOTEUR CARTOGRAFFECT : CONVERSION MARCHÉ -> AFFECT ---
       const calculateCartograffectFromMarket = (port, market) => {
         // 1. Calcul Axe X (Savoir / Valence) : Écart de prédiction basé sur le P&L
-        const portfolioValue = port.veqtShares * market.veqtPrice;
+        const portfolioValue = port.veqtShares * market.veqt.price;
         const costBasis = port.veqtShares * port.veqtAvgCost;
         const gainLoss = portfolioValue - costBasis;
         // Normalisation: On utilise le % de gain/perte par rapport au coût moyen plutôt qu'une valeur fixe
@@ -245,7 +261,7 @@
 
         // 3. Calcul Axe Z (Certitude / Précision) : Inversement proportionnel au VIX
         // VIX 10 = 100% Certitude. VIX 40 = 0% Certitude.
-        const zRaw = 100 - ((market.vix - 10) * (100 / 30));
+        const zRaw = 100 - ((market.vix.price - 10) * (100 / 30));
         const z = Math.max(0, Math.min(100, Math.round(zRaw)));
 
         // --- IDENTIFICATION DE L'ÉMOTION ---
@@ -294,11 +310,95 @@
           gainLoss, portfolioValue, totalAssets,
           x, y, z, emotion,
           indices: { iea, trh, ire },
-          target: { x: targetX, y: targetY, policy: actionPolicy, color: targetColor }
+          target: { x: targetX, y: targetY, policy: actionPolicy, color: targetColor },
+          isAgent: false
         };
       };
 
-      const currentState = useMemo(() => calculateCartograffectFromMarket(portfolio, marketData), [portfolio, marketData]);
+      const deterministicState = useMemo(() => calculateCartograffectFromMarket(portfolio, marketData), [portfolio, marketData]);
+      const [aiAgentState, setAiAgentState] = useState(null);
+
+      const currentState = (useAiAgent && aiAgentState) ? aiAgentState : deterministicState;
+
+      // --- GEMINI AI GOVERNING AGENT ---
+      const fetchAiAgentState = async () => {
+        if (!geminiApiKey || !useAiAgent) return;
+        setIsAnalyzing(true);
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+
+        const prompt = `Tu es un Agent IA Gouvernant le modèle "Cartograffect". Ton rôle est de calculer la position psychologique et stratégique d'un investisseur en fonction du marché en temps réel, EN REMPLAÇANT les mathématiques déterministes.
+
+        DONNÉES DU MARCHÉ EN TEMPS RÉEL:
+        - VIX: ${marketData.vix.price.toFixed(2)} (Variation: ${marketData.vix.percent.toFixed(2)}%)
+        - VEQT (Actions): ${marketData.veqt.price.toFixed(2)}$ (Variation: ${marketData.veqt.percent.toFixed(2)}%)
+        - CASH (Liquidité): ${marketData.cash.price.toFixed(2)}$
+        - Taux Directeur: ${marketData.interestRate}%
+
+        PORTFOLIO DE L'INVESTISSEUR:
+        - VEQT: ${portfolio.veqtShares} parts acquises à ${portfolio.veqtAvgCost}$ l'unité.
+        - Liquidité restante: ${portfolio.cashAvailable}$
+        - Total Actifs: ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)}$
+        - P&L Latent: ${((portfolio.veqtShares * marketData.veqt.price) - (portfolio.veqtShares * portfolio.veqtAvgCost)).toFixed(2)}$
+
+        CALCULS REQUIS (Tu dois générer ces valeurs):
+        - X (Savoir/Valence) : de -100 à +100. (ex: fort gain = positif, forte perte = négatif)
+        - Y (Pouvoir/Activation) : de -100 à +100. (ex: beaucoup de liquidité = positif, bloqué = négatif)
+        - Z (Précision/Certitude) : de 0 à 100. (Impacté par la volatilité VIX).
+        - targetX et targetY : Les coordonnées de la Cible Stratégique pour restaurer l'homéostasie.
+        - emotion_name: "Joie", "Tristesse", "Colère", "Peur", "Désir", "Dégoût", "Calme", ou "Courage".
+        - emotion_color: "#10b981", "#3b82f6", "#ef4444", "#64748b", "#f59e0b", "#a855f7", "#8b5cf6", ou "#f43f5e".
+        - emotion_desc: Courte justification.
+        - policy: Courte phrase d'action (ex: "Conserver", "Acheter la baisse", "Liquider").
+        - targetColor: La couleur de l'action.
+        - iea, trh, ire: Indices de 0 à 100 pour l'Inférence Active.
+
+        RÉPONDS UNIQUEMENT AVEC DU JSON VALIDE. Ne mets aucun texte avant ou après.
+        Exemple de format:
+        {
+          "x": 45, "y": 20, "z": 80,
+          "emotion": { "name": "Joie / Euphorie", "color": "#10b981", "desc": "Conatus en expansion." },
+          "indices": { "iea": 10, "trh": 0, "ire": 5 },
+          "target": { "x": 60, "y": 20, "policy": "Laisser courir les gains", "color": "#10b981" }
+        }`;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { responseMimeType: "application/json" }
+            })
+          });
+          const result = await response.json();
+          if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+             const aiData = JSON.parse(result.candidates[0].content.parts[0].text);
+             setAiAgentState({
+                 ...deterministicState, // Keep gainLoss etc
+                 x: aiData.x, y: aiData.y, z: aiData.z,
+                 emotion: aiData.emotion,
+                 indices: aiData.indices,
+                 target: aiData.target,
+                 isAgent: true
+             });
+             setAiAnalysis("L'Agent IA Gouvernant a mis à jour les coordonnées du modèle avec succès.");
+          }
+        } catch (e) {
+             console.error("AI Agent Error", e);
+             setAiAnalysis("Erreur de l'Agent IA. Retour aux mathématiques déterministes.");
+             setUseAiAgent(false);
+        } finally {
+          setIsAnalyzing(false);
+        }
+      };
+
+      useEffect(() => {
+          if (useAiAgent) {
+              fetchAiAgentState();
+          } else {
+              setAiAgentState(null);
+          }
+      }, [useAiAgent, marketData]); // Re-run agent when market data changes if enabled
 
       const handleSubmit = async () => {
         const newLog = {
@@ -355,7 +455,7 @@
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
 
         const prompt = `Agis en tant qu'expert en finance comportementale et sciences cognitives utilisant le modèle "Cartograffect" (Version 6.1).
-        Données de Marché : VIX = ${marketData.vix}, VEQT = ${marketData.veqtPrice}$.
+        Données de Marché : VIX = ${marketData.vix.price.toFixed(2)}, VEQT = ${marketData.veqt.price.toFixed(2)}$.
         Position Actuelle du Portfolio : Écart de prédiction (Axe X)=${currentState.x.toFixed(1)} (Gain/Perte: ${currentState.gainLoss.toFixed(2)}$), Pouvoir d'action / Liquidité (Axe Y)=${currentState.y.toFixed(1)}, Précision / Certitude (Axe Z)=${currentState.z}%.
         Diagnostic Émotionnel : ${currentState.emotion.name}.
         Politique d'inférence active dictée par le modèle : "${currentState.target.policy}".
@@ -430,43 +530,87 @@
           <main className="max-w-7xl mx-auto">
             {view === 'dashboard' && (
               <>
-                {/* LIVE MARKET BAR */}
-                <div className="bg-slate-900 border border-slate-800 rounded-[2rem] p-6 mb-8 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 transition-all">
-                  <div className="flex gap-8 items-center w-full md:w-auto">
-                    <div>
-                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1"><Icon name="line-chart" size={12}/> Indice VIX</p>
-                      <p className={`text-2xl font-mono font-black transition-colors duration-500 ${marketData.vix > 20 ? 'text-red-400' : 'text-emerald-400'}`}>{marketData.vix.toFixed(2)}</p>
+                {/* LIVE MARKET Ticker */}
+                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 mb-8 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4 transition-all">
+                  <div className="flex gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+
+                    {/* VIX */}
+                    <div className="flex-shrink-0 min-w-[140px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="activity" size={12}/> Indice
+                      </p>
+                      <p className="text-sm font-bold text-slate-300">VIX</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.vix.price.toFixed(2)}</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.vix.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.vix.change > 0 ? '+' : ''}{marketData.vix.change.toFixed(2)}</span>
+                          <span>{marketData.vix.percent > 0 ? '+' : ''}{marketData.vix.percent.toFixed(2)} %</span>
+                      </div>
                     </div>
-                    <div className="h-10 w-px bg-slate-800"></div>
-                    <div>
-                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1"><Icon name="trending-up" size={12}/> VEQT.TO</p>
-                      <p className="text-2xl font-mono font-black text-white transition-all duration-500">{marketData.veqtPrice.toFixed(2)}$</p>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* VEQT */}
+                    <div className="flex-shrink-0 min-w-[200px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="globe" size={12}/> VEQT
+                      </p>
+                      <p className="text-[10px] text-slate-400 truncate w-48">Vanguard All-Equity ETF Portfolio</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.veqt.price.toFixed(2)} $</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.veqt.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.veqt.change > 0 ? '+' : ''}{marketData.veqt.change.toFixed(2)} $</span>
+                          <span>{marketData.veqt.percent > 0 ? '+' : ''}{marketData.veqt.percent.toFixed(2)} %</span>
+                      </div>
                     </div>
-                    <div className="h-10 w-px bg-slate-800"></div>
-                    <div>
-                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1"><Icon name="dollar-sign" size={12}/> Taux Directeur</p>
-                      <p className="text-2xl font-mono font-black text-indigo-400">{marketData.interestRate}%</p>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* CASH */}
+                    <div className="flex-shrink-0 min-w-[200px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="dollar-sign" size={12}/> CASH
+                      </p>
+                      <p className="text-[10px] text-slate-400 truncate w-48">Global X High Interest Savings ETF</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.cash.price.toFixed(2)} $</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.cash.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.cash.change > 0 ? '+' : ''}{marketData.cash.change.toFixed(4)} $</span>
+                          <span>{marketData.cash.percent > 0 ? '+' : ''}{marketData.cash.percent.toFixed(4)} %</span>
+                      </div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-4 w-full md:w-auto flex-wrap justify-end">
-                    <div className="flex items-center gap-2 mr-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer flex items-center gap-2">
+                    <div className="flex items-center gap-4 mr-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-white transition-colors">
                             <input
                                 type="checkbox"
                                 checked={!useMockMarketData}
                                 onChange={(e) => setUseMockMarketData(!e.target.checked)}
                                 className="accent-indigo-500 w-4 h-4 rounded bg-slate-800 border-slate-700"
                             />
-                            API Yahoo (Beta)
+                            Données API
+                        </label>
+                        <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-purple-300 transition-colors">
+                            <input
+                                type="checkbox"
+                                checked={useAiAgent}
+                                onChange={(e) => {
+                                    if (!geminiApiKey && e.target.checked) {
+                                        setShowApiKeyInput(true);
+                                    } else {
+                                        setUseAiAgent(e.target.checked);
+                                    }
+                                }}
+                                className="accent-purple-500 w-4 h-4 rounded bg-slate-800 border-slate-700"
+                            />
+                            <Icon name="bot" size={14} /> Agent IA
                         </label>
                     </div>
-                    <span className="text-[10px] text-slate-500 font-mono bg-slate-950 px-2 py-1 rounded">Maj: {marketData.lastSync}</span>
+                    <span className="text-[10px] text-slate-500 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">Maj: {marketData.lastSync}</span>
                     <button
                       onClick={handleSyncMarket} disabled={isSyncing}
                       className="bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 hover:bg-indigo-600 hover:text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2"
                     >
-                      <Icon name="refresh-cw" size={14} className={isSyncing ? "animate-spin" : ""} /> Sync Marché
+                      <Icon name="refresh-cw" size={14} className={isSyncing ? "animate-spin" : ""} /> {isSyncing ? 'Sync...' : 'Sync Marché'}
                     </button>
                   </div>
                 </div>
@@ -484,11 +628,18 @@
                           X (Écart de prédiction: P&L) × Y (Pouvoir d'action: Liquidité)
                         </p>
                       </div>
-                      <div className="bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl text-right transition-colors duration-500">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Précision (Z)</p>
-                        <p className="text-sm font-black font-mono transition-colors duration-500" style={{ color: currentState.z < 30 ? '#ef4444' : '#10b981' }}>
-                          {currentState.z}% <span className="text-[9px] font-sans text-slate-500">({marketData.vix} VIX)</span>
-                        </p>
+                      <div className="flex gap-4 items-center">
+                          {currentState.isAgent && (
+                             <div className="bg-purple-900/30 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                                 <Icon name="bot" size={12} /> Calculé par IA
+                             </div>
+                          )}
+                          <div className="bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl text-right transition-colors duration-500">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Précision (Z)</p>
+                            <p className="text-sm font-black font-mono transition-colors duration-500" style={{ color: currentState.z < 30 ? '#ef4444' : '#10b981' }}>
+                              {currentState.z}% <span className="text-[9px] font-sans text-slate-500">({marketData.vix.price.toFixed(1)} VIX)</span>
+                            </p>
+                          </div>
                       </div>
                     </div>
 
@@ -757,13 +908,17 @@
                           </tr>
                         </thead>
                         <tbody className="text-xs font-medium">
-                          {logs.slice().reverse().map(log => (
+                          {logs.slice().reverse().map(log => {
+                            const vixPrice = typeof log.vix === 'object' ? log.vix.price : log.vix;
+                            const veqtPrice = typeof log.veqt === 'object' ? log.veqt.price : (log.veqtPrice || log.veqt);
+
+                            return (
                             <tr key={log.id} className="border-b border-slate-800/50 hover:bg-slate-800/50 transition-colors">
                               <td className="px-6 py-5 text-slate-300 font-bold whitespace-nowrap">
                                   {log.date} <span className="text-[10px] text-slate-500 font-mono ml-2">{new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                               </td>
                               <td className="px-6 py-5 font-mono text-slate-400 whitespace-nowrap">
-                                  <span className={log.vix > 20 ? 'text-red-400' : ''}>{log.vix}</span> / {log.veqtPrice}$
+                                  <span className={vixPrice > 20 ? 'text-red-400' : ''}>{vixPrice?.toFixed(2) || 'N/A'}</span> / {veqtPrice?.toFixed(2) || 'N/A'}$
                               </td>
                               <td className="px-6 py-5 text-indigo-300 font-bold uppercase tracking-wide">{log.emotion}</td>
                               <td className="px-4 py-5 text-center font-mono text-slate-500">
@@ -781,7 +936,7 @@
                                 </button>
                               </td>
                             </tr>
-                          ))}
+                          )})}
                         </tbody>
                       </table>
                     </div>
