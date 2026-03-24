@@ -113,10 +113,12 @@
       // Configuration du Portefeuille de l'utilisateur
       const [portfolio, setPortfolio] = useState(() => {
         const saved = localStorage.getItem('carto_portfolio');
-        return saved ? JSON.parse(saved) : {
-          veqtShares: 1000,
-          veqtAvgCost: 38.50,
-          cashAvailable: 15000,
+        const parsed = saved ? JSON.parse(saved) : {};
+        return {
+          veqtShares: parsed.veqtShares !== undefined ? parsed.veqtShares : 1000,
+          veqtAvgCost: parsed.veqtAvgCost !== undefined ? parsed.veqtAvgCost : 38.50,
+          cashAvailable: parsed.cashAvailable !== undefined ? parsed.cashAvailable : 15000,
+          notificationEmail: parsed.notificationEmail !== undefined ? parsed.notificationEmail : ''
         };
       });
 
@@ -383,7 +385,7 @@
         const targetCashValue = (targetCashRatio / 100) * totalAssets;
         const cashDelta = targetCashValue - port.cashAvailable; // Positif = il faut du cash (Vendre), Négatif = il faut dépenser (Acheter)
 
-        if (Math.abs(cashDelta) > 500) { // Seuil minimal de trade (ex: 500$)
+        if (Math.abs(cashDelta) > 500) { // Seuil minimal de trade (ex: 500 CAD)
             // Ajustement bayésien par la certitude (si Z est 50%, on ne trade que la moitié de la conviction)
             // Sauf pour la fuite en cas de révision épistémique !
             const tradeValue = maxIndex === ire ? cashDelta : (cashDelta * Math.max(0.3, confidenceMultiplier));
@@ -422,15 +424,15 @@
 
         DONNÉES DU MARCHÉ EN TEMPS RÉEL:
         - VIX: ${marketData.vix.price.toFixed(2)} (Variation: ${marketData.vix.percent.toFixed(2)}%)
-        - VEQT (Actions): ${marketData.veqt.price.toFixed(2)}$ (Variation: ${marketData.veqt.percent.toFixed(2)}%)
-        - CASH (Liquidité): ${marketData.cash.price.toFixed(2)}$
+        - VEQT (Actions): ${marketData.veqt.price.toFixed(2)} CAD (Variation: ${marketData.veqt.percent.toFixed(2)}%)
+        - CASH (Liquidité): ${marketData.cash.price.toFixed(2)} CAD
         - Taux Directeur: ${marketData.interestRate}%
 
         PORTFOLIO DE L'INVESTISSEUR:
-        - VEQT: ${portfolio.veqtShares} parts acquises à ${portfolio.veqtAvgCost}$ l'unité.
-        - Liquidité restante: ${portfolio.cashAvailable}$
-        - Total Actifs: ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)}$
-        - P&L Latent: ${((portfolio.veqtShares * marketData.veqt.price) - (portfolio.veqtShares * portfolio.veqtAvgCost)).toFixed(2)}$
+        - VEQT: ${portfolio.veqtShares} parts acquises à ${portfolio.veqtAvgCost} CAD l'unité.
+        - Liquidité restante: ${portfolio.cashAvailable} CAD
+        - Total Actifs: ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)} CAD
+        - P&L Latent: ${((portfolio.veqtShares * marketData.veqt.price) - (portfolio.veqtShares * portfolio.veqtAvgCost)).toFixed(2)} CAD
 
         CALCULS REQUIS (Tu dois générer ces valeurs):
         - X (Savoir/Valence) : de -100 à +100. (ex: fort gain = positif, forte perte = négatif)
@@ -547,15 +549,18 @@
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
 
         const prompt = `Agis en tant qu'expert en finance comportementale et sciences cognitives utilisant le modèle "Cartograffect" (Version 6.1).
-        Données de Marché : VIX = ${marketData.vix.price.toFixed(2)}, VEQT = ${marketData.veqt.price.toFixed(2)}$.
-        Position Actuelle du Portfolio : Écart de prédiction (Axe X)=${currentState.x.toFixed(1)} (Gain/Perte: ${currentState.gainLoss.toFixed(2)}$), Pouvoir d'action / Liquidité (Axe Y)=${currentState.y.toFixed(1)}, Précision / Certitude (Axe Z)=${currentState.z}%.
+        Données de Marché : VIX = ${marketData.vix.price.toFixed(2)}, VEQT = ${marketData.veqt.price.toFixed(2)} CAD.
+        Position Actuelle du Portfolio : Écart de prédiction (Axe X)=${currentState.x.toFixed(1)} (Gain/Perte: ${currentState.gainLoss.toFixed(2)} CAD), Pouvoir d'action / Liquidité (Axe Y)=${currentState.y.toFixed(1)}, Précision / Certitude (Axe Z)=${currentState.z}%.
         Diagnostic Émotionnel : ${currentState.emotion.name}.
         Politique d'inférence active dictée par le modèle : "${currentState.target.policy}".
+        Ordre Quantitatif Recommandé : ${currentState.target.quantOrder && currentState.target.quantOrder.amount ? (currentState.target.quantOrder.action + " " + currentState.target.quantOrder.shares + " parts (" + currentState.target.quantOrder.amount.toFixed(0) + " CAD)") : "Aucun"}.
 
-        Rédige un court paragraphe analytique et impactant (environ 3-4 phrases).
-        1. Explique brièvement comment la volatilité (VIX) affecte la "Précision" (Z) de l'investisseur en ce moment.
-        2. Justifie de façon experte la politique d'inférence active proposée (le vecteur d'action) pour restaurer l'homéostasie financière (le Conatus) en tenant compte de l'émotion dominante et de la liquidité (Y).
-        Utilise un ton professionnel, analytique et légèrement philosophique (faisant écho à Spinoza/Friston).`;
+        Tu dois retourner UNIQUEMENT un objet JSON valide avec les clés suivantes :
+        - "exegese": Un court paragraphe analytique (3-4 phrases) expliquant l'impact de la volatilité sur Z et justifiant la politique d'inférence active proposée (ton professionnel, analytique, fristonien).
+        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables) pour exécuter l'ordre en dollars canadiens.
+        - "sendEmail": Un booléen (true ou false). Mets "true" UNIQUEMENT SI l'action recommandée requiert une action immédiate (ex: VENDRE d'urgence à cause de la panique, ou ACHETER agressivement). Mets "false" si la recommandation est de "Laisser courir" ou "Conserver".
+        - "emailSubject": "ALERTE CARTOGRAFFECT: Action Requise" (ou similaire, si sendEmail est true).
+        - "emailBody": Le corps du courriel incluant les recommandations (en texte brut).`;
 
         try {
           const response = await fetch(API_URL, {
@@ -563,22 +568,30 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+              generationConfig: { temperature: 0.7, responseMimeType: "application/json" }
             })
           });
           const result = await response.json();
           if (result.error) {
               if (result.error.code === 400 && result.error.message.includes("API key")) {
-                  setAiAnalysis("Clé API invalide. Veuillez vérifier votre clé Gemini.");
+                  setAiAnalysis({ error: "Clé API invalide. Veuillez vérifier votre clé Gemini." });
                   setShowApiKeyInput(true);
               } else {
-                  setAiAnalysis(`Erreur API: ${result.error.message}`);
+                  setAiAnalysis({ error: `Erreur API: ${result.error.message}` });
+              }
+          } else if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts[0].text) {
+              let textData = result.candidates[0].content.parts[0].text;
+              try {
+                  const aiData = JSON.parse(textData);
+                  setAiAnalysis(aiData);
+              } catch(e) {
+                 setAiAnalysis({ error: "La réponse de l'IA n'est pas un JSON valide." });
               }
           } else {
-              setAiAnalysis(result.candidates?.[0]?.content?.parts?.[0]?.text || "Erreur de génération.");
+              setAiAnalysis({ error: "Réponse inattendue de l'API Gemini." });
           }
         } catch (e) {
-            setAiAnalysis("Erreur réseau lors de l'appel à l'API Gemini.");
+            setAiAnalysis({ error: "Erreur réseau lors de l'appel à l'API Gemini." });
         } finally {
             setIsAnalyzing(false);
         }
@@ -678,9 +691,9 @@
                           <Icon name="globe" size={12}/> VEQT
                       </p>
                       <p className="text-[10px] text-slate-400 truncate w-48">Vanguard All-Equity ETF Portfolio</p>
-                      <p className="text-2xl font-mono font-black text-white">{marketData.veqt.price.toFixed(2)} $</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.veqt.price.toFixed(2)}  CAD</p>
                       <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.veqt.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                          <span>{marketData.veqt.change > 0 ? '+' : ''}{marketData.veqt.change.toFixed(2)} $</span>
+                          <span>{marketData.veqt.change > 0 ? '+' : ''}{marketData.veqt.change.toFixed(2)}  CAD</span>
                           <span>{marketData.veqt.percent > 0 ? '+' : ''}{marketData.veqt.percent.toFixed(2)} %</span>
                       </div>
                     </div>
@@ -693,9 +706,9 @@
                           <Icon name="dollar-sign" size={12}/> CASH
                       </p>
                       <p className="text-[10px] text-slate-400 truncate w-48">Global X High Interest Savings ETF</p>
-                      <p className="text-2xl font-mono font-black text-white">{marketData.cash.price.toFixed(2)} $</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.cash.price.toFixed(2)} CAD</p>
                       <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.cash.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                          <span>{marketData.cash.change > 0 ? '+' : ''}{marketData.cash.change.toFixed(4)} $</span>
+                          <span>{marketData.cash.change > 0 ? '+' : ''}{marketData.cash.change.toFixed(4)} CAD</span>
                           <span>{marketData.cash.percent > 0 ? '+' : ''}{marketData.cash.percent.toFixed(4)} %</span>
                       </div>
                     </div>
@@ -835,13 +848,13 @@
                             <div className="bg-slate-950/60 px-3 py-2 rounded-lg border border-white/5">
                                 <p className="text-[9px] text-slate-500 uppercase font-black tracking-wider mb-1">P&L Latent</p>
                                 <p className={`text-sm font-mono font-bold ${currentState.gainLoss > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                                    {currentState.gainLoss > 0 ? '+' : ''}{currentState.gainLoss.toFixed(2)}$
+                                    {currentState.gainLoss > 0 ? '+' : ''}{currentState.gainLoss.toFixed(2)} CAD
                                 </p>
                             </div>
                             <div className="bg-slate-950/60 px-3 py-2 rounded-lg border border-white/5">
                                 <p className="text-[9px] text-slate-500 uppercase font-black tracking-wider mb-1">Total Actifs</p>
                                 <p className="text-sm font-mono font-bold text-white">
-                                    {currentState.totalAssets.toFixed(0)}$
+                                    {currentState.totalAssets.toFixed(0)} CAD
                                 </p>
                             </div>
                           </div>
@@ -877,7 +890,7 @@
                                        </div>
                                        <div className="text-right">
                                            <p className="text-[10px] text-slate-500 uppercase tracking-widest">Montant</p>
-                                           <p className="text-sm font-mono font-bold text-white">~ {currentState.target.quantOrder.amount.toFixed(0)}$</p>
+                                           <p className="text-sm font-mono font-bold text-white">~ {currentState.target.quantOrder.amount.toFixed(0)} CAD</p>
                                        </div>
                                    </div>
                                 )}
@@ -950,7 +963,51 @@
                                       </span>
                                       <button onClick={() => setShowApiKeyInput(true)} className="text-[9px] text-slate-500 hover:text-indigo-300 underline">Modifier Clé</button>
                                   </div>
-                                  <p className="whitespace-pre-line">{aiAnalysis}</p>
+
+                                  {aiAnalysis.error ? (
+                                    <p className="text-red-400 font-bold">{aiAnalysis.error}</p>
+                                  ) : (
+                                    <div className="space-y-4">
+                                        <div>
+                                            <p className="font-bold text-slate-300 uppercase text-[9px] tracking-widest mb-1">Exégèse Fristonienne</p>
+                                            <p className="text-slate-200">{aiAnalysis.exegese}</p>
+                                        </div>
+
+                                        {aiAnalysis.marcheASuivre && aiAnalysis.marcheASuivre.length > 0 && (
+                                            <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
+                                                <p className="font-bold text-emerald-400 uppercase text-[9px] tracking-widest mb-2 flex items-center gap-1">
+                                                    <Icon name="list-checks" size={10} /> Marche à suivre recommandée
+                                                </p>
+                                                <ol className="list-decimal pl-4 space-y-1 text-slate-300">
+                                                    {aiAnalysis.marcheASuivre.map((etape, i) => (
+                                                        <li key={i}>{etape}</li>
+                                                    ))}
+                                                </ol>
+                                            </div>
+                                        )}
+
+                                        {aiAnalysis.sendEmail && portfolio.notificationEmail && (
+                                            <div className="mt-2 p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                                                <p className="font-bold text-purple-400 uppercase text-[9px] tracking-widest mb-2 flex items-center gap-1">
+                                                    <Icon name="bell" size={10} /> Alerte Requise
+                                                </p>
+                                                <a
+                                                    href={`mailto:${portfolio.notificationEmail}?subject=${encodeURIComponent(aiAnalysis.emailSubject || 'Alerte Cartograffect')}&body=${encodeURIComponent(aiAnalysis.emailBody || '')}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors w-full justify-center"
+                                                >
+                                                    <Icon name="send" size={14} /> Envoyer Courriel d'Alerte à {portfolio.notificationEmail}
+                                                </a>
+                                            </div>
+                                        )}
+                                        {aiAnalysis.sendEmail && !portfolio.notificationEmail && (
+                                             <p className="text-[10px] text-amber-500 flex items-center gap-1 mt-2">
+                                                 <Icon name="alert-circle" size={10}/> L'IA recommande d'envoyer une alerte, mais aucun courriel n'est configuré dans le Portfolio.
+                                             </p>
+                                        )}
+                                    </div>
+                                  )}
                                 </div>
                               )}
                           </div>
@@ -995,7 +1052,7 @@
                   </div>
                   <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
-                          <Icon name="target" size={14}/> Prix d'Achat Moyen (PRU) $
+                          <Icon name="target" size={14}/> Prix d'Achat Moyen (PRU)  CAD
                       </label>
                       <input
                         type="number" step="0.01" value={portfolio.veqtAvgCost} onChange={e => setPortfolio({...portfolio, veqtAvgCost: parseFloat(e.target.value) || 0})}
@@ -1004,12 +1061,23 @@
                   </div>
                   <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
                       <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
-                          <Icon name="dollar-sign" size={14}/> Liquidité Disponible (Cash $)
+                          <Icon name="dollar-sign" size={14}/> Liquidité Disponible (Cash CAD)
                       </label>
                       <input
                         type="number" value={portfolio.cashAvailable} onChange={e => setPortfolio({...portfolio, cashAvailable: parseFloat(e.target.value) || 0})}
                         className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold transition-all"
                       />
+                  </div>
+
+                  <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 mt-6">
+                      <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                          <Icon name="mail" size={14}/> Courriel pour Notifications IA
+                      </label>
+                      <input
+                        type="email" placeholder="votre@courriel.com" value={portfolio.notificationEmail} onChange={e => setPortfolio({...portfolio, notificationEmail: e.target.value})}
+                        className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-purple-500 focus:outline-none font-sans font-medium transition-all"
+                      />
+                      <p className="text-[10px] text-slate-500 mt-2">Nécessaire pour l'envoi d'alertes via l'Agent IA.</p>
                   </div>
 
                   <div className="pt-4">
@@ -1062,7 +1130,7 @@
                                   {log.date} <span className="text-[10px] text-slate-500 font-mono ml-2">{new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                               </td>
                               <td className="px-6 py-5 font-mono text-slate-400 whitespace-nowrap">
-                                  <span className={vixPrice > 20 ? 'text-red-400' : ''}>{vixPrice?.toFixed(2) || 'N/A'}</span> / {veqtPrice?.toFixed(2) || 'N/A'}$
+                                  <span className={vixPrice > 20 ? 'text-red-400' : ''}>{vixPrice?.toFixed(2) || 'N/A'}</span> / {veqtPrice?.toFixed(2) || 'N/A'} CAD
                               </td>
                               <td className="px-6 py-5 text-indigo-300 font-bold uppercase tracking-wide">{log.emotion}</td>
                               <td className="px-4 py-5 text-center font-mono text-slate-500">
