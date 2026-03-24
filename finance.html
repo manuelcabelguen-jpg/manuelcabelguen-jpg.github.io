@@ -133,7 +133,8 @@
           vixRatio: 1.05,
           yieldSpread: 0.15,
           creditSpread: 3.5,
-          putCallRatio: 0.95
+          putCallRatio: 0.95,
+          vixVeqtCorrelation: -0.85
         },
         lastSync: new Date().toLocaleTimeString()
       });
@@ -167,21 +168,23 @@
         setIsSyncing(true);
         setApiError(null);
         try {
-          // Fetch data for symbols, requesting 5d range to get chartPreviousClose
+          // Fetch data for symbols, requesting 1mo range for historical correlation
           const fetchSymbol = async (sym) => {
               // Using allorigins as a public CORS proxy to bypass browser restrictions on Yahoo Finance
-              const targetUrl = encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=5d&interval=1d`);
+              const targetUrl = encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=1mo&interval=1d`);
               const proxyUrl = `https://api.allorigins.win/raw?url=${targetUrl}`;
               const res = await fetch(proxyUrl);
               if (!res.ok) throw new Error(`HTTP ${res.status}`);
               const data = await res.json();
-              const meta = data.chart.result[0].meta;
+              const result = data.chart.result[0];
+              const meta = result.meta;
               const price = meta.regularMarketPrice;
-              // Some assets have previousClose, others only chartPreviousClose in the 5d view
+              // Some assets have previousClose, others only chartPreviousClose in the view
               const prev = meta.previousClose || meta.chartPreviousClose || price;
               const change = price - prev;
               const percent = prev !== 0 ? (change / prev) * 100 : 0;
-              return { price, change, percent };
+              const history = result.indicators.quote[0].close || [];
+              return { price, change, percent, history };
           };
 
           // Fetch Bank of Canada Target Overnight Rate
@@ -217,6 +220,39 @@
           const putCallBase = 0.8 + ((vixData.price - 12) * 0.03); // VIX 12 = 0.8, VIX 30 = 1.34
           const putCallRatio = putCallBase + ((tnxData.change < 0 ? 0.1 : -0.1) * (Math.random() * 0.5 + 0.5)); // Baisse des taux = peur = plus de puts
 
+          // Calcul Corrélation VIX / VEQT (Pearson) sur 30 jours
+          const calculateCorrelation = (arr1, arr2) => {
+              // Ensure arrays are same length and contain valid numbers
+              const len = Math.min(arr1.length, arr2.length);
+              if (len < 2) return -1; // Default negative correlation
+              let validPairs = [];
+              for(let i=0; i<len; i++) {
+                 if (arr1[i] !== null && arr2[i] !== null) {
+                     validPairs.push([arr1[i], arr2[i]]);
+                 }
+              }
+              const n = validPairs.length;
+              if (n < 2) return -1;
+
+              let sum1 = 0, sum2 = 0, sum1Sq = 0, sum2Sq = 0, pSum = 0;
+              for (let i = 0; i < n; i++) {
+                  const x = validPairs[i][0];
+                  const y = validPairs[i][1];
+                  sum1 += x;
+                  sum2 += y;
+                  sum1Sq += x * x;
+                  sum2Sq += y * y;
+                  pSum += x * y;
+              }
+
+              const num = pSum - (sum1 * sum2 / n);
+              const den = Math.sqrt((sum1Sq - sum1 * sum1 / n) * (sum2Sq - sum2 * sum2 / n));
+              if (den === 0) return 0;
+              return num / den;
+          };
+
+          const vixVeqtCorrelation = calculateCorrelation(vixData.history, veqtData.history);
+
           setMarketData({
             vix: vixData,
             veqt: veqtData,
@@ -226,7 +262,8 @@
               vixRatio,
               yieldSpread,
               creditSpread,
-              putCallRatio: Math.max(0.5, Math.min(2.0, putCallRatio))
+              putCallRatio: Math.max(0.5, Math.min(2.0, putCallRatio)),
+              vixVeqtCorrelation: vixVeqtCorrelation
             },
             lastSync: new Date().toLocaleTimeString()
           });
@@ -265,6 +302,8 @@
           const vixRatio = newVixPrice / currentVix;
           const creditSpread = 3.5 + (newVixPrice - 18) * 0.2;
           const putCallRatio = 0.95 + (vixChange > 0 ? 0.1 : -0.05);
+          // Mock correlation (usually negative, positive if regime shifts)
+          const mockCorrelation = Math.random() > 0.9 ? (Math.random() * 0.5) : (-0.6 - Math.random() * 0.3);
 
           setMarketData({
             vix: { price: newVixPrice, change: vixChange, percent: (vixChange/currentVix)*100 },
@@ -272,7 +311,7 @@
             cash: { price: newCashPrice, change: cashChange, percent: (cashChange/currentCash)*100 },
             interestRate: marketData.interestRate,
             macro: {
-              vixRatio, yieldSpread, creditSpread, putCallRatio
+              vixRatio, yieldSpread, creditSpread, putCallRatio, vixVeqtCorrelation: mockCorrelation
             },
             lastSync: new Date().toLocaleTimeString()
           });
@@ -297,13 +336,17 @@
         const totalAssets = portfolioValue + port.cashAvailable;
         const cashRatio = totalAssets > 0 ? (port.cashAvailable / totalAssets) * 100 : 0;
 
-        const { vixRatio, yieldSpread, creditSpread, putCallRatio } = market.macro;
+        const { vixRatio, yieldSpread, creditSpread, putCallRatio, vixVeqtCorrelation } = market.macro;
 
         // 2. MODULATION BAYÉSIENNE (Les priors macro modifient la perception)
 
-        // Axe Z (Précision) : Détruit par la backwardation du VIX et les spreads de crédit
+        // Axe Z (Précision) : Détruit par la backwardation du VIX, les spreads de crédit et un bris de corrélation
         let zRaw = 100 - ((market.vix.price - 10) * (100 / 30)); // Base VIX pure
         zRaw = zRaw - (Math.max(0, vixRatio - 1) * 50) - (Math.max(0, creditSpread - 4) * 10);
+        // Bris de corrélation (Corrélation VIX/VEQT > 0). Signale un changement de régime, tue la précision.
+        if (vixVeqtCorrelation > 0) {
+            zRaw -= (vixVeqtCorrelation * 40);
+        }
         const z = Math.max(0, Math.min(100, Math.round(zRaw)));
 
         // Axe X (Savoir / Valence) : Écart de prédiction (P&L VEQT)
@@ -358,7 +401,16 @@
         // Dimensionnement Quantitatif
         let targetCashRatio = requiredCashBase;
         let confidenceMultiplier = z / 100; // Si Z est bas, on réduit la taille des trades
-        let quantOrder = { action: 'HOLD', shares: 0, reason: '' };
+
+        // Confirmation par corrélation :
+        // Si corrélation positive (marché dysfonctionnel), on limite le levier allostasique.
+        let correlationWarning = false;
+        if (vixVeqtCorrelation > 0.2) {
+            confidenceMultiplier *= 0.5; // On divise par 2 la taille des achats/ventes car le marché est irrationnel
+            correlationWarning = true;
+        }
+
+        let quantOrder = { action: 'HOLD', shares: 0, reason: '', correlationWarning };
 
         const maxIndex = Math.max(iea, trh, ire);
         if (maxIndex === 0) {
@@ -680,6 +732,12 @@
                            <span className="text-slate-400">Put/Call:</span>
                            <span className={marketData.macro.putCallRatio > 1.15 ? 'text-amber-400 font-bold' : 'text-slate-300'}>{marketData.macro.putCallRatio.toFixed(2)}</span>
                         </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Corr. VIX/VEQT:</span>
+                           <span className={marketData.macro.vixVeqtCorrelation > 0 ? 'text-red-400 font-bold' : 'text-emerald-400'} title="Corrélation sur 30 jours">
+                               {marketData.macro.vixVeqtCorrelation.toFixed(2)}
+                           </span>
+                        </div>
                       </div>
                     </div>
 
@@ -893,6 +951,13 @@
                                            <p className="text-sm font-mono font-bold text-white">~ {currentState.target.quantOrder.amount.toFixed(0)} CAD</p>
                                        </div>
                                    </div>
+                                )}
+
+                                {currentState.target.quantOrder && currentState.target.quantOrder.correlationWarning && (
+                                    <div className="mt-2 text-[9px] text-red-400 bg-red-950/30 p-2 rounded-lg border border-red-500/20 flex items-center gap-2 font-mono">
+                                        <Icon name="alert-triangle" size={12} />
+                                        <span>Corrélation VIX/VEQT positive ({marketData.macro.vixVeqtCorrelation.toFixed(2)}). Marché irrationnel. Ordre quantitatif réduit de 50%.</span>
+                                    </div>
                                 )}
                             </div>
 
