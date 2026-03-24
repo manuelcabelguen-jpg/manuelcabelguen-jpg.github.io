@@ -160,7 +160,10 @@
         try {
           // Fetch data for symbols, requesting 5d range to get chartPreviousClose
           const fetchSymbol = async (sym) => {
-              const res = await fetch(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=5d&interval=1d`);
+              // Using allorigins as a public CORS proxy to bypass browser restrictions on Yahoo Finance
+              const targetUrl = encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=5d&interval=1d`);
+              const proxyUrl = `https://api.allorigins.win/raw?url=${targetUrl}`;
+              const res = await fetch(proxyUrl);
               if (!res.ok) throw new Error(`HTTP ${res.status}`);
               const data = await res.json();
               const meta = data.chart.result[0].meta;
