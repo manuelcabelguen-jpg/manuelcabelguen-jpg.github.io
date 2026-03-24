@@ -126,6 +126,13 @@
         veqt: { price: 40.20, change: 0, percent: 0 },
         cash: { price: 50.00, change: 0, percent: 0 },
         interestRate: 4.5,
+        // Nouveaux macro-indicateurs allostasiques
+        macro: {
+          vixRatio: 1.05,
+          yieldSpread: 0.15,
+          creditSpread: 3.5,
+          putCallRatio: 0.95
+        },
         lastSync: new Date().toLocaleTimeString()
       });
 
@@ -183,18 +190,42 @@
               return parseFloat(data.observations[0].V39079.v);
           };
 
-          const [vixData, veqtData, cashData, bocRate] = await Promise.all([
+          const [vixData, veqtData, cashData, bocRate, tnxData, irxData] = await Promise.all([
              fetchSymbol('^VIX'),
              fetchSymbol('VEQT.TO'),
              fetchSymbol('CASH.TO'),
-             fetchBocRate()
+             fetchBocRate(),
+             fetchSymbol('^TNX'), // 10 Year Treasury Note Yield
+             fetchSymbol('^IRX')  // 13 Week Treasury Bill
           ]);
+
+          // Calculs Macro Allostasiques
+          // Yield Spread (10Y - 3M). Si < 0, inversion de la courbe.
+          const yieldSpread = tnxData.price - irxData.price;
+
+          // VIX Ratio (Volatilité court terme vs moyenne mobile très simple de la veille)
+          const vixRatio = vixData.price / (vixData.price - vixData.change);
+
+          // Simulation du Credit Spread basé sur le VIX (Bonds Corporatifs vs Trésor)
+          // VIX normal = Credit Spread ~3.5%. VIX 40+ = Credit Spread ~8%+
+          const creditSpread = Math.max(2.5, (vixData.price / 10) * 2.5 + (Math.random() * 0.5 - 0.25));
+
+          // Simulation du Put/Call Ratio (Panique)
+          // > 1.0 = Bearish/Panique. < 0.8 = Bullish/Complaisance
+          const putCallBase = 0.8 + ((vixData.price - 12) * 0.03); // VIX 12 = 0.8, VIX 30 = 1.34
+          const putCallRatio = putCallBase + ((tnxData.change < 0 ? 0.1 : -0.1) * (Math.random() * 0.5 + 0.5)); // Baisse des taux = peur = plus de puts
 
           setMarketData({
             vix: vixData,
             veqt: veqtData,
             cash: cashData,
             interestRate: bocRate,
+            macro: {
+              vixRatio,
+              yieldSpread,
+              creditSpread,
+              putCallRatio: Math.max(0.5, Math.min(2.0, putCallRatio))
+            },
             lastSync: new Date().toLocaleTimeString()
           });
 
@@ -228,11 +259,19 @@
           const newCashPrice = currentCash + (Math.random() * 0.01 - 0.002);
           const cashChange = newCashPrice - currentCash;
 
+          const yieldSpread = 0.15 + (Math.random() * 0.2 - 0.1);
+          const vixRatio = newVixPrice / currentVix;
+          const creditSpread = 3.5 + (newVixPrice - 18) * 0.2;
+          const putCallRatio = 0.95 + (vixChange > 0 ? 0.1 : -0.05);
+
           setMarketData({
             vix: { price: newVixPrice, change: vixChange, percent: (vixChange/currentVix)*100 },
             veqt: { price: newVeqtPrice, change: veqtChange, percent: (veqtChange/currentVeqt)*100 },
             cash: { price: newCashPrice, change: cashChange, percent: (cashChange/currentCash)*100 },
             interestRate: marketData.interestRate,
+            macro: {
+              vixRatio, yieldSpread, creditSpread, putCallRatio
+            },
             lastSync: new Date().toLocaleTimeString()
           });
           setIsSyncing(false);
@@ -247,76 +286,123 @@
         }
       };
 
-      // --- MOTEUR CARTOGRAFFECT : CONVERSION MARCHÉ -> AFFECT ---
+      // --- MOTEUR CARTOGRAFFECT : CONVERSION MARCHÉ -> AFFECT (v6.1 Allostasique) ---
       const calculateCartograffectFromMarket = (port, market) => {
-        // 1. Calcul Axe X (Savoir / Valence) : Écart de prédiction basé sur le P&L
+        // 1. EXTRACTION DES DONNÉES DE BASE
         const portfolioValue = port.veqtShares * market.veqt.price;
         const costBasis = port.veqtShares * port.veqtAvgCost;
         const gainLoss = portfolioValue - costBasis;
-        // Normalisation: On utilise le % de gain/perte par rapport au coût moyen plutôt qu'une valeur fixe
-        const gainLossPercent = costBasis > 0 ? (gainLoss / costBasis) * 100 : 0;
-        // X = entre -100 et +100 (ex: 20% de gain = +50 en X)
-        const x = Math.max(-100, Math.min(100, gainLossPercent * 2.5)) || 0;
-
-        // 2. Calcul Axe Y (Pouvoir / Activation) : Ratio de Liquidité ajusté
         const totalAssets = portfolioValue + port.cashAvailable;
         const cashRatio = totalAssets > 0 ? (port.cashAvailable / totalAssets) * 100 : 0;
-        // 15% de cash est "neutre" (Y=0). En dessous, contrainte. Au dessus, pouvoir.
-        const yRaw = (cashRatio - 15) * 4;
-        const y = Math.max(-100, Math.min(100, yRaw)) || 0;
 
-        // 3. Calcul Axe Z (Certitude / Précision) : Inversement proportionnel au VIX
-        // VIX 10 = 100% Certitude. VIX 40 = 0% Certitude.
-        const zRaw = 100 - ((market.vix.price - 10) * (100 / 30));
+        const { vixRatio, yieldSpread, creditSpread, putCallRatio } = market.macro;
+
+        // 2. MODULATION BAYÉSIENNE (Les priors macro modifient la perception)
+
+        // Axe Z (Précision) : Détruit par la backwardation du VIX et les spreads de crédit
+        let zRaw = 100 - ((market.vix.price - 10) * (100 / 30)); // Base VIX pure
+        zRaw = zRaw - (Math.max(0, vixRatio - 1) * 50) - (Math.max(0, creditSpread - 4) * 10);
         const z = Math.max(0, Math.min(100, Math.round(zRaw)));
 
-        // --- IDENTIFICATION DE L'ÉMOTION ---
+        // Axe X (Savoir / Valence) : Écart de prédiction (P&L VEQT)
+        const gainLossPercent = costBasis > 0 ? (gainLoss / costBasis) * 100 : 0;
+        let x = Math.max(-100, Math.min(100, gainLossPercent * 2.5)) || 0;
+        // Pénalisé si gain irrationnel (hausse VEQT mais hausse des spreads de crédit = rally "bear market")
+        if (x > 0 && creditSpread > 5) {
+            x = x * 0.5; // Méfiance
+        }
+
+        // Axe Y (Pouvoir) : Capacité d'action (CASH.TO)
+        // L'inversion de la courbe des taux exige plus de cash pour être "neutre"
+        const requiredCashBase = yieldSpread < 0 ? 30 : 15;
+        let y = Math.max(-100, Math.min(100, (cashRatio - requiredCashBase) * 4)) || 0;
+
+        // 3. DÉTECTION DE L'ÉTAT AFFECTIF
         const t = 15;
         const isGain = x > t; const isPerte = x < -t;
         const isPouvoir = y > t; const isContrainte = y < -t;
         const isAxialX = Math.abs(x) <= t; const isAxialY = Math.abs(y) <= t;
 
-        let emotion = { name: "Observation (Neutre)", color: "#94a3b8", desc: "Équilibre prédictif." };
+        let emotion = { name: "Observation (Neutre)", color: "#94a3b8", desc: "Équilibre macro et prédictif." };
 
-        if (isGain && isPouvoir) emotion = { name: "Joie / Euphorie", color: "#10b981", desc: "Conatus en expansion. Modèle validé, liquidité forte." };
-        else if (isPerte && isContrainte) emotion = { name: "Tristesse / Capitulation", color: "#3b82f6", desc: "Conatus diminué. Écart négatif massif et impuissance." };
-        else if (isPerte && isPouvoir) emotion = { name: "Colère / Combativité", color: "#ef4444", desc: "Allostasie proactive. Erreur subie mais haut pouvoir d'achat." };
-        else if (isGain && isContrainte) emotion = { name: "Calme / Soulagement", color: "#8b5cf6", desc: "Régulation homéostasique. Prise de profit requise." };
-        else if (isPouvoir && isAxialX) emotion = { name: "Désir / Anticipation", color: "#f59e0b", desc: "Haut pouvoir génératif en attente de déploiement." };
-        else if (isContrainte && isAxialX) emotion = { name: "Dégoût / Aversion", color: "#a855f7", desc: "Rejet bottom-up d'une contrainte sans gain." };
-        else if (isGain && isAxialY) emotion = { name: "Courage / Assurance", color: "#f43f5e", desc: "Certitude de la validation." };
-        else if (isPerte && isAxialY) emotion = { name: "Peur / Sidération", color: "#64748b", desc: "Alerte de l'écart sans liquidité claire." };
+        if (isGain && isPouvoir) emotion = { name: "Joie / Euphorie", color: "#10b981", desc: "Conatus en expansion. Modèle validé par les taux, liquidité forte." };
+        else if (isPerte && isContrainte) emotion = { name: "Tristesse / Capitulation", color: "#3b82f6", desc: "Conatus diminué. Écart négatif massif et manque structurel de liquidité." };
+        else if (isPerte && isPouvoir) emotion = { name: "Colère / Combativité", color: "#ef4444", desc: "Allostasie proactive. Choc macro subi mais haut pouvoir d'achat." };
+        else if (isGain && isContrainte) emotion = { name: "Calme / Soulagement", color: "#8b5cf6", desc: "Régulation homéostasique. Prise de profit requise par le spread." };
+        else if (isPouvoir && isAxialX) emotion = { name: "Désir / Anticipation", color: "#f59e0b", desc: "Haut pouvoir génératif, en attente de certitude macro." };
+        else if (isContrainte && isAxialX) emotion = { name: "Dégoût / Aversion", color: "#a855f7", desc: "Rejet bottom-up d'un marché sans prime de risque claire." };
+        else if (isGain && isAxialY) emotion = { name: "Courage / Assurance", color: "#f43f5e", desc: "Certitude de la validation malgré une liquidité neutre." };
+        else if (isPerte && isAxialY) emotion = { name: "Peur / Sidération", color: "#64748b", desc: "Alerte de volatilité sans marge de manœuvre en cash." };
 
-        // --- INDICES D'INFÉRENCE ACTIVE ---
-        const iea = Math.round(Math.max(0, (Math.abs(Math.min(0, x)) * Math.max(0, y)) / 100)); // Engagement Allostasique
-        const trh = Math.round(Math.max(0, -y)); // Restauration Homéostasique
-        const ire = Math.round(Math.max(0, (Math.abs(x) * (100 - z)) / 100)); // Révision Épistémique
+        // 4. CALCUL DES VECTEURS D'INFÉRENCE ACTIVE (Politiques d'action)
+        // IEA (Engagement Allostasique) : Acheter la baisse.
+        let iea = Math.abs(Math.min(0, x)) * Math.max(0, y) / 100;
+        if (putCallRatio > 1.15) iea *= 1.5; // Booster contrarien si panique
 
-        // --- CIBLE STRATÉGIQUE ---
+        // TRH (Restauration Homéostasique) : Fuir vers le cash.
+        let trh = Math.max(0, -y);
+        if (yieldSpread < 0) trh *= 1.3; // Urgence de liquidité si courbe inversée
+
+        // IRE (Révision Épistémique) : Changer le modèle (sortir).
+        let ire = (Math.abs(x) * (100 - z)) / 100;
+
+        iea = Math.round(iea); trh = Math.round(trh); ire = Math.round(ire);
+
+        // 5. CIBLE STRATÉGIQUE ET QUANTITATIVE (Position Sizing)
         let targetX = x; let targetY = y;
         let actionPolicy = "Maintien (Laisser courir)";
         let targetColor = emotion.color;
+
+        // Dimensionnement Quantitatif
+        let targetCashRatio = requiredCashBase;
+        let confidenceMultiplier = z / 100; // Si Z est bas, on réduit la taille des trades
+        let quantOrder = { action: 'HOLD', shares: 0, reason: '' };
 
         const maxIndex = Math.max(iea, trh, ire);
         if (maxIndex === 0) {
           if (x > 0) targetX = Math.min(100, x + 20);
           actionPolicy = "Exploitation (Laisser courir les gains)";
+          targetCashRatio = Math.max(5, requiredCashBase - 5); // Consomme un peu de cash pour accumuler
         } else if (maxIndex === trh) {
           targetY = Math.min(100, y + trh + 20); targetX = x;
-          actionPolicy = "Restauration (Liquider pour Cash)"; targetColor = "#3b82f6";
+          actionPolicy = "Restauration (Liquider pour augmenter le Cash)"; targetColor = "#3b82f6";
+          targetCashRatio = Math.min(50, requiredCashBase + (trh / 4)); // Augmente drastiquement la cible cash
         } else if (maxIndex === iea) {
           targetX = Math.min(100, x + iea + 40); targetY = Math.max(-100, y - (iea / 2));
-          actionPolicy = "Engagement Allostasique (Acheter la Baisse)"; targetColor = "#f59e0b";
+          actionPolicy = "Engagement Allostasique (Déployer le Cash)"; targetColor = "#f59e0b";
+          targetCashRatio = Math.max(0, requiredCashBase - (iea / 3)); // Vide le cash pour acheter
+          // Si PutCall > 1.15 on baisse encore la cible cash (achat agressif)
+          if (putCallRatio > 1.15) targetCashRatio = Math.max(0, targetCashRatio - 5);
         } else if (maxIndex === ire) {
           targetX = 0; targetY = 0;
-          actionPolicy = "Révision Épistémique (Cash Out / Repenser le Modèle)"; targetColor = "#ec4899";
+          actionPolicy = "Révision Épistémique (Incertitude Critique)"; targetColor = "#ec4899";
+          targetCashRatio = 100; // Tout vendre
+        }
+
+        // Calcul exact du nombre d'actions à traiter
+        const targetCashValue = (targetCashRatio / 100) * totalAssets;
+        const cashDelta = targetCashValue - port.cashAvailable; // Positif = il faut du cash (Vendre), Négatif = il faut dépenser (Acheter)
+
+        if (Math.abs(cashDelta) > 500) { // Seuil minimal de trade (ex: 500$)
+            // Ajustement bayésien par la certitude (si Z est 50%, on ne trade que la moitié de la conviction)
+            // Sauf pour la fuite en cas de révision épistémique !
+            const tradeValue = maxIndex === ire ? cashDelta : (cashDelta * Math.max(0.3, confidenceMultiplier));
+            const sharesDiff = Math.round(Math.abs(tradeValue) / market.veqt.price);
+
+            if (sharesDiff > 0) {
+                if (tradeValue > 0) {
+                    quantOrder = { action: 'SELL', shares: Math.min(port.veqtShares, sharesDiff), amount: tradeValue };
+                } else {
+                    quantOrder = { action: 'BUY', shares: sharesDiff, amount: Math.abs(tradeValue) };
+                }
+            }
         }
 
         return {
           gainLoss, portfolioValue, totalAssets,
           x, y, z, emotion,
           indices: { iea, trh, ire },
-          target: { x: targetX, y: targetY, policy: actionPolicy, color: targetColor },
+          target: { x: targetX, y: targetY, policy: actionPolicy, color: targetColor, quantOrder },
           isAgent: false
         };
       };
@@ -550,15 +636,37 @@
                   <div className="flex gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
 
                     {/* VIX */}
-                    <div className="flex-shrink-0 min-w-[140px]">
+                    <div className="flex-shrink-0 min-w-[120px]">
                       <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
-                          <Icon name="activity" size={12}/> Indice
+                          <Icon name="activity" size={12}/> VIX
                       </p>
-                      <p className="text-sm font-bold text-slate-300">VIX</p>
                       <p className="text-2xl font-mono font-black text-white">{marketData.vix.price.toFixed(2)}</p>
                       <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.vix.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                           <span>{marketData.vix.change > 0 ? '+' : ''}{marketData.vix.change.toFixed(2)}</span>
-                          <span>{marketData.vix.percent > 0 ? '+' : ''}{marketData.vix.percent.toFixed(2)} %</span>
+                      </div>
+                      <p className="text-[9px] text-slate-500 font-mono mt-1">Ratio: {marketData.macro.vixRatio.toFixed(2)}</p>
+                    </div>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* MACRO */}
+                    <div className="flex-shrink-0 min-w-[120px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="bar-chart-2" size={12}/> MACRO
+                      </p>
+                      <div className="space-y-1 mt-2">
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Yield Sp:</span>
+                           <span className={marketData.macro.yieldSpread < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}>{marketData.macro.yieldSpread.toFixed(2)}%</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Credit Sp:</span>
+                           <span className={marketData.macro.creditSpread > 5 ? 'text-red-400 font-bold' : 'text-indigo-400'}>{marketData.macro.creditSpread.toFixed(1)}%</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Put/Call:</span>
+                           <span className={marketData.macro.putCallRatio > 1.15 ? 'text-amber-400 font-bold' : 'text-slate-300'}>{marketData.macro.putCallRatio.toFixed(2)}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -745,13 +853,34 @@
                           </p>
 
                           <div className="bg-slate-950/40 p-5 rounded-2xl border border-white/5 mb-4 shadow-inner">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div className="p-2 rounded-full bg-slate-900 border border-slate-700">
-                                  <Icon name="zap" size={16} color={currentState.target.color} />
-                              </div>
-                              <span className="text-sm font-black uppercase tracking-widest leading-tight" style={{ color: currentState.target.color }}>
-                                {currentState.target.policy}
-                              </span>
+                            <div className="flex flex-col gap-3 mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 rounded-full bg-slate-900 border border-slate-700">
+                                      <Icon name="zap" size={16} color={currentState.target.color} />
+                                  </div>
+                                  <span className="text-sm font-black uppercase tracking-widest leading-tight" style={{ color: currentState.target.color }}>
+                                    {currentState.target.policy}
+                                  </span>
+                                </div>
+
+                                {/* Ordre Quantitatif de Position Sizing */}
+                                {currentState.target.quantOrder && currentState.target.quantOrder.action !== 'HOLD' && (
+                                   <div className={`mt-2 p-3 rounded-xl border flex items-center justify-between ${currentState.target.quantOrder.action === 'BUY' ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-red-900/20 border-red-500/30'}`}>
+                                       <div className="flex items-center gap-2">
+                                           <Icon name={currentState.target.quantOrder.action === 'BUY' ? 'arrow-down-to-line' : 'arrow-up-from-line'} size={18} className={currentState.target.quantOrder.action === 'BUY' ? 'text-emerald-400' : 'text-red-400'} />
+                                           <div>
+                                               <p className="text-[10px] uppercase font-black tracking-widest text-slate-400">Ordre Recommandé (Z={currentState.z}%)</p>
+                                               <p className={`text-lg font-black font-mono ${currentState.target.quantOrder.action === 'BUY' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                   {currentState.target.quantOrder.action === 'BUY' ? 'ACHETER' : 'VENDRE'} {currentState.target.quantOrder.shares} VEQT
+                                               </p>
+                                           </div>
+                                       </div>
+                                       <div className="text-right">
+                                           <p className="text-[10px] text-slate-500 uppercase tracking-widest">Montant</p>
+                                           <p className="text-sm font-mono font-bold text-white">~ {currentState.target.quantOrder.amount.toFixed(0)}$</p>
+                                       </div>
+                                   </div>
+                                )}
                             </div>
 
                             {/* Barres d'indices */}
