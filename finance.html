@@ -1051,6 +1051,29 @@
                                             </div>
                                         )}
 
+                                        {aiAnalysis.marqueursAchat && aiAnalysis.marqueursAchat.length > 0 && (
+                                            <div className="bg-emerald-950/30 border border-emerald-500/20 p-3 rounded-lg mt-3">
+                                                <p className="font-bold text-emerald-400 uppercase text-[9px] tracking-widest mb-3 flex items-center gap-1">
+                                                    <Icon name="crosshair" size={10} /> Marqueurs d'Achat (Buy the Dip)
+                                                </p>
+                                                <div className="space-y-2">
+                                                    {aiAnalysis.marqueursAchat.map((marqueur, i) => (
+                                                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-emerald-500/10">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider min-w-[80px] text-center border border-emerald-500/30">
+                                                                    {marqueur.niveau}
+                                                                </span>
+                                                                <span className="text-slate-300 text-xs font-medium">{marqueur.raison}</span>
+                                                            </div>
+                                                            <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold whitespace-nowrap bg-slate-800 px-2 py-0.5 rounded-full">
+                                                                {marqueur.type}
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
                                         {aiAnalysis.sendEmail && portfolio.notificationEmail && (
                                             <div className="mt-2 p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg">
                                                 <p className="font-bold text-purple-400 uppercase text-[9px] tracking-widest mb-2 flex items-center gap-1">
