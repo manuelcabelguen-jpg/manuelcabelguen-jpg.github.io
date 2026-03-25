@@ -602,14 +602,16 @@
 
         const prompt = `Agis en tant qu'expert en finance comportementale et sciences cognitives utilisant le modèle "Cartograffect" (Version 6.1).
         Données de Marché : VIX = ${marketData.vix.price.toFixed(2)}, VEQT = ${marketData.veqt.price.toFixed(2)} CAD.
+        Indices Macro: Spread de Taux = ${marketData.macro.yieldSpread}%, Spread de Crédit = ${marketData.macro.creditSpread}%, Put/Call Ratio = ${marketData.macro.putCallRatio}, Corrélation VIX/VEQT = ${marketData.macro.vixVeqtCorrelation}.
         Position Actuelle du Portfolio : Écart de prédiction (Axe X)=${currentState.x.toFixed(1)} (Gain/Perte: ${currentState.gainLoss.toFixed(2)} CAD), Pouvoir d'action / Liquidité (Axe Y)=${currentState.y.toFixed(1)}, Précision / Certitude (Axe Z)=${currentState.z}%.
         Diagnostic Émotionnel : ${currentState.emotion.name}.
         Politique d'inférence active dictée par le modèle : "${currentState.target.policy}".
         Ordre Quantitatif Recommandé : ${currentState.target.quantOrder && currentState.target.quantOrder.amount ? (currentState.target.quantOrder.action + " " + currentState.target.quantOrder.shares + " parts (" + currentState.target.quantOrder.amount.toFixed(0) + " CAD)") : "Aucun"}.
 
         Tu dois retourner UNIQUEMENT un objet JSON valide avec les clés suivantes :
-        - "exegese": Un court paragraphe analytique (3-4 phrases) expliquant l'impact de la volatilité sur Z et justifiant la politique d'inférence active proposée (ton professionnel, analytique, fristonien).
-        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables) pour exécuter l'ordre en dollars canadiens.
+        - "exegese": Un court paragraphe analytique (3-4 phrases) expliquant l'impact de la volatilité et des indices macro sur Z, et justifiant la politique d'inférence active proposée.
+        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables). Si un "Ordre Quantitatif Recommandé" est fourni (parts et CAD), tu DOIS l'inclure explicitement dans ces étapes.
+        - "ciblesQuantitatives": Un tableau d'objets (optionnel) contenant des cibles d'achat ou de vente pour optimiser les gains/pertes selon le contexte MACRO (VIX, prix, spreads). Chaque objet doit avoir : "action" (ex: "ACHETER", "VENDRE", "CONSERVER"), "quantite" (ex: "500 parts", "100% du Cash", ou la quantité de l'Ordre Recommandé), "niveau" (ex: "52.50 CAD" ou "VIX > 30"), "raison" (ex: "Support technique majeur", "Pic de volatilité extrême", "Inversion de la courbe des taux"), et "type" (ex: "Agressif", "Conservateur", "Technique"). Laisse le tableau vide si la politique ne nécessite pas d'action immédiate.
         - "sendEmail": Un booléen (true ou false). Mets "true" UNIQUEMENT SI l'action recommandée requiert une action immédiate (ex: VENDRE d'urgence à cause de la panique, ou ACHETER agressivement). Mets "false" si la recommandation est de "Laisser courir" ou "Conserver".
         - "emailSubject": "ALERTE CARTOGRAFFECT: Action Requise" (ou similaire, si sendEmail est true).
         - "emailBody": Le corps du courriel incluant les recommandations (en texte brut).`;
@@ -1051,25 +1053,39 @@
                                             </div>
                                         )}
 
-                                        {aiAnalysis.marqueursAchat && aiAnalysis.marqueursAchat.length > 0 && (
-                                            <div className="bg-emerald-950/30 border border-emerald-500/20 p-3 rounded-lg mt-3">
-                                                <p className="font-bold text-emerald-400 uppercase text-[9px] tracking-widest mb-3 flex items-center gap-1">
-                                                    <Icon name="crosshair" size={10} /> Marqueurs d'Achat (Buy the Dip)
+                                        {aiAnalysis.ciblesQuantitatives && aiAnalysis.ciblesQuantitatives.length > 0 && (
+                                            <div className="bg-indigo-950/30 border border-indigo-500/20 p-3 rounded-lg mt-3">
+                                                <p className="font-bold text-indigo-400 uppercase text-[9px] tracking-widest mb-3 flex items-center gap-1">
+                                                    <Icon name="crosshair" size={10} /> Cibles Quantitatives (IA)
                                                 </p>
                                                 <div className="space-y-2">
-                                                    {aiAnalysis.marqueursAchat.map((marqueur, i) => (
-                                                        <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-emerald-500/10">
-                                                            <div className="flex items-center gap-2">
-                                                                <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider min-w-[80px] text-center border border-emerald-500/30">
-                                                                    {marqueur.niveau}
+                                                    {aiAnalysis.ciblesQuantitatives.map((cible, i) => {
+                                                        const isAchat = cible.action && cible.action.toUpperCase() === 'ACHETER';
+                                                        const isVente = cible.action && cible.action.toUpperCase() === 'VENDRE';
+                                                        const colorClass = isAchat ? 'emerald' : isVente ? 'red' : 'indigo';
+
+                                                        return (
+                                                        <div key={i} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-${colorClass}-500/10`}>
+                                                            <div className="flex items-center gap-2 flex-wrap">
+                                                                <span className={`bg-${colorClass}-500/20 text-${colorClass}-400 text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider min-w-[60px] text-center border border-${colorClass}-500/30 flex items-center gap-1`}>
+                                                                    {isAchat ? <Icon name="trending-up" size={10} /> : isVente ? <Icon name="trending-down" size={10} /> : null}
+                                                                    {cible.action}
                                                                 </span>
-                                                                <span className="text-slate-300 text-xs font-medium">{marqueur.raison}</span>
+                                                                <span className="text-slate-200 text-xs font-bold font-mono bg-slate-950 px-2 py-0.5 rounded">
+                                                                    {cible.quantite}
+                                                                </span>
+                                                                <span className="text-slate-400 text-xs font-mono">
+                                                                    @ {cible.niveau}
+                                                                </span>
+                                                                <span className="text-slate-300 text-[11px] font-medium ml-1">
+                                                                    ({cible.raison})
+                                                                </span>
                                                             </div>
                                                             <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold whitespace-nowrap bg-slate-800 px-2 py-0.5 rounded-full">
-                                                                {marqueur.type}
+                                                                {cible.type}
                                                             </span>
                                                         </div>
-                                                    ))}
+                                                    )})}
                                                 </div>
                                             </div>
                                         )}
