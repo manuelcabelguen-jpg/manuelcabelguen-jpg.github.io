@@ -173,20 +173,35 @@
           // Fetch data for symbols, requesting 1mo range for historical correlation
           const fetchSymbol = async (sym) => {
               // Using allorigins as a public CORS proxy to bypass browser restrictions on Yahoo Finance
-              const targetUrl = encodeURIComponent(`https://query2.finance.yahoo.com/v8/finance/chart/${sym}?range=1mo&interval=1d`);
-              const proxyUrl = `https://api.allorigins.win/raw?url=${targetUrl}`;
-              const res = await fetch(proxyUrl);
-              if (!res.ok) throw new Error(`HTTP ${res.status}`);
-              const data = await res.json();
-              const result = data.chart.result[0];
-              const meta = result.meta;
-              const price = meta.regularMarketPrice;
-              // Some assets have previousClose, others only chartPreviousClose in the view
-              const prev = meta.previousClose || meta.chartPreviousClose || price;
-              const change = price - prev;
-              const percent = prev !== 0 ? (change / prev) * 100 : 0;
-              const history = result.indicators.quote[0].close || [];
-              return { price, change, percent, history };
+              // Using query1 which seems slightly more stable with the proxy than query2
+              const targetUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1mo&interval=1d`);
+              // When running locally from file://, modern browsers may still block CORS.
+              // We pass a cache-buster to avoid cached CORS preflights which can sometimes fail.
+              const proxyUrl = `https://api.allorigins.win/get?url=${targetUrl}&_cb=${Date.now()}_${Math.random()}`;
+
+              // Simple retry logic because public proxies can be flaky
+              for (let i = 0; i < 3; i++) {
+                  try {
+                      const res = await fetch(proxyUrl);
+                      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                      const proxyData = await res.json();
+                      if (!proxyData.contents) throw new Error("Empty contents from proxy");
+
+                      const data = JSON.parse(proxyData.contents);
+                      const result = data.chart.result[0];
+                      const meta = result.meta;
+                      const price = meta.regularMarketPrice;
+                      // Some assets have previousClose, others only chartPreviousClose in the view
+                      const prev = meta.previousClose || meta.chartPreviousClose || price;
+                      const change = price - prev;
+                      const percent = prev !== 0 ? (change / prev) * 100 : 0;
+                      const history = result.indicators.quote[0].close || [];
+                      return { price, change, percent, history };
+                  } catch (e) {
+                      if (i === 2) throw e;
+                      await new Promise(r => setTimeout(r, 1000));
+                  }
+              }
           };
 
           // Fetch Bank of Canada Target Overnight Rate
