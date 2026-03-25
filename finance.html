@@ -118,6 +118,8 @@
           veqtShares: parsed.veqtShares !== undefined ? parsed.veqtShares : 1000,
           veqtAvgCost: parsed.veqtAvgCost !== undefined ? parsed.veqtAvgCost : 38.50,
           cashAvailable: parsed.cashAvailable !== undefined ? parsed.cashAvailable : 15000,
+          helocInvested: parsed.helocInvested !== undefined ? parsed.helocInvested : 0,
+          helocAvailable: parsed.helocAvailable !== undefined ? parsed.helocAvailable : 0,
           notificationEmail: parsed.notificationEmail !== undefined ? parsed.notificationEmail : ''
         };
       });
@@ -483,8 +485,12 @@
         PORTFOLIO DE L'INVESTISSEUR:
         - VEQT: ${portfolio.veqtShares} parts acquises à ${portfolio.veqtAvgCost} CAD l'unité.
         - Liquidité restante: ${portfolio.cashAvailable} CAD
-        - Total Actifs: ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)} CAD
+        - Marge de crédit hypothécaire (HELOC) investie: ${portfolio.helocInvested} CAD
+        - Marge de crédit hypothécaire (HELOC) disponible: ${portfolio.helocAvailable} CAD
+        - Total Actifs (hors dette): ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)} CAD
         - P&L Latent: ${((portfolio.veqtShares * marketData.veqt.price) - (portfolio.veqtShares * portfolio.veqtAvgCost)).toFixed(2)} CAD
+
+        Note sur le Levier: L'utilisateur utilise un levier hypothécaire. Le taux directeur est de ${marketData.interestRate}%. Considère l'impact de l'inflation et des coûts d'emprunt sur l'Axe Y (Pouvoir) et l'Axe X (Valence).
 
         CALCULS REQUIS (Tu dois générer ces valeurs):
         - X (Savoir/Valence) : de -100 à +100. (ex: fort gain = positif, forte perte = négatif)
@@ -608,9 +614,12 @@
         Politique d'inférence active dictée par le modèle : "${currentState.target.policy}".
         Ordre Quantitatif Recommandé : ${currentState.target.quantOrder && currentState.target.quantOrder.amount ? (currentState.target.quantOrder.action + " " + currentState.target.quantOrder.shares + " parts (" + currentState.target.quantOrder.amount.toFixed(0) + " CAD)") : "Aucun"}.
 
+        Contexte de Levier Hypothécaire (HELOC) : L'investisseur a investi ${portfolio.helocInvested} CAD via sa marge de crédit, et a ${portfolio.helocAvailable} CAD de marge disponible. Le taux directeur de la Banque du Canada est de ${marketData.interestRate}%.
+
         Tu dois retourner UNIQUEMENT un objet JSON valide avec les clés suivantes :
         - "exegese": Un court paragraphe analytique (3-4 phrases) expliquant l'impact de la volatilité et des indices macro sur Z, et justifiant la politique d'inférence active proposée.
-        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables). Si un "Ordre Quantitatif Recommandé" est fourni (parts et CAD), tu DOIS l'inclure explicitement dans ces étapes.
+        - "conseilHeloc": (Optionnel) Un paragraphe fournissant un conseil STRATÉGIQUE spécifique sur l'utilisation ou le remboursement de la marge de crédit hypothécaire, en tenant compte de l'inflation, du VIX, et du taux directeur actuel (${marketData.interestRate}%). Par exemple: rembourser si les taux/volatilité augmentent trop, ou investir la marge disponible si le VIX annonce une reprise et que le rendement attendu couvre les intérêts.
+        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables). Si un "Ordre Quantitatif Recommandé" est fourni (parts et CAD), tu DOIS l'inclure explicitement dans ces étapes. Intègre également tes conseils HELOC dans ces étapes si pertinent.
         - "ciblesQuantitatives": Un tableau d'objets (optionnel) contenant des cibles d'achat ou de vente pour optimiser les gains/pertes selon le contexte MACRO (VIX, prix, spreads). Chaque objet doit avoir : "action" (ex: "ACHETER", "VENDRE", "CONSERVER"), "quantite" (ex: "500 parts", "100% du Cash", ou la quantité de l'Ordre Recommandé), "niveau" (ex: "52.50 CAD" ou "VIX > 30"), "raison" (ex: "Support technique majeur", "Pic de volatilité extrême", "Inversion de la courbe des taux"), et "type" (ex: "Agressif", "Conservateur", "Technique"). Laisse le tableau vide si la politique ne nécessite pas d'action immédiate.
         - "sendEmail": Un booléen (true ou false). Mets "true" UNIQUEMENT SI l'action recommandée requiert une action immédiate (ex: VENDRE d'urgence à cause de la panique, ou ACHETER agressivement). Mets "false" si la recommandation est de "Laisser courir" ou "Conserver".
         - "emailSubject": "ALERTE CARTOGRAFFECT: Action Requise" (ou similaire, si sendEmail est true).
@@ -717,11 +726,15 @@
                     <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
 
                     {/* MACRO */}
-                    <div className="flex-shrink-0 min-w-[120px]">
+                    <div className="flex-shrink-0 min-w-[130px]">
                       <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
                           <Icon name="bar-chart-2" size={12}/> MACRO
                       </p>
                       <div className="space-y-1 mt-2">
+                        <div className="flex justify-between text-xs font-mono border-b border-slate-800 pb-1 mb-1">
+                           <span className="text-slate-400">Taux BoC:</span>
+                           <span className="text-amber-400 font-bold">{marketData.interestRate.toFixed(2)}%</span>
+                        </div>
                         <div className="flex justify-between text-xs font-mono">
                            <span className="text-slate-400">Yield Sp:</span>
                            <span className={marketData.macro.yieldSpread < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}>{marketData.macro.yieldSpread.toFixed(2)}%</span>
@@ -917,6 +930,16 @@
                                     {currentState.totalAssets.toFixed(0)} CAD
                                 </p>
                             </div>
+                            {(portfolio.helocInvested > 0 || portfolio.helocAvailable > 0) && (
+                                <div className="bg-amber-950/20 px-3 py-2 rounded-lg border border-amber-500/20">
+                                    <p className="text-[9px] text-amber-500/80 uppercase font-black tracking-wider mb-1 flex items-center gap-1">
+                                        <Icon name="home" size={10} /> Levier Hypothécaire
+                                    </p>
+                                    <p className="text-sm font-mono font-bold text-amber-400">
+                                        {portfolio.helocInvested.toFixed(0)} <span className="text-[10px] text-amber-500/60">/ {(portfolio.helocAvailable + portfolio.helocInvested).toFixed(0)} CAD</span>
+                                    </p>
+                                </div>
+                            )}
                           </div>
                         </div>
 
@@ -1039,6 +1062,17 @@
                                             <p className="font-bold text-slate-300 uppercase text-[9px] tracking-widest mb-1">Exégèse Fristonienne</p>
                                             <p className="text-slate-200">{aiAnalysis.exegese}</p>
                                         </div>
+
+                                        {aiAnalysis.conseilHeloc && (
+                                            <div className="bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg mt-3">
+                                                <p className="font-bold text-amber-400 uppercase text-[9px] tracking-widest mb-1 flex items-center gap-1">
+                                                    <Icon name="home" size={10} /> Stratégie HELOC (Levier)
+                                                </p>
+                                                <p className="text-amber-100/90 text-[11px] leading-relaxed italic">
+                                                    {aiAnalysis.conseilHeloc}
+                                                </p>
+                                            </div>
+                                        )}
 
                                         {aiAnalysis.marcheASuivre && aiAnalysis.marcheASuivre.length > 0 && (
                                             <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
@@ -1171,6 +1205,27 @@
                         type="number" value={portfolio.cashAvailable} onChange={e => setPortfolio({...portfolio, cashAvailable: parseFloat(e.target.value) || 0})}
                         className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold transition-all"
                       />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                        <label className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                            <Icon name="home" size={14}/> Marge Hypothécaire Investie (CAD)
+                        </label>
+                        <input
+                          type="number" value={portfolio.helocInvested} onChange={e => setPortfolio({...portfolio, helocInvested: parseFloat(e.target.value) || 0})}
+                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono font-bold transition-all"
+                        />
+                    </div>
+                    <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                        <label className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                            <Icon name="credit-card" size={14}/> Marge Disponible à Investir (CAD)
+                        </label>
+                        <input
+                          type="number" value={portfolio.helocAvailable} onChange={e => setPortfolio({...portfolio, helocAvailable: parseFloat(e.target.value) || 0})}
+                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono font-bold transition-all"
+                        />
+                    </div>
                   </div>
 
                   <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 mt-6">
