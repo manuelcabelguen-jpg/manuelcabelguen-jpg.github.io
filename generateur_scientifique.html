@@ -77,10 +77,29 @@
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
     .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
     .chk-field { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: var(--text); }
+
+    .fullscreen-editor {
+        position: fixed !important;
+        top: 20px !important;
+        left: 20px !important;
+        width: calc(100vw - 40px) !important;
+        height: calc(100vh - 40px) !important;
+        z-index: 9999 !important;
+        box-shadow: 0 0 0 9999px rgba(0,0,0,0.5) !important;
+        resize: none !important;
+        font-size: 14px !important;
+        padding: 20px !important;
+    }
     .move-arrows { display: flex; flex-direction: column; margin-right: 8px; align-items: center; justify-content: center; }
     .btn-move { background: transparent; border: none; padding: 2px 4px; font-size: 10px; color: #94a3b8; cursor: pointer; line-height: 1; }
     .btn-move:hover { color: var(--blue); background: #e2e8f0; border-radius: 4px; }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    if(window['pdfjs-dist/build/pdf']) {
+        window['pdfjs-dist/build/pdf'].GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    }
+  </script>
 </head>
 <body>
 <div class="app" id="appRoot" style="--side-w: 320px; --right-w: 420px;">
@@ -100,8 +119,12 @@
       <button class="btn" id="btnImportBrut" style="background:#fefce8; border-color:#fef08a; color:#854d0e;">📄 Importer Article Brut</button>
       <input id="importBrutInput" type="file" style="display:none">
       <button class="btn" id="btnSaveJson">💾 Sauvegarder</button>
-      <button class="btn" id="btnExportWord">📝 Export Word</button>
-      <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1;">☁️ Config IA</button>
+      <div style="display:flex; gap:4px; margin-left:8px; border-left:1px solid #cbd5e1; padding-left:8px;">
+          <button class="btn" id="btnExportWord" title="Exporter au format Word (.doc)">📝 Word</button>
+          <button class="btn" id="btnExportMD" title="Exporter au format Markdown (.md)" style="background:#f8fafc; border-color:#cbd5e1; color:#334155;">Ⓜ️ MD</button>
+          <button class="btn" id="btnExportTex" title="Exporter au format LaTeX (.tex)" style="background:#f8fafc; border-color:#cbd5e1; color:#334155;">📜 LaTeX</button>
+      </div>
+      <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1; margin-left:8px;">☁️ Config IA</button>
       <button class="btn success" id="btnGenerateAI">✦ Exécuter IA (Slots Vides)</button>
       <button class="btn danger" id="btnResetSection">↺ Vider</button>
       <span class="badge" id="saveState">En attente</span>
@@ -307,7 +330,32 @@
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
   function $(id){ return document.getElementById(id); }
   function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},3000); }
-  function setDirty(flag, msg){ state.dirty = !!flag; $('saveState').textContent = flag ? '● Modifié' : '✓ Sauvegardé'; if(msg){ $('saveState').title = msg; } }
+  function setDirty(flag, msg){
+    state.dirty = !!flag;
+    $('saveState').textContent = flag ? '● Modifié' : '✓ Sauvegardé';
+    if(msg){ $('saveState').title = msg; }
+    if(flag) {
+      // Auto-save
+      localStorage.setItem('gc_as_autosave', JSON.stringify(state.data));
+    }
+  }
+
+  function checkAutoSave() {
+    const saved = localStorage.getItem('gc_as_autosave');
+    if(saved) {
+      if(confirm('Une sauvegarde automatique précédente a été trouvée. Voulez-vous la restaurer ?')) {
+        try {
+          state.data = normalizeData(JSON.parse(saved));
+          state.activeSectionKey = (getReportDef().sections[0] || {}).sectionKey || null;
+          toast('Session restaurée avec succès.');
+        } catch(e) {
+          console.error("Erreur de restauration:", e);
+        }
+      } else {
+        localStorage.removeItem('gc_as_autosave');
+      }
+    }
+  }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
   function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
   function nowDate(){ return new Date().toISOString().slice(0,10); }
@@ -471,6 +519,7 @@
           '<div class="field"><div class="label">Revue Ciblée</div><input class="input" id="inpRevue" value="' + esc(cc.revueCible || '') + '"></div>' +
           '<div class="field"><div class="label">Style Académique</div>' + buildSelect('inpStyle', cc.styleAcademique, optStyles) + '</div>' +
         '</div>' +
+        '<div class="field"><div class="label">Bibliographie (BibTeX ou texte)</div><textarea class="input" id="inpBibtex" style="min-height:60px;" placeholder="@article{...}">' + esc(cc.bibtex || '') + '</textarea></div>' +
         '<div class="field" style="margin-top:8px; padding:10px; background:#fff7ed; border:1px solid #fed7aa; border-radius:8px;">' +
             '<label class="chk-field"><input type="checkbox" id="chkAveugle" ' + (cc.doubleAveugle ? 'checked' : '') + '> Anonymiser pour Double Aveugle</label>' +
             '<div style="font-size:10px; color:#c2410c; margin-top:4px; margin-left:22px;">Masque les auteurs lors de l\'export Word et pour l\'IA.</div>' +
@@ -509,6 +558,7 @@
     bind('inpStyle','styleAcademique');
     bind('inpMode','modeIA');
     bind('inpIntention','intentionGlobale');
+    bind('inpBibtex','bibtex');
     bind('chkAveugle','doubleAveugle', true);
 
     var btnCoh = $('btnAnalyseCoh');
@@ -673,14 +723,19 @@
     (def.slots || []).forEach(function(sl, idx){
       var promptText = state.data.prompts[sl.promptKey] || '';
       var val = inst.slotOutputs[sl.slotKey] || '';
+      var tokens = val ? Math.ceil(val.split(/\s+/).length * 1.3) : 0;
 
-      slotsHtml += '<div class="slotBox">' +
+      slotsHtml += '<div class="slotBox" id="box_' + esc(sl.slotKey) + '">' +
           '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
             '<h4 style="margin:0;">' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
-            '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
+            '<div style="display:flex; gap:6px;">' +
+              '<button class="btn btnFullscreenSlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Plein Écran">⛶ Plein Écran</button>' +
+              '<button class="btn btnUndoSlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Restaurer la dernière version de l\'IA">↩️ Annuler (IA)</button>' +
+              '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
+            '</div>' +
           '</div>' +
           '<div class="field"><div class="label" style="color:#0ea5e9;">Directive IA (Lecture Seule)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; cursor:not-allowed;" title="Modifiez dans la Bibliothèque des Prompts.">' + esc(promptText) + '</textarea></div>' +
-          '<div class="field"><div class="label">Brouillon ou Texte Généré</div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
+          '<div class="field"><div class="label" style="display:flex; justify-content:space-between;"><span>Brouillon ou Texte Généré</span><span style="font-size:10px; color:#94a3b8; font-weight:normal;">~' + tokens + ' tokens (est.)</span></div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
         '</div>';
     });
 
@@ -706,6 +761,38 @@
         }, function(err) {
             alert('Impossible de copier : ', err);
         });
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.btnFullscreenSlot'), function(btn){
+      btn.addEventListener('click', function(){
+        var sk = this.getAttribute('data-slotkey');
+        var ta = $('ta_' + sk);
+        var box = $('box_' + sk);
+        if(ta.classList.contains('fullscreen-editor')) {
+            ta.classList.remove('fullscreen-editor');
+            this.textContent = "⛶ Plein Écran";
+        } else {
+            ta.classList.add('fullscreen-editor');
+            this.textContent = "✖ Réduire";
+            ta.focus();
+        }
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll('.btnUndoSlot'), function(btn){
+      btn.addEventListener('click', function(){
+        var sk = this.getAttribute('data-slotkey');
+        var historyKey = 'history_' + sk;
+        if(state[historyKey]) {
+           if(confirm("Voulez-vous restaurer la version précédente de ce texte ?")) {
+               inst.slotOutputs[sk] = state[historyKey];
+               renderEditor();
+               toast("Version précédente restaurée.");
+           }
+        } else {
+           toast("Aucune version précédente disponible pour cette session.");
+        }
       });
     });
   }
@@ -912,6 +999,9 @@
           let aiResponse = await callGeminiAPI(systemPrompt, userPrompt);
           aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
 
+          // Sauvegarde de l'historique avant d'écraser
+          state['history_' + sl.slotKey] = inst.slotOutputs[sl.slotKey];
+
           inst.slotOutputs[sl.slotKey] = aiResponse;
           updated = true;
           renderEditor();
@@ -937,7 +1027,7 @@
     }
   }
 
-  function addSourceFile(file){
+  async function addSourceFile(file){
     if(!file) return;
     state.data.sources = state.data.sources || [];
     if (state.data.sources.length >= 10) {
@@ -945,62 +1035,135 @@
         return;
     }
 
-    var reader = new FileReader();
-    reader.onload = function(e){
-      state.data.sources.push({
-        id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
-        title: file.name,
-        type: file.type || 'Fichier',
-        date: nowDate(),
-        content: typeof e.target.result === 'string' ? e.target.result.slice(0,50000) : ''
-      });
-      setDirty(true, 'Source ajoutée');
-      renderSourcesList();
-      renderEditor();
-      toast('Nouveau document ajouté.');
-    };
-    if((file.type || '').indexOf('text') === 0 || /\.(txt|md|csv|json|html)$/i.test(file.name)){ reader.readAsText(file, 'utf-8'); }
-    else { reader.readAsDataURL(file); }
+    try {
+        let content = "";
+        if (file.type === "application/pdf") {
+            toast('Extraction du texte du PDF source...');
+            content = await extractTextFromPDF(file);
+            content = content.slice(0, 50000);
+        } else {
+            content = await new Promise((resolve, reject) => {
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    let res = typeof e.target.result === 'string' ? e.target.result : '';
+                    if (!file.type.match(/^text/)) res = "Fichier non textuel/PDF ignoré.";
+                    resolve(res.slice(0,50000));
+                };
+                reader.onerror = reject;
+                if(file.type.match(/^text/)){ reader.readAsText(file, 'utf-8'); }
+                else { reader.readAsDataURL(file); }
+            });
+        }
+
+        state.data.sources.push({
+            id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
+            title: file.name,
+            type: file.type || 'Fichier',
+            date: nowDate(),
+            content: content
+        });
+        setDirty(true, 'Source ajoutée');
+        renderSourcesList();
+        renderEditor();
+        toast('Nouveau document ajouté.');
+    } catch(err) {
+        alert('Erreur lors de l\'ajout de la source : ' + err.message);
+    }
   }
 
-  function exportWord(){
+  function extractTextForExport(html) {
+      var tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+  }
+
+  function exportFormat(format) {
     try {
       if (Object.keys(state.data.reportDefinitions).length === 0) {
         toast('Erreur système : Données absentes.');
         return;
       }
-      var parts = [];
-      (getReportDef().sections || []).forEach(function(sec){
-        var inst = getInstanceSection(sec.sectionKey);
-        if(!inst || !inst.enabled) return;
-
-        // Ne pas afficher de titre pour la page de titre elle-même pour un meilleur rendu Word
-        if (sec.sectionKey !== "sec.titre") {
-            parts.push('<h2 style="font-family:\'Times New Roman\',Times,serif;font-size:14pt;color:#000;margin-top:24pt;margin-bottom:12pt;font-weight:bold;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
-        }
-        parts.push('<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt;line-height:2.0;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
-      });
 
       var cc = state.data.caseContext || {};
       var titre = esc(cc.titreArticle || 'Manuscrit');
-      var auteursDisplay = cc.doubleAveugle ? '[ANONYMISÉ POUR ÉVALUATION EN DOUBLE AVEUGLE]' : esc(cc.auteurs || '');
+      var rawTitre = cc.titreArticle || 'Manuscrit';
+      var auteursDisplay = cc.doubleAveugle ? '[ANONYMISÉ POUR ÉVALUATION EN DOUBLE AVEUGLE]' : (cc.auteurs || '');
 
-      var docHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titre + '</title>' +
-                    '<style>p { margin: 0 0 10pt 0; line-height: 2.0; font-family:"Times New Roman",Times,serif; font-size:12pt; } h3, h4 { font-family:"Times New Roman",Times,serif; margin-top: 16pt; margin-bottom: 8pt; font-weight:bold; } h4 { font-size:12pt; font-style:italic; }</style>' +
-                    '</head><body style="font-family:\'Times New Roman\',Times,serif;margin:40px;color:#000000;font-size:12pt;">' +
-                    parts.join('\n') + '</body></html>';
+      var outputStr = "";
+      var mimeType = "text/plain";
+      var ext = ".txt";
 
-      var blob = new Blob(['\ufeff', docHtml], {type:'application/msword;charset=utf-8'});
+      if (format === 'word') {
+          var parts = [];
+          (getReportDef().sections || []).forEach(function(sec){
+            var inst = getInstanceSection(sec.sectionKey);
+            if(!inst || !inst.enabled) return;
+            if (sec.sectionKey !== "sec.titre") {
+                parts.push('<h2 style="font-family:\'Times New Roman\',Times,serif;font-size:14pt;color:#000;margin-top:24pt;margin-bottom:12pt;font-weight:bold;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
+            }
+            parts.push('<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt;line-height:2.0;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
+          });
+          outputStr = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titre + '</title>' +
+                        '<style>p { margin: 0 0 10pt 0; line-height: 2.0; font-family:"Times New Roman",Times,serif; font-size:12pt; } h3, h4 { font-family:"Times New Roman",Times,serif; margin-top: 16pt; margin-bottom: 8pt; font-weight:bold; } h4 { font-size:12pt; font-style:italic; }</style>' +
+                        '</head><body style="font-family:\'Times New Roman\',Times,serif;margin:40px;color:#000000;font-size:12pt;">' +
+                        parts.join('\n') + '</body></html>';
+          mimeType = 'application/msword;charset=utf-8';
+          ext = '.doc';
+      } else if (format === 'md') {
+          outputStr += "# " + rawTitre + "\n\n**Auteurs:** " + auteursDisplay + "\n\n";
+          (getReportDef().sections || []).forEach(function(sec){
+            var inst = getInstanceSection(sec.sectionKey);
+            if(!inst || !inst.enabled) return;
+            if (sec.sectionKey !== "sec.titre") {
+                outputStr += "\n## " + getDisplayTitle(sec.sectionKey) + "\n\n";
+            }
+            // Simple html to md conversion
+            var html = renderSectionHtml(sec.sectionKey);
+            html = html.replace(/<h4>/g, '\n### ').replace(/<\/h4>/g, '\n\n');
+            html = html.replace(/<p>/g, '').replace(/<\/p>/g, '\n\n');
+            html = html.replace(/<strong>/g, '**').replace(/<\/strong>/g, '**');
+            html = html.replace(/<em>/g, '*').replace(/<\/em>/g, '*');
+            outputStr += extractTextForExport(html).trim() + "\n";
+          });
+          mimeType = 'text/markdown;charset=utf-8';
+          ext = '.md';
+      } else if (format === 'tex') {
+          outputStr += "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\title{" + rawTitre + "}\n\\author{" + auteursDisplay + "}\n\\date{\\today}\n\\begin{document}\n\\maketitle\n\n";
+          (getReportDef().sections || []).forEach(function(sec){
+            var inst = getInstanceSection(sec.sectionKey);
+            if(!inst || !inst.enabled) return;
+            if (sec.sectionKey !== "sec.titre") {
+                outputStr += "\n\\section{" + getDisplayTitle(sec.sectionKey) + "}\n\n";
+            }
+            var html = renderSectionHtml(sec.sectionKey);
+            html = html.replace(/<h4>/g, '\n\\subsection{').replace(/<\/h4>/g, '}\n\n');
+            html = html.replace(/<p>/g, '').replace(/<\/p>/g, '\n\n');
+            html = html.replace(/<strong>/g, '\\textbf{').replace(/<\/strong>/g, '}');
+            html = html.replace(/<em>/g, '\\textit{').replace(/<\/em>/g, '}');
+            // Escape special latex chars roughly
+            var text = extractTextForExport(html);
+            text = text.replace(/%/g, '\\%').replace(/&/g, '\\&');
+            outputStr += text.trim() + "\n";
+          });
+          if(cc.bibtex) {
+             outputStr += "\n\\bibliographystyle{plain}\n\\bibliography{references}\n";
+          }
+          outputStr += "\n\\end{document}";
+          mimeType = 'application/x-tex;charset=utf-8';
+          ext = '.tex';
+      }
+
+      var blob = new Blob([(format==='word'?'\ufeff':'') + outputStr], {type:mimeType});
       var a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = slugify(titre || 'Article') + '.doc';
+      a.download = slugify(rawTitre || 'Article') + ext;
       document.body.appendChild(a);
       a.click();
       setTimeout(function(){
         document.body.removeChild(a);
         URL.revokeObjectURL(a.href);
       }, 1000);
-      toast('Manuscrit Word généré avec succès.');
+      toast('Export ' + format.toUpperCase() + ' généré avec succès.');
     } catch(err) {
       alert('Alerte lors de l\'exportation : ' + err.message);
     }
@@ -1028,6 +1191,20 @@
     reader.readAsText(file, 'utf-8');
   }
 
+  async function extractTextFromPDF(file) {
+    if (!window['pdfjs-dist/build/pdf']) throw new Error("pdf.js n'est pas chargé.");
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await window['pdfjs-dist/build/pdf'].getDocument({ data: arrayBuffer }).promise;
+    let text = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const strings = content.items.map(item => item.str);
+        text += strings.join(" ") + "\n";
+    }
+    return text;
+  }
+
   async function importArticleBrut(file) {
     if(!file) return;
     if (!geminiConfig.apiKey) {
@@ -1036,10 +1213,21 @@
       return;
     }
 
-    var reader = new FileReader();
-    reader.onload = async function(e) {
-      try {
-        var rawText = e.target.result.slice(0, 50000); // Limite de sécurité
+    try {
+        var rawText = "";
+        if (file.type === "application/pdf") {
+            toast('Extraction du texte du PDF...');
+            rawText = await extractTextFromPDF(file);
+        } else {
+            rawText = await new Promise((resolve, reject) => {
+                var reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.onerror = reject;
+                reader.readAsText(file, 'utf-8');
+            });
+        }
+
+        rawText = rawText.slice(0, 50000); // Limite de sécurité
         toast('Analyse de l\'article brut par l\'IA en cours...');
 
         var sysPrompt = "Tu es un extracteur de données académiques. Ton rôle est de lire un texte brut d'un article scientifique et de le découper dans un format JSON strict. Tu ne dois renvoyer QUE l'objet JSON, sans aucun autre texte autour, sans balises de code Markdown (```json).";
@@ -1094,11 +1282,9 @@
         renderAll();
         toast('Article importé et structuré avec succès !');
 
-      } catch (err) {
+    } catch (err) {
         alert('Erreur lors du traitement de l\'article brut : ' + err.message);
-      }
-    };
-    reader.readAsText(file, 'utf-8');
+    }
   }
 
   function resetActiveSection(){
@@ -1306,13 +1492,16 @@
     $('importBrutInput').addEventListener('change', function(){ importArticleBrut(this.files[0]); this.value=''; });
     $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
     $('btnResetSection').addEventListener('click', resetActiveSection);
-    $('btnExportWord').addEventListener('click', exportWord);
+    $('btnExportWord').addEventListener('click', function(){ exportFormat('word'); });
+    $('btnExportMD').addEventListener('click', function(){ exportFormat('md'); });
+    $('btnExportTex').addEventListener('click', function(){ exportFormat('tex'); });
     $('btnUploadSource').addEventListener('click', function(){ $('sourceFileInput').click(); });
     $('sourceFileInput').addEventListener('change', function(){ addSourceFile(this.files[0]); this.value=''; });
     initResizers();
   }
 
   bindGlobalEvents();
+  checkAutoSave();
   renderAll();
 })();
 </script>
