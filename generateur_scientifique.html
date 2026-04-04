@@ -121,6 +121,25 @@
 </div>
 <div class="toast" id="toast"></div>
 
+<!-- MODAL ANALYSE DE COHÉRENCE GLOBALE -->
+<div id="coherenceModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
+  <div style="background:#fff; width:80%; max-width:800px; max-height:90vh; border-radius:12px; padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column;">
+    <h2 style="margin-top:0; color:var(--nav); display:flex; align-items:center; justify-content:space-between;">
+      <span><span style="font-size:24px;">🧠</span> Analyse de Cohérence Globale</span>
+      <button class="btn" id="btnCohClose" style="padding:4px 8px;">✕</button>
+    </h2>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">
+      Cette analyse lit tout l'article en parallèle pour vérifier les rapprochements avec votre "[INTENTION DE MODIFICATION]" et suggérer des intégrations transversales pour une cohérence interne parfaite.
+    </p>
+    <div id="coherenceContent" style="flex:1; overflow-y:auto; background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:15px; font-size:13px; line-height:1.6; white-space:pre-wrap;">
+      <div class="empty-state">Cliquez sur "Lancer l'analyse" pour interroger l'IA sur l'ensemble du manuscrit par rapport à votre intention.</div>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+      <button class="btn primary" id="btnCohRun">🚀 Lancer l'analyse sur tout l'article</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL CONFIGURATION AZURE OPENAI -->
 <div id="azureModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
   <div style="background:#fff; width:450px; border-radius:12px; padding:20px; box-shadow:var(--shadow);">
@@ -243,17 +262,17 @@
       "modeOptions": ["Génération à partir de brouillon", "Correction orthographique / Grammaticale", "Amélioration du style académique", "Traduction (FR vers EN)", "Traduction (EN vers FR)"]
     },
     "prompts": {
-      "global.gouvernance": "Vous êtes un assistant académique hautement qualifié spécialisé dans la rédaction scientifique (peer-reviewed). Vous respectez scrupuleusement la vérité scientifique. Vous n'inventez pas de données, de citations ni de références (pas d'hallucinations). Si les informations fournies dans les sources sont insuffisantes, vous devez le signaler. Adoptez un ton neutre, objectif, formel et rigoureux.",
-      "gen.abstract": "Rédigez un résumé structuré (Contexte, Méthodes, Résultats, Conclusion) de 250 mots maximum en vous basant UNIQUEMENT sur les éléments fournis en contexte.",
-      "gen.intro.contexte": "Rédigez l'introduction de l'article en mettant en contexte le sujet, en utilisant le style académique spécifié.",
-      "gen.intro.problematique": "Identifiez clairement la problématique et les hypothèses de recherche.",
-      "gen.methode.participants": "Décrivez la population étudiée, les critères d'inclusion et d'exclusion à partir des notes de méthodologie fournies.",
-      "gen.methode.procedure": "Décrivez la procédure expérimentale et les instruments de mesure utilisés.",
-      "gen.resultats.desc": "Rapportez les résultats descriptifs (moyennes, écarts-types, fréquences) de manière claire.",
-      "gen.resultats.principaux": "Décrivez les résultats des tests statistiques principaux (valeurs p, tailles d'effet) sans les interpréter de manière subjective.",
-      "gen.discussion.interpretation": "Interprétez les résultats en lien avec les hypothèses, sans les survendre.",
-      "gen.discussion.limites": "Exposez les limites de l'étude (biais, taille de l'échantillon, etc.) et proposez des perspectives de recherche futures.",
-      "gen.conclusion": "Rédigez une brève conclusion résumant l'apport principal de l'étude."
+      "global.gouvernance": "Vous êtes un assistant académique hautement qualifié spécialisé dans la rédaction scientifique (peer-reviewed). Vous respectez scrupuleusement la vérité scientifique sans inventer de données (pas d'hallucinations).\n\nZÉRO SURCHARGE COGNITIVE :\nLe seul concept que vous devez intégrer ou évaluer est l'[INTENTION DE MODIFICATION] fournie par l'utilisateur. Ne cherchez pas à inférer des liens complexes qui ne sont pas explicitement demandés.\n\nLE DROIT DE NE RIEN FAIRE :\nSi l'[INTENTION DE MODIFICATION] n'est conceptuellement pas pertinente ou applicable à la [NATURE DU TEXTE] de la section en cours d'analyse, il est parfaitement acceptable et SOUHAITÉ de ne faire aucune modification conceptuelle. Dans ce cas, contentez-vous d'améliorer le style ou de corriger l'orthographe du texte existant sans forcer l'ajout.\n\nFORMATAGE STRICT :\n- Les NOUVEAUX AJOUTS de texte liés à l'intention doivent être en **caractères gras**.\n- Les MODIFICATIONS de phrases existantes (reformulations) doivent être placées entre (parenthèses).\n- Les instructions s'appliquent en entonnoir inversé : l'intention domine sur les spécifications locales de la section.",
+      "gen.abstract": "[NATURE DU TEXTE] : Résumé structuré (Contexte, Méthodes, Résultats, Conclusion). Maximum 250 mots.",
+      "gen.intro.contexte": "[NATURE DU TEXTE] : Introduction de l'article mettant en contexte le sujet, revue de la littérature.",
+      "gen.intro.problematique": "[NATURE DU TEXTE] : Problématique claire et hypothèses de recherche.",
+      "gen.methode.participants": "[NATURE DU TEXTE] : Description de la population étudiée, critères d'inclusion et d'exclusion.",
+      "gen.methode.procedure": "[NATURE DU TEXTE] : Description de la procédure expérimentale et des instruments de mesure.",
+      "gen.resultats.desc": "[NATURE DU TEXTE] : Résultats descriptifs (moyennes, écarts-types, fréquences).",
+      "gen.resultats.principaux": "[NATURE DU TEXTE] : Résultats des tests statistiques principaux (sans interprétation subjective).",
+      "gen.discussion.interpretation": "[NATURE DU TEXTE] : Interprétation des résultats en lien avec les hypothèses de départ.",
+      "gen.discussion.limites": "[NATURE DU TEXTE] : Limites de l'étude et perspectives de recherche futures.",
+      "gen.conclusion": "[NATURE DU TEXTE] : Brève conclusion résumant l'apport principal de l'étude."
     }
   };
 
@@ -424,13 +443,16 @@
         '</div>' +
       '</div></details>' +
 
-      '<details open><summary>🤖 Paramètres de l\'IA</summary><div>' +
+      '<details open><summary>🎯 Intention & Paramètres IA</summary><div>' +
+        '<div class="field">' +
+          '<div class="label" style="color:#0284c7;">Intention de modification (Commande Globale)</div>' +
+          '<textarea class="textarea" id="inpIntention" placeholder="Ex: Intégrer la notion de thermodynamique de manière fluide..." style="min-height:80px;">' + esc(cc.intentionGlobale || '') + '</textarea>' +
+        '</div>' +
         '<div class="field"><div class="label">Mode d\'intervention IA</div>' + buildSelect('inpMode', cc.modeIA, optModes) + '</div>' +
         '<div class="small muted" style="margin-top:8px; line-height:1.4;">' +
-        '<strong>Génération</strong> : Crée du texte à partir de notes brutes.<br>' +
-        '<strong>Correction</strong> : Répare l\'orthographe sans modifier le fond.<br>' +
-        '<strong>Style</strong> : Améliore la lisibilité et le ton académique.<br>' +
+        'L\'IA se concentrera <strong>uniquement</strong> sur votre intention globale. Elle a le droit de <strong>ne rien faire</strong> si la modification n\'est pas pertinente pour la section ciblée.' +
         '</div>' +
+        '<div style="margin-top:12px;"><button class="btn" id="btnAnalyseCoh" style="width:100%; justify-content:center; background:#f8fafc; border:1px solid #cbd5e1; color:#334155;">🧠 Analyse de Cohérence Globale</button></div>' +
       '</div></details>';
 
     bindCaseInputs();
@@ -452,7 +474,16 @@
     bind('inpRevue','revueCible');
     bind('inpStyle','styleAcademique');
     bind('inpMode','modeIA');
+    bind('inpIntention','intentionGlobale');
     bind('chkAveugle','doubleAveugle', true);
+
+    var btnCoh = $('btnAnalyseCoh');
+    if (btnCoh) {
+        // Remove existing listener to prevent duplicates if rendered multiple times
+        var newBtn = btnCoh.cloneNode(true);
+        btnCoh.parentNode.replaceChild(newBtn, btnCoh);
+        newBtn.addEventListener('click', analyseCoherenceGlobale);
+    }
   }
 
   function renderSectionsList(){
@@ -832,9 +863,10 @@
         }
 
         let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
+        let intentionStr = state.data.caseContext.intentionGlobale ? "\n\n[INTENTION DE MODIFICATION GLOBALE A APPLIQUER (si pertinent)] : " + state.data.caseContext.intentionGlobale : "";
 
         let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
-        let userPrompt = directiveMode + "\n\nRevue ciblée : " + state.data.caseContext.revueCible + "\nStyle : " + state.data.caseContext.styleAcademique + "\n\n(Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li> si nécessaire. Aucune balise Markdown ```html).";
+        let userPrompt = directiveMode + intentionStr + "\n\nRevue ciblée : " + state.data.caseContext.revueCible + "\nStyle : " + state.data.caseContext.styleAcademique + "\n\n(Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li>, <strong> si nécessaire. Aucune balise Markdown ```html).";
 
         toast(`Traitement de : ${sl.label}...`);
 
@@ -1029,7 +1061,68 @@
     toast('Configuration IA sauvegardée.');
   }
 
+  async function analyseCoherenceGlobale() {
+    if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur : Base de données absente.');
+        return;
+    }
+
+    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
+        showAzureModal();
+        return;
+    }
+
+    var intention = state.data.caseContext.intentionGlobale || "";
+    if (!intention.trim()) {
+        alert("Veuillez d'abord définir une [Intention de modification] dans le panneau de gauche.");
+        return;
+    }
+
+    $('coherenceModal').style.display = 'flex';
+    var outHost = $('coherenceContent');
+    outHost.innerHTML = '<div style="text-align:center; padding:40px;"><div class="badge" style="background:#e0f2fe; color:#0284c7; font-size:14px; padding:10px 20px;">Analyse en cours... Veuillez patienter.</div></div>';
+    $('btnCohRun').disabled = true;
+
+    try {
+        var def = getReportDef();
+        var articleComplet = "";
+
+        (def.sections || []).forEach(function(sec) {
+            var inst = getInstanceSection(sec.sectionKey);
+            if(inst && inst.enabled) {
+                articleComplet += "--- SECTION : " + getDisplayTitle(sec.sectionKey) + " ---\n";
+                (sec.slots || []).forEach(function(sl) {
+                    articleComplet += "SOUS-SECTION [" + sl.label + "] :\n";
+                    articleComplet += (inst.slotOutputs[sl.slotKey] || "(vide)") + "\n\n";
+                });
+            }
+        });
+
+        var sysPrompt = "Vous êtes le Comité de Lecture Critique d'une revue scientifique de haut niveau. Votre but n'est pas de réécrire le texte, mais de produire un rapport d'analyse de cohérence interne.";
+
+        var userPrompt = "Voici l'ensemble d'un article scientifique en cours de rédaction :\n\n" + articleComplet +
+                         "\n\nL'auteur souhaite y apporter la modification suivante (INTENTION GLOBALE) : " + intention +
+                         "\n\nAnalysez chaque section de l'article en parallèle. Identifiez OÙ et COMMENT cette intention devrait être intégrée pour assurer une cohérence interne parfaite. \n" +
+                         "Règles :\n" +
+                         "1. Ne suggérez des modifications QUE si cela fait sens scientifiquement et narrativement (Le Droit de Ne Rien Faire).\n" +
+                         "2. Soyez très spécifique en pointant les sections et sous-sections concernées.\n" +
+                         "3. Rédigez votre rapport en HTML simple (avec <h3>, <ul>, <li>, <p> et <strong>). Aucune balise Markdown.";
+
+        let aiResponse = await callAzureOpenAI(sysPrompt, userPrompt);
+        aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+        outHost.innerHTML = aiResponse;
+
+    } catch (err) {
+        outHost.innerHTML = '<div style="color:var(--danger);">Erreur lors de l\'analyse : ' + esc(err.message) + '</div>';
+    } finally {
+        $('btnCohRun').disabled = false;
+    }
+  }
+
   function bindGlobalEvents(){
+    $('btnCohClose').addEventListener('click', function(){ $('coherenceModal').style.display = 'none'; });
+    $('btnCohRun').addEventListener('click', analyseCoherenceGlobale);
     $('btnSaveJson').addEventListener('click', saveJson);
     $('btnConfigAzure').addEventListener('click', showAzureModal);
     $('btnAzureCancel').addEventListener('click', hideAzureModal);
