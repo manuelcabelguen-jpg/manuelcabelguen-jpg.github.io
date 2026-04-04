@@ -97,6 +97,8 @@
     <div class="topbar">
       <button class="btn primary" id="btnLoadJson">⬆ Charger JSON</button>
       <input id="jsonFileInput" type="file" accept="application/json" style="display:none">
+      <button class="btn" id="btnImportBrut" style="background:#fefce8; border-color:#fef08a; color:#854d0e;">📄 Importer Article Brut</button>
+      <input id="importBrutInput" type="file" style="display:none">
       <button class="btn" id="btnSaveJson">💾 Sauvegarder</button>
       <button class="btn" id="btnExportWord">📝 Export Word</button>
       <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1;">☁️ Config IA</button>
@@ -111,9 +113,13 @@
 
   <aside class="right">
     <div class="panel">
-      <div class="panelTitle">Sources (Données, Biblio)</div>
-      <button class="btn" id="btnUploadSource">⬆ Ajouter un document</button>
+      <div class="panelTitle">Articles de Référence</div>
+      <div class="small muted" style="margin-bottom:10px; line-height:1.4;">
+        <strong>Recommandé :</strong> Importez ici jusqu'à 10 articles du même auteur pour maintenir une cohérence conceptuelle stricte. Ces sources serviront de base à l'IA.
+      </div>
+      <button class="btn" id="btnUploadSource" style="width:100%; justify-content:center; margin-bottom:8px;">⬆ Ajouter une source</button>
       <input id="sourceFileInput" type="file" style="display:none">
+      <button class="btn success" id="btnGenererPrompts" style="width:100%; justify-content:center; margin-bottom:10px;">✨ Générer les Prompts Adaptatifs</button>
       <div id="sourcesList" style="margin-top:10px"></div>
     </div>
   </aside>
@@ -140,39 +146,29 @@
   </div>
 </div>
 
-<!-- MODAL CONFIGURATION AZURE OPENAI -->
-<div id="azureModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
+<!-- MODAL CONFIGURATION GEMINI IA -->
+<div id="geminiModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
   <div style="background:#fff; width:450px; border-radius:12px; padding:20px; box-shadow:var(--shadow);">
     <h2 style="margin-top:0; color:var(--nav); display:flex; align-items:center; gap:8px;">
-      <span style="font-size:24px;">☁️</span> Configuration Azure OpenAI
+      <span style="font-size:24px;">✨</span> Configuration Google Gemini
     </h2>
     <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:20px;">
-      Configuration du modèle de langage pour la rédaction académique.
+      Configuration du modèle Gemini pour l'analyse et la rédaction académique.
     </p>
 
     <div class="field">
-      <div class="label">Point de terminaison (Endpoint URL)</div>
-      <input type="text" id="azureEndpoint" class="input" placeholder="https://votre-ressource.openai.azure.com/" />
-    </div>
-
-    <div class="field">
       <div class="label">Clé API (API Key)</div>
-      <input type="password" id="azureApiKey" class="input" placeholder="••••••••••••••••••••••••••••••••" />
+      <input type="password" id="geminiApiKey" class="input" placeholder="AIzaSy..." />
     </div>
 
     <div class="field">
-      <div class="label">Nom du déploiement (Modèle)</div>
-      <input type="text" id="azureDeployment" class="input" placeholder="gpt-4" />
-    </div>
-
-    <div class="field">
-      <div class="label">Version de l'API</div>
-      <input type="text" id="azureApiVersion" class="input" placeholder="2024-02-15-preview" value="2024-02-15-preview" />
+      <div class="label">Modèle (ex: gemini-1.5-pro, gemini-1.5-flash)</div>
+      <input type="text" id="geminiModel" class="input" placeholder="gemini-1.5-pro" value="gemini-1.5-pro" />
     </div>
 
     <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
-      <button class="btn" id="btnAzureCancel">Annuler</button>
-      <button class="btn primary" id="btnAzureSave">Mémoriser pour la session</button>
+      <button class="btn" id="btnGeminiCancel">Annuler</button>
+      <button class="btn primary" id="btnGeminiSave">Mémoriser pour la session</button>
     </div>
   </div>
 </div>
@@ -278,11 +274,9 @@
 
   var state = { data: normalizeData(embeddedData), activeSectionKey: null, dirty: false, activeSlotKey: null, isAdmin: false };
 
-  var azureConfig = {
-      endpoint: sessionStorage.getItem('azure_endpoint') || '',
-      apiKey: sessionStorage.getItem('azure_api_key') || '',
-      deployment: sessionStorage.getItem('azure_deployment') || '',
-      apiVersion: sessionStorage.getItem('azure_api_version') || '2024-02-15-preview'
+  var geminiConfig = {
+      apiKey: sessionStorage.getItem('gemini_api_key') || '',
+      model: sessionStorage.getItem('gemini_model') || 'gemini-1.5-pro'
   };
 
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
@@ -743,32 +737,36 @@
     });
   }
 
-  async function callAzureOpenAI(systemPrompt, userPrompt) {
-    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
-      throw new Error("Configuration Azure OpenAI manquante.");
+  async function callGeminiAPI(systemPrompt, userPrompt) {
+    if (!geminiConfig.apiKey) {
+      throw new Error("Configuration Gemini manquante.");
     }
 
-    let baseUrl = azureConfig.endpoint;
-    if (!baseUrl.endsWith('/')) baseUrl += '/';
-
-    const url = `${baseUrl}openai/deployments/${azureConfig.deployment}/chat/completions?api-version=${azureConfig.apiVersion}`;
+    const modelStr = geminiConfig.model || 'gemini-1.5-pro';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelStr}:generateContent?key=${geminiConfig.apiKey}`;
 
     const headers = {
-      "Content-Type": "application/json",
-      "api-key": azureConfig.apiKey
+      "Content-Type": "application/json"
     };
 
     const sanitizedSystemPrompt = sanitizeForAI(systemPrompt);
     const sanitizedUserPrompt = sanitizeForAI(userPrompt);
 
     const body = JSON.stringify({
-      messages: [
-        { role: "system", content: sanitizedSystemPrompt },
-        { role: "user", content: sanitizedUserPrompt }
+      system_instruction: {
+        parts: [{ text: sanitizedSystemPrompt }]
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: sanitizedUserPrompt }]
+        }
       ],
-      temperature: 0.2, // Température basse pour les articles scientifiques
-      max_tokens: 2000,
-      top_p: 0.95
+      generationConfig: {
+        temperature: 0.2,
+        topP: 0.95,
+        maxOutputTokens: 2000
+      }
     });
 
     const response = await fetch(url, {
@@ -783,11 +781,11 @@
     }
 
     const data = await response.json();
-    if (data.choices && data.choices.length > 0) {
-      const generatedContent = data.choices[0].message.content;
+    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts.length > 0) {
+      const generatedContent = data.candidates[0].content.parts[0].text;
       return desanitizeFromAI(generatedContent);
     } else {
-      throw new Error("Réponse vide d'Azure OpenAI");
+      throw new Error("Réponse vide de Gemini");
     }
   }
 
@@ -798,8 +796,8 @@
         return;
       }
 
-      if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
-        showAzureModal();
+      if (!geminiConfig.apiKey) {
+        showGeminiModal();
         return;
       }
 
@@ -871,7 +869,7 @@
         toast(`Traitement de : ${sl.label}...`);
 
         try {
-          let aiResponse = await callAzureOpenAI(systemPrompt, userPrompt);
+          let aiResponse = await callGeminiAPI(systemPrompt, userPrompt);
           aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
 
           inst.slotOutputs[sl.slotKey] = aiResponse;
@@ -901,9 +899,14 @@
 
   function addSourceFile(file){
     if(!file) return;
+    state.data.sources = state.data.sources || [];
+    if (state.data.sources.length >= 10) {
+        alert("Limite de 10 sources atteinte. Veuillez supprimer une ancienne source pour en ajouter une nouvelle.");
+        return;
+    }
+
     var reader = new FileReader();
     reader.onload = function(e){
-      state.data.sources = state.data.sources || [];
       state.data.sources.push({
         id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
         title: file.name,
@@ -985,6 +988,79 @@
     reader.readAsText(file, 'utf-8');
   }
 
+  async function importArticleBrut(file) {
+    if(!file) return;
+    if (!geminiConfig.apiKey) {
+      showGeminiModal();
+      toast('Veuillez configurer Gemini avant d\'importer un article brut.');
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = async function(e) {
+      try {
+        var rawText = e.target.result.slice(0, 50000); // Limite de sécurité
+        toast('Analyse de l\'article brut par l\'IA en cours...');
+
+        var sysPrompt = "Tu es un extracteur de données académiques. Ton rôle est de lire un texte brut d'un article scientifique et de le découper dans un format JSON strict. Tu ne dois renvoyer QUE l'objet JSON, sans aucun autre texte autour, sans balises de code Markdown (```json).";
+
+        var userPrompt = "Voici l'article brut :\n\n" + rawText + "\n\nExtrais les informations et retourne CE JSON EXACTEMENT avec les clés suivantes remplies (si non trouvé, mets une chaîne vide). Les clés 'titreArticle', 'auteurs', 'motsCles' sont pour les métadonnées. Les clés de section sont 'abstract', 'contexte', 'problematique', 'participants', 'procedure', 'resultats_desc', 'resultats_principaux', 'interpretation', 'limites', 'conclusion'.\n" +
+                         '{\n' +
+                         '  "metadata": {\n' +
+                         '    "titreArticle": "",\n' +
+                         '    "auteurs": "",\n' +
+                         '    "motsCles": ""\n' +
+                         '  },\n' +
+                         '  "sections": {\n' +
+                         '    "abstract": "",\n' +
+                         '    "contexte": "",\n' +
+                         '    "problematique": "",\n' +
+                         '    "participants": "",\n' +
+                         '    "procedure": "",\n' +
+                         '    "resultats_desc": "",\n' +
+                         '    "resultats_principaux": "",\n' +
+                         '    "interpretation": "",\n' +
+                         '    "limites": "",\n' +
+                         '    "conclusion": ""\n' +
+                         '  }\n' +
+                         '}';
+
+        var aiResponse = await callGeminiAPI(sysPrompt, userPrompt);
+        // Nettoyage au cas où Gemini renvoie quand même des balises
+        aiResponse = aiResponse.replace(/^```json\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+        var parsed = JSON.parse(aiResponse);
+
+        // Mettre à jour les métadonnées
+        if (parsed.metadata) {
+            state.data.caseContext.titreArticle = parsed.metadata.titreArticle || state.data.caseContext.titreArticle;
+            state.data.caseContext.auteurs = parsed.metadata.auteurs || state.data.caseContext.auteurs;
+            state.data.caseContext.motsCles = parsed.metadata.motsCles || state.data.caseContext.motsCles;
+        }
+
+        // Mettre à jour les sections
+        if (parsed.sections) {
+            (state.data.reportInstance.sections || []).forEach(function(sec) {
+                var slotOutputs = sec.slotOutputs || {};
+                Object.keys(parsed.sections).forEach(function(slotKey) {
+                    if (slotOutputs[slotKey] !== undefined && parsed.sections[slotKey]) {
+                        slotOutputs[slotKey] = parsed.sections[slotKey];
+                    }
+                });
+            });
+        }
+
+        setDirty(true, 'Article brut importé');
+        renderAll();
+        toast('Article importé et structuré avec succès !');
+
+      } catch (err) {
+        alert('Erreur lors du traitement de l\'article brut : ' + err.message);
+      }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
   function resetActiveSection(){
     var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
     if(!inst || !def) return;
@@ -1034,31 +1110,82 @@
 
   function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); renderSourcesList(); }
 
-  function showAzureModal(){
-    $('azureEndpoint').value = azureConfig.endpoint;
-    $('azureApiKey').value = azureConfig.apiKey;
-    $('azureDeployment').value = azureConfig.deployment;
-    $('azureApiVersion').value = azureConfig.apiVersion;
-    $('azureModal').style.display = 'flex';
+  function showGeminiModal(){
+    $('geminiApiKey').value = geminiConfig.apiKey;
+    $('geminiModel').value = geminiConfig.model;
+    $('geminiModal').style.display = 'flex';
   }
 
-  function hideAzureModal(){
-    $('azureModal').style.display = 'none';
+  function hideGeminiModal(){
+    $('geminiModal').style.display = 'none';
   }
 
-  function saveAzureConfig(){
-    azureConfig.endpoint = $('azureEndpoint').value.trim();
-    azureConfig.apiKey = $('azureApiKey').value.trim();
-    azureConfig.deployment = $('azureDeployment').value.trim();
-    azureConfig.apiVersion = $('azureApiVersion').value.trim();
+  function saveGeminiConfig(){
+    geminiConfig.apiKey = $('geminiApiKey').value.trim();
+    geminiConfig.model = $('geminiModel').value.trim();
 
-    sessionStorage.setItem('azure_endpoint', azureConfig.endpoint);
-    sessionStorage.setItem('azure_api_key', azureConfig.apiKey);
-    sessionStorage.setItem('azure_deployment', azureConfig.deployment);
-    sessionStorage.setItem('azure_api_version', azureConfig.apiVersion);
+    sessionStorage.setItem('gemini_api_key', geminiConfig.apiKey);
+    sessionStorage.setItem('gemini_model', geminiConfig.model);
 
-    hideAzureModal();
-    toast('Configuration IA sauvegardée.');
+    hideGeminiModal();
+    toast('Configuration Gemini sauvegardée.');
+  }
+
+  async function genererPromptsAdaptatifs() {
+    if (!state.data.sources || state.data.sources.length === 0) {
+      alert("Veuillez d'abord ajouter au moins un article de référence (source) dans le panneau de droite.");
+      return;
+    }
+
+    if (!geminiConfig.apiKey) {
+      showGeminiModal();
+      toast('Configuration Gemini requise.');
+      return;
+    }
+
+    if (!confirm("Attention : Cela va écraser vos prompts actuels pour les adapter spécifiquement au cadre théorique de vos sources. Voulez-vous continuer ?")) {
+      return;
+    }
+
+    var btn = $('btnGenererPrompts');
+    var originalText = btn.innerHTML;
+    btn.innerHTML = '✨ Génération en cours...';
+    btn.disabled = true;
+
+    try {
+      var sourcesContent = "ARTICLES DE RÉFÉRENCE :\n\n";
+      state.data.sources.forEach(function(srcObj) {
+        sourcesContent += `--- ${srcObj.title} ---\n${srcObj.content.slice(0, 10000)}\n\n`; // Limite pour éviter les dépassements de contexte massif
+      });
+
+      var currentPromptsStr = JSON.stringify(state.data.prompts, null, 2);
+
+      var sysPrompt = "Tu es un méta-ingénieur de prompts spécialisé en rédaction scientifique. Ton but est d'analyser un ensemble d'articles de référence (tous du même auteur ou même cadre théorique) et de modifier un dictionnaire JSON de prompts existants. Tu dois adapter CHAQUE prompt métier (ceux qui commencent par 'gen.') pour qu'ils demandent à l'IA d'utiliser le cadre théorique, le vocabulaire et les concepts spécifiques trouvés dans les sources. Tu ne dois renvoyer QUE le dictionnaire JSON mis à jour, sans balises Markdown.";
+
+      var userPrompt = sourcesContent + "\n\nVoici le dictionnaire de prompts actuel :\n" + currentPromptsStr + "\n\nRenvoie uniquement le JSON modifié.";
+
+      var aiResponse = await callGeminiAPI(sysPrompt, userPrompt);
+      aiResponse = aiResponse.replace(/^```json\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+      var newPrompts = JSON.parse(aiResponse);
+
+      // On conserve le prompt global de gouvernance tel quel pour la sécurité, on ne remplace que les gen.*
+      Object.keys(newPrompts).forEach(function(k) {
+        if (k.startsWith('gen.')) {
+            state.data.prompts[k] = newPrompts[k];
+        }
+      });
+
+      setDirty(true, 'Prompts adaptatifs générés');
+      renderAll(); // Rafraîchir l'interface (notamment si on est dans la vue Bibliothèque)
+      toast('Prompts adaptés avec succès !');
+
+    } catch (err) {
+      alert("Erreur lors de la génération des prompts : " + err.message);
+    } finally {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
   }
 
   async function analyseCoherenceGlobale() {
@@ -1067,8 +1194,8 @@
         return;
     }
 
-    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
-        showAzureModal();
+    if (!geminiConfig.apiKey) {
+        showGeminiModal();
         return;
     }
 
@@ -1108,7 +1235,7 @@
                          "2. Soyez très spécifique en pointant les sections et sous-sections concernées.\n" +
                          "3. Rédigez votre rapport en HTML simple (avec <h3>, <ul>, <li>, <p> et <strong>). Aucune balise Markdown.";
 
-        let aiResponse = await callAzureOpenAI(sysPrompt, userPrompt);
+        let aiResponse = await callGeminiAPI(sysPrompt, userPrompt);
         aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
 
         outHost.innerHTML = aiResponse;
@@ -1124,11 +1251,19 @@
     $('btnCohClose').addEventListener('click', function(){ $('coherenceModal').style.display = 'none'; });
     $('btnCohRun').addEventListener('click', analyseCoherenceGlobale);
     $('btnSaveJson').addEventListener('click', saveJson);
-    $('btnConfigAzure').addEventListener('click', showAzureModal);
-    $('btnAzureCancel').addEventListener('click', hideAzureModal);
-    $('btnAzureSave').addEventListener('click', saveAzureConfig);
+    $('btnConfigAzure').addEventListener('click', showGeminiModal);
+    $('btnGeminiCancel').addEventListener('click', hideGeminiModal);
+    $('btnGeminiSave').addEventListener('click', saveGeminiConfig);
+    var btnGenP = $('btnGenererPrompts');
+    if(btnGenP) {
+      var newBtnGenP = btnGenP.cloneNode(true);
+      btnGenP.parentNode.replaceChild(newBtnGenP, btnGenP);
+      newBtnGenP.addEventListener('click', genererPromptsAdaptatifs);
+    }
     $('btnLoadJson').addEventListener('click', function(){ $('jsonFileInput').click(); });
     $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
+    $('btnImportBrut').addEventListener('click', function(){ $('importBrutInput').click(); });
+    $('importBrutInput').addEventListener('change', function(){ importArticleBrut(this.files[0]); this.value=''; });
     $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
     $('btnResetSection').addEventListener('click', resetActiveSection);
     $('btnExportWord').addEventListener('click', exportWord);
