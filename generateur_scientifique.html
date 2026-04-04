@@ -162,8 +162,8 @@
     </div>
 
     <div class="field">
-      <div class="label">Modèle (ex: gemini-1.5-pro, gemini-1.5-flash)</div>
-      <input type="text" id="geminiModel" class="input" placeholder="gemini-1.5-pro" value="gemini-1.5-pro" />
+      <div class="label">Modèle (ex: gemini-2.0-flash, gemini-1.5-pro-002)</div>
+      <input type="text" id="geminiModel" class="input" placeholder="gemini-2.0-flash" value="gemini-2.0-flash" />
     </div>
 
     <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
@@ -276,7 +276,7 @@
 
   var geminiConfig = {
       apiKey: sessionStorage.getItem('gemini_api_key') || '',
-      model: sessionStorage.getItem('gemini_model') || 'gemini-1.5-pro'
+      model: sessionStorage.getItem('gemini_model') || 'gemini-2.0-flash'
   };
 
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
@@ -742,7 +742,7 @@
       throw new Error("Configuration Gemini manquante.");
     }
 
-    const modelStr = geminiConfig.model || 'gemini-1.5-pro';
+    const modelStr = geminiConfig.model || 'gemini-2.0-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelStr}:generateContent?key=${geminiConfig.apiKey}`;
 
     const headers = {
