@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur/Correcteur d'Articles Scientifiques</title>
+  <style>
+    :root{
+      --bg:#f3f2f1; --panel:#ffffff; --soft:#f8fafc; --border:#e5e7eb; --text:#0f172a; --muted:#64748b;
+      --blue:#0078d4; --blue2:#106ebe; --green:#15803d; --warn:#fb923c; --danger:#b91c1c; --nav:#1e293b;
+      --shadow:0 8px 24px rgba(15,23,42,.08); --radius:12px;
+      --font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text)}
+    .app{display:grid; grid-template-columns:var(--side-w) 4px 1fr 4px var(--right-w); height:100vh; overflow:hidden}
+    .sidebar,.main,.right{min-width:0;overflow:hidden;display:flex;flex-direction:column}
+    .sidebar{background:#fff;border-right:1px solid var(--border)}
+    .main{background:#fff}
+    .right{background:var(--soft);border-left:1px solid var(--border)}
+    .resizer { background: var(--border); cursor: col-resize; z-index: 10; transition: background 0.2s; }
+    .resizer:hover, .resizer.active { background: var(--blue); }
+    body.resizing { user-select: none; cursor: col-resize; }
+    .header{height:56px;background:var(--nav);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-weight:800;letter-spacing:.5px; font-size:15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index:10;}
+    .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:8px 16px;flex-wrap:wrap;background:#fff; box-shadow: 0 2px 5px rgba(15,23,42,0.02);}
+    .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;color:#334155;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;font-size:12px;transition:all 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.04);}
+    .btn:hover{background:#f8fafc; border-color:#cbd5e1; transform:translateY(-1px); box-shadow: 0 3px 6px rgba(0,0,0,0.06);}
+    .btn:active{transform:translateY(0); box-shadow:none;}
+    .btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+    .btn.primary:hover{background:var(--blue2);border-color:var(--blue2)}
+    .btn.success{background:#f0fdf4; color:var(--green);border-color:#bbf7d0}
+    .btn.success:hover{background:#dcfce7;}
+    .btn.danger{background:#fef2f2; color:var(--danger);border-color:#fecaca}
+    .btn.danger:hover{background:#fee2e2;}
+    .panel{padding:16px;border-bottom:1px solid var(--border);background:#fff}
+    .panelTitle{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:12px; display:flex; align-items:center; gap:6px;}
+    .field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+    .label{font-size:11px;letter-spacing:.4px;color:#475569;font-weight:700;text-transform:uppercase}
+    .input,.textarea,select{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px;background:#fff;font:inherit; color:#1e293b; transition: border-color 0.2s, box-shadow 0.2s;}
+    .input:focus,.textarea:focus,select:focus{outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px rgba(0,120,212,0.15);}
+    .textarea{min-height:92px;resize:vertical; line-height:1.5;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .scroll{overflow:auto;min-height:0}
+
+    /* Animation pour le bouton de génération */
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.4); } 70% { box-shadow: 0 0 0 6px rgba(21, 128, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); } }
+    .btn.generating { animation: pulse-ring 1.5s infinite; background:#e6f4ea; color:#166534; border-color:#86efac; cursor:wait; }
+    .sectionsWrap{padding:10px;overflow:auto;min-height:0}
+    .sectionItem{padding:10px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:6px}
+    .sectionItem:hover{background:#f3f4f6}
+    .sectionItem.active{background:#eff6ff;color:#1d4ed8;font-weight:900}
+    .sectionMeta{font-size:11px;color:var(--muted);margin-top:2px}
+    .badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:900;border:1px solid var(--border);background:#fff;color:#475569}
+    .badge.off{color:#9ca3af}
+    .editor{padding:16px;overflow:auto;min-height:0;display:flex;flex-direction:column;gap:12px}
+    .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:0 2px 10px rgba(15,23,42,.04)}
+    .cardTitle{font-weight:900;margin-bottom:8px}
+    .templatePreview{border:1px solid var(--border);border-radius:12px;background:#fff;padding:14px;line-height:1.6;min-height:220px}
+    .slotBox{border:1px dashed #cbd5e1;border-radius:12px;padding:10px;background:#f8fafc}
+    .slotBox h4{margin:0 0 8px;font-size:12px;color:#334155}
+    .muted{color:var(--muted)}
+    .small{font-size:12px}
+    .titleInput{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-weight:800;width:min(100%,600px)}
+    .right .panel{background:var(--soft)}
+    .sourceItem{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px}
+    .sourceName{font-size:12px;font-weight:900;color:#334155}
+    .sourceMeta{font-size:11px;color:#94a3b8}
+    .chips{display:flex;flex-wrap:wrap;gap:6px}
+    .chip{font-size:11px;font-weight:800;border:1px solid var(--border);background:#fff;color:#475569;padding:6px 8px;border-radius:999px;cursor:pointer}
+    .chip.on{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:12px 24px;border-radius:999px;box-shadow:var(--shadow);font-size:13px;font-weight:900;display:none;z-index:9999;text-align:center;}
+    .toast.show{display:block}
+    details{border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden}
+    summary{cursor:pointer;padding:10px 12px;font-weight:900;background:#f9fafb}
+    details > div{padding:12px;background:#fff}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+    .chk-field { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: var(--text); }
+    .move-arrows { display: flex; flex-direction: column; margin-right: 8px; align-items: center; justify-content: center; }
+    .btn-move { background: transparent; border: none; padding: 2px 4px; font-size: 10px; color: #94a3b8; cursor: pointer; line-height: 1; }
+    .btn-move:hover { color: var(--blue); background: #e2e8f0; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<div class="app" id="appRoot" style="--side-w: 320px; --right-w: 420px;">
+
+  <aside class="sidebar">
+    <div class="header">Lab IA <span id="versionTag">v1.0</span></div>
+    <div class="panel scroll" id="casePanel"></div>
+    <div class="sectionsWrap" id="sectionsList"></div>
+  </aside>
+
+  <div class="resizer" id="resizerLeft"></div>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="btn primary" id="btnLoadJson">⬆ Charger JSON</button>
+      <input id="jsonFileInput" type="file" accept="application/json" style="display:none">
+      <button class="btn" id="btnSaveJson">💾 Sauvegarder</button>
+      <button class="btn" id="btnExportWord">📝 Export Word</button>
+      <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1;">☁️ Config IA</button>
+      <button class="btn success" id="btnGenerateAI">✦ Exécuter IA (Slots Vides)</button>
+      <button class="btn danger" id="btnResetSection">↺ Vider</button>
+      <span class="badge" id="saveState">En attente</span>
+    </div>
+    <div class="editor" id="editorHost"></div>
+  </main>
+
+  <div class="resizer" id="resizerRight"></div>
+
+  <aside class="right">
+    <div class="panel">
+      <div class="panelTitle">Sources (Données, Biblio)</div>
+      <button class="btn" id="btnUploadSource">⬆ Ajouter un document</button>
+      <input id="sourceFileInput" type="file" style="display:none">
+      <div id="sourcesList" style="margin-top:10px"></div>
+    </div>
+  </aside>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- MODAL CONFIGURATION AZURE OPENAI -->
+<div id="azureModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.8); z-index:10000; align-items:center; justify-content:center;">
+  <div style="background:#fff; width:450px; border-radius:12px; padding:20px; box-shadow:var(--shadow);">
+    <h2 style="margin-top:0; color:var(--nav); display:flex; align-items:center; gap:8px;">
+      <span style="font-size:24px;">☁️</span> Configuration Azure OpenAI
+    </h2>
+    <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:20px;">
+      Configuration du modèle de langage pour la rédaction académique.
+    </p>
+
+    <div class="field">
+      <div class="label">Point de terminaison (Endpoint URL)</div>
+      <input type="text" id="azureEndpoint" class="input" placeholder="https://votre-ressource.openai.azure.com/" />
+    </div>
+
+    <div class="field">
+      <div class="label">Clé API (API Key)</div>
+      <input type="password" id="azureApiKey" class="input" placeholder="••••••••••••••••••••••••••••••••" />
+    </div>
+
+    <div class="field">
+      <div class="label">Nom du déploiement (Modèle)</div>
+      <input type="text" id="azureDeployment" class="input" placeholder="gpt-4" />
+    </div>
+
+    <div class="field">
+      <div class="label">Version de l'API</div>
+      <input type="text" id="azureApiVersion" class="input" placeholder="2024-02-15-preview" value="2024-02-15-preview" />
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+      <button class="btn" id="btnAzureCancel">Annuler</button>
+      <button class="btn primary" id="btnAzureSave">Mémoriser pour la session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var embeddedData = {
+    "reportDefinitions": {
+      "article_scientifique": {
+        "title": "Article Scientifique",
+        "sections": [
+          {
+            "sectionKey": "sec.titre",
+            "title": "Page de Titre & Informations",
+            "icon": "🏷️",
+            "slots": [
+              { "slotKey": "titre", "label": "Titre", "promptKey": "gen.titre" },
+              { "slotKey": "abstract", "label": "Résumé / Abstract", "promptKey": "gen.abstract" }
+            ],
+            "templateHtml": "<h3 style='text-align:center;'>{{titreArticle}}</h3><p><strong>Auteurs:</strong> {{auteurs}}</p><p><strong>Mots-clés:</strong> {{motsCles}}</p><h4>Résumé</h4><p>\\[SLOT:abstract\\]</p>"
+          },
+          {
+            "sectionKey": "sec.intro",
+            "title": "1. Introduction",
+            "icon": "📖",
+            "slots": [
+              { "slotKey": "contexte", "label": "Contexte de l'étude", "promptKey": "gen.intro.contexte" },
+              { "slotKey": "problematique", "label": "Problématique et Hypothèses", "promptKey": "gen.intro.problematique" }
+            ],
+            "templateHtml": "<h4>1.1. Contexte</h4><p>\\[SLOT:contexte\\]</p><h4>1.2. Problématique</h4><p>\\[SLOT:problematique\\]</p>"
+          },
+          {
+            "sectionKey": "sec.methodes",
+            "title": "2. Matériel et Méthodes",
+            "icon": "🔬",
+            "slots": [
+              { "slotKey": "participants", "label": "Participants / Échantillon", "promptKey": "gen.methode.participants" },
+              { "slotKey": "procedure", "label": "Procédure & Instruments", "promptKey": "gen.methode.procedure" }
+            ],
+            "templateHtml": "<h4>2.1. Échantillon</h4><p>\\[SLOT:participants\\]</p><h4>2.2. Procédure</h4><p>\\[SLOT:procedure\\]</p>"
+          },
+          {
+            "sectionKey": "sec.resultats",
+            "title": "3. Résultats",
+            "icon": "📊",
+            "slots": [
+              { "slotKey": "resultats_desc", "label": "Résultats Descriptifs", "promptKey": "gen.resultats.desc" },
+              { "slotKey": "resultats_principaux", "label": "Analyses Principales", "promptKey": "gen.resultats.principaux" }
+            ],
+            "templateHtml": "<h4>3.1. Analyses Descriptives</h4><p>\\[SLOT:resultats_desc\\]</p><h4>3.2. Analyses Principales</h4><p>\\[SLOT:resultats_principaux\\]</p>"
+          },
+          {
+            "sectionKey": "sec.discussion",
+            "title": "4. Discussion",
+            "icon": "💬",
+            "slots": [
+              { "slotKey": "interpretation", "label": "Interprétation", "promptKey": "gen.discussion.interpretation" },
+              { "slotKey": "limites", "label": "Limites et Perspectives", "promptKey": "gen.discussion.limites" }
+            ],
+            "templateHtml": "<h4>4.1. Interprétation</h4><p>\\[SLOT:interpretation\\]</p><h4>4.2. Limites</h4><p>\\[SLOT:limites\\]</p>"
+          },
+          {
+            "sectionKey": "sec.conclusion",
+            "title": "5. Conclusion",
+            "icon": "🏁",
+            "slots": [
+              { "slotKey": "conclusion", "label": "Conclusion générale", "promptKey": "gen.conclusion" }
+            ],
+            "templateHtml": "<p>\\[SLOT:conclusion\\]</p>"
+          }
+        ]
+      }
+    },
+    "caseContext": {
+      "titreArticle": "Titre provisoire de l'étude",
+      "auteurs": "Nom de l'Auteur 1; Nom de l'Auteur 2",
+      "motsCles": "mot-clé 1, mot-clé 2",
+      "revueCible": "Nature",
+      "styleAcademique": "APA",
+      "modeIA": "Génération à partir de brouillon",
+      "doubleAveugle": false
+    },
+    "uiSchema": {
+      "styleOptions": ["APA", "Vancouver", "Chicago", "MLA", "Harvard"],
+      "modeOptions": ["Génération à partir de brouillon", "Correction orthographique / Grammaticale", "Amélioration du style académique", "Traduction (FR vers EN)", "Traduction (EN vers FR)"]
+    },
+    "prompts": {
+      "global.gouvernance": "Vous êtes un assistant académique hautement qualifié spécialisé dans la rédaction scientifique (peer-reviewed). Vous respectez scrupuleusement la vérité scientifique. Vous n'inventez pas de données, de citations ni de références (pas d'hallucinations). Si les informations fournies dans les sources sont insuffisantes, vous devez le signaler. Adoptez un ton neutre, objectif, formel et rigoureux.",
+      "gen.abstract": "Rédigez un résumé structuré (Contexte, Méthodes, Résultats, Conclusion) de 250 mots maximum en vous basant UNIQUEMENT sur les éléments fournis en contexte.",
+      "gen.intro.contexte": "Rédigez l'introduction de l'article en mettant en contexte le sujet, en utilisant le style académique spécifié.",
+      "gen.intro.problematique": "Identifiez clairement la problématique et les hypothèses de recherche.",
+      "gen.methode.participants": "Décrivez la population étudiée, les critères d'inclusion et d'exclusion à partir des notes de méthodologie fournies.",
+      "gen.methode.procedure": "Décrivez la procédure expérimentale et les instruments de mesure utilisés.",
+      "gen.resultats.desc": "Rapportez les résultats descriptifs (moyennes, écarts-types, fréquences) de manière claire.",
+      "gen.resultats.principaux": "Décrivez les résultats des tests statistiques principaux (valeurs p, tailles d'effet) sans les interpréter de manière subjective.",
+      "gen.discussion.interpretation": "Interprétez les résultats en lien avec les hypothèses, sans les survendre.",
+      "gen.discussion.limites": "Exposez les limites de l'étude (biais, taille de l'échantillon, etc.) et proposez des perspectives de recherche futures.",
+      "gen.conclusion": "Rédigez une brève conclusion résumant l'apport principal de l'étude."
+    }
+  };
+
+  var state = { data: normalizeData(embeddedData), activeSectionKey: null, dirty: false, activeSlotKey: null, isAdmin: false };
+
+  var azureConfig = {
+      endpoint: sessionStorage.getItem('azure_endpoint') || '',
+      apiKey: sessionStorage.getItem('azure_api_key') || '',
+      deployment: sessionStorage.getItem('azure_deployment') || '',
+      apiVersion: sessionStorage.getItem('azure_api_version') || '2024-02-15-preview'
+  };
+
+  function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function $(id){ return document.getElementById(id); }
+  function toast(msg){ var t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},3000); }
+  function setDirty(flag, msg){ state.dirty = !!flag; $('saveState').textContent = flag ? '● Modifié' : '✓ Sauvegardé'; if(msg){ $('saveState').title = msg; } }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
+  function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-'); }
+  function nowDate(){ return new Date().toISOString().slice(0,10); }
+
+  function normalizeData(raw){
+    var d = clone(raw || {});
+    if(!d.reportDefinitions) d.reportDefinitions = {};
+    if(!d.reportInstance) d.reportInstance = { reportId:'', sections:[] };
+    if(!d.caseContext) d.caseContext = {};
+    if(!d.prompts) d.prompts = {};
+    if(!d.sources) d.sources = [];
+    if(!d.uiSchema) d.uiSchema = {};
+
+    if(typeof d.caseContext.doubleAveugle !== 'boolean') d.caseContext.doubleAveugle = false;
+
+    var reportId = d.reportInstance.reportId || Object.keys(d.reportDefinitions)[0] || '';
+    d.reportInstance.reportId = reportId;
+    var def = d.reportDefinitions[reportId] || { sections:[] };
+    var instMap = {};
+    (d.reportInstance.sections || []).forEach(function(s){ instMap[s.sectionKey] = s; });
+
+    d.reportInstance.sections = (def.sections || []).map(function(defSec){
+      var ex = instMap[defSec.sectionKey] || {};
+      var slotOutputs = ex.slotOutputs || {};
+      (defSec.slots || []).forEach(function(sl){ if(typeof slotOutputs[sl.slotKey] !== 'string'){ slotOutputs[sl.slotKey] = ''; } });
+      return {
+        sectionKey: defSec.sectionKey,
+        titleOverride: typeof ex.titleOverride === 'string' ? ex.titleOverride : '',
+        enabled: typeof ex.enabled === 'boolean' ? ex.enabled : true,
+        status: ex.status || 'draft',
+        selectedSourceIds: Array.isArray(ex.selectedSourceIds) ? ex.selectedSourceIds : [],
+        slotOutputs: slotOutputs
+      };
+    });
+    return d;
+  }
+
+  function getReportDef(){ return state.data.reportDefinitions[state.data.reportInstance.reportId] || { sections:[] }; }
+  function getInstanceSection(sectionKey){
+    var list = state.data.reportInstance.sections || [];
+    for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
+    return null;
+  }
+  function getSectionDef(sectionKey){
+    var list = getReportDef().sections || [];
+    for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
+    return null;
+  }
+  function getDisplayTitle(sectionKey){
+    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
+    return (inst && inst.titleOverride) ? inst.titleOverride : (def ? def.title : sectionKey);
+  }
+  function getValueByPath(obj, path){
+    var parts = String(path||'').split('.');
+    var cur = obj;
+    for(var i=0;i<parts.length;i++){ if(cur == null) return ''; cur = cur[parts[i]]; }
+    return cur == null ? '' : cur;
+  }
+
+  function templateVarsContext(){
+    var root = {};
+    var cc = state.data.caseContext || {};
+    Object.keys(cc).forEach(function(k){ root[k] = cc[k]; });
+
+    // Logique Double Aveugle
+    if (cc.doubleAveugle) {
+        root.auteurs = "[ANONYMISÉ POUR DOUBLE AVEUGLE]";
+    }
+
+    return root;
+  }
+
+  // === MOTEUR D'ANONYMISATION ===
+  function sanitizeForAI(text) {
+    if (!text) return "";
+    var cc = state.data.caseContext || {};
+    var sanitized = text;
+
+    if (cc.doubleAveugle && cc.auteurs) {
+        var auteursList = cc.auteurs.split(';').map(a => a.trim());
+        auteursList.forEach(function(auteur) {
+            if (auteur.length > 2) {
+                var regex = new RegExp(auteur.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                sanitized = sanitized.replace(regex, "[AUTEUR_ANONYME]");
+            }
+        });
+    }
+
+    return sanitized;
+  }
+
+  function desanitizeFromAI(text) {
+    return text; // Dans un rapport double aveugle, on garde l'anonymat.
+  }
+  // ============================================
+
+  function replaceVars(htmlText){
+    var ctx = templateVarsContext();
+    return String(htmlText || '').replace(/{{\s*([^}]+?)\s*}}/g, function(_, path){
+      var val = getValueByPath(ctx, path.trim());
+      return val == null ? '' : String(val);
+    });
+  }
+
+  function renderSectionHtml(sectionKey){
+    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
+    if(!def || !inst) return '';
+    var htmlText = replaceVars(def.templateHtml || '');
+    (def.slots || []).forEach(function(sl){
+      var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\\\]', 'g');
+      var content = inst.slotOutputs && typeof inst.slotOutputs[sl.slotKey] === 'string' ? inst.slotOutputs[sl.slotKey] : '';
+      htmlText = htmlText.replace(re, content || '[' + sl.label + ']');
+    });
+    return htmlText;
+  }
+
+  function buildSelect(id, currentValue, optionsList, cssClass) {
+    var sel = '<select class="' + (cssClass||'input') + '" id="' + esc(id) + '">';
+    sel += '<option value="">-- Sélectionner --</option>';
+    optionsList.forEach(function(opt) {
+      var isSelected = (currentValue === opt) ? ' selected' : '';
+      sel += '<option value="' + esc(opt) + '"' + isSelected + '>' + esc(opt) + '</option>';
+    });
+    sel += '</select>';
+    return sel;
+  }
+
+  function renderCasePanel(){
+    var host = $('casePanel');
+    if (Object.keys(state.data.reportDefinitions).length === 0) {
+        host.innerHTML = '<div class="empty-state small">Système en attente des variables...</div>'; return;
+    }
+
+    var cc = state.data.caseContext || {};
+    var schema = state.data.uiSchema || {};
+
+    var optStyles = schema.styleOptions || [];
+    var optModes = schema.modeOptions || [];
+
+    host.innerHTML = '' +
+      '<details open><summary>📝 Métadonnées de l\'Article</summary><div>' +
+        '<div class="field"><div class="label">Titre provisoire</div><input class="input" id="inpTitre" value="' + esc(cc.titreArticle || '') + '"></div>' +
+        '<div class="field"><div class="label">Auteurs (séparés par ;)</div><input class="input" id="inpAuteurs" value="' + esc(cc.auteurs || '') + '"></div>' +
+        '<div class="field"><div class="label">Mots-clés</div><input class="input" id="inpMotsCles" value="' + esc(cc.motsCles || '') + '"></div>' +
+        '<div class="row2">' +
+          '<div class="field"><div class="label">Revue Ciblée</div><input class="input" id="inpRevue" value="' + esc(cc.revueCible || '') + '"></div>' +
+          '<div class="field"><div class="label">Style Académique</div>' + buildSelect('inpStyle', cc.styleAcademique, optStyles) + '</div>' +
+        '</div>' +
+        '<div class="field" style="margin-top:8px; padding:10px; background:#fff7ed; border:1px solid #fed7aa; border-radius:8px;">' +
+            '<label class="chk-field"><input type="checkbox" id="chkAveugle" ' + (cc.doubleAveugle ? 'checked' : '') + '> Anonymiser pour Double Aveugle</label>' +
+            '<div style="font-size:10px; color:#c2410c; margin-top:4px; margin-left:22px;">Masque les auteurs lors de l\'export Word et pour l\'IA.</div>' +
+        '</div>' +
+      '</div></details>' +
+
+      '<details open><summary>🤖 Paramètres de l\'IA</summary><div>' +
+        '<div class="field"><div class="label">Mode d\'intervention IA</div>' + buildSelect('inpMode', cc.modeIA, optModes) + '</div>' +
+        '<div class="small muted" style="margin-top:8px; line-height:1.4;">' +
+        '<strong>Génération</strong> : Crée du texte à partir de notes brutes.<br>' +
+        '<strong>Correction</strong> : Répare l\'orthographe sans modifier le fond.<br>' +
+        '<strong>Style</strong> : Améliore la lisibilité et le ton académique.<br>' +
+        '</div>' +
+      '</div></details>';
+
+    bindCaseInputs();
+  }
+
+  function bindCaseInputs(){
+    function bind(id, path, isCheckbox){
+      var el = $(id); if(!el) return;
+      var eventType = isCheckbox || (el.tagName.toLowerCase() === 'select') ? 'change' : 'input';
+      el.addEventListener(eventType, function(){
+        state.data.caseContext[path] = isCheckbox ? this.checked : this.value;
+        setDirty(true, 'Variables modifiées');
+        refreshEditorPreviewOnly();
+      });
+    }
+    bind('inpTitre','titreArticle');
+    bind('inpAuteurs','auteurs');
+    bind('inpMotsCles','motsCles');
+    bind('inpRevue','revueCible');
+    bind('inpStyle','styleAcademique');
+    bind('inpMode','modeIA');
+    bind('chkAveugle','doubleAveugle', true);
+  }
+
+  function renderSectionsList(){
+    var host = $('sectionsList');
+    var def = getReportDef();
+    if(!def.sections || def.sections.length === 0) {
+        host.innerHTML = '<div class="panelTitle">Plan de l\'article</div><div class="empty-state small">Données structurelles absentes.</div>'; return;
+    }
+    if(!state.activeSectionKey && def.sections && def.sections.length){ state.activeSectionKey = def.sections[0].sectionKey; }
+
+    var out = '<div class="panelTitle">Administration</div>';
+    var activePrompt = state.activeSectionKey === '__PROMPTS__';
+    out += '<div class="sectionItem' + (activePrompt ? ' active' : '') + '" data-key="__PROMPTS__" style="background:#f8fafc; border:1px dashed #cbd5e1; margin-bottom:15px;">' +
+             '<div style="min-width:0;flex:1"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:900;color:#1e3a8a;">🔒 Bibliothèque des Prompts</div></div>' +
+           '</div>';
+
+    out += '<div class="panelTitle">Structure de l\'Article</div>';
+    (def.sections || []).forEach(function(s, i){
+      var inst = getInstanceSection(s.sectionKey) || {};
+      var active = state.activeSectionKey === s.sectionKey;
+      var title = getDisplayTitle(s.sectionKey);
+
+      var icon = s.icon || '📄';
+
+      var arrows = '<div class="move-arrows">' +
+                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="-1" title="Monter">▲</button>' +
+                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="1" title="Descendre">▼</button>' +
+                   '</div>';
+
+      out += '<div class="sectionItem' + (active ? ' active' : '') + '" data-key="' + esc(s.sectionKey) + '">' +
+               '<div style="min-width:0;flex:1;display:flex;align-items:center;">' +
+                 arrows +
+                 '<span style="margin-right:8px; font-size:14px;">' + icon + '</span>' +
+                 '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="' + esc(title) + '">' + esc(title) + '</div>' +
+               '</div>' +
+               '<span class="badge' + (inst.enabled ? '' : ' off') + '">' + (inst.enabled ? 'Actif' : 'Masqué') + '</span>' +
+             '</div>';
+    });
+    host.innerHTML = out;
+
+    Array.prototype.forEach.call(host.querySelectorAll('.sectionItem'), function(item){
+      item.addEventListener('click', function(e){
+          if(e.target.classList.contains('btn-move')) return;
+          var targetKey = this.getAttribute('data-key');
+
+          if (targetKey === '__PROMPTS__' && !state.isAdmin) {
+              var pwd = prompt("ACCÈS RESTREINT. Veuillez entrer le mot de passe administrateur :");
+              if (pwd !== "admin") {
+                  alert("Accès refusé.");
+                  return;
+              }
+              state.isAdmin = true;
+              toast("Authentification réussie. Mode administrateur activé.");
+          }
+
+          state.activeSectionKey = targetKey;
+          state.activeSlotKey = null;
+          renderEditor();
+      });
+    });
+
+    Array.prototype.forEach.call(host.querySelectorAll('.btn-move'), function(btn){
+      btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          var sk = this.getAttribute('data-sk');
+          var dir = parseInt(this.getAttribute('data-dir'));
+
+          var defSecs = getReportDef().sections;
+          var idx = defSecs.findIndex(function(s) { return s.sectionKey === sk; });
+
+          if (idx !== -1 && idx + dir >= 0 && idx + dir < defSecs.length) {
+              var temp = defSecs[idx];
+              defSecs[idx] = defSecs[idx + dir];
+              defSecs[idx + dir] = temp;
+
+              var instSecs = state.data.reportInstance.sections;
+              var newInstSecs = [];
+              defSecs.forEach(function(ds) {
+                  var isec = instSecs.find(function(is) { return is.sectionKey === ds.sectionKey; });
+                  if(isec) newInstSecs.push(isec);
+              });
+              state.data.reportInstance.sections = newInstSecs;
+
+              setDirty(true, 'Ordre des sections modifié');
+              renderSectionsList();
+              refreshEditorPreviewOnly();
+          }
+      });
+    });
+  }
+
+  function renderEditor(){
+    var host = $('editorHost');
+
+    if (state.activeSectionKey === '__PROMPTS__') {
+        var html = '<div class="card"><div class="cardTitle" style="color:#1e3a8a; font-size:16px;">⚙️ Bibliothèque globale des Prompts et Directives</div>';
+        html += '<div class="small muted" style="margin-bottom:15px;">Définissez le comportement de l\'assistant pour la rédaction scientifique.</div>';
+
+        // 1. GOUVERNANCE GLOBALE
+        if (state.data.prompts['global.gouvernance'] !== undefined) {
+            html += '<div class="slotBox" style="margin-bottom:20px; border:2px solid #1e40af; background:#eff6ff;">' +
+                    '<h4 style="color:#1e3a8a; font-size:13px; text-transform:uppercase; display:flex; align-items:center; gap:8px;">' +
+                    '<span>🛡️</span> Prompt de Gouvernance Globale (Système)</h4>' +
+                    '<textarea class="textarea mono global-prompt-editor" data-pk="global.gouvernance" style="min-height:150px; background:#fff;">' + esc(state.data.prompts['global.gouvernance']) + '</textarea>' +
+                    '</div>';
+        }
+
+        // 2. MAPPAGE DES PROMPTS PAR SECTION
+        var def = getReportDef();
+        var mappedPrompts = {};
+        var sectionsHtml = '';
+
+        (def.sections || []).forEach(function(sec) {
+            var secTitle = getDisplayTitle(sec.sectionKey);
+            var slotsHtml = '';
+            (sec.slots || []).forEach(function(sl) {
+                var pk = sl.promptKey;
+                if (pk && state.data.prompts[pk] !== undefined) {
+                    mappedPrompts[pk] = true;
+                    slotsHtml += '<div class="slotBox" style="margin-bottom:10px; margin-left:15px; border-left:3px solid #cbd5e1; background:#f8fafc;">' +
+                                 '<h4 style="color:#334155; font-size:11px; text-transform:uppercase;">' + esc(sl.label) + ' <span class="badge" style="font-weight:normal;">' + esc(pk) + '</span></h4>' +
+                                 '<textarea class="textarea mono global-prompt-editor" data-pk="' + esc(pk) + '">' + esc(state.data.prompts[pk]) + '</textarea>' +
+                                 '</div>';
+                }
+            });
+
+            if (slotsHtml !== '') {
+                sectionsHtml += '<div style="margin-bottom:20px;">' +
+                                '<h3 style="font-size:14px; color:#0f172a; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:4px;">' +
+                                'Section : ' + esc(secTitle) + '</h3>' + slotsHtml + '</div>';
+            }
+        });
+
+        html += sectionsHtml;
+        html += '</div>';
+        host.innerHTML = html;
+
+        Array.prototype.forEach.call(document.querySelectorAll('.global-prompt-editor'), function(ta){
+            ta.addEventListener('input', function(){
+                state.data.prompts[this.getAttribute('data-pk')] = this.value;
+                setDirty(true, 'Prompt global modifié');
+            });
+        });
+        refreshEditorPreviewOnly();
+        return;
+    }
+
+    var key = state.activeSectionKey;
+    var def = getSectionDef(key), inst = getInstanceSection(key);
+    if(!def || !inst){ host.innerHTML = '<div class="empty-state">Aucune section active identifiée.</div>'; return; }
+
+    var slotsHtml = '';
+    (def.slots || []).forEach(function(sl, idx){
+      var promptText = state.data.prompts[sl.promptKey] || '';
+      var val = inst.slotOutputs[sl.slotKey] || '';
+
+      slotsHtml += '<div class="slotBox">' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+            '<h4 style="margin:0;">' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
+            '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
+          '</div>' +
+          '<div class="field"><div class="label" style="color:#0ea5e9;">Directive IA (Lecture Seule)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; cursor:not-allowed;" title="Modifiez dans la Bibliothèque des Prompts.">' + esc(promptText) + '</textarea></div>' +
+          '<div class="field"><div class="label">Brouillon ou Texte Généré</div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
+        '</div>';
+    });
+
+    host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue);">' +
+        '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
+        '<div class="label" style="margin-top:10px; margin-bottom:4px;">📎 Données à fournir à l\'IA pour cette section</div>' +
+        '<div class="chips" id="sourceChips"></div>' +
+        '<div class="field" style="margin-top:14px"><label class="chk-field"><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export Word</label></div>' +
+      '</div>' +
+      '<div class="card"><div class="cardTitle" style="display:flex; justify-content:space-between; align-items:center;"><span>Contenu de la section (Blocs de texte)</span></div>' + slotsHtml + '</div>' +
+      '<div class="card"><div class="cardTitle">Aperçu du rendu final combiné</div><div class="templatePreview" id="templatePreview"></div></div>';
+
+    bindEditor();
+    renderSourceChips();
+    refreshEditorPreviewOnly();
+
+    Array.prototype.forEach.call(document.querySelectorAll('.btnCopySlot'), function(btn){
+      btn.addEventListener('click', function(){
+        var sk = this.getAttribute('data-slotkey');
+        var textToCopy = inst.slotOutputs[sk] || '';
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            toast('Contenu copié dans le presse-papier !');
+        }, function(err) {
+            alert('Impossible de copier : ', err);
+        });
+      });
+    });
+  }
+
+  function renderSourceChips(){
+    var key = state.activeSectionKey;
+    var inst = getInstanceSection(key);
+    var host = $('sourceChips');
+    if(!host || !inst) return;
+    var out = '';
+    (state.data.sources || []).forEach(function(src){
+      var on = (inst.selectedSourceIds || []).indexOf(src.id) >= 0;
+      out += '<button class="chip' + (on ? ' on' : '') + '" data-id="' + esc(src.id) + '">' + esc(src.title || src.name || src.id) + '</button>';
+    });
+    if(!out){ out = '<span class="small muted">Aucun document chargé dans le panneau droit.</span>'; }
+    host.innerHTML = out;
+    Array.prototype.forEach.call(host.querySelectorAll('.chip'), function(btn){
+      btn.addEventListener('click', function(){
+        var id = this.getAttribute('data-id');
+        var arr = inst.selectedSourceIds || [];
+        var ix = arr.indexOf(id);
+        if(ix >= 0){ arr.splice(ix,1); } else { arr.push(id); }
+        inst.selectedSourceIds = arr;
+        setDirty(true, 'Sources associées modifiées');
+        renderSourceChips();
+      });
+    });
+  }
+
+  function bindEditor(){
+    var key = state.activeSectionKey;
+    var inst = getInstanceSection(key);
+    $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = (this.value === getSectionDef(key).title) ? '' : this.value; setDirty(true); renderSectionsList(); });
+    $('chkEnabled').addEventListener('change', function(){ inst.enabled = !!this.checked; setDirty(true); renderSectionsList(); });
+    Array.prototype.forEach.call(document.querySelectorAll('.slot-editor'), function(ta){
+      ta.addEventListener('input', function(){ inst.slotOutputs[this.getAttribute('data-slotkey')] = this.value; setDirty(true); refreshEditorPreviewOnly(); });
+    });
+  }
+
+  function refreshEditorPreviewOnly(){
+    var host = $('templatePreview');
+    if(host) {
+        if(state.activeSectionKey === '__PROMPTS__') host.innerHTML = '';
+        else host.innerHTML = renderSectionHtml(state.activeSectionKey);
+    }
+  }
+
+  function renderSourcesList(){
+    var host = $('sourcesList');
+    var out = '';
+    (state.data.sources || []).forEach(function(src){
+      out += '<div class="sourceItem">' +
+        '<div class="sourceName">' + esc(src.title || src.name || src.id) + '</div>' +
+        '<div class="sourceMeta">' + esc(src.type || 'Fichier') + (src.date ? ' · ' + esc(src.date) : '') + '</div>' +
+        '<div style="margin-top:8px"><button class="btn danger btnDelSrc" data-id="' + esc(src.id) + '">Suppr.</button></div>' +
+      '</div>';
+    });
+    if(!out){ out = '<div class="small muted">Aucun document importé (PDF/Notes brutes).</div>'; }
+    host.innerHTML = out;
+    Array.prototype.forEach.call(host.querySelectorAll('.btnDelSrc'), function(btn){
+      btn.addEventListener('click', function(){
+        var id = this.getAttribute('data-id');
+        state.data.sources = (state.data.sources || []).filter(function(s){ return s.id !== id; });
+        (state.data.reportInstance.sections || []).forEach(function(sec){ sec.selectedSourceIds = (sec.selectedSourceIds || []).filter(function(x){ return x !== id; }); });
+        setDirty(true, 'Source supprimée');
+        renderSourcesList();
+        renderEditor();
+      });
+    });
+  }
+
+  async function callAzureOpenAI(systemPrompt, userPrompt) {
+    if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
+      throw new Error("Configuration Azure OpenAI manquante.");
+    }
+
+    let baseUrl = azureConfig.endpoint;
+    if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+    const url = `${baseUrl}openai/deployments/${azureConfig.deployment}/chat/completions?api-version=${azureConfig.apiVersion}`;
+
+    const headers = {
+      "Content-Type": "application/json",
+      "api-key": azureConfig.apiKey
+    };
+
+    const sanitizedSystemPrompt = sanitizeForAI(systemPrompt);
+    const sanitizedUserPrompt = sanitizeForAI(userPrompt);
+
+    const body = JSON.stringify({
+      messages: [
+        { role: "system", content: sanitizedSystemPrompt },
+        { role: "user", content: sanitizedUserPrompt }
+      ],
+      temperature: 0.2, // Température basse pour les articles scientifiques
+      max_tokens: 2000,
+      top_p: 0.95
+    });
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: body
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `Erreur réseau ${response.status} : ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (data.choices && data.choices.length > 0) {
+      const generatedContent = data.choices[0].message.content;
+      return desanitizeFromAI(generatedContent);
+    } else {
+      throw new Error("Réponse vide d'Azure OpenAI");
+    }
+  }
+
+  async function generateAIForEmptySlots() {
+    try {
+      if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Base de données absente.');
+        return;
+      }
+
+      if (!azureConfig.endpoint || !azureConfig.apiKey || !azureConfig.deployment) {
+        showAzureModal();
+        return;
+      }
+
+      var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
+      if(!inst || !def) {
+        toast('Erreur système : Aucune section active.');
+        return;
+      }
+
+      let sourcesContent = "";
+      if (inst.selectedSourceIds && inst.selectedSourceIds.length > 0) {
+        sourcesContent = "DOCUMENTS DE RÉFÉRENCE / DONNÉES BRUTES :\n\n";
+        inst.selectedSourceIds.forEach(function(srcId) {
+          var srcObj = (state.data.sources || []).find(s => s.id === srcId);
+          if (srcObj) {
+            sourcesContent += `--- DÉBUT SOURCE : ${srcObj.title} ---\n${srcObj.content}\n--- FIN SOURCE ---\n\n`;
+          }
+        });
+      }
+
+      var emptySlots = (def.slots || []).filter(sl => !inst.slotOutputs[sl.slotKey] || inst.slotOutputs[sl.slotKey].trim() === '');
+
+      // Si on est en mode "Correction" ou "Amélioration", on traite aussi les slots non vides
+      var modeIA = state.data.caseContext.modeIA;
+      if (modeIA !== "Génération à partir de brouillon") {
+         emptySlots = def.slots || []; // On traite tout
+      }
+
+      if (emptySlots.length === 0) {
+        toast('Avis : Aucun emplacement à traiter.');
+        return;
+      }
+
+      $('btnGenerateAI').disabled = true;
+      $('btnGenerateAI').classList.add('generating');
+      $('btnGenerateAI').innerHTML = '✨ Traitement IA en cours...';
+
+      let updated = false;
+
+      for (let i = 0; i < emptySlots.length; i++) {
+        let sl = emptySlots[i];
+
+        let promptText = state.data.prompts[sl.promptKey] || '';
+        let contenuExistant = inst.slotOutputs[sl.slotKey] || '';
+
+        // Ajuster le prompt selon le mode IA
+        let directiveMode = "";
+        if (modeIA === "Correction orthographique / Grammaticale") {
+           directiveMode = "Votre tâche est de corriger les fautes d'orthographe, de grammaire et de typographie du texte suivant sans altérer le sens ni réécrire les phrases de manière significative. Si le texte est vide, générez du texte selon les directives. Voici le texte à corriger :\n\n" + contenuExistant;
+        } else if (modeIA === "Amélioration du style académique") {
+           directiveMode = "Votre tâche est de réécrire le texte suivant pour améliorer le style académique, la clarté et le flux narratif, en utilisant le style " + state.data.caseContext.styleAcademique + ". Conservez toutes les informations et données. Voici le texte à améliorer :\n\n" + contenuExistant;
+        } else if (modeIA === "Traduction (FR vers EN)") {
+           directiveMode = "Traduisez le texte suivant du français vers l'anglais académique rigoureux :\n\n" + contenuExistant;
+        } else if (modeIA === "Traduction (EN vers FR)") {
+           directiveMode = "Traduisez le texte suivant de l'anglais vers le français académique rigoureux :\n\n" + contenuExistant;
+        } else {
+           directiveMode = "Générez le contenu en suivant strictement la directive : " + promptText;
+           if (contenuExistant) {
+               directiveMode += "\n\nVoici le brouillon ou les notes préliminaires à utiliser : \n\n" + contenuExistant;
+           }
+        }
+
+        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
+
+        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
+        let userPrompt = directiveMode + "\n\nRevue ciblée : " + state.data.caseContext.revueCible + "\nStyle : " + state.data.caseContext.styleAcademique + "\n\n(Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li> si nécessaire. Aucune balise Markdown ```html).";
+
+        toast(`Traitement de : ${sl.label}...`);
+
+        try {
+          let aiResponse = await callAzureOpenAI(systemPrompt, userPrompt);
+          aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+          inst.slotOutputs[sl.slotKey] = aiResponse;
+          updated = true;
+          renderEditor();
+        } catch (apiError) {
+          alert(`Erreur IA pour "${sl.label}" : ` + apiError.message);
+          break;
+        }
+      }
+
+      if(updated) {
+        inst.status = 'review_needed';
+        setDirty(true, 'Traitement IA terminé');
+        renderEditor();
+        toast('Opération réussie : Texte généré/corrigé.');
+      }
+
+    } catch(err) {
+      alert('Erreur critique lors de l\'IA : ' + err.message);
+    } finally {
+      $('btnGenerateAI').disabled = false;
+      $('btnGenerateAI').classList.remove('generating');
+      $('btnGenerateAI').innerHTML = '✦ Exécuter IA';
+    }
+  }
+
+  function addSourceFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      state.data.sources = state.data.sources || [];
+      state.data.sources.push({
+        id: 'src_' + Date.now() + '_' + Math.floor(Math.random()*10000),
+        title: file.name,
+        type: file.type || 'Fichier',
+        date: nowDate(),
+        content: typeof e.target.result === 'string' ? e.target.result.slice(0,50000) : ''
+      });
+      setDirty(true, 'Source ajoutée');
+      renderSourcesList();
+      renderEditor();
+      toast('Nouveau document ajouté.');
+    };
+    if((file.type || '').indexOf('text') === 0 || /\.(txt|md|csv|json|html)$/i.test(file.name)){ reader.readAsText(file, 'utf-8'); }
+    else { reader.readAsDataURL(file); }
+  }
+
+  function exportWord(){
+    try {
+      if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Données absentes.');
+        return;
+      }
+      var parts = [];
+      (getReportDef().sections || []).forEach(function(sec){
+        var inst = getInstanceSection(sec.sectionKey);
+        if(!inst || !inst.enabled) return;
+
+        // Ne pas afficher de titre pour la page de titre elle-même pour un meilleur rendu Word
+        if (sec.sectionKey !== "sec.titre") {
+            parts.push('<h2 style="font-family:\'Times New Roman\',Times,serif;font-size:14pt;color:#000;margin-top:24pt;margin-bottom:12pt;font-weight:bold;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
+        }
+        parts.push('<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt;line-height:2.0;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
+      });
+
+      var cc = state.data.caseContext || {};
+      var titre = esc(cc.titreArticle || 'Manuscrit');
+      var auteursDisplay = cc.doubleAveugle ? '[ANONYMISÉ POUR ÉVALUATION EN DOUBLE AVEUGLE]' : esc(cc.auteurs || '');
+
+      var docHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titre + '</title>' +
+                    '<style>p { margin: 0 0 10pt 0; line-height: 2.0; font-family:"Times New Roman",Times,serif; font-size:12pt; } h3, h4 { font-family:"Times New Roman",Times,serif; margin-top: 16pt; margin-bottom: 8pt; font-weight:bold; } h4 { font-size:12pt; font-style:italic; }</style>' +
+                    '</head><body style="font-family:\'Times New Roman\',Times,serif;margin:40px;color:#000000;font-size:12pt;">' +
+                    parts.join('\n') + '</body></html>';
+
+      var blob = new Blob(['\ufeff', docHtml], {type:'application/msword;charset=utf-8'});
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = slugify(titre || 'Article') + '.doc';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function(){
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+      }, 1000);
+      toast('Manuscrit Word généré avec succès.');
+    } catch(err) {
+      alert('Alerte lors de l\'exportation : ' + err.message);
+    }
+  }
+
+  function saveJson(){
+    if (Object.keys(state.data.reportDefinitions).length === 0) {
+        toast('Erreur système : Base de données JSON absente.');
+        return;
+    }
+    var payload = clone(state.data); payload.exportedAt = new Date().toISOString();
+    var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json;charset=utf-8'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Article_Scientifique.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    setDirty(false); toast('Sauvegarde JSON confirmée.');
+  }
+
+  function loadJsonFile(file){
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e){
+      try{ state.data = normalizeData(JSON.parse(e.target.result)); state.activeSectionKey = (getReportDef().sections[0] || {}).sectionKey || null; renderAll(); setDirty(false); toast('Projet chargé avec succès.'); }
+      catch(err){ alert('Format JSON corrompu (' + err.message + ')'); }
+    };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  function resetActiveSection(){
+    var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
+    if(!inst || !def) return;
+    if(!confirm('Voulez-vous vraiment vider le contenu de cette section ?')) return;
+    inst.titleOverride = '';
+    inst.status = 'draft';
+    (def.slots || []).forEach(function(sl){ inst.slotOutputs[sl.slotKey] = ''; });
+    setDirty(true, 'Section vidée');
+    renderEditor();
+  }
+
+  function initResizers() {
+    var appRoot = $('appRoot');
+    var resLeft = $('resizerLeft');
+    var resRight = $('resizerRight');
+    var isDraggingLeft = false;
+    var isDraggingRight = false;
+
+    resLeft.addEventListener('mousedown', function(e) {
+      isDraggingLeft = true;
+      document.body.classList.add('resizing');
+      resLeft.classList.add('active');
+    });
+
+    resRight.addEventListener('mousedown', function(e) {
+      isDraggingRight = true;
+      document.body.classList.add('resizing');
+      resRight.classList.add('active');
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDraggingLeft && !isDraggingRight) return;
+      if (isDraggingLeft) { var newW = Math.max(200, Math.min(e.clientX, 800)); appRoot.style.setProperty('--side-w', newW + 'px'); }
+      if (isDraggingRight) { var newW = Math.max(200, Math.min(window.innerWidth - e.clientX, 1000)); appRoot.style.setProperty('--right-w', newW + 'px'); }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isDraggingLeft || isDraggingRight) {
+        isDraggingLeft = false;
+        isDraggingRight = false;
+        document.body.classList.remove('resizing');
+        resLeft.classList.remove('active');
+        resRight.classList.remove('active');
+      }
+    });
+  }
+
+  function renderAll(){ renderCasePanel(); renderSectionsList(); renderEditor(); renderSourcesList(); }
+
+  function showAzureModal(){
+    $('azureEndpoint').value = azureConfig.endpoint;
+    $('azureApiKey').value = azureConfig.apiKey;
+    $('azureDeployment').value = azureConfig.deployment;
+    $('azureApiVersion').value = azureConfig.apiVersion;
+    $('azureModal').style.display = 'flex';
+  }
+
+  function hideAzureModal(){
+    $('azureModal').style.display = 'none';
+  }
+
+  function saveAzureConfig(){
+    azureConfig.endpoint = $('azureEndpoint').value.trim();
+    azureConfig.apiKey = $('azureApiKey').value.trim();
+    azureConfig.deployment = $('azureDeployment').value.trim();
+    azureConfig.apiVersion = $('azureApiVersion').value.trim();
+
+    sessionStorage.setItem('azure_endpoint', azureConfig.endpoint);
+    sessionStorage.setItem('azure_api_key', azureConfig.apiKey);
+    sessionStorage.setItem('azure_deployment', azureConfig.deployment);
+    sessionStorage.setItem('azure_api_version', azureConfig.apiVersion);
+
+    hideAzureModal();
+    toast('Configuration IA sauvegardée.');
+  }
+
+  function bindGlobalEvents(){
+    $('btnSaveJson').addEventListener('click', saveJson);
+    $('btnConfigAzure').addEventListener('click', showAzureModal);
+    $('btnAzureCancel').addEventListener('click', hideAzureModal);
+    $('btnAzureSave').addEventListener('click', saveAzureConfig);
+    $('btnLoadJson').addEventListener('click', function(){ $('jsonFileInput').click(); });
+    $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
+    $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
+    $('btnResetSection').addEventListener('click', resetActiveSection);
+    $('btnExportWord').addEventListener('click', exportWord);
+    $('btnUploadSource').addEventListener('click', function(){ $('sourceFileInput').click(); });
+    $('sourceFileInput').addEventListener('change', function(){ addSourceFile(this.files[0]); this.value=''; });
+    initResizers();
+  }
+
+  bindGlobalEvents();
+  renderAll();
+})();
+</script>
+</body>
+</html>
