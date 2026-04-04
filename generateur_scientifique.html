@@ -178,6 +178,31 @@
   'use strict';
 
   var embeddedData = {
+    "version": "gc_as_v2",
+    "schemaVersion": "report-model-v2",
+    "exportedAt": new Date().toISOString(),
+    "meta": {
+      "label": "Générateur d'Articles Scientifiques (v1.0)"
+    },
+    "bindings": {
+      "activeReportIdPath": "reportInstance.reportId",
+      "sectionKeyField": "sectionKey",
+      "slotKeyField": "slotKey",
+      "promptKeyField": "promptKey",
+      "templateField": "templateHtml",
+      "slotOutputField": "slotOutputs"
+    },
+    "variableAliases": {},
+    "uiSchema": {},
+    "caseContext": {
+      "titreArticle": "",
+      "auteurs": "",
+      "motsCles": "",
+      "revue": "",
+      "styleAcademique": "APA",
+      "doubleAveugle": false
+    },
+    "factors": {},
     "reportDefinitions": {
       "article_scientifique": {
         "title": "Article Scientifique",
@@ -289,12 +314,27 @@
 
   function normalizeData(raw){
     var d = clone(raw || {});
+    if(!d.version) d.version = "gc_as_v2";
+    if(!d.schemaVersion) d.schemaVersion = "report-model-v2";
+    if(!d.meta) d.meta = { label: "Générateur d'Articles Scientifiques (v1.0)" };
+    if(!d.bindings) d.bindings = {
+      activeReportIdPath: "reportInstance.reportId",
+      sectionKeyField: "sectionKey",
+      slotKeyField: "slotKey",
+      promptKeyField: "promptKey",
+      templateField: "templateHtml",
+      slotOutputField: "slotOutputs"
+    };
+    if(!d.variableAliases) d.variableAliases = {};
+    if(!d.uiSchema) d.uiSchema = {};
+    if(!d.caseContext) d.caseContext = {
+      titreArticle: "", auteurs: "", motsCles: "", revue: "", styleAcademique: "APA", doubleAveugle: false
+    };
+    if(!d.factors) d.factors = {};
+    if(!d.prompts) d.prompts = {};
     if(!d.reportDefinitions) d.reportDefinitions = {};
     if(!d.reportInstance) d.reportInstance = { reportId:'', sections:[] };
-    if(!d.caseContext) d.caseContext = {};
-    if(!d.prompts) d.prompts = {};
     if(!d.sources) d.sources = [];
-    if(!d.uiSchema) d.uiSchema = {};
 
     if(typeof d.caseContext.doubleAveugle !== 'boolean') d.caseContext.doubleAveugle = false;
 
