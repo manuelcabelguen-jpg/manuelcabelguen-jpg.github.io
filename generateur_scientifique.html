@@ -127,6 +127,7 @@
           <button class="btn" id="btnExportTex" title="Exporter au format LaTeX (.tex)" style="background:#f8fafc; border-color:#cbd5e1; color:#334155;">📜 LaTeX</button>
       </div>
       <button class="btn" id="btnConfigAzure" style="background:#f0f9ff; border-color:#bae6fd; color:#0369a1; margin-left:8px;">☁️ Config IA</button>
+      <button class="btn primary" id="btnGenerateLocalPrompts">🧠 Générer Contexte Local</button>
       <button class="btn success" id="btnGenerateAI">✦ Exécuter IA (Slots Vides)</button>
       <button class="btn danger" id="btnResetSection">↺ Vider</button>
       <span class="badge" id="saveState">En attente</span>
@@ -422,8 +423,8 @@
     return null;
   }
   function getDisplayTitle(sectionKey){
-    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
-    return (inst && inst.titleOverride) ? inst.titleOverride : (def ? def.title : sectionKey);
+    var inst = getInstanceSection(sectionKey);
+    return (inst && inst.titleOverride) ? inst.titleOverride : sectionKey;
   }
   function getValueByPath(obj, path){
     var parts = String(path||'').split('.');
@@ -478,15 +479,10 @@
   }
 
   function renderSectionHtml(sectionKey){
-    var def = getSectionDef(sectionKey), inst = getInstanceSection(sectionKey);
-    if(!def || !inst) return '';
-    var htmlText = replaceVars(def.templateHtml || '');
-    (def.slots || []).forEach(function(sl){
-      var re = new RegExp('\\\\[SLOT:' + sl.slotKey.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\\\]', 'g');
-      var content = inst.slotOutputs && typeof inst.slotOutputs[sl.slotKey] === 'string' ? inst.slotOutputs[sl.slotKey] : '';
-      htmlText = htmlText.replace(re, content || '[' + sl.label + ']');
-    });
-    return htmlText;
+    var inst = getInstanceSection(sectionKey);
+    if(!inst) return '';
+    var content = inst.slotOutputs[sectionKey + '_content'] || '';
+    return replaceVars(content);
   }
 
   function buildSelect(id, currentValue, optionsList, cssClass) {
@@ -594,11 +590,12 @@
 
   function renderSectionsList(){
     var host = $('sectionsList');
-    var def = getReportDef();
-    if(!def.sections || def.sections.length === 0) {
-        host.innerHTML = '<div class="panelTitle">Plan de l\'article</div><div class="empty-state small">Données structurelles absentes.</div>'; return;
+    var dynSections = state.data.reportInstance.sections || [];
+
+    if(dynSections.length === 0) {
+        host.innerHTML = '<div class="panelTitle">Plan de l\'article</div><div class="empty-state small">Importez un article brut pour générer la structure.</div>'; return;
     }
-    if(!state.activeSectionKey && def.sections && def.sections.length){ state.activeSectionKey = def.sections[0].sectionKey; }
+    if(!state.activeSectionKey && dynSections.length){ state.activeSectionKey = dynSections[0].sectionKey; }
 
     var out = '<div class="panelTitle">Administration</div>';
     var activePrompt = state.activeSectionKey === '__PROMPTS__';
@@ -607,19 +604,18 @@
            '</div>';
 
     out += '<div class="panelTitle">Structure de l\'Article</div>';
-    (def.sections || []).forEach(function(s, i){
-      var inst = getInstanceSection(s.sectionKey) || {};
-      var active = state.activeSectionKey === s.sectionKey;
-      var title = getDisplayTitle(s.sectionKey);
+    dynSections.forEach(function(inst, i){
+      var active = state.activeSectionKey === inst.sectionKey;
+      var title = inst.titleOverride || inst.sectionKey;
 
-      var icon = s.icon || '📄';
+      var icon = '📄';
 
       var arrows = '<div class="move-arrows">' +
-                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="-1" title="Monter">▲</button>' +
-                   '<button class="btn-move" data-sk="' + esc(s.sectionKey) + '" data-dir="1" title="Descendre">▼</button>' +
+                   '<button class="btn-move" data-sk="' + esc(inst.sectionKey) + '" data-dir="-1" title="Monter">▲</button>' +
+                   '<button class="btn-move" data-sk="' + esc(inst.sectionKey) + '" data-dir="1" title="Descendre">▼</button>' +
                    '</div>';
 
-      out += '<div class="sectionItem' + (active ? ' active' : '') + '" data-key="' + esc(s.sectionKey) + '">' +
+      out += '<div class="sectionItem' + (active ? ' active' : '') + '" data-key="' + esc(inst.sectionKey) + '">' +
                '<div style="min-width:0;flex:1;display:flex;align-items:center;">' +
                  arrows +
                  '<span style="margin-right:8px; font-size:14px;">' + icon + '</span>' +
@@ -945,21 +941,16 @@
     throw new Error("Délai d'attente dépassé après plusieurs tentatives (Erreur 429).");
   }
 
-  async function generateAIForEmptySlots() {
+  async function processAIIntervention() {
     try {
-      if (Object.keys(state.data.reportDefinitions).length === 0) {
-        toast('Erreur système : Base de données absente.');
+      var key = state.activeSectionKey, inst = getInstanceSection(key);
+      if(!inst) {
+        toast('Erreur système : Aucune section active.');
         return;
       }
 
       if (!geminiConfig.apiKey) {
         showGeminiModal();
-        return;
-      }
-
-      var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
-      if(!inst || !def) {
-        toast('Erreur système : Aucune section active.');
         return;
       }
 
@@ -974,77 +965,51 @@
         });
       }
 
-      var emptySlots = (def.slots || []).filter(sl => !inst.slotOutputs[sl.slotKey] || inst.slotOutputs[sl.slotKey].trim() === '');
-
-      // Si on est en mode "Correction" ou "Amélioration", on traite aussi les slots non vides
-      var modeIA = state.data.caseContext.modeIA;
-      if (modeIA !== "Génération à partir de brouillon") {
-         emptySlots = def.slots || []; // On traite tout
-      }
-
-      if (emptySlots.length === 0) {
-        toast('Avis : Aucun emplacement à traiter.');
-        return;
-      }
+      var modeIA = state.data.caseContext.modeIA || "Génération à partir de brouillon";
 
       $('btnGenerateAI').disabled = true;
       $('btnGenerateAI').classList.add('generating');
       $('btnGenerateAI').innerHTML = '✨ Traitement IA en cours...';
 
-      let updated = false;
+      let slotKey = key + '_content';
+      let directiveLocale = inst.directive_locale || '';
+      let contenuExistant = inst.slotOutputs[slotKey] || '';
 
-      for (let i = 0; i < emptySlots.length; i++) {
-        let sl = emptySlots[i];
+      let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
+      let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
 
-        let promptText = state.data.prompts[sl.promptKey] || '';
-        let contenuExistant = inst.slotOutputs[sl.slotKey] || '';
+      // Construction structurée en Entonnoir Inversé
+      let userPrompt = `[MODE D'INTERVENTION] : ${modeIA}\n`;
+      userPrompt += `[DIRECTIVE LOCALE (NATURE DU TEXTE ATTENDU)] : ${directiveLocale}\n\n`;
 
-        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
-        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
-
-        // Construction structurée en Entonnoir
-        let userPrompt = `[MODE D'INTERVENTION] : ${modeIA || "Génération à partir de brouillon"}\n`;
-        userPrompt += `[NATURE DU TEXTE ATTENDU] : ${promptText}\n\n`;
-
-        if (state.data.caseContext.intentionGlobale) {
-            userPrompt += `[INTENTION DE MODIFICATION] :\n${state.data.caseContext.intentionGlobale}\n\n`;
-        }
-
-        userPrompt += `[PARAMÈTRES ACADÉMIQUES]\n- Revue ciblée : ${state.data.caseContext.revueCible}\n- Style : ${state.data.caseContext.styleAcademique}\n\n`;
-
-        if (contenuExistant) {
-            userPrompt += `[TEXTE SOURCE (À TRAITER)] :\n${contenuExistant}\n\n`;
-        }
-
-        userPrompt += `(INSTRUCTION DE SORTIE : Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li>, <strong> si nécessaire. N'utilisez aucune balise Markdown comme \`\`\`html. Si le contexte s'y prête, insérez l'intention. Sinon, respectez le droit de ne rien faire et contentez-vous de répondre au mode d'intervention.)`;
-
-        toast(`Traitement de : ${sl.label}...`);
-
-        try {
-          if (i > 0) {
-            toast(`Attente (anti-spam API)...`);
-            await sleep(3000); // Rate limiting between requests
-          }
-          let aiResponse = await callGeminiAPI(systemPrompt, userPrompt);
-          aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
-
-          // Sauvegarde de l'historique avant d'écraser
-          state['history_' + sl.slotKey] = inst.slotOutputs[sl.slotKey];
-
-          inst.slotOutputs[sl.slotKey] = aiResponse;
-          updated = true;
-          renderEditor();
-        } catch (apiError) {
-          alert(`Erreur IA pour "${sl.label}" : ` + apiError.message);
-          break;
-        }
+      if (state.data.caseContext.intentionGlobale) {
+          userPrompt += `[INTENTION DE MODIFICATION] :\n${state.data.caseContext.intentionGlobale}\n\n`;
       }
 
-      if(updated) {
+      userPrompt += `[PARAMÈTRES ACADÉMIQUES]\n- Revue ciblée : ${state.data.caseContext.revueCible}\n- Style : ${state.data.caseContext.styleAcademique}\n\n`;
+
+      if (contenuExistant) {
+          userPrompt += `[TEXTE SOURCE (À TRAITER)] :\n${contenuExistant}\n\n`;
+      }
+
+      userPrompt += `(INSTRUCTION DE SORTIE : Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li>, <strong> si nécessaire. N'utilisez aucune balise Markdown comme \`\`\`html. Si le contexte s'y prête, insérez l'intention. Sinon, respectez le droit de ne rien faire et contentez-vous de répondre au mode d'intervention.)`;
+
+      toast(`Traitement de la section en cours...`);
+
+      try {
+        let aiResponse = await callGeminiAPI(systemPrompt, userPrompt);
+        aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+
+        // Sauvegarde de l'historique avant d'écraser
+        state['history_' + slotKey] = inst.slotOutputs[slotKey];
+
+        inst.slotOutputs[slotKey] = aiResponse;
         inst.status = 'review_needed';
         setDirty(true, 'Traitement IA terminé');
         renderEditor();
         toast('Opération réussie : Texte généré/corrigé.');
+      } catch (apiError) {
+        alert(`Erreur IA : ` + apiError.message);
       }
 
     } catch(err) {
@@ -1124,13 +1089,10 @@
 
       if (format === 'word') {
           var parts = [];
-          (getReportDef().sections || []).forEach(function(sec){
-            var inst = getInstanceSection(sec.sectionKey);
+          (state.data.reportInstance.sections || []).forEach(function(inst){
             if(!inst || !inst.enabled) return;
-            if (sec.sectionKey !== "sec.titre") {
-                parts.push('<h2 style="font-family:\'Times New Roman\',Times,serif;font-size:14pt;color:#000;margin-top:24pt;margin-bottom:12pt;font-weight:bold;">' + esc(getDisplayTitle(sec.sectionKey)) + '</h2>');
-            }
-            parts.push('<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt;line-height:2.0;text-align:justify;color:#000;">' + renderSectionHtml(sec.sectionKey) + '</div>');
+            parts.push('<h2 style="font-family:\'Times New Roman\',Times,serif;font-size:14pt;color:#000;margin-top:24pt;margin-bottom:12pt;font-weight:bold;">' + esc(getDisplayTitle(inst.sectionKey)) + '</h2>');
+            parts.push('<div style="font-family:\'Times New Roman\',Times,serif;font-size:12pt;line-height:2.0;text-align:justify;color:#000;">' + renderSectionHtml(inst.sectionKey) + '</div>');
           });
           outputStr = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>' + titre + '</title>' +
                         '<style>p { margin: 0 0 10pt 0; line-height: 2.0; font-family:"Times New Roman",Times,serif; font-size:12pt; } h3, h4 { font-family:"Times New Roman",Times,serif; margin-top: 16pt; margin-bottom: 8pt; font-weight:bold; } h4 { font-size:12pt; font-style:italic; }</style>' +
@@ -1140,14 +1102,12 @@
           ext = '.doc';
       } else if (format === 'md') {
           outputStr += "# " + rawTitre + "\n\n**Auteurs:** " + auteursDisplay + "\n\n";
-          (getReportDef().sections || []).forEach(function(sec){
-            var inst = getInstanceSection(sec.sectionKey);
+          (state.data.reportInstance.sections || []).forEach(function(inst){
             if(!inst || !inst.enabled) return;
-            if (sec.sectionKey !== "sec.titre") {
-                outputStr += "\n## " + getDisplayTitle(sec.sectionKey) + "\n\n";
-            }
+            outputStr += "\n## " + getDisplayTitle(inst.sectionKey) + "\n\n";
+
             // Simple html to md conversion
-            var html = renderSectionHtml(sec.sectionKey);
+            var html = renderSectionHtml(inst.sectionKey);
             html = html.replace(/<h4>/g, '\n### ').replace(/<\/h4>/g, '\n\n');
             html = html.replace(/<p>/g, '').replace(/<\/p>/g, '\n\n');
             html = html.replace(/<strong>/g, '**').replace(/<\/strong>/g, '**');
@@ -1158,13 +1118,11 @@
           ext = '.md';
       } else if (format === 'tex') {
           outputStr += "\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\title{" + rawTitre + "}\n\\author{" + auteursDisplay + "}\n\\date{\\today}\n\\begin{document}\n\\maketitle\n\n";
-          (getReportDef().sections || []).forEach(function(sec){
-            var inst = getInstanceSection(sec.sectionKey);
+          (state.data.reportInstance.sections || []).forEach(function(inst){
             if(!inst || !inst.enabled) return;
-            if (sec.sectionKey !== "sec.titre") {
-                outputStr += "\n\\section{" + getDisplayTitle(sec.sectionKey) + "}\n\n";
-            }
-            var html = renderSectionHtml(sec.sectionKey);
+            outputStr += "\n\\section{" + getDisplayTitle(inst.sectionKey) + "}\n\n";
+
+            var html = renderSectionHtml(inst.sectionKey);
             html = html.replace(/<h4>/g, '\n\\subsection{').replace(/<\/h4>/g, '}\n\n');
             html = html.replace(/<p>/g, '').replace(/<\/p>/g, '\n\n');
             html = html.replace(/<strong>/g, '\\textbf{').replace(/<\/strong>/g, '}');
@@ -1259,50 +1217,55 @@
         rawText = rawText.slice(0, 50000); // Limite de sécurité
         toast('Analyse de l\'article brut par l\'IA en cours...');
 
-        var sysPrompt = "Tu es un extracteur de données académiques. Ton rôle est de lire un texte brut d'un article scientifique et de le découper dans un format JSON strict. Tu ne dois renvoyer QUE l'objet JSON, sans aucun autre texte autour, sans balises de code Markdown (```json).";
+        var sysPrompt = "Tu es un extracteur de données académiques. Analyse la hiérarchie du texte brut et retourne un format JSON strict structurant l'article.";
 
-        var userPrompt = "Voici l'article brut :\n\n" + rawText + "\n\nExtrais les informations et retourne CE JSON EXACTEMENT avec les clés suivantes remplies (si non trouvé, mets une chaîne vide). Les clés 'titreArticle', 'auteurs', 'motsCles' sont pour les métadonnées. Les clés de section sont 'abstract', 'contexte', 'problematique', 'participants', 'procedure', 'resultats_desc', 'resultats_principaux', 'interpretation', 'limites', 'conclusion'.\n" +
+        var userPrompt = "Voici l'article brut :\n\n" + rawText + "\n\nExtrais les informations et retourne EXCLUSIVEMENT la structure JSON suivante. Ne garde que les sections principales du texte.\n" +
                          '{\n' +
                          '  "metadata": {\n' +
-                         '    "titreArticle": "",\n' +
-                         '    "auteurs": "",\n' +
-                         '    "motsCles": ""\n' +
+                         '    "titre": "",\n' +
+                         '    "auteurs": ""\n' +
                          '  },\n' +
-                         '  "sections": {\n' +
-                         '    "abstract": "",\n' +
-                         '    "contexte": "",\n' +
-                         '    "problematique": "",\n' +
-                         '    "participants": "",\n' +
-                         '    "procedure": "",\n' +
-                         '    "resultats_desc": "",\n' +
-                         '    "resultats_principaux": "",\n' +
-                         '    "interpretation": "",\n' +
-                         '    "limites": "",\n' +
-                         '    "conclusion": ""\n' +
-                         '  }\n' +
+                         '  "sections": [\n' +
+                         '    {\n' +
+                         '      "id": "sec_1",\n' +
+                         '      "titre_detecte": "Titre de la section",\n' +
+                         '      "contenu_brut": "Contenu complet de la section"\n' +
+                         '    }\n' +
+                         '  ]\n' +
                          '}';
 
         var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 8192, true); // forceJson = true
 
         var parsed = JSON.parse(aiResponse);
 
+        // Vider l'état actuel et injecter les nouvelles données
+        state.data.reportInstance.sections = [];
+
         // Mettre à jour les métadonnées
         if (parsed.metadata) {
-            state.data.caseContext.titreArticle = parsed.metadata.titreArticle || state.data.caseContext.titreArticle;
+            state.data.caseContext.titreArticle = parsed.metadata.titre || state.data.caseContext.titreArticle;
             state.data.caseContext.auteurs = parsed.metadata.auteurs || state.data.caseContext.auteurs;
-            state.data.caseContext.motsCles = parsed.metadata.motsCles || state.data.caseContext.motsCles;
         }
 
-        // Mettre à jour les sections
-        if (parsed.sections) {
-            (state.data.reportInstance.sections || []).forEach(function(sec) {
-                var slotOutputs = sec.slotOutputs || {};
-                Object.keys(parsed.sections).forEach(function(slotKey) {
-                    if (slotOutputs[slotKey] !== undefined && parsed.sections[slotKey]) {
-                        slotOutputs[slotKey] = parsed.sections[slotKey];
-                    }
+        // Mettre à jour les sections dynamiques
+        if (parsed.sections && Array.isArray(parsed.sections)) {
+            parsed.sections.forEach(function(secObj, idx) {
+                var sectionKey = secObj.id || ('sec_dyn_' + idx);
+                var slotKey = sectionKey + '_content';
+                state.data.reportInstance.sections.push({
+                    sectionKey: sectionKey,
+                    titleOverride: secObj.titre_detecte || 'Section ' + (idx + 1),
+                    enabled: true,
+                    status: 'draft',
+                    selectedSourceIds: [],
+                    slotOutputs: { [slotKey]: secObj.contenu_brut || '' },
+                    directive_locale: '' // Champ pour le prompt contextuel local
                 });
             });
+            // Rendre la première section active par défaut
+            if (state.data.reportInstance.sections.length > 0) {
+                state.activeSectionKey = state.data.reportInstance.sections[0].sectionKey;
+            }
         }
 
         setDirty(true, 'Article brut importé');
@@ -1315,12 +1278,12 @@
   }
 
   function resetActiveSection(){
-    var key = state.activeSectionKey, inst = getInstanceSection(key), def = getSectionDef(key);
-    if(!inst || !def) return;
+    var key = state.activeSectionKey, inst = getInstanceSection(key);
+    if(!inst) return;
     if(!confirm('Voulez-vous vraiment vider le contenu de cette section ?')) return;
     inst.titleOverride = '';
     inst.status = 'draft';
-    (def.slots || []).forEach(function(sl){ inst.slotOutputs[sl.slotKey] = ''; });
+    inst.slotOutputs[key + '_content'] = '';
     setDirty(true, 'Section vidée');
     renderEditor();
   }
@@ -1439,6 +1402,60 @@
     }
   }
 
+  async function generateLocalPrompts() {
+    if (state.data.reportInstance.sections.length === 0) {
+      toast('Erreur : Aucun article brut structuré disponible.');
+      return;
+    }
+
+    if (!geminiConfig.apiKey) {
+      showGeminiModal();
+      return;
+    }
+
+    $('btnGenerateLocalPrompts').disabled = true;
+    $('btnGenerateLocalPrompts').innerHTML = 'Analyse en cours...';
+
+    try {
+        let updated = false;
+        var dynSections = state.data.reportInstance.sections || [];
+
+        for (let i = 0; i < dynSections.length; i++) {
+            let inst = dynSections[i];
+            let slotKey = inst.sectionKey + '_content';
+            let contenuBrut = inst.slotOutputs[slotKey] || '';
+
+            if (!contenuBrut.trim()) continue;
+
+            if (i > 0) {
+                toast(`Génération contexte local... (${i}/${dynSections.length})`);
+                await sleep(3000); // Eviter l'erreur 429
+            }
+
+            let sysPrompt = "Tu es un ingénieur de prompt pour la rédaction académique.";
+            let userPrompt = "Lis la section d'article scientifique ci-dessous. Rédige une directive précise d'UNE SEULE PHRASE (sans markdown ni json, texte brut uniquement) qui explique à une IA comment elle devra se comporter si elle doit réécrire ce passage précis (Quel est le ton ? Quel est le focus théorique ? Quel est le type d'analyse empirique utilisé ?).\n\n[SECTION À ANALYSER] :\n" + contenuBrut.slice(0, 5000);
+
+            // On ne force pas le JSON ici car on veut juste une phrase
+            let aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 200, false);
+
+            inst.directive_locale = aiResponse.trim();
+            updated = true;
+            renderEditor();
+        }
+
+        if(updated) {
+            setDirty(true, 'Contextes locaux générés');
+            toast('Génération des contextes locaux terminée !');
+        }
+
+    } catch (err) {
+        alert('Erreur lors de la génération du contexte local : ' + err.message);
+    } finally {
+        $('btnGenerateLocalPrompts').disabled = false;
+        $('btnGenerateLocalPrompts').innerHTML = '🧠 Générer Contexte Local';
+    }
+  }
+
   async function analyseCoherenceGlobale() {
     if (Object.keys(state.data.reportDefinitions).length === 0) {
         toast('Erreur : Base de données absente.');
@@ -1515,7 +1532,8 @@
     $('jsonFileInput').addEventListener('change', function(){ loadJsonFile(this.files[0]); this.value=''; });
     $('btnImportBrut').addEventListener('click', function(){ $('importBrutInput').click(); });
     $('importBrutInput').addEventListener('change', function(){ importArticleBrut(this.files[0]); this.value=''; });
-    $('btnGenerateAI').addEventListener('click', generateAIForEmptySlots);
+    $('btnGenerateLocalPrompts').addEventListener('click', generateLocalPrompts);
+    $('btnGenerateAI').addEventListener('click', processAIIntervention);
     $('btnResetSection').addEventListener('click', resetActiveSection);
     $('btnExportWord').addEventListener('click', function(){ exportFormat('word'); });
     $('btnExportMD').addEventListener('click', function(){ exportFormat('md'); });
