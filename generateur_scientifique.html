@@ -31,6 +31,8 @@
     .btn.primary:hover{background:var(--blue2);border-color:var(--blue2)}
     .btn.success{background:#f0fdf4; color:var(--green);border-color:#bbf7d0}
     .btn.success:hover{background:#dcfce7;}
+    .btn.warn{background:#fffbeb; color:#b45309;border-color:#fde68a}
+    .btn.warn:hover{background:#fef3c7;}
     .btn.danger{background:#fef2f2; color:var(--danger);border-color:#fecaca}
     .btn.danger:hover{background:#fee2e2;}
     .panel{padding:16px;border-bottom:1px solid var(--border);background:#fff}
@@ -561,6 +563,26 @@
     bind('inpBibtex','bibtex');
     bind('chkAveugle','doubleAveugle', true);
 
+    var inpMode = $('inpMode');
+    if(inpMode) {
+        inpMode.addEventListener('change', function() {
+            var btnGen = $('btnGenerateAI');
+            if(!btnGen) return;
+            if (this.value === "Génération à partir de brouillon" || !this.value) {
+                btnGen.innerHTML = "✦ Exécuter IA (Slots Vides)";
+                btnGen.classList.remove('warn');
+                btnGen.classList.add('success');
+            } else {
+                btnGen.innerHTML = "✦ Exécuter IA (Tout retraiter)";
+                btnGen.classList.remove('success');
+                btnGen.classList.add('warn');
+            }
+        });
+        // Trigger une fois au chargement pour s'assurer que le bouton a le bon état
+        var event = new Event('change');
+        inpMode.dispatchEvent(event);
+    }
+
     var btnCoh = $('btnAnalyseCoh');
     if (btnCoh) {
         // Remove existing listener to prevent duplicates if rendered multiple times
@@ -977,28 +999,24 @@
         let promptText = state.data.prompts[sl.promptKey] || '';
         let contenuExistant = inst.slotOutputs[sl.slotKey] || '';
 
-        // Ajuster le prompt selon le mode IA
-        let directiveMode = "";
-        if (modeIA === "Correction orthographique / Grammaticale") {
-           directiveMode = "Votre tâche est de corriger les fautes d'orthographe, de grammaire et de typographie du texte suivant sans altérer le sens ni réécrire les phrases de manière significative. Si le texte est vide, générez du texte selon les directives. Voici le texte à corriger :\n\n" + contenuExistant;
-        } else if (modeIA === "Amélioration du style académique") {
-           directiveMode = "Votre tâche est de réécrire le texte suivant pour améliorer le style académique, la clarté et le flux narratif, en utilisant le style " + state.data.caseContext.styleAcademique + ". Conservez toutes les informations et données. Voici le texte à améliorer :\n\n" + contenuExistant;
-        } else if (modeIA === "Traduction (FR vers EN)") {
-           directiveMode = "Traduisez le texte suivant du français vers l'anglais académique rigoureux :\n\n" + contenuExistant;
-        } else if (modeIA === "Traduction (EN vers FR)") {
-           directiveMode = "Traduisez le texte suivant de l'anglais vers le français académique rigoureux :\n\n" + contenuExistant;
-        } else {
-           directiveMode = "Générez le contenu en suivant strictement la directive : " + promptText;
-           if (contenuExistant) {
-               directiveMode += "\n\nVoici le brouillon ou les notes préliminaires à utiliser : \n\n" + contenuExistant;
-           }
+        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
+        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
+
+        // Construction structurée en Entonnoir
+        let userPrompt = `[MODE D'INTERVENTION] : ${modeIA || "Génération à partir de brouillon"}\n`;
+        userPrompt += `[NATURE DU TEXTE ATTENDU] : ${promptText}\n\n`;
+
+        if (state.data.caseContext.intentionGlobale) {
+            userPrompt += `[INTENTION DE MODIFICATION] :\n${state.data.caseContext.intentionGlobale}\n\n`;
         }
 
-        let gouvernanceGlobal = state.data.prompts['global.gouvernance'] || "Vous êtes un assistant IA spécialisé dans la rédaction scientifique.";
-        let intentionStr = state.data.caseContext.intentionGlobale ? "\n\n[INTENTION DE MODIFICATION GLOBALE A APPLIQUER (si pertinent)] : " + state.data.caseContext.intentionGlobale : "";
+        userPrompt += `[PARAMÈTRES ACADÉMIQUES]\n- Revue ciblée : ${state.data.caseContext.revueCible}\n- Style : ${state.data.caseContext.styleAcademique}\n\n`;
 
-        let systemPrompt = gouvernanceGlobal + "\n\n" + sourcesContent;
-        let userPrompt = directiveMode + intentionStr + "\n\nRevue ciblée : " + state.data.caseContext.revueCible + "\nStyle : " + state.data.caseContext.styleAcademique + "\n\n(Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li>, <strong> si nécessaire. Aucune balise Markdown ```html).";
+        if (contenuExistant) {
+            userPrompt += `[TEXTE SOURCE (À TRAITER)] :\n${contenuExistant}\n\n`;
+        }
+
+        userPrompt += `(INSTRUCTION DE SORTIE : Rédigez la réponse en format HTML simple, utilisez <p>, <ul>, <li>, <strong> si nécessaire. N'utilisez aucune balise Markdown comme \`\`\`html. Si le contexte s'y prête, insérez l'intention. Sinon, respectez le droit de ne rien faire et contentez-vous de répondre au mode d'intervention.)`;
 
         toast(`Traitement de : ${sl.label}...`);
 
