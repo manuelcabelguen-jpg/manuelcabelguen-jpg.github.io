@@ -389,36 +389,26 @@
 
     if(typeof d.caseContext.doubleAveugle !== 'boolean') d.caseContext.doubleAveugle = false;
 
-    var reportId = d.reportInstance.reportId || Object.keys(d.reportDefinitions)[0] || '';
+    var reportId = d.reportInstance.reportId || 'article_scientifique';
     d.reportInstance.reportId = reportId;
-    var def = d.reportDefinitions[reportId] || { sections:[] };
-    var instMap = {};
-    (d.reportInstance.sections || []).forEach(function(s){ instMap[s.sectionKey] = s; });
 
-    d.reportInstance.sections = (def.sections || []).map(function(defSec){
-      var ex = instMap[defSec.sectionKey] || {};
-      var slotOutputs = ex.slotOutputs || {};
-      (defSec.slots || []).forEach(function(sl){ if(typeof slotOutputs[sl.slotKey] !== 'string'){ slotOutputs[sl.slotKey] = ''; } });
+    // We preserve the dynamically generated sections instead of forcing them to match a static definition
+    d.reportInstance.sections = (d.reportInstance.sections || []).map(function(ex){
       return {
-        sectionKey: defSec.sectionKey,
+        sectionKey: ex.sectionKey || 'sec_' + Math.random().toString(36).substr(2, 9),
         titleOverride: typeof ex.titleOverride === 'string' ? ex.titleOverride : '',
         enabled: typeof ex.enabled === 'boolean' ? ex.enabled : true,
         status: ex.status || 'draft',
         selectedSourceIds: Array.isArray(ex.selectedSourceIds) ? ex.selectedSourceIds : [],
-        slotOutputs: slotOutputs
+        slotOutputs: ex.slotOutputs || {},
+        directive_locale: typeof ex.directive_locale === 'string' ? ex.directive_locale : ''
       };
     });
     return d;
   }
 
-  function getReportDef(){ return state.data.reportDefinitions[state.data.reportInstance.reportId] || { sections:[] }; }
   function getInstanceSection(sectionKey){
     var list = state.data.reportInstance.sections || [];
-    for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
-    return null;
-  }
-  function getSectionDef(sectionKey){
-    var list = getReportDef().sections || [];
     for(var i=0;i<list.length;i++){ if(list[i].sectionKey === sectionKey) return list[i]; }
     return null;
   }
@@ -498,9 +488,6 @@
 
   function renderCasePanel(){
     var host = $('casePanel');
-    if (Object.keys(state.data.reportDefinitions).length === 0) {
-        host.innerHTML = '<div class="empty-state small">Système en attente des variables...</div>'; return;
-    }
 
     var cc = state.data.caseContext || {};
     var schema = state.data.uiSchema || {};
@@ -653,21 +640,13 @@
           var sk = this.getAttribute('data-sk');
           var dir = parseInt(this.getAttribute('data-dir'));
 
-          var defSecs = getReportDef().sections;
-          var idx = defSecs.findIndex(function(s) { return s.sectionKey === sk; });
+          var dynSecs = state.data.reportInstance.sections || [];
+          var idx = dynSecs.findIndex(function(s) { return s.sectionKey === sk; });
 
-          if (idx !== -1 && idx + dir >= 0 && idx + dir < defSecs.length) {
-              var temp = defSecs[idx];
-              defSecs[idx] = defSecs[idx + dir];
-              defSecs[idx + dir] = temp;
-
-              var instSecs = state.data.reportInstance.sections;
-              var newInstSecs = [];
-              defSecs.forEach(function(ds) {
-                  var isec = instSecs.find(function(is) { return is.sectionKey === ds.sectionKey; });
-                  if(isec) newInstSecs.push(isec);
-              });
-              state.data.reportInstance.sections = newInstSecs;
+          if (idx !== -1 && idx + dir >= 0 && idx + dir < dynSecs.length) {
+              var temp = dynSecs[idx];
+              dynSecs[idx] = dynSecs[idx + dir];
+              dynSecs[idx + dir] = temp;
 
               setDirty(true, 'Ordre des sections modifié');
               renderSectionsList();
@@ -734,31 +713,29 @@
     }
 
     var key = state.activeSectionKey;
-    var def = getSectionDef(key), inst = getInstanceSection(key);
-    if(!def || !inst){ host.innerHTML = '<div class="empty-state">Aucune section active identifiée.</div>'; return; }
+    var inst = getInstanceSection(key);
+    if(!inst){ host.innerHTML = '<div class="empty-state">Aucune section active identifiée. Veuillez importer un article brut.</div>'; return; }
 
-    var slotsHtml = '';
-    (def.slots || []).forEach(function(sl, idx){
-      var promptText = state.data.prompts[sl.promptKey] || '';
-      var val = inst.slotOutputs[sl.slotKey] || '';
-      var tokens = val ? Math.ceil(val.split(/\s+/).length * 1.3) : 0;
+    var slotKey = key + '_content';
+    var val = inst.slotOutputs[slotKey] || '';
+    var directive_locale = inst.directive_locale || '';
+    var tokens = val ? Math.ceil(val.split(/\s+/).length * 1.3) : 0;
 
-      slotsHtml += '<div class="slotBox" id="box_' + esc(sl.slotKey) + '">' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
-            '<h4 style="margin:0;">' + esc(sl.label || sl.slotKey) + ' <span class="badge">' + esc(sl.slotKey) + '</span></h4>' +
-            '<div style="display:flex; gap:6px;">' +
-              '<button class="btn btnFullscreenSlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Plein Écran">⛶ Plein Écran</button>' +
-              '<button class="btn btnUndoSlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Restaurer la dernière version de l\'IA">↩️ Annuler (IA)</button>' +
-              '<button class="btn btnCopySlot" data-slotkey="' + esc(sl.slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
-            '</div>' +
+    var slotsHtml = '<div class="slotBox" id="box_' + esc(slotKey) + '">' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">' +
+          '<h4 style="margin:0;">Contenu Brut / Éditeur <span class="badge">' + esc(slotKey) + '</span></h4>' +
+          '<div style="display:flex; gap:6px;">' +
+            '<button class="btn btnFullscreenSlot" data-slotkey="' + esc(slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Plein Écran">⛶ Plein Écran</button>' +
+            '<button class="btn btnUndoSlot" data-slotkey="' + esc(slotKey) + '" style="padding:4px 8px; font-size:10px; background:#f1f5f9; color:#475569;" title="Restaurer la dernière version de l\'IA">↩️ Annuler (IA)</button>' +
+            '<button class="btn btnCopySlot" data-slotkey="' + esc(slotKey) + '" style="padding:4px 8px; font-size:10px;" title="Copier ce texte">📋 Copier</button>' +
           '</div>' +
-          '<div class="field"><div class="label" style="color:#0ea5e9;">Directive IA (Lecture Seule)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; cursor:not-allowed;" title="Modifiez dans la Bibliothèque des Prompts.">' + esc(promptText) + '</textarea></div>' +
-          '<div class="field"><div class="label" style="display:flex; justify-content:space-between;"><span>Brouillon ou Texte Généré</span><span style="font-size:10px; color:#94a3b8; font-weight:normal;">~' + tokens + ' tokens (est.)</span></div><textarea class="textarea slot-editor" id="ta_' + esc(sl.slotKey) + '" data-slotkey="' + esc(sl.slotKey) + '">' + esc(val) + '</textarea></div>' +
-        '</div>';
-    });
+        '</div>' +
+        (directive_locale ? '<div class="field"><div class="label" style="color:#0ea5e9;">Directive Locale (Contexte Généré)</div><textarea class="textarea mono" readonly style="background:#f1f5f9; border-color:#cbd5e1; min-height:40px; cursor:not-allowed;" title="Généré automatiquement par l\'IA">' + esc(directive_locale) + '</textarea></div>' : '') +
+        '<div class="field"><div class="label" style="display:flex; justify-content:space-between;"><span>Texte Source de la Section</span><span style="font-size:10px; color:#94a3b8; font-weight:normal;">~' + tokens + ' tokens (est.)</span></div><textarea class="textarea slot-editor" id="ta_' + esc(slotKey) + '" data-slotkey="' + esc(slotKey) + '" style="min-height:300px;">' + esc(val) + '</textarea></div>' +
+      '</div>';
 
     host.innerHTML = '<div class="card" style="border-left:4px solid var(--blue);">' +
-        '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(getDisplayTitle(key)) + '"></div>' +
+        '<div class="field"><div class="label">Titre de la section</div><input class="titleInput" id="inpSectionTitle" value="' + esc(inst.titleOverride || key) + '"></div>' +
         '<div class="label" style="margin-top:10px; margin-bottom:4px;">📎 Données à fournir à l\'IA pour cette section</div>' +
         '<div class="chips" id="sourceChips"></div>' +
         '<div class="field" style="margin-top:14px"><label class="chk-field"><input type="checkbox" id="chkEnabled" ' + (inst.enabled ? 'checked' : '') + '> Inclure cette section à l’export Word</label></div>' +
@@ -843,7 +820,7 @@
   function bindEditor(){
     var key = state.activeSectionKey;
     var inst = getInstanceSection(key);
-    $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = (this.value === getSectionDef(key).title) ? '' : this.value; setDirty(true); renderSectionsList(); });
+    $('inpSectionTitle').addEventListener('input', function(){ inst.titleOverride = this.value; setDirty(true); renderSectionsList(); });
     $('chkEnabled').addEventListener('change', function(){ inst.enabled = !!this.checked; setDirty(true); renderSectionsList(); });
     Array.prototype.forEach.call(document.querySelectorAll('.slot-editor'), function(ta){
       ta.addEventListener('input', function(){ inst.slotOutputs[this.getAttribute('data-slotkey')] = this.value; setDirty(true); refreshEditorPreviewOnly(); });
@@ -1073,10 +1050,6 @@
 
   function exportFormat(format) {
     try {
-      if (Object.keys(state.data.reportDefinitions).length === 0) {
-        toast('Erreur système : Données absentes.');
-        return;
-      }
 
       var cc = state.data.caseContext || {};
       var titre = esc(cc.titreArticle || 'Manuscrit');
@@ -1157,10 +1130,6 @@
   }
 
   function saveJson(){
-    if (Object.keys(state.data.reportDefinitions).length === 0) {
-        toast('Erreur système : Base de données JSON absente.');
-        return;
-    }
     var payload = clone(state.data); payload.exportedAt = new Date().toISOString();
     var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json;charset=utf-8'});
     var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Article_Scientifique.json';
@@ -1172,8 +1141,16 @@
     if(!file) return;
     var reader = new FileReader();
     reader.onload = function(e){
-      try{ state.data = normalizeData(JSON.parse(e.target.result)); state.activeSectionKey = (getReportDef().sections[0] || {}).sectionKey || null; renderAll(); setDirty(false); toast('Projet chargé avec succès.'); }
-      catch(err){ alert('Format JSON corrompu (' + err.message + ')'); }
+      try{
+        state.data = normalizeData(JSON.parse(e.target.result));
+        var sections = state.data.reportInstance.sections || [];
+        state.activeSectionKey = sections.length > 0 ? sections[0].sectionKey : null;
+        renderAll();
+        setDirty(false);
+        toast('Projet chargé avec succès.');
+      } catch(err){
+        alert('Format JSON corrompu (' + err.message + ')');
+      }
     };
     reader.readAsText(file, 'utf-8');
   }
@@ -1457,10 +1434,6 @@
   }
 
   async function analyseCoherenceGlobale() {
-    if (Object.keys(state.data.reportDefinitions).length === 0) {
-        toast('Erreur : Base de données absente.');
-        return;
-    }
 
     if (!geminiConfig.apiKey) {
         showGeminiModal();
@@ -1479,17 +1452,12 @@
     $('btnCohRun').disabled = true;
 
     try {
-        var def = getReportDef();
         var articleComplet = "";
 
-        (def.sections || []).forEach(function(sec) {
-            var inst = getInstanceSection(sec.sectionKey);
+        (state.data.reportInstance.sections || []).forEach(function(inst) {
             if(inst && inst.enabled) {
-                articleComplet += "--- SECTION : " + getDisplayTitle(sec.sectionKey) + " ---\n";
-                (sec.slots || []).forEach(function(sl) {
-                    articleComplet += "SOUS-SECTION [" + sl.label + "] :\n";
-                    articleComplet += (inst.slotOutputs[sl.slotKey] || "(vide)") + "\n\n";
-                });
+                articleComplet += "--- SECTION : " + getDisplayTitle(inst.sectionKey) + " ---\n";
+                articleComplet += (inst.slotOutputs[inst.sectionKey + '_content'] || "(vide)") + "\n\n";
             }
         });
 
