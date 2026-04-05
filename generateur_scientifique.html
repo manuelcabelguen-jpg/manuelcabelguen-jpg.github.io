@@ -864,7 +864,9 @@
     });
   }
 
-  async function callGeminiAPI(systemPrompt, userPrompt) {
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3) {
     if (!geminiConfig.apiKey) {
       throw new Error("Configuration Gemini manquante.");
     }
@@ -996,6 +998,10 @@
         toast(`Traitement de : ${sl.label}...`);
 
         try {
+          if (i > 0) {
+            toast(`Attente (anti-spam API)...`);
+            await sleep(3000); // Rate limiting between requests
+          }
           let aiResponse = await callGeminiAPI(systemPrompt, userPrompt);
           aiResponse = aiResponse.replace(/^```html\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
 
