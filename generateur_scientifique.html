@@ -866,7 +866,7 @@
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3) {
+  async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3, maxTokens = 2000) {
     if (!geminiConfig.apiKey) {
       throw new Error("Configuration Gemini manquante.");
     }
@@ -894,7 +894,7 @@
       generationConfig: {
         temperature: 0.2,
         topP: 0.95,
-        maxOutputTokens: 2000
+        maxOutputTokens: maxTokens
       }
     });
 
@@ -1259,11 +1259,17 @@
                          '  }\n' +
                          '}';
 
-        var aiResponse = await callGeminiAPI(sysPrompt, userPrompt);
-        // Nettoyage au cas où Gemini renvoie quand même des balises
-        aiResponse = aiResponse.replace(/^```json\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+        var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 8192); // Max tokens pour un article complet
 
-        var parsed = JSON.parse(aiResponse);
+        // Extraction robuste du JSON au cas où il y a du blabla avant ou après
+        let jsonStr = aiResponse;
+        const startIndex = aiResponse.indexOf('{');
+        const endIndex = aiResponse.lastIndexOf('}');
+        if (startIndex !== -1 && endIndex !== -1) {
+            jsonStr = aiResponse.substring(startIndex, endIndex + 1);
+        }
+
+        var parsed = JSON.parse(jsonStr);
 
         // Mettre à jour les métadonnées
         if (parsed.metadata) {
@@ -1396,10 +1402,16 @@
 
       var userPrompt = sourcesContent + "\n\nVoici le dictionnaire de prompts actuel :\n" + currentPromptsStr + "\n\nRenvoie uniquement le JSON modifié.";
 
-      var aiResponse = await callGeminiAPI(sysPrompt, userPrompt);
-      aiResponse = aiResponse.replace(/^```json\n?/i, '').replace(/^```\n?/i, '').replace(/```$/i, '').trim();
+      var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 4000);
 
-      var newPrompts = JSON.parse(aiResponse);
+      let jsonStr = aiResponse;
+      const startIndex = aiResponse.indexOf('{');
+      const endIndex = aiResponse.lastIndexOf('}');
+      if (startIndex !== -1 && endIndex !== -1) {
+          jsonStr = aiResponse.substring(startIndex, endIndex + 1);
+      }
+
+      var newPrompts = JSON.parse(jsonStr);
 
       // On conserve le prompt global de gouvernance tel quel pour la sécurité, on ne remplace que les gen.*
       Object.keys(newPrompts).forEach(function(k) {
