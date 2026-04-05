@@ -866,56 +866,61 @@
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3, maxTokens = 2000) {
-    if (!geminiConfig.apiKey) {
-      throw new Error("Configuration Gemini manquante.");
-    }
+  async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3, maxTokens = 8192, forceJson = false) {
+    if (!geminiConfig.apiKey) throw new Error("Configuration Gemini manquante.");
 
     const modelStr = geminiConfig.model || 'gemini-2.0-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelStr}:generateContent?key=${geminiConfig.apiKey}`;
 
-    const headers = {
-      "Content-Type": "application/json"
+    const headers = { "Content-Type": "application/json" };
+
+    const generationConfig = {
+      temperature: 0.2,
+      topP: 0.95,
+      maxOutputTokens: maxTokens
     };
 
-    const sanitizedSystemPrompt = sanitizeForAI(systemPrompt);
-    const sanitizedUserPrompt = sanitizeForAI(userPrompt);
+    // Activation de la sortie JSON native si demandé
+    if (forceJson) {
+      generationConfig.responseMimeType = "application/json";
+    }
 
     const body = JSON.stringify({
-      system_instruction: {
-        parts: [{ text: sanitizedSystemPrompt }]
-      },
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: sanitizedUserPrompt }]
+      system_instruction: { parts: [{ text: sanitizeForAI(systemPrompt) }] },
+      contents: [{ role: "user", parts: [{ text: sanitizeForAI(userPrompt) }] }],
+      generationConfig: generationConfig
+    });
+
+    let attempt = 0;
+    let delay = 2000; // Délai initial de 2 secondes
+
+    while (attempt < maxRetries) {
+      const response = await fetch(url, { method: "POST", headers: headers, body: body });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts.length > 0) {
+          return desanitizeFromAI(data.candidates[0].content.parts[0].text);
+        } else {
+          throw new Error("Réponse vide de Gemini");
         }
-      ],
-      generationConfig: {
-        temperature: 0.2,
-        topP: 0.95,
-        maxOutputTokens: maxTokens
       }
-    });
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: body
-    });
+      // Gestion de l'erreur 429 (Too Many Requests)
+      if (response.status === 429) {
+        attempt++;
+        console.warn(`Quota atteint. Nouvel essai dans ${delay/1000}s... (Essai ${attempt}/${maxRetries})`);
+        toast(`Quota atteint. Attente de ${delay/1000}s...`);
+        await sleep(delay);
+        delay *= 2; // Exponential backoff (2s, 4s, 8s)
+        continue;
+      }
 
-    if (!response.ok) {
+      // Autres erreurs
       const err = await response.json();
-      throw new Error(err.error?.message || `Erreur réseau ${response.status} : ${response.statusText}`);
+      throw new Error(err.error?.message || `Erreur réseau ${response.status}`);
     }
-
-    const data = await response.json();
-    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content.parts.length > 0) {
-      const generatedContent = data.candidates[0].content.parts[0].text;
-      return desanitizeFromAI(generatedContent);
-    } else {
-      throw new Error("Réponse vide de Gemini");
-    }
+    throw new Error("Délai d'attente dépassé après plusieurs tentatives (Erreur 429).");
   }
 
   async function generateAIForEmptySlots() {
@@ -1259,17 +1264,9 @@
                          '  }\n' +
                          '}';
 
-        var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 8192); // Max tokens pour un article complet
+        var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 8192, true); // forceJson = true
 
-        // Extraction robuste du JSON au cas où il y a du blabla avant ou après
-        let jsonStr = aiResponse;
-        const startIndex = aiResponse.indexOf('{');
-        const endIndex = aiResponse.lastIndexOf('}');
-        if (startIndex !== -1 && endIndex !== -1) {
-            jsonStr = aiResponse.substring(startIndex, endIndex + 1);
-        }
-
-        var parsed = JSON.parse(jsonStr);
+        var parsed = JSON.parse(aiResponse);
 
         // Mettre à jour les métadonnées
         if (parsed.metadata) {
@@ -1402,16 +1399,8 @@
 
       var userPrompt = sourcesContent + "\n\nVoici le dictionnaire de prompts actuel :\n" + currentPromptsStr + "\n\nRenvoie uniquement le JSON modifié.";
 
-      var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 4000);
-
-      let jsonStr = aiResponse;
-      const startIndex = aiResponse.indexOf('{');
-      const endIndex = aiResponse.lastIndexOf('}');
-      if (startIndex !== -1 && endIndex !== -1) {
-          jsonStr = aiResponse.substring(startIndex, endIndex + 1);
-      }
-
-      var newPrompts = JSON.parse(jsonStr);
+      var aiResponse = await callGeminiAPI(sysPrompt, userPrompt, 3, 4000, true);
+      var newPrompts = JSON.parse(aiResponse);
 
       // On conserve le prompt global de gouvernance tel quel pour la sécurité, on ne remplace que les gen.*
       Object.keys(newPrompts).forEach(function(k) {
