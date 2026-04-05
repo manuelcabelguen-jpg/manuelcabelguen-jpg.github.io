@@ -187,8 +187,8 @@
     </div>
 
     <div class="field">
-      <div class="label">Modèle (ex: gemini-1.5-flash, gemini-1.5-pro)</div>
-      <input type="text" id="geminiModel" class="input" placeholder="gemini-1.5-flash" value="gemini-1.5-flash" />
+      <div class="label">Modèle (ex: gemini-2.5-flash, gemini-2.0-flash-exp)</div>
+      <input type="text" id="geminiModel" class="input" placeholder="gemini-2.5-flash" value="gemini-2.5-flash" />
     </div>
 
     <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
@@ -326,7 +326,7 @@
 
   var geminiConfig = {
       apiKey: sessionStorage.getItem('gemini_api_key') || '',
-      model: sessionStorage.getItem('gemini_model') || 'gemini-1.5-flash'
+      model: sessionStorage.getItem('gemini_model') || 'gemini-2.5-flash'
   };
 
   function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
@@ -891,7 +891,7 @@
   async function callGeminiAPI(systemPrompt, userPrompt, maxRetries = 3, maxTokens = 8192, forceJson = false) {
     if (!geminiConfig.apiKey) throw new Error("Configuration Gemini manquante.");
 
-    const modelStr = geminiConfig.model || 'gemini-1.5-flash';
+    const modelStr = geminiConfig.model || 'gemini-2.5-flash';
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelStr}:generateContent?key=${geminiConfig.apiKey}`;
 
     const headers = { "Content-Type": "application/json" };
