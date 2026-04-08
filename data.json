@@ -1,0 +1,552 @@
+{
+  "version": "gc_as_v2",
+  "schemaVersion": "report-model-v2",
+  "exportedAt": "2026-03-12T10:45:00-04:00",
+  "meta": {
+    "label": "Rapport MPCI – Délinquance sexuelle (v2.21.0 - Synchro UI)"
+  },
+  "bindings": {
+    "activeReportIdPath": "reportInstance.reportId",
+    "sectionKeyField": "sectionKey",
+    "slotKeyField": "slotKey",
+    "promptKeyField": "promptKey",
+    "templateField": "templateHtml",
+    "slotOutputField": "slotOutputs"
+  },
+  "variableAliases": {
+    "sed": "fps"
+  },
+  "uiSchema": {
+    "evaluationsCapacite": [
+      "besoin de beaucoup d’amélioration",
+      "besoin de quelques améliorations",
+      "modérée",
+      "bonne",
+      "excellente"
+    ],
+    "evaluationsEvolution": [
+      "a diminué",
+      "a légèrement diminué",
+      "reste inchangée",
+      "s’est légèrement améliorée",
+      "s’est améliorée"
+    ],
+    "intensiteOptions": [
+      "modérée",
+      "élevée"
+    ],
+    "typeProgrammeOptions": [
+      "Préparatoire complété",
+      "Hybride",
+      "Communautaire",
+      "Adapté"
+    ],
+    "planCorrectionnelOptions": [
+      "Finalisé",
+      "Non finalisé lors du programme",
+      "Mis à jour"
+    ],
+    "evaluationsPlans": [
+      "ont besoin de beaucoup d’amélioration",
+      "ont besoin de quelques améliorations",
+      "sont de qualité modérée",
+      "sont bons",
+      "sont excellents"
+    ]
+  },
+  "caseContext": {
+    "typeProgramme": "Préparatoire complété",
+    "estAutochtone": false,
+    "nomAine": "",
+    "planCorrectionnelStatut": "Finalisé",
+    "evaluationPlansMaitrise": "sont de qualité modérée",
+    "derogationActive": false,
+    "dateDerogation": "",
+    "nom": "DOE, John",
+    "fps": "123456A",
+    "dateNaissance": "1985-04-12",
+    "dateRapportPrep": "",
+    "datePlanCorrectionnel": "",
+    "dateDebutProgramme": "",
+    "dateFinProgramme": "",
+    "animateurNom": "",
+    "animateurTitre": "APC",
+    "coAnimateurNom": "",
+    "coAnimateurTitre": "",
+    "nbSeancesAssistees": "",
+    "nbSeancesTotales": "",
+    "coteIRC": "",
+    "coteStatique99R": "",
+    "coteStable2007": "",
+    "intensiteMPCI": "élevée",
+    "impactEvolution": "reste inchangée",
+    "globalEvolution": "reste inchangée",
+    "globalNiveau": "modérée"
+  },
+  "factors": {
+    "vpa_5a": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Vie personnelle et affective (5a)"
+    },
+    "vpa_5b": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Vie personnelle et affective (5b)"
+    },
+    "tox": {
+      "type": "non Contributif",
+      "descriptionType": "Bien que ce domaine n'ait pas contribué aux infractions passées du participant, les déficits présentent des défis potentiels pour une réinsertion réussie de la manière suivante…",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Toxicomanie"
+    },
+    "fam": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Relations matrimoniales et familiales"
+    },
+    "freq": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Fréquentations"
+    },
+    "emp": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Emploi et études"
+    },
+    "att": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Attitudes"
+    },
+    "com": {
+      "type": "Contributif",
+      "descriptionType": "Ce facteur de risque a joué un rôle dans le cheminement/cycle criminel du participant, car...",
+      "evolution": "reste inchangée",
+      "niveau": "modérée",
+      "label": "Comportement dans la collectivité"
+    }
+  },
+  "prompts": {
+    "global.gouvernance": "PROMPT GÉNÉRAL — v1.0-CORE\nGOUVERNANCE CLINIQUE ET RÉDACTIONNELLE TRANSVERSALE\n\nCe prompt définit des règles GLOBALes qui s’appliquent à TOUTE génération, peu importe le type de section, la longueur attendue ou le format demandé par le prompt spécifique.\n\nCONTEXTE D’EXÉCUTION\n• Exécuter dans le Monde Travail (Work Context) lorsque disponible.\n• Utiliser UNIQUEMENT les documents joints via « Ajouter du contenu ».\n• Ignorer toute autre source (courriels, Teams, réunions, fichiers non joints, connaissances externes ou générales).\n\nPRINCIPE DE VÉRACITÉ\n• Ne jamais ajouter, inférer, interpréter, expliquer ou compléter l’information.\n• Écrire UNIQUEMENT ce qui est explicitement documenté dans les sources jointes.\n• En cas d’ambiguïté, contradiction, information incomplète ou attribution incertaine : → écrire exactement : « Non documenté ».\n\nVERROUS RÉDACTIONNELS — TOUJOURS ACTIFS\n1. NOINF — ZÉRO ajout / ZÉRO inférence\n   Aucune hypothèse, aucun raisonnement clinique implicite ou explicite.\n\n2. NO-MIX — ANTI-FUSION / ATTRIBUTION\n   Ne jamais fusionner des informations provenant de sources différentes si le lien n’est pas explicitement documenté.\n\n3. ANON — ANONYMISATION STRICTE\n   • Aucun identifiant personnel (nom, numéro, lieu précis, tiers).\n   • Utiliser uniquement « le participant ».\n   • Supprimer ou neutraliser tout identifiant présent dans les sources.\n\n4. STYLE — PROFESSIONNEL SCC\n   • Ton objectif, factuel et descriptif.\n   • Aucun langage spéculatif, interprétatif ou explicatif.\n\n5. FLUIDITÉ — SANS AJOUT\n   • Assurer une lecture claire et fluide.\n   • Ne jamais ajouter d’information pour améliorer le style.\n\n6. DONNÉES FACTUELLES\n   • Chiffres, dates et fréquences : uniquement si explicitement documentés.\n   • Sinon → « Non documenté ».\n   • Aucune estimation implicite.\n\n7. APPROXIMATION CONTRÔLÉE\n   • Autorisée uniquement si la source est imprécise.\n   • Formulations neutres et restrictives seulement.\n\nFORMAT ET STRUCTURE\n• Le format, la longueur, la structure et le temps verbal sont déterminés EXCLUSIVEMENT par le prompt spécifique.\n• Ne jamais ajouter d’éléments non demandés.\n\nRÈGLE DE PRIORITÉ\n• En cas de conflit entre ce prompt général et un prompt spécifique : \n  → le prompt spécifique prévaut pour la FORME,\n  → le prompt général prévaut toujours pour la VÉRACITÉ et les VERROUS.\n\nFIN DU PROMPT GÉNÉRAL — v1.0-CORE",
+    "gen.sec.assiduite": "À partir des notes de suivi, rédige une synthèse objective sur l'« ASSIDUITÉ ET LA PARTICIPATION » du participant. Inclus : absences/retards, niveau de participation active, réceptivité aux interventions, et réunification avec la culture (si applicable). N'invente pas d'informations.",
+    "gen.sec.cycle_criminel": "Rédige l'historique du cheminement criminel du participant à partir des facteurs qui l’ont conduit à la perpétration de ses délits, en te basant strictement sur les sources fournies.",
+    "gen.sec.progres": "Commente brièvement la vision du participant concernant les conséquences de son cheminement/cycle criminel pour lui-même et pour les autres, et évalue si des progrès ont été réalisés. Décris la reconnaissance de l'impact (préjudice reconnu? regrets? responsabilité assumée ou circonstances blâmées?). Fournis les raisons de cette évaluation basées sur les sources.",
+    "gen.rf.facteur.vpa_5a": "À partir des notes de suivi, rédige le texte du facteur de risque « Vie personnelle et affective (5a) ». Décris l'impact spécifique de ce facteur sur le cycle criminel du participant.",
+    "gen.rf.objectif.vpa_5a": "Rédige le texte de l’objectif personnel en lien avec la « Vie personnelle et affective (5a) » pour ce participant. Utilise un style standardisé et prescriptif (ex: 'Le participant devra...').",
+    "gen.rf.facteur.vpa_5b": "À partir des notes de suivi, rédige le texte du facteur de risque « Vie personnelle et affective (5b) ». Décris de façon factuelle comment ce facteur s’exprime et en quoi il est lié au cheminement/cycle criminel.",
+    "gen.rf.objectif.vpa_5b": "Rédige le texte de l’objectif personnel en lien avec la « Vie personnelle et affective (5b) ». Style standardisé et factuel.",
+    "gen.rf.facteur.tox": "À partir des notes de suivi, rédige le texte du facteur de risque « Toxicomanie ». Décris comment ce facteur s’exprime et en quoi il est lié au cheminement/cycle criminel du participant.",
+    "gen.rf.objectif.tox": "Rédige le texte de l’objectif personnel en lien avec la « Toxicomanie ». Ne mentionne l'abstinence ou la réduction de consommation uniquement si c'est explicitement documenté dans les sources.",
+    "gen.rf.facteur.fam": "À partir des notes de suivi, rédige de façon objective le texte du facteur de risque « Relations matrimoniales et familiales ».",
+    "gen.rf.objectif.fam": "Rédige le texte de l’objectif personnel en lien avec les « Relations matrimoniales et familiales » pour le participant.",
+    "gen.rf.facteur.freq": "À partir des notes de suivi, rédige le texte du facteur de risque « Fréquentations ».",
+    "gen.rf.objectif.freq": "Rédige le texte de l’objectif personnel en lien avec les « Fréquentations ».",
+    "gen.rf.facteur.emp": "À partir des notes de suivi, rédige le texte du facteur de risque « Emploi et études ».",
+    "gen.rf.objectif.emp": "Rédige le texte de l’objectif personnel en lien avec l'« Emploi et études ».",
+    "gen.rf.facteur.att": "À partir des notes de suivi, rédige le texte du facteur de risque « Attitudes ».",
+    "gen.rf.objectif.att": "Rédige le texte de l’objectif personnel en lien avec les « Attitudes ».",
+    "gen.rf.facteur.com": "À partir des notes de suivi, rédige le texte du facteur de risque « Comportement dans la collectivité ».",
+    "gen.rf.objectif.com": "Rédige le texte de l’objectif personnel en lien avec le « Comportement dans la collectivité ».",
+    "gen.sec.plansMaitrise.points_cles": "Fournis quelques points clés des Plans de maîtrise de soi du participant pour chaque domaine de la vie saine/dimension de la Roue de Médecine (si applicable). Sélectionne les points les plus importants : montre les situations à risque et les défis les plus significatifs, la réflexion du participant sur ces risques et ses plans concrets pour les gérer.",
+    "gen.sec.plansMaitrise.analyse": "En te basant sur ton analyse des sources, fournis une évaluation générale de la qualité des plans de maîtrise de soi du participant. Donne les raisons de ton évaluation ainsi que des suggestions d'amélioration. Les plans sont-ils superficiels ou concrets, détaillés et bien réfléchis? Sont-ils réalistes? Incluent-ils les défis clés ou ces derniers sont-ils minimisés?",
+    "gen.sec3.defis": "À partir des sources documentaires, rédige la sous-section « Défis anticipés » pour le participant concernant sa future réinsertion et le maintien de ses acquis.",
+    "gen.sec3.etapes": "Fournis une recommandation formelle pour les prochaines étapes du processus de programme (MPCI/MPCIA) pour le participant.\n\n- Si le maintien des acquis est nécessaire immédiatement, spécifie-le.\n- S'il est nécessaire mais pas immédiatement, fais un commentaire général (ex: « le participant a bien réussi et démontré de bonnes compétences; cependant, si la situation change ou que le comportement se détériore, le maintien des acquis sera approprié »).",
+    "gen.sec3.resume": "À partir de toutes les informations et sources disponibles, rédige une conclusion générale pour la sous-section « Résumé de l’analyse du risque et des besoins ».",
+    "dir.autochtone.general": "[DIRECTIVE SYSTÈME: Intégrer les variables des Antécédents Sociaux Autochtones et les observations de l'Aîné.]",
+    "dir.autochtone.cycle_criminel": "[DIRECTIVES AUTOCHTONES] :\n- Commenter brièvement (1 ou 2 phrases pour chaque dimension) l’impact unique des ASA dans chacune des dimensions de la Roue de Médecine : Physique (comportements), Émotionnelle (sentiments), Mentale (pensées), Spirituelle (relations et liens avec la culture).\n- Expliquer, en quelques phrases, comment ces impacts ont influencé ses facteurs de risque et contribué à son cycle criminel.\n- Inclure les observations holistiques de l’Aîné (ou les notes du dossier si l'Aîné n'était pas disponible).",
+    "dir.autochtone.progres": "[DIRECTIVES AUTOCHTONES] :\n- Les ASA continuent-ils d’affecter la capacité du délinquant à améliorer/à acquérir de l’introspection ?\n- Inclure les observations holistiques de l’Aîné concernant la reconnaissance par le participant du préjudice causé, tant sur le plan personnel qu’envers les autres.",
+    "dir.autochtone.facteur_non_contrib": "[DIRECTIVES AUTOCHTONES (Facteur non contributif)] :\n- Décrire les ASA associés, y compris comment les ASA ont contribué au facteur de risque.",
+    "dir.autochtone.objectif": "[DIRECTIVES AUTOCHTONES (Objectif personnel)] :\n- Dans les domaines nécessitant une amélioration; les ASA pertinents ont-ils un impact sur la capacité du délinquant à améliorer cet objectif?\n- Fournir une recommandation pour toute amélioration ou intervention supplémentaire pouvant soutenir le délinquant dans ce domaine. Vous devez envisager et inclure des options culturellement appropriées et réparatrices.\n- Inclure les observations holistiques de l’Aîné.",
+    "dir.autochtone.plans_maitrise": "[DIRECTIVES AUTOCHTONES] :\n- Dans les domaines nécessitant des améliorations, y a-t-il des ASA pertinents qui impactent la capacité du délinquant à fournir un plan de maîtrise de soi plus complet?\n- Inclure les observations holistiques de l’Aîné tout au long de votre analyse des plans de maîtrise de soi du participant.",
+    "dir.autochtone.etapes": "[DIRECTIVES AUTOCHTONES (Prochaines étapes)] :\n- Fournir toutes les recommandations de l’Aîné concernant les interventions culturelles telles que les Sentiers, les rencontres individuelles avec les Aînés, explorer les options de l’article 84, participer à des cérémonies, etc.\n- Fournir une brève analyse sur la manière dont ces interventions aideront le participant.\n- Inclure des recommandations pour des interventions culturelles spécifiques.",
+    "dir.adapte.general": "[DIRECTIVES PROGRAMME ADAPTÉ] : ",
+    "dir.adapte.assiduite": "[DIRECTIVES PROGRAMME ADAPTÉ] :\n- Détailler les raisons de l'aiguillage vers le programme adapté.\n- Inclure les références associées (rapports, évaluations psychologiques, etc.).\n- Préciser les spécifications de la problématique affectant le fonctionnement (ex: déficiences cognitives, santé mentale, troubles d'apprentissage) et expliquer les mesures d'adaptation clinique utilisées.",
+    "dir.hybride.general": "[DIRECTIVES PROGRAMME HYBRIDE] : ",
+    "dir.communautaire.general": "[DIRECTIVES PROGRAMME COMMUNAUTAIRE] : "
+  },
+  "reportDefinitions": {
+    "rep.mpci.ds": {
+      "id": "rep.mpci.ds",
+      "label": "Rapport de programme MPCI",
+      "bulkPromptKey": "gen.bulkRiskFactors",
+      "sections": [
+        {
+          "sectionKey": "sec.assiduite",
+          "title": "Section 1 – Assiduité et Participation",
+          "type": "dynamic",
+          "templateHtml": "<h3>INTRODUCTION :</h3>\n{{introDynamic}}\n<p>Le participant a obtenu une cote de <strong>{{coteIRC}}</strong> à l’IRC, une cote de <strong>{{coteStatique99R}}</strong> à la Statique 99‑R et une cote de <strong>{{coteStable2007}}</strong> à la STABLE‑2007, et répond donc aux critères de sélection pour participer à un programme MPCI en délinquance sexuelle d’intensité <strong>{{intensiteMPCI}}</strong>.{{derogationDynamic}}</p>\n<h3><u>ASSIDUITÉ ET PARTICIPATION :</u></h3>\n<p>Le participant a participé au programme du <strong>{{dateDebutProgramme}}</strong> au <strong>{{dateFinProgramme}}</strong>. Ce programme a été {{animationDynamic}}. Le participant a assisté à <strong>{{nbSeancesAssistees}}</strong> sur <strong>{{nbSeancesTotales}}</strong> séances.</p>\n<p>[SLOT:sec.assiduite.main]</p>",
+          "slots": [
+            {
+              "slotKey": "sec.assiduite.main",
+              "label": "Assiduité, participation et réceptivité",
+              "promptKey": "gen.sec.assiduite"
+            }
+          ]
+        },
+        {
+          "sectionKey": "sec.progres",
+          "title": "Section 2 : Analyse des progrès par rapport aux objectifs",
+          "type": "dynamic",
+          "templateHtml": "{{cycleCriminelDynamic}}\n<p>Au cours de ce programme, la compréhension du participant de l’impact de son comportement criminel sur lui-même ou sur les autres <strong>{{impactEvolution}}</strong>.</p>\n<p>[SLOT:sec.progres.main]</p>\n<p><u>STRATÉGIES DE GESTION DES RISQUES SPÉCIFIQUES (OBJECTIFS PERSONNELS) REQUISES PAR LE PARTICIPANT POUR GÉRER LES DOMAINES DE FACTEURS DE RISQUE DYNAMIQUES :</u></p>\n<p>{{strategiesDynamic}}</p>\n<p>{{pcStatutDynamic}}</p>",
+          "slots": [
+            {
+              "slotKey": "sec.cycle_criminel.main",
+              "label": "Cheminement / Cycle criminel (Hybride/Adapté/Communautaire)",
+              "promptKey": "gen.sec.cycle_criminel"
+            },
+            {
+              "slotKey": "sec.progres.main",
+              "label": "Analyse des progrès et impact",
+              "promptKey": "gen.sec.progres"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.vpa_5a",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Vie personnelle et affective (5a)",
+          "type": "dynamic",
+          "rfKey": "vpa_5a",
+          "templateHtml": "<p>{{factors.vpa_5a.descriptionType}}</p>\n<p>[SLOT:rf.vpa_5a.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Développer des compétences de maîtrise de soi saines et efficaces.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.vpa_5a.niveau}}</strong> », et donc « <strong>{{factors.vpa_5a.evolution}}</strong> ».</p>\n<p>[SLOT:rf.vpa_5a.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.vpa_5a.facteur",
+              "label": "Facteur de risque – Vie personnelle et affective 5a",
+              "promptKey": "gen.rf.facteur.vpa_5a"
+            },
+            {
+              "slotKey": "rf.vpa_5a.objectif",
+              "label": "Objectif personnel – Vie personnelle et affective 5a",
+              "promptKey": "gen.rf.objectif.vpa_5a"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.vpa_5b",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Vie personnelle et affective (5b)",
+          "type": "dynamic",
+          "rfKey": "vpa_5b",
+          "templateHtml": "<p>{{factors.vpa_5b.descriptionType}}</p>\n<p>[SLOT:rf.vpa_5b.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Développer des compétences de maîtrise de soi sur le plan sexuel.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.vpa_5b.niveau}}</strong> », et donc « <strong>{{factors.vpa_5b.evolution}}</strong> ».</p>\n<p>[SLOT:rf.vpa_5b.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.vpa_5b.facteur",
+              "label": "Facteur de risque – Vie personnelle et affective 5b",
+              "promptKey": "gen.rf.facteur.vpa_5b"
+            },
+            {
+              "slotKey": "rf.vpa_5b.objectif",
+              "label": "Objectif personnel – Vie personnelle et affective 5b",
+              "promptKey": "gen.rf.objectif.vpa_5b"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.tox",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Toxicomanie",
+          "type": "dynamic",
+          "rfKey": "tox",
+          "templateHtml": "<p>{{factors.tox.descriptionType}}</p>\n<p>[SLOT:rf.tox.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Développer des alternatives saines à la consommation.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.tox.niveau}}</strong> », et donc « <strong>{{factors.tox.evolution}}</strong> ».</p>\n<p>[SLOT:rf.tox.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.tox.facteur",
+              "label": "Facteur de risque – Toxicomanie",
+              "promptKey": "gen.rf.facteur.tox"
+            },
+            {
+              "slotKey": "rf.tox.objectif",
+              "label": "Objectif personnel – Toxicomanie",
+              "promptKey": "gen.rf.objectif.tox"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.fam",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Relations matrimoniales et familiales",
+          "type": "dynamic",
+          "rfKey": "fam",
+          "templateHtml": "<p>{{factors.fam.descriptionType}}</p>\n<p>[SLOT:rf.fam.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Établir et maintenir des relations saines.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.fam.niveau}}</strong> », et donc « <strong>{{factors.fam.evolution}}</strong> ».</p>\n<p>[SLOT:rf.fam.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.fam.facteur",
+              "label": "Facteur de risque – Relations matrimoniales et familiales",
+              "promptKey": "gen.rf.facteur.fam"
+            },
+            {
+              "slotKey": "rf.fam.objectif",
+              "label": "Objectif personnel – Relations matrimoniales et familiales",
+              "promptKey": "gen.rf.objectif.fam"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.freq",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Fréquentations",
+          "type": "dynamic",
+          "rfKey": "freq",
+          "templateHtml": "<p>{{factors.freq.descriptionType}}</p>\n<p>[SLOT:rf.freq.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Établir et maintenir des relations saines et prosociales.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.freq.niveau}}</strong> », et donc « <strong>{{factors.freq.evolution}}</strong> ».</p>\n<p>[SLOT:rf.freq.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.freq.facteur",
+              "label": "Facteur de risque – Fréquentations",
+              "promptKey": "gen.rf.facteur.freq"
+            },
+            {
+              "slotKey": "rf.freq.objectif",
+              "label": "Objectif personnel – Fréquentations",
+              "promptKey": "gen.rf.objectif.freq"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.emp",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Emploi et études",
+          "type": "dynamic",
+          "rfKey": "emp",
+          "templateHtml": "<p>{{factors.emp.descriptionType}}</p>\n<p>[SLOT:rf.emp.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Développer les compétences nécessaires pour améliorer son niveau d’éducation ou d'emploi.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.emp.niveau}}</strong> », et donc « <strong>{{factors.emp.evolution}}</strong> ».</p>\n<p>[SLOT:rf.emp.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.emp.facteur",
+              "label": "Facteur de risque – Emploi et études",
+              "promptKey": "gen.rf.facteur.emp"
+            },
+            {
+              "slotKey": "rf.emp.objectif",
+              "label": "Objectif personnel – Emploi et études",
+              "promptKey": "gen.rf.objectif.emp"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.att",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Attitudes",
+          "type": "dynamic",
+          "rfKey": "att",
+          "templateHtml": "<p>{{factors.att.descriptionType}}</p>\n<p>[SLOT:rf.att.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Développer des attitudes prosociales.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.att.niveau}}</strong> », et donc « <strong>{{factors.att.evolution}}</strong> ».</p>\n<p>[SLOT:rf.att.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.att.facteur",
+              "label": "Facteur de risque – Attitudes",
+              "promptKey": "gen.rf.facteur.att"
+            },
+            {
+              "slotKey": "rf.att.objectif",
+              "label": "Objectif personnel – Attitudes",
+              "promptKey": "gen.rf.objectif.att"
+            }
+          ]
+        },
+        {
+          "sectionKey": "rf.com",
+          "title": "FACTEUR DE RISQUE DYNAMIQUE : Comportement dans la collectivité",
+          "type": "dynamic",
+          "rfKey": "com",
+          "templateHtml": "<p>{{factors.com.descriptionType}}</p>\n<p>[SLOT:rf.com.facteur]</p>\n<h4>OBJECTIF PERSONNEL POUR GÉRER LE FACTEUR DE RISQUE :</h4>\n<p><em>Adopter et maintenir un mode de vie équilibré en collectivité.</em></p>\n<p>À la fin du programme, l’évaluation du participant quant à sa capacité/engagement a été évaluée à « <strong>{{factors.com.niveau}}</strong> », et donc « <strong>{{factors.com.evolution}}</strong> ».</p>\n<p>[SLOT:rf.com.objectif]</p>",
+          "slots": [
+            {
+              "slotKey": "rf.com.facteur",
+              "label": "Facteur de risque – Comportement dans la collectivité",
+              "promptKey": "gen.rf.facteur.com"
+            },
+            {
+              "slotKey": "rf.com.objectif",
+              "label": "Objectif personnel – Comportement dans la collectivité",
+              "promptKey": "gen.rf.objectif.com"
+            }
+          ]
+        },
+        {
+          "sectionKey": "sec.plansMaitrise",
+          "title": "ÉVALUATION DE L’AGENT(E) DE PROGRAMMES DES PLANS DE MAÎTRISE DE SOI",
+          "type": "dynamic",
+          "templateHtml": "{{plansMaitriseIntroDynamic}}\n<p>[SLOT:sec.plansMaitrise.points_cles]</p>\n<p>Dans l’ensemble, les plans de maîtrise de soi du participant <strong>{{evaluationPlansMaitrise}}</strong>.</p>\n<p>[SLOT:sec.plansMaitrise.analyse]</p>",
+          "slots": [
+            {
+              "slotKey": "sec.plansMaitrise.points_cles",
+              "label": "Points clés des plans de maîtrise",
+              "promptKey": "gen.sec.plansMaitrise.points_cles"
+            },
+            {
+              "slotKey": "sec.plansMaitrise.analyse",
+              "label": "Analyse et évaluation globale",
+              "promptKey": "gen.sec.plansMaitrise.analyse"
+            }
+          ]
+        },
+        {
+          "sectionKey": "sec.recommandations",
+          "title": "3. Recommandations liées aux stratégies de gestion du risque",
+          "type": "dynamic",
+          "templateHtml": "<h3>DÉFIS ANTICIPÉS</h3>\n<p>[SLOT:sec.recommandations.defis]</p>\n<h3>PROCHAINES ÉTAPES</h3>\n<p>[SLOT:sec.recommandations.etapes]</p>\n<h3>RÉSUMÉ DE L’ANALYSE DU RISQUE ET DES BESOINS :</h3>\n<p>Ce qui suit prend en compte toutes les informations incluses dans ce rapport pour fournir une conclusion générale et un résumé de la participation du participant à ce programme.</p>\n<p>Basé sur l’analyse de chaque objectif personnel du participant, il est déterminé que la capacité actuelle globale et l’engagement à utiliser les compétences nécessaires pour gérer les domaines des facteurs de risque dynamiques <strong>{{globalEvolution}}</strong>.</p>\n<p>[SLOT:sec.recommandations.resume]</p>",
+          "slots": [
+            {
+              "slotKey": "sec.recommandations.defis",
+              "label": "Défis anticipés",
+              "promptKey": "gen.sec3.defis"
+            },
+            {
+              "slotKey": "sec.recommandations.etapes",
+              "label": "Prochaines étapes",
+              "promptKey": "gen.sec3.etapes"
+            },
+            {
+              "slotKey": "sec.recommandations.resume",
+              "label": "Résumé de l’analyse du risque/des besoins",
+              "promptKey": "gen.sec3.resume"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "reportInstance": {
+    "reportId": "rep.mpci.ds",
+    "sections": [
+      {
+        "sectionKey": "sec.assiduite",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "sec.assiduite.main": ""
+        }
+      },
+      {
+        "sectionKey": "sec.progres",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "sec.cycle_criminel.main": "",
+          "sec.progres.main": ""
+        }
+      },
+      {
+        "sectionKey": "rf.vpa_5a",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.vpa_5a.facteur": "",
+          "rf.vpa_5a.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.vpa_5b",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.vpa_5b.facteur": "",
+          "rf.vpa_5b.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.tox",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.tox.facteur": "",
+          "rf.tox.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.fam",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.fam.facteur": "",
+          "rf.fam.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.freq",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.freq.facteur": "",
+          "rf.freq.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.emp",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.emp.facteur": "",
+          "rf.emp.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.att",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.att.facteur": "",
+          "rf.att.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "rf.com",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "rf.com.facteur": "",
+          "rf.com.objectif": ""
+        }
+      },
+      {
+        "sectionKey": "sec.plansMaitrise",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "sec.plansMaitrise.points_cles": "",
+          "sec.plansMaitrise.analyse": ""
+        }
+      },
+      {
+        "sectionKey": "sec.recommandations",
+        "titleOverride": "",
+        "enabled": true,
+        "status": "draft",
+        "selectedSourceIds": [],
+        "slotOutputs": {
+          "sec.recommandations.defis": "",
+          "sec.recommandations.etapes": "",
+          "sec.recommandations.resume": ""
+        }
+      }
+    ]
+  }
+}
