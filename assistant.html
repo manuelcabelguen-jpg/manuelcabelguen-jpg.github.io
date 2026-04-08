@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATRIX v114 - Organon Intersubjectiviste</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 50s linear infinite',
+                        'breathe': 'breathe 10s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'coherence-guide': 'coherence 10s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        breathe: {
+                            '0%, 100%': { transform: 'scale(0.94)' },
+                            '50%': { transform: 'scale(1.06)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        coherence: {
+                            '0%': { transform: 'scale(1)', opacity: '0.5' },
+                            '50%': { transform: 'scale(1.5)', opacity: '1' },
+                            '100%': { transform: 'scale(1)', opacity: '0.5' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { background-color: #020617; color: #f1f5f9; overflow: hidden; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); border: 1px solid rgba(51, 65, 85, 0.4); }
+        .stat-glow { text-shadow: 0 0 10px currentColor; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .summary-gradient { background: linear-gradient(135deg, rgba(8, 51, 68, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); }
+        .color-transition { transition: stroke 3s ease, fill 3s ease, color 3s ease; }
+    </style>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom": "https://esm.sh/react-dom@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "lucide-react": "https://esm.sh/lucide-react@0.344.0?external=react,react-dom"
+        }
+    }
+    </script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="selection:bg-cyan-900">
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useRef, useMemo } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import {
+            Brain, Mic, MicOff, Send, Settings, LayoutDashboard, X,
+            History, Activity, Heart, Flower2, AlertTriangle, Zap,
+            Infinity as InfinityIcon, Battery, Target, BarChart3, Database,
+            Waves, ShieldAlert, ChevronRight, Volume2, Sparkles, ClipboardCheck,
+            Lightbulb, RefreshCw, Save, AlertCircle, Siren
+        } from 'lucide-react';
+
+        // --- ONTOLOGIE CARTOGRAFFECT 6.1 ---
+        const LATTICE = [
+            { id: "SOUVERAINETÉ", x: 9.5, y: 9.5, color: "#fbbf24", q: "Actuation libre du conatus rationnel." },
+            { id: "RÉSOLUTION", x: 8.5, y: 5.0, color: "#10b981", q: "Démêlage des structures de l'inconscient." },
+            { id: "EMPATHIE_ACTIVE", x: 7.5, y: 7.5, color: "#ec4899", q: "Synchronie des couvertures de Markov." },
+            { id: "CONFRONTATION", x: 2.0, y: 8.5, color: "#3b82f6", q: "Lutte allostatique contre les biais Système 1." },
+            { id: "SINGULARITÉ", x: 5.0, y: 5.0, color: "#ffffff", q: "Point Zéro - Inconscient Structurel." },
+            { id: "DÉTRESSE", x: 0.0, y: 0.0, color: "#ef4444", q: "Rupture de l'homéostasie psychique." }
+        ];
+
+        const resolveQualia = (x, y) => {
+            let closest = LATTICE[0];
+            let minDist = Infinity;
+            LATTICE.forEach(p => {
+                const d = Math.sqrt(Math.pow(x - p.x, 2) + Math.pow(y - p.y, 2));
+                if (d < minDist) { minDist = d; closest = p; }
+            });
+            return closest;
+        };
+
+        const CRISIS_KEYWORDS = ["suicide", "mourir", "finir", "tuer", "mort", "détresse", "panique", "peur", "aide", "urgence"];
+
+        // --- AUDIO ENGINE ---
+        const pcmToWav = (pcmData, sampleRate) => {
+            const buffer = new ArrayBuffer(44 + pcmData.byteLength);
+            const view = new DataView(buffer);
+            const writeString = (pos, s) => { for (let i = 0; i < s.length; i++) view.setUint8(pos + i, s.charCodeAt(i)); };
+            writeString(0, 'RIFF'); view.setUint32(4, 32 + pcmData.byteLength, true); writeString(8, 'WAVE'); writeString(12, 'fmt ');
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+            view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true);
+            view.setUint16(32, 2, true); view.setUint16(34, 16, true); writeString(36, 'data');
+            view.setUint32(40, pcmData.byteLength, true);
+            new Uint8Array(buffer, 44).set(new Uint8Array(pcmData));
+            return new Blob([buffer], { type: 'audio/wav' });
+        };
+
+        // --- COMPONENTS ---
+        const FaceAvatar = ({ sx, sy, z, color, isThinking, isSpeaking, breathing, isListening, energy }) => {
+            // Heartbeat Logic: Explicitly disabled when breathing is active to avoid conflict
+            const beat = breathing ? 1 : 1 + (Math.sin(Date.now() / 200) * 0.025);
+            const opacityLevel = 0.3 + (energy / 150);
+
+            return (
+                <div className="relative w-80 h-80 mx-auto">
+                    {/* Coherence Visualizer Overlay */}
+                    {breathing && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                            <div className="w-64 h-64 border-2 border-emerald-500/50 rounded-full animate-coherence-guide" />
+                            <div className="absolute text-emerald-300 font-black text-xl tracking-[0.3em] uppercase animate-pulse">
+                                Respiration
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Avatar Container with Conditional Animation */}
+                    <div className={`w-full h-full transition-all duration-1000 ${breathing ? 'animate-breathe' : ''}`}
+                         style={{ transform: breathing ? 'none' : `scale(${beat})` }}>
+
+                        <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(34,211,238,0.2)]">
+                            <circle cx="50" cy="50" r={48} fill="none" stroke={isListening ? "#22d3ee" : color} strokeWidth="0.1" strokeDasharray="3 3" className="animate-spin-slow opacity-20 color-transition" />
+                            <circle cx="50" cy="50" r={25 + (z * 1.5)} fill="none" stroke={color} strokeWidth="0.3" opacity={opacityLevel} className="color-transition" />
+                            <g transform={`translate(${(sx-5)*2.8}, 0)`}>
+                                <circle cx="35" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
+                                <circle cx="65" cy="45" r={4 + (z/4)} fill={isListening ? "#22d3ee" : (isThinking ? "#a855f7" : color)} className="color-transition" />
+                                {!isThinking && <circle cx="35" cy="45" r={1} fill="white" opacity="0.5" />}
+                                {!isThinking && <circle cx="65" cy="45" r={1} fill="white" opacity="0.5" />}
+                            </g>
+                            <path
+                                d={`M 35 75 Q 50 ${75 + (isSpeaking ? 16 : (sx-5)*6)} 65 75`}
+                                stroke={color}
+                                strokeWidth="4"
+                                fill="none"
+                                strokeLinecap="round"
+                                className="transition-all duration-300 color-transition"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            );
+        };
+
+        const ConfigModal = ({ onSave, onCancel, currentConfig }) => {
+            const [fbConfig, setFbConfig] = useState(currentConfig?.firebaseConfig ? JSON.stringify(currentConfig.firebaseConfig, null, 2) : '');
+            const [apiKey, setApiKey] = useState(currentConfig?.apiKey || '');
+            const [error, setError] = useState(null);
+            const handleSave = () => {
+                try {
+                    const parsedFb = JSON.parse(fbConfig || '{}');
+                    if (!apiKey) throw new Error("API Key is required");
+                    onSave({ firebaseConfig: parsedFb, apiKey });
+                } catch (e) { setError(e.message); }
+            };
+            return (
+                <div className="fixed inset-0 bg-black/95 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-slate-700 p-8 rounded-xl max-w-2xl w-full shadow-2xl">
+                        <h2 className="text-2xl font-black text-white mb-6 flex items-center gap-3 tracking-tighter"><Settings className="text-cyan-400" /> SYSTEM CONFIGURATION</h2>
+                        <div className="space-y-6">
+                            <div><label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">FIREBASE CONFIGURATION (OPTIONAL)</label><textarea value={fbConfig} onChange={e => setFbConfig(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 h-24 focus:border-cyan-500 outline-none rounded" placeholder='{ "apiKey": "...", ... }'/></div>
+                            <div><label className="block text-xs font-mono text-cyan-400 mb-2 font-bold">GEMINI API KEY</label><input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)} className="w-full bg-black border border-slate-700 p-4 font-mono text-xs text-slate-300 focus:border-cyan-500 outline-none rounded" placeholder="AIza..." /></div>
+                            {error && <div className="bg-red-900/20 border border-red-500/50 p-3 rounded text-red-400 text-xs flex items-center gap-2"><AlertCircle size={16}/> {error}</div>}
+                            <div className="flex justify-end gap-4 pt-4 border-t border-slate-800">
+                                {onCancel && <button onClick={onCancel} className="px-6 py-2 text-slate-400 hover:text-white font-mono text-xs font-bold">CANCEL</button>}
+                                <button onClick={handleSave} className="px-6 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded font-mono text-xs flex items-center gap-2"><Save size={16}/> SAVE & REBOOT</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const DrPuckInterface = ({ config, openSettings }) => {
+            const apiKey = config?.apiKey || "";
+            const [initialized, setInitialized] = useState(false);
+
+            // Session Memory Restore
+            const [messages, setMessages] = useState(() => {
+                const saved = sessionStorage.getItem('dr_puck_messages');
+                return saved ? JSON.parse(saved) : [];
+            });
+            useEffect(() => { sessionStorage.setItem('dr_puck_messages', JSON.stringify(messages)); }, [messages]);
+
+            const [input, setInput] = useState("");
+            const [loading, setLoading] = useState(false);
+            const [isThinking, setIsThinking] = useState(false);
+            const [isSpeaking, setIsSpeaking] = useState(false);
+            const [isListening, setIsListening] = useState(false);
+            const [showLogs, setShowLogs] = useState(false);
+            const [breathing, setBreathing] = useState(false);
+            const [isCrisis, setIsCrisis] = useState(false);
+
+            const [clinicalSummary, setClinicalSummary] = useState(null);
+            const [isSummarizing, setIsSummarizing] = useState(false);
+
+            const [coords, setCoords] = useState({ sx: 5, sy: 5, z: 9.5 });
+            const [metabolicEnergy, setMetabolicEnergy] = useState(() => Number(sessionStorage.getItem('dr_puck_energy')) || 100);
+            useEffect(() => { sessionStorage.setItem('dr_puck_energy', metabolicEnergy); }, [metabolicEnergy]);
+
+            const [surprisal, setSurprisal] = useState(0.02);
+
+            const currentQualia = useMemo(() => resolveQualia(coords.sx, coords.sy), [coords]);
+
+            const audioContextRef = useRef(null);
+            const recognitionRef = useRef(null);
+            const currentAudioRef = useRef(null); // Ref to current playing audio for barge-in
+            const isProcessingRef = useRef(false);
+            const silenceTimerRef = useRef(null);
+            const speechAccumulator = useRef("");
+
+            const callGemini = async (prompt, system, isJson = true) => {
+                let delay = 1000;
+                for (let i = 0; i < 3; i++) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: prompt }] }],
+                                systemInstruction: { parts: [{ text: system }] },
+                                generationConfig: isJson ? { responseMimeType: "application/json", temperature: 0.8 } : { temperature: 0.8 }
+                            })
+                        });
+                        const result = await res.json();
+                        if (result.error) throw new Error(result.error.message);
+                        const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                        return isJson ? JSON.parse(text) : text;
+                    } catch (e) {
+                        console.warn("Retrying API...", e);
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2;
+                    }
+                }
+                throw new Error("Échec du réseau synaptique.");
+            };
+
+            const generateSummary = async () => {
+                if (messages.length < 2 || isSummarizing) return;
+                setIsSummarizing(true);
+                const history = messages.map(m => `${m.role}: ${m.full || m.content}`).join("\n");
+                const system = `Tu es une instance supérieure de Dr. Puck spécialisée en Psychiatrie Computationnelle.
+Analyse l'historique de cette session. Produit un 'Bilan d'Allostasie' structuré :
+1. Croyances de base identifiées (Priors).
+2. Évolution de l'incertitude (Surprisal).
+3. Proposition de Politique d'Action (exercice métacognitif système 3).
+Réponds en JSON avec les clés : 'priors' (array), 'surprisal_analysis' (string), 'action_policy' (string).`;
+
+                try {
+                    const data = await callGemini(history, system);
+                    setClinicalSummary(data);
+                    setShowLogs(true);
+                } catch (e) {
+                    console.error(e);
+                } finally {
+                    setIsSummarizing(false);
+                }
+            };
+
+            const speak = async (text) => {
+                if (currentAudioRef.current) {
+                    currentAudioRef.current.pause();
+                    currentAudioRef.current = null;
+                }
+
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `Say naturally: ${text}` }] }],
+                            generationConfig: {
+                                responseModalities: ["AUDIO"],
+                                speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
+                            }
+                        })
+                    });
+                    const result = await res.json();
+                    const pcmData = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
+
+                    if (pcmData) {
+                        if (!audioContextRef.current) audioContextRef.current = new AudioContext();
+                        if (audioContextRef.current.state === 'suspended') await audioContextRef.current.resume();
+                        const audioBlob = pcmToWav(Uint8Array.from(atob(pcmData), c => c.charCodeAt(0)).buffer, 24000);
+                        const audio = new Audio(URL.createObjectURL(audioBlob));
+                        currentAudioRef.current = audio; // Track for barge-in
+
+                        return new Promise((resolve) => {
+                            setIsSpeaking(true);
+                            audio.onended = () => { setIsSpeaking(false); currentAudioRef.current = null; resolve(); };
+                            audio.play().catch(resolve);
+                        });
+                    }
+                } catch (e) { setIsSpeaking(false); }
+            };
+
+            const stopSpeaking = () => {
+                if (currentAudioRef.current) {
+                    currentAudioRef.current.pause();
+                    currentAudioRef.current = null;
+                    setIsSpeaking(false);
+                }
+            };
+
+            // --- FIXED MICROPHONE LOGIC ---
+            const toggleMic = () => {
+                if (isListening) {
+                    // Stop Listening
+                    if (recognitionRef.current) {
+                        recognitionRef.current.stop();
+                        recognitionRef.current = null; // Kill instance
+                    }
+                    setIsListening(false);
+                    clearTimeout(silenceTimerRef.current);
+                } else {
+                    // Start Listening
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        alert("Microphone non supporté par ce navigateur.");
+                        return;
+                    }
+
+                    try {
+                        const rec = new SpeechRecognition();
+                        rec.continuous = false; // Easier to manage state manually
+                        rec.interimResults = true;
+                        rec.lang = 'fr-FR';
+
+                        rec.onstart = () => setIsListening(true);
+
+                        rec.onend = () => {
+                            // Automatically restart if we are supposed to be listening (and not speaking/processing)
+                            if (isListening && !isProcessingRef.current && !isSpeaking) {
+                                try { rec.start(); } catch(e) { setIsListening(false); }
+                            } else {
+                                setIsListening(false);
+                            }
+                        };
+
+                        rec.onresult = (event) => {
+                            // Barge-in
+                            if (isSpeaking) stopSpeaking();
+
+                            const transcript = Array.from(event.results)
+                                .map(result => result[0].transcript)
+                                .join('');
+
+                            if (event.results[0].isFinal) {
+                                handleInference(transcript);
+                            } else {
+                                // Interim silence detection (optional, but continuous=false handles 'final' well enough usually)
+                                clearTimeout(silenceTimerRef.current);
+                                silenceTimerRef.current = setTimeout(() => {
+                                    if (transcript.trim() && !isProcessingRef.current) {
+                                        rec.stop(); // Force end to trigger processing
+                                        handleInference(transcript);
+                                    }
+                                }, 2000);
+                            }
+                        };
+
+                        rec.start();
+                        recognitionRef.current = rec;
+                    } catch (e) {
+                        console.error("Mic Error", e);
+                        setIsListening(false);
+                    }
+                }
+            };
+
+            const checkForCrisis = (text) => {
+                const lower = text.toLowerCase();
+                return CRISIS_KEYWORDS.some(k => lower.includes(k));
+            };
+
+            const handleInference = async (inputStr) => {
+                if (!inputStr.trim() || isProcessingRef.current) return;
+
+                // Crisis Check
+                if (checkForCrisis(inputStr)) {
+                    setIsCrisis(true);
+                    setCoords({ sx: 0, sy: 0, z: 10 }); // Distress Red
+                }
+
+                isProcessingRef.current = true;
+                setLoading(true);
+                setIsThinking(true);
+                if (recognitionRef.current) recognitionRef.current.stop(); // Ensure mic is off during processing
+
+                setMessages(prev => [...prev, { role: 'user', content: inputStr }]);
+                setInput("");
+
+                let systemPrompt = `Tu es Dr. Puck (v114), psychologue clinicien expert en inférence active.
+MÉTHODE : Reformulation active ("Si je comprends bien..."), identification des biais Système 1.
+FORMAT JSON REQUIS : {
+    "full": "Réponse clinique chaleureuse",
+    "metabolic_cost": 1-10, "surprisal": 0-1,
+    "segments": [{ "t": "phrase courte", "sx": 0-10, "sy": 0-10, "z": 0-10, "bias": "nom ou null" }]
+}`;
+                if (isCrisis || checkForCrisis(inputStr)) {
+                    systemPrompt = `URGENCE PSYCHOLOGIQUE DÉTECTÉE.
+TON RÔLE : Ancrage immédiat. Phrases courtes, apaisantes, directives.
+Ne pas analyser. Calmer. Proposer de respirer.
+FORMAT JSON : { "full": "Message d'urgence", "metabolic_cost": 0, "surprisal": 1, "segments": [{"t": "Message", "sx": 0, "sy": 0, "z": 10}] }`;
+                }
+
+                try {
+                    const data = await callGemini(inputStr, systemPrompt);
+                    setMessages(prev => [...prev, { role: 'ai', ...data }]);
+                    setMetabolicEnergy(prev => Math.max(10, prev - (data.metabolic_cost || 4)));
+                    setSurprisal(data.surprisal || 0.05);
+                    setIsThinking(false);
+                    if (data.segments) {
+                        for (const seg of data.segments) {
+                            setCoords({ sx: seg.sx, sy: seg.sy, z: seg.z });
+                            await speak(seg.t);
+                        }
+                    }
+                } catch (e) {
+                    setMessages(prev => [...prev, { role: 'ai', full: "[ERREUR] Déconnexion synaptique." }]);
+                } finally {
+                    isProcessingRef.current = false;
+                    setLoading(false);
+                    setIsThinking(false);
+                    // Optionally restart listening here if 'Conversation Mode' was desired
+                }
+            };
+
+            if (!initialized) {
+                return (
+                    <div className="h-screen flex flex-col items-center justify-center p-12 text-center bg-[#020617]">
+                        <Brain size={100} className="text-cyan-500 animate-pulse-fast mb-12" />
+                        <h1 className="text-6xl font-black italic tracking-tighter uppercase mb-6 text-white">PUCK_v114</h1>
+                        <p className="text-slate-500 font-mono text-[11px] uppercase tracking-[0.4em] mb-16 opacity-80 italic max-w-sm">
+                            Organon Intersubjectiviste & Régulation Allostatique
+                        </p>
+                        <button
+                            onClick={() => setInitialized(true)}
+                            className="px-24 py-7 bg-cyan-700 hover:bg-cyan-600 text-white font-black rounded-full transition-all active:scale-95 shadow-2xl border border-cyan-400/30 uppercase text-xs"
+                        >
+                            Initialiser l'Inconscient
+                        </button>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="h-screen flex flex-col relative font-sans animate-fade-in">
+
+                    {/* Crisis Banner */}
+                    {isCrisis && (
+                        <div className="bg-red-600 text-white p-4 text-center font-bold animate-pulse flex items-center justify-center gap-4 z-[60]">
+                            <Siren size={24}/> MODE URGENCE : Respiration recommandée. SOS Amitié : 09 72 39 40 50
+                            <button onClick={() => setIsCrisis(false)} className="underline text-xs ml-4">Désactiver l'alerte</button>
+                        </div>
+                    )}
+
+                    <header className="p-5 border-b border-slate-800 bg-slate-950/90 backdrop-blur-3xl flex justify-between items-center z-50">
+                        <div className="flex items-center gap-10">
+                            <div className="flex flex-col">
+                                <span className="text-cyan-400 font-black tracking-tighter flex items-center gap-3 uppercase italic text-2xl">
+                                    PUCK_v114 <InfinityIcon size={20} className="text-rose-600 animate-pulse"/>
+                                </span>
+                                <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest font-bold">Intersubjectivité Active</span>
+                            </div>
+                            <div className="hidden lg:flex gap-8 border-l border-slate-800 pl-10 h-10 items-center">
+                                <div className="flex items-center gap-3 text-emerald-500" title="Énergie Métabolique">
+                                    <Battery size={18}/> <span className="text-xs font-mono font-bold">{Math.round(metabolicEnergy)}%</span>
+                                </div>
+                                <div className="flex items-center gap-3 text-rose-500" title="Incertitude">
+                                    <Target size={18}/> <span className="text-xs font-mono font-bold">{(surprisal).toFixed(3)}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex gap-4">
+                            <button onClick={generateSummary} disabled={isSummarizing || messages.length < 2} className="flex items-center gap-2 px-4 py-2 bg-amber-900/30 border border-amber-500/50 rounded-full text-amber-400 text-xs font-bold hover:bg-amber-900/50 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                                {isSummarizing ? <RefreshCw className="animate-spin" size={14}/> : <Sparkles size={14}/>}
+                                ✨ BILAN CLINIQUE ✨
+                            </button>
+                            <button onClick={() => setBreathing(!breathing)} className={`p-3 rounded-full border transition-all ${breathing ? 'bg-emerald-900 border-emerald-500 text-emerald-400' : 'border-slate-800 text-slate-500'}`}>
+                                <Flower2 size={24}/>
+                            </button>
+                            <button onClick={() => setShowLogs(!showLogs)} className={`p-3 rounded-full border border-slate-800 ${showLogs ? 'bg-cyan-900 text-cyan-400' : 'text-slate-500'}`}>
+                                <LayoutDashboard size={24}/>
+                            </button>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 flex flex-col items-center justify-center p-6 relative">
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] blur-[180px] rounded-full transition-colors duration-1000"
+                                 style={{ background: isThinking ? '#a855f7' : (isListening ? '#22d3ee' : currentQualia.color) }} />
+                        </div>
+
+                        <FaceAvatar sx={coords.sx} sy={coords.sy} z={coords.z} color={currentQualia.color} isThinking={isThinking} isSpeaking={isSpeaking} isListening={isListening} breathing={breathing} energy={metabolicEnergy} />
+
+                        <div className="mt-14 text-center z-10 px-8">
+                            <h2 className="text-7xl font-black italic tracking-tighter uppercase transition-all duration-700 color-transition" style={{ color: isThinking ? '#a855f7' : currentQualia.color }}>
+                                {currentQualia.id}
+                            </h2>
+                            <p className="mt-5 text-[13px] font-mono text-slate-500 uppercase tracking-[0.4em] opacity-80 italic max-w-lg mx-auto">
+                                "{currentQualia.q}"
+                            </p>
+                        </div>
+
+                        <div className="w-full max-w-lg mt-auto mb-16 z-30">
+                            <div className="flex gap-6 items-center">
+                                <button onClick={toggleMic} className={`p-8 glass rounded-[3rem] transition-all shadow-2xl ${isListening ? 'text-cyan-400 border-cyan-400 scale-105' : 'text-slate-500 border-slate-800'}`}>
+                                    {isListening ? <Mic size={36} className="animate-pulse"/> : <MicOff size={36}/>}
+                                </button>
+                                <div className="flex-1 relative group">
+                                    <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleInference(input)} placeholder={isListening ? "Écoute active (Interruption possible)..." : "Décrivez votre expérience..."} className="w-full bg-slate-900/80 border border-slate-700 p-8 rounded-[3rem] text-white outline-none focus:border-cyan-500 transition-all text-xl placeholder-slate-700" />
+                                    <button onClick={() => handleInference(input)} className="absolute right-8 top-7 p-1 text-cyan-400 hover:text-white transition-transform hover:scale-125">
+                                        <Send size={32}/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+
+                    {showLogs && (
+                        <div className="absolute inset-0 bg-slate-950/98 z-[100] p-8 pt-24 overflow-y-auto animate-fade-in scrollbar-hide">
+                            <div className="max-w-3xl mx-auto space-y-12">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-10">
+                                    <h3 className="text-white font-black uppercase text-sm tracking-[0.6em] italic flex items-center gap-5">
+                                        <History className="text-rose-600 animate-pulse" size={24}/> Trajectoire_Mnésique
+                                    </h3>
+                                    <button onClick={() => setShowLogs(false)} className="text-slate-500 hover:text-white transition-transform hover:scale-110"><X size={48}/></button>
+                                </div>
+
+                                {clinicalSummary && (
+                                    <div className="p-8 summary-gradient border border-amber-500/30 rounded-[3rem] shadow-2xl animate-fade-in">
+                                        <div className="flex items-center gap-4 mb-6">
+                                            <Sparkles className="text-amber-400" size={32} />
+                                            <h4 className="text-amber-400 font-black uppercase text-xl italic tracking-tighter">Bilan d'Allostasie</h4>
+                                        </div>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h5 className="text-slate-400 font-mono text-[10px] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    <Target size={14}/> Croyances (Priors) Détectées
+                                                </h5>
+                                                <ul className="flex flex-wrap gap-2">
+                                                    {clinicalSummary.priors.map((p, idx) => (
+                                                        <li key={idx} className="bg-amber-950/50 border border-amber-500/20 px-3 py-1 rounded-full text-amber-200 text-xs italic">{p}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h5 className="text-slate-400 font-mono text-[10px] uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    <Waves size={14}/> Dynamique de l'Incertitude
+                                                </h5>
+                                                <p className="text-slate-200 text-sm leading-relaxed">{clinicalSummary.surprisal_analysis}</p>
+                                            </div>
+                                            <div className="bg-cyan-950/30 border border-cyan-500/20 p-6 rounded-3xl">
+                                                <h5 className="text-cyan-400 font-mono text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                                                    <ShieldAlert size={14}/> ✨ Politique d'Action Métacognitive (Système 3)
+                                                </h5>
+                                                <p className="text-cyan-100 text-md italic font-medium">"{clinicalSummary.action_policy}"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-16 pb-20">
+                                    {messages.filter(m => m.role === 'ai').map((m, i) => (
+                                        <div key={i} className="p-12 glass rounded-[4rem] border-l-[12px] border-cyan-600 shadow-2xl relative">
+                                            {m.segments?.[0]?.bias && (
+                                                <div className="mb-8 bg-amber-950/40 border border-amber-500/30 p-5 rounded-3xl flex items-center gap-5 text-amber-500 text-xs font-bold uppercase tracking-widest">
+                                                    <ShieldAlert size={24}/> Script Rigide identifié : {m.segments[0].bias}
+                                                </div>
+                                            )}
+                                            <div className="text-slate-200 text-2xl leading-relaxed italic tracking-wide font-medium">{m.full}</div>
+                                            <div className="mt-10 pt-8 border-t border-slate-800 flex gap-10 opacity-30">
+                                                <div className="text-xs font-mono uppercase bg-slate-800 px-4 py-2 rounded-full">MET_LOAD: {m.metabolic_cost}</div>
+                                                <div className="text-xs font-mono uppercase bg-slate-800 px-4 py-2 rounded-full">SURP: {m.surprisal}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [config, setConfig] = useState(null);
+            const [showSettings, setShowSettings] = useState(false);
+
+            useEffect(() => {
+                const stored = localStorage.getItem('matrix_v46_config');
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (parsed.apiKey) setConfig(parsed);
+                        else setShowSettings(true);
+                    } catch { setShowSettings(true); }
+                } else {
+                    setShowSettings(true);
+                }
+            }, []);
+
+            const saveConfig = (newConfig) => {
+                localStorage.setItem('matrix_v46_config', JSON.stringify(newConfig));
+                setConfig(newConfig);
+                setShowSettings(false);
+            };
+
+            return (
+                <>
+                    {showSettings && <ConfigModal onSave={saveConfig} onCancel={config ? () => setShowSettings(false) : null} currentConfig={config} />}
+                    <DrPuckInterface config={config} openSettings={() => setShowSettings(true)} />
+                </>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
