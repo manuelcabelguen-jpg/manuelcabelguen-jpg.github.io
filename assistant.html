@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistant Rédaction Pro - Variables Dynamiques</title>
+
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. React Ecosystem -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- 3. Packages Pro (Exports) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pulse-blue {
+            0%, 100% { border-color: #0078D4; box-shadow: 0 0 0 0 rgba(0, 120, 212, 0.4); }
+            50% { border-color: #0078D4; box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.1); }
+        }
+        .generating-active { animation: pulse-blue 2s infinite; }
+
+        .rich-editor { min-height: 300px; outline: none; line-height: 1.6; }
+        .rich-editor h1 { font-size: 1.5em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; }
+        .rich-editor h2 { font-size: 1.25em; font-weight: bold; margin-top: 0.5em; margin-bottom: 0.25em; }
+        .rich-editor ul { list-style-type: disc; padding-left: 1.5em; }
+        .rich-editor p { margin-bottom: 0.5em; }
+
+        /* Modal Overlay */
+        .modal-overlay { background-color: rgba(0, 0, 0, 0.5); }
+    </style>
+</head>
+<body class="bg-[#F3F2F1] text-slate-800">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        // --- ICONES ---
+        const IconBase = ({ children, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{children}</svg>
+        );
+        const Icons = {
+            ShieldAlert: (p) => <IconBase {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6-8 10-8 10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></IconBase>,
+            Settings: (p) => <IconBase {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></IconBase>,
+            Lock: (p) => <IconBase {...p}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></IconBase>,
+            Save: (p) => <IconBase {...p}><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></IconBase>,
+            Bot: (p) => <IconBase {...p}><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></IconBase>,
+            Sparkles: (p) => <IconBase {...p}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 19v2"/><path d="M19 21h2"/></IconBase>,
+            CheckCircle: (p) => <IconBase {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></IconBase>,
+            FileSearch: (p) => <IconBase {...p}><path d="M4 22h14a2 2 0 0 0 2-2V7.5L14.5 2H6a2 2 0 0 0-2 2v4"/><path d="M14 2v6h6"/><path d="M5 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="m9 19-1.5-1.5"/></IconBase>,
+            X: (p) => <IconBase {...p}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></IconBase>,
+            Upload: (p) => <IconBase {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></IconBase>,
+            FileText: (p) => <IconBase {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></IconBase>,
+            Plus: (p) => <IconBase {...p}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></IconBase>,
+            Trash: (p) => <IconBase {...p}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></IconBase>,
+            ArrowDown: (p) => <IconBase {...p}><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></IconBase>,
+            ChevronLeft: (p) => <IconBase {...p}><polyline points="15 18 9 12 15 6"/></IconBase>,
+            ChevronRight: (p) => <IconBase {...p}><polyline points="9 18 15 12 9 6"/></IconBase>,
+            Bold: (p) => <IconBase {...p}><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></IconBase>,
+            Italic: (p) => <IconBase {...p}><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></IconBase>,
+            List: (p) => <IconBase {...p}><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></IconBase>,
+            FilePdf: (p) => <IconBase {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></IconBase>,
+            FileWord: (p) => <IconBase {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></IconBase>,
+            UserCog: (p) => <IconBase {...p}><circle cx="18" cy="15" r="3"/><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/><path d="m21.7 16.4.9.9"/><path d="m15.3 19-.9-.9"/><path d="m21.7 19-.9-.9"/><path d="m15.3 16.4.9.9"/><path d="M19.6 22v-1"/><path d="M19.6 14v-1"/></IconBase>,
+            FilePlus: (p) => <IconBase {...p}><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></IconBase>,
+            Edit: (p) => <IconBase {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></IconBase>
+        };
+
+        const SectionType = { FIXED: 'fixed', DYNAMIC: 'dynamic' };
+        const SourceType = { TEXT: 'Text', PDF: 'PDF' };
+
+        // --- DATA DEFAULTS ---
+        const DEFAULT_REPORT_STRUCTURES = [
+            {
+                id: 'rep_mpci',
+                label: 'Rapport de programme MPCI – Délinquance sexuelle',
+                sections: [
+                    { title: "1. Assiduité et participation", content: "<h3>INTRODUCTION :</h3><p>Rédiger ici...</p><h3>ASSIDUITÉ ET PARTICIPATION :</h3><p>Rédiger ici...</p>", genPrompt: "Pour {{nom}} (FPS: {{fps}}), analyse l'assiduité et la participation active au programme. Note les absences, les retards et l'engagement global.", verifPrompt: "Vérifie si le texte mentionne le taux de présence, les retards éventuels et qualifie le niveau de participation active." },
+                    { title: "2. Progrès - Vie personnelle", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Vie personnelle et affective</h3><p>Analyse...</p>", genPrompt: "Analyse le facteur de risque dynamique 'Vie personnelle et affective' pour {{nom}}. Identifie les stabilités et instabilités récentes.", verifPrompt: "Vérifie la présence d'une analyse des relations affectives et de la stabilité résidentielle/personnelle." },
+                    { title: "2. Progrès - Toxicomanie", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Toxicomanie</h3><p>Analyse...</p>", genPrompt: "Évalue le facteur 'Toxicomanie' pour {{nom}}. Note les progrès, les rechutes éventuelles ou le maintien de la sobriété.", verifPrompt: "Vérifie si l'abstinence ou la consommation est clairement établie et si les risques de rechute sont évalués." },
+                    { title: "2. Progrès - Relations fam.", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Relations matrimoniales et familiales</h3><p>Analyse...</p>", genPrompt: "Analyse les 'Relations matrimoniales et familiales' de {{nom}}. Le soutien familial est-il un facteur de protection ou de risque ?", verifPrompt: "Vérifie si la nature des relations familiales (soutien vs conflit) est décrite." },
+                    { title: "2. Progrès - Fréquentations", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Fréquentations</h3><p>Analyse...</p>", genPrompt: "Examine les fréquentations de {{nom}}. Y a-t-il des associations avec des pairs délinquants ou pro-sociaux ?", verifPrompt: "Vérifie la mention des fréquentations positives ou négatives." },
+                    { title: "2. Progrès - Emploi/Études", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Emploi et études</h3><p>Analyse...</p>", genPrompt: "Fais le point sur la situation 'Emploi et études' de {{nom}}. Stabilité, recherche d'emploi ou formation en cours.", verifPrompt: "Vérifie si le statut d'emploi ou d'étude est actuel." },
+                    { title: "2. Progrès - Attitudes", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Attitudes</h3><p>Analyse...</p>", genPrompt: "Analyse les attitudes de {{nom}} envers la criminalité, l'autorité et le changement. Note les distorsions cognitives observées.", verifPrompt: "Vérifie si les attitudes pro-criminelles ou pro-sociales sont analysées." },
+                    { title: "2. Progrès - Comportement", content: "<h3>FACTEUR DE RISQUE DYNAMIQUE : Comportement dans la collectivité</h3><p>Analyse...</p>", genPrompt: "Décris le comportement de {{nom}} dans la collectivité. Respect des règles, interactions sociales.", verifPrompt: "Vérifie si le respect des conditions et le comportement social sont abordés." },
+                    { title: "2. Progrès - Maîtrise de soi", content: "<h3>ÉVALUATION DE L’AGENT(E) DE PROGRAMMES DES PLANS DE MAÎTRISE DE SOI</h3><p>Analyse...</p>", genPrompt: "Évalue les plans de maîtrise de soi de {{nom}}. Utilise-t-il les stratégies apprises pour gérer ses émotions et impulsions ?", verifPrompt: "Vérifie si l'application des stratégies de maîtrise de soi est évaluée." },
+                    { title: "3. Recommandations", content: "<h3>DÉFIS ANTICIPÉS</h3><p>...</p><h3>PROCHAINES ÉTAPES</h3><p>...</p><h3>STRATÉGIES DE SURVEILLANCE</h3><p>...</p><h3>RÉSUMÉ DE L’ANALYSE DU RISQUE/DES BESOINS :</h3><p>...</p>", genPrompt: "Rédige les défis anticipés, les prochaines étapes et les stratégies de surveillance recommandées pour {{nom}}.", verifPrompt: "Vérifie la présence des défis, des prochaines étapes et des stratégies de surveillance." }
+                ]
+            },
+            {
+                id: 'rep_prep',
+                label: 'Rapport Préparatoire (Exemple)',
+                sections: [
+                    { title: "1. Introduction", content: "<p>Introduction du rapport préparatoire...</p>", genPrompt: "Rédige une introduction formelle pour le dossier de {{nom}}.", verifPrompt: "Vérifie la présence du contexte légal et des dates clés." },
+                    { title: "2. Analyse des facteurs", content: "<p>Analyse...</p>", genPrompt: "Effectue une analyse détaillée des éléments fournis pour {{nom}}.", verifPrompt: "Vérifie que tous les facteurs de risque pertinents sont couverts." },
+                    { title: "3. Conclusion", content: "<p>Conclusion...</p>", genPrompt: "Synthétise les observations pour {{nom}} et formule une conclusion claire.", verifPrompt: "Vérifie la présence d'une recommandation finale claire." }
+                ]
+            },
+            {
+                id: 'rep_maintien',
+                label: 'Rapport de Maintien des Acquis (Exemple)',
+                sections: [
+                    { title: "1. Bilan de la période", content: "<p>Bilan des acquis...</p>", genPrompt: "Fais le bilan des compétences acquises et des progrès réalisés par {{nom}}.", verifPrompt: "Vérifie si les progrès concrets sont listés." },
+                    { title: "2. Objectifs futurs", content: "<p>Nouveaux objectifs...</p>", genPrompt: "Propose des objectifs concrets et mesurables pour la prochaine période.", verifPrompt: "Vérifie si les objectifs sont SMART." }
+                ]
+            }
+        ];
+
+        // --- COMPOSANTS UTILITAIRES ---
+        const RichEditor = ({ value, onChange }) => {
+            const editorRef = useRef(null);
+            useEffect(() => { if (editorRef.current && editorRef.current.innerHTML !== value) editorRef.current.innerHTML = value; }, []);
+            return (
+                <div className="flex flex-col h-full border border-gray-200 rounded-lg overflow-hidden bg-white">
+                    <div className="flex items-center gap-1 p-2 bg-gray-50 border-b border-gray-200">
+                        <button onClick={() => {document.execCommand('bold', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.Bold className="w-4 h-4"/></button>
+                        <button onClick={() => {document.execCommand('italic', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.Italic className="w-4 h-4"/></button>
+                        <button onClick={() => {document.execCommand('insertUnorderedList', false); editorRef.current.focus()}} className="p-1 hover:bg-gray-200 rounded"><Icons.List className="w-4 h-4"/></button>
+                    </div>
+                    <div ref={editorRef} className="rich-editor flex-1 p-4 overflow-y-auto" contentEditable onInput={(e) => onChange(e.target.innerHTML)} dangerouslySetInnerHTML={{ __html: value }} />
+                </div>
+            );
+        };
+
+        // --- MOTEUR IA AVEC VARIABLES ---
+        const generateSectionContent = async (promptText, sources, context, existingContent = "") => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // 1. Remplacement des variables
+                    let finalPrompt = promptText
+                        .replace(/{{nom}}/g, context.nom || "[NOM]")
+                        .replace(/{{fps}}/g, context.fps || "[FPS]")
+                        .replace(/{{date_naissance}}/g, context.dateNaissance || "[DATE]");
+
+                    const formatCitation = (s) => `(${s.docType || 'Doc'} de ${s.author || 'Inconnu'} datée du ${s.date || 'N/D'})`;
+
+                    // 2. Simulation de l'IA (On injecte les variables dans la réponse pour montrer que ça marche)
+                    let response = existingContent.length > 0 ? "<br/><p><strong>[COMPLÉMENT IA] :</strong> " : "<p>";
+
+                    response += `<em>(Prompt traité : "${finalPrompt}")</em><br/><br/>`;
+                    response += `Analyse concernant <strong>${context.nom} (${context.fps})</strong> : `;
+
+                    if (sources.length === 0) {
+                        response += "Aucune source spécifique sélectionnée. Analyse basée sur le contexte général.";
+                    } else {
+                        response += `Synthèse basée sur ${sources.length} document(s). `;
+                        sources.forEach(s => response += `L'élément <em>${s.title}</em> indique une observation pertinente ${formatCitation(s)}. `);
+                    }
+                    response += "</p>";
+                    resolve(response);
+                }, 1200);
+            });
+        };
+
+        // --- PANNEAU CONFIG ADMIN (HIERARCHIQUE) ---
+        const AdminConfigPanel = ({ onClose, reportStructures, onUpdateStructures }) => {
+            const [structures, setStructures] = useState(reportStructures);
+            const [activeTab, setActiveTab] = useState(structures[0].id);
+
+            const handleSave = () => { onUpdateStructures(structures); onClose(); };
+
+            const updatePrompt = (structureId, sectionIndex, field, value) => {
+                const newStructures = structures.map(s => {
+                    if (s.id !== structureId) return s;
+                    const newSections = [...s.sections];
+                    newSections[sectionIndex] = { ...newSections[sectionIndex], [field]: value };
+                    return { ...s, sections: newSections };
+                });
+                setStructures(newStructures);
+            };
+
+            const currentStructure = structures.find(s => s.id === activeTab);
+
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
+                    <div className="bg-white rounded-xl shadow-2xl w-5/6 h-5/6 flex flex-col">
+                        <div className="bg-slate-800 text-white p-4 flex justify-between items-center rounded-t-xl">
+                            <h2 className="font-bold text-lg flex items-center gap-2"><Icons.Settings className="w-5 h-5"/> Admin : Configuration des Rapports</h2>
+                            <button onClick={onClose}><Icons.X className="w-6 h-6"/></button>
+                        </div>
+
+                        <div className="flex border-b bg-gray-100 px-4 pt-2 gap-2">
+                            {structures.map(s => (
+                                <button key={s.id} onClick={() => setActiveTab(s.id)} className={`px-4 py-2 rounded-t-lg text-sm font-bold ${activeTab === s.id ? 'bg-white text-blue-600 border-t border-x' : 'text-gray-500 hover:bg-gray-200'}`}>
+                                    {s.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-6 bg-white flex gap-6">
+                            <div className="flex-1 space-y-6">
+                                {currentStructure.sections.map((section, idx) => (
+                                    <div key={idx} className="bg-gray-50 border rounded-lg p-4 shadow-sm">
+                                        <div className="font-bold text-slate-800 mb-3 border-b pb-2">{section.title}</div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-purple-600 mb-1 uppercase">Prompt de Génération</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-purple-200 outline-none"
+                                                    value={section.genPrompt || ""}
+                                                    onChange={(e) => updatePrompt(currentStructure.id, idx, 'genPrompt', e.target.value)}
+                                                    placeholder="Instructions pour générer le texte..." />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-bold text-green-600 mb-1 uppercase">Prompt de Vérification</label>
+                                                <textarea className="w-full h-24 text-xs font-mono bg-white border rounded p-2 focus:ring-2 focus:ring-green-200 outline-none"
+                                                    value={section.verifPrompt || ""}
+                                                    onChange={(e) => updatePrompt(currentStructure.id, idx, 'verifPrompt', e.target.value)}
+                                                    placeholder="Instructions pour vérifier le contenu..." />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Aide-mémoire Variables */}
+                            <div className="w-64 shrink-0 bg-blue-50 p-4 rounded h-fit border border-blue-100 sticky top-0">
+                                <h4 className="font-bold text-blue-800 mb-2 text-sm">Variables Disponibles</h4>
+                                <p className="text-xs text-blue-600 mb-2">Utilisez ces balises dans vos prompts.</p>
+                                <ul className="text-xs font-mono space-y-1 text-slate-700">
+                                    <li className="bg-white p-1 rounded border">{`{{nom}}`}</li>
+                                    <li className="bg-white p-1 rounded border">{`{{fps}}`}</li>
+                                    <li className="bg-white p-1 rounded border">{`{{date_naissance}}`}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className="p-4 border-t bg-white flex justify-end gap-3 rounded-b-xl">
+                            <button onClick={onClose} className="px-4 py-2 text-gray-600">Annuler</button>
+                            <button onClick={handleSave} className="px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 shadow flex items-center gap-2"><Icons.Save className="w-4 h-4"/> Enregistrer Tout</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- MODAL SELECTION RAPPORT ---
+        const ReportSelectModal = ({ onClose, onSelect, structures }) => (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
+                <div className="bg-white rounded-xl shadow-2xl w-96 p-6 flex flex-col">
+                    <div className="flex justify-between items-center mb-4">
+                        <h2 className="font-bold text-lg text-slate-800">Choisir un Modèle</h2>
+                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
+                    </div>
+                    <div className="space-y-2 flex-1 overflow-y-auto max-h-96">
+                        {structures.map(r => (
+                            <button key={r.id} onClick={() => onSelect(r)} className="w-full text-left p-3 rounded border hover:bg-blue-50 hover:border-blue-300 transition-colors group">
+                                <div className="font-bold text-sm text-slate-700 group-hover:text-blue-700">{r.label}</div>
+                                <div className="text-xs text-slate-500">{r.sections.length} sections</div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- RESULTAT VERIFICATION ---
+        const VerificationResultModal = ({ result, onClose }) => (
+            <div className="fixed inset-0 z-50 flex items-center justify-center modal-overlay backdrop-blur-sm">
+                <div className="bg-white rounded-xl shadow-2xl w-1/2 p-6 flex flex-col animate-in slide-in-from-bottom duration-300">
+                    <div className="flex justify-between items-center mb-4 border-b pb-2">
+                        <h2 className="font-bold text-lg text-green-700 flex items-center gap-2"><Icons.CheckCircle className="w-5 h-5"/> Résultat Vérification</h2>
+                        <button onClick={onClose}><Icons.X className="w-5 h-5 text-gray-400 hover:text-gray-600"/></button>
+                    </div>
+                    <div className="flex-1 overflow-y-auto max-h-96 text-sm text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: result }} />
+                    <div className="mt-4 pt-2 border-t flex justify-end">
+                        <button onClick={onClose} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded text-slate-700 font-medium">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // --- PANNEAU INFO DOSSIER ---
+        const CaseInfoPanel = ({ context, onUpdateContext, isOpen, toggleOpen }) => {
+            if (!isOpen) return (
+                <button onClick={toggleOpen} className="w-full bg-white p-4 border-b border-gray-200 flex items-center gap-3 hover:bg-gray-50 transition">
+                    <div className="w-10 h-10 bg-[#0078D4] text-white rounded-full flex items-center justify-center font-bold">{context.nom ? context.nom.substring(0,2).toUpperCase() : '??'}</div>
+                    <div className="text-left">
+                        <div className="font-bold text-gray-800 text-sm">{context.nom || 'Nom Inconnu'}</div>
+                        <div className="text-xs text-gray-500">FPS: {context.fps || '---'}</div>
+                    </div>
+                    <Icons.UserCog className="w-4 h-4 ml-auto text-gray-400"/>
+                </button>
+            );
+
+            return (
+                <div className="bg-white border-b border-gray-200 p-4 shadow-inner">
+                    <div className="flex justify-between items-center mb-3">
+                        <h3 className="text-xs font-bold text-gray-500 uppercase">Informations Dossier (Variables)</h3>
+                        <button onClick={toggleOpen}><Icons.X className="w-4 h-4 text-gray-400"/></button>
+                    </div>
+                    <div className="space-y-3">
+                        <div>
+                            <label className="block text-[10px] font-bold text-gray-500 mb-1">NOM COMPLET</label>
+                            <input type="text" className="w-full text-sm border p-1 rounded" value={context.nom} onChange={(e) => onUpdateContext('nom', e.target.value)} />
+                        </div>
+                        <div className="flex gap-2">
+                            <div className="flex-1">
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">FPS</label>
+                                <input type="text" className="w-full text-sm border p-1 rounded" value={context.fps} onChange={(e) => onUpdateContext('fps', e.target.value)} />
+                            </div>
+                            <div className="flex-1">
+                                <label className="block text-[10px] font-bold text-gray-500 mb-1">DATE NAISSANCE</label>
+                                <input type="date" className="w-full text-sm border p-1 rounded" value={context.dateNaissance} onChange={(e) => onUpdateContext('dateNaissance', e.target.value)} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        function AssistantProV10() {
+            // Context Global
+            const [caseContext, setCaseContext] = useState({ nom: "DOE, John", fps: "123456A", dateNaissance: "1985-04-12" });
+            const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+            // Data
+            const [sections, setSections] = useState([]);
+            const [sources, setSources] = useState([]);
+            const [activeSectionId, setActiveSectionId] = useState('');
+            const [reportStructures, setReportStructures] = useState(DEFAULT_REPORT_STRUCTURES);
+
+            // UI States
+            const [isAdminMode, setIsAdminMode] = useState(false);
+            const [showConfig, setShowConfig] = useState(false);
+            const [showReportModal, setShowReportModal] = useState(false);
+            const [verificationResult, setVerificationResult] = useState(null);
+            const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [previewSourceId, setPreviewSourceId] = useState(null);
+            const [isDragOver, setIsDragOver] = useState(false);
+
+            // Init & Save
+            useEffect(() => {
+                const savedData = localStorage.getItem('assistant_data_v10');
+                if (savedData) {
+                    const parsed = JSON.parse(savedData);
+                    setSections(parsed.sections || []);
+                    setSources(parsed.sources || []);
+                    setReportStructures(parsed.structures || DEFAULT_REPORT_STRUCTURES);
+                    setCaseContext(parsed.context || { nom: "DOE, John", fps: "123456A" });
+                    if(parsed.sections && parsed.sections.length > 0) setActiveSectionId(parsed.sections[0].id);
+                } else {
+                    const initSections = [{ id: 's1', title: "1. Identification", type: SectionType.FIXED, content: "<p>Section d'intro...</p>", selectedSourceIds: [] }];
+                    setSections(initSections);
+                    setActiveSectionId('s1');
+                }
+            }, []);
+
+            useEffect(() => {
+                localStorage.setItem('assistant_data_v10', JSON.stringify({ sections, sources, structures: reportStructures, context: caseContext }));
+            }, [sections, sources, reportStructures, caseContext]);
+
+            const activeSection = sections.find(s => s.id === activeSectionId);
+            const activeSourceData = previewSourceId ? sources.find(s => s.id === previewSourceId) : null;
+            const fileInputRef = useRef(null);
+
+            // Handlers
+            const handleUpdateContext = (field, val) => setCaseContext(prev => ({...prev, [field]: val}));
+
+            const handleCopilotGenerate = async (action) => {
+                if (!activeSection) return;
+
+                // Retrieve the configured prompt for the current section
+                // We stored 'structureId' and 'sectionIndex' in the section object when creating it to link back to config
+                let promptToUse = "";
+
+                if (activeSection.structureId && activeSection.sectionIndex !== undefined) {
+                    const struct = reportStructures.find(s => s.id === activeSection.structureId);
+                    if (struct && struct.sections[activeSection.sectionIndex]) {
+                        if (action === 'verify') {
+                            promptToUse = struct.sections[activeSection.sectionIndex].verifPrompt || "Vérifie ce contenu.";
+                        } else {
+                            promptToUse = struct.sections[activeSection.sectionIndex].genPrompt || "Génère ce contenu.";
+                        }
+                    }
+                } else {
+                    promptToUse = "Analyse standard...";
+                }
+
+                setIsGenerating(true);
+                const relevantSources = sources.filter(s => activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(s.id));
+
+                if (action === 'verify') {
+                    // Verification logic: send content + verification prompt
+                    const existingText = activeSection.content || "";
+                    // We simulate verification by appending result
+                    const result = await generateSectionContent(promptToUse, relevantSources, caseContext, existingText);
+                    setVerificationResult(result);
+                } else {
+                    // Generation logic
+                    const generated = await generateSectionContent(promptToUse, relevantSources, caseContext, action === 'append' ? (activeSection.content || "") : "");
+                    const finalContent = action === 'append' ? (activeSection.content || "") + generated : generated;
+                    setSections(prev => prev.map(s => s.id === activeSectionId ? { ...s, content: finalContent, status: 'review_needed' } : s));
+                }
+
+                setIsGenerating(false);
+            };
+
+            const processFile = (file) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    setSources(prev => [...prev, {
+                        id: Date.now().toString(), title: file.name, type: file.type === 'application/pdf' ? SourceType.PDF : SourceType.TEXT,
+                        content: e.target.result, date: new Date().toISOString().split('T')[0]
+                    }]);
+                };
+                reader.readAsDataURL(file);
+            };
+
+            const handleExportPDF = () => {
+                const element = document.createElement('div');
+                element.innerHTML = `<h1>Dossier: ${caseContext.nom} (${caseContext.fps})</h1><hr/>` + sections.map(s => `<h2>${s.title}</h2><div>${s.content}</div>`).join('<br/>');
+                html2pdf().from(element).save(`Rapport_${caseContext.fps}.pdf`);
+            };
+
+            const handleLoadReport = (reportTemplate) => {
+                if(!confirm("Attention: Cela va remplacer toutes les sections actuelles. Continuer ?")) return;
+                const newSections = reportTemplate.sections.map((s, i) => ({
+                    id: `s_${Date.now()}_${i}`,
+                    title: s.title,
+                    type: SectionType.DYNAMIC,
+                    content: s.content,
+                    structureId: reportTemplate.id, // Link to config
+                    sectionIndex: i, // Link to config
+                    selectedSourceIds: []
+                }));
+                setSections(newSections);
+                setActiveSectionId(newSections[0].id);
+                setShowReportModal(false);
+            };
+
+            const handleOpenAdmin = () => {
+                if (isAdminMode) {
+                    setShowConfig(true);
+                } else {
+                    const p = prompt("Mdp Admin:");
+                    if (p === 'admin') {
+                        setIsAdminMode(true);
+                        setShowConfig(true);
+                    }
+                }
+            };
+
+            const handleDeleteSection = (e, sectionId) => {
+                e.stopPropagation();
+                if (!confirm("Supprimer cette section ?")) return;
+
+                const newSections = sections.filter(s => s.id !== sectionId);
+                setSections(newSections);
+
+                if (activeSectionId === sectionId) {
+                    setActiveSectionId(newSections.length > 0 ? newSections[0].id : '');
+                }
+            };
+
+            return (
+                <div className="flex h-screen overflow-hidden font-sans text-sm">
+                    {/* MODAL CONFIG */}
+                    {showConfig && <AdminConfigPanel onClose={() => setShowConfig(false)} reportStructures={reportStructures} onUpdateStructures={setReportStructures} />}
+
+                    {/* MODAL REPORT SELECTION */}
+                    {showReportModal && <ReportSelectModal onClose={() => setShowReportModal(false)} structures={reportStructures} onSelect={handleLoadReport} />}
+
+                    {/* MODAL VERIFICATION RESULT */}
+                    {verificationResult && <VerificationResultModal result={verificationResult} onClose={() => setVerificationResult(null)} />}
+
+                    {/* SIDEBAR */}
+                    <div className={`${isSidebarOpen ? 'w-72' : 'w-12'} bg-white border-r border-gray-200 flex flex-col transition-all duration-300 shadow-lg z-20`}>
+                        <div className="h-14 bg-[#002050] flex items-center justify-between px-3 shrink-0">
+                            {isSidebarOpen && <div className="flex items-center gap-2 text-white font-semibold tracking-wide"><Icons.ShieldAlert className="w-5 h-5"/> <span>G-CAS v10</span></div>}
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-white/80 hover:text-white p-1">{isSidebarOpen ? <Icons.ChevronLeft className="w-5 h-5"/> : <Icons.ChevronRight className="w-5 h-5"/>}</button>
+                        </div>
+
+                        {isSidebarOpen && (
+                            <React.Fragment>
+                                {/* PANNEAU INFO DOSSIER */}
+                                <CaseInfoPanel context={caseContext} onUpdateContext={handleUpdateContext} isOpen={isInfoOpen} toggleOpen={() => setIsInfoOpen(!isInfoOpen)} />
+
+                                {/* LISTE SECTIONS */}
+                                <div className="flex-1 overflow-y-auto p-2">
+                                    <div className="text-[10px] font-bold text-gray-400 uppercase mb-2 px-2 mt-2 flex justify-between items-center">
+                                        Plan du rapport
+                                        <button onClick={() => setShowReportModal(true)} title="Changer de modèle" className="text-blue-500 hover:text-blue-700"><Icons.FilePlus className="w-3 h-3"/></button>
+                                    </div>
+                                    {sections.map(s => (
+                                        <div key={s.id} onClick={() => { setActiveSectionId(s.id); setPreviewSourceId(null); }}
+                                             className={`group px-3 py-2 rounded mb-1 cursor-pointer flex items-center justify-between ${activeSectionId === s.id ? 'bg-blue-50 text-blue-700 font-medium' : 'hover:bg-gray-100 text-gray-700'}`}>
+                                            <span className="truncate flex-1">{s.title}</span>
+                                            <div className="flex items-center gap-2">
+                                                {s.status === 'review_needed' && <span className="w-2 h-2 bg-orange-400 rounded-full"></span>}
+                                                <button onClick={(e) => handleDeleteSection(e, s.id)} className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-100 hover:text-red-600 rounded transition-all" title="Supprimer"><Icons.Trash className="w-3 h-3"/></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    <button onClick={() => {const nid=`s_${Date.now()}`; setSections([...sections, {id:nid, title:"Nouvelle Section", type:SectionType.DYNAMIC, content:"", selectedSourceIds:[]}]); setActiveSectionId(nid);}}
+                                        className="w-full mt-2 py-2 border border-dashed border-gray-300 rounded text-gray-500 hover:border-blue-500 hover:text-blue-600 text-xs font-bold flex justify-center items-center gap-2">
+                                        <Icons.Plus className="w-3 h-3"/> Ajouter Section
+                                    </button>
+                                </div>
+
+                                {/* ADMIN FOOTER */}
+                                <div className="p-3 border-t bg-gray-50">
+                                    <button onClick={handleOpenAdmin}
+                                        className={`w-full py-2 rounded flex items-center justify-center gap-2 text-xs font-bold transition-colors ${isAdminMode ? 'bg-slate-800 text-white' : 'text-gray-400 hover:bg-gray-200'}`}>
+                                        {isAdminMode ? <React.Fragment><Icons.Settings className="w-4 h-4"/> Config Admin</React.Fragment> : <React.Fragment><Icons.Lock className="w-3 h-3"/> Admin</React.Fragment>}
+                                    </button>
+                                </div>
+                            </React.Fragment>
+                        )}
+                    </div>
+
+                    {/* MAIN AREA */}
+                    <div className="flex-1 flex flex-col min-w-0 bg-white">
+                        {/* TOOLBAR */}
+                        <div className="h-14 border-b border-gray-200 flex items-center justify-between px-6 bg-white shrink-0">
+                            <input type="text" value={activeSection ? activeSection.title : ''} onChange={(e) => setSections(sections.map(s => s.id === activeSectionId ? { ...s, title: e.target.value } : s))} className="font-bold text-lg text-gray-800 bg-transparent border-none outline-none focus:ring-0 w-full max-w-md"/>
+                            <div className="flex gap-2">
+                                <button onClick={handleExportPDF} className="flex items-center gap-2 px-3 py-1.5 border border-gray-300 rounded text-gray-700 hover:bg-gray-50"><Icons.FilePdf className="w-4 h-4 text-red-600"/> Export PDF</button>
+                                <button className="flex items-center gap-2 px-4 py-1.5 bg-[#0078D4] text-white rounded hover:bg-[#106EBE] shadow-sm"><Icons.Save className="w-4 h-4"/> Sauvegardé</button>
+                            </div>
+                        </div>
+
+                        {/* WORKSPACE */}
+                        <div className="flex-1 flex overflow-hidden">
+                            <div className={`flex-1 flex flex-col p-6 transition-all duration-300 ${previewSourceId ? 'w-1/2' : 'w-full'} overflow-hidden`}>
+                                {activeSection && (
+                                    <React.Fragment>
+                                        <RichEditor value={activeSection.content} onChange={(val) => setSections(sections.map(s => s.id === activeSectionId ? { ...s, content: val, status: 'draft' } : s))} />
+
+                                        {activeSection.type === SectionType.DYNAMIC && (
+                                            <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                                                <div className="flex justify-between items-center mb-3">
+                                                    <div className="flex gap-2 text-xs font-bold text-gray-500 uppercase"><Icons.Sparkles className="w-4 h-4 text-purple-600"/> Assistant IA</div>
+                                                    <div className="flex gap-2">
+                                                        {isAdminMode && (
+                                                            <button onClick={handleOpenAdmin} title="Configurer les prompts de cette section" className="p-1 text-gray-400 hover:text-blue-600 border rounded hover:bg-blue-50 mr-2">
+                                                                <Icons.Settings className="w-4 h-4"/>
+                                                            </button>
+                                                        )}
+                                                        <button onClick={() => handleCopilotGenerate('verify')} disabled={isGenerating} className="px-3 py-1 bg-white border border-green-200 text-green-700 rounded text-xs hover:bg-green-50 flex items-center gap-1 font-bold"><Icons.CheckCircle className="w-3 h-3"/> Vérifier</button>
+                                                        <button onClick={() => handleCopilotGenerate('replace')} disabled={isGenerating} className="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700 flex items-center gap-1"><Icons.Bot className="w-3 h-3"/> Générer</button>
+                                                    </div>
+                                                </div>
+
+                                                {/* Le panneau de sélection de modèle a été supprimé car les prompts sont désormais liés à la section */}
+                                                <div className="text-[10px] text-gray-400 mb-2 italic">
+                                                    Les prompts de génération et de vérification sont configurés spécifiquement pour cette section.
+                                                </div>
+
+                                                <div className="flex flex-wrap gap-2">
+                                                    {sources.map(src => {
+                                                        const isSel = activeSection.selectedSourceIds && activeSection.selectedSourceIds.includes(src.id);
+                                                        return (
+                                                            <button key={src.id} onClick={() => setSections(sections.map(s=>s.id===activeSectionId?{...s, selectedSourceIds:isSel?s.selectedSourceIds.filter(i=>i!==src.id):[...(s.selectedSourceIds||[]), src.id]}:s))}
+                                                                className={`px-2 py-1 rounded text-[10px] border flex items-center gap-1 ${isSel ? 'bg-blue-100 border-blue-300 text-blue-800' : 'bg-white text-gray-500'}`}>
+                                                                {src.type === SourceType.PDF ? <Icons.FilePdf className="w-3 h-3"/> : <Icons.FileText className="w-3 h-3"/>} {src.title}
+                                                            </button>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </React.Fragment>
+                                )}
+                            </div>
+
+                            {/* PREVIEW PANEL */}
+                            {previewSourceId ? (
+                                <div className="w-1/2 border-l border-gray-200 bg-gray-50 flex flex-col animate-in slide-in-from-right duration-300">
+                                    <div className="h-10 bg-white border-b flex justify-between items-center px-4"><span className="font-bold text-xs uppercase text-gray-600">Aperçu Source</span><button onClick={() => setPreviewSourceId(null)}><Icons.X className="w-4 h-4"/></button></div>
+                                    <div className="flex-1 p-4 overflow-hidden relative">
+                                        {activeSourceData && activeSourceData.type === SourceType.PDF ? <iframe src={activeSourceData.content} className="w-full h-full bg-white border"></iframe> : <div className="w-full h-full bg-white border p-4 overflow-y-auto font-mono text-sm">{activeSourceData ? activeSourceData.content : ''}</div>}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="w-64 border-l bg-gray-50 flex flex-col shrink-0" onDragOver={e=>{e.preventDefault(); setIsDragOver(true)}} onDragLeave={()=>setIsDragOver(false)} onDrop={e=>{e.preventDefault(); setIsDragOver(false); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);}}>
+                                    <div className="p-4 bg-white border-b flex justify-between items-center">
+                                        <h3 className="font-bold text-sm text-gray-700">Sources</h3>
+                                        <button onClick={()=>fileInputRef.current.click()}><Icons.Upload className="w-4 h-4 text-blue-600"/></button>
+                                        <input type="file" ref={fileInputRef} className="hidden" onChange={e=>e.target.files[0] && processFile(e.target.files[0])}/>
+                                    </div>
+                                    <div className={`flex-1 p-2 space-y-2 overflow-y-auto ${isDragOver?'bg-blue-100':''}`}>
+                                        {sources.map(s=>(<div key={s.id} onClick={()=>setPreviewSourceId(s.id)} className="bg-white p-2 border rounded shadow-sm cursor-pointer hover:border-blue-400 text-xs truncate flex gap-2"><Icons.FileText className="w-4 h-4 text-gray-400"/> {s.title}</div>))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<AssistantProV10 />);
+    </script>
+</body>
+</html>
