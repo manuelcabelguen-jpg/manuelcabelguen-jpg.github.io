@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartograffect - Live Finance</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'DM Sans', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+
+  <!-- React & ReactDOM (UMD via CDN) -->
+  <script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+
+  <!-- Babel for in-browser JSX compilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Recharts and its dependencies -->
+  <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.js"></script>
+  <script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Firebase (compat version for global namespace) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+</head>
+<body class="bg-slate-950 text-slate-200 antialiased selection:bg-indigo-500/30">
+
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useCallback } = React;
+    const {
+      ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid, Tooltip,
+      ResponsiveContainer, ReferenceLine, Cell
+    } = window.Recharts;
+
+    // --- Configuration Firebase ---
+    // If you don't have these, the app will run without Firebase (Local Storage mode)
+    const firebaseConfig = {
+      // Add your real config here if needed, or leave empty to use local storage fallback
+    };
+
+    // Fallback logic for DB/Auth
+    let app, auth, db;
+    try {
+      if (Object.keys(firebaseConfig).length > 0) {
+        app = firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+      }
+    } catch (e) {
+      console.warn("Firebase not configured. Using local storage fallback.", e);
+    }
+
+    const appId = 'carto-finance-live';
+
+    // Helper component for Lucide Icons
+    const Icon = ({ name, size = 24, className = '', color }) => {
+      // Convert kebab-case (e.g., 'line-chart') to PascalCase (e.g., 'LineChart')
+      const pascalName = name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+      const iconData = lucide.icons[pascalName];
+
+      if (!iconData) {
+          return <span className={`inline-block border border-dashed border-slate-500 rounded ${className}`} style={{width: size, height: size}} />;
+      }
+
+      try {
+        const svgNode = lucide.createElement(iconData);
+        svgNode.setAttribute('width', size);
+        svgNode.setAttribute('height', size);
+        if (className) svgNode.setAttribute('class', className);
+        if (color) svgNode.setAttribute('stroke', color);
+
+        return <span dangerouslySetInnerHTML={{ __html: svgNode.outerHTML }} className="inline-flex items-center justify-center" />;
+      } catch (e) {
+         console.warn("Lucide render error for", name, e);
+         return <span className={`inline-block border border-dashed border-slate-500 rounded ${className}`} style={{width: size, height: size}} />;
+      }
+    };
+
+    const App = () => {
+      const [user, setUser] = useState({ uid: 'local_user' });
+      const [logs, setLogs] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [isAnalyzing, setIsAnalyzing] = useState(false);
+      const [aiAnalysis, setAiAnalysis] = useState("");
+      const [view, setView] = useState('dashboard');
+      const [geminiApiKey, setGeminiApiKey] = useState(localStorage.getItem('gemini_api_key') || '');
+      const [showApiKeyInput, setShowApiKeyInput] = useState(!geminiApiKey);
+      const [useMockMarketData, setUseMockMarketData] = useState(false); // Default to real API since requested
+      const [useAiAgent, setUseAiAgent] = useState(false); // Toggle for Gemini AI Governing Agent
+      const [apiError, setApiError] = useState(null);
+
+      // Configuration du Portefeuille de l'utilisateur
+      const [portfolio, setPortfolio] = useState(() => {
+        const saved = localStorage.getItem('carto_portfolio');
+        const parsed = saved ? JSON.parse(saved) : {};
+        return {
+          veqtShares: parsed.veqtShares !== undefined ? parsed.veqtShares : 1000,
+          veqtAvgCost: parsed.veqtAvgCost !== undefined ? parsed.veqtAvgCost : 38.50,
+          cashAvailable: parsed.cashAvailable !== undefined ? parsed.cashAvailable : 15000,
+          helocInvested: parsed.helocInvested !== undefined ? parsed.helocInvested : 0,
+          helocAvailable: parsed.helocAvailable !== undefined ? parsed.helocAvailable : 0,
+          notificationEmail: parsed.notificationEmail !== undefined ? parsed.notificationEmail : ''
+        };
+      });
+
+      // Flux de données de marché
+      const [marketData, setMarketData] = useState({
+        vix: { price: 14.5, change: 0, percent: 0 },
+        veqt: { price: 40.20, change: 0, percent: 0 },
+        cash: { price: 50.00, change: 0, percent: 0 },
+        interestRate: 4.5,
+        // Nouveaux macro-indicateurs allostasiques
+        macro: {
+          vixRatio: 1.05,
+          yieldSpread: 0.15,
+          creditSpread: 3.5,
+          putCallRatio: 0.95,
+          vixVeqtCorrelation: -0.85
+        },
+        lastSync: new Date().toLocaleTimeString()
+      });
+
+      const [isSyncing, setIsSyncing] = useState(false);
+
+      useEffect(() => {
+        localStorage.setItem('carto_portfolio', JSON.stringify(portfolio));
+      }, [portfolio]);
+
+      useEffect(() => {
+        // Init logs from local storage if Firebase is not available
+        if (!db) {
+          const savedLogs = localStorage.getItem('carto_logs');
+          if (savedLogs) {
+            setLogs(JSON.parse(savedLogs));
+          }
+          setLoading(false);
+          return;
+        }
+
+        if (!user || user.uid === 'local_user') return;
+
+        try {
+           // Firestore logic would go here if authenticated
+        } catch(e) { console.error(e) }
+      }, [user, db]);
+
+      // --- FETCH REAL MARKET DATA (Yahoo Finance & Bank of Canada) ---
+      const fetchRealMarketData = async () => {
+        setIsSyncing(true);
+        setApiError(null);
+        try {
+          // Fetch data for symbols, requesting 1mo range for historical correlation
+          const fetchSymbol = async (sym) => {
+              // Using allorigins as a public CORS proxy to bypass browser restrictions on Yahoo Finance
+              // Using query1 which seems slightly more stable with the proxy than query2
+              const targetUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=1mo&interval=1d`);
+              // When running locally from file://, modern browsers may still block CORS.
+              // We pass a cache-buster to avoid cached CORS preflights which can sometimes fail.
+              const proxyUrl = `https://api.allorigins.win/get?url=${targetUrl}&_cb=${Date.now()}_${Math.random()}`;
+
+              // Simple retry logic because public proxies can be flaky
+              for (let i = 0; i < 3; i++) {
+                  try {
+                      const res = await fetch(proxyUrl);
+                      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                      const proxyData = await res.json();
+                      if (!proxyData.contents) throw new Error("Empty contents from proxy");
+
+                      const data = JSON.parse(proxyData.contents);
+                      const result = data.chart.result[0];
+                      const meta = result.meta;
+                      const price = meta.regularMarketPrice;
+                      // Some assets have previousClose, others only chartPreviousClose in the view
+                      const prev = meta.previousClose || meta.chartPreviousClose || price;
+                      const change = price - prev;
+                      const percent = prev !== 0 ? (change / prev) * 100 : 0;
+                      const history = result.indicators.quote[0].close || [];
+                      return { price, change, percent, history };
+                  } catch (e) {
+                      if (i === 2) throw e;
+                      await new Promise(r => setTimeout(r, 1000));
+                  }
+              }
+          };
+
+          // Fetch Bank of Canada Target Overnight Rate
+          const fetchBocRate = async () => {
+              const res = await fetch('https://www.bankofcanada.ca/valet/observations/V39079/json?recent=1');
+              if (!res.ok) return marketData.interestRate;
+              const data = await res.json();
+              return parseFloat(data.observations[0].V39079.v);
+          };
+
+          const [vixData, veqtData, cashData, bocRate, tnxData, irxData] = await Promise.all([
+             fetchSymbol('^VIX'),
+             fetchSymbol('VEQT.TO'),
+             fetchSymbol('CASH.TO'),
+             fetchBocRate(),
+             fetchSymbol('^TNX'), // 10 Year Treasury Note Yield
+             fetchSymbol('^IRX')  // 13 Week Treasury Bill
+          ]);
+
+          // Calculs Macro Allostasiques
+          // Yield Spread (10Y - 3M). Si < 0, inversion de la courbe.
+          const yieldSpread = tnxData.price - irxData.price;
+
+          // VIX Ratio (Volatilité court terme vs moyenne mobile très simple de la veille)
+          const vixRatio = vixData.price / (vixData.price - vixData.change);
+
+          // Simulation du Credit Spread basé sur le VIX (Bonds Corporatifs vs Trésor)
+          // VIX normal = Credit Spread ~3.5%. VIX 40+ = Credit Spread ~8%+
+          const creditSpread = Math.max(2.5, (vixData.price / 10) * 2.5 + (Math.random() * 0.5 - 0.25));
+
+          // Simulation du Put/Call Ratio (Panique)
+          // > 1.0 = Bearish/Panique. < 0.8 = Bullish/Complaisance
+          const putCallBase = 0.8 + ((vixData.price - 12) * 0.03); // VIX 12 = 0.8, VIX 30 = 1.34
+          const putCallRatio = putCallBase + ((tnxData.change < 0 ? 0.1 : -0.1) * (Math.random() * 0.5 + 0.5)); // Baisse des taux = peur = plus de puts
+
+          // Calcul Corrélation VIX / VEQT (Pearson) sur 30 jours
+          const calculateCorrelation = (arr1, arr2) => {
+              // Ensure arrays are same length and contain valid numbers
+              const len = Math.min(arr1.length, arr2.length);
+              if (len < 2) return -1; // Default negative correlation
+              let validPairs = [];
+              for(let i=0; i<len; i++) {
+                 if (arr1[i] !== null && arr2[i] !== null) {
+                     validPairs.push([arr1[i], arr2[i]]);
+                 }
+              }
+              const n = validPairs.length;
+              if (n < 2) return -1;
+
+              let sum1 = 0, sum2 = 0, sum1Sq = 0, sum2Sq = 0, pSum = 0;
+              for (let i = 0; i < n; i++) {
+                  const x = validPairs[i][0];
+                  const y = validPairs[i][1];
+                  sum1 += x;
+                  sum2 += y;
+                  sum1Sq += x * x;
+                  sum2Sq += y * y;
+                  pSum += x * y;
+              }
+
+              const num = pSum - (sum1 * sum2 / n);
+              const den = Math.sqrt((sum1Sq - sum1 * sum1 / n) * (sum2Sq - sum2 * sum2 / n));
+              if (den === 0) return 0;
+              return num / den;
+          };
+
+          const vixVeqtCorrelation = calculateCorrelation(vixData.history, veqtData.history);
+
+          setMarketData({
+            vix: vixData,
+            veqt: veqtData,
+            cash: cashData,
+            interestRate: bocRate,
+            macro: {
+              vixRatio,
+              yieldSpread,
+              creditSpread,
+              putCallRatio: Math.max(0.5, Math.min(2.0, putCallRatio)),
+              vixVeqtCorrelation: vixVeqtCorrelation
+            },
+            lastSync: new Date().toLocaleTimeString()
+          });
+
+        } catch (error) {
+          console.error("Erreur API de marché:", error);
+          setApiError("Erreur de connexion aux APIs financières (CORS / Limite atteinte). Veuillez réessayer plus tard ou utiliser le mode Simulation.");
+        } finally {
+          setIsSyncing(false);
+        }
+      };
+
+      // --- SIMULATION API DE MARCHÉ (Stochastique) ---
+      const syncMockMarketData = () => {
+        setIsSyncing(true);
+        setApiError(null);
+        setTimeout(() => {
+          // Simulation réaliste de variations de marché
+          const vixMean = 18;
+          const currentVix = marketData.vix.price;
+          const vixPull = (vixMean - currentVix) * 0.1;
+          const newVixPrice = Math.max(10, Math.min(45, currentVix + vixPull + (Math.random() * 6 - 3)));
+          const vixChange = newVixPrice - currentVix;
+
+          const marketShock = (currentVix - newVixPrice) * 0.15;
+          const drift = 0.05;
+          const currentVeqt = marketData.veqt.price;
+          const newVeqtPrice = Math.max(20, currentVeqt + drift + marketShock + (Math.random() * 0.8 - 0.4));
+          const veqtChange = newVeqtPrice - currentVeqt;
+
+          const currentCash = marketData.cash.price;
+          const newCashPrice = currentCash + (Math.random() * 0.01 - 0.002);
+          const cashChange = newCashPrice - currentCash;
+
+          const yieldSpread = 0.15 + (Math.random() * 0.2 - 0.1);
+          const vixRatio = newVixPrice / currentVix;
+          const creditSpread = 3.5 + (newVixPrice - 18) * 0.2;
+          const putCallRatio = 0.95 + (vixChange > 0 ? 0.1 : -0.05);
+          // Mock correlation (usually negative, positive if regime shifts)
+          const mockCorrelation = Math.random() > 0.9 ? (Math.random() * 0.5) : (-0.6 - Math.random() * 0.3);
+
+          setMarketData({
+            vix: { price: newVixPrice, change: vixChange, percent: (vixChange/currentVix)*100 },
+            veqt: { price: newVeqtPrice, change: veqtChange, percent: (veqtChange/currentVeqt)*100 },
+            cash: { price: newCashPrice, change: cashChange, percent: (cashChange/currentCash)*100 },
+            interestRate: marketData.interestRate,
+            macro: {
+              vixRatio, yieldSpread, creditSpread, putCallRatio, vixVeqtCorrelation: mockCorrelation
+            },
+            lastSync: new Date().toLocaleTimeString()
+          });
+          setIsSyncing(false);
+        }, 800);
+      };
+
+      const handleSyncMarket = () => {
+        if (useMockMarketData) {
+          syncMockMarketData();
+        } else {
+          fetchRealMarketData();
+        }
+      };
+
+      // --- MOTEUR CARTOGRAFFECT : CONVERSION MARCHÉ -> AFFECT (v6.1 Allostasique) ---
+      const calculateCartograffectFromMarket = (port, market) => {
+        // 1. EXTRACTION DES DONNÉES DE BASE
+        const portfolioValue = port.veqtShares * market.veqt.price;
+        const costBasis = port.veqtShares * port.veqtAvgCost;
+        const gainLoss = portfolioValue - costBasis;
+        const totalAssets = portfolioValue + port.cashAvailable;
+        const cashRatio = totalAssets > 0 ? (port.cashAvailable / totalAssets) * 100 : 0;
+
+        const { vixRatio, yieldSpread, creditSpread, putCallRatio, vixVeqtCorrelation } = market.macro;
+
+        // 2. MODULATION BAYÉSIENNE (Les priors macro modifient la perception)
+
+        // Axe Z (Précision) : Détruit par la backwardation du VIX, les spreads de crédit et un bris de corrélation
+        let zRaw = 100 - ((market.vix.price - 10) * (100 / 30)); // Base VIX pure
+        zRaw = zRaw - (Math.max(0, vixRatio - 1) * 50) - (Math.max(0, creditSpread - 4) * 10);
+        // Bris de corrélation (Corrélation VIX/VEQT > 0). Signale un changement de régime, tue la précision.
+        if (vixVeqtCorrelation > 0) {
+            zRaw -= (vixVeqtCorrelation * 40);
+        }
+        const z = Math.max(0, Math.min(100, Math.round(zRaw)));
+
+        // Axe X (Savoir / Valence) : Écart de prédiction (P&L VEQT)
+        const gainLossPercent = costBasis > 0 ? (gainLoss / costBasis) * 100 : 0;
+        let x = Math.max(-100, Math.min(100, gainLossPercent * 2.5)) || 0;
+        // Pénalisé si gain irrationnel (hausse VEQT mais hausse des spreads de crédit = rally "bear market")
+        if (x > 0 && creditSpread > 5) {
+            x = x * 0.5; // Méfiance
+        }
+
+        // Axe Y (Pouvoir) : Capacité d'action (CASH.TO)
+        // L'inversion de la courbe des taux exige plus de cash pour être "neutre"
+        const requiredCashBase = yieldSpread < 0 ? 30 : 15;
+        let y = Math.max(-100, Math.min(100, (cashRatio - requiredCashBase) * 4)) || 0;
+
+        // 3. DÉTECTION DE L'ÉTAT AFFECTIF
+        const t = 15;
+        const isGain = x > t; const isPerte = x < -t;
+        const isPouvoir = y > t; const isContrainte = y < -t;
+        const isAxialX = Math.abs(x) <= t; const isAxialY = Math.abs(y) <= t;
+
+        let emotion = { name: "Observation (Neutre)", color: "#94a3b8", desc: "Équilibre macro et prédictif." };
+
+        if (isGain && isPouvoir) emotion = { name: "Joie / Euphorie", color: "#10b981", desc: "Conatus en expansion. Modèle validé par les taux, liquidité forte." };
+        else if (isPerte && isContrainte) emotion = { name: "Tristesse / Capitulation", color: "#3b82f6", desc: "Conatus diminué. Écart négatif massif et manque structurel de liquidité." };
+        else if (isPerte && isPouvoir) emotion = { name: "Colère / Combativité", color: "#ef4444", desc: "Allostasie proactive. Choc macro subi mais haut pouvoir d'achat." };
+        else if (isGain && isContrainte) emotion = { name: "Calme / Soulagement", color: "#8b5cf6", desc: "Régulation homéostasique. Prise de profit requise par le spread." };
+        else if (isPouvoir && isAxialX) emotion = { name: "Désir / Anticipation", color: "#f59e0b", desc: "Haut pouvoir génératif, en attente de certitude macro." };
+        else if (isContrainte && isAxialX) emotion = { name: "Dégoût / Aversion", color: "#a855f7", desc: "Rejet bottom-up d'un marché sans prime de risque claire." };
+        else if (isGain && isAxialY) emotion = { name: "Courage / Assurance", color: "#f43f5e", desc: "Certitude de la validation malgré une liquidité neutre." };
+        else if (isPerte && isAxialY) emotion = { name: "Peur / Sidération", color: "#64748b", desc: "Alerte de volatilité sans marge de manœuvre en cash." };
+
+        // 4. CALCUL DES VECTEURS D'INFÉRENCE ACTIVE (Politiques d'action)
+        // IEA (Engagement Allostasique) : Acheter la baisse.
+        let iea = Math.abs(Math.min(0, x)) * Math.max(0, y) / 100;
+        if (putCallRatio > 1.15) iea *= 1.5; // Booster contrarien si panique
+
+        // TRH (Restauration Homéostasique) : Fuir vers le cash.
+        let trh = Math.max(0, -y);
+        if (yieldSpread < 0) trh *= 1.3; // Urgence de liquidité si courbe inversée
+
+        // IRE (Révision Épistémique) : Changer le modèle (sortir).
+        let ire = (Math.abs(x) * (100 - z)) / 100;
+
+        iea = Math.round(iea); trh = Math.round(trh); ire = Math.round(ire);
+
+        // 5. CIBLE STRATÉGIQUE ET QUANTITATIVE (Position Sizing)
+        let targetX = x; let targetY = y;
+        let actionPolicy = "Maintien (Laisser courir)";
+        let targetColor = emotion.color;
+
+        // Dimensionnement Quantitatif
+        let targetCashRatio = requiredCashBase;
+        let confidenceMultiplier = z / 100; // Si Z est bas, on réduit la taille des trades
+
+        // Confirmation par corrélation :
+        // Si corrélation positive (marché dysfonctionnel), on limite le levier allostasique.
+        let correlationWarning = false;
+        if (vixVeqtCorrelation > 0.2) {
+            confidenceMultiplier *= 0.5; // On divise par 2 la taille des achats/ventes car le marché est irrationnel
+            correlationWarning = true;
+        }
+
+        let quantOrder = { action: 'HOLD', shares: 0, reason: '', correlationWarning };
+
+        const maxIndex = Math.max(iea, trh, ire);
+        if (maxIndex === 0) {
+          if (x > 0) targetX = Math.min(100, x + 20);
+          actionPolicy = "Exploitation (Laisser courir les gains)";
+          targetCashRatio = Math.max(5, requiredCashBase - 5); // Consomme un peu de cash pour accumuler
+        } else if (maxIndex === trh) {
+          targetY = Math.min(100, y + trh + 20); targetX = x;
+          actionPolicy = "Restauration (Liquider pour augmenter le Cash)"; targetColor = "#3b82f6";
+          targetCashRatio = Math.min(50, requiredCashBase + (trh / 4)); // Augmente drastiquement la cible cash
+        } else if (maxIndex === iea) {
+          targetX = Math.min(100, x + iea + 40); targetY = Math.max(-100, y - (iea / 2));
+          actionPolicy = "Engagement Allostasique (Déployer le Cash)"; targetColor = "#f59e0b";
+          targetCashRatio = Math.max(0, requiredCashBase - (iea / 3)); // Vide le cash pour acheter
+          // Si PutCall > 1.15 on baisse encore la cible cash (achat agressif)
+          if (putCallRatio > 1.15) targetCashRatio = Math.max(0, targetCashRatio - 5);
+        } else if (maxIndex === ire) {
+          targetX = 0; targetY = 0;
+          actionPolicy = "Révision Épistémique (Incertitude Critique)"; targetColor = "#ec4899";
+          targetCashRatio = 100; // Tout vendre
+        }
+
+        // Calcul exact du nombre d'actions à traiter
+        const targetCashValue = (targetCashRatio / 100) * totalAssets;
+        const cashDelta = targetCashValue - port.cashAvailable; // Positif = il faut du cash (Vendre), Négatif = il faut dépenser (Acheter)
+
+        if (Math.abs(cashDelta) > 500) { // Seuil minimal de trade (ex: 500 CAD)
+            // Ajustement bayésien par la certitude (si Z est 50%, on ne trade que la moitié de la conviction)
+            // Sauf pour la fuite en cas de révision épistémique !
+            const tradeValue = maxIndex === ire ? cashDelta : (cashDelta * Math.max(0.3, confidenceMultiplier));
+            const sharesDiff = Math.round(Math.abs(tradeValue) / market.veqt.price);
+
+            if (sharesDiff > 0) {
+                if (tradeValue > 0) {
+                    quantOrder = { action: 'SELL', shares: Math.min(port.veqtShares, sharesDiff), amount: tradeValue };
+                } else {
+                    quantOrder = { action: 'BUY', shares: sharesDiff, amount: Math.abs(tradeValue) };
+                }
+            }
+        }
+
+        return {
+          gainLoss, portfolioValue, totalAssets,
+          x, y, z, emotion,
+          indices: { iea, trh, ire },
+          target: { x: targetX, y: targetY, policy: actionPolicy, color: targetColor, quantOrder },
+          isAgent: false
+        };
+      };
+
+      const deterministicState = useMemo(() => calculateCartograffectFromMarket(portfolio, marketData), [portfolio, marketData]);
+      const [aiAgentState, setAiAgentState] = useState(null);
+
+      const currentState = (useAiAgent && aiAgentState) ? aiAgentState : deterministicState;
+
+      // --- GEMINI AI GOVERNING AGENT ---
+      const fetchAiAgentState = async () => {
+        if (!geminiApiKey || !useAiAgent) return;
+        setIsAnalyzing(true);
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+
+        const prompt = `Tu es un Agent IA Gouvernant le modèle "Cartograffect". Ton rôle est de calculer la position psychologique et stratégique d'un investisseur en fonction du marché en temps réel, EN REMPLAÇANT les mathématiques déterministes.
+
+        DONNÉES DU MARCHÉ EN TEMPS RÉEL:
+        - VIX: ${marketData.vix.price.toFixed(2)} (Variation: ${marketData.vix.percent.toFixed(2)}%)
+        - VEQT (Actions): ${marketData.veqt.price.toFixed(2)} CAD (Variation: ${marketData.veqt.percent.toFixed(2)}%)
+        - CASH (Liquidité): ${marketData.cash.price.toFixed(2)} CAD
+        - Taux Directeur: ${marketData.interestRate}%
+
+        PORTFOLIO DE L'INVESTISSEUR:
+        - VEQT: ${portfolio.veqtShares} parts acquises à ${portfolio.veqtAvgCost} CAD l'unité.
+        - Liquidité restante: ${portfolio.cashAvailable} CAD
+        - Marge de crédit hypothécaire (HELOC) investie: ${portfolio.helocInvested} CAD
+        - Marge de crédit hypothécaire (HELOC) disponible: ${portfolio.helocAvailable} CAD
+        - Total Actifs (hors dette): ${(portfolio.veqtShares * marketData.veqt.price + portfolio.cashAvailable).toFixed(2)} CAD
+        - P&L Latent: ${((portfolio.veqtShares * marketData.veqt.price) - (portfolio.veqtShares * portfolio.veqtAvgCost)).toFixed(2)} CAD
+
+        Note sur le Levier: L'utilisateur utilise un levier hypothécaire. Le taux directeur est de ${marketData.interestRate}%. Considère l'impact de l'inflation et des coûts d'emprunt sur l'Axe Y (Pouvoir) et l'Axe X (Valence).
+
+        CALCULS REQUIS (Tu dois générer ces valeurs):
+        - X (Savoir/Valence) : de -100 à +100. (ex: fort gain = positif, forte perte = négatif)
+        - Y (Pouvoir/Activation) : de -100 à +100. (ex: beaucoup de liquidité = positif, bloqué = négatif)
+        - Z (Précision/Certitude) : de 0 à 100. (Impacté par la volatilité VIX).
+        - targetX et targetY : Les coordonnées de la Cible Stratégique pour restaurer l'homéostasie.
+        - emotion_name: "Joie", "Tristesse", "Colère", "Peur", "Désir", "Dégoût", "Calme", ou "Courage".
+        - emotion_color: "#10b981", "#3b82f6", "#ef4444", "#64748b", "#f59e0b", "#a855f7", "#8b5cf6", ou "#f43f5e".
+        - emotion_desc: Courte justification.
+        - policy: Courte phrase d'action (ex: "Conserver", "Acheter la baisse", "Liquider").
+        - targetColor: La couleur de l'action.
+        - iea, trh, ire: Indices de 0 à 100 pour l'Inférence Active.
+
+        RÉPONDS UNIQUEMENT AVEC DU JSON VALIDE. Ne mets aucun texte avant ou après.
+        Exemple de format:
+        {
+          "x": 45, "y": 20, "z": 80,
+          "emotion": { "name": "Joie / Euphorie", "color": "#10b981", "desc": "Conatus en expansion." },
+          "indices": { "iea": 10, "trh": 0, "ire": 5 },
+          "target": { "x": 60, "y": 20, "policy": "Laisser courir les gains", "color": "#10b981" }
+        }`;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { responseMimeType: "application/json" }
+            })
+          });
+          const result = await response.json();
+          if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+             const aiData = JSON.parse(result.candidates[0].content.parts[0].text);
+             setAiAgentState({
+                 ...deterministicState, // Keep gainLoss etc
+                 x: aiData.x, y: aiData.y, z: aiData.z,
+                 emotion: aiData.emotion,
+                 indices: aiData.indices,
+                 target: aiData.target,
+                 isAgent: true
+             });
+             setAiAnalysis("L'Agent IA Gouvernant a mis à jour les coordonnées du modèle avec succès.");
+          }
+        } catch (e) {
+             console.error("AI Agent Error", e);
+             setAiAnalysis("Erreur de l'Agent IA. Retour aux mathématiques déterministes.");
+             setUseAiAgent(false);
+        } finally {
+          setIsAnalyzing(false);
+        }
+      };
+
+      useEffect(() => {
+          if (useAiAgent) {
+              fetchAiAgentState();
+          } else {
+              setAiAgentState(null);
+          }
+      }, [useAiAgent, marketData]); // Re-run agent when market data changes if enabled
+
+      const handleSubmit = async () => {
+        const newLog = {
+          id: Date.now().toString(),
+          ...marketData,
+          ...portfolio,
+          computedX: currentState.x,
+          computedY: currentState.y,
+          computedZ: currentState.z,
+          emotion: currentState.emotion.name,
+          date: new Date().toISOString().split('T')[0],
+          timestamp: Date.now()
+        };
+
+        if (db && user.uid !== 'local_user') {
+          try {
+            await db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('logs').add(newLog);
+            alert("Inférence sauvegardée dans Firebase.");
+          } catch (e) { console.error(e); }
+        } else {
+          // Local storage fallback
+          const newLogs = [...logs, newLog].sort((a, b) => new Date(a.date) - new Date(b.date));
+          setLogs(newLogs);
+          localStorage.setItem('carto_logs', JSON.stringify(newLogs));
+          alert("Inférence sauvegardée localement.");
+        }
+      };
+
+      const handleDeleteLog = async (logId) => {
+        if (db && user.uid !== 'local_user') {
+            try {
+                await db.collection('artifacts').doc(appId).collection('users').doc(user.uid).collection('logs').doc(logId).delete();
+            } catch (e) { console.error(e); }
+        } else {
+            const newLogs = logs.filter(l => l.id !== logId);
+            setLogs(newLogs);
+            localStorage.setItem('carto_logs', JSON.stringify(newLogs));
+        }
+      };
+
+      const saveApiKey = (key) => {
+        setGeminiApiKey(key);
+        localStorage.setItem('gemini_api_key', key);
+        setShowApiKeyInput(false);
+      };
+
+      const generateAIInsight = async () => {
+        if (!geminiApiKey) {
+          setShowApiKeyInput(true);
+          return;
+        }
+
+        setIsAnalyzing(true);
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
+
+        const prompt = `Agis en tant qu'expert en finance comportementale et sciences cognitives utilisant le modèle "Cartograffect" (Version 6.1).
+        Données de Marché : VIX = ${marketData.vix.price.toFixed(2)}, VEQT = ${marketData.veqt.price.toFixed(2)} CAD.
+        Indices Macro: Spread de Taux = ${marketData.macro.yieldSpread}%, Spread de Crédit = ${marketData.macro.creditSpread}%, Put/Call Ratio = ${marketData.macro.putCallRatio}, Corrélation VIX/VEQT = ${marketData.macro.vixVeqtCorrelation}.
+        Position Actuelle du Portfolio : Écart de prédiction (Axe X)=${currentState.x.toFixed(1)} (Gain/Perte: ${currentState.gainLoss.toFixed(2)} CAD), Pouvoir d'action / Liquidité (Axe Y)=${currentState.y.toFixed(1)}, Précision / Certitude (Axe Z)=${currentState.z}%.
+        Diagnostic Émotionnel : ${currentState.emotion.name}.
+        Politique d'inférence active dictée par le modèle : "${currentState.target.policy}".
+        Ordre Quantitatif Recommandé : ${currentState.target.quantOrder && currentState.target.quantOrder.amount ? (currentState.target.quantOrder.action + " " + currentState.target.quantOrder.shares + " parts (" + currentState.target.quantOrder.amount.toFixed(0) + " CAD)") : "Aucun"}.
+
+        Contexte de Levier Hypothécaire (HELOC) : L'investisseur a investi ${portfolio.helocInvested} CAD via sa marge de crédit, et a ${portfolio.helocAvailable} CAD de marge disponible. Le taux directeur de la Banque du Canada est de ${marketData.interestRate}%.
+
+        Tu dois retourner UNIQUEMENT un objet JSON valide avec les clés suivantes :
+        - "exegese": Un court paragraphe analytique (3-4 phrases) expliquant l'impact de la volatilité et des indices macro sur Z, et justifiant la politique d'inférence active proposée.
+        - "conseilHeloc": (Optionnel) Un paragraphe fournissant un conseil STRATÉGIQUE spécifique sur l'utilisation ou le remboursement de la marge de crédit hypothécaire, en tenant compte de l'inflation, du VIX, et du taux directeur actuel (${marketData.interestRate}%). Par exemple: rembourser si les taux/volatilité augmentent trop, ou investir la marge disponible si le VIX annonce une reprise et que le rendement attendu couvre les intérêts.
+        - "marcheASuivre": Un tableau de chaînes de caractères (3 étapes claires, concises et actionnables). Si un "Ordre Quantitatif Recommandé" est fourni (parts et CAD), tu DOIS l'inclure explicitement dans ces étapes. Intègre également tes conseils HELOC dans ces étapes si pertinent.
+        - "ciblesQuantitatives": Un tableau d'objets (optionnel) contenant des cibles d'achat ou de vente pour optimiser les gains/pertes selon le contexte MACRO (VIX, prix, spreads). Chaque objet doit avoir : "action" (ex: "ACHETER", "VENDRE", "CONSERVER"), "quantite" (ex: "500 parts", "100% du Cash", ou la quantité de l'Ordre Recommandé), "niveau" (ex: "52.50 CAD" ou "VIX > 30"), "raison" (ex: "Support technique majeur", "Pic de volatilité extrême", "Inversion de la courbe des taux"), et "type" (ex: "Agressif", "Conservateur", "Technique"). Laisse le tableau vide si la politique ne nécessite pas d'action immédiate.
+        - "sendEmail": Un booléen (true ou false). Mets "true" UNIQUEMENT SI l'action recommandée requiert une action immédiate (ex: VENDRE d'urgence à cause de la panique, ou ACHETER agressivement). Mets "false" si la recommandation est de "Laisser courir" ou "Conserver".
+        - "emailSubject": "ALERTE CARTOGRAFFECT: Action Requise" (ou similaire, si sendEmail est true).
+        - "emailBody": Le corps du courriel incluant les recommandations (en texte brut).`;
+
+        try {
+          const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.7, responseMimeType: "application/json" }
+            })
+          });
+          const result = await response.json();
+          if (result.error) {
+              if (result.error.code === 400 && result.error.message.includes("API key")) {
+                  setAiAnalysis({ error: "Clé API invalide. Veuillez vérifier votre clé Gemini." });
+                  setShowApiKeyInput(true);
+              } else {
+                  setAiAnalysis({ error: `Erreur API: ${result.error.message}` });
+              }
+          } else if (result.candidates && result.candidates[0] && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts[0].text) {
+              let textData = result.candidates[0].content.parts[0].text;
+              try {
+                  const aiData = JSON.parse(textData);
+                  setAiAnalysis(aiData);
+              } catch(e) {
+                 setAiAnalysis({ error: "La réponse de l'IA n'est pas un JSON valide." });
+              }
+          } else {
+              setAiAnalysis({ error: "Réponse inattendue de l'API Gemini." });
+          }
+        } catch (e) {
+            setAiAnalysis({ error: "Erreur réseau lors de l'appel à l'API Gemini." });
+        } finally {
+            setIsAnalyzing(false);
+        }
+      };
+
+      const trajectoryData = [
+        { x: currentState.x, y: currentState.y },
+        { x: currentState.target.x, y: currentState.target.y }
+      ];
+
+      return (
+        <div className="min-h-screen p-4 md:p-8">
+          {/* HEADER */}
+          <header className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 gap-6 border-b border-slate-800 pb-8">
+            <div className="flex items-center gap-4">
+              <div className="bg-indigo-600 p-3.5 rounded-2xl shadow-lg shadow-indigo-600/20">
+                <Icon name="globe" size={32} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-black tracking-tighter uppercase text-white">
+                  Cartograffect <span className="text-indigo-400">Live Market</span>
+                </h1>
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">
+                  Intégration Empirique & Inférence Active (v6.1)
+                </p>
+              </div>
+            </div>
+
+            <nav className="flex bg-slate-900 shadow-sm rounded-xl p-1.5 border border-slate-800">
+              {['dashboard', 'configuration', 'historique'].map(v => (
+                <button
+                  key={v} onClick={() => setView(v)}
+                  className={`px-6 py-2.5 rounded-lg text-xs font-black transition-all uppercase tracking-widest ${view === v ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800'}`}
+                >
+                  {v}
+                </button>
+              ))}
+            </nav>
+          </header>
+
+          <main className="max-w-7xl mx-auto">
+            {view === 'dashboard' && (
+              <>
+                {/* LIVE MARKET Ticker */}
+                {apiError && (
+                  <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-xl mb-4 text-xs font-bold flex items-center justify-between shadow-lg shadow-red-500/5">
+                    <div className="flex items-center gap-3">
+                      <Icon name="alert-triangle" size={18} />
+                      {apiError}
+                    </div>
+                    <button onClick={() => setApiError(null)} className="text-red-400 hover:text-red-300"><Icon name="x" size={16}/></button>
+                  </div>
+                )}
+                <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 mb-8 shadow-xl flex flex-col md:flex-row justify-between items-center gap-4 transition-all">
+                  <div className="flex gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+
+                    {/* VIX */}
+                    <div className="flex-shrink-0 min-w-[120px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="activity" size={12}/> VIX
+                      </p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.vix.price.toFixed(2)}</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.vix.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.vix.change > 0 ? '+' : ''}{marketData.vix.change.toFixed(2)}</span>
+                      </div>
+                      <p className="text-[9px] text-slate-500 font-mono mt-1">Ratio: {marketData.macro.vixRatio.toFixed(2)}</p>
+                    </div>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* MACRO */}
+                    <div className="flex-shrink-0 min-w-[130px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="bar-chart-2" size={12}/> MACRO
+                      </p>
+                      <div className="space-y-1 mt-2">
+                        <div className="flex justify-between text-xs font-mono border-b border-slate-800 pb-1 mb-1">
+                           <span className="text-slate-400">Taux BoC:</span>
+                           <span className="text-amber-400 font-bold">{marketData.interestRate.toFixed(2)}%</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Yield Sp:</span>
+                           <span className={marketData.macro.yieldSpread < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}>{marketData.macro.yieldSpread.toFixed(2)}%</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Credit Sp:</span>
+                           <span className={marketData.macro.creditSpread > 5 ? 'text-red-400 font-bold' : 'text-indigo-400'}>{marketData.macro.creditSpread.toFixed(1)}%</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Put/Call:</span>
+                           <span className={marketData.macro.putCallRatio > 1.15 ? 'text-amber-400 font-bold' : 'text-slate-300'}>{marketData.macro.putCallRatio.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-xs font-mono">
+                           <span className="text-slate-400">Corr. VIX/VEQT:</span>
+                           <span className={marketData.macro.vixVeqtCorrelation > 0 ? 'text-red-400 font-bold' : 'text-emerald-400'} title="Corrélation sur 30 jours">
+                               {marketData.macro.vixVeqtCorrelation.toFixed(2)}
+                           </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* VEQT */}
+                    <div className="flex-shrink-0 min-w-[200px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="globe" size={12}/> VEQT
+                      </p>
+                      <p className="text-[10px] text-slate-400 truncate w-48">Vanguard All-Equity ETF Portfolio</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.veqt.price.toFixed(2)}  CAD</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.veqt.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.veqt.change > 0 ? '+' : ''}{marketData.veqt.change.toFixed(2)}  CAD</span>
+                          <span>{marketData.veqt.percent > 0 ? '+' : ''}{marketData.veqt.percent.toFixed(2)} %</span>
+                      </div>
+                    </div>
+
+                    <div className="h-16 w-px bg-slate-800 self-center hidden md:block"></div>
+
+                    {/* CASH */}
+                    <div className="flex-shrink-0 min-w-[200px]">
+                      <p className="text-[10px] uppercase font-black text-slate-500 tracking-widest flex items-center gap-1 mb-1">
+                          <Icon name="dollar-sign" size={12}/> CASH
+                      </p>
+                      <p className="text-[10px] text-slate-400 truncate w-48">Global X High Interest Savings ETF</p>
+                      <p className="text-2xl font-mono font-black text-white">{marketData.cash.price.toFixed(2)} CAD</p>
+                      <div className={`flex items-center gap-2 text-xs font-mono font-bold ${marketData.cash.change > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          <span>{marketData.cash.change > 0 ? '+' : ''}{marketData.cash.change.toFixed(4)} CAD</span>
+                          <span>{marketData.cash.percent > 0 ? '+' : ''}{marketData.cash.percent.toFixed(4)} %</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4 w-full md:w-auto flex-wrap justify-end">
+                    <div className="flex items-center gap-4 mr-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-white transition-colors">
+                            <input
+                                type="checkbox"
+                                checked={!useMockMarketData}
+                                onChange={(e) => setUseMockMarketData(!e.target.checked)}
+                                className="accent-indigo-500 w-4 h-4 rounded bg-slate-800 border-slate-700"
+                            />
+                            Données API
+                        </label>
+                        <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest cursor-pointer flex items-center gap-2 hover:text-purple-300 transition-colors">
+                            <input
+                                type="checkbox"
+                                checked={useAiAgent}
+                                onChange={(e) => {
+                                    if (!geminiApiKey && e.target.checked) {
+                                        setShowApiKeyInput(true);
+                                    } else {
+                                        setUseAiAgent(e.target.checked);
+                                    }
+                                }}
+                                className="accent-purple-500 w-4 h-4 rounded bg-slate-800 border-slate-700"
+                            />
+                            <Icon name="bot" size={14} /> Agent IA
+                        </label>
+                    </div>
+                    <span className="text-[10px] text-slate-500 font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">Maj: {marketData.lastSync}</span>
+                    <button
+                      onClick={handleSyncMarket} disabled={isSyncing}
+                      className="bg-indigo-600/20 text-indigo-400 border border-indigo-600/30 hover:bg-indigo-600 hover:text-white px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2"
+                    >
+                      <Icon name="refresh-cw" size={14} className={isSyncing ? "animate-spin" : ""} /> {isSyncing ? 'Sync...' : 'Sync Marché'}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
+
+                  {/* GRAPHIQUE CARTESIEN (Gauche) */}
+                  <div className="xl:col-span-7 bg-slate-900 rounded-[2.5rem] border border-slate-800 p-8 shadow-xl flex flex-col">
+                    <div className="mb-6 flex justify-between items-start">
+                      <div>
+                        <h2 className="text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
+                          <Icon name="compass" size={20} className="text-indigo-400"/> Matrice d'Inférence
+                        </h2>
+                        <p className="text-xs text-slate-400 font-medium mt-1">
+                          X (Écart de prédiction: P&L) × Y (Pouvoir d'action: Liquidité)
+                        </p>
+                      </div>
+                      <div className="flex gap-4 items-center">
+                          {currentState.isAgent && (
+                             <div className="bg-purple-900/30 border border-purple-500/30 text-purple-300 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1 animate-pulse">
+                                 <Icon name="bot" size={12} /> Calculé par IA
+                             </div>
+                          )}
+                          <div className="bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl text-right transition-colors duration-500">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Précision (Z)</p>
+                            <p className="text-sm font-black font-mono transition-colors duration-500" style={{ color: currentState.z < 30 ? '#ef4444' : '#10b981' }}>
+                              {currentState.z}% <span className="text-[9px] font-sans text-slate-500">({marketData.vix.price.toFixed(1)} VIX)</span>
+                            </p>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div className="flex-grow min-h-[450px] w-full bg-slate-950 rounded-2xl border border-slate-800 p-4 relative overflow-hidden shadow-inner">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <ScatterChart margin={{ top: 20, right: 40, bottom: 40, left: 40 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
+                          <XAxis type="number" dataKey="x" domain={[-100, 100]} tick={{fill: '#64748b', fontSize: 10}} stroke="#334155" />
+                          <YAxis type="number" dataKey="y" domain={[-100, 100]} tick={{fill: '#64748b', fontSize: 10}} stroke="#334155" />
+                          <ZAxis type="number" dataKey="z" range={[50, 800]} />
+                          <Tooltip
+                            cursor={{ strokeDasharray: '3 3', stroke: '#475569' }}
+                            content={({ payload }) => {
+                              if (payload && payload.length && !payload[0].payload.isTarget) {
+                                const d = payload[0].payload;
+                                return (
+                                  <div className="bg-slate-900 border border-slate-700 p-4 rounded-xl shadow-2xl text-xs max-w-[240px]">
+                                    <p className="font-black mb-1 uppercase tracking-tight flex items-center gap-2" style={{ color: d.emotion.color }}>
+                                        {d.emotion.name}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400 mb-2 italic">{d.emotion.desc}</p>
+                                    <div className="space-y-1 font-mono text-slate-300 mt-2 bg-slate-950 p-2 rounded border border-slate-800">
+                                      <p>Écart (X): {d.x > 0 ? '+' : ''}{d.x.toFixed(1)}</p>
+                                      <p>Pouvoir (Y): {d.y > 0 ? '+' : ''}{d.y.toFixed(1)}</p>
+                                    </div>
+                                  </div>
+                                );
+                              } return null;
+                            }}
+                          />
+                          <ReferenceLine x={0} stroke="#475569" strokeWidth={2} opacity={0.5}/>
+                          <ReferenceLine y={0} stroke="#475569" strokeWidth={2} opacity={0.5}/>
+
+                          {/* Quadrant Labels */}
+                          <ReferenceLine x={50} stroke="transparent" label={{ position: 'insideTopRight', value: 'JOIE', fill: '#10b981', fontSize: 14, fontWeight: 900, opacity: 0.15 }} />
+                          <ReferenceLine x={-50} stroke="transparent" label={{ position: 'insideTopLeft', value: 'COLÈRE', fill: '#ef4444', fontSize: 14, fontWeight: 900, opacity: 0.15 }} />
+                          <ReferenceLine x={-50} stroke="transparent" label={{ position: 'insideBottomLeft', value: 'TRISTESSE', fill: '#3b82f6', fontSize: 14, fontWeight: 900, opacity: 0.15 }} />
+                          <ReferenceLine x={50} stroke="transparent" label={{ position: 'insideBottomRight', value: 'CALME', fill: '#8b5cf6', fontSize: 14, fontWeight: 900, opacity: 0.15 }} />
+
+                          {/* Vecteur Actuel */}
+                          <Scatter name="Trajectory" data={trajectoryData} line={{ stroke: currentState.target.color, strokeWidth: 2, strokeDasharray: '5 5' }} shape="none" isAnimationActive={true} animationDuration={1000} />
+                          {/* Point Cible */}
+                          <Scatter name="Target" data={[{ x: currentState.target.x, y: currentState.target.y, isTarget: true }]} shape="cross" fill={currentState.target.color} zAxis={150} isAnimationActive={true} animationDuration={1000} />
+                          {/* Position Actuelle */}
+                          <Scatter name="Current" data={[currentState]} isAnimationActive={true} animationDuration={800} animationEasing="ease-out">
+                            <Cell fill={currentState.emotion.color} />
+                          </Scatter>
+                        </ScatterChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* PANNEAU ANALYTIQUE (Droite) */}
+                  <div className="xl:col-span-5 space-y-6 flex flex-col">
+                    <div className="bg-gradient-to-br from-indigo-950 to-slate-900 rounded-[2.5rem] p-8 text-white shadow-xl flex-grow relative overflow-hidden border border-indigo-500/20 transition-all duration-500">
+                      {/* Lueur d'arrière-plan basée sur l'émotion */}
+                      <div className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-20 transition-colors duration-1000" style={{ backgroundColor: currentState.emotion.color }}></div>
+
+                      <div className="relative z-10 h-full flex flex-col">
+                        <div className="border-b border-indigo-500/30 pb-5 mb-5">
+                          <p className="text-indigo-300 text-[10px] uppercase tracking-[0.2em] font-bold mb-1 flex items-center gap-2">
+                              <Icon name="activity" size={14} /> Diagnostic du Conatus
+                          </p>
+                          <h3 className="text-3xl font-black uppercase tracking-tighter transition-colors duration-500" style={{ color: currentState.emotion.color }}>
+                            {currentState.emotion.name}
+                          </h3>
+                          <p className="text-xs text-slate-400 mt-2 font-medium italic">{currentState.emotion.desc}</p>
+
+                          <div className="flex flex-wrap gap-2 mt-4">
+                            <div className="bg-slate-950/60 px-3 py-2 rounded-lg border border-white/5">
+                                <p className="text-[9px] text-slate-500 uppercase font-black tracking-wider mb-1">P&L Latent</p>
+                                <p className={`text-sm font-mono font-bold ${currentState.gainLoss > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                                    {currentState.gainLoss > 0 ? '+' : ''}{currentState.gainLoss.toFixed(2)} CAD
+                                </p>
+                            </div>
+                            <div className="bg-slate-950/60 px-3 py-2 rounded-lg border border-white/5">
+                                <p className="text-[9px] text-slate-500 uppercase font-black tracking-wider mb-1">Total Actifs</p>
+                                <p className="text-sm font-mono font-bold text-white">
+                                    {currentState.totalAssets.toFixed(0)} CAD
+                                </p>
+                            </div>
+                            {(portfolio.helocInvested > 0 || portfolio.helocAvailable > 0) && (
+                                <div className="bg-amber-950/20 px-3 py-2 rounded-lg border border-amber-500/20">
+                                    <p className="text-[9px] text-amber-500/80 uppercase font-black tracking-wider mb-1 flex items-center gap-1">
+                                        <Icon name="home" size={10} /> Levier Hypothécaire
+                                    </p>
+                                    <p className="text-sm font-mono font-bold text-amber-400">
+                                        {portfolio.helocInvested.toFixed(0)} <span className="text-[10px] text-amber-500/60">/ {(portfolio.helocAvailable + portfolio.helocInvested).toFixed(0)} CAD</span>
+                                    </p>
+                                </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex-grow flex flex-col">
+                          <p className="text-indigo-200 text-[10px] uppercase tracking-[0.2em] font-black mb-3 flex items-center gap-2">
+                            <Icon name="target" size={14} /> Inférence Active Recommandée
+                          </p>
+
+                          <div className="bg-slate-950/40 p-5 rounded-2xl border border-white/5 mb-4 shadow-inner">
+                            <div className="flex flex-col gap-3 mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="p-2 rounded-full bg-slate-900 border border-slate-700">
+                                      <Icon name="zap" size={16} color={currentState.target.color} />
+                                  </div>
+                                  <span className="text-sm font-black uppercase tracking-widest leading-tight" style={{ color: currentState.target.color }}>
+                                    {currentState.target.policy}
+                                  </span>
+                                </div>
+
+                                {/* Ordre Quantitatif de Position Sizing */}
+                                {currentState.target.quantOrder && currentState.target.quantOrder.action !== 'HOLD' && (
+                                   <div className={`mt-2 p-3 rounded-xl border flex items-center justify-between ${currentState.target.quantOrder.action === 'BUY' ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-red-900/20 border-red-500/30'}`}>
+                                       <div className="flex items-center gap-2">
+                                           <Icon name={currentState.target.quantOrder.action === 'BUY' ? 'arrow-down-to-line' : 'arrow-up-from-line'} size={18} className={currentState.target.quantOrder.action === 'BUY' ? 'text-emerald-400' : 'text-red-400'} />
+                                           <div>
+                                               <p className="text-[10px] uppercase font-black tracking-widest text-slate-400">Ordre Recommandé (Z={currentState.z}%)</p>
+                                               <p className={`text-lg font-black font-mono ${currentState.target.quantOrder.action === 'BUY' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                   {currentState.target.quantOrder.action === 'BUY' ? 'ACHETER' : 'VENDRE'} {currentState.target.quantOrder.shares} VEQT
+                                               </p>
+                                           </div>
+                                       </div>
+                                       <div className="text-right">
+                                           <p className="text-[10px] text-slate-500 uppercase tracking-widest">Montant</p>
+                                           <p className="text-sm font-mono font-bold text-white">~ {currentState.target.quantOrder.amount.toFixed(0)} CAD</p>
+                                       </div>
+                                   </div>
+                                )}
+
+                                {currentState.target.quantOrder && currentState.target.quantOrder.correlationWarning && (
+                                    <div className="mt-2 text-[9px] text-red-400 bg-red-950/30 p-2 rounded-lg border border-red-500/20 flex items-center gap-2 font-mono">
+                                        <Icon name="alert-triangle" size={12} />
+                                        <span>Corrélation VIX/VEQT positive ({marketData.macro.vixVeqtCorrelation.toFixed(2)}). Marché irrationnel. Ordre quantitatif réduit de 50%.</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Barres d'indices */}
+                            <div className="space-y-2 mt-4">
+                                <div className="flex items-center gap-2 text-[10px] font-mono">
+                                    <span className="w-8 text-slate-500">IEA</span>
+                                    <div className="flex-grow bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-amber-500 h-full" style={{width: `${Math.min(100, currentState.indices.iea)}%`}}></div>
+                                    </div>
+                                    <span className="w-6 text-right text-slate-400">{currentState.indices.iea}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] font-mono">
+                                    <span className="w-8 text-slate-500">TRH</span>
+                                    <div className="flex-grow bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-blue-500 h-full" style={{width: `${Math.min(100, currentState.indices.trh)}%`}}></div>
+                                    </div>
+                                    <span className="w-6 text-right text-slate-400">{currentState.indices.trh}</span>
+                                </div>
+                                <div className="flex items-center gap-2 text-[10px] font-mono">
+                                    <span className="w-8 text-slate-500">IRE</span>
+                                    <div className="flex-grow bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                        <div className="bg-pink-500 h-full" style={{width: `${Math.min(100, currentState.indices.ire)}%`}}></div>
+                                    </div>
+                                    <span className="w-6 text-right text-slate-400">{currentState.indices.ire}</span>
+                                </div>
+                            </div>
+                          </div>
+
+                          <div className="mt-auto">
+                              {showApiKeyInput ? (
+                                  <div className="bg-slate-950/80 p-4 rounded-xl border border-indigo-500/30 mt-4 backdrop-blur-sm">
+                                      <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider mb-2 flex items-center gap-1">
+                                        <Icon name="shield-alert" size={12}/> Clé API Gemini Requise
+                                      </p>
+                                      <div className="flex gap-2">
+                                        <input
+                                            type="password"
+                                            placeholder="AIzaSy..."
+                                            className="flex-grow bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-indigo-500"
+                                            onChange={(e) => setGeminiApiKey(e.target.value)}
+                                            value={geminiApiKey}
+                                        />
+                                        <button
+                                            onClick={() => saveApiKey(geminiApiKey)}
+                                            className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-lg text-xs font-bold"
+                                        >
+                                            Sauver
+                                        </button>
+                                      </div>
+                                      <p className="text-[8px] text-slate-500 mt-2">La clé est stockée localement dans votre navigateur.</p>
+                                  </div>
+                              ) : (
+                                  <button
+                                    onClick={generateAIInsight} disabled={isAnalyzing}
+                                    className="w-full bg-white text-slate-900 hover:bg-indigo-400 hover:text-white font-black py-4 rounded-xl text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 group mt-4 shadow-lg shadow-white/5"
+                                  >
+                                    <Icon name="brain-circuit" size={16} className={isAnalyzing ? "animate-pulse text-indigo-500" : "text-indigo-600 group-hover:text-white transition-colors"} />
+                                    {isAnalyzing ? "Exégèse Fristonienne en cours..." : "Générer Exégèse IA"}
+                                  </button>
+                              )}
+
+                              {aiAnalysis && !showApiKeyInput && (
+                                <div className="mt-4 text-[11px] text-slate-200 leading-relaxed border-l-2 border-indigo-400 pl-4 py-3 bg-slate-950/60 rounded-r-xl border border-white/5 shadow-inner">
+                                  <div className="flex justify-between items-start mb-2">
+                                      <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-1">
+                                          <Icon name="brain-circuit" size={10}/> Analyse Gemini
+                                      </span>
+                                      <button onClick={() => setShowApiKeyInput(true)} className="text-[9px] text-slate-500 hover:text-indigo-300 underline">Modifier Clé</button>
+                                  </div>
+
+                                  {aiAnalysis.error ? (
+                                    <p className="text-red-400 font-bold">{aiAnalysis.error}</p>
+                                  ) : (
+                                    <div className="space-y-4">
+                                        <div>
+                                            <p className="font-bold text-slate-300 uppercase text-[9px] tracking-widest mb-1">Exégèse Fristonienne</p>
+                                            <p className="text-slate-200">{aiAnalysis.exegese}</p>
+                                        </div>
+
+                                        {aiAnalysis.conseilHeloc && (
+                                            <div className="bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg mt-3">
+                                                <p className="font-bold text-amber-400 uppercase text-[9px] tracking-widest mb-1 flex items-center gap-1">
+                                                    <Icon name="home" size={10} /> Stratégie HELOC (Levier)
+                                                </p>
+                                                <p className="text-amber-100/90 text-[11px] leading-relaxed italic">
+                                                    {aiAnalysis.conseilHeloc}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {aiAnalysis.marcheASuivre && aiAnalysis.marcheASuivre.length > 0 && (
+                                            <div className="bg-slate-900 border border-slate-700 p-3 rounded-lg">
+                                                <p className="font-bold text-emerald-400 uppercase text-[9px] tracking-widest mb-2 flex items-center gap-1">
+                                                    <Icon name="list-checks" size={10} /> Marche à suivre recommandée
+                                                </p>
+                                                <ol className="list-decimal pl-4 space-y-1 text-slate-300">
+                                                    {aiAnalysis.marcheASuivre.map((etape, i) => (
+                                                        <li key={i}>{etape}</li>
+                                                    ))}
+                                                </ol>
+                                            </div>
+                                        )}
+
+                                        {aiAnalysis.ciblesQuantitatives && aiAnalysis.ciblesQuantitatives.length > 0 && (
+                                            <div className="bg-indigo-950/30 border border-indigo-500/20 p-3 rounded-lg mt-3">
+                                                <p className="font-bold text-indigo-400 uppercase text-[9px] tracking-widest mb-3 flex items-center gap-1">
+                                                    <Icon name="crosshair" size={10} /> Cibles Quantitatives (IA)
+                                                </p>
+                                                <div className="space-y-2">
+                                                    {aiAnalysis.ciblesQuantitatives.map((cible, i) => {
+                                                        const isAchat = cible.action && cible.action.toUpperCase() === 'ACHETER';
+                                                        const isVente = cible.action && cible.action.toUpperCase() === 'VENDRE';
+                                                        const colorClass = isAchat ? 'emerald' : isVente ? 'red' : 'indigo';
+
+                                                        return (
+                                                        <div key={i} className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-slate-900/50 p-2 rounded border border-${colorClass}-500/10`}>
+                                                            <div className="flex items-center gap-2 flex-wrap">
+                                                                <span className={`bg-${colorClass}-500/20 text-${colorClass}-400 text-[10px] font-black px-2 py-0.5 rounded-sm uppercase tracking-wider min-w-[60px] text-center border border-${colorClass}-500/30 flex items-center gap-1`}>
+                                                                    {isAchat ? <Icon name="trending-up" size={10} /> : isVente ? <Icon name="trending-down" size={10} /> : null}
+                                                                    {cible.action}
+                                                                </span>
+                                                                <span className="text-slate-200 text-xs font-bold font-mono bg-slate-950 px-2 py-0.5 rounded">
+                                                                    {cible.quantite}
+                                                                </span>
+                                                                <span className="text-slate-400 text-xs font-mono">
+                                                                    @ {cible.niveau}
+                                                                </span>
+                                                                <span className="text-slate-300 text-[11px] font-medium ml-1">
+                                                                    ({cible.raison})
+                                                                </span>
+                                                            </div>
+                                                            <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold whitespace-nowrap bg-slate-800 px-2 py-0.5 rounded-full">
+                                                                {cible.type}
+                                                            </span>
+                                                        </div>
+                                                    )})}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {aiAnalysis.sendEmail && portfolio.notificationEmail && (
+                                            <div className="mt-2 p-3 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                                                <p className="font-bold text-purple-400 uppercase text-[9px] tracking-widest mb-2 flex items-center gap-1">
+                                                    <Icon name="bell" size={10} /> Alerte Requise
+                                                </p>
+                                                <a
+                                                    href={`mailto:${portfolio.notificationEmail}?subject=${encodeURIComponent(aiAnalysis.emailSubject || 'Alerte Cartograffect')}&body=${encodeURIComponent(aiAnalysis.emailBody || '')}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors w-full justify-center"
+                                                >
+                                                    <Icon name="send" size={14} /> Envoyer Courriel d'Alerte à {portfolio.notificationEmail}
+                                                </a>
+                                            </div>
+                                        )}
+                                        {aiAnalysis.sendEmail && !portfolio.notificationEmail && (
+                                             <p className="text-[10px] text-amber-500 flex items-center gap-1 mt-2">
+                                                 <Icon name="alert-circle" size={10}/> L'IA recommande d'envoyer une alerte, mais aucun courriel n'est configuré dans le Portfolio.
+                                             </p>
+                                        )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button onClick={handleSubmit} className="w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-4 rounded-2xl uppercase tracking-[0.2em] text-xs transition-colors border border-slate-700 flex items-center justify-center gap-2 shadow-lg">
+                      <Icon name="save" size={16} /> Enregistrer l'Inférence
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* VUE CONFIGURATION PORTFOLIO */}
+            {view === 'configuration' && (
+              <div className="max-w-2xl mx-auto bg-slate-900 border border-slate-800 p-10 rounded-[2.5rem] shadow-xl">
+                <div className="mb-8 flex items-center gap-4">
+                  <div className="p-3 bg-indigo-500/10 rounded-xl">
+                      <Icon name="compass" size={28} className="text-indigo-400" />
+                  </div>
+                  <div>
+                      <h2 className="text-2xl font-black uppercase tracking-tight text-white">
+                        Configuration du <span className="text-indigo-400">Portefeuille</span>
+                      </h2>
+                      <p className="text-slate-400 text-sm mt-1 font-medium">
+                        Saisissez vos positions réelles pour calibrer le modèle.
+                      </p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                          <Icon name="trending-up" size={14}/> Nombre d'Actions VEQT
+                      </label>
+                      <input
+                        type="number" value={portfolio.veqtShares} onChange={e => setPortfolio({...portfolio, veqtShares: parseFloat(e.target.value) || 0})}
+                        className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold transition-all"
+                      />
+                  </div>
+                  <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                          <Icon name="target" size={14}/> Prix d'Achat Moyen (PRU)  CAD
+                      </label>
+                      <input
+                        type="number" step="0.01" value={portfolio.veqtAvgCost} onChange={e => setPortfolio({...portfolio, veqtAvgCost: parseFloat(e.target.value) || 0})}
+                        className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold transition-all"
+                      />
+                  </div>
+                  <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                          <Icon name="dollar-sign" size={14}/> Liquidité Disponible (Cash CAD)
+                      </label>
+                      <input
+                        type="number" value={portfolio.cashAvailable} onChange={e => setPortfolio({...portfolio, cashAvailable: parseFloat(e.target.value) || 0})}
+                        className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-mono font-bold transition-all"
+                      />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                        <label className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                            <Icon name="home" size={14}/> Marge Hypothécaire Investie (CAD)
+                        </label>
+                        <input
+                          type="number" value={portfolio.helocInvested} onChange={e => setPortfolio({...portfolio, helocInvested: parseFloat(e.target.value) || 0})}
+                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono font-bold transition-all"
+                        />
+                    </div>
+                    <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
+                        <label className="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                            <Icon name="credit-card" size={14}/> Marge Disponible à Investir (CAD)
+                        </label>
+                        <input
+                          type="number" value={portfolio.helocAvailable} onChange={e => setPortfolio({...portfolio, helocAvailable: parseFloat(e.target.value) || 0})}
+                          className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono font-bold transition-all"
+                        />
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950/50 p-6 rounded-2xl border border-slate-800 mt-6">
+                      <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-3 block flex items-center gap-2">
+                          <Icon name="mail" size={14}/> Courriel pour Notifications IA
+                      </label>
+                      <input
+                        type="email" placeholder="votre@courriel.com" value={portfolio.notificationEmail} onChange={e => setPortfolio({...portfolio, notificationEmail: e.target.value})}
+                        className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-4 focus:ring-2 focus:ring-purple-500 focus:outline-none font-sans font-medium transition-all"
+                      />
+                      <p className="text-[10px] text-slate-500 mt-2">Nécessaire pour l'envoi d'alertes via l'Agent IA.</p>
+                  </div>
+
+                  <div className="pt-4">
+                      <button onClick={() => setView('dashboard')} className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-5 rounded-xl uppercase tracking-[0.2em] text-xs transition-colors shadow-lg shadow-indigo-500/20">
+                        Appliquer et Revenir au Dashboard
+                      </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* VUE HISTORIQUE */}
+            {view === 'historique' && (
+              <div className="bg-slate-900 border border-slate-800 rounded-[2rem] overflow-hidden shadow-xl">
+                <div className="p-6 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                    <h2 className="text-lg font-black uppercase tracking-tight text-white flex items-center gap-2">
+                        <Icon name="activity" size={20} className="text-indigo-400"/> Historique des Inférences
+                    </h2>
+                    <span className="text-xs font-mono text-slate-500 bg-slate-950 px-3 py-1 rounded-full border border-slate-800">
+                        {logs.length} enregistrements
+                    </span>
+                </div>
+
+                {logs.length === 0 ? (
+                    <div className="p-12 text-center text-slate-500 flex flex-col items-center">
+                        <Icon name="alert-triangle" size={48} className="text-slate-700 mb-4" />
+                        <p className="font-bold uppercase tracking-widest text-sm mb-2">Aucun historique</p>
+                        <p className="text-xs">Enregistrez une inférence depuis le dashboard pour la voir apparaître ici.</p>
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left">
+                        <thead className="bg-slate-950 border-b border-slate-800 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                          <tr>
+                            <th className="px-6 py-5">Date</th>
+                            <th className="px-6 py-5">Marché (VIX/VEQT)</th>
+                            <th className="px-6 py-5">Émotion</th>
+                            <th className="px-4 py-5 text-center">Coordonnées (X/Y/Z)</th>
+                            <th className="px-6 py-5 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-xs font-medium">
+                          {logs.slice().reverse().map(log => {
+                            const vixPrice = typeof log.vix === 'object' ? log.vix.price : log.vix;
+                            const veqtPrice = typeof log.veqt === 'object' ? log.veqt.price : (log.veqtPrice || log.veqt);
+
+                            return (
+                            <tr key={log.id} className="border-b border-slate-800/50 hover:bg-slate-800/50 transition-colors">
+                              <td className="px-6 py-5 text-slate-300 font-bold whitespace-nowrap">
+                                  {log.date} <span className="text-[10px] text-slate-500 font-mono ml-2">{new Date(log.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                              </td>
+                              <td className="px-6 py-5 font-mono text-slate-400 whitespace-nowrap">
+                                  <span className={vixPrice > 20 ? 'text-red-400' : ''}>{vixPrice?.toFixed(2) || 'N/A'}</span> / {veqtPrice?.toFixed(2) || 'N/A'} CAD
+                              </td>
+                              <td className="px-6 py-5 text-indigo-300 font-bold uppercase tracking-wide">{log.emotion}</td>
+                              <td className="px-4 py-5 text-center font-mono text-slate-500">
+                                  <span className={log.computedX > 0 ? 'text-emerald-400/70' : 'text-red-400/70'}>{(log.computedX || 0).toFixed(0)}</span> /
+                                  <span className={log.computedY > 0 ? 'text-indigo-400/70' : 'text-orange-400/70'}>{(log.computedY || 0).toFixed(0)}</span> /
+                                  <span className="text-slate-300">{(log.computedZ || 0)}%</span>
+                              </td>
+                              <td className="px-6 py-5 text-right">
+                                <button
+                                    onClick={() => handleDeleteLog(log.id)}
+                                    className="text-slate-500 hover:text-red-400 bg-slate-950 hover:bg-red-400/10 p-2 rounded-lg transition-all border border-slate-800 hover:border-red-400/30 inline-flex"
+                                    title="Supprimer"
+                                >
+                                  <Icon name="trash-2" size={16} />
+                                </button>
+                              </td>
+                            </tr>
+                          )})}
+                        </tbody>
+                      </table>
+                    </div>
+                )}
+              </div>
+            )}
+          </main>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
