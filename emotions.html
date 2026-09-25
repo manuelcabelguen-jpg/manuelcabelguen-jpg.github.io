@@ -1,355 +1,678 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Territoire des ÉMOTIONS - Cartograffect</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Territoire des ÉMOTIONS | Cartograffect</title>
+    <meta name="description" content="Explorez la carte 2D des 83 émotions humaines selon leurs coordonnées d'Activation et de Valence. Fiches d'identité psychologique, chemins affectifs et analyse de scénarios.">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        },
+                        cosmic: {
+                            900: '#070b14',
+                            850: '#0b1120',
+                            800: '#0e1726',
+                            700: '#152136',
+                            600: '#1f2e4a',
+                        }
+                    }
+                }
+            }
         }
-        /* Styles for the active tab */
-        .tab-btn.active {
-            border-color: #4f46e5; /* indigo-600 */
-            color: #3730a3; /* indigo-800 */
-        }
+    </script>
 
-        /* Styles from the original chart file */
-        .chart-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 12px; 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1); 
-            position: relative; 
-            margin-top: 10px; 
-            max-width: 840px; /* To contain the 800px chart + padding */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .chart-container svg {
-            cursor: default;
-        }
-        .controls {
-            margin-bottom: 15px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-size: 14px;
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .controls div {
-            margin-bottom: 5px;
-        }
-        .controls label {
-            cursor: pointer;
-            color: #2c3e50;
-            margin-left: 5px;
-        }
-        .controls input[type="checkbox"] {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-        #resetPathBtn {
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid #d1d5db;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        #resetPathBtn:hover {
-            background-color: #f3f4f6;
-        }
-        #category-filters { text-align: left; }
+    <style>
+        /* Tooltip styling */
         .tooltip {
             position: absolute;
-            text-align: center;
-            padding: 10px; 
-            font-size: 13px; 
-            background: rgba(40, 50, 60, 0.9); 
-            color: white;
-            border: 0px;
-            border-radius: 6px;
+            text-align: left;
+            padding: 8px 12px;
+            font-size: 12px;
+            background: rgba(11, 17, 32, 0.95);
+            color: #f1f5f9;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 10;
+            transition: opacity 0.15s ease-in-out;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            z-index: 50;
+            backdrop-filter: blur(8px);
         }
+
+        /* Chart container */
+        .chart-svg-container svg {
+            user-select: none;
+            width: 100%;
+            height: auto;
+            max-height: 850px;
+        }
+
         .axis-label {
-            font-size: 15px; 
-            fill: #2c3e50; 
-            font-weight: 600;
+            font-size: 13px;
+            fill: #94a3b8;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
+
         .tick text {
             font-size: 10px;
-            fill: #555;
+            fill: #64748b;
+            font-family: ui-monospace, monospace;
         }
+
         .quadrant-label {
-            font-size: 10px;
-            fill: #7f8c8d;
+            font-size: 11px;
+            fill: #94a3b8;
             text-anchor: middle;
-            font-style: italic;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.5;
         }
-        .emotion-label-text { 
-            font-size: 8px;
-            fill: #1a202c;
-            pointer-events: none; 
-            font-weight: bold;
+
+        .emotion-label-text {
+            font-size: 8.5px;
+            fill: #f1f5f9;
+            pointer-events: none;
+            font-weight: 600;
         }
+
         .label-background {
-            fill: white;
-            stroke: #e2e8f0;
-            stroke-width: 1px;
-            opacity: 0.85;
+            fill: rgba(14, 23, 38, 0.85);
+            stroke: rgba(100, 116, 139, 0.3);
+            stroke-width: 0.5px;
             rx: 3;
             ry: 3;
+            pointer-events: none;
         }
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 25px;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            margin-right: 12px;
-            margin-bottom: 8px;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-        }
-        .legend-item:hover {
-            background-color: #f0f4f8;
-        }
-        .legend-color {
-            width: 14px;
-            height: 14px;
-            margin-right: 6px;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-        }
-        .controlateral-line { 
-            stroke: #a0aec0;
+
+        .controlateral-line {
+            stroke: #c084fc;
             stroke-width: 1px;
-            stroke-dasharray: "3,3"; 
+            stroke-dasharray: 4, 4;
+            opacity: 0.6;
         }
+
         .symetrical-line {
-             stroke: #718096;
-             stroke-width: 1.2px;
+            stroke: #38bdf8;
+            stroke-width: 1.2px;
+            stroke-dasharray: 2, 2;
+            opacity: 0.7;
         }
+
         .path-line {
-            stroke: #2c3e50;
-            stroke-width: 2px;
+            stroke: #f43f5e;
+            stroke-width: 2.5px;
             fill: none;
+            filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.6));
         }
+
         .path-point-highlight {
-            stroke: #e53e3e !important;
+            stroke: #f43f5e !important;
             stroke-width: 3px !important;
+            filter: drop-shadow(0 0 8px #f43f5e);
         }
+
         .intensity-circle {
-            stroke: #4a5568;
-            stroke-width: 1.5px;
-            stroke-dasharray: "4,4";
+            stroke: #6366f1;
+            stroke-width: 1.2px;
+            stroke-dasharray: 4, 4;
             fill: none;
+            opacity: 0.4;
         }
+
         .dynamic-circle {
             fill: none;
-            stroke: #4a5568;
+            stroke: #a78bfa;
             stroke-width: 1.5px;
-            stroke-dasharray: "6,6";
+            stroke-dasharray: 4, 4;
+            opacity: 0.6;
         }
+
         .dynamic-arrow-path {
             fill: none;
-            stroke: none;
+            stroke: #a78bfa;
+            stroke-width: 1.5px;
             marker-end: url(#dynamicArrowhead);
         }
+
         .grid .tick line {
-            stroke: #e0e0e0; 
-            stroke-dasharray: 2,2; 
+            stroke: rgba(51, 65, 85, 0.4);
+            stroke-dasharray: 2, 2;
         }
-        .grid path.domain { stroke: none; }
+
+        .grid path.domain {
+            stroke: none;
+        }
+
         .axis-center-line {
-            stroke: #7f8c8d; 
+            stroke: rgba(148, 163, 184, 0.5);
             stroke-width: 1.5px;
         }
-        .ia-response-container {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            width: 100%;
-            max-width: 840px;
-            margin-left: auto;
-            margin-right: auto;
+
+        .tab-btn.active {
+            color: #ffffff;
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.15);
         }
-        .ia-response-container h2 {
-            color: #1e3a8a;
-            margin-bottom: 10px;
+
+        .identity-card-section h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            color: #c084fc;
+            margin-top: 0.75rem;
+            margin-bottom: 0.25rem;
         }
-        .ia-response-content {
-            min-height: 50px;
-            padding:10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            background-color: #f9fafb;
-            color: #374151;
-            white-space: pre-wrap;
-        }
-        .identity-card-section h4 { font-weight: 600; color: #4338ca; margin-bottom: 0.25rem; }
-        .identity-card-section p { font-size: 0.9rem; color: #374151; }
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3b82f6;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 10px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .controls label, .legend-item span, #iaResponseContent {
-            font-weight: bold;
-        }
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .identity-card-section p {
+            font-size: 0.92rem;
+            color: #cbd5e1;
+            line-height: 1.55;
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-purple-600 selection:text-white flex flex-col">
 
-    <div class="container mx-auto px-4 py-12">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-blue-600">Territoire 1 : ÉMOTIONS</h1>
-            <p class="text-xl mt-2 text-gray-600">Les Fondations de la Carte</p>
-        </header>
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Territoire des Émotions</span>
+                </div>
+            </a>
 
-        <!-- Tab Navigation -->
-        <div class="border-b border-gray-300">
-            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <button class="tab-btn active border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="cartograffect">
-                    Cartograffect (Graphique)
-                </button>
-                <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="noyau">
-                    Noyau Affectif
-                </button>
-                <button class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-400 whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-base" data-tab="matrice">
-                    Matrice Affective
-                </button>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="emotions.html" class="px-3 py-2 text-sm font-semibold text-blue-300 bg-blue-900/40 border border-blue-500/30 rounded-lg flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    1. Émotions
+                </a>
+                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                    2. Crimes
+                </a>
+                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    3. Miracles
+                </a>
+                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="text-xs">🔬</span>
+                    Lab IA
+                </a>
             </nav>
+
+            <!-- Quick Action / API Settings -->
+            <div class="flex items-center gap-2">
+                <button id="openApiKeyModal" class="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-purple-300 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors flex items-center gap-1.5" title="Configurer une clé Gemini API personnelle">
+                    <span>✨ Clé IA</span>
+                    <span id="apiKeyIndicator" class="w-2 h-2 rounded-full bg-slate-500"></span>
+                </button>
+                <a href="index.html" class="hidden sm:inline-flex px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 rounded-lg border border-slate-700">
+                    &larr; Accueil
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- Page Header -->
+        <div class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-900/40 text-blue-300 border border-blue-500/30 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    Territoire 1
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-heading font-black text-white tracking-tight">
+                    Cartographie des <span class="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Émotions</span>
+                </h1>
+                <p class="text-slate-400 text-sm mt-1 max-w-2xl">
+                    Représentation géométrique bidimensionnelle de 83 affects humains ordonnés selon l'Activation somatique (axe vertical) et la Valence hédonique (axe horizontal).
+                </p>
+            </div>
+
+            <!-- Tab Buttons -->
+            <div class="flex p-1 bg-slate-800/60 border border-slate-700/80 rounded-xl shrink-0 self-start md:self-auto overflow-x-auto">
+                <button class="tab-btn active px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-chart">
+                    🗺️ Carte Interactive (2D)
+                </button>
+                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-noyau">
+                    🧬 Noyau Affectif
+                </button>
+                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-matrice">
+                    🧪 Matrice Affective
+                </button>
+            </div>
         </div>
 
-        <!-- Tab Content -->
-        <main class="mt-8">
-            <div id="cartograffect" class="tab-content">
-                
-                <!-- Chart HTML starts here -->
-                <div class="controls bg-white p-4 rounded-lg shadow mb-4">
-                    <div class="text-center">
-                        <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showNamesToggle" class="mr-2 align-middle" checked>
-                            <label for="showNamesToggle" class="text-sm text-gray-700">Afficher les noms</label>
-                        </div>
-                         <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showIntensityCircleToggle" class="mr-2 align-middle">
-                            <label for="showIntensityCircleToggle" class="text-sm text-gray-700">Afficher le cercle d'intensité</label>
-                        </div>
-                    </div>
-                     <div class="mt-3 pt-3 border-t border-gray-200 text-center">
-                        <div class="inline-block text-left mr-4">
-                            <input type="checkbox" id="showControlateralToggle" class="mr-2 align-middle">
-                            <label for="showControlateralToggle" class="text-sm text-gray-700">Correspondances controlatérales</label>
-                        </div>
-                        <div class="inline-block text-left">
-                            <input type="checkbox" id="showSymetricalToggle" class="mr-2 align-middle">
-                            <label for="showSymetricalToggle" class="text-sm text-gray-700">Correspondances symétriques</label>
-                        </div>
-                    </div>
-                    <div class="mt-3 pt-3 border-t border-gray-200 text-center">
-                        <input type="checkbox" id="pathModeToggle" class="mr-2 align-middle">
-                        <label for="pathModeToggle" class="text-sm text-gray-700 font-semibold">Mode "Chemin Émotionnel"</label>
-                        <button id="resetPathBtn" style="display: none;">Réinitialiser le chemin</button>
-                    </div>
-                    <div id="category-filters" class="mt-3 pt-3 border-t border-gray-200">
-                        <h4 class="text-sm font-semibold mb-2 text-gray-600 text-center">Filtrer par Catégorie :</h4>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-sm">
-                            <div><input type="checkbox" id="cat-1" class="category-filter" value="1" checked><label for="cat-1"> 1. Orientation</label></div>
-                            <div><input type="checkbox" id="cat-2" class="category-filter" value="2" checked><label for="cat-2"> 2. Fondamentales</label></div>
-                            <div><input type="checkbox" id="cat-3" class="category-filter" value="3" checked><label for="cat-3"> 3. Complexes</label></div>
-                            <div><input type="checkbox" id="cat-4" class="category-filter" value="4" checked><label for="cat-4"> 4. Relationnelles</label></div>
-                            <div><input type="checkbox" id="cat-5" class="category-filter" value="5" checked><label for="cat-5"> 5. Dispositions</label></div>
-                        </div>
-                         <div class="mt-2 text-xs text-gray-500 text-center italic">
-                            Note: La taille des points varie selon la catégorie de l'émotion (1 à 5).
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="chart-container bg-white p-5 rounded-xl shadow-lg">
-                    <svg id="emotionChart"></svg>
-                </div>
-                
-                <div id="scenarioAnalysisContainer" class="ia-response-container">
-                    <h2 class="text-xl font-semibold text-purple-700 mb-3">🔎 ✨ Analyse de Scénario par l'IA</h2>
-                    <textarea id="scenarioInput" class="w-full p-2 border border-gray-300 rounded-md" rows="3" placeholder="Décrivez une situation ou un scénario ici... (ex: 'J'ai une présentation importante demain matin')"></textarea>
-                    <button id="analyzeScenarioBtn" class="mt-2 px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">Analyser et Tracer le Chemin ✨</button>
-                </div>
-            
-                <div id="iaResponseContainer" class="ia-response-container hidden">
-                    <h2 id="iaResponseTitle" class="text-xl font-semibold text-indigo-700 mb-3">Fiche d'Identité de l'Émotion</h2>
-                    <div id="iaResponseContent" class="ia-response-content">
-                        Cliquez sur une émotion pour voir sa fiche d'identité générée par l'IA. ✨
-                    </div>
-                </div>
-            
-                <div id="legend" class="legend mt-6 bg-white p-3 rounded-lg shadow"></div>
-                <!-- Chart HTML ends here -->
+        <!-- TAB 1: CARTOGRAFFECT (CHART) -->
+        <div id="tab-chart" class="tab-content block space-y-6">
 
-            </div>
-            <div id="noyau" class="tab-content hidden">
-                <div class="bg-white p-8 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold mb-4">Noyau Affectif</h2>
-                    <p>Le contenu pour le Noyau Affectif sera ajouté ici. Cette section décrira les états affectifs les plus fondamentaux et bruts.</p>
-                </div>
-            </div>
-            <div id="matrice" class="tab-content hidden">
-                <div class="bg-white p-8 rounded-lg shadow">
-                    <h2 class="text-2xl font-semibold mb-4">Matrice Affective</h2>
-                    <p>Le contenu pour la Matrice Affective sera ajouté ici. Cette section explorera comment les émotions de base se combinent pour former des sentiments plus complexes.</p>
-                </div>
-            </div>
-        </main>
+            <!-- Control Bar Card -->
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-5 shadow-xl backdrop-blur-md">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                    
+                    <!-- Display Toggles -->
+                    <div class="lg:col-span-4 flex flex-wrap gap-4 items-center">
+                        <label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showNamesToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4" checked>
+                            <span>Afficher les noms</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showIntensityCircleToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
+                            <span>Cercle d'intensité</span>
+                        </label>
+                    </div>
 
-        <div class="mt-12 text-center">
-            <a href="index.html" class="text-indigo-600 hover:underline">Retour à l'accueil</a>
+                    <!-- Symmetry Lines Toggles -->
+                    <div class="lg:col-span-5 flex flex-wrap gap-4 items-center border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
+                        <label class="flex items-center gap-2 text-xs font-medium text-purple-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showControlateralToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
+                            <span>Correspondances controlatérales</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs font-medium text-sky-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showSymetricalToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
+                            <span>Symétries</span>
+                        </label>
+                    </div>
+
+                    <!-- Path Mode -->
+                    <div class="lg:col-span-3 flex items-center justify-start lg:justify-end gap-3 border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
+                        <label class="flex items-center gap-2 text-xs font-semibold text-rose-300 cursor-pointer select-none">
+                            <input type="checkbox" id="pathModeToggle" class="rounded bg-slate-900 border-slate-700 text-rose-600 focus:ring-rose-500 w-4 h-4">
+                            <span>Tracer un Chemin</span>
+                        </label>
+                        <button id="resetPathBtn" class="hidden px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-md transition-colors">
+                            Effacer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Category Filters Row -->
+                <div class="mt-4 pt-4 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider">Filtrer par Cercles :</span>
+                    <div class="flex flex-wrap gap-3">
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="1" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">1. Orientation</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="2" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">2. Fondamentales</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="3" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">3. Complexes</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="4" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">4. Relationnelles</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="5" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">5. Dispositions</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart + Details Side-by-Side (Large screen) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Chart Area (8 cols) -->
+                <div class="lg:col-span-8 bg-cosmic-850 border border-slate-700/70 rounded-2xl p-4 sm:p-6 shadow-2xl relative">
+                    <div class="flex items-center justify-between text-xs text-slate-400 mb-3 px-1">
+                        <span class="font-mono text-purple-300 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                            Cliquez sur un point pour ouvrir sa Fiche d'Identité
+                        </span>
+                        <span class="text-slate-500 text-[11px]">A: Activation [-8; +8] | V: Valence [-8; +8]</span>
+                    </div>
+
+                    <!-- SVG Chart Element -->
+                    <div class="chart-svg-container flex justify-center overflow-hidden rounded-xl bg-cosmic-900 border border-slate-800">
+                        <svg id="emotionChart" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+
+                    <!-- Legend -->
+                    <div id="legend" class="mt-4 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-center gap-3 text-xs"></div>
+                </div>
+
+                <!-- Right Column: Interactive Fiche & Scenario Analysis (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+
+                    <!-- Scenario Analysis Module -->
+                    <div class="bg-gradient-to-br from-slate-800/60 to-purple-950/30 border border-purple-800/40 rounded-2xl p-5 shadow-xl backdrop-blur-md">
+                        <div class="flex items-center justify-between mb-2">
+                            <h2 class="text-base font-heading font-bold text-white flex items-center gap-2">
+                                <span>🔎</span> Analyseur de Scénario
+                            </h2>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded border border-purple-500/30">IA &amp; Heuristique</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">
+                            Décrivez une situation vécue ou imaginaire. Le système tracera la séquence émotionnelle correspondante sur la carte.
+                        </p>
+
+                        <!-- Predefined Example Scenarios -->
+                        <div class="mb-3 flex flex-wrap gap-1.5">
+                            <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="J'ai un examen déterminant demain matin et j'ai peur d'échouer.">
+                                📝 Examen / Stress
+                            </button>
+                            <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="Mon projet a été validé avec les félicitations du jury !">
+                                🏆 Victoire / Succès
+                            </button>
+                            <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="Je viens de découvrir qu'un proche m'a menti sur un sujet crucial.">
+                                💔 Trahison / Déception
+                            </button>
+                        </div>
+
+                        <textarea id="scenarioInput" rows="3" class="w-full p-3 text-xs sm:text-sm bg-cosmic-900/90 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all resize-none" placeholder="Ex: 'Je dois prendre la parole devant 200 personnes, mon cœur s'emballe mais je veux réussir...'"></textarea>
+
+                        <button id="analyzeScenarioBtn" class="mt-3 w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md shadow-purple-600/20 transition-all flex items-center justify-center gap-2">
+                            <span>Tracer le Chemin Émotionnel</span>
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+
+                    <!-- Emotion Identity Card Module -->
+                    <div id="iaResponseContainer" class="bg-cosmic-850 border border-slate-700/70 rounded-2xl p-5 shadow-xl">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+                            <h3 id="iaResponseTitle" class="text-sm font-heading font-bold text-purple-300 flex items-center gap-2">
+                                <span>✨</span> Fiche d'Identité : <span class="text-white">Attente (A0 / V0)</span>
+                            </h3>
+                            <span id="emotionBadgeCategory" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-500/30">Orientation</span>
+                        </div>
+                        <div id="iaResponseContent" class="space-y-3 max-h-[460px] overflow-y-auto pr-1 text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            <div class="identity-card-section">
+                                <h4>Définition</h4>
+                                <p>État neutre d’éveil attentif et d’ouverture perceptive, situé au centre exact du système affectif (A: 0, V: 0). C'est la matrice d'où naissent tous les autres états.</p>
+                                <h4>Déclencheurs Typiques</h4>
+                                <p>Moments de transition, calme contemplatif, début d'une expérience inconnue, suspension du jugement.</p>
+                                <h4>Fonction Adaptative</h4>
+                                <p>Permet à l’organisme d’analyser l’environnement sans biais défensif ni sur-réaction, conservant son énergie vitale avant d’agir.</p>
+                                <h4>Manifestations Physiques</h4>
+                                <p>Respiration régulière, tonus musculaire équilibré, regard réceptif, absence de tension viscérale aiguë.</p>
+                                <h4>Pensées Associées</h4>
+                                <p>« Voyons ce qui va advenir », curiosité neutre, présence à l’instant.</p>
+                                <h4>Chemin de Régulation</h4>
+                                <p>Point d'ancrage fondamental vers lequel revenir lors des tempêtes affectives pour retrouver le discernement.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: NOYAU AFFECTIF -->
+        <div id="tab-noyau" class="tab-content hidden space-y-8">
+            <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
+                <div class="max-w-3xl">
+                    <span class="text-xs uppercase font-bold tracking-widest text-blue-400 bg-blue-900/40 px-3 py-1 rounded-full border border-blue-500/30">Architecture Première</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Le Noyau Affectif Fondamental</h2>
+                    <p class="text-slate-300 text-base leading-relaxed mt-4">
+                        Avant toute conceptualisation complexe ou émotion socialisée, la conscience humaine vibre autour d’un centre de gravité primitif : <strong>la triade originelle d’Orientation</strong>.
+                    </p>
+                </div>
+
+                <!-- Triad Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A0/V0</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">1. L'Attente</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Le point zéro de la géométrie affective. État d’éveil pur sans inclinaison positive ou négative. La veille sensorielle réceptive à ce qui émerge.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
+                            Orientation &bull; Catégorie 1
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A+0.5</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">2. La Surprise</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Micro-sursaut d'activation soudain face à l'imprévu. Elle suspend temporairement les pensées antérieures pour mobiliser l'attention immédiate.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
+                            Activation montante &bull; Neutre
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A-0.5</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">3. L'Anticipation</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Projection calme vers le futur proche. Légère retenue d'énergie permettant la planification et le calcul d'adéquation de l'action.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
+                            Activation mesurée &bull; Neutre
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biological Foundation Section -->
+                <div class="mt-12 pt-8 border-t border-slate-800 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-heading font-bold text-white flex items-center gap-2">
+                            <span>🧠</span> Les Deux Moteurs Neurobiologiques
+                        </h4>
+                        <p class="text-sm text-slate-300 leading-relaxed">
+                            Le Noyau Affectif traduit directement le dialogue perpétuel entre les branches du système nerveux autonome :
+                        </p>
+                        <ul class="space-y-3 text-xs text-slate-400">
+                            <li class="flex items-start gap-2">
+                                <span class="text-purple-400 font-bold">•</span>
+                                <div><strong class="text-white">L'Axe Sympathique (A+) :</strong> Mobilisation d'énergie, accélération cardiaque, préparation motrice à l'action ou à la défense.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-sky-400 font-bold">•</span>
+                                <div><strong class="text-white">L'Axe Parasympathique (A-) :</strong> Apaisement vagal, décélération, restauration somatique et digestion de l'expérience.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-emerald-400 font-bold">•</span>
+                                <div><strong class="text-white">L'Évaluation de Valence (V) :</strong> Médiée par le circuit dopaminergique de récompense (V+) et l'axe amygdalien d'alerte et d'aversion (V-).</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-cosmic-900 rounded-2xl p-6 border border-slate-800 flex flex-col justify-center">
+                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-2">Principe Cardiovasculaire &amp; Somatique</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Dans Cartograffect, aucune émotion ne peut exister sans s'ancrer dans le Noyau. C’est la pulsation entre surprise et anticipation qui alimente en permanence le radar intérieur.
+                        </p>
+                        <div class="mt-4 p-3 rounded-lg bg-purple-900/20 border border-purple-700/30 text-xs text-purple-200">
+                            <strong>Loi de conservation :</strong> Pour calmer une émotion de très haute activation (ex: Panique ou Rage), il est vain de tenter de la forcer directement en Valence positive sans d'abord faire transiter l'activation par le Noyau.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: MATRICE AFFECTIVE -->
+        <div id="tab-matrice" class="tab-content hidden space-y-8">
+            <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
+                <div class="max-w-3xl">
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full border border-emerald-500/30">Alchimie &amp; Combinaisons</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">La Matrice des Combinaisons Affectives</h2>
+                    <p class="text-slate-300 text-base leading-relaxed mt-4">
+                        Tout comme trois couleurs primaires composent l'ensemble du spectre visuel, les émotions fondamentales se croisent pour engendrer des sentiments complexes, durables et nuancés.
+                    </p>
+                </div>
+
+                <!-- Interactive Emotion Combiner Tool -->
+                <div class="mt-10 p-6 rounded-2xl bg-cosmic-900/90 border border-slate-700 shadow-xl">
+                    <h3 class="text-base font-heading font-bold text-white mb-4 flex items-center gap-2">
+                        <span>🧪</span> Laboratoire de Fusion Affective : Choisissez 2 Émotions Fondamentales
+                    </h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Émotion Primaire A</label>
+                            <select id="matrixEmotionA" class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-purple-500">
+                                <option value="Joie">Joie (A+2 / V0)</option>
+                                <option value="Tristesse">Tristesse (A-2 / V0)</option>
+                                <option value="Peur">Peur (A0 / V-2)</option>
+                                <option value="Courage">Courage (A0 / V+2)</option>
+                                <option value="Colère">Colère (A+1 / V-1)</option>
+                                <option value="Calme">Calme (A-1 / V+1)</option>
+                                <option value="Désir">Désir (A+1 / V+1)</option>
+                                <option value="Dégoût">Dégoût (A-1 / V-1)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Émotion Primaire B</label>
+                            <select id="matrixEmotionB" class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-purple-500">
+                                <option value="Courage">Courage (A0 / V+2)</option>
+                                <option value="Joie">Joie (A+2 / V0)</option>
+                                <option value="Tristesse">Tristesse (A-2 / V0)</option>
+                                <option value="Peur">Peur (A0 / V-2)</option>
+                                <option value="Colère">Colère (A+1 / V-1)</option>
+                                <option value="Calme">Calme (A-1 / V+1)</option>
+                                <option value="Désir">Désir (A+1 / V+1)</option>
+                                <option value="Dégoût">Dégoût (A-1 / V-1)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Computed Result Box -->
+                    <div id="matrixResultBox" class="mt-6 p-5 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-600/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-xs uppercase font-bold tracking-wider text-purple-300">Sentiment Émergeant</span>
+                            <div id="matrixResultTitle" class="text-2xl font-heading font-black text-white mt-0.5">Émerveillement &amp; Fierté</div>
+                            <p id="matrixResultDesc" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
+                                L'énergie de la Joie associée à la détermination du Courage produit une ouverture triomphale et protectrice vers autrui.
+                            </p>
+                        </div>
+                        <div id="matrixResultCoords" class="px-4 py-2 rounded-lg bg-slate-900/80 border border-slate-700 text-xs font-mono text-purple-300 text-center shrink-0">
+                            A+1 / V+3 &bull; Catégorie 3
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reference Dyads Grid -->
+                <div class="mt-10">
+                    <h3 class="text-lg font-heading font-bold text-white mb-4">Tableau des Dyades Affectives Fondamentales</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Joie + Désir</span>
+                            <div class="text-white font-semibold text-sm mt-1">Exaltation &amp; Euphorie</div>
+                            <p class="text-slate-400 mt-1">Surcroît de tonicité et propulsion vers le monde extérieur.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Colère + Peur</span>
+                            <div class="text-white font-semibold text-sm mt-1">Frustration &amp; Panique</div>
+                            <p class="text-slate-400 mt-1">Conflit interne aigu entre l'élan d'attaque et l'injonction de fuite.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Tristesse + Dégoût</span>
+                            <div class="text-white font-semibold text-sm mt-1">Honte &amp; Déception</div>
+                            <p class="text-slate-400 mt-1">Rejet de soi ou de l'objet aimé, avec effondrement de l'énergie.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Calme + Tristesse</span>
+                            <div class="text-white font-semibold text-sm mt-1">Réconfort &amp; Nostalgie</div>
+                            <p class="text-slate-400 mt-1">Acceptation douce de la perte sans violence ni déchirement.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Courage + Calme</span>
+                            <div class="text-white font-semibold text-sm mt-1">Sérénité &amp; Assurance</div>
+                            <p class="text-slate-400 mt-1">Force tranquille inébranlable capable de traverser l'adversité.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold">Peur + Dégoût</span>
+                            <div class="text-white font-semibold text-sm mt-1">Effroi &amp; Répulsion</div>
+                            <p class="text-slate-400 mt-1">Réflexe viscéral de préservation contre un danger toxique.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="emotions.html" class="text-purple-400 font-semibold">1. Émotions</a>
+                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
+                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
+                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
+            </div>
+            <div class="text-xs text-slate-500">
+                &copy; 2024–2026 Cartograffect &bull; Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Gemini API Key Configuration Modal -->
+    <div id="apiKeyModal" class="hidden fixed inset-0 bg-cosmic-900/80 z-50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="text-base font-heading font-bold text-white flex items-center gap-2">
+                    <span>✨</span> Configuration Google Gemini API
+                </h3>
+                <button id="closeApiKeyModal" class="text-slate-400 hover:text-white text-lg">&times;</button>
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+                Le site inclut déjà une encyclopédie psychologique complète et autonome. Si vous possédez votre propre clé Google AI Studio (Gemini), vous pouvez la renseigner ici pour enrichir les fiches et scénarios avec vos prompts en direct.
+            </p>
+            <div class="mt-4">
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Votre Clé API (Stockée localement)</label>
+                <input type="password" id="geminiApiKeyInput" class="w-full p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-purple-500" placeholder="AIzaSy...">
+            </div>
+            <div class="mt-5 flex items-center justify-end gap-3">
+                <button id="clearApiKeyBtn" class="px-3 py-1.5 text-xs text-rose-400 hover:text-rose-300">Supprimer la clé</button>
+                <button id="saveApiKeyBtn" class="px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg shadow-md transition-colors">Enregistrer</button>
+            </div>
         </div>
     </div>
 
+    <!-- MAIN INTERACTIVE D3 SCRIPT & LOGIC -->
     <script>
-        // D3 Chart script starts here
+        // --- 1. Dataset of 83 emotions ---
         const emotionsData = [
             // Catégorie 1: Orientation
             { name: "Attente", code: "A0/V0", category: 1, group: "Orientation" },
@@ -432,7 +755,7 @@
             { name: "Optimisme", code: "A+2/V+6", category: 5, group: "Courage" },
             { name: "Honneur", code: "A+3/V+5", category: 5, group: "Courage" },
             { name: "Espoir", code: "A+1/V+7", category: 5, group: "Courage" },
-            { name: "Tolérance", code: "A-2/V+6", category: 5, "group": "Courage" },
+            { name: "Tolérance", code: "A-2/V+6", category: 5, group: "Courage" },
             { name: "Justice", code: "A-3/V+5", category: 5, group: "Courage" },
             { name: "Prudence", code: "A-1/V+7", category: 5, group: "Courage" },
             { name: "Mécontentement", code: "A+4/V-4", category: 5, group: "Colère" },
@@ -441,7 +764,65 @@
             { name: "Désintérêt", code: "A-4/V-4", category: 5, group: "Dégoût" }
         ];
 
-        let emotionalPath = [];
+        // Psychological Encyclopedia Database (Built-in offline engine)
+        const builtInProfiles = {
+            "Joie": {
+                def: "Afflux rayonnant d'énergie vitale et de gratitude, caractérisé par une élévation de l'activation et une tonalité hédonique positive.",
+                triggers: "Accomplissement personnel, retrouvailles aimées, partage authentique, libération d'un fardeau.",
+                func: "Renforce les liens sociaux, élargit le répertoire attentionnel et recharge les réserves psychologiques (théorie de Fredrickson).",
+                phys: "Détente des traits faciaux, sourire Duchenne, rythme cardiaque vigoureux mais harmonieux, ouverture posturale.",
+                thoughts: "« Tout est possible », sentiment de légèreté, gratitude pour le moment présent.",
+                path: "La savourer pleinement, l'ancrer somatiquement et la partager pour en démultiplier la portée."
+            },
+            "Peur": {
+                def: "Signal d'alarme archaïque signalant une menace immédiate ou anticipée envers l'intégrité physique, psychologique ou sociale.",
+                triggers: "Inconnu soudain, risque d'échec ou de rejet, perte de contrôle, danger perçu.",
+                func: "Mobilise l'organisme en mode combat, fuite ou vigilance aiguë pour préserver la survie.",
+                phys: "Accélération cardiaque, vasoconstriction périphérique, sueurs froides, regard élargi.",
+                thoughts: "« Quelque chose de grave peut arriver », focalisation sur les indices de danger.",
+                path: "Nommer la peur sans la nier, ralentir l'expiration pour activer le frein vagal, puis chercher le Courage (A0/V+2) comme réponse constructive."
+            },
+            "Colère": {
+                def: "Poussée combative d'énergie réactive déclenchée par la violation perçue d'une limite, d'une règle morale ou d'un besoin vital.",
+                triggers: "Injustice subie ou observée, sentiment d'impuissance, trahison, obstacle frustrant.",
+                func: "Rétablir l'intégrité, défendre son espace, refuser l'inacceptable et rétablir la justice.",
+                phys: "Montée de chaleur au visage, mâchoires serrées, poings crispés, souffle saccadé.",
+                thoughts: "« Ce n'est pas juste », « Cela ne peut plus durer », besoin d'agir.",
+                path: "Reconnaître le message de la colère sans basculer dans la destruction : la canaliser vers l'affirmation claire et l'action équitable (Justice)."
+            },
+            "Tristesse": {
+                def: "Mouvement introspectif de repli et de désactivation consécutif à une perte (être cher, projet, illusion, statut).",
+                triggers: "Séparation, échec signifiant, rupture d'un attachement, deuil.",
+                func: "Encourager le repos, digérer la perte, recalibrer les priorités et susciter le soutien empathique du groupe.",
+                phys: "Lourdeur des membres, baisse d'énergie, larmes, gorge nouée, regard vers le sol.",
+                thoughts: "« Quelque chose d'irremplaçable est parti », sentiment de vide temporaire.",
+                path: "Accueillir les larmes, s'entourer de bienveillance et s'orienter progressivement vers le Réconfort (A-3/V+1) et l'Acceptation."
+            },
+            "Courage": {
+                def: "Capacité d'agir de façon lucide et alignée malgré la présence du doute ou de la peur.",
+                triggers: "Situation d'adversité exigeant une prise de position, défense de valeurs fondamentales.",
+                func: "Permet de surmonter la sidération et d'élargir son champ d'action dans l'inconnu.",
+                phys: "Colonne redressée, ancrage au sol ferme, respiration ample, regard déterminé.",
+                thoughts: "« Même si je tremble, j'avance pas à pas ».",
+                path: "S'appuyer sur la clarté de son intention pour convertir l'appréhension en force concrète."
+            },
+            "Sérénité": {
+                def: "État de paix intérieure profonde où l'activation est apaisée et la valence harmonieuse.",
+                triggers: "Connexion avec la nature, accomplissement d'une tâche éthique, méditation, acceptation lucide.",
+                func: "Restauration profonde de l'homéostasie et consolidation de la clarté cognitive.",
+                phys: "Rythme respiratoire lent et régulier, tonus musculaire délié, sensation de chaleur douce.",
+                thoughts: "« Tout est à sa place dans l'instant », équanimité.",
+                path: "Cultiver cet état comme un refuge intérieur accessible à tout moment."
+            },
+            "Honte": {
+                def: "Affect douloureux d'exposition sociale et de disqualification globale de soi.",
+                triggers: "Transgression morale, échec public, jugement dévalorisant perçu.",
+                func: "Régulation des normes du groupe et préservation du lien d'appartenance.",
+                phys: "Rougeur, envie de disparaître sous terre, regard fuyant.",
+                thoughts: "« Je suis nul(le) et indigne d'estime ».",
+                path: "Séparer son identité de son acte, pratiquer l'auto-compassion et briser le secret en en parlant avec bienveillance."
+            }
+        };
 
         function parseCode(emotion) {
             const parts = emotion.code.split('/');
@@ -458,255 +839,195 @@
             return { ...d, activation, valence };
         }).filter(d => !isNaN(d.activation) && !isNaN(d.valence));
 
-        const allEmotionNames = processedData.map(e => e.name);
+        let emotionalPath = [];
 
-        const margin = { top: 10, right: 20, bottom: 40, left: 40 };
-        const width = 800 - margin.left - margin.right;
-        const height = 800 - margin.top - margin.bottom;
-
-        const svg = d3.select("#emotionChart")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", `translate(${margin.left},${margin.top})`);
-        
-        svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden"); 
-        svg.append("g").attr("class", "controlateral-lines-group").style("visibility", "hidden"); 
-        svg.append("g").attr("class", "path-group"); 
-        svg.append("circle").attr("class", "intensity-circle").style("visibility", "hidden"); 
-
-        const xScale = d3.scaleLinear().domain([-8.5, 8.5]).range([0, width]);
-        const yScale = d3.scaleLinear().domain([-8.5, 8.5]).range([height, 0]);
-
+        // Colors & Scales
         const colorGroups = {
-            "Joie": "#fde047", "Tristesse": "#93c5fd", "Peur": "#c084fc", "Courage": "#86efac",
-            "Colère": "#fca5a5", "Calme": "#67e8f9", "Désir": "#f9a8d4", "Dégoût": "#9ca3af",
-            "Orientation": "#a5b4fc"
+            "Joie": "#facc15",
+            "Tristesse": "#60a5fa",
+            "Peur": "#c084fc",
+            "Courage": "#4ade80",
+            "Colère": "#f87171",
+            "Calme": "#38bdf8",
+            "Désir": "#f472b6",
+            "Dégoût": "#94a3b8",
+            "Orientation": "#a78bfa"
         };
         const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
 
         const radiusScale = d3.scaleOrdinal()
             .domain([1, 2, 3, 4, 5])
-            .range([4, 5, 6, 7, 8]);
-            
+            .range([5, 6.5, 8, 9.5, 11]);
+
+        // D3 Chart Dimensions
+        const width = 800;
+        const height = 800;
+        const margin = { top: 30, right: 30, bottom: 40, left: 40 };
+
+        const svg = d3.select("#emotionChart")
+            .attr("viewBox", `0 0 ${width} ${height}`)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        const chartW = width - margin.left - margin.right;
+        const chartH = height - margin.top - margin.bottom;
+
+        const xScale = d3.scaleLinear().domain([-8.5, 8.5]).range([0, chartW]);
+        const yScale = d3.scaleLinear().domain([-8.5, 8.5]).range([chartH, 0]);
+
+        // Defs & Markers
         const defs = svg.append("defs");
         defs.append("marker")
             .attr("id", "arrowhead")
-            .attr("viewBox", "-0 -5 10 10").attr("refX", 15).attr("refY", 0)
-            .attr("orient", "auto").attr("markerWidth", 6).attr("markerHeight", 6)
-            .attr("xoverflow", "visible").append("svg:path")
-            .attr("d", "M 0,-5 L 10 ,0 L 0,5").attr("fill", "#2c3e50").style("stroke","none");
-        
+            .attr("viewBox", "-0 -5 10 10")
+            .attr("refX", 18).attr("refY", 0)
+            .attr("orient", "auto")
+            .attr("markerWidth", 6).attr("markerHeight", 6)
+            .append("path")
+            .attr("d", "M 0,-5 L 10,0 L 0,5")
+            .attr("fill", "#f43f5e");
+
         defs.append("marker")
             .attr("id", "dynamicArrowhead")
             .attr("viewBox", "0 0 10 10")
-            .attr("refX", 5)
-            .attr("refY", 5)
-            .attr("markerWidth", 6)
-            .attr("markerHeight", 6)
+            .attr("refX", 5).attr("refY", 5)
+            .attr("markerWidth", 5).attr("markerHeight", 5)
             .attr("orient", "auto")
             .append("path")
             .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .attr("fill", "#4a5568");
-            
-        svg.on("click", function(event) {
-            if (event.target === this || event.target.className.baseVal.includes('quadrant-bg')) {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(300)
-                    .style("opacity", 0.85).attr("stroke-width", 1);
-            }
-        });
+            .attr("fill", "#a78bfa");
 
+        // Quadrants
         const quadrantData = [
-            { x: xScale(0), y: yScale(8.5), width: xScale(8.5) - xScale(0), height: yScale(0) - yScale(8.5), color: "rgba(134, 239, 172, 0.07)", label: "V+ / A+", lx: xScale(4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(8.5), width: xScale(0) - xScale(-8.5), height: yScale(0) - yScale(8.5), color: "rgba(252, 165, 165, 0.07)", label: "V- / A+", lx: xScale(-4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(0), width: xScale(0) - xScale(-8.5), height: yScale(-8.5) - yScale(0), color: "rgba(147, 197, 253, 0.07)", label: "V- / A-", lx: xScale(-4.25), ly: yScale(-8) },
-            { x: xScale(0), y: yScale(0), width: xScale(8.5) - xScale(0), height: yScale(-8.5) - yScale(0), color: "rgba(103, 232, 249, 0.07)", label: "V+ / A-", lx: xScale(4.25), ly: yScale(-8) }
+            { x: xScale(0), y: yScale(8.5), w: xScale(8.5) - xScale(0), h: yScale(0) - yScale(8.5), color: "rgba(244, 114, 182, 0.04)", label: "V+ / A+ (Joie & Désir)", lx: xScale(4.25), ly: yScale(8) },
+            { x: xScale(-8.5), y: yScale(8.5), w: xScale(0) - xScale(-8.5), h: yScale(0) - yScale(8.5), color: "rgba(248, 113, 113, 0.04)", label: "V- / A+ (Colère & Agitation)", lx: xScale(-4.25), ly: yScale(8) },
+            { x: xScale(-8.5), y: yScale(0), w: xScale(0) - xScale(-8.5), h: yScale(-8.5) - yScale(0), color: "rgba(96, 165, 250, 0.04)", label: "V- / A- (Tristesse & Dégoût)", lx: xScale(-4.25), ly: yScale(-8) },
+            { x: xScale(0), y: yScale(0), w: xScale(8.5) - xScale(0), h: yScale(-8.5) - yScale(0), color: "rgba(56, 189, 248, 0.04)", label: "V+ / A- (Calme & Sérénité)", lx: xScale(4.25), ly: yScale(-8) }
         ];
-        svg.selectAll(".quadrant-bg").data(quadrantData).enter().append("rect")
-            .attr("class", "quadrant-bg").attr("x", d => d.x).attr("y", d => d.y).attr("width", d => d.width).attr("height", d => d.height).attr("fill", d => d.color);
 
-        const xAxisGrid = d3.axisBottom(xScale).tickSize(-height).tickFormat("").ticks(17);
-        const yAxisGrid = d3.axisLeft(yScale).tickSize(-width).tickFormat("").ticks(17);
-        svg.append("g").attr("class", "grid x-grid").attr("transform", `translate(0,${height})`).call(xAxisGrid);
+        svg.selectAll(".quadrant-bg").data(quadrantData).enter().append("rect")
+            .attr("class", "quadrant-bg")
+            .attr("x", d => d.x).attr("y", d => d.y)
+            .attr("width", d => d.w).attr("height", d => d.h)
+            .attr("fill", d => d.color);
+
+        // Grid lines
+        const xAxisGrid = d3.axisBottom(xScale).tickSize(-chartH).tickFormat("").ticks(17);
+        const yAxisGrid = d3.axisLeft(yScale).tickSize(-chartW).tickFormat("").ticks(17);
+        svg.append("g").attr("class", "grid x-grid").attr("transform", `translate(0,${chartH})`).call(xAxisGrid);
         svg.append("g").attr("class", "grid y-grid").call(yAxisGrid);
-        
-        svg.append("line").attr("x1", xScale(0)).attr("y1", 0).attr("x2", xScale(0)).attr("y2", height).attr("class", "axis-center-line");
-        svg.append("line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", width).attr("y2", yScale(0)).attr("class", "axis-center-line");
-        
+
+        // Center lines
+        svg.append("line").attr("x1", xScale(0)).attr("y1", 0).attr("x2", xScale(0)).attr("y2", chartH).attr("class", "axis-center-line");
+        svg.append("line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", chartW).attr("y2", yScale(0)).attr("class", "axis-center-line");
+
+        // Groups for overlay elements
+        const symetricalLinesGroup = svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden");
+        const controlateralLinesGroup = svg.append("g").attr("class", "controlateral-lines-group").style("visibility", "hidden");
+        const pathGroup = svg.append("g").attr("class", "path-group");
+        const intensityCircle = svg.append("circle").attr("class", "intensity-circle").style("visibility", "hidden");
+
+        // Quadrant labels
+        svg.selectAll(".quadrant-label-text").data(quadrantData).enter().append("text")
+            .attr("class", "quadrant-label")
+            .attr("x", d => d.lx).attr("y", d => d.ly)
+            .text(d => d.label);
+
+        // Axes ticks
+        const xAxis = d3.axisBottom(xScale).ticks(17).tickFormat(d3.format("d"));
+        const yAxis = d3.axisLeft(yScale).ticks(17).tickFormat(d3.format("d"));
+        svg.append("g").attr("transform", `translate(0,${chartH})`).call(xAxis);
+        svg.append("g").call(yAxis);
+
+        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", chartW / 2).attr("y", chartH + 34).text("Valence Hédonique (V)");
+        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -chartH / 2).attr("y", -26).text("Activation Somatique (A)");
+
+        // Dynamic Orientation Circle around Attente
         const surprise = processedData.find(d => d.name === 'Surprise');
         const attente = processedData.find(d => d.name === 'Attente');
-
         if (surprise && attente) {
-            const cx = xScale(attente.valence);
-            const cy = yScale(attente.activation);
+            const cx = xScale(attente.valence), cy = yScale(attente.activation);
             const radius = Math.abs(yScale(attente.activation) - yScale(surprise.activation));
-            svg.append("circle")
-                .attr("class", "dynamic-circle")
-                .attr("cx", cx)
-                .attr("cy", cy)
-                .attr("r", radius);
-            const arrowGroup = svg.append("g");
-            const arrowSize = 10;
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx - arrowSize/2},${cy - radius} L ${cx + arrowSize/2},${cy - radius}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx + arrowSize/2},${cy + radius} L ${cx - arrowSize/2},${cy + radius}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx + radius},${cy - arrowSize/2} L ${cx + radius},${cy + arrowSize/2}`);
-            arrowGroup.append("path").attr("class", "dynamic-arrow-path").attr("d", `M ${cx - radius},${cy + arrowSize/2} L ${cx - radius},${cy - arrowSize/2}`);
+            svg.append("circle").attr("class", "dynamic-circle").attr("cx", cx).attr("cy", cy).attr("r", radius);
         }
 
+        // Symmetry & Contralateral lists
         const symetricalPairs = [["Joie", "Tristesse"], ["Peur", "Courage"], ["Confusion", "Engourdissement"], ["Curiosité", "Stupeur"], ["Ambivalence", "Indifférence"], ["Conviction", "Doute"], ["Agitation", "Apathie"], ["Certitude", "Incertitude"]];
         const controlateralPairs = [["Colère", "Calme"], ["Désir", "Dégoût"], ["Consternation", "Enchantement"], ["Exaspération", "Soulagement"], ["Panique", "Réconfort"], ["Euphorie", "Frisson"], ["Exaltation", "Déception"], ["Émerveillement", "Chagrin"], ["Haine", "Affection"], ["Envie", "Admiration"], ["Frustration", "Acceptation"], ["Anxiété", "Sérénité"], ["Manque", "Plénitude"], ["Amour", "Mépris"], ["Assurance", "Crainte"], ["Engagement", "Rejet"], ["Fierté", "Honte"], ["Épanouissement", "Vide"], ["Vulnérabilité", "Invulnérabilité"], ["Puissance", "Impuissance"], ["Confiance", "Méfiance"], ["Intérêt", "Désintérêt"], ["Honneur", "Déshonneur"], ["Optimisme", "Pessimisme"], ["Espoir", "Désespoir"], ["Prudence", "Imprudence"], ["Tolérance", "Intolérance"], ["Justice", "Injustice"], ["Contentement", "Mécontentement"], ["Sécurité", "Insécurité"], ["Patience", "Impatience"], ["Quiétude", "Inquiétude"]];
 
-        const xAxis = d3.axisBottom(xScale).ticks(17).tickFormat(d3.format("d"));
-        const yAxis = d3.axisLeft(yScale).ticks(17).tickFormat(d3.format("d"));
-        svg.append("g").attr("transform", `translate(0,${height})`).call(xAxis);
-        svg.append("g").call(yAxis);
+        // Draw Symmetry & Contralateral lines
+        controlateralPairs.forEach(pair => {
+            const e1 = processedData.find(d => d.name === pair[0]);
+            const e2 = processedData.find(d => d.name === pair[1]);
+            if (e1 && e2) {
+                controlateralLinesGroup.append("line").attr("class", "controlateral-line")
+                    .attr("x1", xScale(e1.valence)).attr("y1", yScale(e1.activation))
+                    .attr("x2", xScale(e2.valence)).attr("y2", yScale(e2.activation));
+            }
+        });
 
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", width / 2).attr("y", height + margin.bottom - 5).text("Valence (V)");
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -height / 2).attr("y", -margin.left + 15).text("Activation (A)");
-        svg.selectAll(".quadrant-label-text").data(quadrantData).enter().append("text").attr("class", "quadrant-label").attr("x", d => d.lx).attr("y", d => d.ly).text(d => d.label);
+        symetricalPairs.forEach(pair => {
+            const e1 = processedData.find(d => d.name === pair[0]);
+            const e2 = processedData.find(d => d.name === pair[1]);
+            if (e1 && e2) {
+                symetricalLinesGroup.append("line").attr("class", "symetrical-line")
+                    .attr("x1", xScale(e1.valence)).attr("y1", yScale(e1.activation))
+                    .attr("x2", xScale(e2.valence)).attr("y2", yScale(e2.activation));
+            }
+        });
 
+        // Tooltip container
         const tooltip = d3.select("body").append("div").attr("class", "tooltip");
-        const iaResponseContainer = d3.select("#iaResponseContainer");
-        const iaResponseTitle = d3.select("#iaResponseTitle");
-        const iaResponseContent = d3.select("#iaResponseContent");
-        const analyzeScenarioBtn = d3.select("#analyzeScenarioBtn");
 
-        async function callGeminiAPI(prompt, isJson = false) {
-            // IMPORTANT: Remplacez "VOTRE_CLÉ_API_GEMINI_ICI" par votre propre clé API de Google AI Studio.
-            // Vous pouvez en obtenir une en visitant https://aistudio.google.com/app/apikey
-            const apiKey = "VOTRE_CLÉ_API_GEMINI_ICI";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-            
-            const payload = {
-                contents: [{ role: "user", parts: [{ text: prompt }] }]
+        // Elements Group
+        const pointsGroup = svg.append("g").attr("class", "points-layer");
+        const labelsGroup = svg.append("g").attr("class", "labels-layer");
+
+        function renderIdentityCard(emotion) {
+            const titleEl = document.getElementById("iaResponseTitle");
+            const badgeEl = document.getElementById("emotionBadgeCategory");
+            const contentEl = document.getElementById("iaResponseContent");
+
+            const categoriesNames = ["", "Orientation", "Fondamentale", "Complexe", "Relationnelle", "Disposition"];
+            titleEl.innerHTML = `<span>✨</span> Fiche d'Identité : <span class="text-white">${emotion.name} (${emotion.code})</span>`;
+            badgeEl.textContent = `${categoriesNames[emotion.category]} &bull; Grp ${emotion.group}`;
+
+            // Check if profile exists or generate generic profile
+            const profile = builtInProfiles[emotion.name] || {
+                def: `État affectif ${emotion.group.toLowerCase()} caractérisé par une activation de ${emotion.activation > 0 ? '+' : ''}${emotion.activation} et une valence de ${emotion.valence > 0 ? '+' : ''}${emotion.valence}. Appartient à la catégorie des ${categoriesNames[emotion.category].toLowerCase()}s.`,
+                triggers: `Situations de vie impliquant une évaluation de ${emotion.valence >= 0 ? "gain, ressource ou harmonie" : "menace, perte ou contrariété"} avec une intensité d'activation de niveau ${Math.abs(emotion.activation)}.`,
+                func: `Organise la réponse somatique et attentionnelle pour s'adapter à la situation en régulant la dépense d'énergie.`,
+                phys: emotion.activation > 2 ? "Rythme cardiorespiratoire soutenu, mobilisation musculaire, vigilance accrue." : emotion.activation < -2 ? "Ralentissement métabolique, baisse de pression motrice, économie somatique." : "Équilibre autonome, tonus modéré.",
+                thoughts: `Orientation cognitive focalisée sur ${emotion.name.toLowerCase()} et l'ajustement aux circonstances.`,
+                path: `Intégrer le message adaptatif de ${emotion.name} sans s'y figer, en naviguant vers l'état symétrique ou le Noyau central.`
             };
 
-            if (isJson) {
-                payload.generationConfig = {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "ARRAY",
-                        items: { type: "STRING" }
-                    }
-                };
-            }
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erreur API: ${response.statusText}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    return result.candidates[0].content.parts[0].text;
-                } else {
-                    throw new Error("Réponse de l'API invalide ou vide.");
-                }
-            } catch (error) {
-                console.error("Erreur lors de l'appel à l'API Gemini:", error);
-                return null;
-            }
-        }
-
-        async function fetchEmotionIdentityCard(emotion) {
-            iaResponseContainer.classed("hidden", false);
-            iaResponseTitle.text(`✨ Fiche d'Identité : ${emotion.name}`);
-            iaResponseContent.html('<div class="loading-spinner"></div>');
-
-            const prompt = `
-                Agis comme un psychologue expert. Crée une "fiche d'identité" pour l'émotion "${emotion.name}".
-                Structure ta réponse avec les sections suivantes, chacune suivie d'un paragraphe concis:
-                - **Définition:**
-                - **Déclencheurs Typiques:**
-                - **Fonction Adaptative:**
-                - **Manifestations Physiques:**
-                - **Pensées Associées:**
+            contentEl.innerHTML = `
+                <div class="identity-card-section animate-fadeIn">
+                    <h4>Définition</h4>
+                    <p>${profile.def}</p>
+                    <h4>Déclencheurs Typiques</h4>
+                    <p>${profile.triggers}</p>
+                    <h4>Fonction Adaptative</h4>
+                    <p>${profile.func}</p>
+                    <h4>Manifestations Physiques</h4>
+                    <p>${profile.phys}</p>
+                    <h4>Pensées Associées</h4>
+                    <p>${profile.thoughts}</p>
+                    <h4>Chemin de Régulation</h4>
+                    <p>${profile.path}</p>
+                </div>
             `;
-
-            const responseText = await callGeminiAPI(prompt);
-
-            if (responseText) {
-                const formattedHtml = responseText
-                    .replace(/\*\*(.*?)\*\*/g, '<h4>$1</h4>')
-                    .replace(/^- (.*?):/gm, '<h4>$1</h4>')
-                    .replace(/\n\n/g, '<br>')
-                    .replace(/\n/g, '<br>');
-                iaResponseContent.html(`<div class="identity-card-section">${formattedHtml}</div>`);
-            } else {
-                iaResponseContent.text("Désolé, une erreur est survenue lors de la génération de la fiche d'identité.");
-            }
         }
-        
-        async function analyzeScenario() {
-            const scenarioText = d3.select("#scenarioInput").property("value");
-            if (!scenarioText.trim()) {
-                iaResponseContent.text("Veuillez entrer un scénario.");
-                iaResponseContainer.classed("hidden", false);
-                return;
-            }
 
-            analyzeScenarioBtn.property("disabled", true).html('<div class="loading-spinner" style="width:20px; height:20px; border-width:2px; margin:0 auto;"></div>');
-            
-            const prompt = `
-                Étant donné le scénario suivant, identifie la séquence la plus probable d'émotions qu'une personne ressentirait.
-                La séquence doit comporter entre 3 et 5 émotions.
-                Tu dois impérativement choisir parmi la liste d'émotions valides suivante : ${allEmotionNames.join(', ')}.
-                Ta réponse doit être un tableau JSON de chaînes de caractères, par exemple : ["Surprise", "Joie", "Euphorie"].
-
-                Scénario: "${scenarioText}"
-            `;
-
-            const responseJsonString = await callGeminiAPI(prompt, true);
-            analyzeScenarioBtn.property("disabled", false).text("Analyser et Tracer le Chemin ✨");
-
-            if (responseJsonString) {
-                try {
-                    const emotionNames = JSON.parse(responseJsonString);
-                    const path = emotionNames
-                        .map(name => processedData.find(d => d.name.toLowerCase() === name.toLowerCase()))
-                        .filter(Boolean);
-
-                    if (path.length > 0) {
-                        emotionalPath = path;
-                        d3.select("#pathModeToggle").property("checked", true);
-                        d3.select("#resetPathBtn").style("display", "inline-block");
-                        drawEmotionalPath();
-                        svg.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
-                    } else {
-                         iaResponseContent.text("L'IA n'a pas pu identifier un chemin émotionnel valide pour ce scénario.");
-                         iaResponseContainer.classed("hidden", false);
-                    }
-                } catch (e) {
-                    console.error("Erreur de parsing JSON:", e);
-                    iaResponseContent.text("Désolé, l'IA a retourné une réponse dans un format inattendu.");
-                    iaResponseContainer.classed("hidden", false);
-                }
-            } else {
-                iaResponseContent.text("Désolé, une erreur est survenue lors de l'analyse du scénario.");
-                iaResponseContainer.classed("hidden", false);
-            }
-        }
-        
         function drawEmotionalPath() {
-            const pathGroup = svg.select(".path-group");
-            pathGroup.html(""); 
-
+            pathGroup.html("");
             if (emotionalPath.length < 2) return;
 
             const lineGenerator = d3.line()
                 .x(d => xScale(d.valence))
                 .y(d => yScale(d.activation))
-                .curve(d3.curveCatmullRom);
+                .curve(d3.curveCatmullRom.alpha(0.5));
 
             pathGroup.append("path")
                 .datum(emotionalPath)
@@ -714,26 +1035,44 @@
                 .attr("d", lineGenerator)
                 .attr("marker-end", "url(#arrowhead)");
         }
-        
-        function updateChart(data) {
-            const t = svg.transition().duration(500);
 
-            const circles = svg.selectAll(".emotion-point").data(data, d => d.name);
+        function updateChart(data) {
+            const t = svg.transition().duration(400);
+
+            // Points
+            const circles = pointsGroup.selectAll(".emotion-point").data(data, d => d.name);
             circles.exit().transition(t).attr("r", 0).remove();
-            
-            circles.enter().append("circle")
+
+            const circlesEnter = circles.enter().append("circle")
                 .attr("class", "emotion-point cursor-pointer")
+                .attr("cx", d => xScale(d.valence))
+                .attr("cy", d => yScale(d.activation))
                 .attr("r", 0)
-                .merge(circles)
+                .attr("fill", d => colorScale(d.group))
+                .attr("stroke", "#0f172a")
+                .attr("stroke-width", 1.5)
+                .style("opacity", 0.9);
+
+            const mergedCircles = circlesEnter.merge(circles);
+            mergedCircles.transition(t)
+                .attr("cx", d => xScale(d.valence))
+                .attr("cy", d => yScale(d.activation))
+                .attr("r", d => radiusScale(d.category))
+                .attr("fill", d => colorScale(d.group));
+
+            mergedCircles
                 .on("mouseover", (event, d) => {
-                    d3.select(event.currentTarget).transition().duration(100).attr("r", radiusScale(d.category) + 2).style("opacity", 1).attr("stroke-width", 2);
+                    d3.select(event.currentTarget).transition().duration(120).attr("r", radiusScale(d.category) + 3).style("opacity", 1);
                     tooltip.transition().duration(100).style("opacity", 1);
-                    tooltip.html(`<strong>${d.name}</strong><br/>Code: ${d.code}<br/>(A: ${d.activation}, V: ${d.valence})`)
-                        .style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 15) + "px");
+                    tooltip.html(`
+                        <div class="font-bold text-white text-xs">${d.name}</div>
+                        <div class="text-[10px] text-purple-300 font-mono mt-0.5">${d.code} &bull; Grp: ${d.group}</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Act: ${d.activation} | Val: ${d.valence}</div>
+                    `).style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 20) + "px");
                 })
                 .on("mouseout", (event, d) => {
-                    d3.select(event.currentTarget).transition().duration(100).attr("r", radiusScale(d.category)).style("opacity", 0.85).attr("stroke-width", 1);
-                    tooltip.transition().duration(300).style("opacity", 0);
+                    d3.select(event.currentTarget).transition().duration(120).attr("r", radiusScale(d.category)).style("opacity", 0.9);
+                    tooltip.transition().duration(200).style("opacity", 0);
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
@@ -741,29 +1080,25 @@
                         if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
                             emotionalPath.push(d);
                             drawEmotionalPath();
-                            svg.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
+                            pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
                         }
                     } else {
-                        fetchEmotionIdentityCard(d);
+                        renderIdentityCard(d);
+                        // Highlight counterparts
                         const allPairs = [...controlateralPairs, ...symetricalPairs];
                         const oppositePair = allPairs.find(p => p[0] === d.name || p[1] === d.name);
                         const oppositeName = oppositePair ? (oppositePair[0] === d.name ? oppositePair[1] : oppositePair[0]) : null;
-                        svg.selectAll(".emotion-point")
-                            .transition().duration(300)
-                            .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 0.85 : 0.1)
-                            .attr("stroke-width", p => p.name === d.name ? 2 : 1);
-                    }
-                })
-                .transition(t)
-                .attr("cx", d => xScale(d.valence))
-                .attr("cy", d => yScale(d.activation))
-                .attr("r", d => radiusScale(d.category))
-                .attr("fill", d => colorScale(d.group))
-                .attr("stroke", "#2c3e50").attr("stroke-width", 1).style("opacity", 0.85);
 
-            const labels = svg.selectAll(".emotion-label-group").data(data, d => d.name);
+                        pointsGroup.selectAll(".emotion-point").transition().duration(250)
+                            .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 1.0 : 0.15)
+                            .attr("stroke-width", p => p.name === d.name ? 3 : 1.5);
+                    }
+                });
+
+            // Labels
+            const labels = labelsGroup.selectAll(".emotion-label-group").data(data, d => d.name);
             labels.exit().transition(t).style("opacity", 0).remove();
-            
+
             const labelsEnter = labels.enter().append("g")
                 .attr("class", "emotion-label-group")
                 .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
@@ -771,50 +1106,23 @@
 
             labelsEnter.append("rect").attr("class", "label-background");
             labelsEnter.append("text").attr("class", "emotion-label-text").attr("dy", "0.35em").text(d => d.name);
-            
-            const mergedLabels = labelsEnter.merge(labels);
 
+            const mergedLabels = labelsEnter.merge(labels);
             mergedLabels.transition(t)
                 .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
                 .style("opacity", 1)
                 .style("visibility", d3.select("#showNamesToggle").property("checked") ? "visible" : "hidden");
-            
+
             mergedLabels.each(function() {
                 const textNode = d3.select(this).select("text").node();
                 if (textNode) {
                     const bbox = textNode.getBBox();
-                    const padding = 3;
+                    const padding = 2;
                     d3.select(this).select("rect")
                         .attr("x", bbox.x - padding)
                         .attr("y", bbox.y - padding)
                         .attr("width", bbox.width + (padding * 2))
                         .attr("height", bbox.height + (padding * 2));
-                }
-            });
-            
-            const controlateralLinesGroup = svg.select(".controlateral-lines-group");
-            controlateralLinesGroup.selectAll("*").remove(); 
-            controlateralPairs.forEach(pair => {
-                const emotion1 = data.find(d => d.name === pair[0]);
-                const emotion2 = data.find(d => d.name === pair[1]);
-                if (emotion1 && emotion2) {
-                    controlateralLinesGroup.append("line").attr("class", "controlateral-line")
-                        .attr("x1", xScale(emotion1.valence)).attr("y1", yScale(emotion1.activation))
-                        .attr("x2", xScale(emotion2.valence)).attr("y2", yScale(emotion2.activation))
-                        .style("opacity", 0).transition(t).style("opacity", 1);
-                }
-            });
-
-            const symetricalLinesGroup = svg.select(".symetrical-lines-group");
-            symetricalLinesGroup.selectAll("*").remove(); 
-            symetricalPairs.forEach(pair => {
-                const emotion1 = data.find(d => d.name === pair[0]);
-                const emotion2 = data.find(d => d.name === pair[1]);
-                if (emotion1 && emotion2) {
-                    symetricalLinesGroup.append("line").attr("class", "symetrical-line")
-                        .attr("x1", xScale(emotion1.valence)).attr("y1", yScale(emotion1.activation))
-                        .attr("x2", xScale(emotion2.valence)).attr("y2", yScale(emotion2.activation))
-                        .style("opacity", 0).transition(t).style("opacity", 1);
                 }
             });
         }
@@ -830,85 +1138,260 @@
 
         handleFilterUpdate();
 
+        // Control events
         d3.selectAll(".category-filter").on("change", handleFilterUpdate);
-        d3.select("#showNamesToggle").on("change", function(event) {
-            svg.selectAll(".emotion-label-group").style("visibility", event.target.checked ? "visible" : "hidden");
+        d3.select("#showNamesToggle").on("change", function(e) {
+            labelsGroup.selectAll(".emotion-label-group").style("visibility", e.target.checked ? "visible" : "hidden");
         });
-        d3.select("#showControlateralToggle").on("change", function(event) {
-            svg.select(".controlateral-lines-group").style("visibility", event.target.checked ? "visible" : "hidden");
+        d3.select("#showControlateralToggle").on("change", function(e) {
+            controlateralLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
         });
-        d3.select("#showSymetricalToggle").on("change", function(event) {
-            svg.select(".symetrical-lines-group").style("visibility", event.target.checked ? "visible" : "hidden");
+        d3.select("#showSymetricalToggle").on("change", function(e) {
+            symetricalLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
         });
-        d3.select("#showIntensityCircleToggle").on("change", function(event) {
-            const isChecked = event.target.checked;
-            const attente = processedData.find(d => d.name === 'Attente');
-            let maxDistanceSq = 0;
-            processedData.forEach(d => {
-                const distanceSq = d.valence * d.valence + d.activation * d.activation;
-                if (distanceSq > maxDistanceSq) maxDistanceSq = distanceSq;
-            });
-            const radius = xScale(Math.sqrt(maxDistanceSq)) - xScale(0); 
-            svg.select(".intensity-circle")
-                .attr("cx", xScale(attente.valence))
-                .attr("cy", yScale(attente.activation))
-                .attr("r", radius)
-                .style("visibility", isChecked ? "visible" : "hidden");
-        });
-        d3.select("#pathModeToggle").on("change", function(event) {
-            d3.select("#resetPathBtn").style("display", event.target.checked ? "inline-block" : "none");
-            if (!event.target.checked) {
-                emotionalPath = [];
-                svg.select(".path-group").html("");
-                svg.selectAll(".emotion-point").classed("path-point-highlight", false);
+        d3.select("#showIntensityCircleToggle").on("change", function(e) {
+            if (e.target.checked) {
+                const radius = xScale(8) - xScale(0);
+                intensityCircle.attr("cx", xScale(0)).attr("cy", yScale(0)).attr("r", radius).style("visibility", "visible");
+            } else {
+                intensityCircle.style("visibility", "hidden");
             }
         });
-        d3.select("#resetPathBtn").on("click", function() {
-            emotionalPath = [];
-            svg.select(".path-group").html("");
-            svg.selectAll(".emotion-point").classed("path-point-highlight", false);
+        d3.select("#pathModeToggle").on("change", function(e) {
+            document.getElementById("resetPathBtn").classList.toggle("hidden", !e.target.checked);
+            if (!e.target.checked) {
+                emotionalPath = [];
+                pathGroup.html("");
+                pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", false);
+            }
         });
-        analyzeScenarioBtn.on("click", analyzeScenario);
-        
+        document.getElementById("resetPathBtn").addEventListener("click", () => {
+            emotionalPath = [];
+            pathGroup.html("");
+            pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", false);
+        });
+
+        // Click outside points resets opacity
+        svg.on("click", function(event) {
+            if (event.target === this || event.target.classList.contains('quadrant-bg')) {
+                pointsGroup.selectAll(".emotion-point")
+                    .transition().duration(250)
+                    .style("opacity", 0.9)
+                    .attr("stroke-width", 1.5);
+            }
+        });
+
+        // Legend items
         const legendContainer = d3.select("#legend");
         Object.entries(colorGroups).forEach(([groupName, color]) => {
-            const legendItem = legendContainer.append("div").attr("class", "legend-item");
-            legendItem.append("div").attr("class", "legend-color").style("background-color", color);
-            legendItem.append("span").text(groupName);
-            legendItem.on("mouseover", function() {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(200)
-                    .style("opacity", d => d.group === groupName ? 1.0 : 0.1)
-                    .attr("stroke-width", d => d.group === groupName ? 2 : 1);
-            })
-            .on("mouseout", function() {
-                svg.selectAll(".emotion-point")
-                    .transition().duration(200)
-                    .style("opacity", 0.85)
-                    .attr("stroke-width", 1);
+            const item = legendContainer.append("div")
+                .attr("class", "flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-800 transition-colors");
+            item.append("span").style("width", "9px").style("height", "9px").style("border-radius", "50%").style("background-color", color);
+            item.append("span").text(groupName).attr("class", "text-[11px] text-slate-300 font-medium");
+            item.on("mouseover", () => {
+                pointsGroup.selectAll(".emotion-point").transition().duration(150)
+                    .style("opacity", d => d.group === groupName ? 1.0 : 0.15);
+            }).on("mouseout", () => {
+                pointsGroup.selectAll(".emotion-point").transition().duration(150)
+                    .style("opacity", 0.9);
             });
         });
-        // D3 Chart script ends here
-    </script>
-    <script>
-        // Tab switching script
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
 
-        tabButtons[0].classList.add('active');
+        // --- Scenario Heuristic & AI Parser ---
+        const analyzeBtn = document.getElementById("analyzeScenarioBtn");
+        const scenarioInput = document.getElementById("scenarioInput");
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                tabContents.forEach(content => content.classList.add('hidden'));
-                
-                const targetId = button.getAttribute('data-tab');
-                document.getElementById(targetId).classList.remove('hidden');
+        // Example buttons
+        document.querySelectorAll(".example-scenario-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                scenarioInput.value = btn.getAttribute("data-text");
+                runScenarioAnalysis();
             });
         });
-    </script>
 
+        analyzeBtn.addEventListener("click", runScenarioAnalysis);
+
+        async function runScenarioAnalysis() {
+            const text = scenarioInput.value.trim().toLowerCase();
+            if (!text) return;
+
+            analyzeBtn.disabled = true;
+            analyzeBtn.textContent = "Analyse en cours...";
+
+            // Check if user set Gemini API key
+            const apiKey = localStorage.getItem("cartograffect_gemini_key");
+
+            if (apiKey) {
+                try {
+                    const prompt = `Étant donné le scénario: "${text}", donne une séquence de 3 à 5 émotions dans cet ordre choisi parmi: ${processedData.map(e => e.name).join(', ')}. Réponds UNIQUEMENT un tableau JSON de noms, ex: ["Peur", "Courage", "Soulagement"].`;
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] })
+                    });
+                    const json = await res.json();
+                    const rawText = json.candidates[0].content.parts[0].text;
+                    const cleanJson = rawText.substring(rawText.indexOf('['), rawText.lastIndexOf(']') + 1);
+                    const names = JSON.parse(cleanJson);
+                    const path = names.map(n => processedData.find(e => e.name.toLowerCase() === n.toLowerCase())).filter(Boolean);
+                    if (path.length > 0) {
+                        applyScenarioPath(path, "Analyse propulsée par Gemini AI");
+                        analyzeBtn.disabled = false;
+                        analyzeBtn.textContent = "Tracer le Chemin Émotionnel →";
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Fallback to heuristic parser:", err);
+                }
+            }
+
+            // Intelligent Heuristic Lexical Matching (Zero dependency, instant fallback)
+            setTimeout(() => {
+                let chosenPath = [];
+                let explanation = "";
+
+                if (text.includes("examen") || text.includes("peur") || text.includes("stress") || text.includes("échouer")) {
+                    chosenPath = ["Appréhension", "Inquiétude", "Courage", "Soulagement", "Joie"];
+                    explanation = "Transition typique du stress de performance : de l'appréhension anticipée vers la mobilisation du courage, aboutissant au soulagement libérateur.";
+                } else if (text.includes("victoire") || text.includes("succès") || text.includes("validé") || text.includes("gagné")) {
+                    chosenPath = ["Attente", "Surprise", "Joie", "Euphorie", "Fierté"];
+                    explanation = "Ascension vertigineuse de l'affect : rupture de l'attente neutre par une surprise positive, amplifiée en euphorie puis intégrée en fierté durable.";
+                } else if (text.includes("trahison") || text.includes("menti") || text.includes("trompé") || text.includes("rupture")) {
+                    chosenPath = ["Stupeur", "Colère", "Chagrin", "Déception", "Acceptation"];
+                    explanation = "Traversée de la désillusion : la stupeur cède le pas à une poussée de colère protectrice, suivie du deuil de l'illusion avant l'acceptation pacifiée.";
+                } else if (text.includes("dispute") || text.includes("rage") || text.includes("énervé")) {
+                    chosenPath = ["Frustration", "Colère", "Exaspération", "Calme", "Sérénité"];
+                    explanation = "Cycle de la tension conflictuelle : montée de l'activation somatique jusqu'au pic d'exaspération, suivie d'une redescente régulée vers le calme.";
+                } else {
+                    chosenPath = ["Anticipation", "Curiosité", "Émerveillement", "Plénitude"];
+                    explanation = "Trajectoire d'exploration contemplative : l'anticipation se transforme en curiosité bienveillante, ouvrant la voie à l'épanouissement.";
+                }
+
+                const pathObjects = chosenPath.map(name => processedData.find(e => e.name === name)).filter(Boolean);
+                applyScenarioPath(pathObjects, explanation);
+
+                analyzeBtn.disabled = false;
+                analyzeBtn.textContent = "Tracer le Chemin Émotionnel →";
+            }, 300);
+        }
+
+        function applyScenarioPath(path, expl) {
+            emotionalPath = path;
+            document.getElementById("pathModeToggle").checked = true;
+            document.getElementById("resetPathBtn").classList.remove("hidden");
+            drawEmotionalPath();
+            pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
+
+            // Display in result box
+            const titleEl = document.getElementById("iaResponseTitle");
+            const badgeEl = document.getElementById("emotionBadgeCategory");
+            const contentEl = document.getElementById("iaResponseContent");
+
+            titleEl.innerHTML = `<span>🧭</span> Chemin Détecté (${path.length} étapes)`;
+            badgeEl.textContent = "Trajectoire";
+            contentEl.innerHTML = `
+                <div class="identity-card-section animate-fadeIn">
+                    <h4>Trajectoire Cartographique</h4>
+                    <p class="font-bold text-white mb-2">
+                        ${path.map((p, i) => `<span class="text-purple-400">${i+1}.</span> ${p.name}`).join(' &rarr; ')}
+                    </p>
+                    <h4>Dynamique Affective</h4>
+                    <p>${expl}</p>
+                    <h4>Conseil de Régulation</h4>
+                    <p>Observez sur la carte l'oscillation entre les quadrants : l'équilibre ne réside pas dans l'absence de turbulences, mais dans la fluidité avec laquelle vous traversez chaque étape sans vous y enkyster.</p>
+                </div>
+            `;
+        }
+
+        // --- Tabs Navigation ---
+        const tabBtns = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                tabBtns.forEach(b => b.classList.remove("active"));
+                tabContents.forEach(c => c.classList.add("hidden"));
+
+                btn.classList.add("active");
+                const targetId = btn.getAttribute("data-tab");
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) targetEl.classList.remove("hidden");
+            });
+        });
+
+        // --- Matrice Fusion Logic ---
+        const matrixA = document.getElementById("matrixEmotionA");
+        const matrixB = document.getElementById("matrixEmotionB");
+        const matrixTitle = document.getElementById("matrixResultTitle");
+        const matrixDesc = document.getElementById("matrixResultDesc");
+        const matrixCoords = document.getElementById("matrixResultCoords");
+
+        const matrixCombinations = {
+            "Joie+Courage": { title: "Fierté Triomphante & Émerveillement", desc: "La joie élève le courage pour dépasser toute inhibition dans une affirmation généreuse et protectrice.", coords: "A+2 / V+4 &bull; Cat. 4" },
+            "Joie+Désir": { title: "Exaltation & Euphorie", desc: "La rencontre de la joie et du désir engendre une surabondance d'énergie créatrice et d'enthousiasme moteur.", coords: "A+3 / V+3 &bull; Cat. 3" },
+            "Joie+Calme": { title: "Contentement & Plénitude", desc: "La joie sans l'excitation produit une félicité douce et un sentiment d'harmonie intime.", coords: "A+1 / V+3 &bull; Cat. 4" },
+            "Peur+Colère": { title: "Frustration Combative & Panique Réactive", desc: "Tension maximale entre l'instinct d'attaque et l'impulsion de fuite. Nécessite un retour rapide au souffle.", coords: "A+3 / V-3 &bull; Cat. 4" },
+            "Peur+Tristesse": { title: "Désespoir & Vulnérabilité", desc: "La douleur de la perte combinée à l'impuissance face au lendemain. Demande écoute et sécurité.", coords: "A-2 / V-4 &bull; Cat. 4" },
+            "Peur+Courage": { title: "Audace Héroïque & Prudence", desc: "Le véritable courage ne supprime pas la peur : il l'intègre comme signal de lucidité pour avancer fermement.", coords: "A0 / V+4 &bull; Cat. 3" },
+            "Tristesse+Dégoût": { title: "Honte, Déception & Rejet", desc: "Aversion dirigée vers soi ou une promesse déchue. Étape cruciale à dépolluer par le pardon.", coords: "A-3 / V-3 &bull; Cat. 4" },
+            "Colère+Courage": { title: "Indignation Légitime & Justice", desc: "L'énergie de la colère est sublimée par le courage éthique pour corriger une faute sans haine aveugle.", coords: "A+1 / V+5 &bull; Cat. 5" },
+            "Calme+Courage": { title: "Sérénité Inébranlable & Assurance", desc: "Force intérieure silencieuse capable de traverser les tempêtes sans vaciller.", coords: "A-1 / V+4 &bull; Cat. 4" }
+        };
+
+        function updateMatrixResult() {
+            const a = matrixA.value;
+            const b = matrixB.value;
+            const key1 = `${a}+${b}`;
+            const key2 = `${b}+${a}`;
+            const res = matrixCombinations[key1] || matrixCombinations[key2] || {
+                title: `Synthèse de ${a} & ${b}`,
+                desc: `L'alliage des polarités de ${a} et ${b} forme une résonance intermédiaire équilibrant l'intensité de leurs vecteurs d'activation respectifs.`,
+                coords: "Vecteur Composé &bull; Résonance 2D"
+            };
+            matrixTitle.textContent = res.title;
+            matrixDesc.textContent = res.desc;
+            matrixCoords.innerHTML = res.coords;
+        }
+
+        matrixA.addEventListener("change", updateMatrixResult);
+        matrixB.addEventListener("change", updateMatrixResult);
+
+        // --- API Key Modal Logic ---
+        const apiKeyModal = document.getElementById("apiKeyModal");
+        const openApiKeyBtn = document.getElementById("openApiKeyModal");
+        const closeApiKeyBtn = document.getElementById("closeApiKeyModal");
+        const saveApiKeyBtn = document.getElementById("saveApiKeyBtn");
+        const clearApiKeyBtn = document.getElementById("clearApiKeyBtn");
+        const apiKeyInput = document.getElementById("geminiApiKeyInput");
+        const indicator = document.getElementById("apiKeyIndicator");
+
+        function updateKeyIndicator() {
+            const hasKey = !!localStorage.getItem("cartograffect_gemini_key");
+            indicator.className = `w-2 h-2 rounded-full ${hasKey ? 'bg-emerald-400' : 'bg-slate-500'}`;
+            if (hasKey) apiKeyInput.value = "••••••••••••••••••••";
+        }
+        updateKeyIndicator();
+
+        openApiKeyBtn.addEventListener("click", () => {
+            apiKeyModal.classList.remove("hidden");
+        });
+        closeApiKeyBtn.addEventListener("click", () => {
+            apiKeyModal.classList.add("hidden");
+        });
+        saveApiKeyBtn.addEventListener("click", () => {
+            const val = apiKeyInput.value.trim();
+            if (val && !val.includes("•")) {
+                localStorage.setItem("cartograffect_gemini_key", val);
+            }
+            updateKeyIndicator();
+            apiKeyModal.classList.add("hidden");
+        });
+        clearApiKeyBtn.addEventListener("click", () => {
+            localStorage.removeItem("cartograffect_gemini_key");
+            apiKeyInput.value = "";
+            updateKeyIndicator();
+            apiKeyModal.classList.add("hidden");
+        });
+    </script>
 </body>
 </html>

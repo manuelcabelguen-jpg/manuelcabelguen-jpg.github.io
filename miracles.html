@@ -1,34 +1,373 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Territoire des MIRACLES - Cartograffect</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Territoire des MIRACLES | Cartograffect</title>
+    <meta name="description" content="Explorez les voies de résilience et d'alchimie affective : comment transformer la peur en courage, le ressentiment en justice et le chagrin en sérénité.">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        cosmic: {
+                            900: '#070b14',
+                            850: '#0b1120',
+                            800: '#0e1726',
+                            700: '#152136',
+                            600: '#1f2e4a',
+                        }
+                    }
+                }
+            }
         }
-    </style>
+    </script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-emerald-600 selection:text-white flex flex-col">
 
-    <div class="container mx-auto px-4 py-12">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-green-600">Territoire 3 : MIRACLES</h1>
-            <p class="text-xl mt-2 text-gray-600">Les Itinéraires vers l'Équilibre</p>
-        </header>
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="text-[10px] tracking-widest uppercase text-emerald-400 font-semibold">Territoire des Miracles</span>
+                </div>
+            </a>
 
-        <main class="text-center">
-            <p class="text-lg">Le contenu de cette section est en cours de construction.</p>
-            <div class="mt-8">
-                <a href="index.html" class="text-indigo-600 hover:underline">Retour à l'accueil</a>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    1. Émotions
+                </a>
+                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                    2. Crimes
+                </a>
+                <a href="miracles.html" class="px-3 py-2 text-sm font-semibold text-emerald-300 bg-emerald-900/40 border border-emerald-500/30 rounded-lg flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    3. Miracles
+                </a>
+                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="text-xs">🔬</span>
+                    Lab IA
+                </a>
+            </nav>
+
+            <!-- Quick Action -->
+            <div class="flex items-center gap-2">
+                <a href="emotions.html" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg shadow-md transition-all">
+                    Voir la Carte 2D &rarr;
+                </a>
             </div>
-        </main>
-    </div>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+
+        <!-- Hero Section -->
+        <section class="relative rounded-3xl bg-gradient-to-br from-emerald-950/40 via-cosmic-850 to-slate-900 border border-emerald-900/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-600/10 blur-3xl pointer-events-none"></div>
+            
+            <div class="max-w-3xl relative z-10 space-y-5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Territoire 3 &bull; Les Itinéraires vers l'Équilibre
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
+                    MIRACLES : L'Alchimie de la <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">Transmutation Affective</span>
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
+                    Dans la perspective Cartograffect, le <strong>« Miracle »</strong> ne relève pas de la magie, mais de la reconnexion lucide : l’art de transformer une énergie douloureuse ou destructrice en force d’action juste, de réconfort et de sérénité.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#navigateur-resilience" class="px-5 py-2.5 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all text-xs sm:text-sm">
+                        Lancer le Navigateur de Résilience
+                    </a>
+                    <a href="#leviers" class="px-5 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 transition-colors text-xs sm:text-sm">
+                        Les 4 Leviers de Transformation
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Resilience Path Finder -->
+        <section id="navigateur-resilience" class="rounded-3xl bg-slate-850 border border-emerald-700/40 p-8 sm:p-12 shadow-2xl space-y-8">
+            <div class="max-w-3xl">
+                <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Outil Interactif</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                    Navigateur d'Itinéraires de Résilience
+                </h2>
+                <p class="text-slate-400 text-sm mt-1">
+                    Sélectionnez votre état émotionnel actuel douloureux pour révéler le chemin cartographique étape par étape vers le retour à l'équilibre.
+                </p>
+            </div>
+
+            <!-- Emotion Selector Buttons -->
+            <div class="flex flex-wrap gap-2.5" id="startEmotionButtons">
+                <button class="resilience-choice-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-600 text-white border border-emerald-500 shadow-md transition-all" data-emotion="Colère">
+                    😡 Colère &amp; Ressentiment
+                </button>
+                <button class="resilience-choice-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-emotion="Peur">
+                    😨 Peur &amp; Anxiété
+                </button>
+                <button class="resilience-choice-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-emotion="Tristesse">
+                    😢 Tristesse &amp; Deuil
+                </button>
+                <button class="resilience-choice-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-emotion="Honte">
+                    😳 Honte &amp; Dévalorisation
+                </button>
+                <button class="resilience-choice-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-emotion="Désespoir">
+                    😩 Désespoir &amp; Découragement
+                </button>
+            </div>
+
+            <!-- Path Timeline Display -->
+            <div id="pathDisplayCard" class="rounded-2xl bg-cosmic-900 border border-slate-700/80 p-6 sm:p-8 shadow-inner space-y-6">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- The 4 Levers of Affective Transformation -->
+        <section id="leviers" class="space-y-6">
+            <div class="max-w-2xl">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Méthodologie Cartograffect</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Les 4 Leviers de la Transmutation</h2>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">
+                    Comment opérer concrètement le virage affectif d'un quadrant négatif vers un pôle constructif.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">1</div>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">L'Accueil Somatique</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Interrompre la lutte mentale. Rapatrier son attention dans le corps : où se loge la constriction ? Respirer dans la zone sans chercher à la faire disparaître.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
+                        Désactivation sympathique
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">2</div>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">Le Décentrement</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Passer de « Je suis en colère » à « J'observe la présence d'une colère en moi ». Ce recul réactive immédiatement le Noyau d'Attente neutre (A0/V0).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
+                        Rétablissement de l'Observateur
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">3</div>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">L'Inversion Géométrique</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Interroger la contrepartie symétrique de l'émotion sur la carte. Si j'ai peur, quel Courage attend d'être invoqué ? Si j'ai honte, quel Honneur doit être réparé ?
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
+                        Activation controlatérale
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">4</div>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">L'Action Congruente</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            L'émotion demande un acte. Rétablir une limite avec fermeté et courtoisie, demander pardon, poser un geste d'amitié ou créer quelque chose de beau.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
+                        Ancrage dans la réalité
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Golden Rules of Affective Balance -->
+        <section class="rounded-3xl bg-gradient-to-r from-cosmic-850 via-slate-900 to-emerald-950/40 border border-emerald-800/40 p-8 sm:p-12 shadow-xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div class="lg:col-span-8 space-y-4">
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Principes Cardinaux</span>
+                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">
+                        Les Trois Lois d'Or de l'Équilibre
+                    </h2>
+                    <div class="space-y-3 text-xs sm:text-sm text-slate-300">
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <strong class="text-white">1. La Règle des 90 Secondes :</strong> La réponse biochimique pure d'un affect ne dure que 90 secondes dans le flux sanguin. Si elle persiste des heures, c'est que votre dialogue intérieur réalimente la mèche.
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <strong class="text-white">2. Aucune Émotion n'est Coupable :</strong> La peur protège, la colère défend, la tristesse guérit. C'est uniquement l'enfermement chronique dans une case qui crée le « Crime ».
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <strong class="text-white">3. Le Noyau est Toujours Intact :</strong> Même au cœur de la pire tempête, le point zéro (Attente, présence pure) demeure inaltérable au centre de votre être.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-cosmic-900/90 p-6 rounded-2xl border border-slate-700 text-center space-y-3">
+                    <div class="text-3xl mb-1">🗺️</div>
+                    <h3 class="text-base font-heading font-bold text-white">Prêt à Explorer ?</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Visualisez ces trajectoires directement sur la carte interactive 2D avec ses 83 émotions reliées.
+                    </p>
+                    <a href="emotions.html" class="inline-block w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-md transition-all">
+                        Ouvrir la Carte 2D &rarr;
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
+                <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
+                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
+            </div>
+            <div class="text-xs text-slate-500">
+                &copy; 2024–2026 Cartograffect &bull; Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Resilience Navigator Script -->
+    <script>
+        const pathsData = {
+            "Colère": {
+                title: "De la Colère Explosive vers la Justice & la Sérénité",
+                steps: [
+                    { num: "01", name: "Colère (A+1 / V-1)", role: "Déclencheur", desc: "Perception d'une injustice ou d'une atteinte aux limites. L'énergie monte brutalement." },
+                    { num: "02", name: "Attente (A0 / V0)", role: "Point Pivot", desc: "Pause somatique : 3 expirations prolongées pour suspendre le réflexe de réplique immédiate." },
+                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Décision d'aborder le problème avec fermeté lucide plutôt qu'avec haine réactive." },
+                    { num: "04", name: "Justice & Sérénité", role: "Atterrissage", desc: "Rétablissement de l'intégrité sans blesser inutilement. Paix intérieure retrouvée." }
+                ],
+                practice: "Exercez-vous à la 'phrase de désarmement' : « Je ressens une vive contrariété, prenons 5 minutes avant d'en parler »."
+            },
+            "Peur": {
+                title: "De la Peur Paralysante vers le Courage & la Confiance",
+                steps: [
+                    { num: "01", name: "Peur (A0 / V-2)", role: "Déclencheur", desc: "Le système nerveux signale un danger ou une incertitude future." },
+                    { num: "02", name: "Anticipation (A-0.5 / V0)", role: "Point Pivot", desc: "Évaluer objectivement la probabilité réelle du risque plutôt que le scénario catastrophe." },
+                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Faire le premier petit pas concret malgré les tremblements intérieurs." },
+                    { num: "04", name: "Assurance & Confiance", role: "Atterrissage", desc: "Constater que l'action dissout la sidération. Ancrage de la capacité d'adaptation." }
+                ],
+                practice: "La technique du 'pire scénario réaliste' : qu'est-ce que je ferais concrètement si le pire arrivait ? Vous découvrirez vos ressources cachées."
+            },
+            "Tristesse": {
+                title: "Du Chagrin de la Perte vers le Réconfort & la Plénitude",
+                steps: [
+                    { num: "01", name: "Tristesse (A-2 / V0)", role: "Déclencheur", desc: "Constat d'une rupture, d'un deuil ou d'un échec signifiant." },
+                    { num: "02", name: "Acceptation (A-3 / V+3)", role: "Point Pivot", desc: "Cesser de nier l'inévitable. Permettre aux larmes de purifier la tension viscérale." },
+                    { num: "03", name: "Réconfort (A-3 / V+1)", role: "Mobilisation", desc: "Rechercher la chaleur d'un lien bienveillant ou d'une activité ressourçante." },
+                    { num: "04", name: "Gratitude & Sérénité", role: "Atterrissage", desc: "Intégration de la mémoire avec tendresse : ce qui a été aimé fait désormais partie de soi." }
+                ],
+                practice: "Écrire une lettre de gratitude à ce qui a disparu, puis la brûler ou la ranger symboliquement pour clore le cycle."
+            },
+            "Honte": {
+                title: "De la Honte Toxique vers l'Honneur & l'Auto-Compassion",
+                steps: [
+                    { num: "01", name: "Honte (A-4 / V-2)", role: "Déclencheur", desc: "Sentiment cuisant d'indignité et désir de disparaître du regard d'autrui." },
+                    { num: "02", name: "Tolérance (A-2 / V+6)", role: "Point Pivot", desc: "Reconnaître notre condition humaine faillible : l'erreur n'efface pas la valeur d'être." },
+                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Sortir du secret : partager sa vulnérabilité avec une personne de confiance absolue." },
+                    { num: "04", name: "Honneur & Dignité", role: "Atterrissage", desc: "Réparation sincère si autrui a été lésé, puis redressement de la tête." }
+                ],
+                practice: "L'antidote absolu à la honte est l'empathie partagée : la honte ne survit pas à une parole accueillie sans jugement."
+            },
+            "Désespoir": {
+                title: "Du Désespoir Sombre vers l'Espoir & le Renouveau",
+                steps: [
+                    { num: "01", name: "Désespoir (A-7 / V-1)", role: "Déclencheur", desc: "Épuisement total de la motivation et sentiment d'impasse absolue." },
+                    { num: "02", name: "Attente (A0 / V0)", role: "Point Pivot", desc: "Ne rien tenter de grandiose. Revenir uniquement au rythme de la respiration dans l'instant." },
+                    { num: "03", name: "Curiosité (A0 / V+4)", role: "Mobilisation", desc: "Ouvrir une fissure : « Et s'il existait une variable que je n'ai pas encore aperçue ? »" },
+                    { num: "04", name: "Espoir (A+1 / V+7)", role: "Atterrissage", desc: "La minuscule étincelle qui rallume le moteur de vie et redonne du sens." }
+                ],
+                practice: "La micro-victoire : accomplir une seule action microscopique (boire un verre d'eau, faire son lit, regarder le ciel) pour réenclencher l'agentivité."
+            }
+        };
+
+        function renderPath(emotionKey) {
+            const data = pathsData[emotionKey];
+            if (!data) return;
+
+            const card = document.getElementById("pathDisplayCard");
+            card.innerHTML = `
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Itinéraire Cartographique Recommandé</span>
+                    <h3 class="text-xl sm:text-2xl font-heading font-black text-white mt-1">${data.title}</h3>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    ${data.steps.map(step => `
+                        <div class="p-4 rounded-xl bg-slate-850/80 border border-slate-750 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between text-xs mb-2">
+                                    <span class="font-mono text-emerald-400 font-bold text-sm">${step.num}</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400 font-medium">${step.role}</span>
+                                </div>
+                                <h4 class="text-white font-bold text-sm mb-1">${step.name}</h4>
+                                <p class="text-xs text-slate-300 leading-relaxed">${step.desc}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-700/40 text-xs text-emerald-200">
+                    <strong class="text-emerald-300 font-semibold">Conseil pratique de terrain :</strong> ${data.practice}
+                </div>
+            `;
+        }
+
+        const buttons = document.querySelectorAll(".resilience-choice-btn");
+        buttons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                buttons.forEach(b => {
+                    b.classList.remove("active", "bg-emerald-600", "text-white", "border-emerald-500", "shadow-md");
+                    b.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                });
+                btn.classList.add("active", "bg-emerald-600", "text-white", "border-emerald-500", "shadow-md");
+                btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+
+                renderPath(btn.getAttribute("data-emotion"));
+            });
+        });
+
+        // Initialize with default choice
+        renderPath("Colère");
+    </script>
 </body>
 </html>

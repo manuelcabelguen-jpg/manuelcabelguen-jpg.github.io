@@ -1,705 +1,394 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARTOGRAFFECT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective</title>
+    <meta name="description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script type="importmap">
-    {
-      "imports": {
-        "d3": "https://aistudiocdn.com/d3@^7.9.0"
-      }
-    }
-    </script>
-</head>
-<body class="bg-slate-900 text-slate-300 py-8">
-
-    <!-- Fullscreen Title Animation -->
-    <div id="title-screen" class="fixed inset-0 bg-slate-900 flex items-center justify-center">
-        <svg id="title-animation"></svg>
-    </div>
-
-    <!-- Main Content (initially hidden) -->
-    <div id="main-content" class="hidden w-full max-w-screen-2xl mx-auto">
-
-        <!-- Col 1: Logo, Title & Menu -->
-        <div class="w-5/12 flex flex-col justify-between p-8 pl-16">
-            <div>
-                <!-- Replaced Title with Logo -->
-                <div class="mb-12">
-                    <img src="assets/logo.png" alt="Cartograffect Logo" class="w-64">
-                </div>
-                <nav class="flex flex-col space-y-6">
-                    <a href="emotions.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">ÉMOTIONS</a>
-                    <a href="crimes.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">CRIMES</a>
-                    <a href="miracles.html" class="text-3xl text-slate-400 hover:text-white transition-colors duration-300">MIRACLES</a>
-                </nav>
-            </div>
-            <footer class="text-slate-500">
-                <p>&copy; 2024 Cartograffect.</p>
-            </footer>
-        </div>
-
-        <!-- Col 2: Animation -->
-        <div class="w-7/12 flex flex-col">
-            <div class="flex-grow p-4">
-                <div class="pulsar-container">
-                    <svg id="logoCanvas"></svg>
-                </div>
-            </div>
-            <div class="p-8">
-                <p class="text-slate-400 text-lg leading-relaxed">
-                    Bienvenue. L'objectif de ce site est de vous aider à <strong>cartographier les émotions pour mieux se comprendre</strong>. En explorant les différents territoires de votre monde intérieur, vous développerez une meilleure conscience de vous-même et trouverez des chemins vers un plus grand équilibre.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-6">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede. Praesent blandit odio eu enim. Pellentesque sed dui ut augue blandit sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam nibh. Mauris ac mauris sed pede pellentesque fermentum. Maecenas adipiscing ante non diam.
-                </p>
-                <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Fusce consectetuer risus a nunc. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi. Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc.
-                </p>
-                 <p class="text-slate-400 text-lg leading-relaxed mt-4">
-                    Sed adipiscing ornare risus. Morbi est est, blandit sit amet, sagittis vel, euismod vel, velit. Pellentesque egestas sem. Suspendisse commodo ullamcorper magna.
-                </p>
-            </div>
-        </div>
-    </div>
-
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const titleScreen = document.getElementById('title-screen');
-            const mainContent = document.getElementById('main-content');
-
-            function runTitleAnimation(callback) {
-                const svg = d3.select("#title-animation");
-                const width = window.innerWidth;
-                const height = window.innerHeight;
-                svg.attr("width", width).attr("height", height);
-
-                const textString = "CARTOGRAFFECT";
-                const fontSize = Math.min(width / 11, 100);
-
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                const context = canvas.getContext('2d');
-                context.font = `bold ${fontSize}px "DM Sans", sans-serif`;
-                context.fillStyle = "white";
-                context.textAlign = "center";
-                context.textBaseline = "middle";
-                context.fillText(textString, width / 2, height / 2);
-
-                const imageData = context.getImageData(0, 0, width, height);
-                const data = imageData.data;
-                const points = [];
-                const step = 4;
-
-                for (let y = 0; y < height; y += step) {
-                    for (let x = 0; x < width; x += step) {
-                        const alpha = data[((y * width + x) * 4) + 3];
-                        if (alpha > 128) {
-                            points.push({ x: x, y: y });
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            700: '#6d28d9',
+                            900: '#4c1d95',
+                        },
+                        cosmic: {
+                            900: '#070b14',
+                            800: '#0e1726',
+                            700: '#152136',
+                            600: '#1f2e4a',
                         }
                     }
                 }
-
-                const sampleSize = Math.min(points.length, 2500);
-                const sampledPoints = d3.shuffle(points.slice()).slice(0, sampleSize);
-
-                svg.selectAll("circle")
-                    .data(sampledPoints)
-                    .enter().append("circle")
-                    .attr("cx", () => Math.random() * width)
-                    .attr("cy", () => Math.random() * height)
-                    .attr("r", 1)
-                    .style("fill", "#f0abfc")
-                    .style("opacity", 0)
-                    .transition()
-                    .duration(1000)
-                    .style("opacity", 1)
-                    .transition()
-                    .duration(1000)
-                    .delay((d, i) => i * 0.75)
-                    .attr("cx", d => d.x)
-                    .attr("cy", d => d.y)
-                    .on("end", (d, i) => {
-                        if (i === sampledPoints.length - 1) {
-                            setTimeout(callback, 750); // Wait 0.75s after animation ends
-                        }
-                    });
             }
-
-            function runCartograffectLogoAnimation() {
-                const svgContainer = d3.select("#logoCanvas");
-                if (!svgContainer.node()) return;
-
-                svgContainer.selectAll("*").remove();
-
-                const specificEmotionEmojis = {
-                    "Attente": "⏳", "Surprise": "😮", "Anticipation": "🤔", "Joie": "😄", "Tristesse": "😢", "Peur": "😨",
-                    "Courage": "💪", "Colère": "😠", "Calme": "😌", "Désir": "😍", "Dégoût": "🤢", "Confusion": "😕",
-                    "Consternation": "😧", "Euphorie": "🥳", "Engourdissement": "😵", "Réconfort": "🤗", "Chagrin": "😥",
-                    "Stupeur": "😲", "Panique": "😱", "Effroi": "🥶", "Appréhension": "🧐", "Émerveillement": "🤩",
-                    "Enchantement": "✨", "Exaspération": "😤", "Soulagement": "😮‍💨", "Excitation": "🤪", "Déception": "😞",
-                    "Ambivalence": "🤷", "Envie": "😏", "Haine": "😡", "Amour": "❤️", "Assurance": "😎", "Indifférence": "😐",
-                    "Sérénité": "😇", "Plénitude": "🙏", "Honte": "😳", "Vide": "😶‍🌫️", "Anxiété": "😰", "Manque": "💔",
-                    "Mépris": "😒", "Crainte": "😟", "Doute": "🤨", "Conviction": "✅", "Fierté": "🦁", "Épanouissement": "🌸",
-                    "Affection": "🥰", "Admiration": "🙌", "Frustration": "😫", "Acceptation": "👌", "Engagement": "🤝",
-                    "Rejet": "🙅‍♂️", "Agitation": "🏃‍♀️", "Invulnérabilité": "🛡️", "Puissance": "⚡", "Confiance": "👍",
-                    "Intolérance": "🚫", "Injustice": "⚖️", "Imprudence": "🙈", "Apathie": "😑", "Sécurité": "🔒",
-                    "Quiétude": "🏞️", "Patience": "🧘‍♀️", "Pessimisme": "🌧️", "Déshonneur": "🤦‍♂️", "Désespoir": "😩",
-                    "Incertitude": "❓", "Insécurité": "😥", "Inquiétude": "🤔", "Impatience": "😤", "Vulnérabilité": "💔",
-                    "Impuissance": "🤷‍♂️", "Méfiance": "😒", "Certitude": "💯", "Optimisme": "😊", "Honneur": "🎖️",
-                    "Espoir": "✨", "Tolérance": "🤗", "Justice": "⚖️", "Prudence": "🧐", "Mécontentement": "😕",
-                    "Contentement": "😊", "Intérêt": "💡", "Désintérêt": "😴"
-                };
-                
-                const pointsData = [
-                    { id: 0, name: "Attente", x: 0, y: 0, category: 1, group: "Orientation" },
-                    { id: 1, name: "Surprise", x: 0, y: 0.5, category: 1, group: "Orientation" },
-                    { id: 2, name: "Anticipation", x: 0, y: -0.5, category: 1, group: "Orientation" },
-                    { id: 3, name: "Joie", x: 0, y: 2, category: 2, group: "Joie" },
-                    { id: 4, name: "Tristesse", x: 0, y: -2, category: 2, group: "Tristesse" },
-                    { id: 5, name: "Peur", x: -2, y: 0, category: 2, group: "Peur" },
-                    { id: 6, name: "Courage", x: 2, y: 0, category: 2, group: "Courage" },
-                    { id: 7, name: "Colère", x: -1, y: 1, category: 2, group: "Colère" },
-                    { id: 8, name: "Calme", x: 1, y: -1, category: 2, group: "Calme" },
-                    { id: 9, name: "Désir", x: 1, y: 1, category: 2, group: "Désir" },
-                    { id: 10, name: "Dégoût", x: -1, y: -1, category: 2, group: "Dégoût" },
-                    { id: 11, name: "Confusion", x: 0, y: 4, category: 3, group: "Joie" },
-                    { id: 12, name: "Consternation", x: -1, y: 3, category: 3, group: "Joie" },
-                    { id: 13, name: "Euphorie", x: 1, y: 3, category: 3, group: "Joie" },
-                    { id: 14, name: "Engourdissement", x: 0, y: -4, category: 3, group: "Tristesse" },
-                    { id: 15, name: "Réconfort", x: 1, y: -3, category: 3, group: "Tristesse" },
-                    { id: 16, name: "Chagrin", x: -1, y: -3, category: 3, group: "Tristesse" },
-                    { id: 17, name: "Stupeur", x: -4, y: 0, category: 3, group: "Peur" },
-                    { id: 18, name: "Panique", x: -3, y: 1, category: 3, group: "Peur" },
-                    { id: 19, name: "Effroi", x: -3, y: -1, category: 3, group: "Peur" },
-                    { id: 20, name: "Appréhension", x: 4, y: 0, category: 3, group: "Courage" },
-                    { id: 21, name: "Émerveillement", x: 3, y: 1, category: 3, group: "Courage" },
-                    { id: 22, name: "Enchantement", x: 3, y: -1, category: 3, group: "Courage" },
-                    { id: 23, name: "Exaspération", x: -2, y: 2, category: 3, group: "Colère" },
-                    { id: 24, name: "Soulagement", x: 2, y: -2, category: 3, group: "Calme" },
-                    { id: 25, name: "Excitation", x: 2, y: 2, category: 3, group: "Désir" },
-                    { id: 26, name: "Déception", x: -2, y: -2, category: 3, group: "Dégoût" },
-                    { id: 27, name: "Ambivalence", x: 0, y: 6, category: 4, group: "Joie" },
-                    { id: 28, name: "Envie", x: -2, y: 4, category: 4, group: "Joie" },
-                    { id: 29, name: "Haine", x: -1, y: 5, category: 4, group: "Joie" },
-                    { id: 30, name: "Amour", x: 1, y: 5, category: 4, group: "Joie" },
-                    { id: 31, name: "Assurance", x: 2, y: 4, category: 4, group: "Joie" },
-                    { id: 32, name: "Indifférence", x: 0, y: -6, category: 4, group: "Tristesse" },
-                    { id: 33, name: "Sérénité", x: 2, y: -4, category: 4, group: "Tristesse" },
-                    { id: 34, name: "Plénitude", x: 1, y: -5, category: 4, group: "Tristesse" },
-                    { id: 35, name: "Honte", x: -2, y: -4, category: 4, group: "Tristesse" },
-                    { id: 36, name: "Vide", x: -1, y: -5, category: 4, group: "Tristesse" },
-                    { id: 37, name: "Anxiété", x: -4, y: 2, category: 4, group: "Peur" },
-                    { id: 38, name: "Manque", x: -5, y: 1, category: 4, group: "Peur" },
-                    { id: 39, name: "Mépris", x: -5, y: -1, category: 4, group: "Peur" },
-                    { id: 40, name: "Crainte", x: -4, y: -2, category: 4, group: "Peur" },
-                    { id: 41, name: "Doute", x: -6, y: 0, category: 4, group: "Peur" },
-                    { id: 42, name: "Conviction", x: 6, y: 0, category: 4, group: "Courage" },
-                    { id: 43, name: "Fierté", x: 4, y: 2, category: 4, group: "Courage" },
-                    { id: 44, name: "Épanouissement", x: 5, y: 1, category: 4, group: "Courage" },
-                    { id: 45, name: "Affection", x: 5, y: -1, category: 4, group: "Courage" },
-                    { id: 46, name: "Admiration", x: 4, y: -2, category: 4, group: "Courage" },
-                    { id: 47, name: "Frustration", x: -3, y: 3, category: 4, group: "Colère" },
-                    { id: 48, name: "Acceptation", x: 3, y: -3, category: 4, group: "Calme" },
-                    { id: 49, name: "Engagement", x: 3, y: 3, category: 4, group: "Désir" },
-                    { id: 50, name: "Rejet", x: -3, y: -3, category: 4, group: "Dégoût" },
-                    { id: 51, name: "Agitation", x: 0, y: 8, category: 5, group: "Joie" },
-                    { id: 52, name: "Invulnérabilité", x: 1, y: 7, category: 5, group: "Joie" },
-                    { id: 53, name: "Puissance", x: 2, y: 6, category: 5, group: "Joie" },
-                    { id: 54, name: "Confiance", x: 3, y: 5, category: 5, group: "Joie" },
-                    { id: 55, name: "Intolérance", x: -2, y: 6, category: 5, group: "Joie" },
-                    { id: 56, name: "Injustice", x: -3, y: 5, category: 5, group: "Joie" },
-                    { id: 57, name: "Imprudence", x: -1, y: 7, category: 5, group: "Joie" },
-                    { id: 58, name: "Apathie", x: 0, y: -8, category: 5, group: "Tristesse" },
-                    { id: 59, name: "Sécurité", x: 2, y: -6, category: 5, group: "Tristesse" },
-                    { id: 60, name: "Quiétude", x: 3, y: -5, category: 5, group: "Tristesse" },
-                    { id: 61, name: "Patience", x: 1, y: -7, category: 5, group: "Tristesse" },
-                    { id: 62, name: "Pessimisme", x: -2, y: -6, category: 5, group: "Tristesse" },
-                    { id: 63, name: "Déshonneur", x: -3, y: -5, category: 5, group: "Tristesse" },
-                    { id: 64, "name": "Désespoir", x: -1, y: -7, category: 5, group: "Tristesse" },
-                    { id: 65, name: "Incertitude", x: -8, y: 0, category: 5, group: "Peur" },
-                    { id: 66, name: "Insécurité", x: -6, y: 2, category: 5, group: "Peur" },
-                    { id: 67, name: "Inquiétude", x: -5, y: 3, category: 5, group: "Peur" },
-                    { id: 68, name: "Impatience", x: -7, y: 1, category: 5, group: "Peur" },
-                    { id: 69, name: "Vulnérabilité", x: -7, y: -1, category: 5, group: "Peur" },
-                    { id: 70, name: "Impuissance", x: -6, y: -2, category: 5, group: "Peur" },
-                    { id: 71, name: "Méfiance", x: -5, y: -3, category: 5, group: "Peur" },
-                    { id: 72, name: "Certitude", x: 8, y: 0, category: 5, group: "Courage" },
-                    { id: 73, name: "Optimisme", x: 6, y: 2, category: 5, group: "Courage" },
-                    { id: 74, name: "Honneur", x: 5, y: 3, category: 5, group: "Courage" },
-                    { id: 75, name: "Espoir", x: 7, y: 1, category: 5, group: "Courage" },
-                    { id: 76, name: "Tolérance", x: 6, y: -2, category: 5, group: "Courage" },
-                    { id: 77, name: "Justice", x: 5, y: -3, category: 5, group: "Courage" },
-                    { id: 78, name: "Prudence", x: 7, y: -1, category: 5, group: "Courage" },
-                    { id: 79, name: "Mécontentement", x: -4, y: 4, category: 5, group: "Colère" },
-                    { id: 80, name: "Contentement", x: 4, y: -4, category: 5, group: "Calme" },
-                    { id: 81, name: "Intérêt", x: 4, y: 4, category: 5, group: "Désir" },
-                    { id: 82, name: "Désintérêt", x: -4, y: -4, category: 5, group: "Dégoût" }
-                ];
-
-                const SIZE = 700;
-                const MARGIN = { top: 20, right: 20, bottom: 20, left: 20 };
-                const DOMAIN_LIMIT = 8.5;
-
-                const width = SIZE - MARGIN.left - MARGIN.right;
-                const height = SIZE - MARGIN.top - MARGIN.bottom;
-
-                const svg = svgContainer
-                    .attr("width", SIZE)
-                    .attr("height", SIZE)
-                    .append("g")
-                    .attr("transform", `translate(${MARGIN.left},${MARGIN.top})`);
-
-                const xScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([0, width]);
-                const yScale = d3.scaleLinear().domain([-DOMAIN_LIMIT, DOMAIN_LIMIT]).range([height, 0]);
-                
-                const colorGroups = {
-                    "Joie": "#a78bfa", "Tristesse": "#38bdf8", "Peur": "#f472b6", "Courage": "#4ade80",
-                    "Colère": "#f87171", "Calme": "#67e8f9", "Désir": "#e879f9", "Dégoût": "#94a3b8",
-                    "Orientation": "#c4b5fd"
-                };
-                const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
-
-                const radiusScale = d3.scaleOrdinal()
-                    .domain([1, 2, 3, 4, 5])
-                    .range([5, 6, 7, 8, 9]);
-
-                const defs = svg.append("defs");
-                const filter = defs.append("filter").attr("id", "glow");
-                filter.append("feGaussianBlur").attr("stdDeviation", "3.5").attr("result", "coloredBlur");
-                const feMerge = filter.append("feMerge");
-                feMerge.append("feMergeNode").attr("in", "coloredBlur");
-                feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
-                const rainbowGradient = defs.append("linearGradient")
-                    .attr("id", "rainbow-gradient")
-                    .attr("gradientUnits", "userSpaceOnUse")
-                    .attr("x1", 0).attr("y1", yScale(DOMAIN_LIMIT))
-                    .attr("x2", 0).attr("y2", yScale(-DOMAIN_LIMIT));
-                
-                const rainbowColors = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#4f46e5", "#8b5cf6"];
-                rainbowGradient.selectAll("stop")
-                    .data(rainbowColors)
-                    .enter().append("stop")
-                    .attr("offset", (d,i) => i / (rainbowColors.length - 1))
-                    .attr("stop-color", d => d);
-                
-                const axisGroup = svg.append("g").attr("class", "axis-group");
-                axisGroup.append("line").attr("class", "axis-line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", width).attr("y2", yScale(0));
-                axisGroup.append("line").attr("class", "axis-line").attr("x1", xScale(0)).attr("y1", 0).attr("x2", xScale(0)).attr("y2", height);
-
-                const adjacencyList = new Map();
-                pointsData.forEach(p => adjacencyList.set(p.id, []));
-                const lineData = [];
-                const connections = new Set();
-                const centralPoints = pointsData.filter(p => p.id <= 2);
-                const firstLayerPoints = pointsData.filter(p => p.category === 2);
-                for (const centerP of centralPoints) {
-                    for (const layer1P of firstLayerPoints) {
-                        const connectionKey = [centerP.id, layer1P.id].sort((a,b) => a-b).join('-');
-                        if (!connections.has(connectionKey)) {
-                            lineData.push({ source: centerP, target: layer1P });
-                            adjacencyList.get(centerP.id).push(layer1P.id);
-                            adjacencyList.get(layer1P.id).push(centerP.id);
-                            connections.add(connectionKey);
-                        }
-                    }
-                }
-                const k = 3;
-                const outerLayersPoints = pointsData.filter(p => p.category > 1);
-                for (const p1 of outerLayersPoints) {
-                    const distances = [];
-                    for (const p2 of outerLayersPoints) {
-                        if (p1.id === p2.id) continue;
-                        const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-                        distances.push({ point: p2, distance: dist });
-                    }
-                    distances.sort((a, b) => a.distance - b.distance);
-                    const neighbors = distances.slice(0, k);
-                    for (const neighbor of neighbors) {
-                        const p2 = neighbor.point;
-                        const connectionKey = [p1.id, p2.id].sort((a, b) => a - b).join('-');
-                        if (!connections.has(connectionKey)) {
-                            lineData.push({ source: p1, target: p2 });
-                            adjacencyList.get(p1.id).push(p2.id);
-                            adjacencyList.get(p2.id).push(p1.id);
-                            connections.add(connectionKey);
-                        }
-                    }
-                }
-                
-                const lines = svg.append("g").selectAll("line")
-                    .data(lineData)
-                    .enter()
-                    .append("line")
-                    .attr("class", "structural-line")
-                    .attr("stroke", "#4b5563")
-                    .attr("stroke-width", 0.75)
-                    .attr("opacity", 0.3)
-                    .attr("x1", d => xScale(d.source.x))
-                    .attr("y1", d => yScale(d.source.y))
-                    .attr("x2", d => xScale(d.target.x))
-                    .attr("y2", d => yScale(d.target.y));
-
-                const points = svg.selectAll(".data-point").data(pointsData).enter().append("circle")
-                    .attr("class", "data-point").attr("id", d => `point-${d.id}`).attr("cx", d => xScale(d.x)).attr("cy", d => yScale(d.y))
-                    .attr("r", d => radiusScale(d.category)).attr("fill", d => colorScale(d.group)).style("filter", "url(#glow)");
-                
-                function findRandomWavePath(startPoint, tempTarget, adjacencyList) {
-                    // Find the real point closest to the temporary snapshot target
-                    let closestPoint = null;
-                    let minDistance = Infinity;
-                    pointsData.forEach(p => {
-                        if (p.id === 0) return;
-                        const dist = Math.sqrt(Math.pow(p.x - tempTarget.x, 2) + Math.pow(p.y - tempTarget.y, 2));
-                        if (dist < minDistance) {
-                            minDistance = dist;
-                            closestPoint = p;
-                        }
-                    });
-
-                    let path = [startPoint, tempTarget];
-                    let currentPoint;
-
-                    if(closestPoint) {
-                        path.push(closestPoint);
-                        currentPoint = closestPoint;
-                    } else {
-                        return [startPoint]; // Fallback
-                    }
-                    
-                    let visited = new Set([startPoint.id, currentPoint.id]);
-                    const maxSteps = 6 + Math.floor(Math.random() * 6); // Shorter path after the target
-
-                    for (let i = 0; i < maxSteps; i++) {
-                        const neighborsIds = adjacencyList.get(currentPoint.id) || [];
-                        const unvisitedNeighbors = neighborsIds
-                            .map(id => pointsData.find(p => p.id === id))
-                            .filter(p => p && !visited.has(p.id));
-
-                        if (unvisitedNeighbors.length === 0) break;
-
-                        const nextPoint = unvisitedNeighbors[Math.floor(Math.random() * unvisitedNeighbors.length)];
-                        path.push(nextPoint);
-                        visited.add(nextPoint.id);
-                        currentPoint = nextPoint;
-                    }
-                    return path;
-                }
-
-                function animateWave(pathPoints) {
-                    if (pathPoints.length < 2) return;
-                    const waveDuration = 1500;
-                    const lineGenerator = d3.line().x(d => xScale(d.x)).y(d => yScale(d.y)).curve(d3.curveCatmullRom.alpha(0.5));
-                    const path = svg.append("path").datum(pathPoints).attr("fill", "none").attr("stroke", "#f0abfc").attr("stroke-width", "2.5px").style("filter", "url(#glow)").attr("d", lineGenerator);
-                    const length = path.node().getTotalLength();
-                    path.attr("stroke-dasharray", `${length} ${length}`).attr("stroke-dashoffset", length).transition().duration(waveDuration).ease(d3.easeLinear).attr("stroke-dashoffset", 0).transition().duration(500).style("opacity", 0).remove();
-                    
-                    pathPoints.forEach((point, i) => {
-                        const delay = (waveDuration / (pathPoints.length - 1)) * i;
-                        setTimeout(() => {
-                            d3.select(`#point-${point.id}`).transition().duration(200).attr("r", d => radiusScale(d.category) + 5).transition().duration(600).attr("r", d => radiusScale(d.category));
-                            
-                            const startX = xScale(point.x), startY = yScale(point.y);
-                            let [dirX, dirY] = [startX - xScale(0), startY - yScale(0)];
-                            const mag = Math.sqrt(dirX * dirX + dirY * dirY);
-                            if (mag > 0) { [dirX, dirY] = [dirX / mag, dirY / mag]; } else { [dirX, dirY] = [(Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2]; }
-                            
-                            svg.append("text").attr("class", "emotion-label-popup").attr("x", startX).attr("y", startY).text(point.name).attr("fill", "#e5e7eb").attr("font-size", "14px").attr("font-weight", "600").attr("text-anchor", "middle").style("pointer-events", "none").transition().duration(2500).ease(d3.easeQuadOut).attr("x", startX + dirX * 120).attr("y", startY + dirY * 120).style("opacity", 0).remove();
-                        
-                            const emoji = specificEmotionEmojis[point.name];
-                            if (emoji) {
-                                const emojiDriftX = (Math.random() - 0.5) * 40;
-                                const emojiDriftY = (Math.random() - 0.5) * 40;
-                                
-                                svg.append("text")
-                                    .attr("class", "emotion-emoji-popup")
-                                    .attr("x", startX)
-                                    .attr("y", startY)
-                                    .text(emoji)
-                                    .transition()
-                                    .duration(2800)
-                                    .ease(d3.easeQuadOut)
-                                    .attr("x", startX + dirX * 140 + emojiDriftX)
-                                    .attr("y", startY + dirY * 140 + emojiDriftY)
-                                    .attr("transform", `rotate(${(Math.random() - 0.5) * 30}, ${startX}, ${startY})`)
-                                    .style("opacity", 0)
-                                    .remove();
-                            }
-                        }, delay);
-                    });
-                };
-                
-                points.each(function(p) {
-                    const point = p;
-                    const selection = d3.select(this);
-                    function pulse() {
-                        selection.transition()
-                            .duration(2000 + Math.random() * 1500)
-                            .ease(d3.easeSinInOut)
-                            .attr("r", radiusScale(point.category) + 1.5)
-                            .transition()
-                            .duration(2000 + Math.random() * 1500)
-                            .ease(d3.easeSinInOut)
-                            .attr("r", radiusScale(point.category))
-                            .on("end", pulse);
-                    }
-                    pulse();
-                });
-                
-                const pointEntities = pointsData.map(d => ({
-                    id: d.id,
-                    originalData: d,
-                    selection: d3.select(`#point-${d.id}`),
-                    originalCx: xScale(d.x),
-                    originalCy: yScale(d.y),
-                    orbitRadius: 2 + Math.random() * 2.5,
-                    orbitSpeed: (0.2 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1) * 0.0001,
-                    startAngle: Math.random() * 2 * Math.PI,
-                    // Add individual oscillation speeds for core points
-                    oscSpeed: 0.001 + Math.random() * 0.001,
-                }));
-
-                const surpriseEntity2 = svg.append("circle")
-                    .attr("class", "data-point")
-                    .attr("cx", xScale(0)) // Explicitly set the horizontal position to the center
-                    .attr("r", radiusScale(1))
-                    .attr("fill", colorScale("Orientation"))
-                    .style("filter", "url(#glow)");
-
-                const pulsars = [];
-                const pulsarColors = ["#FFFFFF", "#FFFFFF", "#a78bfa", "#a78bfa"];
-                for (let i = 0; i < 4; i++) {
-                    pulsars.push(
-                        svg.append("circle")
-                           .attr("r", 6.5)
-                           .attr("fill", pulsarColors[i])
-                           .style("filter", "url(#glow)")
-                    );
-                }
-                const resultantPoint = pulsars[0];
-
-                const pointPositions = new Map();
-
-                let lastWaveTime = 0;
-                const waveInterval = 2000; // ms
-
-                d3.timer(elapsed => {
-
-
-                    // --- Animate Core Axis Points ---
-                    let domainX = 0, domainY = 0;
-
-                    const surpriseEntity = pointEntities.find(p => p.id === 1);
-                    if (surpriseEntity) {
-                        domainY = amplitude * Math.sin(elapsed * surpriseEntity.oscSpeed);
-                        const newCy = yScale(domainY);
-                        surpriseEntity.selection.attr('cy', newCy);
-                        surpriseEntity2.attr('cy', yScale(-domainY)); // Animate opposite point
-                        pointPositions.set(1, { x: surpriseEntity.originalCx, y: newCy });
-                    }
-
-                    const anticipationEntity = pointEntities.find(p => p.id === 2);
-                    if (anticipationEntity) {
-                        domainX = amplitude * Math.sin(elapsed * anticipationEntity.oscSpeed);
-                        const newCx = xScale(domainX);
-                        const centralY = yScale(0);
-                        anticipationEntity.selection.attr('cx', newCx).attr('cy', centralY);
-                        pointPositions.set(2, { x: newCx, y: centralY });
-                    }
-                    
-                    // --- Animate Four Pulsars ---
-                    pulsars[0].attr('cx', xScale(domainX)).attr('cy', yScale(domainY));
-                    pulsars[1].attr('cx', xScale(domainX)).attr('cy', yScale(-domainY));
-                    pulsars[2].attr('cx', xScale(-domainX)).attr('cy', yScale(domainY));
-                    pulsars[3].attr('cx', xScale(-domainX)).attr('cy', yScale(-domainY));
-
-                    // --- Handle Static and Orbiting Points ---
-                    const attenteEntity = pointEntities.find(p => p.id === 0);
-                    if (attenteEntity && !pointPositions.has(0)) {
-                        pointPositions.set(0, { x: attenteEntity.originalCx, y: attenteEntity.originalCy });
-                    }
-
-                    pointEntities.forEach(p => {
-                        if (p.id > 2) { // Orbit all other points
-                            const angle = p.startAngle + elapsed * p.orbitSpeed;
-                            const newCx = p.originalCx + p.orbitRadius * Math.cos(angle);
-                            const newCy = p.originalCy + p.orbitRadius * Math.sin(angle);
-                            p.selection.attr('cx', newCx).attr('cy', newCy);
-                            pointPositions.set(p.id, { x: newCx, y: newCy });
-                        }
-                    });
-
-                    // Update all lines
-                    lines
-                        .attr('x1', d => pointPositions.get(d.source.id)?.x || xScale(d.source.x))
-                        .attr('y1', d => pointPositions.get(d.source.id)?.y || yScale(d.source.y))
-                        .attr('x2', d => pointPositions.get(d.target.id)?.x || xScale(d.target.x))
-                        .attr('y2', d => pointPositions.get(d.target.id)?.y || yScale(d.target.y));
-
-                    // --- Proximity and Wave Animations ---
-
-                    // Proximity Pulse Effect
-                    pulsars.forEach(pulsar => {
-                        const pulsarPos = { x: pulsar.attr('cx'), y: pulsar.attr('cy') };
-                        if (pulsarPos.x && pulsarPos.y) {
-                            pointEntities.forEach(p => {
-                                if (p.isAnimating || p.id <= 0) return;
-
-                                const currentPos = pointPositions.get(p.id);
-                                if (!currentPos) return;
-
-                                const dist = Math.sqrt(Math.pow(currentPos.x - pulsarPos.x, 2) + Math.pow(currentPos.y - pulsarPos.y, 2));
-                                const activation_radius = 40;
-
-                                if (dist < activation_radius) {
-                                    p.isAnimating = true;
-                                    p.selection.transition().duration(150)
-                                        .ease(d3.easeQuadOut)
-                                        .attr("r", radiusScale(p.originalData.category) + 7)
-                                        .transition().duration(350)
-                                        .ease(d3.easeQuadIn)
-                                        .attr("r", radiusScale(p.originalData.category))
-                                        .on("end", () => { p.isAnimating = false; });
-                                }
-                            });
-                        }
-                    });
-
-                    // Periodic Wave Animation
-                    if (elapsed - lastWaveTime > waveInterval) {
-                        lastWaveTime = elapsed;
-
-                            if (pulsarCx !== null && pulsarCy !== null) {
-                                const targetX_domain = xScale.invert(pulsarCx);
-                                const targetY_domain = yScale.invert(pulsarCy);
-                                const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
-                                const startPoint = pointsData.find(p => p.id === 0);
-                                const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
-                                animateWave(path);
-                            }
-                        });
-                    }
-                });
-                const targetPoints = {
-                    center: [xScale(0), yScale(0)],
-                    joie: [xScale(0), yScale(2)],
-                    tristesse: [xScale(0), yScale(-2)],
-                    peur: [xScale(-2), yScale(0)],
-                    courage: [xScale(2), yScale(0)],
-                    colere: [xScale(-1), yScale(1)],
-                    calme: [xScale(1), yScale(-1)],
-                    desir: [xScale(1), yScale(1)],
-                    degout: [xScale(-1), yScale(-1)]
-                };
-
-                const pathDefinitions = [
-                    [targetPoints.center, targetPoints.joie, targetPoints.colere, targetPoints.center],
-                    [targetPoints.center, targetPoints.joie, targetPoints.desir, targetPoints.center],
-                    [targetPoints.center, targetPoints.tristesse, targetPoints.degout, targetPoints.center],
-                    [targetPoints.center, targetPoints.tristesse, targetPoints.calme, targetPoints.center],
-                    [targetPoints.center, targetPoints.peur, targetPoints.colere, targetPoints.center],
-                    [targetPoints.center, targetPoints.peur, targetPoints.degout, targetPoints.center],
-                    [targetPoints.center, targetPoints.courage, targetPoints.desir, targetPoints.center],
-                    [targetPoints.center, targetPoints.courage, targetPoints.calme, targetPoints.center]
-                ];
-                
-                const lineGenerator = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
-
-                function animateTrace(pathData, index) {
-                    const pathD = lineGenerator(pathData);
-                    const tracePath = svg.append("path")
-                        .attr("d", pathD)
-                        .attr("fill", "none")
-                        .attr("stroke", "url(#rainbow-gradient)") // Use the rainbow gradient
-                        .attr("stroke-width", 2.5)
-                        .style("filter", "url(#glow)");
-
-                    const length = tracePath.node().getTotalLength();
-                    const drawDuration = 2000;
-                    const fadeDuration = 1000;
-                    const delay = 1000;
-
-                    tracePath
-                        .attr("stroke-dasharray", length + " " + length)
-                        .attr("stroke-dashoffset", length)
-                        .transition()
-                        .duration(drawDuration)
-                        .ease(d3.easeSinInOut)
-                        .attr("stroke-dashoffset", 0)
-                        .on("end", () => {
-                            if (index === 0) {
-                                launchWaveLoop();
-                            }
-                        })
-                        .transition()
-                        .duration(fadeDuration)
-                        .style("opacity", 0)
-                        .remove()
-                        .on("end", () => {
-                            // The delay is now inside the recursive call to ensure loops don't overlap too fast
-                            setTimeout(() => animateTrace(pathData, index), delay);
-                        });
-                }
-
-                pathDefinitions.forEach((pathData, i) => {
-                    // No stagger, all start at the same time
-                    animateTrace(pathData, i);
-                });
-
-                function launchWaveLoop() {
-                    if (document.hidden) return;
-
-                    // Snapshot the resultant point's current screen position
-                    const resultantCx = resultantPoint.attr('cx');
-                    const resultantCy = resultantPoint.attr('cy');
-                    
-                    if (!resultantCx || !resultantCy) return; // Don't launch if point not ready
-
-                    // Convert screen coords back to domain coords for the path
-                    const targetX_domain = xScale.invert(resultantCx);
-                    const targetY_domain = yScale.invert(resultantCy);
-                    const tempTarget = { x: targetX_domain, y: targetY_domain, name: "" };
-
-                    const startPoint = pointsData.find(p => p.id === 0);
-                    const path = findRandomWavePath(startPoint, tempTarget, adjacencyList);
-                    animateWave(path);
-                };
-            }
-
-            function transitionToMainContent() {
-                titleScreen.classList.add('hidden');
-                
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('flex');
-                
-                // Use requestAnimationFrame to ensure 'display' is applied before adding 'visible' for the transition
-                requestAnimationFrame(() => {
-                    mainContent.classList.add('visible');
-                });
-
-                // Run the animation after a delay that allows the layout to be computed.
-                setTimeout(runCartograffectLogoAnimation, 400);
-
-                // Remove the title screen from the DOM after its own transition is complete.
-                setTimeout(() => {
-                    titleScreen.remove();
-                }, 1000); // Matches the CSS transition duration for #title-screen
-            }
-
-            runTitleAnimation(transitionToMainContent);
-        });
+        }
     </script>
-    <script type="module" src="script.js"></script>
+    
+    <!-- D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-purple-600 selection:text-white">
+
+    <!-- Fullscreen Title Particle Animation -->
+    <div id="title-screen" class="fixed inset-0 bg-cosmic-900 z-50 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-1000">
+        <svg id="title-animation" class="w-full h-full"></svg>
+        <div class="absolute bottom-8 text-xs tracking-widest uppercase text-slate-400 bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700/60 shadow-lg backdrop-blur hover:bg-slate-700 transition-all duration-300">
+            Cliquer pour entrer directement &rarr;
+        </div>
+    </div>
+
+    <!-- Main Content Container (fades in when intro completes or skipped) -->
+    <div id="main-content" class="hidden opacity-0 flex-col min-h-screen w-full transition-opacity duration-1000">
+
+        <!-- Top Navigation Bar -->
+        <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/80 border-b border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                    <div class="flex flex-col">
+                        <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                        <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Cartographie des Affects</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                    <a href="index.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg">Accueil</a>
+                    <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        1. Émotions
+                    </a>
+                    <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                        2. Crimes
+                    </a>
+                    <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        3. Miracles
+                    </a>
+                    <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="text-xs">🔬</span>
+                        Lab IA
+                    </a>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <a href="emotions.html" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
+                        Ouvrir la Carte &rarr;
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Dropdown -->
+            <div id="mobileMenu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-800 bg-cosmic-900/95">
+                <a href="index.html" class="block px-3 py-2 text-base font-semibold text-purple-300 bg-purple-900/30 rounded-lg">Accueil</a>
+                <a href="emotions.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">1. Territoire des Émotions</a>
+                <a href="crimes.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">2. Territoire des Crimes</a>
+                <a href="miracles.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">3. Territoire des Miracles</a>
+                <a href="generateur_scientifique.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-purple-300 rounded-lg">Laboratoire IA / Articles</a>
+            </div>
+        </header>
+
+        <!-- Hero Section with Pulsar Map -->
+        <main class="flex-grow">
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                    
+                    <!-- Left Column: Vision & Presentation -->
+                    <div class="lg:col-span-6 space-y-8">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-500/30 mb-5">
+                                <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                                Architecture Géométrique des Affects
+                            </div>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white leading-tight">
+                                Cartographier les <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Émotions</span> pour se Comprendre.
+                            </h1>
+                        </div>
+
+                        <p class="text-slate-300 text-lg leading-relaxed font-light">
+                            <strong>Cartograffect</strong> est une approche novatrice qui structure l’univers de la subjectivité humaine à travers deux dimensions fondamentales : l’<span class="text-purple-300 font-semibold">Activation somatique</span> et la <span class="text-sky-300 font-semibold">Valence hédonique</span>.
+                        </p>
+
+                        <p class="text-slate-400 text-base leading-relaxed">
+                            À partir d’un point focal d’<span class="text-white font-medium">Attente</span> et d’orientation, 83 états affectifs s’organisent en cercles d’intensité, formant un cosmos interactif où chaque émotion possède ses symétries, ses pièges (les <em>Crimes</em>) et ses chemins de transformation vers l’équilibre (les <em>Miracles</em>).
+                        </p>
+
+                        <!-- Highlights Pills -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
+                                <div class="text-purple-400 text-lg mb-1">🧭</div>
+                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">83 États</div>
+                                <div class="text-sm font-semibold text-white">Cartographie Complète</div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
+                                <div class="text-sky-400 text-lg mb-1">⚡</div>
+                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">2 Axes Clés</div>
+                                <div class="text-sm font-semibold text-white">Activation &amp; Valence</div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
+                                <div class="text-emerald-400 text-lg mb-1">✨</div>
+                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">3 Territoires</div>
+                                <div class="text-sm font-semibold text-white">Émotions, Crimes, Miracles</div>
+                            </div>
+                        </div>
+
+                        <!-- CTA Group -->
+                        <div class="flex flex-wrap items-center gap-4 pt-2">
+                            <a href="emotions.html" class="px-6 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <span>Explorer le Territoire des Émotions</span>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </a>
+                            <a href="#territoires" class="px-6 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700 transition-colors">
+                                Découvrir la Théorie
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Interactive Pulsar / Logo Animation -->
+                    <div class="lg:col-span-6 flex flex-col items-center">
+                        <div class="w-full relative rounded-2xl bg-gradient-to-b from-slate-800/40 to-slate-900/60 border border-slate-700/60 p-4 shadow-2xl backdrop-blur-xl">
+                            <!-- Visual Header Bar -->
+                            <div class="flex items-center justify-between pb-3 px-2 border-b border-slate-800 text-xs text-slate-400 font-mono">
+                                <span class="flex items-center gap-2">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    Pulsar Affectif Cartograffect (Actif)
+                                </span>
+                                <span>83 Noeuds &bull; D3.js</span>
+                            </div>
+
+                            <!-- Pulsar Container -->
+                            <div class="pulsar-container mt-2 flex items-center justify-center min-h-[460px] sm:min-h-[520px]">
+                                <svg id="logoCanvas" class="w-full h-auto max-w-[620px] aspect-square"></svg>
+                            </div>
+
+                            <p class="text-center text-xs text-slate-400 mt-2 italic">
+                                Animation orbitale temps réel des résonances affectives et des flux d'énergie.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 3 Fundamental Territories Cards -->
+            <section id="territoires" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+                <div class="text-center max-w-3xl mx-auto mb-14">
+                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/20">Structure Globale</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Les Trois Territoires de l'Expérience</h2>
+                    <p class="text-slate-400 mt-3 text-base leading-relaxed">
+                        Pour cheminer dans son monde émotionnel, Cartograffect divise le paysage intérieur en trois espaces complémentaires, de la cartographie descriptive à la transformation active.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Territory 1: Emotions -->
+                    <div class="group relative rounded-2xl bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 hover:border-purple-500/50 p-8 transition-all duration-300 flex flex-col justify-between shadow-xl">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                                🧭
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Territoire 1</span>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">ÉMOTIONS</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                <strong>Les Fondations de la Carte.</strong> Visualisez en 2D les 83 états affectifs, consultez les fiches d’identité psychologique, tracez des chemins émotionnels et testez l’analyseur de scénario.
+                            </p>
+                            <ul class="space-y-2 text-xs text-slate-400 mb-6">
+                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Graphique interactif complet 83 points</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Filtres par 5 catégories &amp; symétries</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Noyau Affectif &amp; Matrice Combinatoire</li>
+                            </ul>
+                        </div>
+                        <a href="emotions.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-blue-300 bg-blue-950/40 hover:bg-blue-900/60 border border-blue-500/30 transition-colors">
+                            <span>Accéder aux Émotions</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+
+                    <!-- Territory 2: Crimes -->
+                    <div class="group relative rounded-2xl bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 hover:border-rose-500/50 p-8 transition-all duration-300 flex flex-col justify-between shadow-xl">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-2xl text-rose-400 mb-6 group-hover:scale-110 transition-transform">
+                                ⚡
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Territoire 2</span>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">CRIMES</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                <strong>Les Zones d'Ombre de la Carte.</strong> Comprenez les dérégulations, les ruptures d'équilibre, les boucles de ressentiment, le désespoir et l'anatomie des pièges émotionnels destructeurs.
+                            </p>
+                            <ul class="space-y-2 text-xs text-slate-400 mb-6">
+                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Décryptage des 4 pièges critiques</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Analyse des mécanismes de défense</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Détection précoce du passage à l'acte</li>
+                            </ul>
+                        </div>
+                        <a href="crimes.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-rose-300 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 transition-colors">
+                            <span>Explorer les Zones d'Ombre</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+
+                    <!-- Territory 3: Miracles -->
+                    <div class="group relative rounded-2xl bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 hover:border-emerald-500/50 p-8 transition-all duration-300 flex flex-col justify-between shadow-xl">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                                ✨
+                            </div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Territoire 3</span>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">MIRACLES</h3>
+                            <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                                <strong>Les Itinéraires vers l'Équilibre.</strong> Découvrez l'alchimie affective : comment transformer la peur en courage, le chagrin en sérénité et trouver votre itinéraire de résilience guidé.
+                            </p>
+                            <ul class="space-y-2 text-xs text-slate-400 mb-6">
+                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Navigateur interactif de résilience</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Itinéraires guidés étape par étape</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Les 4 leviers de transmutation</li>
+                            </ul>
+                        </div>
+                        <a href="miracles.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-emerald-300 bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-500/30 transition-colors">
+                            <span>Suivre les Itinéraires</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Theoretical Framework Section -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+                <div class="rounded-3xl bg-gradient-to-r from-purple-950/40 via-slate-900 to-indigo-950/40 border border-purple-800/30 p-8 sm:p-12">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                        <div class="space-y-6">
+                            <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Cadre Conceptuel</span>
+                            <h2 class="text-3xl font-heading font-extrabold text-white">
+                                Une Géométrie Affective Rigoureuse
+                            </h2>
+                            <p class="text-slate-300 text-base leading-relaxed">
+                                Dans la méthode Cartograffect, chaque émotion n’est plus un mot flou, mais un vecteur défini par ses coordonnées dans un espace hédonique et somatosensoriel.
+                            </p>
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">A</div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-sm">L'Axe d'Activation (Vertical)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Quantifie l'éveil neurophysiologique, de la léthargie/indifférence (-8) à l'hyperexcitation/agitation (+8).</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">V</div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-sm">L'Axe de Valence (Horizontal)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Quantifie l'évaluation subjective, de l'aversion/rejet/doute (-8) à l'attraction/conviction/amour (+8).</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">5</div>
+                                    <div>
+                                        <h4 class="text-white font-semibold text-sm">Les Cinq Cercles d'Évolution</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">1. Orientation, 2. Fondamentales, 3. Complexes, 4. Relationnelles, 5. Dispositions globales et traits profonds.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Visual Schema -->
+                        <div class="bg-cosmic-900/80 rounded-2xl p-6 border border-slate-700/60 shadow-inner flex flex-col justify-center">
+                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-4 text-center">Les 4 Quadrants Affectifs</h3>
+                            <div class="grid grid-cols-2 gap-3 text-center">
+                                <div class="p-4 rounded-xl bg-purple-900/20 border border-purple-700/30">
+                                    <div class="text-xs text-purple-400 font-bold uppercase">Cadran Haut-Gauche</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Colère &amp; Agitation</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">A+ / V- (Urgence &amp; Tension)</div>
+                                </div>
+                                <div class="p-4 rounded-xl bg-pink-900/20 border border-pink-700/30">
+                                    <div class="text-xs text-pink-400 font-bold uppercase">Cadran Haut-Droit</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Joie &amp; Désir</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">A+ / V+ (Élan &amp; Euphorie)</div>
+                                </div>
+                                <div class="p-4 rounded-xl bg-blue-900/20 border border-blue-700/30">
+                                    <div class="text-xs text-blue-400 font-bold uppercase">Cadran Bas-Gauche</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Tristesse &amp; Dégoût</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">A- / V- (Repli &amp; Douleur)</div>
+                                </div>
+                                <div class="p-4 rounded-xl bg-teal-900/20 border border-teal-700/30">
+                                    <div class="text-xs text-teal-400 font-bold uppercase">Cadran Bas-Droit</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Calme &amp; Sérénité</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">A- / V+ (Paix &amp; Plénitude)</div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-800 text-center">
+                                <a href="emotions.html" class="text-xs font-semibold text-purple-400 hover:text-purple-300">
+                                    Examiner les coordonnées exactes sur la carte interactive &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-800/80 bg-cosmic-900/90 py-12 mt-16 text-slate-400 text-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+                    <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                    <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
+                    <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
+                    <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
+                </div>
+                <div class="text-xs text-slate-500">
+                    &copy; 2024–2026 Cartograffect. Tous droits réservés.
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+
+    <!-- Main Logic & Animation Script -->
+    <script src="script.js"></script>
 </body>
 </html>

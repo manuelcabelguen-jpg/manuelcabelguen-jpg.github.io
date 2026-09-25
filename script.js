@@ -1,8 +1,9 @@
-        import * as d3 from 'd3';
+const d3 = window.d3;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const titleScreen = document.getElementById('title-screen');
-            const mainContent = document.getElementById('main-content');
+document.addEventListener("DOMContentLoaded", () => {
+    const titleScreen = document.getElementById('title-screen');
+    const mainContent = document.getElementById('main-content');
+    let hasTransitioned = false;
 
             function runTitleAnimation(callback) {
                 const svg = d3.select("#title-animation");
@@ -677,23 +678,35 @@
             }
 
             function transitionToMainContent() {
-                titleScreen.classList.add('hidden');
+                if (hasTransitioned) return;
+                hasTransitioned = true;
 
-                mainContent.classList.remove('hidden');
-                mainContent.classList.add('flex');
+                if (titleScreen) {
+                    titleScreen.classList.add('hidden');
+                }
 
-                // Use requestAnimationFrame to ensure 'display' is applied before adding 'visible' for the transition
-                requestAnimationFrame(() => {
-                    mainContent.classList.add('visible');
-                });
+                if (mainContent) {
+                    mainContent.classList.remove('hidden');
+                    mainContent.classList.add('flex');
+                    
+                    requestAnimationFrame(() => {
+                        mainContent.classList.add('visible');
+                    });
+                }
 
-                // Run the animation after a delay that allows the layout to be computed.
                 setTimeout(runCartograffectLogoAnimation, 400);
 
-                // Remove the title screen from the DOM after its own transition is complete.
                 setTimeout(() => {
-                    titleScreen.remove();
-                }, 1000); // Matches the CSS transition duration for #title-screen
+                    if (titleScreen && titleScreen.parentNode) {
+                        titleScreen.remove();
+                    }
+                }, 1000);
+            }
+
+            if (titleScreen) {
+                titleScreen.addEventListener('click', () => {
+                    transitionToMainContent();
+                });
             }
 
             runTitleAnimation(transitionToMainContent);
