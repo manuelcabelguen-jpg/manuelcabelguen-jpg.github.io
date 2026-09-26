@@ -269,8 +269,10 @@
                     const distances = [];
                     for (const p2 of outerLayersPoints) {
                         if (p1.id === p2.id) continue;
-                        const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
-                        distances.push({ point: p2, distance: dist });
+                        const dx = p1.x - p2.x;
+                        const dy = p1.y - p2.y;
+                        const distSq = dx * dx + dy * dy;
+                        distances.push({ point: p2, distance: distSq });
                     }
                     distances.sort((a, b) => a.distance - b.distance);
                     const neighbors = distances.slice(0, k);
@@ -306,12 +308,14 @@
                 function findRandomWavePath(startPoint, tempTarget, adjacencyList) {
                     // Find the real point closest to the temporary snapshot target
                     let closestPoint = null;
-                    let minDistance = Infinity;
+                    let minSqDistance = Infinity;
                     pointsData.forEach(p => {
                         if (p.id === 0) return;
-                        const dist = Math.sqrt(Math.pow(p.x - tempTarget.x, 2) + Math.pow(p.y - tempTarget.y, 2));
-                        if (dist < minDistance) {
-                            minDistance = dist;
+                        const dx = p.x - tempTarget.x;
+                        const dy = p.y - tempTarget.y;
+                        const distSq = dx * dx + dy * dy;
+                        if (distSq < minSqDistance) {
+                            minSqDistance = distSq;
                             closestPoint = p;
                         }
                     });
@@ -569,10 +573,12 @@
                         const currentPos = pointPositions.get(p.id);
                         if (!currentPos) return;
 
-                        const dist = Math.sqrt(Math.pow(currentPos.x - resultantPos.x, 2) + Math.pow(currentPos.y - resultantPos.y, 2));
-                        const activation_radius = 30; // pixels
+                        const dx = currentPos.x - resultantPos.x;
+                        const dy = currentPos.y - resultantPos.y;
+                        const distSq = dx * dx + dy * dy;
+                        const activation_radius_sq = 30 * 30; // 900 pixels squared
 
-                        if (dist < activation_radius) {
+                        if (distSq < activation_radius_sq) {
                             p.isAnimating = true;
                             p.selection.transition().duration(150)
                                 .ease(d3.easeQuadOut)
