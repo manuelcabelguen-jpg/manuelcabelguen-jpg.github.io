@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentions Légales & Propriété Intellectuelle | Cartograffect</title>
     <meta name="description" content="Cadre juridique, propriété intellectuelle, certificat OPIC 1233199, licences GNU AGPLv3 et CC BY-NC-SA 4.0 pour le projet Cartograffect et ses outils computationnels.">
+    <link rel="canonical" href="https://www.cartograffect.com/mentions-legales.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/mentions-legales.html">
+    <meta property="og:title" content="Mentions Légales & Propriété Intellectuelle | Cartograffect">
+    <meta property="og:description" content="Cadre juridique, propriété intellectuelle et licences du projet Cartograffect.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.cartograffect.com/mentions-legales.html">
+    <meta name="twitter:title" content="Mentions Légales & Propriété Intellectuelle | Cartograffect">
+    <meta name="twitter:description" content="Cadre juridique, propriété intellectuelle et licences du projet Cartograffect.">
+    <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +63,7 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Cadre Juridique</span>
@@ -55,14 +76,34 @@
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">3. Miracles</a>
-                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors">Lab IA</a>
             </nav>
 
-            <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 rounded-lg border border-slate-700">
-                &larr; Retour au site
-            </a>
+            <div class="hidden md:inline-flex header-action-btn">
+                <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 rounded-lg border border-slate-700">
+                    &larr; Retour au site
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Fullscreen Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="mentions-legales.html" class="active-link"><span class="menu-dot bg-slate-400"></span>Mentions Légales &amp; PI</a>
+    </div>
 
     <!-- Main Content -->
     <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full space-y-12">
@@ -205,10 +246,10 @@
                     Pour toute publication scientifique, thèse, communication ou rapport faisant référence au modèle, aux outils (Dr Puck, ScIAnse, SchémIA) ou à la géométrie des affects, la citation formelle suivante doit être appliquée :
                 </p>
                 <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-purple-200 select-all space-y-2">
-                    <div><strong>Format APA 7 :</strong></div>
-                    <div>Cabelguen, M. (2025). <em>Cartograffect : Modélisation biophysiologique et clinique des affects</em> (Certificat d'enregistrement de droit d'auteur n° 1233199). Office de la propriété intellectuelle du Canada. https://www.cartograffect.com</div>
-                    <div class="pt-2"><strong>Métrique computationnelle &amp; Outils :</strong></div>
-                    <div>Cabelguen, M. (2026). <em>Métrique L1 de Manhattan et Interface Attentionnelle appliquées à la cartographie des affects</em> [Logiciel computationnel sous licence GNU AGPLv3 / CC BY-NC-SA 4.0]. Plateforme Cartograffect (Dr Puck, ScIAnse, SchémIA).</div>
+                    <div><strong>Article Théorique de Référence (Format APA 7) :</strong></div>
+                    <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Droit d'auteur enregistré auprès de l'OPIC n° 1233199). Prépublication théorique. https://www.cartograffect.com</div>
+                    <div class="pt-2"><strong>Métrique computationnelle &amp; Architecture logicielle :</strong></div>
+                    <div>Cabelguen, M. (2026). <em>Métrique L1 de Manhattan et Inférence Active appliquées à la cartographie des affects</em> [Logiciel computationnel sous licence GNU AGPLv3 / CC BY-NC-SA 4.0]. Plateforme Cartograffect (Dr Puck, ScIAnse, SchémIA).</div>
                 </div>
             </div>
         </section>
@@ -248,22 +289,43 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
                 <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
-                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
                 <a href="mentions-legales.html" class="text-purple-400 font-semibold">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-500">
+            <div class="text-xs text-slate-400">
                 &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
             </div>
         </div>
     </footer>
 
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

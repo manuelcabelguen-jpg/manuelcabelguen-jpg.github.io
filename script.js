@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
 
                 const pointsData = [
-                    { id: 0, name: "Attente", x: 0, y: 0, category: 1, group: "Orientation" },
-                    { id: 1, name: "Surprise", x: 0, y: 0.5, category: 1, group: "Orientation" },
-                    { id: 2, name: "Anticipation", x: 0, y: -0.5, category: 1, group: "Orientation" },
+                    { id: 0, name: "Point de Veille", x: 0, y: 0, category: 1, group: "Orientation" },
+                    { id: 1, name: "Surprise", x: 0, y: 1, category: 1, group: "Orientation" },
+                    { id: 2, name: "Anticipation", x: 0, y: 2, category: 2, group: "Orientation" },
                     { id: 3, name: "Joie", x: 0, y: 2, category: 2, group: "Joie" },
                     { id: 4, name: "Tristesse", x: 0, y: -2, category: 2, group: "Tristesse" },
                     { id: 5, name: "Peur", x: -2, y: 0, category: 2, group: "Peur" },
@@ -683,31 +683,52 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
             }
 
-            function transitionToMainContent() {
+            const INTRO_SEEN_KEY = 'cartograffect_intro_seen';
+
+            function transitionToMainContent(immediate = false) {
                 if (hasTransitioned) return;
                 hasTransitioned = true;
+                try {
+                    sessionStorage.setItem(INTRO_SEEN_KEY, 'true');
+                } catch(e) {}
 
                 if (titleScreen) {
-                    titleScreen.classList.add('hidden');
+                    if (immediate) {
+                        titleScreen.style.display = 'none';
+                        titleScreen.remove();
+                    } else {
+                        titleScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            if (titleScreen && titleScreen.parentNode) {
+                                titleScreen.remove();
+                            }
+                        }, 800);
+                    }
                 }
 
                 if (mainContent) {
                     mainContent.classList.remove('hidden');
                     mainContent.classList.add('flex');
                     
-                    requestAnimationFrame(() => {
+                    if (immediate) {
                         mainContent.classList.add('visible');
-                    });
+                    } else {
+                        requestAnimationFrame(() => {
+                            mainContent.classList.add('visible');
+                        });
+                    }
                 }
 
-                setTimeout(runCartograffectLogoAnimation, 400);
-
-                setTimeout(() => {
-                    if (titleScreen && titleScreen.parentNode) {
-                        titleScreen.remove();
-                    }
-                }, 1000);
+                setTimeout(runCartograffectLogoAnimation, immediate ? 50 : 300);
             }
+
+            // Keyboard shortcut to skip intro
+            window.addEventListener('keydown', (e) => {
+                if (!hasTransitioned && (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    transitionToMainContent();
+                }
+            });
 
             if (titleScreen) {
                 titleScreen.addEventListener('click', () => {
@@ -715,5 +736,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            runTitleAnimation(transitionToMainContent);
+            // Check if user already saw the intro in this session
+            let alreadySeen = false;
+            try {
+                alreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === 'true';
+            } catch(e) {}
+
+            if (alreadySeen) {
+                transitionToMainContent(true);
+            } else {
+                runTitleAnimation(transitionToMainContent);
+            }
         });

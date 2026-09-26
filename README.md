@@ -1,66 +1,82 @@
 # CARTOGRAFFECT
 
-> **Cartographie Géométrique des Affects & Architecture des Émotions Humaines**  
+> **Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif**  
+> *Manuel Cabelguen, Ph. D., BCN*  
+> Droit d'auteur enregistré auprès de l'OPIC (Office de la propriété intellectuelle du Canada) n° 1233199  
 > Site officiel : [www.cartograffect.com](https://www.cartograffect.com)
 
 ---
 
-## 🌟 Présentation du Projet
+## 🌟 Présentation Théorique
 
-**Cartograffect** modélise l’univers de la subjectivité et de l'expérience affective à travers une géométrie rigoureuse articulée sur deux axes cardinaux :
-1. **L'Axe d'Activation (A) [axe vertical, -8 à +8]** : Quantifie le niveau d'éveil neurophysiologique (du ralentissement parasympathique et apathique jusqu'à l'excitation et la mobilisation motrice).
-2. **L'Axe de Valence (V) [axe horizontal, -8 à +8]** : Quantifie la tonalité hédonique (de l'aversion/rejet/doute jusqu'à l'attraction/conviction/amour).
+L'étude scientifique des émotions demeure historiquement fragmentée entre les théories des émotions de base, les approches dimensionnelles (circonplexe de Russell), les modèles d'évaluation cognitive (appraisal) et le constructionnisme psychologique.
 
-Au cœur du système réside la **triade d'Orientation (Catégorie 1)** :
-- **Attente (A0 / V0)** : Le point d'ancrage neutre et réceptif.
-- **Surprise (A+0.5 / V0)** : La micro-mobilisation immédiate face à l'imprévu.
-- **Anticipation (A-0.5 / V0)** : La projection calibrée vers le futur proche.
+**CARTOGRAFFECT** dépasse ces clivages en proposant une **grammaire fonctionnelle unifiée** de l'affect, de l'émotion et du sentiment, enracinée dans les cadres du **traitement prédictif (predictive processing)**, de l'**inférence active**, de l'**inférence intéroceptive** et de l'**allostasie**.
 
-Autour de ce noyau se déploient **83 émotions répertoriées** réparties en 5 cercles concentriques :
-- **1. Orientation** (Attente, Surprise, Anticipation)
-- **2. Fondamentales** (Joie, Tristesse, Peur, Courage, Colère, Calme, Désir, Dégoût)
-- **3. Complexes** (Euphorie, Panique, Stupeur, Curiosité, Émerveillement, Exaspération...)
-- **4. Relationnelles** (Amour, Haine, Fierté, Honte, Sérénité, Anxiété, Plénitude...)
-- **5. Dispositions** (Agitation, Apathie, Espoir, Désespoir, Justice, Injustice, Optimisme...)
+L’architecture se déploie en quatre volets rigoureusement emboîtés :
+
+### 1. Le Moteur Prédictif
+Définit la circulation des écarts de prédiction à travers trois interfaces computationnelles fondamentales :
+- **Interface Perceptive (Axe Y vertical — Gradient de Contrôle)** : Porte l'incertitude sensorimotrice et la capacité d'agir sur le monde pour conformer la réalité aux attentes de l'organisme (+Y : monde contrôlable / décharge pragmatique ; -Y : monde non contrôlable / repli adaptatif).
+- **Interface Subjective (Axe X horizontal — Gradient d'Attente)** : Porte l'incertitude cognitive et la capacité à réviser le modèle interne (+X : modèle révisable / mise à jour épistémique ; -X : modèle non révisable / rigidité / charge épistémique).
+- **Interface Attentionnelle (Axe Z orthogonal — Profondeur Inférentielle)** : Ne porte aucun contenu propre mais module la précision et le degré de confiance accordé aux flux sensoriels ou interprétatifs. Graduée à partir de $Z \ge 0$, elle indexe l'horizon temporel et le niveau d'abstraction.
+
+### 2. Le Noyau Affectif
+Condense les forces régulatrices selon une dynamique de **charge** (écart non résorbé / énergie libre croissante) et de **décharge** (écart résorbé / énergie libre décroissante) :
+- **Budget attentionnel fini sous la norme L1 de Manhattan** :
+  $$\|X\| + \|Y\| = 2Z - 2 \quad \text{pour } Z \ge 2, \text{ avec } X, Y \in \mathbb{Z}$$
+- **Statut de l'activation somatique** : L'activation n'est pas une coordonnée spatiale de la carte, mais un paramètre de vitesse et de mobilisation transversal à l'ensemble de la trajectoire.
+- **Statut de la valence** : Se lit à partir des polarités axiales et de la résolution intégrée de la trajectoire.
+
+### 3. La Matrice Affective (Strate Z = 2)
+Arrime la dynamique algorithmique à l'espace phénoménologique à la première couronne ($Z=2$, budget $\|X\|+\|Y\|=2$) :
+- **4 Orientations Axiales Pures (instables, 1 dimension résolue)** :
+  - **Joie $(0, +2, 2)$** : Décharge de Contrôle, Attente indéterminée ($X0$).
+  - **Tristesse $(0, -2, 2)$** : Charge de Contrôle, Attente indéterminée ($X0$).
+  - **Courage $(+2, 0, 2)$** : Décharge d'Attente, Contrôle indéterminé ($Y0$).
+  - **Peur $(-2, 0, 2)$** : Charge d'Attente, Contrôle indéterminé ($Y0$).
+- **4 Prototypes Combinés Équilibrés (attracteurs locaux stables, $\|X\|=\|Y\|=1$)** :
+  - **Désir $(+1, +1, 2)$** : Modèle révisable & Monde contrôlable.
+  - **Colère $(-1, +1, 2)$** : Modèle non révisable & Monde contrôlable.
+  - **Calme $(+1, -1, 2)$** : Modèle révisable & Monde non contrôlable.
+  - **Dégoût $(-1, -1, 2)$** : Modèle non révisable & Monde non contrôlable.
+- **Inversion Centrale $(X, Y) \to (-X, -Y)$** : Constitue la relation d'antagonisme adaptatif principal de la Matrice (ex. Colère $\leftrightarrow$ Calme, Désir $\leftrightarrow$ Dégoût).
+
+### 4. La Taxonomie Hiérarchique (Les 5 Couches d'Inférence)
+Organise l'univers affectif selon des niveaux croissants de profondeur temporelle et d'abstraction. Chaque strate est centrée sur un **opérateur de suspension** non résolu ($0 \ne 2Z - 2$) :
+- **Niveau Initial ($Z = 0$)** : **Point de Veille $(0, 0, 0)$** — Veille homéostatique de fond.
+- **1ère Couche ($Z = 1$)** : **Surprise $(0, 0, 1)$** — Rupture ascendante de repos, entrée indéterminée dans l'espace.
+- **2e Couche ($Z = 2$)** : **Anticipation $(0, 0, 2)$** — Première couronne affective (orientations axiales et attracteurs combinés).
+- **3e Couche ($Z = 3$)** : **Émoi $(0, 0, 3)$** — Émotions réactives, horizon immédiat ($\|X\|+\|Y\|=4$).
+- **4e Couche ($Z = 4$)** : **Réserve $(0, 0, 4)$** — Sentiments réflexifs, modèles de second ordre (soi face à autrui, $\|X\|+\|Y\|=6$).
+- **5e Couche ($Z = 5$)** : **Recul $(0, 0, 5)$** — Orientations stables & Humeurs, paramètres lents sur classes étendues de situations ($\|X\|+\|Y\|=8$).
 
 ---
 
-## 🗺️ Les Trois Territoires
+## 🗺️ Les Trois Territoires de la Plateforme
 
 1. **[Territoire 1 : ÉMOTIONS](emotions.html)**
-   - Visualisation bidimensionnelle interactive (D3.js).
-   - Filtres dynamiques par cercles d'intensité.
-   - Tracé des symétries et correspondances controlatérales.
-   - Fiches d'identité psychologique complètes pour chaque émotion (définition, déclencheurs, fonction adaptative, manifestations somatiques, pensées associées, chemin de régulation).
-   - Analyseur de scénarios affectifs (heuristique intégrée + option API Gemini).
-   - Exploration du **Noyau Affectif** et de la **Matrice Combinatoire**.
+   - Visualisation interactive sous D3.js avec graduation selon la norme L1 de Manhattan (losanges $\|X\|+\|Y\|=2Z-2$).
+   - Filtres dynamiques par strates d'inférence $Z \in \{0, 1, 2, 3, 4, 5\}$.
+   - Visualisation des antagonismes centraux $(X,Y) \to (-X,-Y)$ et des symétries axiales.
+   - Fiches d'identité computationnelles détaillant la révision épistémique (Axe X), l'action pragmatique (Axe Y) et la minimisation de l'énergie libre.
+   - Traçage dynamique de trajectoires et simulateur d'inversion matricielle.
 
 2. **[Territoire 2 : CRIMES](crimes.html)**
-   - Exploration des zones d'ombre de la carte et des ruptures d'équilibre intérieur.
-   - Les 4 pièges affectifs majeurs : Forteresse du Ressentiment, Abîme du Désespoir, Brasier de la Rage, Prison de la Honte toxique.
-   - Analyse des mécanismes de défense de l'égo (projection, clivage, rationalisation, évitement).
-   - Détection des signaux précurseurs somatiques et cognitifs.
+   - Analyse des impasses computationnelles et des blocages de l'inférence active aux strates profondes ($Z=4, 5$).
+   - Étude des boucles d'immunisation cognitive, du ressentiment gelé et de l'effondrement allostatique.
 
 3. **[Territoire 3 : MIRACLES](miracles.html)**
-   - L'art et la science de l'alchimie affective et de la transmutation des émotions.
-   - **Navigateur d'Itinéraires de Résilience** : guidage cartographique pas-à-pas pour transformer la colère en justice, la peur en courage, le chagrin en gratitude.
-   - Les 4 leviers de transmutation (accueil somatique, décentrement, inversion géométrique, action congruente).
-   - Les lois d'or de l'homéostasie affective.
+   - Transmutation affective par inférence active congruente.
+   - Navigateur d'itinéraires de résilience cartographiés étape par étape.
+   - Activation des antagonistes centraux pour restaurer la viabilité adaptative.
 
-4. **[Laboratoire IA & Rédaction Scientifique](generateur_scientifique.html)**
-   - Outil académique d'aide à la structuration et rédaction de manuscrits scientifiques avec intégration de sources documentaires et modèles de langage.
-
----
-
-## 💻 Technologies Utilisées
-
-- **Frontend** : HTML5 sémantique, Tailwind CSS (configuration custom), Vanilla CSS.
-- **Visualisation de Données** : [D3.js v7](https://d3js.org/) pour les calculs de vecteurs, échelles cartésiennes, projections orbitales et animations Catmull-Rom.
-- **Typographie** : DM Sans, Outfit, Inter (Google Fonts).
-- **Hébergement** : GitHub Pages avec domaine personnalisé ([CNAME](CNAME) pointant vers `www.cartograffect.com`).
+4. **Laboratoire IA Scientifique** *(Actuellement en cours de développement / Standby)*
+   - Module d'analyse et de formalisation assistée par modèles de langage pour la cartographie des états affectifs et la production de synthèses théoriques.
 
 ---
 
-## 📜 Licence & Droits
+## 📜 Propriété Intellectuelle & Droits d'Auteur
 
-© 2024–2026 Cartograffect. Tous droits réservés.
+- **Théorie, Ontologie & Textes** : © 2026 Manuel Cabelguen. Tous droits réservés. Enregistrement auprès de l'OPIC n° 1233199. Licence [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+- **Code Source & Algorithmes** : Licence [GNU AGPLv3](https://www.gnu.org/licenses/agpl-3.0.html).

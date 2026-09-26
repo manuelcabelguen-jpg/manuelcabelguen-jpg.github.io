@@ -1,10 +1,12 @@
-/* Cartograffect Global Design Tokens & Styles */
+/* ============================================================
+   Cartograffect – Global Design Tokens & Styles
+   ============================================================ */
 body {
     font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
 }
 
-/* Custom Sleek Scrollbar */
+/* ---- Custom Sleek Scrollbar ---- */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -21,7 +23,9 @@ body {
     background: #475569;
 }
 
-/* --- Screen Transition Styles --- */
+/* ============================================================
+   Screen Transition (Intro → Main)
+   ============================================================ */
 #title-screen {
     opacity: 1;
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -40,7 +44,9 @@ body {
     opacity: 1;
 }
 
-/* --- Logo & Pulsar Animation Styles --- */
+/* ============================================================
+   Logo & Pulsar Animation
+   ============================================================ */
 .pulsar-container {
     background: radial-gradient(circle at center, #111827 0%, #070b14 100%);
     padding: 16px;
@@ -98,7 +104,9 @@ body {
     pointer-events: none;
 }
 
-/* Smooth fadeIn utility */
+/* ============================================================
+   Utility Animations
+   ============================================================ */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -111,4 +119,159 @@ body {
 }
 .animate-fadeIn {
     animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.animate-slideUp {
+    animation: slideUp 0.5s ease-out forwards;
+}
+
+/* ============================================================
+   Mobile Menu Overlay (used on all pages)
+   ============================================================ */
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: rgba(7, 11, 20, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    padding: 5rem 1.5rem 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mobile-menu-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+.mobile-menu-overlay a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+.mobile-menu-overlay a:hover,
+.mobile-menu-overlay a:focus {
+    color: #ffffff;
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+.mobile-menu-overlay a.active-link {
+    color: #c4b5fd;
+    background: rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.4);
+    font-weight: 700;
+}
+.mobile-menu-overlay .close-btn {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    color: #94a3b8;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.mobile-menu-overlay .close-btn:hover {
+    color: #ffffff;
+    background: rgba(30, 41, 59, 0.9);
+}
+.mobile-menu-overlay .menu-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   Responsive: Mobile-first adjustments
+   ============================================================ */
+
+/* -- Header logo text: truncate on very small screens -- */
+@media (max-width: 400px) {
+    .header-subtitle {
+        display: none;
+    }
+    .header-title {
+        font-size: 1rem !important;
+    }
+}
+
+/* -- Quadrants grid → single column on mobile -- */
+@media (max-width: 640px) {
+    .quadrant-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* -- Pulsar container: reduce min-height on mobile -- */
+@media (max-width: 640px) {
+    .pulsar-container {
+        min-height: 280px !important;
+        padding: 8px;
+    }
+}
+
+/* -- Hero section: reduce padding on mobile -- */
+@media (max-width: 640px) {
+    .hero-section-inner {
+        padding: 1.5rem !important;
+    }
+}
+
+/* -- Hide action button on small screens to make room for hamburger -- */
+@media (max-width: 767px) {
+    .header-action-btn {
+        display: none !important;
+    }
+}
+
+/* ============================================================
+   Improved card hover effects
+   ============================================================ */
+.territory-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.territory-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px -15px rgba(139, 92, 246, 0.15);
+}
+
+/* ============================================================
+   Subtle entrance animations via IntersectionObserver
+   ============================================================ */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal-on-scroll.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }

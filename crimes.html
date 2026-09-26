@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Territoire des CRIMES | Cartograffect</title>
     <meta name="description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles, boucles toxiques de ressentiment, impasses psychiques et anatomie des fractures intérieures.">
+    <link rel="canonical" href="https://www.cartograffect.com/crimes.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/crimes.html">
+    <meta property="og:title" content="Territoire des CRIMES | Cartograffect">
+    <meta property="og:description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles et boucles toxiques.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.cartograffect.com/crimes.html">
+    <meta name="twitter:title" content="Territoire des CRIMES | Cartograffect">
+    <meta name="twitter:description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles et boucles toxiques.">
+    <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +55,9 @@
             }
         }
     </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-rose-600 selection:text-white flex flex-col">
 
@@ -41,7 +65,7 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] tracking-widest uppercase text-rose-400 font-semibold">Territoire des Crimes</span>
@@ -63,20 +87,38 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
-                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="text-xs">🔬</span>
-                    Lab IA
-                </a>
             </nav>
 
             <!-- Quick Action -->
-            <div class="flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-2 header-action-btn">
                 <a href="miracles.html" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg shadow-md transition-all">
                     Vers les Miracles &rarr;
                 </a>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Fullscreen Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <a href="crimes.html" class="active-link"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
+        <div class="mt-auto pt-6">
+            <a href="miracles.html" class="!bg-gradient-to-r !from-emerald-600 !to-teal-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-emerald-600/30">Vers les Miracles &rarr;</a>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
@@ -110,91 +152,91 @@
         <!-- The 4 Critical Shadow Zones (Interactive Explorer) -->
         <section id="zones-critiques" class="space-y-6">
             <div class="max-w-2xl">
-                <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Cartographie des Impasses</span>
+                <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Cartographie des Impasses Computationnelles</span>
                 <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Les 4 Zones d'Ombre Principales</h2>
                 <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                    Chaque zone correspond à une désynchronisation aiguë entre Activation et Valence, créant un piège gravitationnel où l'énergie psychique tourne en circuit fermé.
+                    Chaque zone correspond à un blocage inférentiel aux strates profondes (Z=4 et Z=5) où l'écart de prédiction ne parvient pas à se résorber, générant une accumulation d'énergie libre et une immunisation cognitive rigide.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Zone 1: Le Piège du Ressentiment -->
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between territory-card">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🧊</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/40">A+3 / V-5 &bull; Haine / Injustice</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/40">X-1 / Y+5 / Z4 &bull; Haine &bull; X-3 / Y+5 / Z5 &bull; Injustice</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">1. La Forteresse du Ressentiment</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            La colère, au lieu d'être métabolisée en affirmation juste, est refoulée et congelée. Le sujet rejoue indéfiniment la scène du préjudice subi.
+                            Le modèle interne refuse la révision (-X) face au préjudice subi, tandis que la contrôlabilité tente de s'imposer sur autrui (+Y). L'écart de prédiction reste congelé en boucle fermée sans décharge épistémique.
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
-                            <p class="text-slate-400">Croire que sa propre amertume punit l'offenseur, alors qu'elle empoisonne le vase qui la contient.</p>
+                            <p class="text-slate-400">Immunisation cognitive : croyance rigide que le maintien de l'amertume protège le modèle de soi, alors qu'il épuise les ressources allostatiques.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Dégeler la colère par l'expression somatique &rarr; Décentrement vers la Justice (Courage A-3/V+5) &rarr; Détachement.</p>
+                            <p class="text-slate-300">Révision épistémique du modèle interne (+X) &rarr; Décentrement vers la Justice équitable (X+5 / Y-3 / Z5) &rarr; Décharge de l'énergie libre.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Zone 2: L'Abîme du Désespoir -->
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between territory-card">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🕳️</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40">A-7 / V-6 &bull; Désespoir / Apathie</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40">X-1 / Y-7 / Z5 &bull; Désespoir &bull; X0 / Y-8 / Z5 &bull; Apathie</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">2. L'Abîme du Désespoir</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Effondrement conjoint de l'énergie (A-7) et de la perspective de valeur (V-6). L'illusion que tout effort futur est voué à l'inutilité.
+                            Double charge d'énergie libre non résorbée : modèle interne durablement tenu pour non révisable (-X) et capacité d'agir évaluée comme nulle ou impuissante (-Y). Repli somatique massif d'économie adaptative.
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
-                            <p class="text-slate-400">L'anesthésie affective prise pour une protection : le sujet renonce à désirer pour ne plus souffrir.</p>
+                            <p class="text-slate-400">Inertie des paramètres lents du modèle génératif à la 5e couche (Z=5) : anesthésie affective prise pour une protection contre de nouvelles erreurs de prédiction.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Ne pas exiger une joie immédiate. Viser d'abord l'Attente neutre (A0/V0) par des micro-stimulations sensorielles, puis le Réconfort.</p>
+                            <p class="text-slate-300">Ne pas exiger un saut brutal. Revenir au Point de Veille (0,0,0) par un ré-échantillonnage somato-viscéral bienveillant, puis Réconfort (X+1 / Y-3 / Z3).</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Zone 3: Le Brasier de la Rage Impulsive -->
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between territory-card">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🔥</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-red-950/60 text-red-300 border border-red-800/40">A+8 / V-4 &bull; Agitation / Intolérance</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-red-950/60 text-red-300 border border-red-800/40">X0 / Y+8 / Z5 &bull; Agitation &bull; X-2 / Y+6 / Z5 &bull; Intolérance</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">3. Le Brasier de la Rage Aveugle</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Surtension neurovégétative maximale : le cortex préfrontal est temporairement court-circuité par la décharge adrénergique. Passage à l'acte immédiat.
+                            Surtension du gradient de contrôle (+Y) sans mise à jour cognitive (-X) : l'organisme force l'action pragmatique pour conformer le monde à ses attentes sans réviser ses croyances. Passage à l'acte explosif.
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
-                            <p class="text-slate-400">Confusion entre puissance réelle et explosion pulsionnelle. La destruction externe crée un préjudice irréversible.</p>
+                            <p class="text-slate-400">Confusion entre action constructive et décharge motrice réflexe sans délibération en mémoire de travail.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Arrêt somatique immédiat (rupture de pattern, souffle froid) &rarr; Dérivation physique saine &rarr; Canalisation vers l'engagement lucide.</p>
+                            <p class="text-slate-300">Suspension de l'action par l'opérateur de Réserve (0,0,4) &rarr; Dérivation physique saine &rarr; Canalisation vers l'engagement lucide (X+3 / Y+3 / Z4).</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Zone 4: La Prison de la Honte -->
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 hover:border-rose-500/50 p-6 transition-all duration-300 shadow-xl flex flex-col justify-between territory-card">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">⛓️</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/40">A-4 / V-2 &bull; Honte / Déshonneur</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/40">X-2 / Y-4 / Z4 &bull; Honte &bull; X-3 / Y-5 / Z5 &bull; Déshonneur</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">4. La Prison de la Honte Toxique</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Alors que la culpabilité s'adresse à ce que l'on a *fait*, la honte toxique s'adresse à ce que l'on *est*. Sentiment de tare intime et d'indignité d'exister.
+                            Sentiment réflexif où le modèle de soi de second ordre est figé comme coupable ou irrémédiablement défaillant (-X), doublé d'un sentiment d'impuissance sociale (-Y).
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
-                            <p class="text-slate-400">Le secret et l'isolement qui nourrissent la certitude d'être rejeté si l'on est découvert.</p>
+                            <p class="text-slate-400">Verrouillage attentionnel : sur-échantillonnage des signaux de rejet et occultation des indices d'acceptation, confirmant la prédiction d'indignité.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Partager le secret dans un espace sécurisé &rarr; Séparer l'identité de l'erreur &rarr; Rétablir l'Honneur (Courage A+3/V+5).</p>
+                            <p class="text-slate-300">Inférence active en relation sécure &rarr; Séparer l'action du modèle du soi &rarr; Rétablir l'Honneur et l'Affection (Courage X+5 / Y+3 / Z5).</p>
                         </div>
                     </div>
                 </div>
@@ -295,22 +337,44 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
                 <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="text-rose-400 font-semibold">2. Crimes</a>
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
-                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-500">
+            <div class="text-xs text-slate-400">
                 &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
             </div>
         </div>
     </footer>
 
+
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

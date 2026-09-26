@@ -3,8 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Territoire des ÉMOTIONS | Cartograffect</title>
-    <meta name="description" content="Explorez la carte 2D des 83 émotions humaines selon leurs coordonnées d'Activation et de Valence. Fiches d'identité psychologique, chemins affectifs et analyse de scénarios.">
+    <title>Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect</title>
+    <meta name="description" content="Architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Exploration interactive des Gradients de Contrôle (Y), d'Attente (X) et de Profondeur (Z) régis par la norme L1 de Manhattan.">
+    <link rel="canonical" href="https://www.cartograffect.com/emotions.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/emotions.html">
+    <meta property="og:title" content="Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect">
+    <meta property="og:description" content="Architecture hiérarchique de l'expérience affective : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.cartograffect.com/emotions.html">
+    <meta name="twitter:title" content="Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect">
+    <meta name="twitter:description" content="Architecture hiérarchique de l'expérience affective : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
+    <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +93,7 @@
         }
 
         .axis-label {
-            font-size: 13px;
+            font-size: 12px;
             fill: #94a3b8;
             font-weight: 700;
             letter-spacing: 0.5px;
@@ -89,8 +110,8 @@
             fill: #94a3b8;
             text-anchor: middle;
             font-weight: 600;
-            letter-spacing: 1px;
-            opacity: 0.5;
+            letter-spacing: 0.5px;
+            opacity: 0.65;
         }
 
         .emotion-label-text {
@@ -111,9 +132,9 @@
 
         .controlateral-line {
             stroke: #c084fc;
-            stroke-width: 1px;
+            stroke-width: 1.2px;
             stroke-dasharray: 4, 4;
-            opacity: 0.6;
+            opacity: 0.65;
         }
 
         .symetrical-line {
@@ -136,12 +157,20 @@
             filter: drop-shadow(0 0 8px #f43f5e);
         }
 
-        .intensity-circle {
-            stroke: #6366f1;
-            stroke-width: 1.2px;
+        .manhattan-diamond {
+            stroke: #8b5cf6;
+            stroke-width: 1.3px;
             stroke-dasharray: 4, 4;
             fill: none;
-            opacity: 0.4;
+            opacity: 0.55;
+        }
+
+        .manhattan-diamond-label {
+            font-size: 9px;
+            fill: #a78bfa;
+            font-family: ui-monospace, monospace;
+            font-weight: 700;
+            opacity: 0.75;
         }
 
         .dynamic-circle {
@@ -194,6 +223,9 @@
             line-height: 1.55;
         }
     </style>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-purple-600 selection:text-white flex flex-col">
 
@@ -201,7 +233,7 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Territoire des Émotions</span>
@@ -223,14 +255,10 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
-                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="text-xs">🔬</span>
-                    Lab IA
-                </a>
             </nav>
 
             <!-- Quick Action / API Settings -->
-            <div class="flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-2 header-action-btn">
                 <button id="openApiKeyModal" class="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-purple-300 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors flex items-center gap-1.5" title="Configurer une clé Gemini API personnelle">
                     <span>✨ Clé IA</span>
                     <span id="apiKeyIndicator" class="w-2 h-2 rounded-full bg-slate-500"></span>
@@ -239,8 +267,30 @@
                     &larr; Accueil
                 </a>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Fullscreen Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="emotions.html" class="active-link"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
+        <div class="mt-auto pt-6">
+            <a href="index.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">&larr; Retour à l'Accueil</a>
+        </div>
+    </div>
 
     <!-- Main Container -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
@@ -248,28 +298,28 @@
         <!-- Page Header -->
         <div class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-900/40 text-blue-300 border border-blue-500/30 mb-2">
-                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                    Territoire 1
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/40 text-purple-300 border border-purple-500/30 mb-2">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                    Traitement Prédictif &bull; Inférence Active
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-heading font-black text-white tracking-tight">
-                    Cartographie des <span class="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Émotions</span>
+                    Matrice des <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Affects</span>
                 </h1>
-                <p class="text-slate-400 text-sm mt-1 max-w-2xl">
-                    Représentation géométrique bidimensionnelle de 83 affects humains ordonnés selon l'Activation somatique (axe vertical) et la Valence hédonique (axe horizontal).
+                <p class="text-slate-400 text-sm mt-1 max-w-3xl leading-relaxed">
+                    Cartographie hiérarchique de l’expérience affective : le <strong>Gradient de Contrôle (Axe Y)</strong> évalue la capacité d’agir sur le monde, le <strong>Gradient d’Attente (Axe X)</strong> évalue la révisabilité du modèle interne, et l'<strong>Axe Z</strong> indexe le budget attentionnel fini sous la norme L1 de Manhattan : <span class="font-mono text-purple-300">|X| + |Y| = 2Z - 2</span>.
                 </p>
             </div>
 
             <!-- Tab Buttons -->
             <div class="flex p-1 bg-slate-800/60 border border-slate-700/80 rounded-xl shrink-0 self-start md:self-auto overflow-x-auto">
                 <button class="tab-btn active px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-chart">
-                    🗺️ Carte Interactive (2D)
+                    🗺️ Matrice Interactive (Axes X-Y &amp; L1)
                 </button>
                 <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-noyau">
-                    🧬 Noyau Affectif
+                    ⚙️ Moteur &amp; Noyau Affectif
                 </button>
                 <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-matrice">
-                    🧪 Matrice Affective
+                    📐 Matrice &amp; Taxonomie Hiérarchique
                 </button>
             </div>
         </div>
@@ -287,21 +337,21 @@
                             <input type="checkbox" id="showNamesToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4" checked>
                             <span>Afficher les noms</span>
                         </label>
-                        <label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer select-none">
-                            <input type="checkbox" id="showIntensityCircleToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
-                            <span>Cercle d'intensité</span>
+                        <label class="flex items-center gap-2 text-xs font-medium text-purple-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showIntensityCircleToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4" checked>
+                            <span>Losanges L1 (|X|+|Y|=2Z-2)</span>
                         </label>
                     </div>
 
-                    <!-- Symmetry Lines Toggles -->
+                    <!-- Symmetry & Antagonism Lines Toggles -->
                     <div class="lg:col-span-5 flex flex-wrap gap-4 items-center border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
                         <label class="flex items-center gap-2 text-xs font-medium text-purple-300 cursor-pointer select-none">
                             <input type="checkbox" id="showControlateralToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
-                            <span>Correspondances controlatérales</span>
+                            <span>Antagonismes centraux (X,Y)&rarr;(-X,-Y)</span>
                         </label>
                         <label class="flex items-center gap-2 text-xs font-medium text-sky-300 cursor-pointer select-none">
                             <input type="checkbox" id="showSymetricalToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
-                            <span>Symétries</span>
+                            <span>Symétries axiales</span>
                         </label>
                     </div>
 
@@ -309,7 +359,7 @@
                     <div class="lg:col-span-3 flex items-center justify-start lg:justify-end gap-3 border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
                         <label class="flex items-center gap-2 text-xs font-semibold text-rose-300 cursor-pointer select-none">
                             <input type="checkbox" id="pathModeToggle" class="rounded bg-slate-900 border-slate-700 text-rose-600 focus:ring-rose-500 w-4 h-4">
-                            <span>Tracer un Chemin</span>
+                            <span>Tracer une Trajectoire</span>
                         </label>
                         <button id="resetPathBtn" class="hidden px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white bg-slate-700 hover:bg-slate-600 rounded-md transition-colors">
                             Effacer
@@ -317,29 +367,33 @@
                     </div>
                 </div>
 
-                <!-- Category Filters Row -->
+                <!-- Category / Strata Filters Row -->
                 <div class="mt-4 pt-4 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider">Filtrer par Cercles :</span>
-                    <div class="flex flex-wrap gap-3">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider">Filtrer par Strates d'Inférence (Axe Z) :</span>
+                    <div class="flex flex-wrap gap-2 sm:gap-3">
+                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="0" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=0 Veille</span>
+                        </label>
                         <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="1" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">1. Orientation</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=1 Surprise</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="2" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">2. Fondamentales</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=2 1re Couronne &bull; Anticipation</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="3" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">3. Complexes</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=3 Émotions Réactives &bull; Émoi</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="4" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">4. Relationnelles</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=4 Sentiments Réflexifs &bull; Réserve</span>
                         </label>
                         <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="5" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px]">5. Dispositions</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=5 Humeurs &bull; Recul</span>
                         </label>
                     </div>
                 </div>
@@ -353,9 +407,9 @@
                     <div class="flex items-center justify-between text-xs text-slate-400 mb-3 px-1">
                         <span class="font-mono text-purple-300 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            Cliquez sur un point pour ouvrir sa Fiche d'Identité
+                            Cliquez sur un attracteur pour inspecter ses paramètres computationnels
                         </span>
-                        <span class="text-slate-500 text-[11px]">A: Activation [-8; +8] | V: Valence [-8; +8]</span>
+                        <span class="text-slate-500 text-[11px] font-mono">Axe Y: Contrôle [-8; +8] | Axe X: Attente [-8; +8] | Axe Z: Profondeur [0 à 5]</span>
                     </div>
 
                     <!-- SVG Chart Element -->
@@ -374,31 +428,31 @@
                     <div class="bg-gradient-to-br from-slate-800/60 to-purple-950/30 border border-purple-800/40 rounded-2xl p-5 shadow-xl backdrop-blur-md">
                         <div class="flex items-center justify-between mb-2">
                             <h2 class="text-base font-heading font-bold text-white flex items-center gap-2">
-                                <span>🔎</span> Analyseur de Scénario
+                                <span>🔎</span> Analyseur de Trajectoire
                             </h2>
-                            <span class="text-[10px] uppercase font-bold tracking-widest text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded border border-purple-500/30">IA &amp; Heuristique</span>
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-purple-300 bg-purple-900/60 px-2 py-0.5 rounded border border-purple-500/30">Inférence Active</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">
-                            Décrivez une situation vécue ou imaginaire. Le système tracera la séquence émotionnelle correspondante sur la carte.
+                            Décrivez un épisode ou une situation. Le modèle reconstituera la dynamique d'inférence active à travers la Matrice.
                         </p>
 
                         <!-- Predefined Example Scenarios -->
                         <div class="mb-3 flex flex-wrap gap-1.5">
                             <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="J'ai un examen déterminant demain matin et j'ai peur d'échouer.">
-                                📝 Examen / Stress
+                                📝 Examen / Incertitude
                             </button>
                             <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="Mon projet a été validé avec les félicitations du jury !">
-                                🏆 Victoire / Succès
+                                🏆 Victoire / Résolution
                             </button>
                             <button class="example-scenario-btn text-[11px] px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/60 transition-colors" data-text="Je viens de découvrir qu'un proche m'a menti sur un sujet crucial.">
-                                💔 Trahison / Déception
+                                💔 Rupture de Modèle
                             </button>
                         </div>
 
-                        <textarea id="scenarioInput" rows="3" class="w-full p-3 text-xs sm:text-sm bg-cosmic-900/90 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all resize-none" placeholder="Ex: 'Je dois prendre la parole devant 200 personnes, mon cœur s'emballe mais je veux réussir...'"></textarea>
+                        <textarea id="scenarioInput" rows="3" class="w-full p-3 text-xs sm:text-sm bg-cosmic-900/90 border border-slate-700 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all resize-none" placeholder="Ex: 'Face à un obstacle imprévu, je ne sais pas si je peux changer la situation ou si je dois réviser mes certitudes...'"></textarea>
 
                         <button id="analyzeScenarioBtn" class="mt-3 w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-md shadow-purple-600/20 transition-all flex items-center justify-center gap-2">
-                            <span>Tracer le Chemin Émotionnel</span>
+                            <span>Tracer la Trajectoire Active</span>
                             <span>&rarr;</span>
                         </button>
                     </div>
@@ -407,24 +461,20 @@
                     <div id="iaResponseContainer" class="bg-cosmic-850 border border-slate-700/70 rounded-2xl p-5 shadow-xl">
                         <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                             <h3 id="iaResponseTitle" class="text-sm font-heading font-bold text-purple-300 flex items-center gap-2">
-                                <span>✨</span> Fiche d'Identité : <span class="text-white">Attente (A0 / V0)</span>
+                                <span>✨</span> Fiche Computationnelle : <span class="text-white">Point de Veille (0, 0, 0)</span>
                             </h3>
-                            <span id="emotionBadgeCategory" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-500/30">Orientation</span>
+                            <span id="emotionBadgeCategory" class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/40 text-purple-300 border border-purple-500/30">Niveau Initial (Z=0)</span>
                         </div>
                         <div id="iaResponseContent" class="space-y-3 max-h-[460px] overflow-y-auto pr-1 text-slate-300 text-xs sm:text-sm leading-relaxed">
                             <div class="identity-card-section">
                                 <h4>Définition</h4>
-                                <p>État neutre d’éveil attentif et d’ouverture perceptive, situé au centre exact du système affectif (A: 0, V: 0). C'est la matrice d'où naissent tous les autres états.</p>
-                                <h4>Déclencheurs Typiques</h4>
-                                <p>Moments de transition, calme contemplatif, début d'une expérience inconnue, suspension du jugement.</p>
+                                <p>Bassin attracteur de stabilité relative et de veille pure (0, 0, 0), situé au niveau zéro de l'Axe Z. Les flux intéroceptifs s'y écoulent sans saillance particulière sous contrôle homéostatique.</p>
+                                <h4>Dynamique d'Énergie Libre</h4>
+                                <p>Équilibre de base : aucun écart saillant ne franchit le seuil de tolérance. Aucune profondeur inférentielle ni révision de modèle n'est engagée.</p>
                                 <h4>Fonction Adaptative</h4>
-                                <p>Permet à l’organisme d’analyser l’environnement sans biais défensif ni sur-réaction, conservant son énergie vitale avant d’agir.</p>
-                                <h4>Manifestations Physiques</h4>
-                                <p>Respiration régulière, tonus musculaire équilibré, regard réceptif, absence de tension viscérale aiguë.</p>
-                                <h4>Pensées Associées</h4>
-                                <p>« Voyons ce qui va advenir », curiosité neutre, présence à l’instant.</p>
-                                <h4>Chemin de Régulation</h4>
-                                <p>Point d'ancrage fondamental vers lequel revenir lors des tempêtes affectives pour retrouver le discernement.</p>
+                                <p>Maintien de la viabilité somatique minimale et disponibilité attentionnelle totale pour les événements à venir.</p>
+                                <h4>Opérateurs de Transition</h4>
+                                <p>Lorsqu'un écart franchit le seuil de tolérance, le système accède à la Surprise (0, 0, 1) par voie ascendante, puis l'Anticipation (0, 0, 2) oriente la résolution dans la Matrice.</p>
                             </div>
                         </div>
                     </div>
@@ -434,139 +484,199 @@
 
         </div>
 
-        <!-- TAB 2: NOYAU AFFECTIF -->
+        <!-- TAB 2: NOYAU AFFECTIF & MOTEUR PRÉDICTIF -->
         <div id="tab-noyau" class="tab-content hidden space-y-8">
             <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
                 <div class="max-w-3xl">
-                    <span class="text-xs uppercase font-bold tracking-widest text-blue-400 bg-blue-900/40 px-3 py-1 rounded-full border border-blue-500/30">Architecture Première</span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Le Noyau Affectif Fondamental</h2>
+                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/30">Architecture Computationnelle</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Le Moteur Prédictif &amp; le Noyau Affectif</h2>
                     <p class="text-slate-300 text-base leading-relaxed mt-4">
-                        Avant toute conceptualisation complexe ou émotion socialisée, la conscience humaine vibre autour d’un centre de gravité primitif : <strong>la triade originelle d’Orientation</strong>.
+                        Le système affectif est fondé sur le principe de <strong>minimisation de l’écart de prédiction</strong> (inférence active et allostasie). Il s'articule autour de trois interfaces projetées sur les trois dimensions de l'espace :
                     </p>
                 </div>
 
-                <!-- Triad Cards -->
+                <!-- 3 Interfaces Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                    <div class="rounded-2xl bg-slate-900/70 border border-purple-700/50 p-6 flex flex-col justify-between">
                         <div>
-                            <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A0/V0</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">1. L'Attente</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Le point zéro de la géométrie affective. État d’éveil pur sans inclinaison positive ou négative. La veille sensorielle réceptive à ce qui émerge.
+                            <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe Y</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">1. Interface Perceptive</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Réactive, portée sur l'environnement et les flux sensorimoteurs. Elle porte la valeur affective du <strong class="text-purple-300">Contrôle</strong> : la capacité que l'organisme s'attribue pour agir sur la situation.
                             </p>
                         </div>
                         <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
-                            Orientation &bull; Catégorie 1
+                            +Y: Monde contrôlable &bull; -Y: Non contrôlable
                         </div>
                     </div>
 
-                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                    <div class="rounded-2xl bg-slate-900/70 border border-sky-700/50 p-6 flex flex-col justify-between">
                         <div>
-                            <div class="w-10 h-10 rounded-lg bg-pink-500/20 text-pink-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A+0.5</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">2. La Surprise</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Micro-sursaut d'activation soudain face à l'imprévu. Elle suspend temporairement les pensées antérieures pour mobiliser l'attention immédiate.
+                            <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe X</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">2. Interface Subjective</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Prédictive, intégrant la mémoire, les apprentissages et le modèle du monde. Elle porte la valeur affective de l'<strong class="text-sky-300">Attente</strong> : l'évaluation de la révisabilité des croyances internes.
                             </p>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
-                            Activation montante &bull; Neutre
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-sky-300 font-mono">
+                            +X: Modèle révisable &bull; -X: Non révisable
                         </div>
                     </div>
 
-                    <div class="rounded-2xl bg-slate-900/70 border border-slate-700/80 p-6 flex flex-col justify-between">
+                    <div class="rounded-2xl bg-slate-900/70 border border-emerald-700/50 p-6 flex flex-col justify-between">
                         <div>
-                            <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-mono font-bold text-sm mb-4">A-0.5</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">3. L'Anticipation</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                Projection calme vers le futur proche. Légère retenue d'énergie permettant la planification et le calcul d'adéquation de l'action.
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe Z</div>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">3. Interface Attentionnelle</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Régulatrice, modulant la précision (degré de confiance accordé aux signaux). Elle porte la <strong class="text-emerald-300">Profondeur Inférentielle</strong> temporelle et conceptuelle et le budget fini (norme L1).
                             </p>
                         </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-purple-300 font-mono">
-                            Activation mesurée &bull; Neutre
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
+                            Z &ge; 0 &bull; |X| + |Y| = 2Z - 2
                         </div>
                     </div>
                 </div>
 
-                <!-- Biological Foundation Section -->
+                <!-- Dynamics & Operators Section -->
                 <div class="mt-12 pt-8 border-t border-slate-800 grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="space-y-4">
                         <h4 class="text-lg font-heading font-bold text-white flex items-center gap-2">
-                            <span>🧠</span> Les Deux Moteurs Neurobiologiques
+                            <span>⚡</span> Dynamique de Charge et de Décharge d’Énergie Libre
                         </h4>
                         <p class="text-sm text-slate-300 leading-relaxed">
-                            Le Noyau Affectif traduit directement le dialogue perpétuel entre les branches du système nerveux autonome :
+                            Dans la formalisation de Joffily &amp; Coricelli (2013), la valence traduit le <strong>taux de variation négatif de l'énergie libre</strong> :
                         </p>
                         <ul class="space-y-3 text-xs text-slate-400">
                             <li class="flex items-start gap-2">
-                                <span class="text-purple-400 font-bold">•</span>
-                                <div><strong class="text-white">L'Axe Sympathique (A+) :</strong> Mobilisation d'énergie, accélération cardiaque, préparation motrice à l'action ou à la défense.</div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <span class="text-sky-400 font-bold">•</span>
-                                <div><strong class="text-white">L'Axe Parasympathique (A-) :</strong> Apaisement vagal, décélération, restauration somatique et digestion de l'expérience.</div>
-                            </li>
-                            <li class="flex items-start gap-2">
                                 <span class="text-emerald-400 font-bold">•</span>
-                                <div><strong class="text-white">L'Évaluation de Valence (V) :</strong> Médiée par le circuit dopaminergique de récompense (V+) et l'axe amygdalien d'alerte et d'aversion (V-).</div>
+                                <div><strong class="text-white">Décharge (Énergie libre décroissante) :</strong> L'écart est résorbé, soit par mise à jour épistémique sur l'Axe X (+X), soit par action pragmatique sur l'Axe Y (+Y). Concerne les polarités positives.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-rose-400 font-bold">•</span>
+                                <div><strong class="text-white">Charge (Énergie libre croissante) :</strong> L'écart persiste et ne peut être résorbé, soit par rigidité du modèle (-X), soit par impuissance motrice face au monde (-Y). Concerne les polarités négatives.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-purple-400 font-bold">•</span>
+                                <div><strong class="text-white">Statut de l'Activation :</strong> L'activation ne constitue pas une coordonnée de l'espace. Elle désigne le degré de mobilisation transversale d'une trajectoire (rapidité, amplitude, persistance).</div>
                             </li>
                         </ul>
                     </div>
 
-                    <div class="bg-cosmic-900 rounded-2xl p-6 border border-slate-800 flex flex-col justify-center">
-                        <h4 class="text-xs uppercase font-bold text-slate-400 mb-2">Principe Cardiovasculaire &amp; Somatique</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Dans Cartograffect, aucune émotion ne peut exister sans s'ancrer dans le Noyau. C’est la pulsation entre surprise et anticipation qui alimente en permanence le radar intérieur.
-                        </p>
-                        <div class="mt-4 p-3 rounded-lg bg-purple-900/20 border border-purple-700/30 text-xs text-purple-200">
-                            <strong>Loi de conservation :</strong> Pour calmer une émotion de très haute activation (ex: Panique ou Rage), il est vain de tenter de la forcer directement en Valence positive sans d'abord faire transiter l'activation par le Noyau.
+                    <div class="bg-cosmic-900 rounded-2xl p-6 border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs uppercase font-bold text-slate-400 mb-2">Les Opérateurs de Transition de Phase</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                L'origine est le <strong>Point de Veille (0, 0, 0)</strong>, un bassin de stabilité homéostatique. Lorsqu'un écart franchit le seuil de tolérance (sa dérivée temporelle), la symétrie est brisée :
+                            </p>
+                            <div class="mt-4 space-y-2 text-xs font-mono">
+                                <div class="p-2.5 rounded-lg bg-purple-900/30 border border-purple-700/40 text-purple-200">
+                                    <strong>Surprise (0, 0, 1) :</strong> Écart saillant sans orientation encore déterminée (voie ascendante).
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-indigo-900/30 border border-indigo-700/40 text-indigo-200">
+                                    <strong>Anticipation (0, 0, 2) :</strong> Opérateur descendant suspendant la décharge immédiate pour orienter vers la 1re couronne.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 italic">
+                            Au-delà : Émoi (Z=3), Réserve (Z=4) et Recul (Z=5) prolongent cette fonction de suspension à chaque strate d'abstraction.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: MATRICE AFFECTIVE -->
+        <!-- TAB 3: MATRICE AFFECTIVE & TAXONOMIE HIÉRARCHIQUE -->
         <div id="tab-matrice" class="tab-content hidden space-y-8">
             <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
                 <div class="max-w-3xl">
-                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full border border-emerald-500/30">Alchimie &amp; Combinaisons</span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">La Matrice des Combinaisons Affectives</h2>
+                    <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full border border-emerald-500/30">Grammaire des Configurations</span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">La Matrice Affective (Z = 2) &amp; la Taxonomie</h2>
                     <p class="text-slate-300 text-base leading-relaxed mt-4">
-                        Tout comme trois couleurs primaires composent l'ensemble du spectre visuel, les émotions fondamentales se croisent pour engendrer des sentiments complexes, durables et nuancés.
+                        À la première couronne (Z = 2), huit configurations résolvent l'équation <span class="font-mono text-purple-300">|X| + |Y| = 2</span> : quatre <strong>orientations axiales</strong> instables et quatre <strong>prototypes combinés</strong> constituant des attracteurs locaux.
                     </p>
                 </div>
 
-                <!-- Interactive Emotion Combiner Tool -->
+                <!-- 8 Configurations Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                    <!-- 4 Axiales -->
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-purple-500/40">
+                        <div class="text-[10px] font-mono text-purple-300 uppercase">Orientation Axiale (Y+)</div>
+                        <div class="text-lg font-bold text-white mt-1">Joie (0, +2, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Décharge de Contrôle, Attente indéterminée (X0). Élan moteur d'approche avant spécification de l'objet.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-blue-500/40">
+                        <div class="text-[10px] font-mono text-blue-300 uppercase">Orientation Axiale (Y-)</div>
+                        <div class="text-lg font-bold text-white mt-1">Tristesse (0, -2, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Charge de Contrôle, Attente indéterminée (X0). Repli de la puissance d'agir face à une situation non modifiable.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-pink-500/40">
+                        <div class="text-[10px] font-mono text-pink-300 uppercase">Orientation Axiale (X-)</div>
+                        <div class="text-lg font-bold text-white mt-1">Peur (-2, 0, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Charge d'Attente, Contrôle indéterminé (Y0). Menace anticipée ou contradiction du modèle sans plan d'action.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-emerald-500/40">
+                        <div class="text-[10px] font-mono text-emerald-300 uppercase">Orientation Axiale (X+)</div>
+                        <div class="text-lg font-bold text-white mt-1">Courage (+2, 0, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Décharge d'Attente, Contrôle indéterminé (Y0). Révision constructive du modèle dans l'inconnu.</p>
+                    </div>
+
+                    <!-- 4 Combinés -->
+                    <div class="p-4 rounded-xl bg-pink-950/40 border border-pink-600/40">
+                        <div class="text-[10px] font-mono text-pink-300 uppercase">Congruence (+X, +Y)</div>
+                        <div class="text-lg font-bold text-white mt-1">Désir (+1, +1, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Modèle révisable + Monde contrôlable. L'état souhaité peut être atteint par l'action coordonnée.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-600/40">
+                        <div class="text-[10px] font-mono text-purple-300 uppercase">Compensation (-X, +Y)</div>
+                        <div class="text-lg font-bold text-white mt-1">Colère (-1, +1, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Modèle non révisable + Monde contrôlable. Mobilisation combative pour ramener le monde au modèle.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-teal-950/40 border border-teal-600/40">
+                        <div class="text-[10px] font-mono text-teal-300 uppercase">Compensation (+X, -Y)</div>
+                        <div class="text-lg font-bold text-white mt-1">Calme (+1, -1, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Modèle révisable + Monde non contrôlable. Suspension de l'effort : le modèle s'adapte à la situation.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-600/40">
+                        <div class="text-[10px] font-mono text-slate-400 uppercase">Congruence (-X, -Y)</div>
+                        <div class="text-lg font-bold text-white mt-1">Dégoût (-1, -1, 2)</div>
+                        <p class="text-xs text-slate-300 mt-1">Modèle non révisable + Monde non contrôlable. La seule politique d'adaptation viable demeure le rejet.</p>
+                    </div>
+                </div>
+
+                <!-- Antagonismes & Transitions Simulator -->
                 <div class="mt-10 p-6 rounded-2xl bg-cosmic-900/90 border border-slate-700 shadow-xl">
-                    <h3 class="text-base font-heading font-bold text-white mb-4 flex items-center gap-2">
-                        <span>🧪</span> Laboratoire de Fusion Affective : Choisissez 2 Émotions Fondamentales
+                    <h3 class="text-base font-heading font-bold text-white mb-2 flex items-center gap-2">
+                        <span>🔄</span> Relation d’Antagonisme Principal : Inversion Centrale (X, Y) &rarr; (-X, -Y)
                     </h3>
+                    <p class="text-xs text-slate-400 mb-6">
+                        Deux attracteurs diagonalement opposés inversent conjointement leurs polarités et représentent des stratégies régulatrices diamétralement opposées.
+                    </p>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Émotion Primaire A</label>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Sélectionnez une Configuration Source</label>
                             <select id="matrixEmotionA" class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-purple-500">
-                                <option value="Joie">Joie (A+2 / V0)</option>
-                                <option value="Tristesse">Tristesse (A-2 / V0)</option>
-                                <option value="Peur">Peur (A0 / V-2)</option>
-                                <option value="Courage">Courage (A0 / V+2)</option>
-                                <option value="Colère">Colère (A+1 / V-1)</option>
-                                <option value="Calme">Calme (A-1 / V+1)</option>
-                                <option value="Désir">Désir (A+1 / V+1)</option>
-                                <option value="Dégoût">Dégoût (A-1 / V-1)</option>
+                                <option value="Désir">Désir (+1, +1, 2) &bull; Modèle révisable / Monde contrôlable</option>
+                                <option value="Colère">Colère (-1, +1, 2) &bull; Modèle non révisable / Monde contrôlable</option>
+                                <option value="Calme">Calme (+1, -1, 2) &bull; Modèle révisable / Monde non contrôlable</option>
+                                <option value="Dégoût">Dégoût (-1, -1, 2) &bull; Modèle non révisable / Monde non contrôlable</option>
+                                <option value="Joie">Joie (0, +2, 2) &bull; Décharge Contrôle / Attente 0</option>
+                                <option value="Tristesse">Tristesse (0, -2, 2) &bull; Charge Contrôle / Attente 0</option>
+                                <option value="Peur">Peur (-2, 0, 2) &bull; Charge Attente / Contrôle 0</option>
+                                <option value="Courage">Courage (+2, 0, 2) &bull; Décharge Attente / Contrôle 0</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Émotion Primaire B</label>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Deuxième Configuration pour Comparaison</label>
                             <select id="matrixEmotionB" class="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-purple-500">
-                                <option value="Courage">Courage (A0 / V+2)</option>
-                                <option value="Joie">Joie (A+2 / V0)</option>
-                                <option value="Tristesse">Tristesse (A-2 / V0)</option>
-                                <option value="Peur">Peur (A0 / V-2)</option>
-                                <option value="Colère">Colère (A+1 / V-1)</option>
-                                <option value="Calme">Calme (A-1 / V+1)</option>
-                                <option value="Désir">Désir (A+1 / V+1)</option>
-                                <option value="Dégoût">Dégoût (A-1 / V-1)</option>
+                                <option value="Dégoût">Dégoût (-1, -1, 2) &bull; Antagoniste du Désir</option>
+                                <option value="Calme">Calme (+1, -1, 2) &bull; Antagoniste de la Colère</option>
+                                <option value="Colère">Colère (-1, +1, 2)</option>
+                                <option value="Désir">Désir (+1, +1, 2)</option>
+                                <option value="Tristesse">Tristesse (0, -2, 2) &bull; Antagoniste de la Joie</option>
+                                <option value="Joie">Joie (0, +2, 2)</option>
+                                <option value="Courage">Courage (+2, 0, 2) &bull; Antagoniste de la Peur</option>
+                                <option value="Peur">Peur (-2, 0, 2)</option>
                             </select>
                         </div>
                     </div>
@@ -574,51 +684,51 @@
                     <!-- Computed Result Box -->
                     <div id="matrixResultBox" class="mt-6 p-5 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-600/40 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div>
-                            <span class="text-xs uppercase font-bold tracking-wider text-purple-300">Sentiment Émergeant</span>
-                            <div id="matrixResultTitle" class="text-2xl font-heading font-black text-white mt-0.5">Émerveillement &amp; Fierté</div>
+                            <span class="text-xs uppercase font-bold tracking-wider text-purple-300">Trajectoire Régulatrice Inférentielle</span>
+                            <div id="matrixResultTitle" class="text-2xl font-heading font-black text-white mt-0.5">Antagonisme Parfait : Désir vs Dégoût</div>
                             <p id="matrixResultDesc" class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
-                                L'énergie de la Joie associée à la détermination du Courage produit une ouverture triomphale et protectrice vers autrui.
+                                Inversion conjointe des deux gradients (X,Y) &rarr; (-X,-Y). Le Désir maximise la convergence entre révision interne et action externe, tandis que le Dégoût impose le rejet radical face à un monde non modifiable et un modèle non négociable.
                             </p>
                         </div>
                         <div id="matrixResultCoords" class="px-4 py-2 rounded-lg bg-slate-900/80 border border-slate-700 text-xs font-mono text-purple-300 text-center shrink-0">
-                            A+1 / V+3 &bull; Catégorie 3
+                            Inversion Centrale &bull; Strate Z=2
                         </div>
                     </div>
                 </div>
 
-                <!-- Reference Dyads Grid -->
+                <!-- 5 Layers Hierarchy Synthesis -->
                 <div class="mt-10">
-                    <h3 class="text-lg font-heading font-bold text-white mb-4">Tableau des Dyades Affectives Fondamentales</h3>
+                    <h3 class="text-lg font-heading font-bold text-white mb-4">Les 5 Couches de la Taxonomie Hiérarchique</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
                         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Joie + Désir</span>
-                            <div class="text-white font-semibold text-sm mt-1">Exaltation &amp; Euphorie</div>
-                            <p class="text-slate-400 mt-1">Surcroît de tonicité et propulsion vers le monde extérieur.</p>
+                            <span class="text-purple-400 font-bold font-mono">Z = 1 &bull; Opérateur Surprise (0,0,1)</span>
+                            <div class="text-white font-semibold text-sm mt-1">Processus Primordial</div>
+                            <p class="text-slate-400 mt-1">Trace d'un écart ascendant non encore orienté sur les axes.</p>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Colère + Peur</span>
-                            <div class="text-white font-semibold text-sm mt-1">Frustration &amp; Panique</div>
-                            <p class="text-slate-400 mt-1">Conflit interne aigu entre l'élan d'attaque et l'injonction de fuite.</p>
+                            <span class="text-purple-400 font-bold font-mono">Z = 2 &bull; Opérateur Anticipation (0,0,2)</span>
+                            <div class="text-white font-semibold text-sm mt-1">Première Couronne Affective</div>
+                            <p class="text-slate-400 mt-1">Budget = 2. Déploiement des 4 axiales et des 4 prototypes combinés.</p>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Tristesse + Dégoût</span>
-                            <div class="text-white font-semibold text-sm mt-1">Honte &amp; Déception</div>
-                            <p class="text-slate-400 mt-1">Rejet de soi ou de l'objet aimé, avec effondrement de l'énergie.</p>
+                            <span class="text-purple-400 font-bold font-mono">Z = 3 &bull; Opérateur Émoi (0,0,3)</span>
+                            <div class="text-white font-semibold text-sm mt-1">Émotions Réactives</div>
+                            <p class="text-slate-400 mt-1">Budget = 4. L'affect persiste, s'intensifie et se différencie avec son objet immédiat.</p>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Calme + Tristesse</span>
-                            <div class="text-white font-semibold text-sm mt-1">Réconfort &amp; Nostalgie</div>
-                            <p class="text-slate-400 mt-1">Acceptation douce de la perte sans violence ni déchirement.</p>
+                            <span class="text-purple-400 font-bold font-mono">Z = 4 &bull; Opérateur Réserve (0,0,4)</span>
+                            <div class="text-white font-semibold text-sm mt-1">Sentiments Réflexifs</div>
+                            <p class="text-slate-400 mt-1">Budget = 6. Contrôlabilité sur autrui et révisabilité du modèle de soi (second ordre).</p>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Courage + Calme</span>
-                            <div class="text-white font-semibold text-sm mt-1">Sérénité &amp; Assurance</div>
-                            <p class="text-slate-400 mt-1">Force tranquille inébranlable capable de traverser l'adversité.</p>
+                            <span class="text-purple-400 font-bold font-mono">Z = 5 &bull; Opérateur Recul (0,0,5)</span>
+                            <div class="text-white font-semibold text-sm mt-1">Humeurs &amp; Orientations Stables</div>
+                            <p class="text-slate-400 mt-1">Budget = 8. Paramètres lents du modèle génératif sur des horizons étendus.</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold">Peur + Dégoût</span>
-                            <div class="text-white font-semibold text-sm mt-1">Effroi &amp; Répulsion</div>
-                            <p class="text-slate-400 mt-1">Réflexe viscéral de préservation contre un danger toxique.</p>
+                        <div class="p-4 rounded-xl bg-slate-900/60 border border-purple-800/40">
+                            <span class="text-purple-300 font-bold font-mono">Récursivité &bull; S'émouvoir &rarr; Se retenir &rarr; Prendre du recul</span>
+                            <div class="text-white font-semibold text-sm mt-1">Élargissement de l'Horizon</div>
+                            <p class="text-slate-400 mt-1">Invariance formelle des lois régulatrices avec abstraction croissante.</p>
                         </div>
                     </div>
                 </div>
@@ -631,18 +741,17 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
                 <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
-                <a href="emotions.html" class="text-purple-400 font-semibold">1. Émotions</a>
+                <a href="emotions.html" class="text-blue-400 font-semibold">1. Émotions</a>
                 <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
-                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-500">
+            <div class="text-xs text-slate-400">
                 &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
             </div>
         </div>
@@ -673,173 +782,112 @@
 
     <!-- MAIN INTERACTIVE D3 SCRIPT & LOGIC -->
     <script>
-        // --- 1. Dataset of 83 emotions ---
+        // --- 1. Dataset of Affective Attractors & Operators grounded in Predictive Processing ---
+        // Axes: X = Gradient d'Attente (Modèle révisable +X vs non-révisable -X)
+        //       Y = Gradient de Contrôle (Monde contrôlable +Y vs non-contrôlable -Y)
+        //       Z = Profondeur inférentielle & niveau d'abstraction (Z in {0, 1, 2, 3, 4, 5})
+        // Manhattan L1 Budget constraint for Z >= 2: |X| + |Y| = 2Z - 2
         const emotionsData = [
-            // Catégorie 1: Orientation
-            { name: "Attente", code: "A0/V0", category: 1, group: "Orientation" },
-            { name: "Surprise", code: "A0,5/V0", category: 1, group: "Orientation" },
-            { name: "Anticipation", code: "A-0,5/V0", category: 1, group: "Orientation" },
-            // Catégorie 2: Émotions fondamentales
-            { name: "Joie", code: "A+2/V0", category: 2, group: "Joie" },
-            { name: "Tristesse", code: "A-2/V0", category: 2, group: "Tristesse" },
-            { name: "Peur", code: "A0/V-2", category: 2, group: "Peur" },
-            { name: "Courage", code: "A0/V+2", category: 2, group: "Courage" },
-            { name: "Colère", code: "A+1/V-1", category: 2, group: "Colère" },
-            { name: "Calme", code: "A-1/V+1", category: 2, group: "Calme" },
-            { name: "Désir", code: "A+1/V+1", category: 2, group: "Désir" },
-            { name: "Dégoût", code: "A-1/V-1", category: 2, group: "Dégoût" },
-            // Catégorie 3: Émotions complexes
-            { name: "Confusion", code: "A+4/V0", category: 3, group: "Joie" },
-            { name: "Consternation", code: "A+3/V-1", category: 3, group: "Joie" },
-            { name: "Euphorie", code: "A+3/V+1", category: 3, group: "Joie" },
-            { name: "Engourdissement", code: "A-4/V0", category: 3, group: "Tristesse" },
-            { name: "Réconfort", code: "A-3/V+1", category: 3, group: "Tristesse" },
-            { name: "Chagrin", code: "A-3/V-1", category: 3, group: "Tristesse" },
-            { name: "Stupeur", code: "A0/V-4", category: 3, group: "Peur" },
-            { name: "Panique", code: "A+1/V-3", category: 3, group: "Peur" },
-            { name: "Frisson", code: "A-1/V-3", category: 3, group: "Peur" },
-            { name: "Curiosité", code: "A0/V+4", category: 3, group: "Courage" },
-            { name: "Émerveillement", code: "A+1/V+3", category: 3, group: "Courage" },
-            { name: "Enchantement", code: "A-1/V+3", category: 3, group: "Courage" },
-            { name: "Exaspération", code: "A+2/V-2", category: 3, group: "Colère" },
-            { name: "Soulagement", code: "A-2/V+2", category: 3, group: "Calme" },
-            { name: "Exaltation", code: "A+2/V+2", category: 3, group: "Désir" },
-            { name: "Déception", code: "A-2/V-2", category: 3, group: "Dégoût" },
-            // Catégorie 4: Émotions relationnelles
-            { name: "Ambivalence", code: "A+6/V0", category: 4, group: "Joie" },
-            { name: "Envie", code: "A+4/V-2", category: 4, group: "Joie" },
-            { name: "Haine", code: "A+5/V-1", category: 4, group: "Joie" },
-            { name: "Amour", code: "A+5/V+1", category: 4, group: "Joie" },
-            { name: "Assurance", code: "A+4/V+2", category: 4, group: "Joie" },
-            { name: "Indifférence", code: "A-6/V0", category: 4, group: "Tristesse" },
-            { name: "Sérénité", code: "A-4/V+2", category: 4, group: "Tristesse" },
-            { name: "Plénitude", code: "A-5/V+1", category: 4, group: "Tristesse" },
-            { name: "Honte", code: "A-4/V-2", category: 4, group: "Tristesse" },
-            { name: "Vide", code: "A-5/V-1", category: 4, group: "Tristesse" },
-            { name: "Anxiété", code: "A+2/V-4", category: 4, group: "Peur" },
-            { name: "Manque", code: "A+1/V-5", category: 4, group: "Peur" },
-            { name: "Mépris", code: "A-1/V-5", category: 4, group: "Peur" },
-            { name: "Crainte", code: "A-2/V-4", category: 4, group: "Peur" },
-            { name: "Doute", code: "A0/V-6", category: 4, group: "Peur" },
-            { name: "Conviction", code: "A0/V+6", category: 4, group: "Courage" },
-            { name: "Fierté", code: "A+2/V+4", category: 4, group: "Courage" },
-            { name: "Épanouissement", code: "A+1/V+5", category: 4, group: "Courage" },
-            { name: "Affection", code: "A-1/V+5", category: 4, group: "Courage" },
-            { name: "Admiration", code: "A-2/V+4", category: 4, group: "Courage" },
-            { name: "Frustration", code: "A+3/V-3", category: 4, group: "Colère" },
-            { name: "Acceptation", code: "A-3/V+3", category: 4, group: "Calme" },
-            { name: "Engagement", code: "A+3/V+3", category: 4, group: "Désir" },
-            { name: "Rejet", code: "A-3/V-3", category: 4, group: "Dégoût" },
-            // Catégorie 5: Dispositions
-            { name: "Agitation", code: "A+8/V0", category: 5, group: "Joie" },
-            { name: "Invulnérabilité", code: "A+7/V+1", category: 5, group: "Joie" },
-            { name: "Puissance", code: "A+6/V+2", category: 5, group: "Joie" },
-            { name: "Confiance", code: "A+5/V+3", category: 5, group: "Joie" },
-            { name: "Intolérance", code: "A+6/V-2", category: 5, group: "Joie" },
-            { name: "Injustice", code: "A+5/V-3", category: 5, group: "Joie" },
-            { name: "Imprudence", code: "A+7/V-1", category: 5, group: "Joie" },
-            { name: "Apathie", code: "A-8/V0", category: 5, group: "Tristesse" },
-            { name: "Sécurité", code: "A-6/V+2", category: 5, group: "Tristesse" },
-            { name: "Quiétude", code: "A-5/V+3", category: 5, group: "Tristesse" },
-            { name: "Patience", code: "A-7/V+1", category: 5, group: "Tristesse" },
-            { name: "Pessimisme", code: "A-6/V-2", category: 5, group: "Tristesse" },
-            { name: "Déshonneur", code: "A-5/V-3", category: 5, group: "Tristesse" },
-            { name: "Désespoir", code: "A-7/V-1", category: 5, group: "Tristesse" },
-            { name: "Incertitude", code: "A0/V-8", category: 5, group: "Peur" },
-            { name: "Insécurité", code: "A+2/V-6", category: 5, group: "Peur" },
-            { name: "Inquiétude", code: "A+3/V-5", category: 5, group: "Peur" },
-            { name: "Impatience", code: "A+1/V-7", category: 5, group: "Peur" },
-            { name: "Vulnérabilité", code: "A-1/V-7", category: 5, group: "Peur" },
-            { name: "Impuissance", code: "A-2/V-6", category: 5, group: "Peur" },
-            { name: "Méfiance", code: "A-3/V-5", category: 5, group: "Peur" },
-            { name: "Certitude", code: "A0/V+8", category: 5, group: "Courage" },
-            { name: "Optimisme", code: "A+2/V+6", category: 5, group: "Courage" },
-            { name: "Honneur", code: "A+3/V+5", category: 5, group: "Courage" },
-            { name: "Espoir", code: "A+1/V+7", category: 5, group: "Courage" },
-            { name: "Tolérance", code: "A-2/V+6", category: 5, group: "Courage" },
-            { name: "Justice", code: "A-3/V+5", category: 5, group: "Courage" },
-            { name: "Prudence", code: "A-1/V+7", category: 5, group: "Courage" },
-            { name: "Mécontentement", code: "A+4/V-4", category: 5, group: "Colère" },
-            { name: "Contentement", code: "A-4/V+4", category: 5, group: "Calme" },
-            { name: "Intérêt", code: "A+4/V+4", category: 5, group: "Désir" },
-            { name: "Désintérêt", code: "A-4/V-4", category: 5, group: "Dégoût" }
+            // --- Opérateurs Centraux de Transition & Suspension (X0, Y0) ---
+            { name: "Point de Veille", x: 0, y: 0, z: 0, category: 0, group: "Veille", code: "X0 / Y0 / Z0", type: "operator", desc: "Bassin attracteur de repos homéostatique de fond (0,0,0). Les flux intéroceptifs s'écoulent sans saillance particulière." },
+            { name: "Surprise", x: 0, y: 0, z: 1, category: 1, group: "Surprise", code: "X0 / Y0 / Z1", type: "operator", desc: "Rupture de la veille par voie ascendante (0,0,1). Écart de prédiction saillant enregistré sans orientation déterminée sur les Axes X et Y." },
+            { name: "Anticipation", x: 0, y: 0, z: 2, category: 2, group: "Anticipation", code: "X0 / Y0 / Z2", type: "operator", desc: "Opérateur descendant de l'Interface Subjective (0,0,2). Suspend la décharge immédiate et oriente le flux vers l'un des 8 attracteurs de la 1re couronne." },
+            { name: "Émoi", x: 0, y: 0, z: 3, category: 3, group: "Émoi", code: "X0 / Y0 / Z3", type: "operator", desc: "Opérateur de suspension de la 3e couche (0,0,3). Précède l'allocation attentionnelle face à la situation et son histoire immédiate." },
+            { name: "Réserve", x: 0, y: 0, z: 4, category: 4, group: "Réserve", code: "X0 / Y0 / Z4", type: "operator", desc: "Opérateur réflexif de second ordre (0,0,4). Précède l'évaluation de l'effet sur autrui et la révision du modèle de soi." },
+            { name: "Recul", x: 0, y: 0, z: 5, category: 5, group: "Recul", code: "X0 / Y0 / Z5", type: "operator", desc: "Opérateur d'élargissement de l'horizon temporel (0,0,5). Précède l'ajustement des paramètres lents régissant des classes étendues de situations (humeurs)." },
+
+            // --- 2e Couche (Z=2) : Première Couronne Affective (|X| + |Y| = 2) ---
+            // 4 Orientations axiales pures (instables, une dimension indéterminée)
+            { name: "Joie", x: 0, y: 2, z: 2, category: 2, group: "Joie", code: "X0 / Y+2 / Z2", type: "axial" },
+            { name: "Tristesse", x: 0, y: -2, z: 2, category: 2, group: "Tristesse", code: "X0 / Y-2 / Z2", type: "axial" },
+            { name: "Courage", x: 2, y: 0, z: 2, category: 2, group: "Courage", code: "X+2 / Y0 / Z2", type: "axial" },
+            { name: "Peur", x: -2, y: 0, z: 2, category: 2, group: "Peur", code: "X-2 / Y0 / Z2", type: "axial" },
+            // 4 Prototypes combinés équilibrés (attracteurs locaux stables, |X|=|Y|=1)
+            { name: "Désir", x: 1, y: 1, z: 2, category: 2, group: "Désir", code: "X+1 / Y+1 / Z2", type: "combine" },
+            { name: "Colère", x: -1, y: 1, z: 2, category: 2, group: "Colère", code: "X-1 / Y+1 / Z2", type: "combine" },
+            { name: "Calme", x: 1, y: -1, z: 2, category: 2, group: "Calme", code: "X+1 / Y-1 / Z2", type: "combine" },
+            { name: "Dégoût", x: -1, y: -1, z: 2, category: 2, group: "Dégoût", code: "X-1 / Y-1 / Z2", type: "combine" },
+
+            // --- 3e Couche (Z=3) : Émotions Réactives (|X| + |Y| = 4) ---
+            { name: "Élan", x: 0, y: 4, z: 3, category: 3, group: "Joie", code: "X0 / Y+4 / Z3", type: "axial" },
+            { name: "Euphorie", x: 1, y: 3, z: 3, category: 3, group: "Joie", code: "X+1 / Y+3 / Z3", type: "lateral" },
+            { name: "Consternation", x: -1, y: 3, z: 3, category: 3, group: "Joie", code: "X-1 / Y+3 / Z3", type: "lateral" },
+            { name: "Exaltation", x: 2, y: 2, z: 3, category: 3, group: "Désir", code: "X+2 / Y+2 / Z3", type: "combine" },
+            { name: "Exaspération", x: -2, y: 2, z: 3, category: 3, group: "Colère", code: "X-2 / Y+2 / Z3", type: "combine" },
+            { name: "Curiosité", x: 4, y: 0, z: 3, category: 3, group: "Courage", code: "X+4 / Y0 / Z3", type: "axial" },
+            { name: "Émerveillement", x: 3, y: 1, z: 3, category: 3, group: "Courage", code: "X+3 / Y+1 / Z3", type: "lateral" },
+            { name: "Enchantement", x: 3, y: -1, z: 3, category: 3, group: "Courage", code: "X+3 / Y-1 / Z3", type: "lateral" },
+            { name: "Soulagement", x: 2, y: -2, z: 3, category: 3, group: "Calme", code: "X+2 / Y-2 / Z3", type: "combine" },
+            { name: "Déception", x: -2, y: -2, z: 3, category: 3, group: "Dégoût", code: "X-2 / Y-2 / Z3", type: "combine" },
+            { name: "Chagrin", x: -1, y: -3, z: 3, category: 3, group: "Tristesse", code: "X-1 / Y-3 / Z3", type: "lateral" },
+            { name: "Réconfort", x: 1, y: -3, z: 3, category: 3, group: "Tristesse", code: "X+1 / Y-3 / Z3", type: "lateral" },
+            { name: "Abattement", x: 0, y: -4, z: 3, category: 3, group: "Tristesse", code: "X0 / Y-4 / Z3", type: "axial" },
+            { name: "Doute", x: -4, y: 0, z: 3, category: 3, group: "Peur", code: "X-4 / Y0 / Z3", type: "axial" },
+            { name: "Panique", x: -3, y: 1, z: 3, category: 3, group: "Peur", code: "X-3 / Y+1 / Z3", type: "lateral" },
+            { name: "Frisson", x: -3, y: -1, z: 3, category: 3, group: "Peur", code: "X-3 / Y-1 / Z3", type: "lateral" },
+
+            // --- 4e Couche (Z=4) : Sentiments Réflexifs (|X| + |Y| = 6) ---
+            { name: "Ambivalence", x: 0, y: 6, z: 4, category: 4, group: "Joie", code: "X0 / Y+6 / Z4", type: "axial" },
+            { name: "Amour", x: 1, y: 5, z: 4, category: 4, group: "Joie", code: "X+1 / Y+5 / Z4", type: "lateral" },
+            { name: "Haine", x: -1, y: 5, z: 4, category: 4, group: "Joie", code: "X-1 / Y+5 / Z4", type: "lateral" },
+            { name: "Assurance", x: 2, y: 4, z: 4, category: 4, group: "Joie", code: "X+2 / Y+4 / Z4", type: "lateral" },
+            { name: "Envie", x: -2, y: 4, z: 4, category: 4, group: "Joie", code: "X-2 / Y+4 / Z4", type: "lateral" },
+            { name: "Engagement", x: 3, y: 3, z: 4, category: 4, group: "Désir", code: "X+3 / Y+3 / Z4", type: "combine" },
+            { name: "Frustration", x: -3, y: 3, z: 4, category: 4, group: "Colère", code: "X-3 / Y+3 / Z4", type: "combine" },
+            { name: "Conviction", x: 6, y: 0, z: 4, category: 4, group: "Courage", code: "X+6 / Y0 / Z4", type: "axial" },
+            { name: "Épanouissement", x: 5, y: 1, z: 4, category: 4, group: "Courage", code: "X+5 / Y+1 / Z4", type: "lateral" },
+            { name: "Affection", x: 5, y: -1, z: 4, category: 4, group: "Courage", code: "X+5 / Y-1 / Z4", type: "lateral" },
+            { name: "Fierté", x: 4, y: 2, z: 4, category: 4, group: "Courage", code: "X+4 / Y+2 / Z4", type: "lateral" },
+            { name: "Admiration", x: 4, y: -2, z: 4, category: 4, group: "Courage", code: "X+4 / Y-2 / Z4", type: "lateral" },
+            { name: "Acceptation", x: 3, y: -3, z: 4, category: 4, group: "Calme", code: "X+3 / Y-3 / Z4", type: "combine" },
+            { name: "Rejet", x: -3, y: -3, z: 4, category: 4, group: "Dégoût", code: "X-3 / Y-3 / Z4", type: "combine" },
+            { name: "Indifférence", x: 0, y: -6, z: 4, category: 4, group: "Tristesse", code: "X0 / Y-6 / Z4", type: "axial" },
+            { name: "Plénitude", x: 1, y: -5, z: 4, category: 4, group: "Tristesse", code: "X+1 / Y-5 / Z4", type: "lateral" },
+            { name: "Vide", x: -1, y: -5, z: 4, category: 4, group: "Tristesse", code: "X-1 / Y-5 / Z4", type: "lateral" },
+            { name: "Sérénité", x: 2, y: -4, z: 4, category: 4, group: "Tristesse", code: "X+2 / Y-4 / Z4", type: "lateral" },
+            { name: "Honte", x: -2, y: -4, z: 4, category: 4, group: "Tristesse", code: "X-2 / Y-4 / Z4", type: "lateral" },
+            { name: "Stupeur", x: -6, y: 0, z: 4, category: 4, group: "Peur", code: "X-6 / Y0 / Z4", type: "axial" },
+            { name: "Manque", x: -5, y: 1, z: 4, category: 4, group: "Peur", code: "X-5 / Y+1 / Z4", type: "lateral" },
+            { name: "Mépris", x: -5, y: -1, z: 4, category: 4, group: "Peur", code: "X-5 / Y-1 / Z4", type: "lateral" },
+            { name: "Anxiété", x: -4, y: 2, z: 4, category: 4, group: "Peur", code: "X-4 / Y+2 / Z4", type: "lateral" },
+            { name: "Crainte", x: -4, y: -2, z: 4, category: 4, group: "Peur", code: "X-4 / Y-2 / Z4", type: "lateral" },
+
+            // --- 5e Couche (Z=5) : Orientations Affectives Stables / Humeurs (|X| + |Y| = 8) ---
+            { name: "Agitation", x: 0, y: 8, z: 5, category: 5, group: "Joie", code: "X0 / Y+8 / Z5", type: "axial" },
+            { name: "Invulnérabilité", x: 1, y: 7, z: 5, category: 5, group: "Joie", code: "X+1 / Y+7 / Z5", type: "lateral" },
+            { name: "Imprudence", x: -1, y: 7, z: 5, category: 5, group: "Joie", code: "X-1 / Y+7 / Z5", type: "lateral" },
+            { name: "Puissance", x: 2, y: 6, z: 5, category: 5, group: "Joie", code: "X+2 / Y+6 / Z5", type: "lateral" },
+            { name: "Intolérance", x: -2, y: 6, z: 5, category: 5, group: "Joie", code: "X-2 / Y+6 / Z5", type: "lateral" },
+            { name: "Confiance", x: 3, y: 5, z: 5, category: 5, group: "Joie", code: "X+3 / Y+5 / Z5", type: "lateral" },
+            { name: "Injustice", x: -3, y: 5, z: 5, category: 5, group: "Joie", code: "X-3 / Y+5 / Z5", type: "lateral" },
+            { name: "Intérêt", x: 4, y: 4, z: 5, category: 5, group: "Désir", code: "X+4 / Y+4 / Z5", type: "combine" },
+            { name: "Mécontentement", x: -4, y: 4, z: 5, category: 5, group: "Colère", code: "X-4 / Y+4 / Z5", type: "combine" },
+            { name: "Certitude", x: 8, y: 0, z: 5, category: 5, group: "Courage", code: "X+8 / Y0 / Z5", type: "axial" },
+            { name: "Espoir", x: 7, y: 1, z: 5, category: 5, group: "Courage", code: "X+7 / Y+1 / Z5", type: "lateral" },
+            { name: "Prudence", x: 7, y: -1, z: 5, category: 5, group: "Courage", code: "X+7 / Y-1 / Z5", type: "lateral" },
+            { name: "Optimisme", x: 6, y: 2, z: 5, category: 5, group: "Courage", code: "X+6 / Y+2 / Z5", type: "lateral" },
+            { name: "Tolérance", x: 6, y: -2, z: 5, category: 5, group: "Courage", code: "X+6 / Y-2 / Z5", type: "lateral" },
+            { name: "Honneur", x: 5, y: 3, z: 5, category: 5, group: "Courage", code: "X+5 / Y+3 / Z5", type: "lateral" },
+            { name: "Justice", x: 5, y: -3, z: 5, category: 5, group: "Courage", code: "X+5 / Y-3 / Z5", type: "lateral" },
+            { name: "Contentement", x: 4, y: -4, z: 5, category: 5, group: "Calme", code: "X+4 / Y-4 / Z5", type: "combine" },
+            { name: "Désintérêt", x: -4, y: -4, z: 5, category: 5, group: "Dégoût", code: "X-4 / Y-4 / Z5", type: "combine" },
+            { name: "Apathie", x: 0, y: -8, z: 5, category: 5, group: "Tristesse", code: "X0 / Y-8 / Z5", type: "axial" },
+            { name: "Patience", x: 1, y: -7, z: 5, category: 5, group: "Tristesse", code: "X+1 / Y-7 / Z5", type: "lateral" },
+            { name: "Désespoir", x: -1, y: -7, z: 5, category: 5, group: "Tristesse", code: "X-1 / Y-7 / Z5", type: "lateral" },
+            { name: "Sécurité", x: 2, y: -6, z: 5, category: 5, group: "Tristesse", code: "X+2 / Y-6 / Z5", type: "lateral" },
+            { name: "Pessimisme", x: -2, y: -6, z: 5, category: 5, group: "Tristesse", code: "X-2 / Y-6 / Z5", type: "lateral" },
+            { name: "Quiétude", x: 3, y: -5, z: 5, category: 5, group: "Tristesse", code: "X+3 / Y-5 / Z5", type: "lateral" },
+            { name: "Déshonneur", x: -3, y: -5, z: 5, category: 5, group: "Tristesse", code: "X-3 / Y-5 / Z5", type: "lateral" },
+            { name: "Incertitude", x: -8, y: 0, z: 5, category: 5, group: "Peur", code: "X-8 / Y0 / Z5", type: "axial" },
+            { name: "Impatience", x: -7, y: 1, z: 5, category: 5, group: "Peur", code: "X-7 / Y+1 / Z5", type: "lateral" },
+            { name: "Vulnérabilité", x: -7, y: -1, z: 5, category: 5, group: "Peur", code: "X-7 / Y-1 / Z5", type: "lateral" },
+            { name: "Insécurité", x: -6, y: 2, z: 5, category: 5, group: "Peur", code: "X-6 / Y+2 / Z5", type: "lateral" },
+            { name: "Impuissance", x: -6, y: -2, z: 5, category: 5, group: "Peur", code: "X-6 / Y-2 / Z5", type: "lateral" },
+            { name: "Inquiétude", x: -5, y: 3, z: 5, category: 5, group: "Peur", code: "X-5 / Y+3 / Z5", type: "lateral" },
+            { name: "Méfiance", x: -5, y: -3, z: 5, category: 5, group: "Peur", code: "X-5 / Y-3 / Z5", type: "lateral" }
         ];
 
-        // Psychological Encyclopedia Database (Built-in offline engine)
-        const builtInProfiles = {
-            "Joie": {
-                def: "Afflux rayonnant d'énergie vitale et de gratitude, caractérisé par une élévation de l'activation et une tonalité hédonique positive.",
-                triggers: "Accomplissement personnel, retrouvailles aimées, partage authentique, libération d'un fardeau.",
-                func: "Renforce les liens sociaux, élargit le répertoire attentionnel et recharge les réserves psychologiques (théorie de Fredrickson).",
-                phys: "Détente des traits faciaux, sourire Duchenne, rythme cardiaque vigoureux mais harmonieux, ouverture posturale.",
-                thoughts: "« Tout est possible », sentiment de légèreté, gratitude pour le moment présent.",
-                path: "La savourer pleinement, l'ancrer somatiquement et la partager pour en démultiplier la portée."
-            },
-            "Peur": {
-                def: "Signal d'alarme archaïque signalant une menace immédiate ou anticipée envers l'intégrité physique, psychologique ou sociale.",
-                triggers: "Inconnu soudain, risque d'échec ou de rejet, perte de contrôle, danger perçu.",
-                func: "Mobilise l'organisme en mode combat, fuite ou vigilance aiguë pour préserver la survie.",
-                phys: "Accélération cardiaque, vasoconstriction périphérique, sueurs froides, regard élargi.",
-                thoughts: "« Quelque chose de grave peut arriver », focalisation sur les indices de danger.",
-                path: "Nommer la peur sans la nier, ralentir l'expiration pour activer le frein vagal, puis chercher le Courage (A0/V+2) comme réponse constructive."
-            },
-            "Colère": {
-                def: "Poussée combative d'énergie réactive déclenchée par la violation perçue d'une limite, d'une règle morale ou d'un besoin vital.",
-                triggers: "Injustice subie ou observée, sentiment d'impuissance, trahison, obstacle frustrant.",
-                func: "Rétablir l'intégrité, défendre son espace, refuser l'inacceptable et rétablir la justice.",
-                phys: "Montée de chaleur au visage, mâchoires serrées, poings crispés, souffle saccadé.",
-                thoughts: "« Ce n'est pas juste », « Cela ne peut plus durer », besoin d'agir.",
-                path: "Reconnaître le message de la colère sans basculer dans la destruction : la canaliser vers l'affirmation claire et l'action équitable (Justice)."
-            },
-            "Tristesse": {
-                def: "Mouvement introspectif de repli et de désactivation consécutif à une perte (être cher, projet, illusion, statut).",
-                triggers: "Séparation, échec signifiant, rupture d'un attachement, deuil.",
-                func: "Encourager le repos, digérer la perte, recalibrer les priorités et susciter le soutien empathique du groupe.",
-                phys: "Lourdeur des membres, baisse d'énergie, larmes, gorge nouée, regard vers le sol.",
-                thoughts: "« Quelque chose d'irremplaçable est parti », sentiment de vide temporaire.",
-                path: "Accueillir les larmes, s'entourer de bienveillance et s'orienter progressivement vers le Réconfort (A-3/V+1) et l'Acceptation."
-            },
-            "Courage": {
-                def: "Capacité d'agir de façon lucide et alignée malgré la présence du doute ou de la peur.",
-                triggers: "Situation d'adversité exigeant une prise de position, défense de valeurs fondamentales.",
-                func: "Permet de surmonter la sidération et d'élargir son champ d'action dans l'inconnu.",
-                phys: "Colonne redressée, ancrage au sol ferme, respiration ample, regard déterminé.",
-                thoughts: "« Même si je tremble, j'avance pas à pas ».",
-                path: "S'appuyer sur la clarté de son intention pour convertir l'appréhension en force concrète."
-            },
-            "Sérénité": {
-                def: "État de paix intérieure profonde où l'activation est apaisée et la valence harmonieuse.",
-                triggers: "Connexion avec la nature, accomplissement d'une tâche éthique, méditation, acceptation lucide.",
-                func: "Restauration profonde de l'homéostasie et consolidation de la clarté cognitive.",
-                phys: "Rythme respiratoire lent et régulier, tonus musculaire délié, sensation de chaleur douce.",
-                thoughts: "« Tout est à sa place dans l'instant », équanimité.",
-                path: "Cultiver cet état comme un refuge intérieur accessible à tout moment."
-            },
-            "Honte": {
-                def: "Affect douloureux d'exposition sociale et de disqualification globale de soi.",
-                triggers: "Transgression morale, échec public, jugement dévalorisant perçu.",
-                func: "Régulation des normes du groupe et préservation du lien d'appartenance.",
-                phys: "Rougeur, envie de disparaître sous terre, regard fuyant.",
-                thoughts: "« Je suis nul(le) et indigne d'estime ».",
-                path: "Séparer son identité de son acte, pratiquer l'auto-compassion et briser le secret en en parlant avec bienveillance."
-            }
-        };
-
-        function parseCode(emotion) {
-            const parts = emotion.code.split('/');
-            const activationStr = parts[0].replace('A', '').replace(',', '.');
-            const valenceStr = parts[1].replace('V', '').replace(',', '.');
-            return {
-                activation: parseFloat(activationStr),
-                valence: parseFloat(valenceStr)
-            };
-        }
-
-        const processedData = emotionsData.map(d => {
-            const { activation, valence } = parseCode(d);
-            return { ...d, activation, valence };
-        }).filter(d => !isNaN(d.activation) && !isNaN(d.valence));
-
+        const processedData = emotionsData;
         let emotionalPath = [];
 
         // Colors & Scales
@@ -852,18 +900,23 @@
             "Calme": "#38bdf8",
             "Désir": "#f472b6",
             "Dégoût": "#94a3b8",
-            "Orientation": "#a78bfa"
+            "Veille": "#64748b",
+            "Surprise": "#fbbf24",
+            "Anticipation": "#a855f7",
+            "Émoi": "#ec4899",
+            "Réserve": "#818cf8",
+            "Recul": "#06b6d4"
         };
         const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
 
         const radiusScale = d3.scaleOrdinal()
-            .domain([1, 2, 3, 4, 5])
-            .range([5, 6.5, 8, 9.5, 11]);
+            .domain([0, 1, 2, 3, 4, 5])
+            .range([8, 7.5, 7, 6.5, 6, 5.5]);
 
         // D3 Chart Dimensions
         const width = 800;
         const height = 800;
-        const margin = { top: 30, right: 30, bottom: 40, left: 40 };
+        const margin = { top: 35, right: 35, bottom: 45, left: 45 };
 
         const svg = d3.select("#emotionChart")
             .attr("viewBox", `0 0 ${width} ${height}`)
@@ -888,22 +941,12 @@
             .attr("d", "M 0,-5 L 10,0 L 0,5")
             .attr("fill", "#f43f5e");
 
-        defs.append("marker")
-            .attr("id", "dynamicArrowhead")
-            .attr("viewBox", "0 0 10 10")
-            .attr("refX", 5).attr("refY", 5)
-            .attr("markerWidth", 5).attr("markerHeight", 5)
-            .attr("orient", "auto")
-            .append("path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .attr("fill", "#a78bfa");
-
-        // Quadrants
+        // Predictive Processing Quadrants
         const quadrantData = [
-            { x: xScale(0), y: yScale(8.5), w: xScale(8.5) - xScale(0), h: yScale(0) - yScale(8.5), color: "rgba(244, 114, 182, 0.04)", label: "V+ / A+ (Joie & Désir)", lx: xScale(4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(8.5), w: xScale(0) - xScale(-8.5), h: yScale(0) - yScale(8.5), color: "rgba(248, 113, 113, 0.04)", label: "V- / A+ (Colère & Agitation)", lx: xScale(-4.25), ly: yScale(8) },
-            { x: xScale(-8.5), y: yScale(0), w: xScale(0) - xScale(-8.5), h: yScale(-8.5) - yScale(0), color: "rgba(96, 165, 250, 0.04)", label: "V- / A- (Tristesse & Dégoût)", lx: xScale(-4.25), ly: yScale(-8) },
-            { x: xScale(0), y: yScale(0), w: xScale(8.5) - xScale(0), h: yScale(-8.5) - yScale(0), color: "rgba(56, 189, 248, 0.04)", label: "V+ / A- (Calme & Sérénité)", lx: xScale(4.25), ly: yScale(-8) }
+            { x: xScale(0), y: yScale(8.5), w: xScale(8.5) - xScale(0), h: yScale(0) - yScale(8.5), color: "rgba(244, 114, 182, 0.04)", label: "+X / +Y : Modèle Révisable & Monde Contrôlable (Désir)", lx: xScale(4.25), ly: yScale(8.1) },
+            { x: xScale(-8.5), y: yScale(8.5), w: xScale(0) - xScale(-8.5), h: yScale(0) - yScale(8.5), color: "rgba(248, 113, 113, 0.04)", label: "-X / +Y : Modèle Non Révisable & Monde Contrôlable (Colère)", lx: xScale(-4.25), ly: yScale(8.1) },
+            { x: xScale(-8.5), y: yScale(0), w: xScale(0) - xScale(-8.5), h: yScale(-8.5) - yScale(0), color: "rgba(96, 165, 250, 0.04)", label: "-X / -Y : Modèle Non Révisable & Monde Non Contrôlable (Dégoût)", lx: xScale(-4.25), ly: yScale(-8.1) },
+            { x: xScale(0), y: yScale(0), w: xScale(8.5) - xScale(0), h: yScale(-8.5) - yScale(0), color: "rgba(56, 189, 248, 0.04)", label: "+X / -Y : Modèle Révisable & Monde Non Contrôlable (Calme)", lx: xScale(4.25), ly: yScale(-8.1) }
         ];
 
         svg.selectAll(".quadrant-bg").data(quadrantData).enter().append("rect")
@@ -923,10 +966,39 @@
         svg.append("line").attr("x1", 0).attr("y1", yScale(0)).attr("x2", chartW).attr("y2", yScale(0)).attr("class", "axis-center-line");
 
         // Groups for overlay elements
-        const symetricalLinesGroup = svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden");
+        const manhattanDiamondsGroup = svg.append("g").attr("class", "manhattan-diamonds-group");
         const controlateralLinesGroup = svg.append("g").attr("class", "controlateral-lines-group").style("visibility", "hidden");
+        const symetricalLinesGroup = svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden");
         const pathGroup = svg.append("g").attr("class", "path-group");
-        const intensityCircle = svg.append("circle").attr("class", "intensity-circle").style("visibility", "hidden");
+
+        // Draw Manhattan L1 Diamonds: |X| + |Y| = 2Z - 2 for Z in [2, 3, 4, 5]
+        const diamondLine = d3.line().x(d => xScale(d[0])).y(d => yScale(d[1]));
+        const strataDiamonds = [
+            { z: 2, r: 2, label: "Z=2 : |X|+|Y|=2 (1re Couronne)", color: "rgba(168, 85, 247, 0.65)", bg: "rgba(168, 85, 247, 0.03)" },
+            { z: 3, r: 4, label: "Z=3 : |X|+|Y|=4 (Émotions Réactives)", color: "rgba(99, 102, 241, 0.50)", bg: "rgba(99, 102, 241, 0.02)" },
+            { z: 4, r: 6, label: "Z=4 : |X|+|Y|=6 (Sentiments Réflexifs)", color: "rgba(59, 130, 246, 0.40)", bg: "rgba(59, 130, 246, 0.015)" },
+            { z: 5, r: 8, label: "Z=5 : |X|+|Y|=8 (Orientations Stables)", color: "rgba(14, 165, 233, 0.35)", bg: "none" }
+        ];
+
+        strataDiamonds.forEach(d => {
+            const pts = [[0, d.r], [d.r, 0], [0, -d.r], [-d.r, 0], [0, d.r]];
+            manhattanDiamondsGroup.append("path")
+                .attr("d", diamondLine(pts))
+                .attr("fill", d.bg)
+                .attr("stroke", d.color)
+                .attr("stroke-width", 1.5)
+                .attr("stroke-dasharray", "4 4")
+                .attr("class", "manhattan-diamond-path");
+
+            manhattanDiamondsGroup.append("text")
+                .attr("x", xScale(d.r * 0.5) + 4)
+                .attr("y", yScale(d.r * 0.5) - 4)
+                .attr("fill", d.color)
+                .attr("font-size", "9px")
+                .attr("font-family", "monospace")
+                .attr("class", "manhattan-diamond-text")
+                .text(`|X|+|Y|=${d.r}`);
+        });
 
         // Quadrant labels
         svg.selectAll(".quadrant-label-text").data(quadrantData).enter().append("text")
@@ -940,40 +1012,75 @@
         svg.append("g").attr("transform", `translate(0,${chartH})`).call(xAxis);
         svg.append("g").call(yAxis);
 
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", chartW / 2).attr("y", chartH + 34).text("Valence Hédonique (V)");
-        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -chartH / 2).attr("y", -26).text("Activation Somatique (A)");
+        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", chartW / 2).attr("y", chartH + 36).text("Gradient d'Attente (Axe X) : Modèle non révisable (-X) ⟵ 0 ⟶ Modèle révisable (+X)");
+        svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -chartH / 2).attr("y", -30).text("Gradient de Contrôle (Axe Y) : Monde non contrôlable (-Y) ⟵ 0 ⟶ Monde contrôlable (+Y)");
 
-        // Dynamic Orientation Circle around Attente
-        const surprise = processedData.find(d => d.name === 'Surprise');
-        const attente = processedData.find(d => d.name === 'Attente');
-        if (surprise && attente) {
-            const cx = xScale(attente.valence), cy = yScale(attente.activation);
-            const radius = Math.abs(yScale(attente.activation) - yScale(surprise.activation));
-            svg.append("circle").attr("class", "dynamic-circle").attr("cx", cx).attr("cy", cy).attr("r", radius);
-        }
+        // Central Inversion Pairs (Antagonismes régulateurs: (X,Y) -> (-X,-Y))
+        const controlateralPairs = [
+            ["Colère", "Calme"],
+            ["Désir", "Dégoût"],
+            ["Exaspération", "Soulagement"],
+            ["Exaltation", "Déception"],
+            ["Consternation", "Enchantement"],
+            ["Panique", "Réconfort"],
+            ["Euphorie", "Frisson"],
+            ["Émerveillement", "Chagrin"],
+            ["Frustration", "Acceptation"],
+            ["Engagement", "Rejet"],
+            ["Haine", "Affection"],
+            ["Envie", "Admiration"],
+            ["Anxiété", "Sérénité"],
+            ["Manque", "Plénitude"],
+            ["Amour", "Mépris"],
+            ["Assurance", "Crainte"],
+            ["Fierté", "Honte"],
+            ["Épanouissement", "Vide"],
+            ["Mécontentement", "Contentement"],
+            ["Intérêt", "Désintérêt"],
+            ["Puissance", "Impuissance"],
+            ["Confiance", "Méfiance"],
+            ["Optimisme", "Pessimisme"],
+            ["Espoir", "Désespoir"],
+            ["Prudence", "Imprudence"],
+            ["Tolérance", "Intolérance"],
+            ["Justice", "Injustice"],
+            ["Sécurité", "Insécurité"],
+            ["Patience", "Impatience"],
+            ["Quiétude", "Inquiétude"],
+            ["Invulnérabilité", "Vulnérabilité"]
+        ];
 
-        // Symmetry & Contralateral lists
-        const symetricalPairs = [["Joie", "Tristesse"], ["Peur", "Courage"], ["Confusion", "Engourdissement"], ["Curiosité", "Stupeur"], ["Ambivalence", "Indifférence"], ["Conviction", "Doute"], ["Agitation", "Apathie"], ["Certitude", "Incertitude"]];
-        const controlateralPairs = [["Colère", "Calme"], ["Désir", "Dégoût"], ["Consternation", "Enchantement"], ["Exaspération", "Soulagement"], ["Panique", "Réconfort"], ["Euphorie", "Frisson"], ["Exaltation", "Déception"], ["Émerveillement", "Chagrin"], ["Haine", "Affection"], ["Envie", "Admiration"], ["Frustration", "Acceptation"], ["Anxiété", "Sérénité"], ["Manque", "Plénitude"], ["Amour", "Mépris"], ["Assurance", "Crainte"], ["Engagement", "Rejet"], ["Fierté", "Honte"], ["Épanouissement", "Vide"], ["Vulnérabilité", "Invulnérabilité"], ["Puissance", "Impuissance"], ["Confiance", "Méfiance"], ["Intérêt", "Désintérêt"], ["Honneur", "Déshonneur"], ["Optimisme", "Pessimisme"], ["Espoir", "Désespoir"], ["Prudence", "Imprudence"], ["Tolérance", "Intolérance"], ["Justice", "Injustice"], ["Contentement", "Mécontentement"], ["Sécurité", "Insécurité"], ["Patience", "Impatience"], ["Quiétude", "Inquiétude"]];
+        // Axial Symmetries (Inversion sur un seul axe)
+        const symetricalPairs = [
+            ["Joie", "Tristesse"],     // Inversion du Contrôle Y (+2 vs -2 à X=0)
+            ["Courage", "Peur"],        // Inversion de l'Attente X (+2 vs -2 à Y=0)
+            ["Élan", "Abattement"],     // Y=+4 vs Y=-4
+            ["Curiosité", "Doute"],     // X=+4 vs X=-4
+            ["Ambivalence", "Indifférence"], // Y=+6 vs Y=-6
+            ["Conviction", "Stupeur"],  // X=+6 vs X=-6
+            ["Agitation", "Apathie"],   // Y=+8 vs Y=-8
+            ["Certitude", "Incertitude"]// X=+8 vs X=-8
+        ];
 
-        // Draw Symmetry & Contralateral lines
+        // Draw Central Antagonism Lines
         controlateralPairs.forEach(pair => {
             const e1 = processedData.find(d => d.name === pair[0]);
             const e2 = processedData.find(d => d.name === pair[1]);
             if (e1 && e2) {
                 controlateralLinesGroup.append("line").attr("class", "controlateral-line")
-                    .attr("x1", xScale(e1.valence)).attr("y1", yScale(e1.activation))
-                    .attr("x2", xScale(e2.valence)).attr("y2", yScale(e2.activation));
+                    .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
+                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y));
             }
         });
 
+        // Draw Axial Symmetry Lines
         symetricalPairs.forEach(pair => {
             const e1 = processedData.find(d => d.name === pair[0]);
             const e2 = processedData.find(d => d.name === pair[1]);
             if (e1 && e2) {
                 symetricalLinesGroup.append("line").attr("class", "symetrical-line")
-                    .attr("x1", xScale(e1.valence)).attr("y1", yScale(e1.activation))
-                    .attr("x2", xScale(e2.valence)).attr("y2", yScale(e2.activation));
+                    .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
+                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y));
             }
         });
 
@@ -989,34 +1096,51 @@
             const badgeEl = document.getElementById("emotionBadgeCategory");
             const contentEl = document.getElementById("iaResponseContent");
 
-            const categoriesNames = ["", "Orientation", "Fondamentale", "Complexe", "Relationnelle", "Disposition"];
-            titleEl.innerHTML = `<span>✨</span> Fiche d'Identité : <span class="text-white">${emotion.name} (${emotion.code})</span>`;
-            badgeEl.textContent = `${categoriesNames[emotion.category]} &bull; Grp ${emotion.group}`;
+            const strataNames = [
+                "Z=0 : Basse homéostatique (Veille)",
+                "Z=1 : Rupture ascendante (Surprise)",
+                "Z=2 : 1re Couronne affective (Anticipation)",
+                "Z=3 : Émotions réactives (Émoi)",
+                "Z=4 : Sentiments réflexifs (Réserve)",
+                "Z=5 : Orientations stables & Humeurs (Recul)"
+            ];
 
-            // Check if profile exists or generate generic profile
-            const profile = builtInProfiles[emotion.name] || {
-                def: `État affectif ${emotion.group.toLowerCase()} caractérisé par une activation de ${emotion.activation > 0 ? '+' : ''}${emotion.activation} et une valence de ${emotion.valence > 0 ? '+' : ''}${emotion.valence}. Appartient à la catégorie des ${categoriesNames[emotion.category].toLowerCase()}s.`,
-                triggers: `Situations de vie impliquant une évaluation de ${emotion.valence >= 0 ? "gain, ressource ou harmonie" : "menace, perte ou contrariété"} avec une intensité d'activation de niveau ${Math.abs(emotion.activation)}.`,
-                func: `Organise la réponse somatique et attentionnelle pour s'adapter à la situation en régulant la dépense d'énergie.`,
-                phys: emotion.activation > 2 ? "Rythme cardiorespiratoire soutenu, mobilisation musculaire, vigilance accrue." : emotion.activation < -2 ? "Ralentissement métabolique, baisse de pression motrice, économie somatique." : "Équilibre autonome, tonus modéré.",
-                thoughts: `Orientation cognitive focalisée sur ${emotion.name.toLowerCase()} et l'ajustement aux circonstances.`,
-                path: `Intégrer le message adaptatif de ${emotion.name} sans s'y figer, en naviguant vers l'état symétrique ou le Noyau central.`
+            const typeNames = {
+                "operator": "Opérateur de phase / suspension",
+                "axial": "Orientation axiale instable (1 dimension résolue)",
+                "combine": "Prototype combiné équilibré (attracteur stable)",
+                "lateral": "Position latérale pondérée (|X|≠|Y|)"
             };
 
+            titleEl.innerHTML = `<span>✨</span> Fiche Computationnelle : <span class="text-white">${emotion.name}</span>`;
+            badgeEl.textContent = `${strataNames[emotion.z] || 'Strate Z=' + emotion.z}`;
+
+            const attenteStatus = emotion.x > 0 ? `Modèle révisable (+${emotion.x}) &bull; Décharge épistémique` : emotion.x < 0 ? `Modèle non révisable (${emotion.x}) &bull; Charge épistémique (maintien)` : "Attente indéterminée (X0)";
+            const controleStatus = emotion.y > 0 ? `Monde contrôlable (+${emotion.y}) &bull; Décharge pragmatique` : emotion.y < 0 ? `Monde non contrôlable (${emotion.y}) &bull; Charge pragmatique (repli adaptatif)` : "Contrôle indéterminé (Y0)";
+            const budgetL1 = Math.abs(emotion.x) + Math.abs(emotion.y);
+
             contentEl.innerHTML = `
-                <div class="identity-card-section animate-fadeIn">
-                    <h4>Définition</h4>
-                    <p>${profile.def}</p>
-                    <h4>Déclencheurs Typiques</h4>
-                    <p>${profile.triggers}</p>
-                    <h4>Fonction Adaptative</h4>
-                    <p>${profile.func}</p>
-                    <h4>Manifestations Physiques</h4>
-                    <p>${profile.phys}</p>
-                    <h4>Pensées Associées</h4>
-                    <p>${profile.thoughts}</p>
-                    <h4>Chemin de Régulation</h4>
-                    <p>${profile.path}</p>
+                <div class="identity-card-section animate-fadeIn space-y-3">
+                    <div class="p-3 bg-purple-900/30 border border-purple-500/30 rounded-xl">
+                        <div class="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider">Coordonnées Théoriques</div>
+                        <div class="text-sm font-mono text-white mt-0.5">X = ${emotion.x} (Attente) | Y = ${emotion.y} (Contrôle) | Z = ${emotion.z} (Profondeur)</div>
+                        <div class="text-[11px] text-slate-400 mt-1 font-mono">Norme Manhattan : |X| + |Y| = ${budgetL1} ${emotion.z >= 2 ? `(= 2Z - 2)` : ''} &bull; ${typeNames[emotion.type] || 'Attracteur'}</div>
+                    </div>
+
+                    <h4>1. Évaluation Épistémique (Axe X — Gradient d'Attente)</h4>
+                    <p class="text-slate-300">${attenteStatus}. Répond à la question fondamentale : <em>« Que signifie cet événement pour ma compréhension du monde ? »</em></p>
+
+                    <h4>2. Évaluation Pragmatique (Axe Y — Gradient de Contrôle)</h4>
+                    <p class="text-slate-300">${controleStatus}. Répond à la question fondamentale : <em>« Que puis-je faire pour changer l'environnement ? »</em></p>
+
+                    <h4>3. Niveau d'Abstraction & Profondeur Temporelle (Axe Z)</h4>
+                    <p class="text-slate-300">Strate Z = ${emotion.z}. ${emotion.desc || `L'Axe Z indexe le budget attentionnel fini mobilisé pour résorber l'écart de prédiction. Plus Z est élevé, plus le modèle génératif sollicité est lent, abstrait et doté d'une forte inertie adaptative.`}</p>
+
+                    <h4>4. Dynamique de Minimisation de l'Énergie Libre</h4>
+                    <p class="text-slate-300">La valence se lit à partir des polarités axiales (décharge = énergie libre décroissante vs charge = énergie libre croissante). L'activation somatique n'est pas un lieu dans l'espace, mais un paramètre de vitesse et de mobilisation transversal à la trajectoire.</p>
+
+                    <h4>5. Antagonisme Adaptatif Central</h4>
+                    <p class="text-slate-300">Par inversion centrale <strong>(X, Y) &rarr; (-X, -Y)</strong>, l'antagoniste fonctionnel de cet état inverse simultanément ses polarités d'action et d'apprentissage, matérialisant la stratégie régulatrice opposée.</p>
                 </div>
             `;
         }
@@ -1026,8 +1150,8 @@
             if (emotionalPath.length < 2) return;
 
             const lineGenerator = d3.line()
-                .x(d => xScale(d.valence))
-                .y(d => yScale(d.activation))
+                .x(d => xScale(d.x))
+                .y(d => yScale(d.y))
                 .curve(d3.curveCatmullRom.alpha(0.5));
 
             pathGroup.append("path")
@@ -1038,28 +1162,52 @@
         }
 
         function updateChart(data) {
-            const t = svg.transition().duration(400);
+            const t = svg.transition().duration(350);
 
             // Points
             const circles = pointsGroup.selectAll(".emotion-point").data(data, d => d.name);
             circles.exit().transition(t).attr("r", 0).remove();
 
             const circlesEnter = circles.enter().append("circle")
-                .attr("class", "emotion-point cursor-pointer")
-                .attr("cx", d => xScale(d.valence))
-                .attr("cy", d => yScale(d.activation))
+                .attr("class", "emotion-point cursor-pointer focus:outline-none")
+                .attr("role", "button")
+                .attr("tabindex", "0")
+                .attr("aria-label", d => `${d.name} (${d.code}) : Attente ${d.x}, Contrôle ${d.y}, Strate Z=${d.z}`)
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
                 .attr("r", 0)
                 .attr("fill", d => colorScale(d.group))
-                .attr("stroke", "#0f172a")
-                .attr("stroke-width", 1.5)
-                .style("opacity", 0.9);
+                .attr("stroke", d => d.type === "operator" ? "#ffffff" : "#0f172a")
+                .attr("stroke-width", d => d.type === "operator" ? 2.5 : 1.5)
+                .style("opacity", 0.95);
 
             const mergedCircles = circlesEnter.merge(circles);
             mergedCircles.transition(t)
-                .attr("cx", d => xScale(d.valence))
-                .attr("cy", d => yScale(d.activation))
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y))
                 .attr("r", d => radiusScale(d.category))
-                .attr("fill", d => colorScale(d.group));
+                .attr("fill", d => colorScale(d.group))
+                .attr("stroke", d => d.type === "operator" ? "#ffffff" : "#0f172a");
+
+            function handleEmotionSelect(event, d) {
+                if (d3.select("#pathModeToggle").property("checked")) {
+                    if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
+                        emotionalPath.push(d);
+                        drawEmotionalPath();
+                        pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
+                    }
+                } else {
+                    renderIdentityCard(d);
+                    // Highlight central counterpart
+                    const allPairs = [...controlateralPairs, ...symetricalPairs];
+                    const oppositePair = allPairs.find(p => p[0] === d.name || p[1] === d.name);
+                    const oppositeName = oppositePair ? (oppositePair[0] === d.name ? oppositePair[1] : oppositePair[0]) : null;
+
+                    pointsGroup.selectAll(".emotion-point").transition().duration(200)
+                        .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 1.0 : 0.15)
+                        .attr("stroke-width", p => p.name === d.name ? 3.5 : (p.type === "operator" ? 2.5 : 1.5));
+                }
+            }
 
             mergedCircles
                 .on("mouseover", (event, d) => {
@@ -1067,33 +1215,29 @@
                     tooltip.transition().duration(100).style("opacity", 1);
                     tooltip.html(`
                         <div class="font-bold text-white text-xs">${d.name}</div>
-                        <div class="text-[10px] text-purple-300 font-mono mt-0.5">${d.code} &bull; Grp: ${d.group}</div>
-                        <div class="text-[10px] text-slate-400 mt-0.5">Act: ${d.activation} | Val: ${d.valence}</div>
+                        <div class="text-[10px] text-purple-300 font-mono mt-0.5">${d.code} &bull; ${d.group}</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Attente (X): ${d.x} | Contrôle (Y): ${d.y} | Strate: Z=${d.z}</div>
                     `).style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 20) + "px");
                 })
                 .on("mouseout", (event, d) => {
-                    d3.select(event.currentTarget).transition().duration(120).attr("r", radiusScale(d.category)).style("opacity", 0.9);
+                    d3.select(event.currentTarget).transition().duration(120).attr("r", radiusScale(d.category)).style("opacity", 0.95);
                     tooltip.transition().duration(200).style("opacity", 0);
+                })
+                .on("focus", (event, d) => {
+                    d3.select(event.currentTarget).attr("stroke", "#ffffff").attr("stroke-width", 3);
+                })
+                .on("blur", (event, d) => {
+                    d3.select(event.currentTarget).attr("stroke", d.type === "operator" ? "#ffffff" : "#0f172a").attr("stroke-width", d.type === "operator" ? 2.5 : 1.5);
+                })
+                .on("keydown", (event, d) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        handleEmotionSelect(event, d);
+                    }
                 })
                 .on("click", (event, d) => {
                     event.stopPropagation();
-                    if (d3.select("#pathModeToggle").property("checked")) {
-                        if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
-                            emotionalPath.push(d);
-                            drawEmotionalPath();
-                            pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
-                        }
-                    } else {
-                        renderIdentityCard(d);
-                        // Highlight counterparts
-                        const allPairs = [...controlateralPairs, ...symetricalPairs];
-                        const oppositePair = allPairs.find(p => p[0] === d.name || p[1] === d.name);
-                        const oppositeName = oppositePair ? (oppositePair[0] === d.name ? oppositePair[1] : oppositePair[0]) : null;
-
-                        pointsGroup.selectAll(".emotion-point").transition().duration(250)
-                            .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 1.0 : 0.15)
-                            .attr("stroke-width", p => p.name === d.name ? 3 : 1.5);
-                    }
+                    handleEmotionSelect(event, d);
                 });
 
             // Labels
@@ -1102,7 +1246,7 @@
 
             const labelsEnter = labels.enter().append("g")
                 .attr("class", "emotion-label-group")
-                .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
+                .attr("transform", d => `translate(${xScale(d.x) + 10}, ${yScale(d.y)})`)
                 .style("opacity", 0);
 
             labelsEnter.append("rect").attr("class", "label-background");
@@ -1110,7 +1254,7 @@
 
             const mergedLabels = labelsEnter.merge(labels);
             mergedLabels.transition(t)
-                .attr("transform", d => `translate(${xScale(d.valence) + 12}, ${yScale(d.activation)})`)
+                .attr("transform", d => `translate(${xScale(d.x) + 10}, ${yScale(d.y)})`)
                 .style("opacity", 1)
                 .style("visibility", d3.select("#showNamesToggle").property("checked") ? "visible" : "hidden");
 
@@ -1151,12 +1295,7 @@
             symetricalLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
         });
         d3.select("#showIntensityCircleToggle").on("change", function(e) {
-            if (e.target.checked) {
-                const radius = xScale(8) - xScale(0);
-                intensityCircle.attr("cx", xScale(0)).attr("cy", yScale(0)).attr("r", radius).style("visibility", "visible");
-            } else {
-                intensityCircle.style("visibility", "hidden");
-            }
+            manhattanDiamondsGroup.style("visibility", e.target.checked ? "visible" : "hidden");
         });
         d3.select("#pathModeToggle").on("change", function(e) {
             document.getElementById("resetPathBtn").classList.toggle("hidden", !e.target.checked);
@@ -1176,14 +1315,15 @@
         svg.on("click", function(event) {
             if (event.target === this || event.target.classList.contains('quadrant-bg')) {
                 pointsGroup.selectAll(".emotion-point")
-                    .transition().duration(250)
-                    .style("opacity", 0.9)
-                    .attr("stroke-width", 1.5);
+                    .transition().duration(200)
+                    .style("opacity", 0.95)
+                    .attr("stroke-width", d => d.type === "operator" ? 2.5 : 1.5);
             }
         });
 
         // Legend items
         const legendContainer = d3.select("#legend");
+        legendContainer.html("");
         Object.entries(colorGroups).forEach(([groupName, color]) => {
             const item = legendContainer.append("div")
                 .attr("class", "flex items-center gap-1.5 px-2 py-1 rounded-md bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-800 transition-colors");
@@ -1194,7 +1334,7 @@
                     .style("opacity", d => d.group === groupName ? 1.0 : 0.15);
             }).on("mouseout", () => {
                 pointsGroup.selectAll(".emotion-point").transition().duration(150)
-                    .style("opacity", 0.9);
+                    .style("opacity", 0.95);
             });
         });
 
@@ -1311,12 +1451,18 @@
         tabBtns.forEach(btn => {
             btn.addEventListener("click", () => {
                 tabBtns.forEach(b => b.classList.remove("active"));
-                tabContents.forEach(c => c.classList.add("hidden"));
+                tabContents.forEach(c => {
+                    c.classList.remove("block");
+                    c.classList.add("hidden");
+                });
 
                 btn.classList.add("active");
                 const targetId = btn.getAttribute("data-tab");
                 const targetEl = document.getElementById(targetId);
-                if (targetEl) targetEl.classList.remove("hidden");
+                if (targetEl) {
+                    targetEl.classList.remove("hidden");
+                    targetEl.classList.add("block");
+                }
             });
         });
 
@@ -1328,15 +1474,17 @@
         const matrixCoords = document.getElementById("matrixResultCoords");
 
         const matrixCombinations = {
-            "Joie+Courage": { title: "Fierté Triomphante & Émerveillement", desc: "La joie élève le courage pour dépasser toute inhibition dans une affirmation généreuse et protectrice.", coords: "A+2 / V+4 &bull; Cat. 4" },
-            "Joie+Désir": { title: "Exaltation & Euphorie", desc: "La rencontre de la joie et du désir engendre une surabondance d'énergie créatrice et d'enthousiasme moteur.", coords: "A+3 / V+3 &bull; Cat. 3" },
-            "Joie+Calme": { title: "Contentement & Plénitude", desc: "La joie sans l'excitation produit une félicité douce et un sentiment d'harmonie intime.", coords: "A+1 / V+3 &bull; Cat. 4" },
-            "Peur+Colère": { title: "Frustration Combative & Panique Réactive", desc: "Tension maximale entre l'instinct d'attaque et l'impulsion de fuite. Nécessite un retour rapide au souffle.", coords: "A+3 / V-3 &bull; Cat. 4" },
-            "Peur+Tristesse": { title: "Désespoir & Vulnérabilité", desc: "La douleur de la perte combinée à l'impuissance face au lendemain. Demande écoute et sécurité.", coords: "A-2 / V-4 &bull; Cat. 4" },
-            "Peur+Courage": { title: "Audace Héroïque & Prudence", desc: "Le véritable courage ne supprime pas la peur : il l'intègre comme signal de lucidité pour avancer fermement.", coords: "A0 / V+4 &bull; Cat. 3" },
-            "Tristesse+Dégoût": { title: "Honte, Déception & Rejet", desc: "Aversion dirigée vers soi ou une promesse déchue. Étape cruciale à dépolluer par le pardon.", coords: "A-3 / V-3 &bull; Cat. 4" },
-            "Colère+Courage": { title: "Indignation Légitime & Justice", desc: "L'énergie de la colère est sublimée par le courage éthique pour corriger une faute sans haine aveugle.", coords: "A+1 / V+5 &bull; Cat. 5" },
-            "Calme+Courage": { title: "Sérénité Inébranlable & Assurance", desc: "Force intérieure silencieuse capable de traverser les tempêtes sans vaciller.", coords: "A-1 / V+4 &bull; Cat. 4" }
+            "Joie+Courage": { title: "Fierté Triomphante & Émerveillement", desc: "La décharge de Contrôle (+Y) se combine à la décharge d'Attente (+X) : le modèle est révisé avec succès et la puissance d'agir est déployée dans le monde.", coords: "X+4 / Y+2 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Joie+Désir": { title: "Exaltation & Euphorie", desc: "Convergence vers l'attracteur combiné (+X, +Y) : exploration active du monde soutenu par un modèle interne hautement révisable et anticipateur.", coords: "X+2 / Y+2 / Z3 &bull; Budget Manhattan |X|+|Y|=4" },
+            "Joie+Calme": { title: "Plénitude & Sérénité", desc: "La réussite de l'action s'harmonise avec l'acceptation des limites environnementales, réduisant la dépense métabolique.", coords: "X+2 / Y-4 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Peur+Colère": { title: "Panique Réactive & Frustration", desc: "Le modèle interne est tenu pour non révisable (-X) face à une menace : oscillation critique entre impulsion motrice d'attaque (+Y) et sidération indéterminée (Y0).", coords: "X-3 / Y+3 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Peur+Tristesse": { title: "Désespoir & Vulnérabilité", desc: "Double charge d'énergie libre non résorbée : modèle rigide (-X) et impuissance à modifier l'environnement (-Y). Repli allostatique prononcé.", coords: "X-2 / Y-4 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Peur+Courage": { title: "Audace Épique & Lucidité Épistémique", desc: "Symétrie axiale sur le gradient d'Attente : la charge de peur (-X) est résorbée par une révision courageuse des croyances internes (+X).", coords: "Axe X pur &bull; Résorption épistémique de l'incertitude" },
+            "Tristesse+Dégoût": { title: "Honte, Déception & Rejet", desc: "Le monde est évalué comme non contrôlable (-Y) et l'événement ne peut être assimilé (-X). La seule politique viable sélectionnée est le rejet protecteur.", coords: "X-3 / Y-3 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Colère+Courage": { title: "Indignation Éthique & Justice", desc: "La non-résorbabilité du modèle face à une injustice perçue est canalisée par une révision des politiques d'action pour rétablir la viabilité sociale.", coords: "X+5 / Y-3 / Z5 &bull; Budget Manhattan |X|+|Y|=8" },
+            "Calme+Courage": { title: "Sérénité Inébranlable & Assurance", desc: "Modèle interne flexible (+X) permettant d'intégrer les perturbations sans engager d'effort moteur disproportionné.", coords: "X+2 / Y+4 / Z4 &bull; Budget Manhattan |X|+|Y|=6" },
+            "Colère+Calme": { title: "Axe d'Antagonisme Central (X,Y) ⟷ (-X,-Y)", desc: "Inversion centrale stricte : la Colère (-X, +Y : forcer le monde) et le Calme (+X, -Y : adapter le modèle) constituent deux stratégies régulatrices opposées.", coords: "Inversion Centrale &bull; Polarités opposées" },
+            "Désir+Dégoût": { title: "Axe d'Antagonisme Central (X,Y) ⟷ (-X,-Y)", desc: "Inversion centrale stricte : le Désir (+X, +Y : assimilation et action) et le Dégoût (-X, -Y : rejet et fermeture) sont les pôles antagonistes majeurs de la Matrice.", coords: "Inversion Centrale &bull; Polarités opposées" }
         };
 
         function updateMatrixResult() {
@@ -1345,9 +1493,9 @@
             const key1 = `${a}+${b}`;
             const key2 = `${b}+${a}`;
             const res = matrixCombinations[key1] || matrixCombinations[key2] || {
-                title: `Synthèse de ${a} & ${b}`,
-                desc: `L'alliage des polarités de ${a} et ${b} forme une résonance intermédiaire équilibrant l'intensité de leurs vecteurs d'activation respectifs.`,
-                coords: "Vecteur Composé &bull; Résonance 2D"
+                title: `Dynamique Inférentielle : ${a} & ${b}`,
+                desc: `L'interaction entre ces deux attracteurs engage une recomposition du budget attentionnel entre l'Axe X (révision du modèle interne) et l'Axe Y (contrôle du monde extérieur).`,
+                coords: "Composition Vectorielle &bull; Inférence Active"
             };
             matrixTitle.textContent = res.title;
             matrixDesc.textContent = res.desc;
@@ -1393,6 +1541,29 @@
             updateKeyIndicator();
             apiKeyModal.classList.add("hidden");
         });
+    </script>
+
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+        })();
     </script>
 </body>
 </html>

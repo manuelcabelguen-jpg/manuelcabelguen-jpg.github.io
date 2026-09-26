@@ -6,6 +6,45 @@
     <title>CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective</title>
     <meta name="description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
     
+    <link rel="canonical" href="https://www.cartograffect.com/">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/">
+    <meta property="og:title" content="CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective">
+    <meta property="og:description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.cartograffect.com/">
+    <meta name="twitter:title" content="CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective">
+    <meta name="twitter:description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Cartograffect",
+      "url": "https://www.cartograffect.com",
+      "description": "Système interactif de modélisation géométrique des émotions et des affects humains.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "author": {
+        "@type": "Person",
+        "name": "Manuel Cabelguen"
+      }
+    }
+    </script>
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,8 +93,9 @@
     <!-- Fullscreen Title Particle Animation -->
     <div id="title-screen" class="fixed inset-0 bg-cosmic-900 z-50 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-1000">
         <svg id="title-animation" class="w-full h-full"></svg>
-        <div class="absolute bottom-8 text-xs tracking-widest uppercase text-slate-400 bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700/60 shadow-lg backdrop-blur hover:bg-slate-700 transition-all duration-300">
-            Cliquer pour entrer directement &rarr;
+        <div class="absolute bottom-8 text-xs tracking-wider uppercase text-slate-300 bg-slate-800/90 px-5 py-2.5 rounded-full border border-slate-700/80 shadow-xl backdrop-blur-md hover:bg-slate-700 hover:text-white hover:border-purple-500/50 transition-all duration-300 flex items-center gap-2">
+            <span>Passer l'introduction &rarr;</span>
+            <kbd class="px-1.5 py-0.5 text-[10px] bg-slate-900/80 border border-slate-600/60 rounded text-slate-400">Échap</kbd>
         </div>
     </div>
 
@@ -66,7 +106,7 @@
         <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/80 border-b border-slate-800/80">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <a href="index.html" class="flex items-center gap-3 group">
-                    <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                    <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                     <div class="flex flex-col">
                         <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
                         <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Cartographie des Affects</span>
@@ -88,14 +128,10 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                         3. Miracles
                     </a>
-                    <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                        <span class="text-xs">🔬</span>
-                        Lab IA
-                    </a>
                 </nav>
 
                 <!-- Action Button -->
-                <div class="hidden sm:flex items-center gap-3">
+                <div class="hidden md:flex items-center gap-3 header-action-btn">
                     <a href="emotions.html" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
                         Ouvrir la Carte &rarr;
                     </a>
@@ -109,15 +145,21 @@
                 </button>
             </div>
 
-            <!-- Mobile Dropdown -->
-            <div id="mobileMenu" class="hidden md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-slate-800 bg-cosmic-900/95">
-                <a href="index.html" class="block px-3 py-2 text-base font-semibold text-purple-300 bg-purple-900/30 rounded-lg">Accueil</a>
-                <a href="emotions.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">1. Territoire des Émotions</a>
-                <a href="crimes.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">2. Territoire des Crimes</a>
-                <a href="miracles.html" class="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white rounded-lg">3. Territoire des Miracles</a>
-                <a href="generateur_scientifique.html" class="block px-3 py-2 text-base font-medium text-slate-400 hover:text-purple-300 rounded-lg">Laboratoire IA / Articles</a>
-            </div>
         </header>
+
+        <!-- Mobile Fullscreen Menu Overlay -->
+        <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+            <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <a href="index.html" class="active-link"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+            <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+            <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+            <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+            <div class="mt-auto pt-6">
+                <a href="emotions.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Ouvrir la Carte &rarr;</a>
+            </div>
+        </div>
 
         <!-- Hero Section with Pulsar Map -->
         <main class="flex-grow">
@@ -129,48 +171,59 @@
                         <div>
                             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-500/30 mb-5">
                                 <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                                Architecture Géométrique des Affects
+                                Traitement Prédictif &amp; Inférence Active
                             </div>
                             <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white leading-tight">
-                                Cartographier les <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Émotions</span> pour se Comprendre.
+                                Cartographie des <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Affects</span>
                             </h1>
+                            <p class="text-sm sm:text-base font-medium text-purple-300 mt-2">
+                                Une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
+                            </p>
+                            <p class="text-xs text-slate-400 mt-1">
+                                Manuel Cabelguen, Ph. D., BCN &bull; Droit d'auteur enregistré OPIC n° 1233199
+                            </p>
                         </div>
 
                         <p class="text-slate-300 text-lg leading-relaxed font-light">
-                            <strong>Cartograffect</strong> est une approche novatrice qui structure l’univers de la subjectivité humaine à travers deux dimensions fondamentales : l’<span class="text-purple-300 font-semibold">Activation somatique</span> et la <span class="text-sky-300 font-semibold">Valence hédonique</span>.
+                            <strong>La Cartographie des Affects</strong> unifie l’affect, l’émotion et le sentiment au sein d'une grammaire computationnelle rigoureuse. L’émotion y est définie comme la <strong>sélection d’une politique d’action</strong> visant à résoudre un écart de prédiction saillant, et le sentiment comme <strong>l’intégration consciente</strong> de cette trajectoire.
                         </p>
 
                         <p class="text-slate-400 text-base leading-relaxed">
-                            À partir d’un point focal d’<span class="text-white font-medium">Attente</span> et d’orientation, 83 états affectifs s’organisent en cercles d’intensité, formant un cosmos interactif où chaque émotion possède ses symétries, ses pièges (les <em>Crimes</em>) et ses chemins de transformation vers l’équilibre (les <em>Miracles</em>).
+                            Tout écart déclenche une double évaluation adaptative : le <strong class="text-slate-200">Gradient de Contrôle (Axe Y)</strong> sur la contrôlabilité du monde (action pragmatique) et le <strong class="text-slate-200">Gradient d’Attente (Axe X)</strong> sur la révisabilité du modèle interne (mise à jour épistémique). À travers l'<strong class="text-slate-200">Axe Z</strong>, ces configurations se déploient en une taxonomie hiérarchique d’attracteurs probabilistes régie par un budget attentionnel fini (norme L1 de Manhattan).
                         </p>
 
                         <!-- Highlights Pills -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2">
                             <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-purple-400 text-lg mb-1">🧭</div>
-                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">83 États</div>
-                                <div class="text-sm font-semibold text-white">Cartographie Complète</div>
+                                <div class="text-purple-400 text-lg mb-1">⚙️</div>
+                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 1</div>
+                                <div class="text-xs font-semibold text-white">Moteur Prédictif</div>
                             </div>
                             <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
                                 <div class="text-sky-400 text-lg mb-1">⚡</div>
-                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">2 Axes Clés</div>
-                                <div class="text-sm font-semibold text-white">Activation &amp; Valence</div>
+                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 2</div>
+                                <div class="text-xs font-semibold text-white">Noyau Affectif</div>
                             </div>
                             <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-emerald-400 text-lg mb-1">✨</div>
-                                <div class="text-xs uppercase font-bold tracking-wider text-slate-400">3 Territoires</div>
-                                <div class="text-sm font-semibold text-white">Émotions, Crimes, Miracles</div>
+                                <div class="text-emerald-400 text-lg mb-1">📐</div>
+                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 3</div>
+                                <div class="text-xs font-semibold text-white">Matrice Affective</div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
+                                <div class="text-pink-400 text-lg mb-1">🏛️</div>
+                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 4</div>
+                                <div class="text-xs font-semibold text-white">Taxonomie Hiérarchique</div>
                             </div>
                         </div>
 
                         <!-- CTA Group -->
                         <div class="flex flex-wrap items-center gap-4 pt-2">
                             <a href="emotions.html" class="px-6 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                                <span>Explorer le Territoire des Émotions</span>
+                                <span>Explorer la Matrice Interactive</span>
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
-                            <a href="#territoires" class="px-6 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700 transition-colors">
-                                Découvrir la Théorie
+                            <a href="#theorie" class="px-6 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700 transition-colors">
+                                Architecture Théorique
                             </a>
                         </div>
                     </div>
@@ -182,18 +235,18 @@
                             <div class="flex items-center justify-between pb-3 px-2 border-b border-slate-800 text-xs text-slate-400 font-mono">
                                 <span class="flex items-center gap-2">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                    Pulsar Affectif Cartograffect (Actif)
+                                    Dynamique Vectorielle de l'Affect
                                 </span>
-                                <span>83 Noeuds &bull; D3.js</span>
+                                <span>Axe X (Attente) &bull; Axe Y (Contrôle) &bull; Axe Z (Profondeur)</span>
                             </div>
 
                             <!-- Pulsar Container -->
-                            <div class="pulsar-container mt-2 flex items-center justify-center min-h-[460px] sm:min-h-[520px]">
+                            <div class="pulsar-container mt-2 flex items-center justify-center min-h-[280px] sm:min-h-[420px] lg:min-h-[520px]">
                                 <svg id="logoCanvas" class="w-full h-auto max-w-[620px] aspect-square"></svg>
                             </div>
 
                             <p class="text-center text-xs text-slate-400 mt-2 italic">
-                                Animation orbitale temps réel des résonances affectives et des flux d'énergie.
+                                Trajectoires d'inférence active : Point de Veille (0,0,0) &rarr; Surprise (0,0,1) &rarr; Anticipation (0,0,2) &rarr; Résolution dans la Matrice.
                             </p>
                         </div>
                     </div>
@@ -284,70 +337,71 @@
             </section>
 
             <!-- Theoretical Framework Section -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+            <section id="theorie" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
                 <div class="rounded-3xl bg-gradient-to-r from-purple-950/40 via-slate-900 to-indigo-950/40 border border-purple-800/30 p-8 sm:p-12">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                         <div class="space-y-6">
-                            <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Cadre Conceptuel</span>
+                            <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Fondements Computationnels</span>
                             <h2 class="text-3xl font-heading font-extrabold text-white">
-                                Une Géométrie Affective Rigoureuse
+                                Une Grammaire Fonctionnelle de l’Affect
                             </h2>
                             <p class="text-slate-300 text-base leading-relaxed">
-                                Dans la méthode Cartograffect, chaque émotion n’est plus un mot flou, mais un vecteur défini par ses coordonnées dans un espace hédonique et somatosensoriel.
+                                Dépassant les limites du modèle circumplexe (Russell, 1980), Cartograffect ne traite pas l'activation comme une coordonnée spatiale. La valence s'y lit à partir des polarités de charge/décharge de l'énergie libre, et l'espace s'articule sur deux gradients adaptatifs orthogonaux et une profondeur temporelle :
                             </p>
                             <div class="space-y-4">
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">A</div>
+                                    <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">Y</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">L'Axe d'Activation (Vertical)</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">Quantifie l'éveil neurophysiologique, de la léthargie/indifférence (-8) à l'hyperexcitation/agitation (+8).</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe Y – Gradient de Contrôle (Interface Perceptive)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Incertitude sensorimotrice. Capacité que l'organisme s'attribue pour agir sur le monde : monde perçu comme contrôlable (+Y, décharge pragmatique) ou non modifiable (-Y, charge pragmatique / repli adaptatif).</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">V</div>
+                                    <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">X</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">L'Axe de Valence (Horizontal)</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">Quantifie l'évaluation subjective, de l'aversion/rejet/doute (-8) à l'attraction/conviction/amour (+8).</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe X – Gradient d’Attente (Interface Subjective)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Incertitude cognitive. Souplesse des croyances internes : modèle interne révisable (+X, décharge épistémique / mise à jour) ou non révisable (-X, charge épistémique / rigidité cognitive / maintien).</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">5</div>
+                                    <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">Z</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">Les Cinq Cercles d'Évolution</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">1. Orientation, 2. Fondamentales, 3. Complexes, 4. Relationnelles, 5. Dispositions globales et traits profonds.</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe Z – Profondeur Inférentielle &amp; Budget Attentionnel (Norme L1)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">L'Axe Z indexe le budget attentionnel fini alloué selon la contrainte de Manhattan : <span class="font-mono text-purple-300">|X| + |Y| = 2Z - 2</span> (pour Z &ge; 2). Déploie 5 couches hiérarchiques centrées sur des opérateurs de suspension : Surprise (Z=1), Anticipation (Z=2), Émoi (Z=3), Réserve (Z=4) et Recul (Z=5).</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Mini Visual Schema -->
+                        <!-- Mini Visual Schema: 4 Quadrants & Matrice -->
                         <div class="bg-cosmic-900/80 rounded-2xl p-6 border border-slate-700/60 shadow-inner flex flex-col justify-center">
-                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-4 text-center">Les 4 Quadrants Affectifs</h3>
-                            <div class="grid grid-cols-2 gap-3 text-center">
+                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2 text-center">La Matrice Affective (Strate Z = 2)</h3>
+                            <p class="text-[11px] text-slate-400 text-center mb-4">Croisement de la contrôlabilité du monde (+Y/-Y) et de la révisabilité du modèle (+X/-X)</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center quadrant-grid">
                                 <div class="p-4 rounded-xl bg-purple-900/20 border border-purple-700/30">
-                                    <div class="text-xs text-purple-400 font-bold uppercase">Cadran Haut-Gauche</div>
-                                    <div class="text-sm font-semibold text-white mt-1">Colère &amp; Agitation</div>
-                                    <div class="text-[11px] text-slate-400 mt-1">A+ / V- (Urgence &amp; Tension)</div>
+                                    <div class="text-[11px] text-purple-400 font-bold uppercase">Haut-Gauche (-X, +Y)</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Colère (-1, +1, 2)</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Modèle non révisable &bull; Monde contrôlable (Action corrective pour aligner le monde)</div>
                                 </div>
                                 <div class="p-4 rounded-xl bg-pink-900/20 border border-pink-700/30">
-                                    <div class="text-xs text-pink-400 font-bold uppercase">Cadran Haut-Droit</div>
-                                    <div class="text-sm font-semibold text-white mt-1">Joie &amp; Désir</div>
-                                    <div class="text-[11px] text-slate-400 mt-1">A+ / V+ (Élan &amp; Euphorie)</div>
+                                    <div class="text-[11px] text-pink-400 font-bold uppercase">Haut-Droit (+X, +Y)</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Désir (+1, +1, 2)</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Modèle révisable &bull; Monde contrôlable (Diagonale de congruence : élan vers l'état souhaité)</div>
                                 </div>
                                 <div class="p-4 rounded-xl bg-blue-900/20 border border-blue-700/30">
-                                    <div class="text-xs text-blue-400 font-bold uppercase">Cadran Bas-Gauche</div>
-                                    <div class="text-sm font-semibold text-white mt-1">Tristesse &amp; Dégoût</div>
-                                    <div class="text-[11px] text-slate-400 mt-1">A- / V- (Repli &amp; Douleur)</div>
+                                    <div class="text-[11px] text-blue-400 font-bold uppercase">Bas-Gauche (-X, -Y)</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Dégoût (-1, -1, 2)</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Modèle non révisable &bull; Monde non contrôlable (Rejet nécessaire &bull; Antagoniste du Désir)</div>
                                 </div>
                                 <div class="p-4 rounded-xl bg-teal-900/20 border border-teal-700/30">
-                                    <div class="text-xs text-teal-400 font-bold uppercase">Cadran Bas-Droit</div>
-                                    <div class="text-sm font-semibold text-white mt-1">Calme &amp; Sérénité</div>
-                                    <div class="text-[11px] text-slate-400 mt-1">A- / V+ (Paix &amp; Plénitude)</div>
+                                    <div class="text-[11px] text-teal-400 font-bold uppercase">Bas-Droit (+X, -Y)</div>
+                                    <div class="text-sm font-semibold text-white mt-1">Calme (+1, -1, 2)</div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Modèle révisable &bull; Monde non contrôlable (Diagonale de compensation : ajustement interne)</div>
                                 </div>
                             </div>
                             <div class="mt-4 pt-3 border-t border-slate-800 text-center">
                                 <a href="emotions.html" class="text-xs font-semibold text-purple-400 hover:text-purple-300">
-                                    Examiner les coordonnées exactes sur la carte interactive &rarr;
+                                    Explorer les 83 attracteurs et leurs trajectoires sur la carte interactive &rarr;
                                 </a>
                             </div>
                         </div>
@@ -360,17 +414,16 @@
         <footer class="border-t border-slate-800/80 bg-cosmic-900/90 py-12 mt-16 text-slate-400 text-sm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-3">
-                    <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                    <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
                     <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
                 </div>
-                <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+                <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                     <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                     <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                     <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
-                    <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
                     <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
                 </div>
-                <div class="text-xs text-slate-500">
+                <div class="text-xs text-slate-400">
                     &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
                 </div>
             </div>
@@ -380,13 +433,36 @@
 
     <!-- Mobile Navigation Toggle Script -->
     <script>
-        const mobileBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        if (mobileBtn && mobileMenu) {
-            mobileBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+
+            // Scroll reveal
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        })();
     </script>
 
     <!-- Main Logic & Animation Script -->

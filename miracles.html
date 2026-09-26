@@ -5,6 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Territoire des MIRACLES | Cartograffect</title>
     <meta name="description" content="Explorez les voies de résilience et d'alchimie affective : comment transformer la peur en courage, le ressentiment en justice et le chagrin en sérénité.">
+    <link rel="canonical" href="https://www.cartograffect.com/miracles.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/miracles.html">
+    <meta property="og:title" content="Territoire des MIRACLES | Cartograffect">
+    <meta property="og:description" content="Explorez les voies de résilience et d'alchimie affective : transformation et équilibre émotionnel.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://www.cartograffect.com/miracles.html">
+    <meta name="twitter:title" content="Territoire des MIRACLES | Cartograffect">
+    <meta name="twitter:description" content="Explorez les voies de résilience et d'alchimie affective : transformation et équilibre émotionnel.">
+    <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +55,9 @@
             }
         }
     </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen selection:bg-emerald-600 selection:text-white flex flex-col">
 
@@ -41,7 +65,7 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] tracking-widest uppercase text-emerald-400 font-semibold">Territoire des Miracles</span>
@@ -63,20 +87,38 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
-                <a href="generateur_scientifique.html" class="px-3 py-2 text-sm font-medium text-slate-400 hover:text-purple-300 hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="text-xs">🔬</span>
-                    Lab IA
-                </a>
             </nav>
 
             <!-- Quick Action -->
-            <div class="flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-2 header-action-btn">
                 <a href="emotions.html" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg shadow-md transition-all">
                     Voir la Carte 2D &rarr;
                 </a>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </header>
+
+    <!-- Mobile Fullscreen Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+        <a href="miracles.html" class="active-link"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
+        <div class="mt-auto pt-6">
+            <a href="emotions.html" class="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Voir la Carte 2D &rarr;</a>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
@@ -155,7 +197,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl territory-card">
                     <div>
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">1</div>
                         <h3 class="text-lg font-heading font-bold text-white mb-2">L'Accueil Somatique</h3>
@@ -168,12 +210,12 @@
                     </div>
                 </div>
 
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl territory-card">
                     <div>
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">2</div>
-                        <h3 class="text-lg font-heading font-bold text-white mb-2">Le Décentrement</h3>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">Le Décentrement Épistémique</h3>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Passer de « Je suis en colère » à « J'observe la présence d'une colère en moi ». Ce recul réactive immédiatement le Noyau d'Attente neutre (A0/V0).
+                            Passer de « Je suis en colère » à « J'observe la présence d'un écart de prédiction en moi ». Ce recul réactive le Point de Veille (0,0,0) et l'opérateur descendant d'Anticipation (0,0,2).
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
@@ -181,29 +223,29 @@
                     </div>
                 </div>
 
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl territory-card">
                     <div>
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">3</div>
-                        <h3 class="text-lg font-heading font-bold text-white mb-2">L'Inversion Géométrique</h3>
+                        <h3 class="text-lg font-heading font-bold text-white mb-2">L'Inversion Centrale</h3>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Interroger la contrepartie symétrique de l'émotion sur la carte. Si j'ai peur, quel Courage attend d'être invoqué ? Si j'ai honte, quel Honneur doit être réparé ?
+                            Activer l'antagoniste adaptatif central (X, Y) &rarr; (-X, -Y). Si le modèle est bloqué par la peur (-X), quel Courage (+X) révise les croyances ? Si la colère force le monde (+Y), quel Calme (-Y) adapte le modèle ?
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
-                        Activation controlatérale
+                        Antagonisme adaptatif (X,Y) &rarr; (-X,-Y)
                     </div>
                 </div>
 
-                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl">
+                <div class="rounded-2xl bg-cosmic-850 border border-slate-700/80 p-6 flex flex-col justify-between shadow-xl territory-card">
                     <div>
                         <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-lg flex items-center justify-center mb-4">4</div>
                         <h3 class="text-lg font-heading font-bold text-white mb-2">L'Action Congruente</h3>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            L'émotion demande un acte. Rétablir une limite avec fermeté et courtoisie, demander pardon, poser un geste d'amitié ou créer quelque chose de beau.
+                            L'inférence active demande un acte. Rétablir une limite avec clarté, demander pardon, poser un geste d'amitié ou créer une issue constructive pour résorber l'incertitude dans le milieu.
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
-                        Ancrage dans la réalité
+                        Résorption pragmatique sur l'Axe Y
                     </div>
                 </div>
             </div>
@@ -219,13 +261,13 @@
                     </h2>
                     <div class="space-y-3 text-xs sm:text-sm text-slate-300">
                         <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <strong class="text-white">1. La Règle des 90 Secondes :</strong> La réponse biochimique pure d'un affect ne dure que 90 secondes dans le flux sanguin. Si elle persiste des heures, c'est que votre dialogue intérieur réalimente la mèche.
+                            <strong class="text-white">1. La Règle des 90 Secondes :</strong> La réponse somato-viscérale réflexe d'un affect ne dure que 90 secondes dans le flux corporel. Si elle persiste des heures, c'est que des prédictions descendantes négatives en boucle réalimentent l'écart.
                         </div>
                         <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <strong class="text-white">2. Aucune Émotion n'est Coupable :</strong> La peur protège, la colère défend, la tristesse guérit. C'est uniquement l'enfermement chronique dans une case qui crée le « Crime ».
+                            <strong class="text-white">2. Aucune Émotion n'est Coupable :</strong> La peur anticipe la menace, la colère préserve l'intégrité, la tristesse opère une économie adaptative. C'est uniquement l'enfermement chronique sans mise à jour épistémique qui crée le « Crime ».
                         </div>
                         <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <strong class="text-white">3. Le Noyau est Toujours Intact :</strong> Même au cœur de la pire tempête, le point zéro (Attente, présence pure) demeure inaltérable au centre de votre être.
+                            <strong class="text-white">3. Le Point de Veille (0,0,0) est Toujours Accessible :</strong> Même au cœur de la pire tempête, le bassin homéostatique de stabilité relative (0,0,0) demeure le point d'ancrage fondamental vers lequel le système peut toujours relaxer.
                         </div>
                     </div>
                 </div>
@@ -257,7 +299,6 @@
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
-                <a href="generateur_scientifique.html" class="hover:text-white transition-colors">Lab IA Scientifique</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-500">
@@ -272,50 +313,50 @@
             "Colère": {
                 title: "De la Colère Explosive vers la Justice & la Sérénité",
                 steps: [
-                    { num: "01", name: "Colère (A+1 / V-1)", role: "Déclencheur", desc: "Perception d'une injustice ou d'une atteinte aux limites. L'énergie monte brutalement." },
-                    { num: "02", name: "Attente (A0 / V0)", role: "Point Pivot", desc: "Pause somatique : 3 expirations prolongées pour suspendre le réflexe de réplique immédiate." },
-                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Décision d'aborder le problème avec fermeté lucide plutôt qu'avec haine réactive." },
-                    { num: "04", name: "Justice & Sérénité", role: "Atterrissage", desc: "Rétablissement de l'intégrité sans blesser inutilement. Paix intérieure retrouvée." }
+                    { num: "01", name: "Colère (X-1 / Y+1 / Z2)", role: "Déclencheur", desc: "Modèle interne non révisable (-X) et poussée de contrôle (+Y) pour conformer le monde à ses attentes." },
+                    { num: "02", name: "Point de Veille (0,0,0) & Recul (0,0,5)", role: "Point Pivot", desc: "Pause somato-viscérale : suspendre la décharge motrice réflexe pour élargir l'horizon temporel de l'inférence." },
+                    { num: "03", name: "Courage (X+2 / Y0 / Z2)", role: "Mobilisation", desc: "Réviser son modèle interne (+X) avec lucidité au lieu de maintenir une crispation défensive." },
+                    { num: "04", name: "Justice (X+5 / Y-3 / Z5) & Sérénité", role: "Atterrissage", desc: "Résolution équitable et pacifiée : rééquilibrage de l'énergie libre sans destruction inutile." }
                 ],
                 practice: "Exercez-vous à la 'phrase de désarmement' : « Je ressens une vive contrariété, prenons 5 minutes avant d'en parler »."
             },
             "Peur": {
                 title: "De la Peur Paralysante vers le Courage & la Confiance",
                 steps: [
-                    { num: "01", name: "Peur (A0 / V-2)", role: "Déclencheur", desc: "Le système nerveux signale un danger ou une incertitude future." },
-                    { num: "02", name: "Anticipation (A-0.5 / V0)", role: "Point Pivot", desc: "Évaluer objectivement la probabilité réelle du risque plutôt que le scénario catastrophe." },
-                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Faire le premier petit pas concret malgré les tremblements intérieurs." },
-                    { num: "04", name: "Assurance & Confiance", role: "Atterrissage", desc: "Constater que l'action dissout la sidération. Ancrage de la capacité d'adaptation." }
+                    { num: "01", name: "Peur (X-2 / Y0 / Z2)", role: "Déclencheur", desc: "Charge d'Attente (-X) avec action indéterminée (Y0) : anticipation d'une contradiction menaçante pour le modèle." },
+                    { num: "02", name: "Anticipation (0,0,2) & Émoi (0,0,3)", role: "Point Pivot", desc: "Orienter l'attention pour échantillonner activement des indices rassurants dans le milieu." },
+                    { num: "03", name: "Courage (X+2 / Y0 / Z2)", role: "Mobilisation", desc: "Révision constructive du modèle interne (+X) : accepter l'apprentissage dans l'inconnu." },
+                    { num: "04", name: "Confiance (X+3 / Y+5 / Z5) & Assurance", role: "Atterrissage", desc: "L'inférence active confirme la viabilité de l'agent. Stabilisation d'un a priori allostatique sécure." }
                 ],
                 practice: "La technique du 'pire scénario réaliste' : qu'est-ce que je ferais concrètement si le pire arrivait ? Vous découvrirez vos ressources cachées."
             },
             "Tristesse": {
                 title: "Du Chagrin de la Perte vers le Réconfort & la Plénitude",
                 steps: [
-                    { num: "01", name: "Tristesse (A-2 / V0)", role: "Déclencheur", desc: "Constat d'une rupture, d'un deuil ou d'un échec signifiant." },
-                    { num: "02", name: "Acceptation (A-3 / V+3)", role: "Point Pivot", desc: "Cesser de nier l'inévitable. Permettre aux larmes de purifier la tension viscérale." },
-                    { num: "03", name: "Réconfort (A-3 / V+1)", role: "Mobilisation", desc: "Rechercher la chaleur d'un lien bienveillant ou d'une activité ressourçante." },
-                    { num: "04", name: "Gratitude & Sérénité", role: "Atterrissage", desc: "Intégration de la mémoire avec tendresse : ce qui a été aimé fait désormais partie de soi." }
+                    { num: "01", name: "Tristesse (X0 / Y-2 / Z2)", role: "Déclencheur", desc: "Charge de Contrôle (-Y) devant une situation non modifiable : repli adaptatif pour économiser l'énergie." },
+                    { num: "02", name: "Acceptation (X+3 / Y-3 / Z4)", role: "Point Pivot", desc: "Cesser de lutter contre l'inévitable : adapter son modèle du monde à la perte constatée." },
+                    { num: "03", name: "Réconfort (X+1 / Y-3 / Z3)", role: "Mobilisation", desc: "Solliciter la co-régulation et l'inférence partagée auprès de figures d'attachement sécures." },
+                    { num: "04", name: "Plénitude (X+1 / Y-5 / Z4) & Sérénité", role: "Atterrissage", desc: "Intégration du souvenir dans le modèle de soi sans souffrance allostatique résiduelle." }
                 ],
                 practice: "Écrire une lettre de gratitude à ce qui a disparu, puis la brûler ou la ranger symboliquement pour clore le cycle."
             },
             "Honte": {
                 title: "De la Honte Toxique vers l'Honneur & l'Auto-Compassion",
                 steps: [
-                    { num: "01", name: "Honte (A-4 / V-2)", role: "Déclencheur", desc: "Sentiment cuisant d'indignité et désir de disparaître du regard d'autrui." },
-                    { num: "02", name: "Tolérance (A-2 / V+6)", role: "Point Pivot", desc: "Reconnaître notre condition humaine faillible : l'erreur n'efface pas la valeur d'être." },
-                    { num: "03", name: "Courage (A0 / V+2)", role: "Mobilisation", desc: "Sortir du secret : partager sa vulnérabilité avec une personne de confiance absolue." },
-                    { num: "04", name: "Honneur & Dignité", role: "Atterrissage", desc: "Réparation sincère si autrui a été lésé, puis redressement de la tête." }
+                    { num: "01", name: "Honte (X-2 / Y-4 / Z4)", role: "Déclencheur", desc: "Modèle de soi réflexif perçu comme disqualifié (-X) et repli social impuissant (-Y)." },
+                    { num: "02", name: "Tolérance (X+6 / Y-2 / Z5)", role: "Point Pivot", desc: "Élargir les distributions a priori : reconnaître la faillibilité inhérente à la condition humaine." },
+                    { num: "03", name: "Courage (X+2 / Y0 / Z2)", role: "Mobilisation", desc: "Sortir du secret et briser l'immunisation cognitive par un dévoilement authentique." },
+                    { num: "04", name: "Honneur (X+5 / Y+3 / Z5) & Affection", role: "Atterrissage", desc: "Restitution de la dignité et réintégration de l'appartenance au réseau social." }
                 ],
                 practice: "L'antidote absolu à la honte est l'empathie partagée : la honte ne survit pas à une parole accueillie sans jugement."
             },
             "Désespoir": {
                 title: "Du Désespoir Sombre vers l'Espoir & le Renouveau",
                 steps: [
-                    { num: "01", name: "Désespoir (A-7 / V-1)", role: "Déclencheur", desc: "Épuisement total de la motivation et sentiment d'impasse absolue." },
-                    { num: "02", name: "Attente (A0 / V0)", role: "Point Pivot", desc: "Ne rien tenter de grandiose. Revenir uniquement au rythme de la respiration dans l'instant." },
-                    { num: "03", name: "Curiosité (A0 / V+4)", role: "Mobilisation", desc: "Ouvrir une fissure : « Et s'il existait une variable que je n'ai pas encore aperçue ? »" },
-                    { num: "04", name: "Espoir (A+1 / V+7)", role: "Atterrissage", desc: "La minuscule étincelle qui rallume le moteur de vie et redonne du sens." }
+                    { num: "01", name: "Désespoir (X-1 / Y-7 / Z5)", role: "Déclencheur", desc: "Rigidité cognitive profonde (-X) et conviction d'impuissance totale (-Y) ancrées dans les paramètres lents." },
+                    { num: "02", name: "Point de Veille (0,0,0)", role: "Point Pivot", desc: "Mettre en veille les attentes démesurées. Revenir aux simples flux intéroceptifs du souffle." },
+                    { num: "03", name: "Curiosité (X+4 / Y0 / Z3)", role: "Mobilisation", desc: "Exploration épistémique : « Existe-t-il une variable inexplorée dans mon environnement ? »" },
+                    { num: "04", name: "Espoir (X+7 / Y+1 / Z5)", role: "Atterrissage", desc: "Réouverture des possibles et reprise de l'inférence active orientée vers l'avenir." }
                 ],
                 practice: "La micro-victoire : accomplir une seule action microscopique (boire un verre d'eau, faire son lit, regarder le ciel) pour réenclencher l'agentivité."
             }
@@ -369,6 +410,49 @@
 
         // Initialize with default choice
         renderPath("Colère");
+    </script>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
+                <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
+                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+            </div>
+            <div class="text-xs text-slate-400">
+                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+        })();
     </script>
 </body>
 </html>
