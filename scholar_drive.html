@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#2563eb">
+  <title>ScholarDrive</title>
+
+  <!-- Manifest PWA intégré pour éviter un fichier séparé -->
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiU2Nob2xhckRyaXZlIiwic2hvcnRfbmFtZSI6IlNjaG9sYXJEcml2ZSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjZmZmZmZmIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMjQgMjQnIGZpbGw9JyUyMzI1NjNlYiclM0UlM0NwYXRoIGQ9J00xMiAyTDIgN2wxMCA1IDEwLTUtMTAtNXpNMCAxN2wxMCA1IDEwLTVNMCAxMmwxMCA1IDEwLTUnLyUzRSUzQy9zdmclM0UiLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          padding: {
+            'safe': 'env(safe-area-inset-bottom)',
+            'safe-top': 'env(safe-area-inset-top)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Babel pour compiler le JSX dans le navigateur -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Import maps pour les modules React, Firebase et Lucide -->
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.344.0",
+        "firebase/app": "https://esm.sh/firebase@10.8.1/app",
+        "firebase/auth": "https://esm.sh/firebase@10.8.1/auth",
+        "firebase/firestore": "https://esm.sh/firebase@10.8.1/firestore"
+      }
+    }
+  </script>
+
+  <style>
+    /* Support des zones de sécurité (notamment pour l'encoche des iPhones) */
+    .pt-safe { padding-top: env(safe-area-inset-top); }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+    /* Styles pour masquer la barre de défilement mais permettre le scroll */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
+  <script>
+    // Configuration minimale Firebase (mock si les vraies clés ne sont pas fournies)
+    window.__firebase_config = JSON.stringify({
+      apiKey: "mock_api_key",
+      authDomain: "mock.firebaseapp.com",
+      projectId: "mock_project",
+      storageBucket: "mock.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    });
+    window.__app_id = "scholar-drive-mobile-v1";
+
+    // Service Worker minimal pour que la PWA soit installable
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        self.addEventListener('install', (e) => self.skipWaiting());
+        self.addEventListener('activate', (e) => self.clients.claim());
+        self.addEventListener('fetch', (e) => {});
+      `;
+      const blob = new Blob([swCode], {type: 'application/javascript'});
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl).catch(console.error);
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-900 overscroll-none">
+  <div id="root"></div>
+
+  <!-- Script de l'application -->
+  <script type="text/babel" data-type="module">
+    // --- APP CODE START ---
+import React, { useState, useEffect, useRef } from 'react';
+import { createRoot } from 'react-dom/client';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, doc, setDoc, onSnapshot, query, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { Play, Pause, SkipForward, SkipBack, MessageSquare, ShieldCheck, Save, Edit3, Settings, Mic, Headphones, Plus, Trash2, BookOpen, FileText, Check, X, RefreshCw, Wand2, List, Type, UploadCloud, ChevronUp, ChevronDown, Car } from 'lucide-react';
+
+// Configuration Firebase
+const firebaseConfig = JSON.parse(window.__firebase_config);
+const app = initializeApp(firebaseConfig);
+// Pour le mock sans vraies clés Firebase, on gère les erreurs silencieusement
+let auth, db;
+try {
+  auth = getAuth(app);
+  db = getFirestore(app);
+} catch (e) {
+  console.warn("Firebase n'est pas complètement configuré avec de vraies clés.");
+}
+const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'scholar-drive-mobile-v1';
+
+const GEMINI_MODEL = "gemini-2.5-flash-preview-09-2025";
+const TTS_MODEL = "gemini-2.5-flash-preview-tts";
+
+function pcmToWav(pcmData, sampleRate) {
+  const buffer = new ArrayBuffer(44 + pcmData.length);
+  const view = new DataView(buffer);
+  const writeString = (offset, string) => { for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i)); };
+  writeString(0, 'RIFF'); view.setUint32(4, 32 + pcmData.length, true);
+  writeString(8, 'WAVE'); writeString(12, 'fmt '); view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+  writeString(36, 'data'); view.setUint32(40, pcmData.length, true);
+  for (let i = 0; i < pcmData.length; i++) view.setUint8(44 + i, pcmData[i]);
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+function App() {
+  const [user, setUser] = useState(null);
+  const [blocks, setBlocks] = useState([{ id: 'b1', text: "Introduction", isHeader: true }]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Navigation Mobile State
+  const [activeTab, setActiveTab] = useState('editor'); // 'editor', 'outline', 'sources'
+  const [isDrivingMode, setIsDrivingMode] = useState(false);
+
+  // AI Analysis Bottom Sheet State
+  const [showAnalysisSheet, setShowAnalysisSheet] = useState(false);
+  const [aiDiscussion, setAiDiscussion] = useState("");
+  const [supervisorCritique, setSupervisorCritique] = useState("");
+  const [proposedRewrite, setProposedRewrite] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isReading, setIsReading] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [sources, setSources] = useState([]);
+  const [newSource, setNewSource] = useState({ title: '', type: 'Article', content: '' });
+  const [showSourceModal, setShowSourceModal] = useState(false);
+  const [importText, setImportText] = useState("");
+  const [showImportModal, setShowImportModal] = useState(false);
+
+  const audioRef = useRef(null);
+  const blockRefs = useRef({});
+  const apiKey = "";
+
+  useEffect(() => {
+    const initAuth = async () => {
+      if (!auth) return;
+      try {
+        if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+          await signInWithCustomToken(auth, window.__initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (e) {
+        console.warn("Auth Firebase ignoré pour le mock local.");
+      }
+    };
+    initAuth();
+    if (auth) {
+        const unsubscribe = onAuthStateChanged(auth, setUser);
+        return () => unsubscribe();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!user || !db) return;
+    try {
+        const qDraft = query(collection(db, 'artifacts', appId, 'users', user.uid, 'drafts'));
+        const unsubDraft = onSnapshot(qDraft, (snapshot) => {
+          if (!snapshot.empty && snapshot.docs[0].data().blocks) setBlocks(snapshot.docs[0].data().blocks);
+        });
+        const qSources = query(collection(db, 'artifacts', appId, 'users', user.uid, 'sources'));
+        const unsubSources = onSnapshot(qSources, (snapshot) => {
+          setSources(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        });
+        return () => { unsubDraft(); unsubSources(); };
+    } catch (e) {}
+  }, [user]);
+
+  const saveToCloud = async (newBlocks) => {
+    if (!user || !db) return;
+    try {
+        await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'drafts', 'current_article'), { blocks: newBlocks, updatedAt: Date.now() }, { merge: true });
+    } catch (e) {}
+  };
+
+  const updateBlock = (index, value) => {
+    const next = [...blocks]; next[index].text = value;
+    setBlocks(next); saveToCloud(next);
+  };
+
+  const toggleHeader = (index) => {
+    const next = [...blocks]; next[index].isHeader = !next[index].isHeader;
+    setBlocks(next); saveToCloud(next);
+  };
+
+  const addBlockAfter = (index) => {
+    const next = [...blocks];
+    next.splice(index + 1, 0, { id: `b-${Date.now()}`, text: "", isHeader: false });
+    setBlocks(next); saveToCloud(next);
+    scrollToBlock(index + 1);
+  };
+
+  const removeBlock = (index) => {
+    if (blocks.length <= 1) return;
+    const next = blocks.filter((_, i) => i !== index);
+    setBlocks(next); saveToCloud(next);
+    setCurrentIndex(Math.max(0, index - 1));
+  };
+
+  const scrollToBlock = (index) => {
+    setCurrentIndex(index);
+    setActiveTab('editor'); // Switch to editor if coming from outline
+    setTimeout(() => {
+      blockRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
+  const speak = async (textToSpeak) => {
+    if (!textToSpeak) return;
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${TTS_MODEL}:generateContent?key=${apiKey}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `D'une voix claire : ${textToSpeak}` }] }],
+          generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
+        })
+      });
+      const data = await response.json();
+      const base64Audio = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+      if(base64Audio) {
+          const pcmData = Uint8Array.from(atob(base64Audio), c => c.charCodeAt(0));
+          setAudioUrl(URL.createObjectURL(pcmToWav(pcmData, 24000)));
+          setIsReading(true);
+      }
+    } catch (error) { console.error(error); } finally { setIsLoading(false); }
+  };
+
+  const analyzeAndRewrite = async (index) => {
+    const block = blocks[index];
+    if (!block || block.isHeader) return;
+
+    setShowAnalysisSheet(true);
+    setIsLoading(true);
+    setAiDiscussion(""); setSupervisorCritique(""); setProposedRewrite("");
+
+    const sourceContext = sources.map(s => `[SOURCE: ${s.title}]: ${s.content}`).join("\n\n");
+    const callAI = async (systemPrompt, userQuery) => {
+      try {
+        if(!apiKey) return "Clé API Gemini manquante.";
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: userQuery }] }],
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+          })
+        });
+        const data = await res.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Erreur";
+      } catch (e) { return "Erreur réseau."; }
+    };
+
+    const [disc, crit, rew] = await Promise.all([
+      callAI(`Tu es un assistant littéraire. Questionne l'auteur sur ses intentions en 1 phrase. Sources: ${sourceContext}`, block.text),
+      callAI(`Tu es un superviseur académique. Critique la rigueur en 2 phrases brèves. Sources: ${sourceContext}`, block.text),
+      callAI(`Réécris ce paragraphe pour un journal scientifique. Ne fournis que le texte. Sources: ${sourceContext}`, block.text)
+    ]);
+
+    setAiDiscussion(String(disc)); setSupervisorCritique(String(crit)); setProposedRewrite(String(rew));
+    setIsLoading(false);
+    if (isDrivingMode) await speak(`Suggestion : ${disc}. Critique : ${crit}.`);
+  };
+
+  const applyRewrite = () => {
+    if (!proposedRewrite) return;
+    updateBlock(currentIndex, proposedRewrite);
+    setProposedRewrite("");
+    setShowAnalysisSheet(false);
+  };
+
+  const toggleDrivingMode = () => {
+    const next = !isDrivingMode;
+    setIsDrivingMode(next);
+    setShowAnalysisSheet(false);
+    if (next && blocks[currentIndex]) speak(blocks[currentIndex].text);
+    else if (!next && audioRef.current) { audioRef.current.pause(); setIsReading(false); }
+  };
+
+  const handleImport = () => {
+    if (!importText) return;
+    const lines = importText.split('\n').filter(line => line.trim() !== '');
+    const newBlocks = lines.map((line, idx) => ({
+      id: `b-${Date.now()}-${idx}`,
+      text: line,
+      isHeader: line.length < 50 && (line === line.toUpperCase() || line.endsWith(':'))
+    }));
+    setBlocks(newBlocks);
+    saveToCloud(newBlocks);
+    setShowImportModal(false);
+    setImportText("");
+  };
+
+  const handleAddSource = () => {
+    if (!newSource.title || !newSource.content) return;
+    const src = { id: `src-${Date.now()}`, ...newSource };
+    setSources([...sources, src]);
+    setNewSource({ title: '', type: 'Article', content: '' });
+    setShowSourceModal(false);
+  };
+
+  // --- RENDU MODE CONDUITE (FULL SCREEN OVERLAY) ---
+  if (isDrivingMode) {
+    return (
+      <div className="fixed inset-0 bg-slate-950 text-white flex flex-col p-4 font-sans z-50">
+        <div className="flex justify-between items-center mb-6 pt-8">
+          <div className="flex items-center gap-2 text-blue-500">
+            <Car size={24} /> <span className="font-black tracking-widest uppercase text-sm">Mode Conduite</span>
+          </div>
+          <button onClick={toggleDrivingMode} className="p-4 bg-slate-800 rounded-full active:bg-slate-700 transition-colors">
+            <X size={28} />
+          </button>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-center space-y-8 w-full max-w-md mx-auto">
+          <div className="bg-slate-900/80 p-8 rounded-[32px] w-full border border-slate-800 flex-1 max-h-[50vh] flex flex-col">
+            <p className="text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-[0.2em] text-center">Bloc {currentIndex + 1} / {blocks.length}</p>
+            <div className="flex-1 overflow-y-auto px-2 text-2xl font-serif leading-relaxed text-slate-100 italic text-center flex items-center justify-center">
+              "{blocks[currentIndex]?.text}"
+            </div>
+          </div>
+
+          <div className="w-full flex justify-between items-center px-4">
+            <button onClick={() => { if(currentIndex > 0) setCurrentIndex(currentIndex - 1); }} className="p-6 bg-slate-900 rounded-[28px] active:scale-95 transition-transform">
+              <SkipBack size={40} />
+            </button>
+            <button onClick={() => isReading ? audioRef.current?.pause() : speak(blocks[currentIndex]?.text)} className="p-8 bg-blue-600 rounded-[32px] active:scale-95 transition-transform shadow-lg shadow-blue-900/50">
+              {isReading ? <Pause size={48} fill="currentColor" /> : <Play size={48} fill="currentColor" />}
+            </button>
+            <button onClick={() => { if(currentIndex < blocks.length - 1) setCurrentIndex(currentIndex + 1); }} className="p-6 bg-slate-900 rounded-[28px] active:scale-95 transition-transform">
+              <SkipForward size={40} />
+            </button>
+          </div>
+
+          <button onClick={() => analyzeAndRewrite(currentIndex)} disabled={isLoading} className={`w-full p-6 rounded-[28px] flex items-center justify-center gap-4 text-xl font-black transition-all ${isLoading ? 'bg-amber-900 animate-pulse' : 'bg-amber-600 active:scale-95'}`}>
+            <ShieldCheck size={32} /> {isLoading ? "ANALYSE..." : "VÉRIFIER RIGUEUR"}
+          </button>
+        </div>
+        {audioUrl && <audio ref={audioRef} src={audioUrl} autoPlay onEnded={() => setIsReading(false)} className="hidden" />}
+      </div>
+    );
+  }
+
+  // --- RENDU MOBILE PRINCIPAL ---
+  return (
+    <div className="h-dvh bg-slate-50 flex flex-col font-sans text-slate-900 overflow-hidden relative pb-[80px]"> {/* pb-[80px] for bottom nav spacing */}
+
+      {/* Header Mobile */}
+      <header className="bg-white border-b px-4 py-3 flex justify-between items-center shrink-0 shadow-sm z-20 pt-safe">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-md">
+            <BookOpen size={20} />
+          </div>
+          <div>
+            <h1 className="font-black text-lg leading-tight tracking-tight">ScholarDrive</h1>
+            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Mobile Editor</p>
+          </div>
+        </div>
+        <button onClick={() => setShowImportModal(true)} className="p-2.5 bg-slate-100 text-slate-600 rounded-xl active:bg-slate-200">
+          <UploadCloud size={20} />
+        </button>
+      </header>
+
+      {/* Main Content Area (Switches based on Tab) */}
+      <main className="flex-1 overflow-y-auto relative w-full h-full bg-slate-50">
+
+        {/* TAB 1: EDITOR */}
+        <div className={`absolute inset-0 transition-opacity duration-300 ${activeTab === 'editor' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`}>
+          <div className="p-4 space-y-6 pb-32">
+            {blocks.map((b, i) => (
+              <div key={b.id} ref={el => blockRefs.current[i] = el} onClick={() => setCurrentIndex(i)}
+                   className={`relative p-5 rounded-[24px] border-2 transition-all bg-white shadow-sm ${currentIndex === i ? 'border-blue-500 shadow-md ring-4 ring-blue-50' : 'border-slate-100'}`}>
+
+                {/* Mobile Block Controls (Visible only when selected) */}
+                {currentIndex === i && (
+                  <div className="flex justify-between items-center mb-3 pb-3 border-b border-slate-50">
+                     <button onClick={() => toggleHeader(i)} className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 ${b.isHeader ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-500'}`}>
+                        <Type size={14}/> {b.isHeader ? "Titre" : "Paragraphe"}
+                     </button>
+                     <div className="flex gap-2">
+                        <button onClick={() => addBlockAfter(i)} className="p-2 bg-green-50 text-green-600 rounded-lg"><Plus size={16}/></button>
+                        <button onClick={() => removeBlock(i)} className="p-2 bg-red-50 text-red-500 rounded-lg"><Trash2 size={16}/></button>
+                     </div>
+                  </div>
+                )}
+
+                <textarea
+                  className={`w-full bg-transparent border-none focus:ring-0 p-0 leading-relaxed resize-none outline-none ${b.isHeader ? 'text-xl font-black text-slate-900' : 'text-base font-serif text-slate-700'}`}
+                  rows={Math.max(1, String(b.text).split('\n').length)}
+                  value={b.text}
+                  onChange={(e) => updateBlock(i, e.target.value)}
+                  placeholder={b.isHeader ? "Titre..." : "Tapez ici..."}
+                />
+
+                {currentIndex === i && !b.isHeader && (
+                  <button onClick={() => analyzeAndRewrite(i)} className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 bg-amber-100 text-amber-800 rounded-xl text-sm font-black active:bg-amber-200">
+                    <Wand2 size={16} /> ANALYSER IA
+                  </button>
+                )}
+              </div>
+            ))}
+            <button onClick={() => addBlockAfter(blocks.length - 1)} className="w-full py-5 border-2 border-dashed border-slate-200 rounded-[24px] text-slate-400 font-bold flex items-center justify-center gap-2 active:bg-slate-100">
+              <Plus size={20} /> NOUVEAU BLOC
+            </button>
+          </div>
+        </div>
+
+        {/* TAB 2: OUTLINE */}
+        <div className={`absolute inset-0 bg-white transition-opacity duration-300 ${activeTab === 'outline' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`}>
+          <div className="p-4 border-b bg-slate-50 sticky top-0">
+            <h2 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><List size={16}/> Structure</h2>
+          </div>
+          <div className="p-4 space-y-2">
+            {blocks.filter(b => b.isHeader && b.text.trim() !== "").length > 0 ? (
+              blocks.map((b, i) => b.isHeader && b.text.trim() !== "" && (
+                <button key={b.id} onClick={() => scrollToBlock(i)} className="w-full text-left p-4 bg-slate-50 rounded-2xl text-sm font-bold active:bg-blue-50 active:text-blue-700 border border-slate-100">
+                  {b.text}
+                </button>
+              ))
+            ) : (
+              <div className="text-center p-8 text-slate-400 text-sm">Aucun titre défini.</div>
+            )}
+          </div>
+        </div>
+
+        {/* TAB 3: SOURCES */}
+        <div className={`absolute inset-0 bg-white transition-opacity duration-300 ${activeTab === 'sources' ? 'opacity-100 z-10' : 'opacity-0 pointer-events-none z-0'}`}>
+          <div className="p-4 border-b bg-slate-50 sticky top-0 flex justify-between items-center">
+            <h2 className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><FileText size={16}/> Sources ({sources.length})</h2>
+            <button onClick={() => setShowSourceModal(true)} className="p-2 bg-blue-100 text-blue-600 rounded-lg active:bg-blue-200"><Plus size={18}/></button>
+          </div>
+          <div className="p-4 space-y-3">
+            {sources.length > 0 ? sources.map(s => (
+              <div key={s.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between items-start">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">{s.title}</h4>
+                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{s.content}</p>
+                </div>
+                <button onClick={() => deleteDoc(doc(db, 'artifacts', appId, 'users', user?.uid, 'sources', s.id))} className="p-2 text-slate-300 active:text-red-500"><Trash2 size={16}/></button>
+              </div>
+            )) : (
+              <div className="text-center p-8 text-slate-400 text-sm">Aucune source. L'IA utilisera ses connaissances générales.</div>
+            )}
+          </div>
+        </div>
+
+      </main>
+
+      {/* Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 h-[80px] bg-white border-t border-slate-200 px-6 flex justify-between items-center z-40 pb-safe">
+        <button onClick={() => setActiveTab('editor')} className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'editor' ? 'text-blue-600' : 'text-slate-400'}`}>
+          <Edit3 size={24} className={activeTab === 'editor' ? 'fill-blue-50' : ''} />
+          <span className="text-[10px] font-bold">Éditeur</span>
+        </button>
+        <button onClick={() => setActiveTab('outline')} className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'outline' ? 'text-blue-600' : 'text-slate-400'}`}>
+          <List size={24} />
+          <span className="text-[10px] font-bold">Plan</span>
+        </button>
+        <button onClick={() => setActiveTab('sources')} className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'sources' ? 'text-blue-600' : 'text-slate-400'}`}>
+          <FileText size={24} />
+          <span className="text-[10px] font-bold">Sources</span>
+        </button>
+        <button onClick={toggleDrivingMode} className="flex flex-col items-center gap-1 p-2 text-slate-800 relative">
+          <div className="absolute -top-6 bg-slate-900 text-white p-3 rounded-full shadow-lg border-4 border-white">
+            <Car size={24} />
+          </div>
+          <span className="text-[10px] font-black mt-6">Conduite</span>
+        </button>
+      </nav>
+
+      {/* AI Analysis Bottom Sheet (Slide up) */}
+      <div className={`fixed inset-x-0 bottom-0 bg-white rounded-t-[32px] shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 transition-transform duration-300 ease-in-out transform ${showAnalysisSheet ? 'translate-y-0' : 'translate-y-full'} flex flex-col max-h-[85vh]`}>
+        <div className="w-full flex justify-center py-3" onClick={() => setShowAnalysisSheet(false)}>
+          <div className="w-12 h-1.5 bg-slate-200 rounded-full"></div>
+        </div>
+        <div className="px-6 pb-4 flex justify-between items-center border-b border-slate-50">
+          <h3 className="font-black text-lg flex items-center gap-2"><Wand2 size={20} className="text-amber-500"/> Analyse IA</h3>
+          <button onClick={() => setShowAnalysisSheet(false)} className="p-2 bg-slate-100 rounded-full text-slate-500"><X size={20}/></button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 pb-12">
+          {isLoading ? (
+            <div className="space-y-4 animate-pulse">
+              <div className="h-24 bg-slate-100 rounded-2xl w-full"></div>
+              <div className="h-24 bg-slate-100 rounded-2xl w-full"></div>
+            </div>
+          ) : (
+            <>
+              {proposedRewrite && (
+                <div className="space-y-3">
+                  <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest">Proposition (Glisser pour voir)</h4>
+                  <div className="bg-blue-50 border border-blue-100 p-5 rounded-2xl text-sm font-serif leading-relaxed text-blue-900">
+                    {proposedRewrite}
+                  </div>
+                  <button onClick={applyRewrite} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black shadow-lg shadow-blue-200 active:bg-blue-700 flex items-center justify-center gap-2">
+                    <Check size={18}/> REMPLACER MON TEXTE
+                  </button>
+                </div>
+              )}
+              {supervisorCritique && (
+                <div className="space-y-2">
+                  <h4 className="text-[10px] font-black text-amber-600 uppercase tracking-widest flex items-center gap-1"><ShieldCheck size={12}/> Critique</h4>
+                  <p className="bg-amber-50 text-amber-900 p-4 rounded-2xl text-sm leading-relaxed">{supervisorCritique}</p>
+                </div>
+              )}
+              {aiDiscussion && (
+                <div className="space-y-2">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-1"><MessageSquare size={12}/> Réflexion</h4>
+                  <p className="bg-slate-50 text-slate-600 p-4 rounded-2xl text-sm italic">{aiDiscussion}</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+      {showAnalysisSheet && <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40" onClick={() => setShowAnalysisSheet(false)}></div>}
+
+      {/* Modals for Import & Sources (Adapted for mobile) */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-white z-50 flex flex-col">
+          <div className="flex justify-between items-center p-4 border-b">
+            <h3 className="font-black text-lg">Importer</h3>
+            <button onClick={() => setShowImportModal(false)}><X size={24}/></button>
+          </div>
+          <textarea className="flex-1 p-6 w-full text-sm outline-none resize-none" placeholder="Collez le texte brut ici..." value={importText} onChange={e => setImportText(e.target.value)}></textarea>
+          <div className="p-4 border-t"><button onClick={handleImport} className="w-full py-4 bg-blue-600 text-white font-black rounded-2xl">STRUCTURER</button></div>
+        </div>
+      )}
+
+      {showSourceModal && (
+        <div className="fixed inset-0 bg-white z-50 flex flex-col">
+          <div className="flex justify-between items-center p-4 border-b">
+            <h3 className="font-black text-lg">Nouvelle Source</h3>
+            <button onClick={() => setShowSourceModal(false)}><X size={24}/></button>
+          </div>
+          <div className="p-6 space-y-4 flex-1">
+            <input className="w-full p-4 bg-slate-50 rounded-xl outline-none font-bold" placeholder="Titre (ex: Auteur, Année)" value={newSource.title} onChange={e => setNewSource({...newSource, title: e.target.value})} />
+            <textarea className="w-full h-48 p-4 bg-slate-50 rounded-xl outline-none" placeholder="Résumé de la source..." value={newSource.content} onChange={e => setNewSource({...newSource, content: e.target.value})} />
+          </div>
+          <div className="p-4 border-t"><button onClick={handleAddSource} className="w-full py-4 bg-blue-600 text-white font-black rounded-2xl">SAUVEGARDER</button></div>
+        </div>
+      )}
+
+      {/* Hidden Audio Player */}
+      {audioUrl && !isDrivingMode && <audio ref={audioRef} src={audioUrl} autoPlay onEnded={() => setIsReading(false)} className="hidden" />}
+    </div>
+  );
+}
+
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);
+
+    // --- APP CODE END ---
+  </script>
+</body>
+</html>
