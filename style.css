@@ -275,3 +275,61 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* ============================================================
+   Breathing Pacer Animation (90s Somatic Timer)
+   ============================================================ */
+@keyframes breathe-circle-scale {
+    0% { transform: scale(0.82); }
+    33% { transform: scale(1.18); } /* Inspire 4s */
+    50% { transform: scale(1.18); } /* Rétention 2s */
+    100% { transform: scale(0.82); } /* Expire 6s */
+}
+
+.breathe-animating {
+    animation: breathe-circle-scale 12s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* ============================================================
+   Clinical Regulation Sheet Print Mode (@media print)
+   ============================================================ */
+@media print {
+    body {
+        background: #ffffff !important;
+        color: #111827 !important;
+    }
+    header, footer, nav, #mobileMenu, .no-print, button, .close-btn {
+        display: none !important;
+    }
+    .print-sheet-container {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+    .print-sheet-container * {
+        color: #111827 !important;
+        border-color: #cbd5e1 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    .print-sheet-header {
+        border-bottom: 2px solid #0f172a !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 20px !important;
+    }
+    .print-badge {
+        border: 1px solid #0f172a !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+    }
+    .page-break {
+        page-break-after: always;
+    }
+}

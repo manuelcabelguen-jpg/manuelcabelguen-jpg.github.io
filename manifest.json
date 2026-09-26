@@ -1,0 +1,27 @@
+{
+  "name": "Cartograffect - Cartographie des Affects",
+  "short_name": "Cartograffect",
+  "description": "Une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. Modèles ÉMOTIONS, C.R.I.M.E.S. et M.I.R.A.C.L.E.S. par Manuel Cabelguen.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Recherche & Scholar Drive | Cartograffect</title>
+    <meta name="description" content="Espace scientifique et publications : Algorithme Cartograffect 3.6, formalisation en inférence active, allostasie et propriété intellectuelle OPIC n° 1233199.">
+    <link rel="canonical" href="https://www.cartograffect.com/scholar_drive.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/scholar_drive.html">
+    <meta property="og:title" content="Espace Recherche & Scholar Drive | Cartograffect">
+    <meta property="og:description" content="Algorithme Cartograffect 3.6, formalisation computationnelle et publications académiques par Manuel Cabelguen, Ph. D., BCN.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for crisp mathematical rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        cosmic: {
+                            900: '#070b14',
+                            850: '#0b1120',
+                            800: '#0e1726',
+                            750: '#152136',
+                            700: '#1a2744',
+                            600: '#1f2e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Scholar &amp; Algorithme 3.6</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>1. Émotions
+                </a>
+                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>2. Crimes
+                </a>
+                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>3. Miracles
+                </a>
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>Scholar Drive
+                </a>
+            </nav>
+
+            <div class="hidden md:flex items-center gap-3">
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
+                <a href="emotions.html" class="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-600/30 transition-all">
+                    Ouvrir la Carte &rarr;
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Fullscreen Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
+        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="scholar_drive.html" class="active-link"><span class="menu-dot bg-purple-400"></span>Espace Scholar &amp; Algorithme 3.6</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+        
+        <!-- Hero Section -->
+        <section class="relative rounded-3xl bg-gradient-to-br from-purple-950/40 via-cosmic-850 to-slate-900 border border-purple-800/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-purple-600/15 blur-3xl pointer-events-none"></div>
+            <div class="max-w-4xl relative z-10 space-y-5">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-950/80 text-purple-300 border border-purple-700/50">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                    Espace Scientifique &bull; Algorithme du Cartograffect 3.6
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
+                    Publications, Recherche &amp; <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-300 bg-clip-text text-transparent">Scholar Drive</span>
+                </h1>
+                <p class="text-purple-300 text-sm sm:text-base font-semibold tracking-wide">
+                    Manuel Cabelguen, Ph. D., BCN &bull; Enregistrement auprès de l'OPIC n° 1233199
+                </p>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
+                    Cet espace rassemble les fondements mathématiques, les algorithmes formels (Version 3.6), les notes cliniques, les articles de recherche et les références bibliographiques internationales qui sous-tendent la <strong>Cartographie des Affects</strong>.
+                </p>
+
+                <!-- Quick Filter Buttons -->
+                <div class="flex flex-wrap gap-2.5 pt-2">
+                    <a href="#algorithme-36" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>⚙️</span> Algorithme 3.6
+                    </a>
+                    <a href="#equations-formelles" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>📐</span> Formalisation L1
+                    </a>
+                    <a href="#scholar-drive-docs" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>📂</span> Documents &amp; Drive
+                    </a>
+                    <a href="#bibliographie" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>📚</span> Corpus Bibliographique
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 1 : ALGORITHME DU CARTOGRAFFECT 3.6             -->
+        <!-- ======================================================== -->
+        <section id="algorithme-36" class="rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Axiomatique &amp; Computation</span>
+                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                        Algorithme du Cartograffect &bull; Version 3.6
+                    </h2>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
+                    Propriété Intellectuelle OPIC n° 1233199
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Box 1 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 font-bold flex items-center justify-center text-sm border border-purple-500/40">Y</span>
+                        <h3 class="text-base font-bold text-white">Gradient de Contrôle (Axe Y)</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Modélise l'<strong>incertitude sensorimotrice</strong>. Évalue la probabilité subjective que l'action pragmatique de l'organisme puisse modifier l'état du monde pour résorber l'écart de prédiction.
+                    </p>
+                    <div class="text-[11px] font-mono text-purple-300 pt-2 border-t border-slate-800">
+                        +Y : Monde contrôlable &bull; -Y : Monde non modifiable
+                    </div>
+                </div>
+
+                <!-- Box 2 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-300 font-bold flex items-center justify-center text-sm border border-sky-500/40">X</span>
+                        <h3 class="text-base font-bold text-white">Gradient d'Attente (Axe X)</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Modélise l'<strong>incertitude cognitive</strong>. Évalue le degré de révisabilité du modèle interne de l'organisme face aux données sensorielles entrantes (mise à jour bayésienne).
+                    </p>
+                    <div class="text-[11px] font-mono text-sky-300 pt-2 border-t border-slate-800">
+                        +X : Modèle révisable &bull; -X : Modèle non révisable
+                    </div>
+                </div>
+
+                <!-- Box 3 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-sm border border-emerald-500/40">Z</span>
+                        <h3 class="text-base font-bold text-white">Profondeur Inférentielle (Axe Z)</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Indexe l'<strong>horizon temporel</strong> et le degré d'abstraction (Z=0 à Z=5). Ne porte aucun contenu propre mais régule la précision attentionnelle sous la contrainte métrique L1.
+                    </p>
+                    <div class="text-[11px] font-mono text-emerald-300 pt-2 border-t border-slate-800">
+                        Budget L1 : |X| + |Y| = 2Z - 2 (pour Z &ge; 2)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mathematical Core -->
+            <div id="equations-formelles" class="p-6 rounded-2xl bg-cosmic-900 border border-purple-800/40 space-y-4">
+                <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Formalisation Mathématique &amp; Invariance</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300">
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                        <div class="font-bold text-white">1. Conservation Attentionnelle de Manhattan (L1) :</div>
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-purple-300 text-sm">
+                            ||(X, Y)||_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2
+                        </div>
+                        <p class="text-slate-400 text-[11px]">
+                            Garantit qu'à profondeur inférentielle fixée, la charge cognitive et sensorimotrice est strictement conservée.
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                        <div class="font-bold text-white">2. Antagonisme Central par Inversion :</div>
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-indigo-300 text-sm">
+                            \mathcal{A}(X, Y, Z) = (-X, -Y, Z)
+                        </div>
+                        <p class="text-slate-400 text-[11px]">
+                            Tout attracteur possède un opposé fonctionnel exact inversant simultanément la révisabilité interne et la contrôlabilité externe (ex: Colère $\leftrightarrow$ Calme, Désir $\leftrightarrow$ Dégoût).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 2 : SCHOLAR DRIVE & DOCUMENTS DE RECHERCHE      -->
+        <!-- ======================================================== -->
+        <section id="scholar-drive-docs" class="rounded-3xl bg-slate-850/95 border border-slate-750 p-6 sm:p-10 shadow-2xl space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Ressources Académiques</span>
+                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                        Documents de Recherche &amp; Synthèses
+                    </h2>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-mono bg-sky-950/80 text-sky-300 border border-sky-700/50">
+                    Accès Chercheurs &amp; Praticiens
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Doc 1 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl">📄</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Algorithme 3.6</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">Algorithme du Cartograffect 3.6</h3>
+                        <p class="text-xs text-slate-300">
+                            Document de référence formalisant les 4 volets : Moteur Prédictif, Noyau Affectif, Matrice Z=2 et Taxonomie hiérarchique des 83 états affectifs.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">Manuel Cabelguen</span>
+                        <a href="https://docs.google.com/document/d/1VwLSbfWCPPsk7ruqWaFB0026-awqgXSX/edit" target="_blank" rel="noopener noreferrer" class="font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                            <span>Consulter</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Doc 2 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-emerald-500/50 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl">✨</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Modèle MIRACLES</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">Modèle M.I.R.A.C.L.E.S. &amp; Neurobiologie</h3>
+                        <p class="text-xs text-slate-300">
+                            Modèle intégré de régulation attentionnelle : Systèmes 1, 2, 3, modèle séquentiel de James Gross et 14 stratégies de restructuration cognitive.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">18 Pages de Référence</span>
+                        <a href="miracles.html" class="font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                            <span>Explorer</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Doc 3 -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-rose-500/50 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl">⚠️</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Modèle CRIMES</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">Modèle C.R.I.M.E.S. &amp; Dérégulation</h3>
+                        <p class="text-xs text-slate-300">
+                            Catalogue de 85+ comportements nuisibles, 12 distorsions cognitives et justifications verbales, et neurochimie des 4 circuits de récompense.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">85+ Items Cliniques</span>
+                        <a href="crimes.html" class="font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1">
+                            <span>Explorer</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 3 : CORPUS BIBLIOGRAPHIQUE INTERNATIONAL         -->
+        <!-- ======================================================== -->
+        <section id="bibliographie" class="rounded-3xl bg-slate-850/95 border border-slate-750 p-6 sm:p-10 shadow-2xl space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                <div>
+                    <span class="text-xs uppercase font-bold tracking-widest text-indigo-400">Piliers Théoriques &amp; Épistémologie</span>
+                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                        Corpus Scientifique &amp; Références Internationales
+                    </h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                <div class="p-4 rounded-xl bg-cosmic-900 border border-slate-800 space-y-1">
+                    <div class="font-bold text-white">Friston, K. (2010)</div>
+                    <div class="text-purple-300 italic">The free-energy principle: a unified brain theory?</div>
+                    <p class="text-slate-400">Nature Reviews Neuroscience, 11(2), 127-138. Fondement de l'inférence active et de la minimisation de l'énergie libre.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-cosmic-900 border border-slate-800 space-y-1">
+                    <div class="font-bold text-white">Gross, J. J. (2015)</div>
+                    <div class="text-purple-300 italic">Emotion regulation: Current status and future prospects.</div>
+                    <p class="text-slate-400">Philosophical Transactions of the Royal Society B. Modèle séquentiel de la régulation émotionnelle (Situation &rarr; Attention &rarr; Évaluation &rarr; Réponse).</p>
+                </div>
+                <div class="p-4 rounded-xl bg-cosmic-900 border border-slate-800 space-y-1">
+                    <div class="font-bold text-white">Barrett, L. F. (2017)</div>
+                    <div class="text-purple-300 italic">How emotions are made: The secret life of the brain.</div>
+                    <p class="text-slate-400">Houghton Mifflin Harcourt. Théorie de l'émotion construite et allostasie prédictive.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-cosmic-900 border border-slate-800 space-y-1">
+                    <div class="font-bold text-white">Joffily, M., &amp; Coricelli, G. (2013)</div>
+                    <div class="text-purple-300 italic">Emotional valence and the free-energy principle.</div>
+                    <p class="text-slate-400">PLoS Computational Biology, 9(6), e1003094. Définition de la valence comme taux de variation de l'énergie libre.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
+                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
+                <a href="scholar_drive.html" class="text-purple-400 font-semibold">Scholar Drive</a>
+                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+            </div>
+            <div class="text-xs text-slate-400">
+                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation Toggle Script -->
+    <script>
+        (function() {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileClose = document.getElementById('mobileMenuClose');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                });
+                const closeMenu = () => {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                };
+                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) closeMenu();
+                });
+            }
+        })();
+
+        // Auto-render KaTeX mathematical formulas
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError: false
+                });
+            } else {
+                window.addEventListener('load', () => {
+                    if (typeof renderMathInElement === 'function') {
+                        renderMathInElement(document.body, {
+                            delimiters: [
+                                {left: '$$', right: '$$', display: true},
+                                {left: '$', right: '$', display: false}
+                            ],
+                            throwOnError: false
+                        });
+                    }
+                });
+            }
+        });
+
+        // Register Service Worker for PWA Offline Capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
+                }).catch((err) => {
+                    console.log('SW registration error :', err);
+                });
+            });
+        }
+    </script>
+    <script src="bilingual_modal.js"></script>
+</body>
+</html>

@@ -11,6 +11,8 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -34,6 +36,10 @@
     
     <!-- D3.js -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Three.js for 3D Inferential Pyramid -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -255,10 +261,17 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                    Scholar Drive
+                </a>
             </nav>
 
-            <!-- Quick Action / API Settings -->
+            <!-- Quick Action / API Settings / Bilingual -->
             <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
                 <button id="openApiKeyModal" class="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-purple-300 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors flex items-center gap-1.5" title="Configurer une clé Gemini API personnelle">
                     <span>✨ Clé IA</span>
                     <span id="apiKeyIndicator" class="w-2 h-2 rounded-full bg-slate-500"></span>
@@ -286,6 +299,7 @@
         <a href="emotions.html" class="active-link"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="index.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">&larr; Retour à l'Accueil</a>
@@ -320,6 +334,9 @@
                 </button>
                 <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-matrice">
                     📐 Matrice &amp; Taxonomie Hiérarchique
+                </button>
+                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-fittt">
+                    📊 Test de Fonctionnalité F.I.T.T.T.
                 </button>
             </div>
         </div>
@@ -403,18 +420,40 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
                 <!-- Chart Area (8 cols) -->
-                <div class="lg:col-span-8 bg-cosmic-850 border border-slate-700/70 rounded-2xl p-4 sm:p-6 shadow-2xl relative">
-                    <div class="flex items-center justify-between text-xs text-slate-400 mb-3 px-1">
+                <div id="chartAreaCard" class="lg:col-span-8 bg-cosmic-850 border border-slate-700/70 rounded-2xl p-4 sm:p-6 shadow-2xl relative">
+                    <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 mb-3 px-1">
                         <span class="font-mono text-purple-300 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            Cliquez sur un attracteur pour inspecter ses paramètres computationnels
+                            <span>Axe Y: Contrôle [-8; +8] | Axe X: Attente [-8; +8] | Axe Z: Profondeur [0 à 5]</span>
                         </span>
-                        <span class="text-slate-500 text-[11px] font-mono">Axe Y: Contrôle [-8; +8] | Axe X: Attente [-8; +8] | Axe Z: Profondeur [0 à 5]</span>
+                        
+                        <!-- 2D / 3D & Presentation Mode Buttons -->
+                        <div class="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-750">
+                            <button id="viewMode2DBtn" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-600 text-white shadow transition-all flex items-center gap-1">
+                                <span>🗺️</span> 2D Matrice
+                            </button>
+                            <button id="viewMode3DBtn" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all flex items-center gap-1">
+                                <span>🪐</span> 3D Pyramide
+                            </button>
+                            <button id="toggleFullscreenBtn" type="button" class="px-2 py-1 rounded-lg text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="Mode Plein Écran / Présentation">
+                                <span>⛶</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- SVG Chart Element -->
-                    <div class="chart-svg-container flex justify-center overflow-hidden rounded-xl bg-cosmic-900 border border-slate-800">
+                    <!-- 2D SVG Chart Element -->
+                    <div id="chart2DWrapper" class="chart-svg-container flex justify-center overflow-hidden rounded-xl bg-cosmic-900 border border-slate-800">
                         <svg id="emotionChart" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+
+                    <!-- 3D WebGL Chart Element -->
+                    <div id="chart3DWrapper" class="hidden w-full h-[580px] rounded-xl bg-cosmic-900 border border-slate-800 relative overflow-hidden">
+                        <div id="threeJsCanvasContainer" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+                        <!-- 3D Overlay Controls HUD -->
+                        <div class="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between pointer-events-none text-[11px] font-mono text-purple-300/80 bg-slate-950/80 backdrop-blur px-3 py-1.5 rounded-lg border border-purple-800/40">
+                            <span>🖱️ Glisser : Orbite 360° | Molette : Zoom | Clic Droit : Déplacement</span>
+                            <span>Axe Z (Hauteur) &bull; Norme L1 : |X|+|Y|=2Z-2</span>
+                        </div>
                     </div>
 
                     <!-- Legend -->
@@ -731,6 +770,144 @@
                             <p class="text-slate-400 mt-1">Invariance formelle des lois régulatrices avec abstraction croissante.</p>
                         </div>
                     </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: TEST DE FONCTIONNALITÉ F.I.T.T.T. -->
+        <div id="tab-fittt" class="tab-content hidden space-y-8">
+            <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-indigo-700/60 rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8">
+                <div class="max-w-3xl">
+                    <span class="text-xs uppercase font-bold tracking-widest text-indigo-400 bg-indigo-950/80 px-3 py-1 rounded-full border border-indigo-700/40">
+                        Crible Clinique &bull; Cabelguen (2026)
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">
+                        Est-ce que mes émotions fittent avec le F.I.T.T.T. ?
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mt-2 font-light">
+                        « Grâce à la composante naturelle de base de ces affects, ils seront jugés fonctionnels dans la mesure où la <strong>Fréquence</strong>, l'<strong>Intensité</strong>, le <strong>Type</strong>, la <strong>Durée (Temps)</strong> ou le <strong>Timing (moment)</strong> correspondent aux attentes normatives du milieu de vie de l'individu. »
+                    </p>
+                </div>
+
+                <!-- Interactive Evaluation Matrix -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Form 5 Criteria -->
+                    <div class="lg:col-span-7 bg-cosmic-900 border border-slate-750 p-6 sm:p-8 rounded-2xl space-y-6">
+                        <div class="space-y-1 border-b border-slate-800 pb-3">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-300">1. Émotion ou Sentiment Observé :</label>
+                            <input type="text" id="fitttEmotionName" value="Colère" placeholder="Ex: Colère, Peur, Tristesse, Joie, Méfiance..." class="w-full bg-slate-850 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white font-semibold focus:outline-none focus:border-indigo-500">
+                        </div>
+
+                        <!-- F : Fréquence -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-white">F &bull; Fréquence <span class="text-slate-400 font-normal">(Nombre de fois qu'elle se répète)</span> :</span>
+                                <span id="valFText" class="font-mono text-indigo-400 font-bold">Modérée (Occasionnelle)</span>
+                            </div>
+                            <input type="range" id="sliderF" min="1" max="4" value="2" class="w-full accent-indigo-500 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-500">
+                                <span>Rare (1)</span>
+                                <span>Occasionnelle (2)</span>
+                                <span>Fréquente (3)</span>
+                                <span>Envahissante (4)</span>
+                            </div>
+                        </div>
+
+                        <!-- I : Intensité -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-white">I &bull; Intensité <span class="text-slate-400 font-normal">(Charge émotive et viscérale)</span> :</span>
+                                <span id="valIText" class="font-mono text-indigo-400 font-bold">Proportionnée (Modérée)</span>
+                            </div>
+                            <input type="range" id="sliderI" min="1" max="4" value="2" class="w-full accent-indigo-500 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-500">
+                                <span>Légère (1)</span>
+                                <span>Modérée (2)</span>
+                                <span>Forte (3)</span>
+                                <span>Explosive (4)</span>
+                            </div>
+                        </div>
+
+                        <!-- T1 : Type -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-white">T &bull; Type <span class="text-slate-400 font-normal">(Correspondance avec le contexte)</span> :</span>
+                                <span id="valT1Text" class="font-mono text-indigo-400 font-bold">Congruente au contexte</span>
+                            </div>
+                            <input type="range" id="sliderT1" min="1" max="3" value="1" class="w-full accent-indigo-500 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-500">
+                                <span>Cohérente (1)</span>
+                                <span>Partiellement décalée (2)</span>
+                                <span>Inappropriée (3)</span>
+                            </div>
+                        </div>
+
+                        <!-- T2 : Temps -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-white">T &bull; Temps / Durée <span class="text-slate-400 font-normal">(Délai de retour au niveau neutre)</span> :</span>
+                                <span id="valT2Text" class="font-mono text-indigo-400 font-bold">Règle des 90 secondes</span>
+                            </div>
+                            <input type="range" id="sliderT2" min="1" max="4" value="1" class="w-full accent-indigo-500 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-500">
+                                <span>&lt; 90s (1)</span>
+                                <span>Quelques minutes (2)</span>
+                                <span>Plusieurs heures (3)</span>
+                                <span>Enkystée en jours (4)</span>
+                            </div>
+                        </div>
+
+                        <!-- T3 : Timing -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="font-bold text-white">T &bull; Timing <span class="text-slate-400 font-normal">(Moment où elle est exprimée)</span> :</span>
+                                <span id="valT3Text" class="font-mono text-indigo-400 font-bold">Moment opportun</span>
+                            </div>
+                            <input type="range" id="sliderT3" min="1" max="3" value="1" class="w-full accent-indigo-500 cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-slate-500">
+                                <span>Opportun / Calibré (1)</span>
+                                <span>Légèrement tardif / hâtif (2)</span>
+                                <span>Impulsif / Inopportun (3)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagnostic Result Card -->
+                    <div class="lg:col-span-5 bg-cosmic-900 border border-slate-750 p-6 sm:p-8 rounded-2xl space-y-5 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <span class="text-xs uppercase font-bold tracking-widest text-indigo-400">Diagnostic Métacognitif</span>
+                            <div id="fitttResultScoreBadge" class="p-3 rounded-xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 font-bold text-sm flex items-center justify-between">
+                                <span>Fonctionnalité Globale : Équilibrée</span>
+                                <span>✓ Normative</span>
+                            </div>
+                            <h3 id="fitttResultTitle" class="text-xl font-heading font-black text-white">Réponse Adaptative Fonctionnelle</h3>
+                            <p id="fitttResultDesc" class="text-xs text-slate-300 leading-relaxed">
+                                L'émotion est cohérente avec la situation, régulée dans sa charge et respecte la redescente somatique naturelle (règle des 90 secondes). Elle sert l'adaptation sans générer de dysfonctionnement relationnel.
+                            </p>
+                        </div>
+
+                        <div id="fitttGuidanceBox" class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2 text-xs">
+                            <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Orientation Thérapeutique</span>
+                            <p id="fitttGuidanceText" class="text-slate-300">
+                                Maintenir la présence et consolider le renforcement positif par le raisonnement logique et introspectif.
+                            </p>
+                        </div>
+
+                        <div class="pt-2 space-y-2">
+                            <a id="fitttLinkAction" href="miracles.html#modele-miracles" class="inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all">
+                                Consulter les Leviers M.I.R.A.C.L.E.S. &rarr;
+                            </a>
+                            <div class="grid grid-cols-2 gap-2">
+                                <a href="miracles.html#minuteur-somatique" class="py-2 px-3 text-center rounded-xl font-semibold text-[11px] text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-600/40 transition-colors flex items-center justify-center gap-1">
+                                    <span>⏱️</span> Minuteur 90s
+                                </a>
+                                <a href="miracles.html#pont-resolution" class="py-2 px-3 text-center rounded-xl font-semibold text-[11px] text-purple-200 bg-purple-950/70 hover:bg-purple-900 border border-purple-600/40 transition-colors flex items-center justify-center gap-1">
+                                    <span>🌉</span> Pont de Résolution
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -1505,6 +1682,86 @@
         matrixA.addEventListener("change", updateMatrixResult);
         matrixB.addEventListener("change", updateMatrixResult);
 
+        // --- F.I.T.T.T. Functional Test Logic (Cabelguen 2026) ---
+        const sliderF = document.getElementById("sliderF");
+        const sliderI = document.getElementById("sliderI");
+        const sliderT1 = document.getElementById("sliderT1");
+        const sliderT2 = document.getElementById("sliderT2");
+        const sliderT3 = document.getElementById("sliderT3");
+        const emotionNameInput = document.getElementById("fitttEmotionName");
+
+        const valFText = document.getElementById("valFText");
+        const valIText = document.getElementById("valIText");
+        const valT1Text = document.getElementById("valT1Text");
+        const valT2Text = document.getElementById("valT2Text");
+        const valT3Text = document.getElementById("valT3Text");
+
+        const fitttResultScoreBadge = document.getElementById("fitttResultScoreBadge");
+        const fitttResultTitle = document.getElementById("fitttResultTitle");
+        const fitttResultDesc = document.getElementById("fitttResultDesc");
+        const fitttGuidanceText = document.getElementById("fitttGuidanceText");
+        const fitttLinkAction = document.getElementById("fitttLinkAction");
+
+        function updateFitttDiagnostic() {
+            if (!sliderF || !sliderI) return;
+
+            const f = parseInt(sliderF.value);
+            const i = parseInt(sliderI.value);
+            const t1 = parseInt(sliderT1.value);
+            const t2 = parseInt(sliderT2.value);
+            const t3 = parseInt(sliderT3.value);
+            const name = emotionNameInput.value.trim() || "Cet affect";
+
+            const fLabels = ["", "Rare (1)", "Occasionnelle (2)", "Fréquente (3)", "Envahissante (4)"];
+            const iLabels = ["", "Légère (1)", "Modérée (2)", "Forte (3)", "Explosive (4)"];
+            const t1Labels = ["", "Cohérente (1)", "Partiellement décalée (2)", "Inappropriée (3)"];
+            const t2Labels = ["", "Règle des 90 secondes (1)", "Quelques minutes (2)", "Plusieurs heures (3)", "Enkystée en jours (4)"];
+            const t3Labels = ["", "Moment opportun (1)", "Légèrement décalé (2)", "Impulsif / Inopportun (3)"];
+
+            if (valFText) valFText.textContent = fLabels[f];
+            if (valIText) valIText.textContent = iLabels[i];
+            if (valT1Text) valT1Text.textContent = t1Labels[t1];
+            if (valT2Text) valT2Text.textContent = t2Labels[t2];
+            if (valT3Text) valT3Text.textContent = t3Labels[t3];
+
+            const total = f + i + t1 + t2 + t3;
+
+            if (total <= 8) {
+                fitttResultScoreBadge.className = "p-3 rounded-xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 font-bold text-sm flex items-center justify-between";
+                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Équilibré</span><span>✓ Normatif</span>`;
+                fitttResultTitle.textContent = `${name} : Réponse Adaptative Saine`;
+                fitttResultDesc.textContent = `Votre vécu de ${name} s'inscrit dans les normes physiologiques saines. La durée respecte la règle homéostatique des 90 secondes et la charge correspond à la situation sans débordement toxique.`;
+                fitttGuidanceText.textContent = "Consolidez cette régulation par le raisonnement logique et introspectif (MIRACLES). Aucun réajustement urgent requis.";
+                fitttLinkAction.href = "miracles.html#modele-miracles";
+                fitttLinkAction.textContent = "Consolider avec le Modèle M.I.R.A.C.L.E.S. →";
+                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all";
+            } else if (total <= 12) {
+                fitttResultScoreBadge.className = "p-3 rounded-xl bg-amber-950/80 border border-amber-600/40 text-amber-300 font-bold text-sm flex items-center justify-between";
+                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Tension Modérée</span><span>⚠️ Vigilance</span>`;
+                fitttResultTitle.textContent = `${name} : Risque d'Enkystement Affectif`;
+                fitttResultDesc.textContent = `L'affect ${name} commence à dépasser le cadre contextuel : sa durée excessive ou sa fréquence indique que le système génératif réalimente en boucle l'écart de prédiction au lieu de revenir à la neutralité (0,0,0).`;
+                fitttGuidanceText.textContent = "Appliquez les 4 leviers de transmutation : Accueil somatique immédiat, décentrement épistémique et désamorçage des ruminations.";
+                fitttLinkAction.href = "miracles.html#navigateur-resilience";
+                fitttLinkAction.textContent = "Activer le Navigateur de Résilience →";
+                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-amber-600 hover:bg-amber-500 shadow-lg shadow-amber-600/30 transition-all";
+            } else {
+                fitttResultScoreBadge.className = "p-3 rounded-xl bg-rose-950/80 border border-rose-600/40 text-rose-300 font-bold text-sm flex items-center justify-between";
+                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Alerte Dérégulation</span><span>🛑 Risque C.R.I.M.E.S.</span>`;
+                fitttResultTitle.textContent = `${name} : Rupture Écologique Intérieure`;
+                fitttResultDesc.textContent = `L'intensité explosive, la répétition envahissante et l'inadéquation au contexte signalent un basculement vers l'un des 4 pièges du modèle C.R.I.M.E.S. (Domination, Exagération, Soumission ou Évasion). Des distorsions cognitives et des justifications renforcent ce comportement nuisible.`;
+                fitttGuidanceText.textContent = "Désamorcez d'urgence les alibis cognitifs et identifiez les formulations piégées dans le répertoire des comportements nuisibles.";
+                fitttLinkAction.href = "crimes.html#comportements-nuisibles";
+                fitttLinkAction.textContent = "Diagnostiquer sur le Territoire des C.R.I.M.E.S. →";
+                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all";
+            }
+        }
+
+        [sliderF, sliderI, sliderT1, sliderT2, sliderT3].forEach(s => {
+            if (s) s.addEventListener("input", updateFitttDiagnostic);
+        });
+        if (emotionNameInput) emotionNameInput.addEventListener("input", updateFitttDiagnostic);
+        updateFitttDiagnostic();
+
         // --- API Key Modal Logic ---
         const apiKeyModal = document.getElementById("apiKeyModal");
         const openApiKeyBtn = document.getElementById("openApiKeyModal");
@@ -1541,6 +1798,264 @@
             updateKeyIndicator();
             apiKeyModal.classList.add("hidden");
         });
+
+        // ========================================================
+        // 3D ORBITAL PYRAMID VISUALIZATION (THREE.JS)
+        // ========================================================
+        let scene3D, camera3D, renderer3D, controls3D, animationFrameId;
+        let is3DInitialized = false;
+        const clickableSpheres = [];
+
+        function init3DVisualization() {
+            const container = document.getElementById("threeJsCanvasContainer");
+            if (!container) return;
+
+            const width = container.clientWidth || 800;
+            const height = container.clientHeight || 580;
+
+            // Scene
+            scene3D = new THREE.Scene();
+            scene3D.background = new THREE.Color(0x070b14);
+            scene3D.fog = new THREE.FogExp2(0x070b14, 0.0018);
+
+            // Camera
+            camera3D = new THREE.PerspectiveCamera(45, width / height, 1, 2500);
+            camera3D.position.set(220, 240, 340);
+
+            // Renderer
+            renderer3D = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer3D.setSize(width, height);
+            renderer3D.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.innerHTML = "";
+            container.appendChild(renderer3D.domElement);
+
+            // Controls
+            controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
+            controls3D.enableDamping = true;
+            controls3D.dampingFactor = 0.05;
+            controls3D.maxDistance = 800;
+            controls3D.minDistance = 60;
+            controls3D.target.set(0, 40, 0);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+            scene3D.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xc084fc, 1.4);
+            dirLight.position.set(150, 300, 150);
+            scene3D.add(dirLight);
+
+            const pointLight = new THREE.PointLight(0x38bdf8, 1.2, 500);
+            pointLight.position.set(-150, 100, -150);
+            scene3D.add(pointLight);
+
+            // Coordinate scale
+            const scaleXY = 20; // 1 unit = 20 px
+            const scaleZ = 65;  // 1 Z layer = 65 px
+
+            // Stratum colors
+            const stratumColors = {
+                0: 0x94a3b8, // Veille
+                1: 0xc084fc, // Surprise
+                2: 0xa855f7, // 1re Couronne
+                3: 0x3b82f6, // Émotions réactives
+                4: 0xec4899, // Sentiments réflexifs
+                5: 0x14b8a6  // Humeurs
+            };
+
+            // Build Vertical Axis Z Line
+            const zAxisGeo = new THREE.BufferGeometry().setFromPoints([
+                new THREE.Vector3(0, -60, 0),
+                new THREE.Vector3(0, 5.5 * scaleZ - 100, 0)
+            ]);
+            const zAxisMat = new THREE.LineDashedMaterial({ color: 0xa855f7, dashSize: 6, gapSize: 4 });
+            const zAxisLine = new THREE.Line(zAxisGeo, zAxisMat);
+            zAxisLine.computeLineDistances();
+            scene3D.add(zAxisLine);
+
+            // Build Horizontal Planes & Manhattan Diamonds for Z=2,3,4,5
+            [2, 3, 4, 5].forEach(z => {
+                const yElev = (z - 1.5) * scaleZ - 70;
+                const budget = 2 * z - 2;
+
+                // Diamond vertices in horizontal X-Z (where Three.js Y is up)
+                const pts = [
+                    new THREE.Vector3(budget * scaleXY, yElev, 0),
+                    new THREE.Vector3(0, yElev, -budget * scaleXY),
+                    new THREE.Vector3(-budget * scaleXY, yElev, 0),
+                    new THREE.Vector3(0, yElev, budget * scaleXY),
+                    new THREE.Vector3(budget * scaleXY, yElev, 0)
+                ];
+
+                const diamondGeo = new THREE.BufferGeometry().setFromPoints(pts);
+                const diamondMat = new THREE.LineBasicMaterial({
+                    color: stratumColors[z] || 0x8b5cf6,
+                    transparent: true,
+                    opacity: 0.65,
+                    linewidth: 1.5
+                });
+                const diamondLine = new THREE.Line(diamondGeo, diamondMat);
+                scene3D.add(diamondLine);
+
+                // Subtle transparent plane
+                const shape = new THREE.Shape();
+                shape.moveTo(budget * scaleXY, 0);
+                shape.lineTo(0, -budget * scaleXY);
+                shape.lineTo(-budget * scaleXY, 0);
+                shape.lineTo(0, budget * scaleXY);
+                shape.closePath();
+
+                const planeGeo = new THREE.ShapeGeometry(shape);
+                const planeMat = new THREE.MeshBasicMaterial({
+                    color: stratumColors[z] || 0x8b5cf6,
+                    transparent: true,
+                    opacity: 0.04,
+                    side: THREE.DoubleSide
+                });
+                const planeMesh = new THREE.Mesh(planeGeo, planeMat);
+                planeMesh.rotation.x = Math.PI / 2;
+                planeMesh.position.y = yElev;
+                scene3D.add(planeMesh);
+            });
+
+            // Add 83 Affect Spheres
+            clickableSpheres.length = 0;
+            const sphereGeo = new THREE.SphereGeometry(3.8, 16, 16);
+
+            emotionsData.forEach(d => {
+                const yElev = (d.z - 1.5) * scaleZ - 70;
+                const xPos = d.x * scaleXY;
+                const zPos = -d.y * scaleXY;
+
+                const color = stratumColors[d.category] || 0xa855f7;
+                const mat = new THREE.MeshStandardMaterial({
+                    color: color,
+                    roughness: 0.2,
+                    metalness: 0.6,
+                    emissive: color,
+                    emissiveIntensity: d.category === 0 ? 0.2 : 0.45
+                });
+
+                const sphere = new THREE.Mesh(sphereGeo, mat);
+                sphere.position.set(xPos, yElev, zPos);
+                sphere.userData = d;
+                scene3D.add(sphere);
+                clickableSpheres.push(sphere);
+
+                // Floating 3D Text Canvas Sprite for main emotions
+                if (d.z <= 2 || ["Colère", "Peur", "Joie", "Tristesse", "Désir", "Calme", "Dégoût", "Courage"].includes(d.name)) {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = 160;
+                    canvas.height = 40;
+                    const ctx = canvas.getContext("2d");
+                    ctx.font = "bold 20px DM Sans, sans-serif";
+                    ctx.fillStyle = "#f1f5f9";
+                    ctx.textAlign = "center";
+                    ctx.fillText(d.name, 80, 26);
+
+                    const texture = new THREE.CanvasTexture(canvas);
+                    const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.85 });
+                    const sprite = new THREE.Sprite(spriteMat);
+                    sprite.position.set(xPos, yElev + 8, zPos);
+                    sprite.scale.set(24, 6, 1);
+                    scene3D.add(sprite);
+                }
+            });
+
+            // Raycaster for Hover & Click
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            container.addEventListener("click", (event) => {
+                const rect = renderer3D.domElement.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(mouse, camera3D);
+                const intersects = raycaster.intersectObjects(clickableSpheres);
+                if (intersects.length > 0) {
+                    const hitData = intersects[0].object.userData;
+                    if (typeof handleEmotionSelect === "function") {
+                        handleEmotionSelect(event, hitData);
+                    }
+                }
+            });
+
+            // Animation Loop
+            function animate() {
+                animationFrameId = requestAnimationFrame(animate);
+                controls3D.update();
+                renderer3D.render(scene3D, camera3D);
+            }
+            animate();
+
+            // Resize Handler
+            window.addEventListener("resize", () => {
+                if (renderer3D && container && !document.getElementById("chart3DWrapper").classList.contains("hidden")) {
+                    const w = container.clientWidth;
+                    const h = container.clientHeight;
+                    camera3D.aspect = w / h;
+                    camera3D.updateProjectionMatrix();
+                    renderer3D.setSize(w, h);
+                }
+            });
+
+            is3DInitialized = true;
+        }
+
+        // 2D / 3D Switcher
+        const viewMode2DBtn = document.getElementById("viewMode2DBtn");
+        const viewMode3DBtn = document.getElementById("viewMode3DBtn");
+        const chart2DWrapper = document.getElementById("chart2DWrapper");
+        const chart3DWrapper = document.getElementById("chart3DWrapper");
+
+        if (viewMode2DBtn && viewMode3DBtn) {
+            viewMode2DBtn.addEventListener("click", () => {
+                viewMode2DBtn.classList.add("bg-purple-600", "text-white");
+                viewMode2DBtn.classList.remove("text-slate-400");
+                viewMode3DBtn.classList.remove("bg-purple-600", "text-white");
+                viewMode3DBtn.classList.add("text-slate-400");
+
+                if (chart2DWrapper) chart2DWrapper.classList.remove("hidden");
+                if (chart3DWrapper) chart3DWrapper.classList.add("hidden");
+            });
+
+            viewMode3DBtn.addEventListener("click", () => {
+                viewMode3DBtn.classList.add("bg-purple-600", "text-white");
+                viewMode3DBtn.classList.remove("text-slate-400");
+                viewMode2DBtn.classList.remove("bg-purple-600", "text-white");
+                viewMode2DBtn.classList.add("text-slate-400");
+
+                if (chart2DWrapper) chart2DWrapper.classList.add("hidden");
+                if (chart3DWrapper) chart3DWrapper.classList.remove("hidden");
+
+                if (!is3DInitialized) {
+                    setTimeout(init3DVisualization, 60);
+                } else if (renderer3D) {
+                    const container = document.getElementById("threeJsCanvasContainer");
+                    if (container) {
+                        camera3D.aspect = container.clientWidth / container.clientHeight;
+                        camera3D.updateProjectionMatrix();
+                        renderer3D.setSize(container.clientWidth, container.clientHeight);
+                    }
+                }
+            });
+        }
+
+        // Fullscreen / Presentation Mode
+        const toggleFullscreenBtn = document.getElementById("toggleFullscreenBtn");
+        const chartAreaCard = document.getElementById("chartAreaCard");
+        if (toggleFullscreenBtn && chartAreaCard) {
+            toggleFullscreenBtn.addEventListener("click", () => {
+                if (!document.fullscreenElement) {
+                    chartAreaCard.requestFullscreen().catch(err => {
+                        console.warn("Fullscreen request error:", err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        }
     </script>
 
     <!-- Mobile Navigation Toggle Script -->
@@ -1564,6 +2079,27 @@
                 });
             }
         })();
+
+        // Auto-switch to tab if specified in hash or session
+        window.addEventListener("DOMContentLoaded", () => {
+            if (sessionStorage.getItem('openTab') === 'tab-fittt' || window.location.hash === '#tab-fittt') {
+                sessionStorage.removeItem('openTab');
+                const btn = document.querySelector('[data-tab="tab-fittt"]');
+                if (btn) btn.click();
+            }
+        });
+
+        // Register Service Worker for PWA Offline Capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
+                }).catch((err) => {
+                    console.log('SW registration error :', err);
+                });
+            });
+        }
     </script>
+    <script src="bilingual_modal.js"></script>
 </body>
 </html>

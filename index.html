@@ -12,6 +12,8 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -128,10 +130,17 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                         3. Miracles
                     </a>
+                    <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                        Scholar Drive
+                    </a>
                 </nav>
 
-                <!-- Action Button -->
+                <!-- Action Button & Bilingual Modal -->
                 <div class="hidden md:flex items-center gap-3 header-action-btn">
+                    <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                        <span class="text-purple-400">🌐</span> FR | EN
+                    </button>
                     <a href="emotions.html" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
                         Ouvrir la Carte &rarr;
                     </a>
@@ -156,6 +165,7 @@
             <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
             <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
             <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+            <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
             <div class="mt-auto pt-6">
                 <a href="emotions.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Ouvrir la Carte &rarr;</a>
             </div>
@@ -226,6 +236,24 @@
                                 Architecture Théorique
                             </a>
                         </div>
+
+                        <!-- Direct Interactive Clinical Tools Bar -->
+                        <div class="pt-2 flex flex-wrap items-center gap-2.5">
+                            <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1">Outils Directs :</span>
+                            <a href="miracles.html#minuteur-somatique" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-600/40 transition-colors">
+                                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                                <span>⏱️</span> Minuteur 90s
+                            </a>
+                            <a href="miracles.html#pont-resolution" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-200 bg-purple-950/70 hover:bg-purple-900 border border-purple-600/40 transition-colors">
+                                <span>🌉</span> Pont CRIMES &rarr; MIRACLES
+                            </a>
+                            <a href="emotions.html" onclick="sessionStorage.setItem('openTab','tab-fittt');" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-200 bg-indigo-950/70 hover:bg-indigo-900 border border-indigo-600/40 transition-colors">
+                                <span>📊</span> Test F.I.T.T.T.
+                            </a>
+                            <a href="miracles.html" onclick="sessionStorage.setItem('openClinicalModal','true');" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-200 bg-blue-950/70 hover:bg-blue-900 border border-blue-600/40 transition-colors">
+                                <span>📄</span> Fiche Clinique PDF
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Right Column: Interactive Pulsar / Logo Animation -->
@@ -266,24 +294,25 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Territory 1: Emotions -->
-                    <div class="group relative rounded-2xl bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 hover:border-purple-500/50 p-8 transition-all duration-300 flex flex-col justify-between shadow-xl">
+                    <div class="group relative rounded-2xl bg-slate-800/40 hover:bg-slate-800/70 border border-slate-700/60 hover:border-blue-500/50 p-8 transition-all duration-300 flex flex-col justify-between shadow-xl">
                         <div>
                             <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-2xl text-blue-400 mb-6 group-hover:scale-110 transition-transform">
                                 🧭
                             </div>
                             <span class="text-xs font-bold uppercase tracking-wider text-blue-400">Territoire 1</span>
-                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">ÉMOTIONS</h3>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-2">ÉMOTIONS</h3>
+                            <div class="text-[11px] font-mono text-blue-300 mb-3">La Cartographie Fondamentale &bull; Test F.I.T.T.T.</div>
                             <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                                <strong>Les Fondations de la Carte.</strong> Visualisez en 2D les 83 états affectifs, consultez les fiches d’identité psychologique, tracez des chemins émotionnels et testez l’analyseur de scénario.
+                                <strong>La Matrice Sensorimotrice et Cognitive.</strong> Visualisez en 2D les 83 états affectifs, évaluez la fonctionnalité de vos affects par le test clinique <strong>F.I.T.T.T.</strong> (Fréquence, Intensité, Type, Temps &lt; 90s, Timing) et explorez le Noyau Affectif.
                             </p>
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Graphique interactif complet 83 points</li>
-                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Filtres par 5 catégories &amp; symétries</li>
-                                <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Noyau Affectif &amp; Matrice Combinatoire</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Cartographie interactive des 83 états &amp; 5 strates</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Test F.I.T.T.T. de détection du dysfonctionnel</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Règle biologique des 90 secondes</li>
                             </ul>
                         </div>
                         <a href="emotions.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-blue-300 bg-blue-950/40 hover:bg-blue-900/60 border border-blue-500/30 transition-colors">
-                            <span>Accéder aux Émotions</span>
+                            <span>Explorer la Matrice &amp; Test F.I.T.T.T.</span>
                             <span>&rarr;</span>
                         </a>
                     </div>
@@ -295,18 +324,19 @@
                                 ⚡
                             </div>
                             <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Territoire 2</span>
-                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">CRIMES</h3>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-2">C.R.I.M.E.S.</h3>
+                            <div class="text-[11px] font-mono text-rose-300 mb-3">Comportements Symptomatiques Inadaptés</div>
                             <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                                <strong>Les Zones d'Ombre de la Carte.</strong> Comprenez les dérégulations, les ruptures d'équilibre, les boucles de ressentiment, le désespoir et l'anatomie des pièges émotionnels destructeurs.
+                                <strong>Comportements Résultants de l’Influence de Modulations Émotionnelles Symptomatiques.</strong> Modélisation des 4 modes nuisibles : <strong>Domination (R-)</strong>, <strong>Exagération (R+)</strong>, <strong>Soumission (P+)</strong> et <strong>Évasion (P-)</strong>.
                             </p>
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Décryptage des 4 pièges critiques</li>
-                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Analyse des mécanismes de défense</li>
-                                <li class="flex items-center gap-2"><span class="text-rose-400">✓</span> Détection précoce du passage à l'acte</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> Catalogue interactif de 85+ comportements nuisibles</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> 12 Distorsions cognitives &amp; formules de justification</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> Neurochimie des 4 désirs &amp; substances endo/exo</li>
                             </ul>
                         </div>
                         <a href="crimes.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-rose-300 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 transition-colors">
-                            <span>Explorer les Zones d'Ombre</span>
+                            <span>Décoder le Modèle C.R.I.M.E.S.</span>
                             <span>&rarr;</span>
                         </a>
                     </div>
@@ -318,18 +348,19 @@
                                 ✨
                             </div>
                             <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Territoire 3</span>
-                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-3">MIRACLES</h3>
+                            <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-2">M.I.R.A.C.L.E.S.</h3>
+                            <div class="text-[11px] font-mono text-emerald-300 mb-3">Régulation Attentionnelle &amp; Comportementale</div>
                             <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                                <strong>Les Itinéraires vers l'Équilibre.</strong> Découvrez l'alchimie affective : comment transformer la peur en courage, le chagrin en sérénité et trouver votre itinéraire de résilience guidé.
+                                <strong>Modèle Intégré de la Régulation Attentionnelle et Comportementale.</strong> Les 4 quadrants vertueux : <strong>Assertion (R-)</strong>, <strong>Optimisation (R+)</strong>, <strong>Compassion (P+)</strong> et <strong>Responsabilisation (P-)</strong>.
                             </p>
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Navigateur interactif de résilience</li>
-                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Itinéraires guidés étape par étape</li>
-                                <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Les 4 leviers de transmutation</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> 14 Stratégies de restructuration &amp; 60+ dialogues internes</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Neurobiologie des Systèmes 1, 2, 3 &amp; Modèle de Gross</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Écologie du S.O.I., 4 tempéraments &amp; glossaire des 70 affects</li>
                             </ul>
                         </div>
                         <a href="miracles.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-emerald-300 bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-500/30 transition-colors">
-                            <span>Suivre les Itinéraires</span>
+                            <span>Activer le Modèle M.I.R.A.C.L.E.S.</span>
                             <span>&rarr;</span>
                         </a>
                     </div>
@@ -467,5 +498,19 @@
 
     <!-- Main Logic & Animation Script -->
     <script src="script.js"></script>
+    <script src="bilingual_modal.js"></script>
+
+    <!-- Register Service Worker for PWA Offline Capability -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
+                }).catch((err) => {
+                    console.log('SW registration error :', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>

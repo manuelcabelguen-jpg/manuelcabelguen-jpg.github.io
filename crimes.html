@@ -3,28 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Territoire des CRIMES | Cartograffect</title>
-    <meta name="description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles, boucles toxiques de ressentiment, impasses psychiques et anatomie des fractures intérieures.">
+    <title>Territoire des CRIMES (C.R.I.M.E.S.) | Cartograffect</title>
+    <meta name="description" content="Explorez l'anatomie des dérégulations émotionnelles : Modèle C.R.I.M.E.S., 85+ comportements nuisibles, distorsions cognitives, justifications et neurobiologie des addictions.">
     <link rel="canonical" href="https://www.cartograffect.com/crimes.html">
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.cartograffect.com/crimes.html">
-    <meta property="og:title" content="Territoire des CRIMES | Cartograffect">
-    <meta property="og:description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles et boucles toxiques.">
+    <meta property="og:title" content="Territoire des CRIMES (C.R.I.M.E.S.) | Cartograffect">
+    <meta property="og:description" content="Modèle C.R.I.M.E.S. : Comportements résultants de l'influence de modulations émotionnelles symptomatiques, 85+ comportements nuisibles et distorsions cognitives.">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.cartograffect.com/crimes.html">
-    <meta name="twitter:title" content="Territoire des CRIMES | Cartograffect">
-    <meta name="twitter:description" content="Explorez les zones d'ombre de la carte affective : dérégulations émotionnelles et boucles toxiques.">
+    <meta name="twitter:title" content="Territoire des CRIMES (C.R.I.M.E.S.) | Cartograffect">
+    <meta name="twitter:description" content="Modèle C.R.I.M.E.S. : Dérégulations émotionnelles, 85+ comportements nuisibles et distorsions cognitives.">
     <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
@@ -47,6 +49,7 @@
                             900: '#070b14',
                             850: '#0b1120',
                             800: '#0e1726',
+                            750: '#111c30',
                             700: '#152136',
                             600: '#1f2e4a',
                         }
@@ -87,10 +90,17 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                    Scholar Drive
+                </a>
             </nav>
 
-            <!-- Quick Action -->
+            <!-- Quick Action & Bilingual -->
             <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
                 <a href="miracles.html" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 rounded-lg shadow-md transition-all">
                     Vers les Miracles &rarr;
                 </a>
@@ -114,6 +124,7 @@
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html" class="active-link"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="miracles.html" class="!bg-gradient-to-r !from-emerald-600 !to-teal-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-emerald-600/30">Vers les Miracles &rarr;</a>
@@ -124,27 +135,444 @@
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
 
         <!-- Hero Section -->
-        <section class="relative rounded-3xl bg-gradient-to-br from-rose-950/40 via-cosmic-850 to-slate-900 border border-rose-900/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
-            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-rose-600/10 blur-3xl pointer-events-none"></div>
+        <section class="relative rounded-3xl bg-gradient-to-br from-rose-950/50 via-cosmic-850 to-slate-900 border border-rose-900/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-rose-600/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-600/10 blur-3xl pointer-events-none"></div>
             
-            <div class="max-w-3xl relative z-10 space-y-5">
+            <div class="max-w-4xl relative z-10 space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose-950/80 text-rose-300 border border-rose-700/50">
                     <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                    Territoire 2 &bull; Les Zones d'Ombre de la Carte
+                    Territoire 2 &bull; Modèle C.R.I.M.E.S. &bull; Pathologie &amp; Biais
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
-                    CRIMES : L'Anatomie des <span class="bg-gradient-to-r from-rose-400 via-red-300 to-amber-300 bg-clip-text text-transparent">Fractures Affectives</span>
+                    Modèle <span class="bg-gradient-to-r from-rose-400 via-red-300 to-amber-300 bg-clip-text text-transparent">C.R.I.M.E.S.</span>
                 </h1>
-                <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
-                    Dans le modèle Cartograffect, le terme <strong>« Crime »</strong> ne relève pas du code pénal, mais de la rupture de l'écologie intérieure : c'est le moment critique où une émotion saturée déserte le Noyau d'Orientation pour s'enfermer dans une boucle toxique de ressentiment, de sidération ou d'injustice.
+                <p class="text-rose-300 text-sm sm:text-base font-semibold tracking-wide">
+                    Comportements Résultants de l’Influence de Modulations Émotionnelles Symptomatiques
                 </p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="#zones-critiques" class="px-5 py-2.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all text-xs sm:text-sm">
-                        Explorer les 4 Pièges Critiques
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
+                    Dans l'architecture Cartograffect, le <strong>« Crime »</strong> ne relève pas de la justice criminelle ordinaire, mais de la dérégulation adaptative : le moment critique où une réponse émotionnelle se fige dans l'un des 4 quadrants dysfonctionnels — <strong>Domination</strong>, <strong>Exagération</strong>, <strong>Soumission</strong> ou <strong>Évasion</strong> — renforcée par des distorsions cognitives et des discours de justification.
+                </p>
+                <div class="flex flex-wrap gap-2.5 pt-2">
+                    <a href="#modele-crimes" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>📐</span> Modèle C.R.I.M.E.S.
                     </a>
-                    <a href="#signaux" class="px-5 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 transition-colors text-xs sm:text-sm">
-                        Détecter les Signaux Précurseurs
+                    <a href="miracles.html#pont-resolution" class="px-3.5 py-2 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>🌉</span> Pont de Résolution vers MIRACLES &rarr;
                     </a>
+                    <a href="miracles.html#minuteur-somatique" class="px-3.5 py-2 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>⏱️</span> Minuteur 90s (Bio-Désescalade)
+                    </a>
+                    <a href="#comportements-nuisibles" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>⚠️</span> 85+ Comportements
+                    </a>
+                    <a href="#distorsions-cognitives" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>🪞</span> 12 Distorsions
+                    </a>
+                    <a href="#neurochimie-substances" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>🧪</span> Neurochimie
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 10 & 12 : LE MODÈLE INTÉGRÉ C.R.I.M.E.S.         -->
+        <!-- ======================================================== -->
+        <section id="modele-crimes" class="rounded-3xl bg-slate-850/90 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-rose-400">Architecture Symptomatique (10 &amp; 12)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Cartographie du Système C.R.I.M.E.S.
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                        Cabelguen (2026) &bull; OPIC n° 1233199
+                    </span>
+                </div>
+
+                <!-- Verbatim Foundational Text -->
+                <div class="rounded-2xl bg-cosmic-900/90 border border-slate-750 p-5 sm:p-6 text-xs sm:text-sm text-slate-300 leading-relaxed space-y-3">
+                    <div class="flex items-center gap-2 text-rose-400 font-semibold text-xs tracking-wider uppercase">
+                        <span>📖</span> Énoncé Théorique Fondamental C.R.I.M.E.S.
+                    </div>
+                    <p class="italic text-slate-300/90 font-light">
+                        « Tout individu, pour s'adapter à son environnement, présente un système biologique complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical du système excitateur/inhibiteur). Ces systèmes peuvent être exacerbés par diverses substances/drogues, mécanismes physiologiques ou activités (endogènes/exogènes). Le système excitateur, qui sert à éviter un danger ou à identifier dans l'environnement les éléments indispensables à la survie (protection/nourriture/reproduction), peut ainsi être amené à confondre des éléments superflus comme une nécessité absolue. Le système inhibiteur, qui sert à faire cesser, régénérer ou réguler le comportement résultant de l'action du système excitateur et dont les besoins auraient été comblés, peut se voir exacerbé avec pour effet de réduire la réponse à l'environnement. Différents affects vont résulter de ces deux systèmes selon un apprentissage associant une multitude d'éléments de l'environnement perçus comme étant agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à l'apprentissage de toute une gamme possible d'émotions ou de sentiments variant selon les particularités dans lesquelles aura évolué l'individu, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I) et durant le développement de l'individu. Une dysrégulation peut intervenir à différents stades du processus émotionnel, allant de la sélection de la situation à la modulation de la réponse émotionnelle. Malgré la composante naturelle de base de ces affects, ils seront jugés dysfonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) ne correspondent pas ou plus aux attentes normatives du milieu de vie de l'individu. De ces affects peuvent émerger une tendance vers un mode d'affirmation (confrontation/exagération/évasion/soumission), et favoriser des comportements nuisibles qui conduisent à un dysfonctionnement social. »
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mode Selector Nav Buttons -->
+            <div class="flex flex-wrap gap-2 pt-2" id="crimesModeTabs">
+                <button class="crimes-tab-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-rose-600 text-white border border-rose-500 shadow-md transition-all flex items-center gap-1.5" data-mode="domination">
+                    <span>⚔️</span> 1. Domination [R-]
+                </button>
+                <button class="crimes-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="exageration">
+                    <span>💥</span> 2. Exagération [R+]
+                </button>
+                <button class="crimes-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="evasion">
+                    <span>🏃</span> 3. Évasion [P-]
+                </button>
+                <button class="crimes-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="soumission">
+                    <span>🙇</span> 4. Soumission [P+]
+                </button>
+                <button class="crimes-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="soi-crimes">
+                    <span>🎯</span> Cœur S.O.I. &amp; Biais
+                </button>
+            </div>
+
+            <!-- Interactive Vector Diagram Representation of CRIMES -->
+            <div class="relative w-full rounded-2xl bg-cosmic-900 border border-slate-750 p-4 sm:p-6 overflow-hidden shadow-inner">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between mb-3 px-2">
+                    <span class="flex items-center gap-1.5 text-rose-400 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                        Diagramme Pathologique Bi-Axial C.R.I.M.E.S. &bull; Cliquez sur un quadrant pour inspecter
+                    </span>
+                    <span class="hidden sm:inline font-mono text-[10px] text-slate-500">Cartographie des Boucles Dysfonctionnelles</span>
+                </div>
+
+                <div class="w-full overflow-x-auto flex justify-center">
+                    <svg viewBox="0 0 1000 760" class="w-full max-w-4xl h-auto select-none font-sans" id="crimesSvg">
+                        <!-- Grid lines -->
+                        <line x1="80" y1="380" x2="920" y2="380" stroke="#334155" stroke-width="2" stroke-dasharray="6,4" />
+                        <line x1="500" y1="60" x2="500" y2="700" stroke="#334155" stroke-width="2" stroke-dasharray="6,4" />
+
+                        <!-- Quadrant Haut-Gauche : DOMINATION -->
+                        <g class="cursor-pointer group" onclick="selectCrimesMode('domination')">
+                            <rect id="svg-crime-domination" x="90" y="80" width="390" height="280" rx="16" fill="#ef4444" fill-opacity="0.08" stroke="#ef4444" stroke-opacity="0.4" stroke-width="2" class="transition-all hover:fill-opacity-20"/>
+                            <rect x="110" y="100" width="160" height="42" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+                            <text x="190" y="126" fill="#fca5a5" font-size="14" font-weight="800" text-anchor="middle">DOMINATION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="290" y="100" width="170" height="42" rx="8" fill="#450a0a" stroke="#b91c1c" stroke-width="1"/>
+                            <text x="375" y="118" fill="#f87171" font-size="10" font-weight="700" text-anchor="middle">RÉCOMPENSE (-)</text>
+                            <text x="375" y="132" fill="#fca5a5" font-size="8" text-anchor="middle">Retrait objet agréable</text>
+
+                            <!-- Cognitive Distortion tag -->
+                            <rect x="110" y="270" width="220" height="70" rx="8" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+                            <text x="120" y="288" fill="#f87171" font-size="9" font-weight="700">DISTORSIONS &amp; JUSTIFICATION :</text>
+                            <text x="120" y="302" fill="#e2e8f0" font-size="8.5" font-style="italic">Amplification &bull; Diabolisation</text>
+                            <text x="120" y="315" fill="#e2e8f0" font-size="8.5" font-style="italic">Projection &bull; « Ils font exprès ! »</text>
+                            <text x="120" y="330" fill="#f87171" font-size="8" font-weight="600">BIAIS : « CES SENTIMENTS SONT VRAIS ! »</text>
+                        </g>
+
+                        <!-- Quadrant Haut-Droite : EXAGÉRATION -->
+                        <g class="cursor-pointer group" onclick="selectCrimesMode('exageration')">
+                            <rect id="svg-crime-exageration" x="520" y="80" width="390" height="280" rx="16" fill="#f59e0b" fill-opacity="0.08" stroke="#f59e0b" stroke-opacity="0.4" stroke-width="1.5" class="transition-all hover:fill-opacity-20"/>
+                            <rect x="730" y="100" width="160" height="42" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+                            <text x="810" y="126" fill="#fde68a" font-size="14" font-weight="800" text-anchor="middle">EXAGÉRATION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="540" y="100" width="170" height="42" rx="8" fill="#451a03" stroke="#d97706" stroke-width="1"/>
+                            <text x="625" y="118" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">RÉCOMPENSE (+)</text>
+                            <text x="625" y="132" fill="#fde68a" font-size="8" text-anchor="middle">Ajout objet agréable</text>
+
+                            <!-- Cognitive Distortion tag -->
+                            <rect x="670" y="270" width="220" height="70" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1"/>
+                            <text x="680" y="288" fill="#fbbf24" font-size="9" font-weight="700">DISTORSIONS &amp; JUSTIFICATION :</text>
+                            <text x="680" y="302" fill="#e2e8f0" font-size="8.5" font-style="italic">Injonction &bull; Généralisation</text>
+                            <text x="680" y="315" fill="#e2e8f0" font-size="8.5" font-style="italic">Normalisation &bull; « Je dois tout avoir »</text>
+                            <text x="680" y="330" fill="#fbbf24" font-size="8" font-weight="600">BIAIS : « CES SENTIMENTS SONT VRAIS ! »</text>
+                        </g>
+
+                        <!-- Quadrant Bas-Gauche : SOUMISSION -->
+                        <g class="cursor-pointer group" onclick="selectCrimesMode('soumission')">
+                            <rect id="svg-crime-soumission" x="90" y="400" width="390" height="280" rx="16" fill="#a855f7" fill-opacity="0.08" stroke="#a855f7" stroke-opacity="0.4" stroke-width="1.5" class="transition-all hover:fill-opacity-20"/>
+                            <rect x="110" y="618" width="160" height="42" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5"/>
+                            <text x="190" y="644" fill="#e9d5ff" font-size="14" font-weight="800" text-anchor="middle">SOUMISSION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="290" y="618" width="170" height="42" rx="8" fill="#3b0764" stroke="#9333ea" stroke-width="1"/>
+                            <text x="375" y="636" fill="#c084fc" font-size="10" font-weight="700" text-anchor="middle">PUNITION (+)</text>
+                            <text x="375" y="650" fill="#e9d5ff" font-size="8" text-anchor="middle">Ajout objet désagréable</text>
+
+                            <!-- Cognitive Distortion tag -->
+                            <rect x="110" y="420" width="220" height="70" rx="8" fill="#0f172a" stroke="#a855f7" stroke-width="1"/>
+                            <text x="120" y="438" fill="#c084fc" font-size="9" font-weight="700">DISTORSIONS &amp; JUSTIFICATION :</text>
+                            <text x="120" y="452" fill="#e2e8f0" font-size="8.5" font-style="italic">Victimisation &bull; Dévalorisation</text>
+                            <text x="120" y="465" fill="#e2e8f0" font-size="8.5" font-style="italic">Dramatisation &bull; « Je ne vaux rien »</text>
+                            <text x="120" y="480" fill="#c084fc" font-size="8" font-weight="600">BIAIS : « CES SENTIMENTS SONT VRAIS ! »</text>
+                        </g>
+
+                        <!-- Quadrant Bas-Droite : ÉVASION -->
+                        <g class="cursor-pointer group" onclick="selectCrimesMode('evasion')">
+                            <rect id="svg-crime-evasion" x="520" y="400" width="390" height="280" rx="16" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-opacity="0.4" stroke-width="1.5" class="transition-all hover:fill-opacity-20"/>
+                            <rect x="710" y="618" width="180" height="42" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+                            <text x="800" y="644" fill="#bfdbfe" font-size="14" font-weight="800" text-anchor="middle">ÉVASION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="520" y="618" width="170" height="42" rx="8" fill="#172554" stroke="#2563eb" stroke-width="1"/>
+                            <text x="605" y="636" fill="#60a5fa" font-size="10" font-weight="700" text-anchor="middle">PUNITION (-)</text>
+                            <text x="605" y="650" fill="#bfdbfe" font-size="8" text-anchor="middle">Retrait objet désagréable</text>
+
+                            <!-- Cognitive Distortion tag -->
+                            <rect x="670" y="420" width="220" height="70" rx="8" fill="#0f172a" stroke="#3b82f6" stroke-width="1"/>
+                            <text x="680" y="438" fill="#60a5fa" font-size="9" font-weight="700">DISTORSIONS &amp; JUSTIFICATION :</text>
+                            <text x="680" y="452" fill="#e2e8f0" font-size="8.5" font-style="italic">Banalisation &bull; Minimisation</text>
+                            <text x="680" y="465" fill="#e2e8f0" font-size="8.5" font-style="italic">Déresponsabilisation &bull; « Pas grave »</text>
+                            <text x="680" y="480" fill="#60a5fa" font-size="8" font-weight="600">BIAIS : « CES SENTIMENTS SONT VRAIS ! »</text>
+                        </g>
+
+                        <!-- Central Diamond -->
+                        <polygon points="500,240 640,380 500,520 360,380" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,3" />
+
+                        <!-- Core S.O.I. Hub -->
+                        <g class="cursor-pointer" onclick="selectCrimesMode('soi-crimes')">
+                            <circle cx="500" cy="380" r="76" fill="#1e1b4b" stroke="#f43f5e" stroke-width="2" />
+                            <circle cx="500" cy="380" r="54" fill="#0f172a" stroke="#e11d48" stroke-width="1.5" />
+                            <rect x="465" y="362" width="70" height="36" rx="6" fill="#881337" stroke="#fb7185" stroke-width="1.5" />
+                            <text x="500" y="386" fill="#ffffff" font-size="16" font-weight="900" text-anchor="middle">S.O.I.</text>
+                            <text x="500" y="414" fill="#fda4af" font-size="8.5" font-weight="600" text-anchor="middle">Situations &bull; Objets &bull; Individus</text>
+
+                            <!-- Modulators text ring -->
+                            <text x="500" y="295" fill="#94a3b8" font-size="7.5" font-weight="600" text-anchor="middle">EXPÉRIENCES DE VIE</text>
+                            <text x="500" y="308" fill="#94a3b8" font-size="7.5" font-weight="600" text-anchor="middle">ÉDUCATION &bull; ENTOURAGE</text>
+                            <text x="420" y="335" fill="#cbd5e1" font-size="7" text-anchor="middle">MOTIVATION</text>
+                            <text x="580" y="335" fill="#cbd5e1" font-size="7" text-anchor="middle">RAISONNEMENTS</text>
+                            <text x="400" y="365" fill="#fca5a5" font-size="7" text-anchor="middle">IMPULSIVITÉ</text>
+                            <text x="600" y="365" fill="#6ee7b7" font-size="7" text-anchor="middle">EMPATHIE</text>
+                            <text x="400" y="405" fill="#fde047" font-size="7" text-anchor="middle">SURPRISE</text>
+                            <text x="600" y="405" fill="#a7f3d0" font-size="7" text-anchor="middle">CRÉATIVITÉ</text>
+                            <text x="420" y="435" fill="#bae6fd" font-size="7" text-anchor="middle">ATTENTION</text>
+                            <text x="580" y="435" fill="#ddd6fe" font-size="7" text-anchor="middle">SPIRITUALITÉ</text>
+                            <text x="500" y="465" fill="#cbd5e1" font-size="7.5" font-weight="600" text-anchor="middle">ANTICIPATION &bull; FLEXIBILITÉ</text>
+                        </g>
+
+                        <!-- Main Cardinal Axis Labels -->
+                        <!-- TOP: SYSTÈME EXCITATEUR -->
+                        <g>
+                            <rect x="400" y="24" width="200" height="32" rx="8" fill="#1e1b4b" stroke="#f43f5e" stroke-width="1.5"/>
+                            <text x="500" y="44" fill="#fca5a5" font-size="12" font-weight="800" text-anchor="middle" letter-spacing="1">SYSTÈME EXCITATEUR</text>
+                            <text x="360" y="44" fill="#ef4444" font-size="11" font-weight="800">HAINE</text>
+                            <text x="615" y="44" fill="#f43f5e" font-size="11" font-weight="800">AMOUR</text>
+                        </g>
+
+                        <!-- BOTTOM: SYSTÈME INHIBITEUR -->
+                        <g>
+                            <rect x="400" y="706" width="200" height="32" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+                            <text x="500" y="726" fill="#a7f3d0" font-size="12" font-weight="800" text-anchor="middle" letter-spacing="1">SYSTÈME INHIBITEUR</text>
+                            <text x="360" y="726" fill="#94a3b8" font-size="11" font-weight="800">VIDE</text>
+                            <text x="615" y="726" fill="#38bdf8" font-size="11" font-weight="800">PLEIN</text>
+                        </g>
+
+                        <!-- LEFT: PERCEPTION DÉSAGRÉABLE / MALHEUR -->
+                        <g>
+                            <rect x="10" y="362" width="165" height="36" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+                            <text x="92" y="384" fill="#fca5a5" font-size="9" font-weight="800" text-anchor="middle">PERCEPTION DÉSAGRÉABLE</text>
+                            <text x="92" y="352" fill="#ef4444" font-size="11" font-weight="900" text-anchor="middle">MALHEUR</text>
+                            <text x="92" y="415" fill="#f87171" font-size="8.5" font-weight="600" text-anchor="middle">PROTECTION / FERMETURE</text>
+                        </g>
+
+                        <!-- RIGHT: PERCEPTION AGRÉABLE / BONHEUR -->
+                        <g>
+                            <rect x="825" y="362" width="165" height="36" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+                            <text x="907" y="384" fill="#6ee7b7" font-size="9" font-weight="800" text-anchor="middle">PERCEPTION AGRÉABLE</text>
+                            <text x="907" y="352" fill="#10b981" font-size="11" font-weight="900" text-anchor="middle">BONHEUR</text>
+                            <text x="907" y="415" fill="#34d399" font-size="8.5" font-weight="600" text-anchor="middle">EXPLORATION / OUVERTURE</text>
+                        </g>
+
+                        <!-- Secondary Nodes & Tensions -->
+                        <g font-size="8" font-weight="600" fill="#94a3b8">
+                            <text x="230" y="160">INDIGNATION \ INJUSTICE</text>
+                            <text x="210" y="180">VENGEANCE \ JALOUSIE</text>
+                            <text x="200" y="200">INTOLÉRANCE \ IMPATIENCE</text>
+                            <text x="220" y="220">CRAINTE \ ANGOISSE</text>
+                            <text x="240" y="240">FUITE \ DOUTE</text>
+                            <text x="220" y="515">PRUDENCE \ RÉSIGNATION</text>
+                            <text x="210" y="535">DÉDAIN \ HUMILIATION</text>
+                            <text x="200" y="555">PESSIMISME \ APATHIE</text>
+                            <text x="680" y="160">AUDACE / RÉSILIENCE</text>
+                            <text x="700" y="180">COURAGE / ASSURANCE</text>
+                            <text x="680" y="200">FIERTÉ / ADMIRATION</text>
+                            <text x="670" y="220">OPTIMISME / ENTHOUSIASME</text>
+                            <text x="670" y="515">GRATITUDE / CONTENTEMENT</text>
+                            <text x="660" y="535">JUSTICE / ACCEPTATION</text>
+                            <text x="670" y="555">PATIENCE / TOLÉRANCE</text>
+                            <text x="680" y="575">CALME / SÉRÉNITÉ</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Dynamic Inspection Deck for Selected Crime Mode -->
+            <div id="crimesInspectorDeck" class="rounded-2xl bg-cosmic-900 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-6">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 09 & 11 : 85+ COMPORTEMENTS NUISIBLES            -->
+        <!-- ======================================================== -->
+        <section id="comportements-nuisibles" class="rounded-3xl bg-slate-850/95 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-rose-400">Catalogue Clinique Exhaustif (09 &amp; 11)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Répertoire des 85+ Comportements Nuisibles
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-rose-950/80 text-rose-300 border border-rose-700/50">
+                        85 Comportements Définis &bull; Recherche Filtrable
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    Chaque comportement nuisible s'enracine dans l'un des quatre quadrants du conditionnement opérant lorsqu'une émotion saturée échappe au contrôle exécutif et s'auto-justifie par un discours interne trompeur.
+                </p>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-grow">
+                    <input type="text" id="crimeSearchInput" placeholder="Rechercher un comportement nuisible (ex: Agression, Procrastination, Isolement, Harcèlement, Vol)..." class="w-full bg-cosmic-900 border border-slate-750 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-rose-500">
+                    <span class="absolute right-3 top-2.5 text-slate-500 text-xs">🔍</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5" id="crimeFilterButtons">
+                    <button class="crime-filter-btn active px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 text-white" data-filter="all">Tous (85)</button>
+                    <button class="crime-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="domination">⚔️ Domination [R-]</button>
+                    <button class="crime-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="exageration">💥 Exagération [R+]</button>
+                    <button class="crime-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="soumission">🙇 Soumission [P+]</button>
+                    <button class="crime-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="evasion">🏃 Évasion [P-]</button>
+                </div>
+            </div>
+
+            <!-- Results Counter & Grid -->
+            <div class="space-y-3">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span id="crimeCountText">Affichage de 85 comportements nuisibles...</span>
+                </div>
+                <div id="crimesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-1 pr-2 custom-scroll">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 05, 06 & 08 : 12 DISTORSIONS & JUSTIFICATIONS     -->
+        <!-- ======================================================== -->
+        <section id="distorsions-cognitives" class="rounded-3xl bg-slate-850/95 border border-amber-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-amber-400">Erreurs de Pensée &amp; Justifications (05, 06 &amp; 08)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Les 12 Distorsions Cognitives &amp; Leurs Phrases-Pièges
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-amber-950/80 text-amber-300 border border-amber-700/50">
+                        Roue des Distorsions &bull; Citations Verbatim
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    Les distorsions cognitives et les justifications sont des pensées irrationnelles et exagérées qui rendent le comportement problématique acceptable pour soi-même. Cliquez sur une distorsion pour afficher sa définition et ses formulations langagières typiques.
+                </p>
+            </div>
+
+            <!-- Distortion Category Tabs -->
+            <div class="flex flex-wrap gap-2" id="distortionTabs">
+                <button class="distortion-tab-btn active px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 text-white border border-amber-500 shadow-sm transition-all" data-dist="generalisation">Généralisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="normalisation">Normalisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="banalisation">Banalisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="minimisation">Minimisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="deresponsabilisation">Déresponsabilisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="dramatisation">Dramatisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="devalorisation">Dévalorisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="injonction">Injonction</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="diabolisation">Diabolisation</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="amplification">Amplification</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="projection">Projection</button>
+                <button class="distortion-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-dist="victimisation">Victimisation</button>
+            </div>
+
+            <!-- Dynamic Distortion Display Deck -->
+            <div id="distortionDeck" class="rounded-2xl bg-cosmic-900 border border-slate-750 p-6 space-y-4">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 01 : NEUROCHIMIE & SUBSTANCES                   -->
+        <!-- ======================================================== -->
+        <section id="neurochimie-substances" class="rounded-3xl bg-slate-850/95 border border-purple-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Fondements Biologiques (01 &amp; 12)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            L'Équilibre Excitateur / Inhibiteur &amp; Neurochimie des Substances
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
+                        Endogène vs Exogène &bull; 4 Désirs Fondamentaux
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    Tout être vivant possède deux systèmes neurobiologiques fondamentaux régis par des neurotransmetteurs et des hormones. Lorsqu'ils sont exacerbés par des substances exogènes ou un déséquilibre interne, ils font basculer l'organisme dans la pathologie C.R.I.M.E.S.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Système Excitateur -->
+                <div class="rounded-2xl bg-cosmic-900 border border-rose-900/40 p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-rose-400 flex items-center gap-2">
+                            <span>⚡</span> SYSTÈME EXCITATEUR
+                        </span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Éveil &bull; Réactivité &bull; Dopamine</span>
+                    </div>
+                    
+                    <div class="space-y-2 text-xs text-slate-300">
+                        <strong class="text-white block">Les 4 Désirs Fondamentaux (Circuit de Récompense) :</strong>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
+                            <li><strong class="text-rose-300">La sexualité :</strong> Pulsion reproductive et attachement</li>
+                            <li><strong class="text-rose-300">La nourriture :</strong> Appétence calorique et subsistance</li>
+                            <li><strong class="text-rose-300">L'information :</strong> Réduction de l'incertitude dans le milieu</li>
+                            <li><strong class="text-rose-300">Le statut social :</strong> Reconnaissance et dominance au sein du groupe</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
+                        <div class="text-rose-400 font-semibold">Influences Endogènes :</div>
+                        <p class="text-slate-300">Adrénaline, ocytocine, cortisol, dopamine, testostérone &bull; Système nerveux sympathique.</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
+                        <div class="text-rose-400 font-semibold">Substances Exogènes (Facteurs d'Exacerbation) :</div>
+                        <p class="text-slate-300">Cocaïne / crack, PCP, méthamphétamine / speed, méthylphénidate (Ritaline), ecstasy (MDMA), sativa, stéroïdes, caféine, nicotine.</p>
+                    </div>
+                </div>
+
+                <!-- Système Inhibiteur -->
+                <div class="rounded-2xl bg-cosmic-900 border border-emerald-900/40 p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-emerald-400 flex items-center gap-2">
+                            <span>🛡️</span> SYSTÈME INHIBITEUR
+                        </span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Calme &bull; Satiété &bull; GABA</span>
+                    </div>
+                    
+                    <div class="space-y-2 text-xs text-slate-300">
+                        <strong class="text-white block">Les 4 Fonctions Régulatrices Fondamentales :</strong>
+                        <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
+                            <li><strong class="text-emerald-300">La protection :</strong> Préservation de l'homéostasie viscérale</li>
+                            <li><strong class="text-emerald-300">La raison :</strong> Inhibition frontale des passages à l'acte pulsionnels</li>
+                            <li><strong class="text-emerald-300">La satiété :</strong> Sentiment de satisfaction qui réduit temporairement le désir</li>
+                            <li><strong class="text-emerald-300">Le rejet :</strong> Capacité à refuser ou à s'éloigner des stimuli indésirables</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
+                        <div class="text-emerald-400 font-semibold">Influences Endogènes :</div>
+                        <p class="text-slate-300">Sérotonine, endocannabinoïdes (Anandamide), GABA, endorphines, adénosine &bull; Système nerveux parasympathique.</p>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
+                        <div class="text-emerald-400 font-semibold">Substances Exogènes (Facteurs d'Exacerbation) :</div>
+                        <p class="text-slate-300">Opioïdes, GHB, solvants, barbituriques, alcool, benzodiazépines, kétamine, indica, mélatonine, antihistaminiques.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -166,7 +594,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🧊</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/40">X-1 / Y+5 / Z4 &bull; Haine &bull; X-3 / Y+5 / Z5 &bull; Injustice</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-300 border border-rose-800/40">X-1 / Y+5 / Z4 &bull; Haine &bull; Injustice</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">1. La Forteresse du Ressentiment</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -176,7 +604,7 @@
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
                             <p class="text-slate-400">Immunisation cognitive : croyance rigide que le maintien de l'amertume protège le modèle de soi, alors qu'il épuise les ressources allostatiques.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Révision épistémique du modèle interne (+X) &rarr; Décentrement vers la Justice équitable (X+5 / Y-3 / Z5) &rarr; Décharge de l'énergie libre.</p>
+                            <p class="text-slate-300">Révision épistémique du modèle interne (+X) &rarr; Décentrement vers la Justice équitable &rarr; Décharge de l'énergie libre.</p>
                         </div>
                     </div>
                 </div>
@@ -186,7 +614,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🕳️</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40">X-1 / Y-7 / Z5 &bull; Désespoir &bull; X0 / Y-8 / Z5 &bull; Apathie</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/40">X-1 / Y-7 / Z5 &bull; Désespoir &bull; Apathie</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">2. L'Abîme du Désespoir</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -194,9 +622,9 @@
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
-                            <p class="text-slate-400">Inertie des paramètres lents du modèle génératif à la 5e couche (Z=5) : anesthésie affective prise pour une protection contre de nouvelles erreurs de prédiction.</p>
+                            <p class="text-slate-400">Inertie des paramètres lents du modèle génératif : anesthésie affective prise pour une protection contre de nouvelles erreurs de prédiction.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Ne pas exiger un saut brutal. Revenir au Point de Veille (0,0,0) par un ré-échantillonnage somato-viscéral bienveillant, puis Réconfort (X+1 / Y-3 / Z3).</p>
+                            <p class="text-slate-300">Revenir au Point de Veille (0,0,0) par un ré-échantillonnage somato-viscéral bienveillant, puis Réconfort.</p>
                         </div>
                     </div>
                 </div>
@@ -206,17 +634,17 @@
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">🔥</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-red-950/60 text-red-300 border border-red-800/40">X0 / Y+8 / Z5 &bull; Agitation &bull; X-2 / Y+6 / Z5 &bull; Intolérance</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-red-950/60 text-red-300 border border-red-800/40">X0 / Y+8 / Z5 &bull; Rage &bull; Intolérance</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">3. Le Brasier de la Rage Aveugle</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Surtension du gradient de contrôle (+Y) sans mise à jour cognitive (-X) : l'organisme force l'action pragmatique pour conformer le monde à ses attentes sans réviser ses croyances. Passage à l'acte explosif.
+                            Surtension du gradient de contrôle (+Y) sans mise à jour cognitive (-X) : l'organisme force l'action pragmatique pour conformer le monde à ses attentes sans réviser ses croyances.
                         </p>
                         <div class="mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
                             <p class="text-slate-400">Confusion entre action constructive et décharge motrice réflexe sans délibération en mémoire de travail.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Suspension de l'action par l'opérateur de Réserve (0,0,4) &rarr; Dérivation physique saine &rarr; Canalisation vers l'engagement lucide (X+3 / Y+3 / Z4).</p>
+                            <p class="text-slate-300">Suspension de l'action par l'opérateur de Réserve &rarr; Dérivation physique saine &rarr; Canalisation vers l'assertion lucide.</p>
                         </div>
                     </div>
                 </div>
@@ -226,7 +654,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="text-2xl">⛓️</span>
-                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/40">X-2 / Y-4 / Z4 &bull; Honte &bull; X-3 / Y-5 / Z5 &bull; Déshonneur</span>
+                            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 border border-purple-800/40">X-2 / Y-4 / Z4 &bull; Honte &bull; Déshonneur</span>
                         </div>
                         <h3 class="text-xl font-heading font-bold text-white mb-2">4. La Prison de la Honte Toxique</h3>
                         <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
@@ -236,51 +664,11 @@
                             <div class="text-rose-400 font-semibold">Le Mécanisme Piège :</div>
                             <p class="text-slate-400">Verrouillage attentionnel : sur-échantillonnage des signaux de rejet et occultation des indices d'acceptation, confirmant la prédiction d'indignité.</p>
                             <div class="text-emerald-400 font-semibold pt-1">Voie de sortie Cartograffect :</div>
-                            <p class="text-slate-300">Inférence active en relation sécure &rarr; Séparer l'action du modèle du soi &rarr; Rétablir l'Honneur et l'Affection (Courage X+5 / Y+3 / Z5).</p>
+                            <p class="text-slate-300">Inférence active en relation sécure &rarr; Séparer l'action de l'identité du soi &rarr; Auto-compassion et dignité.</p>
                         </div>
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- The Psychological Alibis (Mechanisms of Defense) -->
-        <section class="rounded-3xl bg-slate-850 border border-slate-700/70 p-8 sm:p-12 shadow-xl space-y-8">
-            <div class="max-w-3xl">
-                <span class="text-xs uppercase font-bold tracking-widest text-rose-400">Processus Inconscients</span>
-                <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                    Les 4 « Alibis » Émotionnels : Comment l'Égo se Justifie
-                </h2>
-                <p class="text-slate-400 text-sm mt-2 leading-relaxed">
-                    Avant de commettre un crime contre sa propre clarté intérieure ou envers les autres, l'esprit humain déploie des ruses cognitives pour masquer son déséquilibre.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-800">
-                    <div class="text-rose-400 font-bold text-lg mb-2">1. La Projection</div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Attribuer à l'autre la violence, la mesquinerie ou la trahison que l'on refuse d'admettre en soi. L'autre devient l'ennemi légitime à abattre.
-                    </p>
-                </div>
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-800">
-                    <div class="text-rose-400 font-bold text-lg mb-2">2. Le Clivage</div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Polarisation binaire du monde en « Tout Bon » ou « Tout Mauvais ». Incapacité d'intégrer l'ambivalence et les nuances de la réalité.
-                    </p>
-                </div>
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-800">
-                    <div class="text-rose-400 font-bold text-lg mb-2">3. La Rationalisation</div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Construire après coup un argumentaire logique impeccable pour masquer un comportement dicté par la rancœur ou la jalousie pure.
-                    </p>
-                </div>
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-800">
-                    <div class="text-rose-400 font-bold text-lg mb-2">4. L'Évitement Émotionnel</div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Hyperactivité frénétique, addictions ou intellectualisation constante pour ne jamais ressentir le vide ou la tristesse sous-jacente.
-                    </p>
-                </div>
             </div>
         </section>
 
@@ -302,7 +690,7 @@
                         </label>
                         <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-800/50 transition-colors">
                             <input type="checkbox" class="rounded bg-slate-800 border-slate-700 text-rose-500 w-4 h-4">
-                            <span><strong>Ruminations nocturnes</strong> centrées sur la revanche ou la rancune.</span>
+                            <span><strong>Ruminations nocturnes</strong> centrées sur la revanche, la rancune ou le ressentiment.</span>
                         </label>
                         <label class="flex items-center gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800 cursor-pointer hover:bg-slate-800/50 transition-colors">
                             <input type="checkbox" class="rounded bg-slate-800 border-slate-700 text-rose-500 w-4 h-4">
@@ -353,6 +741,610 @@
         </div>
     </footer>
 
+    <!-- Scripts Intégrés -->
+    <script>
+        // ========================================================
+        // 1. DATA ET LOGIQUE DU MODÈLE C.R.I.M.E.S. (10 & 12)
+        // ========================================================
+        const crimesModes = {
+            "domination": {
+                name: "Mode DOMINATION",
+                icon: "⚔️",
+                badge: "RÉCOMPENSE (-) • Retrait de l'agréable",
+                colorBadgeClass: "bg-rose-950/80 text-rose-300 border-rose-600/50",
+                location: "Quadrant Haut-Gauche (Système Excitateur / Perception Désagréable)",
+                questionCritique: "« Biais & Jugement : Ces sentiments sont vrais ! Je dois imposer ma force. »",
+                conditionnement: "Récompense négative (R-) détournée : la personne cherche à soumettre son milieu pour compenser une blessure narcissique ou une perte de contrôle.",
+                distorsions: "Amplification, Diabolisation, Projection.",
+                justification: "« C'est toujours sur moi que ça tombe... Ils font exprès de me nuire... Il n'y a que comme ça qu'ils comprennent... C'est moi qui décide ! »",
+                comportementsNuisibles: [
+                    "Conflits répétés et polarisation relationnelle",
+                    "Agression physique et violence verbale",
+                    "Contrôle obsessif et intimidation d'autrui",
+                    "Menaces et chantage émotionnel ou financier",
+                    "Méfiance paranoïaque et dénigrement systématique",
+                    "Rejet catégorique de toute autorité légitime",
+                    "Sabotage professionnel et relationnel délibéré",
+                    "Violence psychologique ou domestique",
+                    "Stalking et harcèlement obsessionnel"
+                ],
+                antidoteMiracle: "Passage vers l'ASSERTION : exprimer ses limites sans violence, restaurer le respect mutuel et canaliser son énergie dans le sport et la résolution constructive."
+            },
+            "exageration": {
+                name: "Mode EXAGÉRATION",
+                icon: "💥",
+                badge: "RÉCOMPENSE (+) • Ajout de l'agréable",
+                colorBadgeClass: "bg-amber-950/80 text-amber-300 border-amber-600/50",
+                location: "Quadrant Haut-Droite (Système Excitateur / Perception Agréable)",
+                questionCritique: "« Biais & Jugement : Ces sentiments sont vrais ! Rien n'est impossible, je dois tout avoir. »",
+                conditionnement: "Récompense positive (R+) addictive : course effrénée aux shoots dopaminergiques, mégalomanie, surmenage jusqu'à l'effondrement.",
+                distorsions: "Injonction, Généralisation, Normalisation.",
+                justification: "« Tout le monde le fait... C'est normal de réussir à tout prix... Je dois être le meilleur en tout... Personne ne le saura... »",
+                comportementsNuisibles: [
+                    "Épuisement et burn-out par négation de la fatigue",
+                    "Addictions aux substances (cocaïne, speed) ou aux jeux d'argent",
+                    "Fraudes, vols et manipulations pour gain personnel",
+                    "Superficialité, vanité et obsession narcissique de l'image",
+                    "Perfectionnisme tyrannique et hypercontrôle",
+                    "Compétition féroce au détriment des liens humains",
+                    "Conduite à haute vitesse et prises de risque inconsidérées",
+                    "Duperie, mensonge et manipulation affective",
+                    "Compulsions d'achat et accumulation de dettes"
+                ],
+                antidoteMiracle: "Passage vers l'OPTIMISATION : planifier des pauses, cultiver des liens authentiques, canaliser l'énergie dans des projets éducatifs et structurants."
+            },
+            "soumission": {
+                name: "Mode SOUMISSION",
+                icon: "🙇",
+                badge: "PUNITION (+) • Ajout du désagréable",
+                colorBadgeClass: "bg-purple-950/80 text-purple-300 border-purple-600/50",
+                location: "Quadrant Bas-Gauche (Système Inhibiteur / Perception Désagréable)",
+                questionCritique: "« Biais & Jugement : Ces sentiments sont vrais ! Je suis nul et tout est de ma faute. »",
+                conditionnement: "Punition positive (P+) auto-infligée : enfermement dans la posture de victime, apitoiement, passivité masochiste pour susciter l'attention.",
+                distorsions: "Victimisation, Dévalorisation, Dramatisation.",
+                justification: "« Je ne suis bon à rien... C'est catastrophique... Je n'aurai jamais la force... Tout est de ma faute... Je ne dois pas déranger... »",
+                comportementsNuisibles: [
+                    "Comportements auto-agressifs et auto-mutilation",
+                    "Dévalorisation de soi et autocritique destructrice",
+                    "Isolement social complet et repli mutique",
+                    "Perte totale d'intérêt, cynisme et apitoiement stérile",
+                    "Ruminations anxieuses et anticipation du pire",
+                    "Auto-punition pour des erreurs imaginaires",
+                    "Abandon prématuré face au moindre obstacle",
+                    "Culpabilisation omnipotente et mépris de soi",
+                    "Posture de victime chronique pour obtenir de l'affection"
+                ],
+                antidoteMiracle: "Passage vers la COMPASSION : accueillir sa souffrance avec bienveillance, pratiquer l'auto-compassion, fixer des objectifs réalistes et chercher du soutien sécure."
+            },
+            "evasion": {
+                name: "Mode ÉVASION",
+                icon: "🏃",
+                badge: "PUNITION (-) • Retrait du désagréable",
+                colorBadgeClass: "bg-blue-950/80 text-blue-300 border-blue-600/50",
+                location: "Quadrant Bas-Droite (Système Inhibiteur / Perception Agréable)",
+                questionCritique: "« Biais & Jugement : Ces sentiments sont vrais ! Ce n'est pas grave, je m'en fous, demain est un autre jour. »",
+                conditionnement: "Punition négative (P-) évitante : fuite devant l'effort, anesthésie émotionnelle, parasitisme, déni des devoirs pour préserver un confort illusoire.",
+                distorsions: "Banalisation, Déresponsabilisation, Minimisation.",
+                justification: "« Ça n'est pas grave... Ça ne dérange personne... Tout finit par se régler... Ce n'est pas mon rôle de... Vivre le moment présent... »",
+                comportementsNuisibles: [
+                    "Procrastination chronique et négligence des obligations",
+                    "Détachement affectif froid et retrait social passif",
+                    "Parasitisme et dépendance matérielle ou émotionnelle excessive",
+                    "Oisiveté complaisante et absence totale d'initiatives",
+                    "Évitement systématique des conflits et passivité-agressive",
+                    "Refus d'assumer la responsabilité de ses actes",
+                    "Sous-estimation de ses capacités et résignation passive",
+                    "Léthargie physique et désengagement relationnel",
+                    "Immaturité comportementale et fuite des décisions importantes"
+                ],
+                antidoteMiracle: "Passage vers la RESPONSABILISATION : prioriser ses tâches, s'engager activement dans le réel, trouver des passe-temps productifs et assumer ses devoirs."
+            },
+            "soi-crimes": {
+                name: "Noyau S.O.I. sous Emprise Dysfonctionnelle",
+                icon: "🎯",
+                badge: "Situations • Objets • Individus",
+                colorBadgeClass: "bg-rose-950/80 text-rose-300 border-rose-600/50",
+                location: "Centre S.O.I. aveuglé par la fusion cognitive",
+                questionCritique: "« Pourquoi mes filtres cognitifs déforment-ils la réalité ? »",
+                conditionnement: "Fusion cognitive : l'individu ne distingue plus ses pensées automatiques des faits réels, attribuant à ses croyances le statut de vérités absolues.",
+                distorsions: "Inhibition du Système 3 (Cortex préfrontal) au profit des automatismes subcorticaux de S1 et S2.",
+                justification: "« Je suis fait comme ça, je ne changerai jamais... Les autres n'ont qu'à s'adapter ! »",
+                comportementsNuisibles: [
+                    "Rigidité cognitive et refus de remettre en cause ses schémas mentaux",
+                    "Attribution externe systématique : c'est toujours la faute des circonstances",
+                    "Perte de l'empathie cognitive et lecture de pensée hostile chez autrui",
+                    "Sur-échantillonnage des stimuli confirmant les préjugés initiaux",
+                    "Absence d'introspection métacognitive avant le passage à l'acte"
+                ],
+                antidoteMiracle: "Réveil du Point de Veille (0,0,0) : pratiquer la pause somatique, rétablir l'observateur conscient et activer le doute socratique bienveillant."
+            }
+        };
+
+        function selectCrimesMode(modeKey) {
+            const data = crimesModes[modeKey];
+            if (!data) return;
+
+            document.querySelectorAll(".crimes-tab-btn").forEach(btn => {
+                if (btn.getAttribute("data-mode") === modeKey) {
+                    btn.classList.add("active", "bg-rose-600", "text-white", "border-rose-500", "shadow-md");
+                    btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+                } else {
+                    btn.classList.remove("active", "bg-rose-600", "text-white", "border-rose-500", "shadow-md");
+                    btn.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                }
+            });
+
+            const quadIds = ["domination", "exageration", "soumission", "evasion"];
+            quadIds.forEach(id => {
+                const el = document.getElementById("svg-crime-" + id);
+                if (el) {
+                    if (id === modeKey) {
+                        el.setAttribute("stroke-width", "3.5");
+                        el.setAttribute("fill-opacity", "0.25");
+                    } else {
+                        el.setAttribute("stroke-width", "1.5");
+                        el.setAttribute("fill-opacity", "0.08");
+                    }
+                }
+            });
+
+            const deck = document.getElementById("crimesInspectorDeck");
+            deck.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl p-2.5 rounded-2xl bg-slate-800 border border-slate-700">${data.icon}</span>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${data.colorBadgeClass} mb-1">
+                                ${data.badge}
+                            </span>
+                            <h3 class="text-xl sm:text-2xl font-heading font-black text-white">${data.name}</h3>
+                            <p class="text-xs text-slate-400">${data.location}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Callout Biais & Justification -->
+                <div class="rounded-xl bg-slate-800/80 border border-slate-750 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-rose-400">Formule de Justification Typique</span>
+                        <div class="text-base sm:text-lg font-heading font-bold text-white italic">
+                            ${data.justification}
+                        </div>
+                        <p class="text-xs text-slate-300">${data.questionCritique}</p>
+                    </div>
+                    <span class="px-3 py-1.5 rounded-lg bg-rose-950/60 border border-rose-700/50 text-[11px] font-mono text-rose-300 whitespace-nowrap">
+                        Renforcement Nuisible
+                    </span>
+                </div>
+
+                <!-- 2-Columns : Behaviors & Antidote -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-7 space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-rose-400">
+                            <span>⚠️</span> Comportements Nuisibles Observés dans ce Quadrant
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-200">
+                            ${data.comportementsNuisibles.map(comp => `
+                                <div class="flex items-start gap-2 p-2.5 rounded-lg bg-slate-850 border border-slate-750/80 hover:border-rose-500/40 transition-colors">
+                                    <span class="text-rose-400 text-xs mt-0.5">✕</span>
+                                    <span class="leading-snug">${comp}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                            <span class="text-[11px] uppercase font-bold tracking-widest text-amber-400">Distorsions Cognitives Associées</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-light">${data.distorsions}</p>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">${data.conditionnement}</p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-700/40 space-y-2">
+                            <span class="text-[11px] uppercase font-bold tracking-widest text-emerald-400">✨ Voie de Sortie M.I.R.A.C.L.E.S.</span>
+                            <p class="text-xs text-emerald-200 leading-relaxed font-light">${data.antidoteMiracle}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.querySelectorAll(".crimes-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => selectCrimesMode(btn.getAttribute("data-mode")));
+        });
+        selectCrimesMode("domination");
+
+        // ========================================================
+        // 2. DATA ET LOGIQUE DU RÉPERTOIRE DES 85 COMPORTEMENTS (11)
+        // ========================================================
+        const allCrimesData = [
+            // Quadrant EXAGÉRATION / Récompense (+) (21)
+            { name: "Épuisement", quad: "exageration", def: "Ignorer les signes de fatigue et ne pas prendre de pauses nécessaires." },
+            { name: "Harcèlement", quad: "exageration", def: "Intimider ou persécuter quelqu'un de manière répétée pour affirmer sa domination." },
+            { name: "Jeux de hasard", quad: "exageration", def: "Participer de manière excessive et compulsive aux jeux d'argent." },
+            { name: "Fraudes", quad: "exageration", def: "Tromper ou escroquer délibérément les autres pour un gain personnel." },
+            { name: "Vol", quad: "exageration", def: "Prendre les biens d'autrui sans permission ni considération morale." },
+            { name: "Dettes", quad: "exageration", def: "Accumuler des dettes financières excessives sans aucun plan de remboursement." },
+            { name: "Superficialité", quad: "exageration", def: "Se concentrer uniquement sur les apparences extérieures et le paraître." },
+            { name: "Duperie / Manipulation / Mensonge", quad: "exageration", def: "Tromper ou manipuler autrui pour obtenir ce que l'on veut à ses dépens." },
+            { name: "Infidélité", quad: "exageration", def: "Manquer de loyauté et de sincérité dans une relation de confiance." },
+            { name: "Conduite dangereuse (vitesse)", quad: "exageration", def: "Conduire de manière imprudente et à grande vitesse au péril d'autrui." },
+            { name: "Compulsions", quad: "exageration", def: "S'engager dans des comportements compulsifs comme le shopping excessif ou l'hyperphagie." },
+            { name: "Addictions", quad: "exageration", def: "Développer des dépendances sévères à des substances ou activités (alcool, drogues, jeux)." },
+            { name: "Exhibitionnisme", quad: "exageration", def: "Chercher constamment et excessivement l'attention et l'approbation d'autrui." },
+            { name: "Manipulation émotionnelle", quad: "exageration", def: "Utiliser les vulnérabilités émotionnelles d'autrui pour obtenir gain de cause." },
+            { name: "Hyperactivité", quad: "exageration", def: "Incapacité à se détendre, à ralentir le rythme ou à tolérer l'inactivité." },
+            { name: "Perfectionnisme", quad: "exageration", def: "Fixer des standards irréalistes et se punir ou punir autrui de ne pas les atteindre." },
+            { name: "Exploitation", quad: "exageration", def: "Utiliser les autres pour son propre bénéfice sans considération pour leurs besoins." },
+            { name: "Narcissisme", quad: "exageration", def: "Avoir une obsession excessive et égocentrique pour soi-même et son image." },
+            { name: "Compétition excessive", quad: "exageration", def: "Toujours vouloir surpasser et écraser les autres, au détriment des relations." },
+            { name: "Hypercontrôle", quad: "exageration", def: "Vouloir tout contrôler de manière maniaque, y compris les décisions d'autrui." },
+            { name: "Vanité / Matérialisme", quad: "exageration", def: "Accorder une importance démesurée aux possessions matérielles et à l'apparence." },
+
+            // Quadrant DOMINATION / Récompense (-) (21)
+            { name: "Conflits répétés", quad: "domination", def: "Entrer fréquemment et délibérément en conflit virulent avec les autres." },
+            { name: "Agression physique", quad: "domination", def: "Utiliser la violence corporelle contre les autres pour soumettre ou punir." },
+            { name: "Violence verbale", quad: "domination", def: "Utiliser des insultes, sarcasmes ou cris pour blesser et intimider les autres." },
+            { name: "Contrôle", quad: "domination", def: "Tenter de contrôler les moindres faits et gestes des autres de manière excessive." },
+            { name: "Menace", quad: "domination", def: "Utiliser des menaces de représailles pour obtenir par la force ce que l'on veut." },
+            { name: "Méfiance", quad: "domination", def: "Refuser systématiquement de faire confiance aux autres et soupçonner des complots." },
+            { name: "Dénigrement / Mépris", quad: "domination", def: "Rabaisser, ridiculiser ou mépriser publiquement les compétences d'autrui." },
+            { name: "Intimidation", quad: "domination", def: "Utiliser la peur et la terreur psychologique pour dominer son entourage." },
+            { name: "Agression passive", quad: "domination", def: "Exprimer son hostilité de manière indirecte par l'inaction hostile ou le sarcasme." },
+            { name: "Manipulation", quad: "domination", def: "Utiliser des tactiques sournoises pour orienter les choix des autres à leur insu." },
+            { name: "Chantage émotionnel", quad: "domination", def: "Prendre en otage les émotions d'autrui pour le forcer à capituler." },
+            { name: "Sabotage des relations", quad: "domination", def: "Détruire intentionnellement des relations sociales ou amoureuses par jalousie." },
+            { name: "Violence psychologique", quad: "domination", def: "Utiliser le gaslighting ou le dénigrement pour briser psychologiquement autrui." },
+            { name: "Contrôle obsessionnel", quad: "domination", def: "Avoir un besoin compulsif de tout régenter et de ne laisser aucune autonomie." },
+            { name: "Rejet de l'autorité", quad: "domination", def: "Refuser systématiquement et par principe de suivre les règles ou lois communes." },
+            { name: "Manipulation financière", quad: "domination", def: "Utiliser l'argent comme arme pour contrôler, asservir ou punir autrui." },
+            { name: "Sabotage professionnel", quad: "domination", def: "Nuire intentionnellement à la carrière, aux dossiers ou au travail des collègues." },
+            { name: "Violence domestique", quad: "domination", def: "Exercer des sévices physiques ou psychologiques au sein du foyer familial." },
+            { name: "Extorsion", quad: "domination", def: "Utiliser la contrainte et les menaces pour soutirer de l'argent ou des faveurs." },
+            { name: "Stalking", quad: "domination", def: "Suivre, épier et harceler quelqu'un de manière obsessionnelle et intrusive." },
+            { name: "Chantage", quad: "domination", def: "Utiliser des informations compromettantes pour contraindre quelqu'un à obéir." },
+
+            // Quadrant SOUMISSION / Punition (+) (22)
+            { name: "Dissimulation / Évitement", quad: "soumission", def: "Éviter les problèmes ou les dissimuler lâchement au lieu de les affronter." },
+            { name: "Isolement", quad: "soumission", def: "Se couper totalement des autres et s'enfermer dans une solitude destructrice." },
+            { name: "Comportement auto-agressif", quad: "soumission", def: "Se faire du mal physiquement ou émotionnellement en réponse au stress." },
+            { name: "Apitoiement", quad: "soumission", def: "Se complaire passivement dans la pitié de soi sans jamais chercher d'issue." },
+            { name: "Dévalorisation de soi", quad: "soumission", def: "Entretenir une image totalement négative et disqualifiée de sa propre personne." },
+            { name: "Perte d'espoir", quad: "soumission", def: "Abandonner tout espoir de changement, de guérison ou d'amélioration future." },
+            { name: "Perte d'intérêt", quad: "soumission", def: "Ne plus s'intéresser à aucune activité, relation ou plaisir de la vie (anhédonie)." },
+            { name: "Négativisme / Pessimisme", quad: "soumission", def: "Avoir une vision systématiquement noire, catastrophiste et biaisée de l'existence." },
+            { name: "Abandon", quad: "soumission", def: "Renoncer immédiatement et systématiquement face au moindre obstacle." },
+            { name: "Autocritique excessive", quad: "soumission", def: "Se critiquer sévèrement et constamment pour la moindre imperfection." },
+            { name: "Ruminations", quad: "soumission", def: "Ressasser continuellement des pensées négatives en boucle fermée sans agir." },
+            { name: "Paranoïa", quad: "soumission", def: "Développer une méfiance excessive, délirante et irrationnelle envers autrui." },
+            { name: "Auto-mutilation", quad: "soumission", def: "Se blesser intentionnellement le corps pour tenter d'évacuer une détresse psychique." },
+            { name: "Culpabilisation", quad: "soumission", def: "Se sentir constamment et exagérément coupable pour des événements hors de contrôle." },
+            { name: "Hostilité", quad: "soumission", def: "Entretenir une attitude constamment amère, haineuse et défensive envers le monde." },
+            { name: "Autopunition", quad: "soumission", def: "S'infliger des privations ou des punitions corporelles pour des erreurs perçues." },
+            { name: "Cynisme", quad: "soumission", def: "Adopter une attitude sarcastique, désabusée et méprisante envers la bonté humaine." },
+            { name: "Mépris de soi", quad: "soumission", def: "Avoir un dégoût et une haine profonde pour son propre corps et sa personne." },
+            { name: "Hypervigilance", quad: "soumission", def: "Être constamment en état d'alerte maximale, s'attendant au pire danger à tout instant." },
+            { name: "Déni", quad: "soumission", def: "Refuser obstinément de reconnaître des vérités évidentes ou des réalités désagréables." },
+            { name: "Blâme", quad: "soumission", def: "Accuser constamment et de manière virulente les autres pour ses propres échecs." },
+            { name: "Perte d'estime", quad: "soumission", def: "Effondrement du sentiment d'auto-efficacité et sentiment d'indignité morale." },
+
+            // Quadrant ÉVASION / Punition (-) (21)
+            { name: "Négligence", quad: "evasion", def: "Ne pas prendre soin de ses responsabilités, de sa santé ou de ses obligations." },
+            { name: "Procrastination", quad: "evasion", def: "Remettre constamment les tâches urgentes ou importantes à plus tard." },
+            { name: "Détachement", quad: "evasion", def: "Se désengager émotionnellement et froidement des relations ou situations de crise." },
+            { name: "Retrait social", quad: "evasion", def: "Éviter les interactions sociales significatives et fuir toute forme d'engagement." },
+            { name: "Absence d'initiative", quad: "evasion", def: "Attendre passivement que les autres agissent ou décident à sa place." },
+            { name: "Oisiveté", quad: "evasion", def: "Passer son temps de manière improductive dans des distractions superficielles." },
+            { name: "Parasitisme", quad: "evasion", def: "Dépendre financièrement ou affectivement des autres sans contribuer en retour." },
+            { name: "Irresponsabilité", quad: "evasion", def: "Refuser d'assumer les conséquences directes de ses choix ou de ses erreurs." },
+            { name: "Immaturité", quad: "evasion", def: "Manquer de maturité émotionnelle, réagir en enfant gâté devant l'effort." },
+            { name: "Auto-sabotage", quad: "evasion", def: "Saboter inconsciemment ses propres réussites par peur d'assumer le succès." },
+            { name: "Passivité", quad: "evasion", def: "Ne pas défendre ses propres droits ou besoins fondamentaux par lâcheté." },
+            { name: "Indécision", quad: "evasion", def: "Incapacité chronique à trancher et à prendre des décisions fermes." },
+            { name: "Évitement des responsabilités", quad: "evasion", def: "Déléguer, esquiver ou ignorer délibérément ses obligations professionnelles ou parentales." },
+            { name: "Dépendance excessive", quad: "evasion", def: "S'appuyer excessivement sur un conjoint ou un parent pour survivre au quotidien." },
+            { name: "Léthargie", quad: "evasion", def: "Manque total d'énergie, apathie motrice et refus de bouger de son canapé." },
+            { name: "Évitement des conflits", quad: "evasion", def: "Ne jamais confronter les problèmes réels pour maintenir une fausse paix de surface." },
+            { name: "Dépendance émotionnelle", quad: "evasion", def: "Besoins affectifs démesurés dictés par la peur panique d'être seul." },
+            { name: "Sous-estimation de soi", quad: "evasion", def: "Ne jamais reconnaître ses compétences et s'auto-limiter par complaisance." },
+            { name: "Passivité-agressive", quad: "evasion", def: "Exprimer son mécontentement par la bouderie, les retards délibérés ou les oublis feints." },
+            { name: "Manque d'ambition", quad: "evasion", def: "Se complaire dans la médiocrité sans jamais chercher à s'élever ou apprendre." },
+            { name: "Résignation", quad: "evasion", def: "Accepter passivement et avec fatalisme des situations toxiques sans chercher d'issue." }
+        ];
+
+        function renderCrimes(filter = "all", searchQuery = "") {
+            const grid = document.getElementById("crimesGrid");
+            const countText = document.getElementById("crimeCountText");
+            if (!grid) return;
+
+            let filtered = allCrimesData;
+            if (filter !== "all") {
+                filtered = filtered.filter(item => item.quad === filter);
+            }
+            if (searchQuery.trim() !== "") {
+                const q = searchQuery.toLowerCase().trim();
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(q) || item.def.toLowerCase().includes(q));
+            }
+
+            if (countText) {
+                countText.textContent = `${filtered.length} comportement(s) nuisible(s) trouvé(s) sur ${allCrimesData.length}`;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 text-xs">Aucun comportement ne correspond à vos critères.</div>`;
+                return;
+            }
+
+            const quadBadges = {
+                "domination": { label: "⚔️ Domination [R-]", cls: "bg-rose-950/80 text-rose-300 border-rose-800/40" },
+                "exageration": { label: "💥 Exagération [R+]", cls: "bg-amber-950/80 text-amber-300 border-amber-800/40" },
+                "soumission": { label: "🙇 Soumission [P+]", cls: "bg-purple-950/80 text-purple-300 border-purple-800/40" },
+                "evasion": { label: "🏃 Évasion [P-]", cls: "bg-blue-950/80 text-blue-300 border-blue-800/40" }
+            };
+
+            grid.innerHTML = filtered.map(item => {
+                const b = quadBadges[item.quad] || { label: "Nuisible", cls: "bg-slate-800 text-slate-300" };
+                return `
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-750/90 hover:border-rose-500/40 transition-colors flex flex-col justify-between space-y-2">
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h5 class="text-sm font-bold text-white font-heading">${item.name}</h5>
+                                <span class="px-2 py-0.5 rounded text-[9px] font-semibold border ${b.cls}">${b.label}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${item.def}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        let currentCrimeFilter = "all";
+        document.querySelectorAll(".crime-filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".crime-filter-btn").forEach(b => {
+                    b.classList.remove("active", "bg-rose-600", "text-white");
+                    b.classList.add("bg-slate-800", "text-slate-300");
+                });
+                btn.classList.add("active", "bg-rose-600", "text-white");
+                btn.classList.remove("bg-slate-800", "text-slate-300");
+                currentCrimeFilter = btn.getAttribute("data-filter");
+                const searchVal = document.getElementById("crimeSearchInput") ? document.getElementById("crimeSearchInput").value : "";
+                renderCrimes(currentCrimeFilter, searchVal);
+            });
+        });
+
+        const crimeSearchInput = document.getElementById("crimeSearchInput");
+        if (crimeSearchInput) {
+            crimeSearchInput.addEventListener("input", (e) => {
+                renderCrimes(currentCrimeFilter, e.target.value);
+            });
+        }
+        renderCrimes("all", "");
+
+        // ========================================================
+        // 3. DATA ET LOGIQUE DES 12 DISTORSIONS COGNITIVES (06 & 08)
+        // ========================================================
+        const distortionsData = {
+            "generalisation": {
+                name: "Généralisation",
+                definition: "Tendance à tirer des conclusions absolues et définitives à partir d'un seul événement isolé.",
+                phrases: [
+                    "Ça marche toujours comme ça...",
+                    "À chaque fois que j'essaie, ça rate...",
+                    "Tout le monde fait pareil...",
+                    "C'est systématiquement de leur faute...",
+                    "Jamais rien ne change ici...",
+                    "Ça finit invariablement par empirer...",
+                    "Dans tous les cas, ça ne sert à rien...",
+                    "Sans exception, ils sont tous hypocrites..."
+                ]
+            },
+            "normalisation": {
+                name: "Normalisation",
+                definition: "Présentation de comportements toxiques ou problématiques comme étant normaux, légitimes ou universels.",
+                phrases: [
+                    "C'est normal de réagir avec violence...",
+                    "Tout le monde fait pareil en cachette...",
+                    "C'est comme ça que ça se passe dans le monde réel...",
+                    "On ne peut pas faire autrement...",
+                    "C'est la façon habituelle de fonctionner...",
+                    "Dans ce milieu, c'est toujours comme ça...",
+                    "C'est la règle non écrite, il faut s'y plier...",
+                    "C'est ce qu'on attend de nous, pourquoi lutter ?"
+                ]
+            },
+            "banalisation": {
+                name: "Banalisation",
+                definition: "Réduire artificiellement l'importance ou la gravité des problèmes pour esquiver la culpabilité.",
+                phrases: [
+                    "Ce n'est pas si grave...",
+                    "Ça arrive à tout le monde d'avoir un dérapage...",
+                    "Il y a bien pire ailleurs dans le monde...",
+                    "On ne peut rien y faire de toute façon...",
+                    "C'est comme ça et puis c'est tout...",
+                    "Ça passera avec le temps...",
+                    "Il faut faire avec...",
+                    "C'est la vie, inutile d'en faire un plat..."
+                ]
+            },
+            "minimisation": {
+                name: "Minimisation",
+                definition: "Diminuer délibérément la perception de la gravité d'une faute ou d'une situation blessante.",
+                phrases: [
+                    "Ce n'est pas important...",
+                    "Ça ne vaut même pas la peine d'en parler...",
+                    "Ce n'est qu'un tout petit détail...",
+                    "Ce n'est rien du tout...",
+                    "C'est trois fois rien, ils exagèrent...",
+                    "C'est totalement insignifiant...",
+                    "C'est négligeable, personne n'est mort...",
+                    "C'est sans conséquence pour leur avenir..."
+                ]
+            },
+            "deresponsabilisation": {
+                name: "Déresponsabilisation",
+                definition: "Éviter systématiquement la responsabilité personnelle en rejetant la faute sur les circonstances ou autrui.",
+                phrases: [
+                    "Ce n'est pas de ma faute...",
+                    "Je n'y peux absolument rien...",
+                    "On ne m'a pas dit qu'il fallait le faire...",
+                    "Je ne savais pas que c'était interdit...",
+                    "Personne ne m'a prévenu à l'avance...",
+                    "On ne m'a jamais formé pour ce travail...",
+                    "Ce n'est pas du tout mon rôle de gérer ça...",
+                    "Ce n'est pas à moi de m'en occuper !"
+                ]
+            },
+            "dramatisation": {
+                name: "Dramatisation",
+                definition: "Amplifier de manière catastrophique les aspects négatifs d'une contrariété mineure.",
+                phrases: [
+                    "C'est une catastrophe absolue...",
+                    "C'est terrible, tout est fichu...",
+                    "C'est horrible, je ne m'en remettrai jamais...",
+                    "C'est la fin de tout...",
+                    "C'est un véritable désastre sans issue...",
+                    "C'est totalement insurmontable...",
+                    "C'est insupportable à vivre...",
+                    "C'est d'une gravité dramatique !"
+                ]
+            },
+            "devalorisation": {
+                name: "Dévalorisation",
+                definition: "Se dénigrer violemment ou se considérer comme intrinsèquement nul et indigne d'estime.",
+                phrases: [
+                    "Je suis nul dans tout ce que j'entreprends...",
+                    "Je ne vaux rien pour personne...",
+                    "Je suis totalement incapable de changer...",
+                    "Je ne mérite pas d'être aimé ou heureux...",
+                    "Je suis trop mauvais pour y arriver...",
+                    "Je n'ai pas le niveau requis...",
+                    "Je ne suis pas du tout à la hauteur...",
+                    "Je ne suis pas fait pour cette vie..."
+                ]
+            },
+            "injonction": {
+                name: "Injonction",
+                definition: "Se donner des ordres rigides, irréalistes et tyranniques (pensée en 'Il faut', 'Je dois').",
+                phrases: [
+                    "Je dois réussir à tout prix, sans exception !",
+                    "Je ne peux pas me permettre de faire la moindre erreur !",
+                    "Je dois toujours être à la hauteur des attentes !",
+                    "Je ne dois jamais montrer la moindre faiblesse !",
+                    "Je dois tout contrôler personnellement !",
+                    "Je dois plaire absolument à tout le monde !",
+                    "Je ne dois jamais échouer sous peine de déshonneur !",
+                    "Je dois toujours avoir raison dans une dispute !"
+                ]
+            },
+            "diabolisation": {
+                name: "Diabolisation",
+                definition: "Voir autrui ou un groupe comme entièrement corrompu, malveillant ou hostile.",
+                phrases: [
+                    "Ils sont tous profondément mauvais...",
+                    "Ils ne méritent aucun respect de ma part...",
+                    "Ils font exprès pour me nuire et me détruire...",
+                    "Ils veulent absolument me voir échouer...",
+                    "Ils sont tous d'une incompétence crasse...",
+                    "Ils sont intrinsèquement malveillants...",
+                    "Ils complotent tous en cachette contre moi...",
+                    "Leur intention secrète est de me faire souffrir..."
+                ]
+            },
+            "amplification": {
+                name: "Amplification",
+                definition: "Exagérer démesurément la portée ou l'impact d'une situation désagréable.",
+                phrases: [
+                    "C'est absolument insupportable...",
+                    "C'est totalement inadmissible...",
+                    "C'est complètement inacceptable...",
+                    "Rien ne pourra jamais compenser ce préjudice...",
+                    "Tout est définitivement gâché...",
+                    "C'est extrêmement pénible...",
+                    "C'est infiniment trop lourd pour moi...",
+                    "C'est terriblement injuste !"
+                ]
+            },
+            "projection": {
+                name: "Projection",
+                definition: "Attribuer à autrui ses propres sentiments inavouables, ses pulsions agressives ou ses erreurs.",
+                phrases: [
+                    "Les autres sont tellement hypocrites et menteurs...",
+                    "C'est eux qui font exprès de me pousser à bout...",
+                    "C'est entièrement de leur faute si j'ai explosé...",
+                    "Ils me poussent à devenir violent...",
+                    "À cause d'eux, je suis obligé d'agir ainsi...",
+                    "S'ils n'avaient pas été si stupides, rien ne serait arrivé...",
+                    "Ils cherchent toujours à me provoquer...",
+                    "Leur intention est mauvaise, je ne fais que répliquer !"
+                ]
+            },
+            "victimisation": {
+                name: "Victimisation",
+                definition: "Se percevoir constamment comme une victime impuissante des actions d'autrui ou du destin.",
+                phrases: [
+                    "On me fait toujours du mal gratuitement...",
+                    "Personne ne se soucie réellement de ce que je vis...",
+                    "Je suis toujours celui qui est sacrifié et maltraité...",
+                    "Je ne mérite pas mieux que ce que j'ai subi...",
+                    "Je ne peux rien faire pour changer ma misérable situation...",
+                    "Peu importe mes efforts, rien ne s'améliore jamais pour moi...",
+                    "Le monde entier s'est ligué contre mon bonheur...",
+                    "Je suis condamné à être la victime des autres..."
+                ]
+            }
+        };
+
+        function renderDistortion(distKey) {
+            const data = distortionsData[distKey];
+            if (!data) return;
+
+            const deck = document.getElementById("distortionDeck");
+            if (!deck) return;
+
+            deck.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-750 pb-3">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-amber-400">Distorsion Cognitive Active</span>
+                        <h4 class="text-xl font-heading font-black text-white mt-0.5">${data.name}</h4>
+                        <p class="text-xs text-slate-300 mt-1">${data.definition}</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-amber-950/80 text-amber-300 border border-amber-700/50">
+                        Piège Verbal
+                    </span>
+                </div>
+
+                <div class="space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300">
+                        Formulations Langagières Types (Justifications Mentales) :
+                    </span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                        ${data.phrases.map(p => `
+                            <div class="p-3 rounded-xl bg-slate-850 border border-slate-750/80 text-xs text-slate-200 flex items-start gap-2 hover:border-amber-500/40 transition-colors">
+                                <span class="text-amber-400 font-bold mt-0.5">●</span>
+                                <span class="italic font-medium leading-snug">« ${p} »</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            document.querySelectorAll(".distortion-tab-btn").forEach(btn => {
+                if (btn.getAttribute("data-dist") === distKey) {
+                    btn.classList.add("active", "bg-amber-600", "text-white", "border-amber-500");
+                    btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+                } else {
+                    btn.classList.remove("active", "bg-amber-600", "text-white", "border-amber-500");
+                    btn.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                }
+            });
+        }
+
+        document.querySelectorAll(".distortion-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => renderDistortion(btn.getAttribute("data-dist")));
+        });
+        renderDistortion("generalisation");
+    </script>
 
     <!-- Mobile Navigation Toggle Script -->
     <script>
@@ -375,6 +1367,18 @@
                 });
             }
         })();
+
+        // Register Service Worker for PWA Offline Capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
+                }).catch((err) => {
+                    console.log('SW registration error :', err);
+                });
+            });
+        }
     </script>
+    <script src="bilingual_modal.js"></script>
 </body>
 </html>

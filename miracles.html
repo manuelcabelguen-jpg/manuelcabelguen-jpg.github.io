@@ -11,6 +11,8 @@
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -87,10 +89,17 @@
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
                     3. Miracles
                 </a>
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                    Scholar Drive
+                </a>
             </nav>
 
-            <!-- Quick Action -->
+            <!-- Quick Action & Bilingual -->
             <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
                 <a href="emotions.html" class="px-3.5 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg shadow-md transition-all">
                     Voir la Carte 2D &rarr;
                 </a>
@@ -114,6 +123,7 @@
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html" class="active-link"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="emotions.html" class="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Voir la Carte 2D &rarr;</a>
@@ -124,27 +134,1014 @@
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
 
         <!-- Hero Section -->
-        <section class="relative rounded-3xl bg-gradient-to-br from-emerald-950/40 via-cosmic-850 to-slate-900 border border-emerald-900/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
-            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-600/10 blur-3xl pointer-events-none"></div>
+        <section class="relative rounded-3xl bg-gradient-to-br from-emerald-950/50 via-cosmic-850 to-slate-900 border border-emerald-800/50 p-8 sm:p-14 overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-600/15 blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-teal-600/10 blur-3xl pointer-events-none"></div>
             
-            <div class="max-w-3xl relative z-10 space-y-5">
+            <div class="max-w-4xl relative z-10 space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Territoire 3 &bull; Les Itinéraires vers l'Équilibre
+                    Territoire 3 &bull; Fondation Théorique &amp; Clinique
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
-                    MIRACLES : L'Alchimie de la <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">Transmutation Affective</span>
+                    Modèle <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">M.I.R.A.C.L.E.S.</span>
                 </h1>
-                <p class="text-slate-300 text-base sm:text-lg leading-relaxed font-light">
-                    Dans la perspective Cartograffect, le <strong>« Miracle »</strong> ne relève pas de la magie, mais de la reconnexion lucide : l’art de transformer une énergie douloureuse ou destructrice en force d’action juste, de réconfort et de sérénité.
+                <p class="text-emerald-300 text-sm sm:text-base font-semibold tracking-wide">
+                    Modèle Intégré de la Régulation Attentionnelle et Comportementale en Lien aux Émotions et aux Sentiments
                 </p>
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="#navigateur-resilience" class="px-5 py-2.5 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all text-xs sm:text-sm">
-                        Lancer le Navigateur de Résilience
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
+                    Dans l'architecture Cartograffect, le <strong>« Miracle »</strong> ne relève pas de la pensée magique, mais d'une modélisation neuro-comportementale rigoureuse : l'articulation entre le système biologique (excitateur / inhibiteur), la valence perceptive (agréable / désagréable), le noyau <strong>S.O.I.</strong> (Situations, Objets, Individus) et les 4 matrices du conditionnement opérant menant aux conduites saines d'<strong>Assertion</strong>, de <strong>Simplification</strong>, de <strong>Responsabilisation</strong> et de <strong>Compassion</strong>.
+                </p>
+                <div class="flex flex-wrap gap-2.5 pt-2">
+                    <a href="#modele-miracles" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>📐</span> Modèle M.I.R.A.C.L.E.S.
                     </a>
-                    <a href="#leviers" class="px-5 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 transition-colors text-xs sm:text-sm">
-                        Les 4 Leviers de Transformation
+                    <a href="#minuteur-somatique" class="px-3.5 py-2 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        <span>⏱️</span> Minuteur 90s Bio-Désescalade
                     </a>
+                    <a href="#pont-resolution" class="px-3.5 py-2 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>🌉</span> Pont CRIMES &rarr; MIRACLES
+                    </a>
+                    <a href="#processus-neuro" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>🧠</span> Modèle de Gross
+                    </a>
+                    <a href="#restructuration-pensees" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>💡</span> Restructuration (14 Stratégies)
+                    </a>
+                    <a href="#soi-temperaments" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>🌱</span> 4 Tempéraments
+                    </a>
+                    <a href="#glossaire-affects" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                        <span>📖</span> Glossaire (70 Affects)
+                    </a>
+                    <button type="button" onclick="openClinicalSheetModal()" class="px-3.5 py-2 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg shadow-blue-900/40 transition-all text-xs flex items-center gap-1.5">
+                        <span>📄</span> Fiche Clinique PDF
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 11 : Le Modèle Intégré MIRACLES -->
+        <section id="modele-miracles" class="rounded-3xl bg-slate-850/90 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Architecture Fondatrice (11)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Cartographie du Système MIRACLES
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
+                        Cabelguen (2026) &bull; OPIC n° 1233199
+                    </span>
+                </div>
+
+                <!-- Verbatim Foundational Text -->
+                <div class="rounded-2xl bg-cosmic-900/90 border border-slate-750 p-5 sm:p-6 text-xs sm:text-sm text-slate-300 leading-relaxed space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-300 font-semibold text-xs tracking-wider uppercase">
+                        <span>📖</span> Énoncé Théorique Fondamental
+                    </div>
+                    <p class="italic text-slate-300/90 font-light">
+                        « Tout individu, pour s'adapter à son environnement, présente un système biologique complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical du système excitateur/inhibiteur). Le système excitateur sert à éviter un danger ou à identifier dans l'environnement les éléments indispensables à la survie (protection/nourriture/reproduction) et le système inhibiteur sert à faire cesser, régénérer ou réguler le comportement résultant de l'action du système excitateur. Ces systèmes qui peuvent être régulés par diverses substances, mécanismes physiologiques ou activités (endogènes/exogènes) doivent également distinguer les éléments nécessaires des superflus afin de répondre adéquatement à l'environnement. Différents affects vont résulter de ces deux systèmes selon un apprentissage associant une multitude d'éléments de l'environnement perçus comme étant agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à toute une gamme possible d'émotions ou de sentiments variant selon les particularités dans lesquelles aura évolué l'individu, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I) et durant le développement de l'individu. Une régulation efficace du processus émotionnel peut s'opérer depuis la sélection de la situation à la modulation de la réponse émotionnelle. Grâce à la composante naturelle de base de ces affects, ils seront jugés fonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) correspondent aux attentes normatives du milieu de vie de l'individu. De ces affects peuvent émerger une tendance vers un mode d'affirmation assertif, optimisé, compatissant et responsable, et favoriser des comportements bénéfiques qui conduisent à un bon fonctionnement social. »
+                    </p>
+                </div>
+            </div>
+
+            <!-- Mode Selector Nav Buttons -->
+            <div class="flex flex-wrap gap-2 pt-2" id="miraclesModeTabs">
+                <button class="miracles-tab-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white border border-emerald-500 shadow-md transition-all flex items-center gap-1.5" data-mode="assertion">
+                    <span>🛡️</span> 1. Mode Assertion [R-]
+                </button>
+                <button class="miracles-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="optimisation">
+                    <span>⚡</span> 2. Mode Optimisation [R+]
+                </button>
+                <button class="miracles-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="responsabilisation">
+                    <span>⚖️</span> 3. Mode Responsabilisation [P-]
+                </button>
+                <button class="miracles-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="compassion">
+                    <span>💚</span> 4. Mode Compassion [P+]
+                </button>
+                <button class="miracles-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="soi">
+                    <span>🎯</span> Cœur S.O.I. &amp; 15 Filtres
+                </button>
+                <button class="miracles-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all flex items-center gap-1.5" data-mode="fit">
+                    <span>📊</span> Critères F.I.T.³ (Type, Temps, Timing)
+                </button>
+            </div>
+
+            <!-- Interactive Vector Diagram Representation -->
+            <div class="relative w-full rounded-2xl bg-cosmic-900 border border-slate-750 p-4 sm:p-6 overflow-hidden shadow-inner">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between mb-3 px-2">
+                    <span class="flex items-center gap-1.5 text-emerald-400 font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        Diagramme Vectoriel Interactif &bull; Cliquez sur un quadrant ou une zone pour inspecter
+                    </span>
+                    <span class="hidden sm:inline font-mono text-[10px] text-slate-500">Représentation Topologique Bi-Axiale</span>
+                </div>
+
+                <div class="w-full overflow-x-auto flex justify-center">
+                    <svg viewBox="0 0 1000 760" class="w-full max-w-4xl h-auto select-none font-sans" id="miraclesSvg">
+                        <defs>
+                            <!-- Gradients -->
+                            <linearGradient id="gradExcitateur" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.02"/>
+                            </linearGradient>
+                            <linearGradient id="gradInhibiteur" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+                                <stop offset="100%" stop-color="#10b981" stop-opacity="0.02"/>
+                            </linearGradient>
+                            <radialGradient id="gradCore" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.4"/>
+                                <stop offset="100%" stop-color="#0f172a" stop-opacity="0.8"/>
+                            </radialGradient>
+                            <!-- Glow Filter -->
+                            <filter id="miracleGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <!-- Background Grid lines -->
+                        <line x1="80" y1="380" x2="920" y2="380" stroke="#334155" stroke-width="2" stroke-dasharray="6,4" />
+                        <line x1="500" y1="60" x2="500" y2="700" stroke="#334155" stroke-width="2" stroke-dasharray="6,4" />
+
+                        <!-- Quadrant Regions (Interactive Clickable Rects) -->
+                        <!-- Quadrant Haut-Gauche : ASSERTION -->
+                        <g class="cursor-pointer group" onclick="selectMiraclesMode('assertion')">
+                            <rect id="svg-quadrant-assertion" x="90" y="80" width="390" height="280" rx="16" fill="#f59e0b" fill-opacity="0.06" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.5" class="transition-all hover:fill-opacity-15"/>
+                            <rect x="110" y="100" width="160" height="42" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+                            <text x="190" y="126" fill="#fef08a" font-size="14" font-weight="800" text-anchor="middle">ASSERTION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="290" y="100" width="170" height="42" rx="8" fill="#451a03" stroke="#d97706" stroke-width="1"/>
+                            <text x="375" y="118" fill="#fbbf24" font-size="10" font-weight="700" text-anchor="middle">RÉCOMPENSE (-)</text>
+                            <text x="375" y="132" fill="#fde68a" font-size="8" text-anchor="middle">Retrait objet agréable</text>
+
+                            <!-- Mini Metacognitive tag -->
+                            <rect x="110" y="270" width="220" height="70" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                            <text x="120" y="288" fill="#94a3b8" font-size="9" font-weight="700">JUGEMENT CRITIQUE :</text>
+                            <text x="120" y="302" fill="#e2e8f0" font-size="8.5" font-style="italic">« Est-ce normal de penser,</text>
+                            <text x="120" y="315" fill="#e2e8f0" font-size="8.5" font-style="italic">de se sentir et d'agir ainsi ? »</text>
+                            <text x="120" y="330" fill="#38bdf8" font-size="8" font-weight="600">RAISONNEMENT LOGIQUE &bull; RENFORCEMENT +/-</text>
+                        </g>
+
+                        <!-- Quadrant Haut-Droite : OPTIMISATION -->
+                        <g class="cursor-pointer group" onclick="selectMiraclesMode('optimisation')">
+                            <rect id="svg-quadrant-optimisation" x="520" y="80" width="390" height="280" rx="16" fill="#10b981" fill-opacity="0.06" stroke="#10b981" stroke-opacity="0.3" stroke-width="1.5" class="transition-all hover:fill-opacity-15"/>
+                            <rect x="730" y="100" width="160" height="42" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+                            <text x="810" y="126" fill="#a7f3d0" font-size="14" font-weight="800" text-anchor="middle">OPTIMISATION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="540" y="100" width="170" height="42" rx="8" fill="#064e3b" stroke="#059669" stroke-width="1"/>
+                            <text x="625" y="118" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">RÉCOMPENSE (+)</text>
+                            <text x="625" y="132" fill="#a7f3d0" font-size="8" text-anchor="middle">Ajout objet agréable</text>
+
+                            <!-- Mini Metacognitive tag -->
+                            <rect x="670" y="270" width="220" height="70" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                            <text x="680" y="288" fill="#94a3b8" font-size="9" font-weight="700">JUGEMENT CRITIQUE :</text>
+                            <text x="680" y="302" fill="#e2e8f0" font-size="8.5" font-style="italic">« Est-ce normal de penser,</text>
+                            <text x="680" y="315" fill="#e2e8f0" font-size="8.5" font-style="italic">de se sentir et d'agir ainsi ? »</text>
+                            <text x="680" y="330" fill="#34d399" font-size="8" font-weight="600">RAISONNEMENT LOGIQUE &bull; RENFORCEMENT +/-</text>
+                        </g>
+
+                        <!-- Quadrant Bas-Gauche : COMPASSION -->
+                        <g class="cursor-pointer group" onclick="selectMiraclesMode('compassion')">
+                            <rect id="svg-quadrant-compassion" x="90" y="400" width="390" height="280" rx="16" fill="#a855f7" fill-opacity="0.06" stroke="#a855f7" stroke-opacity="0.3" stroke-width="1.5" class="transition-all hover:fill-opacity-15"/>
+                            <rect x="110" y="618" width="160" height="42" rx="8" fill="#1e293b" stroke="#a855f7" stroke-width="1.5"/>
+                            <text x="190" y="644" fill="#e9d5ff" font-size="14" font-weight="800" text-anchor="middle">COMPASSION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="290" y="618" width="170" height="42" rx="8" fill="#3b0764" stroke="#9333ea" stroke-width="1"/>
+                            <text x="375" y="636" fill="#c084fc" font-size="10" font-weight="700" text-anchor="middle">PUNITION (+)</text>
+                            <text x="375" y="650" fill="#e9d5ff" font-size="8" text-anchor="middle">Ajout objet désagréable</text>
+
+                            <!-- Mini Metacognitive tag -->
+                            <rect x="110" y="420" width="220" height="70" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                            <text x="120" y="438" fill="#94a3b8" font-size="9" font-weight="700">JUGEMENT CRITIQUE :</text>
+                            <text x="120" y="452" fill="#e2e8f0" font-size="8.5" font-style="italic">« Est-ce normal de penser,</text>
+                            <text x="120" y="465" fill="#e2e8f0" font-size="8.5" font-style="italic">de se sentir et d'agir ainsi ? »</text>
+                            <text x="120" y="480" fill="#a855f7" font-size="8" font-weight="600">RAISONNEMENT LOGIQUE &bull; RENFORCEMENT +/-</text>
+                        </g>
+
+                        <!-- Quadrant Bas-Droite : RESPONSABILISATION -->
+                        <g class="cursor-pointer group" onclick="selectMiraclesMode('responsabilisation')">
+                            <rect id="svg-quadrant-responsabilisation" x="520" y="400" width="390" height="280" rx="16" fill="#3b82f6" fill-opacity="0.06" stroke="#3b82f6" stroke-opacity="0.3" stroke-width="1.5" class="transition-all hover:fill-opacity-15"/>
+                            <rect x="710" y="618" width="180" height="42" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+                            <text x="800" y="644" fill="#bfdbfe" font-size="14" font-weight="800" text-anchor="middle">RESPONSABILISATION</text>
+                            
+                            <!-- Conditioning badge -->
+                            <rect x="520" y="618" width="170" height="42" rx="8" fill="#172554" stroke="#2563eb" stroke-width="1"/>
+                            <text x="605" y="636" fill="#60a5fa" font-size="10" font-weight="700" text-anchor="middle">PUNITION (-)</text>
+                            <text x="605" y="650" fill="#bfdbfe" font-size="8" text-anchor="middle">Retrait objet désagréable</text>
+
+                            <!-- Mini Metacognitive tag -->
+                            <rect x="670" y="420" width="220" height="70" rx="8" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+                            <text x="680" y="438" fill="#94a3b8" font-size="9" font-weight="700">JUGEMENT CRITIQUE :</text>
+                            <text x="680" y="452" fill="#e2e8f0" font-size="8.5" font-style="italic">« Est-ce normal de penser,</text>
+                            <text x="680" y="465" fill="#e2e8f0" font-size="8.5" font-style="italic">de se sentir et d'agir ainsi ? »</text>
+                            <text x="680" y="480" fill="#60a5fa" font-size="8" font-weight="600">RAISONNEMENT LOGIQUE &bull; RENFORCEMENT +/-</text>
+                        </g>
+
+                        <!-- Central Diamond Rays connecting to core -->
+                        <polygon points="500,240 640,380 500,520 360,380" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,3" />
+
+                        <!-- Core S.O.I. Hub -->
+                        <g class="cursor-pointer" onclick="selectMiraclesMode('soi')">
+                            <circle cx="500" cy="380" r="76" fill="url(#gradCore)" stroke="#14b8a6" stroke-width="2" filter="url(#miracleGlow)" />
+                            <circle cx="500" cy="380" r="54" fill="#0f172a" stroke="#0d9488" stroke-width="1.5" />
+                            <rect x="465" y="362" width="70" height="36" rx="6" fill="#134e4a" stroke="#2dd4bf" stroke-width="1.5" />
+                            <text x="500" y="386" fill="#ffffff" font-size="16" font-weight="900" text-anchor="middle">S.O.I.</text>
+                            <text x="500" y="414" fill="#5eead4" font-size="8.5" font-weight="600" text-anchor="middle">Situations &bull; Objets &bull; Individus</text>
+
+                            <!-- 15 Modulators Ring around S.O.I. -->
+                            <text x="500" y="295" fill="#93c5fd" font-size="7.5" font-weight="600" text-anchor="middle">EXPÉRIENCES DE VIE</text>
+                            <text x="500" y="308" fill="#93c5fd" font-size="7.5" font-weight="600" text-anchor="middle">ÉDUCATION &bull; ENTOURAGE</text>
+                            
+                            <text x="420" y="335" fill="#cbd5e1" font-size="7" text-anchor="middle">MOTIVATION</text>
+                            <text x="580" y="335" fill="#cbd5e1" font-size="7" text-anchor="middle">RAISONNEMENTS</text>
+                            
+                            <text x="400" y="365" fill="#fca5a5" font-size="7" text-anchor="middle">IMPULSIVITÉ</text>
+                            <text x="600" y="365" fill="#6ee7b7" font-size="7" text-anchor="middle">EMPATHIE</text>
+
+                            <text x="400" y="405" fill="#fde047" font-size="7" text-anchor="middle">SURPRISE</text>
+                            <text x="600" y="405" fill="#a7f3d0" font-size="7" text-anchor="middle">CRÉATIVITÉ</text>
+
+                            <text x="420" y="435" fill="#bae6fd" font-size="7" text-anchor="middle">ATTENTION</text>
+                            <text x="580" y="435" fill="#ddd6fe" font-size="7" text-anchor="middle">SPIRITUALITÉ</text>
+
+                            <text x="500" y="465" fill="#cbd5e1" font-size="7.5" font-weight="600" text-anchor="middle">ANTICIPATION &bull; FLEXIBILITÉ</text>
+                        </g>
+
+                        <!-- Main Cardinal Axis Labels -->
+                        <!-- TOP: SYSTÈME EXCITATEUR -->
+                        <g>
+                            <rect x="400" y="24" width="200" height="32" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+                            <text x="500" y="44" fill="#c7d2fe" font-size="12" font-weight="800" text-anchor="middle" letter-spacing="1">SYSTÈME EXCITATEUR</text>
+                            <text x="360" y="44" fill="#f87171" font-size="11" font-weight="800">HAINE</text>
+                            <text x="615" y="44" fill="#fb7185" font-size="11" font-weight="800">AMOUR</text>
+                        </g>
+
+                        <!-- BOTTOM: SYSTÈME INHIBITEUR -->
+                        <g>
+                            <rect x="400" y="706" width="200" height="32" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+                            <text x="500" y="726" fill="#a7f3d0" font-size="12" font-weight="800" text-anchor="middle" letter-spacing="1">SYSTÈME INHIBITEUR</text>
+                            <text x="360" y="726" fill="#94a3b8" font-size="11" font-weight="800">VIDE</text>
+                            <text x="615" y="726" fill="#38bdf8" font-size="11" font-weight="800">PLEIN</text>
+                        </g>
+
+                        <!-- LEFT: PERCEPTION DÉSAGRÉABLE / MALHEUR -->
+                        <g>
+                            <rect x="10" y="362" width="165" height="36" rx="6" fill="#450a0a" stroke="#ef4444" stroke-width="1"/>
+                            <text x="92" y="384" fill="#fca5a5" font-size="9" font-weight="800" text-anchor="middle">PERCEPTION DÉSAGRÉABLE</text>
+                            <text x="92" y="352" fill="#ef4444" font-size="11" font-weight="900" text-anchor="middle">MALHEUR</text>
+                            <text x="92" y="415" fill="#f87171" font-size="8.5" font-weight="600" text-anchor="middle">PROTECTION / FERMETURE</text>
+                        </g>
+
+                        <!-- RIGHT: PERCEPTION AGRÉABLE / BONHEUR -->
+                        <g>
+                            <rect x="825" y="362" width="165" height="36" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+                            <text x="907" y="384" fill="#6ee7b7" font-size="9" font-weight="800" text-anchor="middle">PERCEPTION AGRÉABLE</text>
+                            <text x="907" y="352" fill="#10b981" font-size="11" font-weight="900" text-anchor="middle">BONHEUR</text>
+                            <text x="907" y="415" fill="#34d399" font-size="8.5" font-weight="600" text-anchor="middle">EXPLORATION / OUVERTURE</text>
+                        </g>
+
+                        <!-- Primary Affects Nodes around axes -->
+                        <!-- North: Joie, Pouvoir, Désir, Passion -->
+                        <g font-size="10" font-weight="700">
+                            <rect x="475" y="170" width="50" height="22" rx="4" fill="#b91c1c" stroke="#f87171" stroke-width="1"/>
+                            <text x="500" y="185" fill="#fff" text-anchor="middle">JOIE</text>
+
+                            <rect x="420" y="200" width="65" height="20" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+                            <text x="452" y="214" fill="#cbd5e1" font-size="9" text-anchor="middle">MÉFIANCE</text>
+
+                            <rect x="515" y="200" width="65" height="20" rx="4" fill="#831843" stroke="#f472b6" stroke-width="1"/>
+                            <text x="547" y="214" fill="#fbcfe8" font-size="9" text-anchor="middle">POUVOIR</text>
+
+                            <rect x="540" y="225" width="55" height="20" rx="4" fill="#831843" stroke="#f472b6" stroke-width="1"/>
+                            <text x="567" y="239" fill="#fbcfe8" font-size="9" text-anchor="middle">DÉSIR</text>
+
+                            <rect x="575" y="170" width="60" height="20" rx="4" fill="#831843" stroke="#f472b6" stroke-width="1"/>
+                            <text x="605" y="184" fill="#fbcfe8" font-size="9" text-anchor="middle">PASSION</text>
+                        </g>
+
+                        <!-- West: Colère, Peur, Frustration, Inquiétude, Impuissance, Rejet -->
+                        <g font-size="9" font-weight="700">
+                            <rect x="350" y="230" width="65" height="20" rx="4" fill="#7f1d1d" stroke="#ef4444" stroke-width="1"/>
+                            <text x="382" y="244" fill="#fecaca" text-anchor="middle">FRUSTRATION</text>
+
+                            <rect x="430" y="245" width="55" height="20" rx="4" fill="#7f1d1d" stroke="#ef4444" stroke-width="1"/>
+                            <text x="457" y="259" fill="#fecaca" text-anchor="middle">COLÈRE</text>
+
+                            <rect x="345" y="290" width="65" height="20" rx="4" fill="#451a03" stroke="#f59e0b" stroke-width="1"/>
+                            <text x="377" y="304" fill="#fef08a" text-anchor="middle">INQUIÉTUDE</text>
+
+                            <rect x="400" y="335" width="45" height="20" rx="4" fill="#451a03" stroke="#f59e0b" stroke-width="1"/>
+                            <text x="422" y="349" fill="#fef08a" text-anchor="middle">PEUR</text>
+
+                            <rect x="345" y="440" width="70" height="20" rx="4" fill="#1e1b4b" stroke="#818cf8" stroke-width="1"/>
+                            <text x="380" y="454" fill="#e0e7ff" text-anchor="middle">IMPUISSANCE</text>
+
+                            <rect x="390" y="480" width="50" height="20" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+                            <text x="415" y="494" fill="#e0e7ff" text-anchor="middle">REJET</text>
+
+                            <rect x="430" y="515" width="55" height="20" rx="4" fill="#042f2e" stroke="#14b8a6" stroke-width="1"/>
+                            <text x="457" y="529" fill="#99f6e4" text-anchor="middle">DÉGOÛT</text>
+
+                            <rect x="440" y="555" width="65" height="20" rx="4" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+                            <text x="472" y="569" fill="#cbd5e1" text-anchor="middle">DÉSESPOIR</text>
+                        </g>
+
+                        <!-- South: Tristesse, Soulagement, Quiétude, Satisfaction -->
+                        <g font-size="9" font-weight="700">
+                            <rect x="480" y="555" width="65" height="20" rx="4" fill="#1e3a5f" stroke="#38bdf8" stroke-width="1"/>
+                            <text x="512" y="569" fill="#bae6fd" text-anchor="middle">TRISTESSE</text>
+
+                            <rect x="525" y="520" width="80" height="20" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+                            <text x="565" y="534" fill="#a7f3d0" text-anchor="middle">SOULAGEMENT</text>
+
+                            <rect x="520" y="590" width="65" height="20" rx="4" fill="#064e3b" stroke="#34d399" stroke-width="1"/>
+                            <text x="552" y="604" fill="#a7f3d0" text-anchor="middle">QUIÉTUDE</text>
+
+                            <rect x="565" y="560" width="75" height="20" rx="4" fill="#14532d" stroke="#22c55e" stroke-width="1"/>
+                            <text x="602" y="574" fill="#bbf7d0" text-anchor="middle">SATISFACTION</text>
+                        </g>
+
+                        <!-- East: Curiosité, Espoir, Confiance -->
+                        <g font-size="9" font-weight="700">
+                            <rect x="575" y="325" width="65" height="20" rx="4" fill="#065f46" stroke="#34d399" stroke-width="1"/>
+                            <text x="607" y="339" fill="#a7f3d0" text-anchor="middle">CURIOSITÉ</text>
+
+                            <rect x="610" y="370" width="60" height="20" rx="4" fill="#065f46" stroke="#34d399" stroke-width="1"/>
+                            <text x="640" y="384" fill="#a7f3d0" text-anchor="middle">CONFIANCE</text>
+
+                            <rect x="610" y="275" width="55" height="20" rx="4" fill="#0284c7" stroke="#38bdf8" stroke-width="1"/>
+                            <text x="637" y="289" fill="#e0f2fe" text-anchor="middle">ESPOIR</text>
+                        </g>
+
+                        <!-- Polar Dialectics & Transition Axis Labels -->
+                        <g font-size="8" font-weight="600" fill="#94a3b8">
+                            <!-- Top Left -->
+                            <text x="230" y="160">INDIGNATION \ INJUSTICE</text>
+                            <text x="210" y="180">VENGEANCE \ JALOUSIE</text>
+                            <text x="200" y="200">INTOLÉRANCE \ IMPATIENCE</text>
+                            <text x="220" y="220">CRAINTE \ ANGOISSE</text>
+                            <text x="240" y="240">FUITE \ DOUTE</text>
+
+                            <!-- Bottom Left -->
+                            <text x="220" y="515">PRUDENCE \ RÉSIGNATION</text>
+                            <text x="210" y="535">DÉDAIN \ HUMILIATION</text>
+                            <text x="200" y="555">PESSIMISME \ APATHIE</text>
+
+                            <!-- Top Right -->
+                            <text x="680" y="160">AUDACE / RÉSILIENCE</text>
+                            <text x="700" y="180">COURAGE / ASSURANCE</text>
+                            <text x="680" y="200">FIERTÉ / ADMIRATION</text>
+                            <text x="670" y="220">OPTIMISME / ENTHOUSIASME</text>
+
+                            <!-- Bottom Right -->
+                            <text x="670" y="515">GRATITUDE / CONTENTEMENT</text>
+                            <text x="660" y="535">JUSTICE / ACCEPTATION</text>
+                            <text x="670" y="555">PATIENCE / TOLÉRANCE</text>
+                            <text x="680" y="575">CALME / SÉRÉNITÉ</text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Dynamic Inspection Deck for Selected Mode -->
+            <div id="miraclesInspectorDeck" class="rounded-2xl bg-cosmic-900 border border-slate-700/80 p-6 sm:p-8 shadow-xl space-y-6">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 15 : MODÈLE DES PROCESSUS DE RÉGULATION (GROSS) -->
+        <!-- ======================================================== -->
+        <section id="processus-neuro" class="rounded-3xl bg-slate-850/95 border border-sky-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Neurobiologie Intégrative (15)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Processus de Régulation Émotionnelle &amp; Comportementale
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-sky-950/80 text-sky-300 border border-sky-700/50">
+                        Modèle de Gross Étendu &bull; Systèmes 1, 2, 3
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    La régulation émotionnelle opère selon une trajectoire temporelle allant du stimulus à la réponse motrice. Elle s'appuie sur trois systèmes neurobiologiques interconnectés et traverse une cascade séquentielle régie par des filtres et des biais spécifiques.
+                </p>
+            </div>
+
+            <!-- The 3 Neurobiological Systems Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-5 space-y-3 hover:border-amber-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center text-sm border border-amber-500/40">S1</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-900/60">Implicite / Réflexe</span>
+                    </div>
+                    <h3 class="text-base font-heading font-bold text-white">Système 1 &bull; Voie T-A + HHS</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>Thalamo-Amygdalien + Axe Hypothalamo-Hypophysaire-Surrénalien.</strong> Régulation implicite, intuitive et automatique. Traitement ultra-rapide des menaces sans passer par le cortex conscient.
+                    </p>
+                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+                        <span class="text-amber-400 font-semibold">Biais associés :</span> Biais physiologiques, hypervigilance neurovégétative.
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-5 space-y-3 hover:border-sky-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-300 font-bold flex items-center justify-center text-sm border border-sky-500/40">S2</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-sky-900/60">Explicite / Délibéré</span>
+                    </div>
+                    <h3 class="text-base font-heading font-bold text-white">Système 2 &bull; Voie T-C-A + Hyp.</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>Thalamo-Cortico-Amygdalien + Hippocampe.</strong> Régulation explicite et mémoire de travail sollicitée. Contextualisation spatio-temporelle, rappel d'expériences antérieures et modélisation mentale.
+                    </p>
+                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+                        <span class="text-sky-400 font-semibold">Biais associés :</span> Biais attentionnels, mémoire sélective.
+                    </div>
+                </div>
+
+                <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-5 space-y-3 hover:border-emerald-500/50 transition-all">
+                    <div class="flex items-center justify-between">
+                        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-sm border border-emerald-500/40">S3</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-emerald-300 border border-emerald-900/60">Contrôle Exécutif</span>
+                    </div>
+                    <h3 class="text-base font-heading font-bold text-white">Système 3 &bull; PFC + CCA + MPD + FÉ</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong>Cortex Préfrontal + Cortex Cingulaire Antérieur + Mode par Défaut + Fonctions Exécutives.</strong> Contrôle cognitif et modulateur/inhibiteur de S1 et S2. Métacognition, flexibilité et réévaluation sémantique.
+                    </p>
+                    <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
+                        <span class="text-emerald-400 font-semibold">Effet :</span> Inhibition motrice, réévaluation de sens, restructuration.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gross Linear Sequence Interactive Tracker -->
+            <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-6 space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                        <span>🔄</span> Chaîne Linéaire de Gross &amp; Points d'Intervention Métacognitive
+                    </span>
+                    <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-3 py-1 rounded-full border border-emerald-700/40">
+                        Modulation : S1′ &rarr; At1′ &rarr; Ev1′ &rarr; R1′
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative">
+                    <!-- Step 1 : Situation -->
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-700/80 space-y-2 relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold text-amber-400">ÉTAPE 1</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/40">Biais Sélectifs</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">SITUATION (S1)</h4>
+                        <p class="text-xs text-slate-300">
+                            Sélection ou modification de l'environnement contextuel (S1, S2, S3...).
+                        </p>
+                        <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                            <em>Filtre :</em> Évitement préventif ou exposition constructive.
+                        </div>
+                    </div>
+
+                    <!-- Step 2 : Attention -->
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-700/80 space-y-2 relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold text-sky-400">ÉTAPE 2</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-sky-950/80 text-sky-300 border border-sky-800/40">Biais Attentionnels</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">ATTENTION (At1)</h4>
+                        <p class="text-xs text-slate-300">
+                            Focalisation perceptive sur certains indices (At1, At2, At3...).
+                        </p>
+                        <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                            <em>Filtre :</em> Décentrement, élargissement attentionnel ou zoom anxieux.
+                        </div>
+                    </div>
+
+                    <!-- Step 3 : Evaluation -->
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-700/80 space-y-2 relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold text-purple-400">ÉTAPE 3</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-purple-950/80 text-purple-300 border border-purple-800/40">Biais Cognitifs</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">ÉVALUATION (Ev1)</h4>
+                        <p class="text-xs text-slate-300">
+                            Attribution de sens et calcul de valence (Ev1, Ev2, Ev3...).
+                        </p>
+                        <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                            <em>Filtre :</em> Restructuration cognitive, réévaluation rationnelle.
+                        </div>
+                    </div>
+
+                    <!-- Step 4 : Reaction -->
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-700/80 space-y-2 relative overflow-hidden">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold text-emerald-400">ÉTAPE 4</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/40">Régulation R1′</span>
+                        </div>
+                        <h4 class="text-base font-bold text-white">RÉACTION (R1)</h4>
+                        <p class="text-xs text-slate-300">
+                            Réponse émotionnelle somatique et/ou comportementale dans l'action.
+                        </p>
+                        <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                            <em>Effet :</em> Apprentissage, consolidation vers S∞I, punitions/récompenses.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 text-xs text-slate-300 leading-relaxed flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <strong class="text-white">Boucle d'Inférence Active &amp; Apprentissage Continu :</strong>
+                        Chaque réaction réajuste les paramètres internes du SOI, produisant des renforcements positifs ou négatifs (Punitions +/- et Récompenses +/-) qui forgent les futurs filtres prédictifs (S∞I).
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION 15-B : MINUTEUR SOMATIQUE 90 SECONDES (HHS & GROSS) -->
+            <!-- ======================================================== -->
+            <div id="minuteur-somatique" class="mt-8 rounded-3xl bg-gradient-to-br from-amber-950/40 via-cosmic-850 to-slate-900 border border-amber-600/40 p-6 sm:p-10 shadow-2xl relative overflow-hidden">
+                <div class="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none"></div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-5 mb-8">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-950/80 text-amber-300 border border-amber-600/40 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            Neurobiologie &bull; Règle des 90 Secondes (Gross &amp; HHS)
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-heading font-black text-white">
+                            Minuteur Somatique de Bio-Désescalade (90s)
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
+                            La vague neurochimique brute d'une émotion aiguë (Adrénaline &amp; Cortisol via l'axe HHS) possède une durée de vie physiologique de <strong>90 secondes</strong>. Si l'émotion persiste au-delà, ce n'est plus la biologie, mais la boucle prédictive et les ruminations cognitives qui l'entretiennent.
+                        </p>
+                    </div>
+                    <span class="px-3.5 py-1.5 rounded-full text-xs font-mono bg-amber-900/40 text-amber-300 border border-amber-600/30">
+                        Physiologie du Système 1 &rarr; Système 3
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left: Breathing & Countdown Visualizer -->
+                    <div class="lg:col-span-5 flex flex-col items-center justify-center p-6 rounded-2xl bg-cosmic-900/90 border border-slate-800 shadow-inner relative">
+                        <div class="relative w-56 h-56 sm:w-64 sm:h-64 flex items-center justify-center">
+                            <!-- SVG Progress Ring -->
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="50%" cy="50%" r="90" stroke="#1e293b" stroke-width="8" fill="transparent"></circle>
+                                <circle id="timerProgressRing" cx="50%" cy="50%" r="90" stroke="#f59e0b" stroke-width="8" stroke-dasharray="565.48" stroke-dashoffset="0" stroke-linecap="round" fill="transparent" class="transition-all duration-1000 ease-linear"></circle>
+                            </svg>
+
+                            <!-- Pulsing Breathing Circle -->
+                            <div id="breathingPacerCircle" class="absolute w-36 h-36 rounded-full bg-gradient-to-br from-amber-500/20 via-emerald-500/20 to-teal-500/20 border border-amber-400/40 flex flex-col items-center justify-center text-center shadow-lg backdrop-blur-sm pointer-events-none transition-transform duration-700">
+                                <span id="timerCountdownDisplay" class="text-4xl sm:text-5xl font-mono font-black text-white">90<span class="text-xl text-amber-400">s</span></span>
+                                <span id="breathingPhaseText" class="text-[11px] uppercase tracking-wider font-bold text-amber-300 mt-1">Prêt</span>
+                            </div>
+                        </div>
+
+                        <!-- Guide Text -->
+                        <div id="breathingActionPrompt" class="text-center mt-5 text-xs text-slate-300 font-medium px-2 min-h-[38px] flex items-center justify-center">
+                            Appuyez sur Démarrer pour engager le protocole somatique des 90 secondes.
+                        </div>
+
+                        <!-- Interactive Controls -->
+                        <div class="flex items-center gap-3 mt-4">
+                            <button id="timerStartBtn" type="button" class="px-5 py-2.5 rounded-xl font-bold text-white bg-amber-600 hover:bg-amber-500 shadow-lg shadow-amber-600/30 transition-all text-xs flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                <span id="timerBtnText">Démarrer le Cycle (90s)</span>
+                            </button>
+                            <button id="timerResetBtn" type="button" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                <span>Réinitialiser</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: The 3 Biological Phases -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="text-xs uppercase font-bold tracking-wider text-slate-400">
+                            Chronologie de Résorption Physiologique (Système 1 &rarr; Système 3) :
+                        </div>
+
+                        <!-- Phase 1 -->
+                        <div id="phaseCard1" class="p-4 rounded-2xl bg-slate-850 border border-slate-750 transition-all duration-300 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-300 font-bold text-xs flex items-center justify-center border border-rose-500/40">1</span>
+                                    <h4 class="text-sm font-bold text-white">0s à 30s &bull; Pic Neurochimique HHS (Système 1)</h4>
+                                </div>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950/80 text-rose-300 border border-rose-800/40">Adrénaline &amp; Cortisol</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                <strong>Règle d'or : Suspension Motrice.</strong> Ne pas envoyer de message, ne pas chercher à argumenter, ne pas prendre de décision. L'amygdale court-circuite temporairement le raisonnement.
+                            </p>
+                            <div class="text-[11px] text-amber-400/90 font-medium">
+                                Action somatique : Inspirer par le nez (4s), bloquer doucement (2s), souffler lentement (6s).
+                            </div>
+                        </div>
+
+                        <!-- Phase 2 -->
+                        <div id="phaseCard2" class="p-4 rounded-2xl bg-slate-850 border border-slate-750 transition-all duration-300 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center justify-center border border-amber-500/40">2</span>
+                                    <h4 class="text-sm font-bold text-white">30s à 60s &bull; Bascule Parasympathique &amp; Frein Vagal</h4>
+                                </div>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/40">Nerf Vague &amp; Acétylcholine</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                La décharge hormonale commence à être métabolisée. Le rythme cardiaque ralentit naturellement si aucune nouvelle pensée catastrophique ne vient relancer la boucle.
+                            </p>
+                            <div class="text-[11px] text-amber-400/90 font-medium">
+                                Action somatique : Relâcher consciemment les mâchoires, ouvrir les mains et abaisser les épaules.
+                            </div>
+                        </div>
+
+                        <!-- Phase 3 -->
+                        <div id="phaseCard3" class="p-4 rounded-2xl bg-slate-850 border border-slate-750 transition-all duration-300 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs flex items-center justify-center border border-emerald-500/40">3</span>
+                                    <h4 class="text-sm font-bold text-white">60s à 90s &bull; Réactivation Préfrontale (Système 3)</h4>
+                                </div>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/40">Cortex Préfrontal &amp; FÉ</span>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Le cerveau exécutif reprend les commandes. Le seuil de discernement rationnel est restauré. Vous êtes maintenant en capacité d'appliquer la <strong>restructuration cognitive MIRACLES</strong>.
+                            </p>
+                            <div class="text-[11px] text-emerald-400 font-medium">
+                                Passerelle : Choisir une phrase de dialogue interne constructive ci-dessous.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- SECTION : LE PONT DE RÉSOLUTION INTERACTIF (CRIMES -> MIRACLES) -->
+            <!-- ======================================================== -->
+            <div id="pont-resolution" class="mt-8 rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Transmutation Clinique Directe</span>
+                        <h3 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Le Pont de Résolution : CRIMES &rarr; MIRACLES
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
+                            Sélectionnez un comportement inadapté ou un piège émotionnel du quotidien : l'algorithme Cartograffect identifie le quadrant destructeur CRIMES, la distorsion cognitive sous-jacente et déploie instantanément la stratégie et la formule d'auto-dialogue MIRACLES de désamorçage.
+                        </p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
+                        Algorithme de Sortie de Boucle
+                    </span>
+                </div>
+
+                <!-- Scenario Selector Dropdown -->
+                <div class="space-y-2">
+                    <label for="bridgeScenarioSelect" class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                        <span>Sélectionnez la situation / impulsion vécue :</span>
+                        <span class="text-purple-400 font-normal lowercase text-[11px]">10 cas cliniques fréquents modélisés</span>
+                    </label>
+                    <select id="bridgeScenarioSelect" class="w-full bg-cosmic-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        <option value="rage">1. Explosion de colère / Agressivité verbale envers un proche ou collègue</option>
+                        <option value="controle">2. Contrôle excessif / Vouloir tout surveiller et imposer sa méthode à tout prix</option>
+                        <option value="theatralisation">3. Théâtralisation / Séduction compulsive et quête fébrile d'attention</option>
+                        <option value="surengagement">4. Surengagement fébrile / Promesses grandioses irréalistes non tenues</option>
+                        <option value="complaisance">5. Complaisance anxieuse / Dire "oui" à tout par peur d'être rejeté ou abandonné</option>
+                        <option value="autodenigrement">6. Auto-dénigrement violent / « Je suis un raté, je ne vaux rien »</option>
+                        <option value="procrastination">7. Procrastination &amp; Fuite dans les écrans / Évitement des obligations</option>
+                        <option value="compensation">8. Consommation impulsive compensatoire (nourriture, substances, achats compulsifs)</option>
+                        <option value="ressentiment">9. Ressentiment gelé / Ruminations amères incessantes sur un affront passé</option>
+                        <option value="victimisation">10. Victimisation systématique / « Tout le monde est contre moi, c'est injuste »</option>
+                    </select>
+                </div>
+
+                <!-- Dynamic Bridge Inspection Card -->
+                <div id="bridgeResolutionDisplay" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 07 : RESTRUCTURATION DES PENSÉES (14 STRATÉGIES) -->
+        <!-- ======================================================== -->
+        <section id="restructuration-pensees" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Pratique Clinique &amp; Métacognition (07)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Restructuration des Pensées &amp; Phrases d'Auto-Dialogue
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
+                        14 Stratégies &bull; 9 Piliers d'Auto-Dialogue
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    Minimiser l’impact des distorsions cognitives dans nos décisions demande une approche consciente et méthodique. Voici les 14 stratégies validées et l'outil interactif d'auto-dialogue pour cultiver un état d'esprit ouvert et conscient.
+                </p>
+            </div>
+
+            <!-- Interactive Internal Dialogue Selector -->
+            <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-6 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                        <span>💬</span> Boîte à Outils d'Auto-Dialogue Interne &bull; Sélectionnez un objectif
+                    </span>
+                    <span class="text-[11px] text-slate-400">Cliquez sur une phrase pour la mémoriser</span>
+                </div>
+
+                <!-- Dialogue Category Buttons -->
+                <div class="flex flex-wrap gap-2" id="dialogueCategoryTabs">
+                    <button class="dialogue-cat-btn active px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white border border-emerald-500 shadow-sm transition-all" data-category="croyances">
+                        Remettre en question ses croyances
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="distorsions">
+                        Prévenir les distorsions
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="ouverture">
+                        Favoriser l'ouverture
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="empathie">
+                        Développer l'empathie cognitive
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="humilite">
+                        Humilité intellectuelle
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="responsabilite">
+                        Responsabilité
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="nuance">
+                        Nuance
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="realisme">
+                        Réalisme
+                    </button>
+                    <button class="dialogue-cat-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-category="resilience">
+                        Résilience mentale
+                    </button>
+                </div>
+
+                <!-- Phrases Deck Display -->
+                <div id="dialoguePhrasesDeck" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-2">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- The 14 Deliberate Decision Strategies Grid -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-base font-heading font-bold text-white flex items-center gap-2">
+                        <span>🛡️</span> Les 14 Stratégies Efficaces de Décision Délibérée
+                    </h3>
+                    <span class="text-xs text-emerald-400 font-mono">Protocole Clinique Cabelguen</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">1. Prendre conscience des distorsions</div>
+                        <p class="text-slate-300">Reconnaître que les erreurs de pensée existent et peuvent biaiser nos décisions pour les stopper à temps.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">2. Chercher des perspectives différentes</div>
+                        <p class="text-slate-300">Activer la recherche d’informations contradictoires pour rééquilibrer notre modèle interne.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">3. Créer des espaces de dialogue</div>
+                        <p class="text-slate-300">Favoriser des discussions ouvertes et constructives qui valorisent la diversité des points de vue.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">4. Remettre en question ses croyances</div>
+                        <p class="text-slate-300">Éviter les jugements hâtifs en testant si nos opinions préexistantes résistent aux faits récents.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">5. Prendre du recul</div>
+                        <p class="text-slate-300">Peser le pour et le contre de manière objective avant de poser un acte décisif.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">6. Utiliser des check-lists</div>
+                        <p class="text-slate-300">Structurer la prise de décision pour s'assurer que tous les aspects clés sont passés en revue.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">7. Consulter les autres</div>
+                        <p class="text-slate-300">Faire appel à des tiers neutres pour identifier les angles morts invisibles pour nous-mêmes.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">8. Pratiquer la décision délibérée</div>
+                        <p class="text-slate-300">Établir une routine de vérification logique du raisonnement avant tout engagement majeur.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">9. Outils d'aide à la décision</div>
+                        <p class="text-slate-300">Utiliser le FOCUS, les matrices multicritères ou les arbres de décision hiérarchisés.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">10. Approche basée sur les preuves</div>
+                        <p class="text-slate-300">Privilégier les données et preuves tangibles face aux intuitions ou impressions vagues.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">11. Simulations et scénarios</div>
+                        <p class="text-slate-300">Tester différentes options à travers des scénarios hypothétiques sans les distorsions immédiates.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">12. Pratiquer la pleine conscience</div>
+                        <p class="text-slate-300">Améliorer la clarté mentale et réduire la réactivité automatique par la présence corporelle.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">13. Favoriser l'empathie cognitive</div>
+                        <p class="text-slate-300">Comprendre le point de vue d'autrui avec compassion, au-delà de ses propres préjugés.</p>
+                    </div>
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-800 hover:border-slate-700 transition-colors">
+                        <div class="text-emerald-400 font-bold mb-1">14. Apprendre continuellement</div>
+                        <p class="text-slate-300">Cultiver une mentalité de croissance qui valorise l'apprentissage et la remise en question permanente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 04-06 & 16 : S.O.I., AFFIRMATION & TEMPÉRAMENTS -->
+        <!-- ======================================================== -->
+        <section id="soi-temperaments" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Écologie Intérieure (04, 06 &amp; 16)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            L'Écologie du S.O.I., l'Affirmation de Soi &amp; les 4 Tempéraments
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
+                        Connaissance de Soi &bull; Piliers d'Affirmation
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    « Être ou ne pas être, changer ou rester le même, telle est la question ? Tout ça commence par se connaître soi-même… » Le SOI se situe au cœur d'une tension permanente entre nos 16 aspirations &amp; forces et nos 16 contraintes &amp; limites.
+                </p>
+            </div>
+
+            <!-- Tension Matrix : Désirs (Vert) vs Contraintes (Rouge/Marron) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left : Forces, Désirs & Aspirations (Vert) -->
+                <div class="lg:col-span-6 rounded-2xl bg-cosmic-900 border border-emerald-800/40 p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-emerald-400 flex items-center gap-2">
+                            <span>🌱</span> Pôle Expansion &bull; Désirs, Forces &amp; Droits (16)
+                        </span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/40">Gains &amp; Opportunités</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Espoirs</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Rêves</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Projets</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Désirs</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Envies</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Opinions</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Buts</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Aspirations</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Ambitions</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Besoins</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Souhaits</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Attentes</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Droits</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Principes</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Forces</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-950/60 border border-emerald-700/40 text-emerald-300">Facilités</span>
+                    </div>
+                </div>
+
+                <!-- Right : Limites, Contraintes & Obstacles (Rouge/Ambre) -->
+                <div class="lg:col-span-6 rounded-2xl bg-cosmic-900 border border-rose-900/40 p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-rose-400 flex items-center gap-2">
+                            <span>🧱</span> Pôle Réalité &bull; Contraintes, Devoirs &amp; Limites (16)
+                        </span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Frottements &amp; Épreuves</span>
+                    </div>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Contraintes</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Obligations</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Devoirs</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Entraves</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Échecs</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Deuils</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Responsabilités</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Pertes</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Faiblesses</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Lois</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Règles</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Empêchements</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Manque</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Limites</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Fatigues</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-rose-950/40 border border-rose-800/40 text-rose-300">Obstacles</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The 3 Pillars of Self-Affirmation -->
+            <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-6 space-y-4">
+                <h3 class="text-base font-heading font-bold text-white flex items-center gap-2">
+                    <span>⚖️</span> Les 3 Piliers Fondamentaux de l'Affirmation de Soi
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-800 space-y-2">
+                        <div class="text-emerald-400 font-bold text-sm">Pilier 1 &bull; Identification</div>
+                        <p>Consiste à bien identifier avec lucidité ses émotions, ses pensées, ses opinions et ses croyances sans les refouler.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-800 space-y-2">
+                        <div class="text-emerald-400 font-bold text-sm">Pilier 2 &bull; Reconnaissance des Droits</div>
+                        <p>Consiste à reconnaître pleinement ses propres droits légitimes tout en respectant scrupuleusement ceux des autres.</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-800 space-y-2">
+                        <div class="text-emerald-400 font-bold text-sm">Pilier 3 &bull; Communication &amp; Écoute</div>
+                        <p>Consiste à communiquer tous ces éléments avec clarté et apprendre activement à écouter ou se renseigner sur ceux des autres.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The 4 Temperaments Interactive Deck (Page 16) -->
+            <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-6 space-y-5">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                        <span>🎭</span> Modes d'Affirmation pour Chaque Tempérament
+                    </span>
+                    <span class="text-[11px] text-slate-400">Sélecteur de profil individuel</span>
+                </div>
+
+                <div class="flex flex-wrap gap-2" id="temperamentTabs">
+                    <button class="temperament-tab-btn active px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white border border-emerald-500 shadow-md transition-all" data-temp="sanguin">
+                        1. Sanguin
+                    </button>
+                    <button class="temperament-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-temp="colerique">
+                        2. Colérique
+                    </button>
+                    <button class="temperament-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-temp="melancolique">
+                        3. Mélancolique
+                    </button>
+                    <button class="temperament-tab-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-750 text-slate-300 border border-slate-700 transition-all" data-temp="flegmatique">
+                        4. Flegmatique
+                    </button>
+                </div>
+
+                <div id="temperamentDeck" class="p-5 rounded-xl bg-slate-850 border border-slate-750 space-y-4">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- SECTION 14 & 16 : GLOSSAIRE CLINIQUE DES AFFECTS         -->
+        <!-- ======================================================== -->
+        <section id="glossaire-affects" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+            <div class="space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Taxonomie Complète (14 &amp; 16)</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
+                            Glossaire Clinique des Émotions &amp; Sentiments
+                        </h2>
+                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
+                        8 Émotions &bull; 62 Sentiments &bull; Recherche Directe
+                    </span>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed font-light">
+                    Classification rigoureuse des états affectifs : distinction entre les 8 émotions primaires et les 62 sentiments catégorisés selon la valence (agréable/désagréable) et le mode opératoire (actif/passif).
+                </p>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="relative flex-grow">
+                    <input type="text" id="glossarySearchInput" placeholder="Rechercher une émotion ou un sentiment (ex: Courage, Sérénité, Honte, Joie)..." class="w-full bg-cosmic-900 border border-slate-750 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500">
+                    <span class="absolute right-3 top-2.5 text-slate-500 text-xs">🔍</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5" id="glossaryFilterButtons">
+                    <button class="glossary-filter-btn active px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white" data-filter="all">Tous</button>
+                    <button class="glossary-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="base">8 Primaires</button>
+                    <button class="glossary-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="agr-actif">Agréables Actifs</button>
+                    <button class="glossary-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="agr-passif">Agréables Passifs</button>
+                    <button class="glossary-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="des-actif">Désagréables Actifs</button>
+                    <button class="glossary-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-filter="des-passif">Désagréables Passifs</button>
+                </div>
+            </div>
+
+            <!-- Results Counter & Grid -->
+            <div class="space-y-3">
+                <div class="text-[11px] text-slate-400 flex items-center justify-between">
+                    <span id="glossaryCountText">Affichage de tous les affects...</span>
+                </div>
+                <div id="glossaryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto p-1 pr-2 custom-scroll">
+                    <!-- Populated dynamically via JS -->
                 </div>
             </div>
         </section>
@@ -152,7 +1149,7 @@
         <!-- Interactive Resilience Path Finder -->
         <section id="navigateur-resilience" class="rounded-3xl bg-slate-850 border border-emerald-700/40 p-8 sm:p-12 shadow-2xl space-y-8">
             <div class="max-w-3xl">
-                <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Outil Interactif</span>
+                <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Outil Clinique Interactif</span>
                 <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
                     Navigateur d'Itinéraires de Résilience
                 </h2>
@@ -287,28 +1284,286 @@
 
     </main>
 
-    <!-- Footer -->
+    <!-- Footer Unique & Propre -->
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto">
+                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
                 <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-500">
+            <div class="text-xs text-slate-400">
                 &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
             </div>
         </div>
     </footer>
 
-    <!-- Interactive Resilience Navigator Script -->
+    <!-- Scripts Intégrés -->
     <script>
+        // ========================================================
+        // 1. DATA ET LOGIQUE DU MODÈLE M.I.R.A.C.L.E.S.
+        // ========================================================
+        const miraclesModes = {
+            "assertion": {
+                name: "Mode ASSERTION",
+                icon: "🛡️",
+                badge: "RÉCOMPENSE (-) • Retrait de l'agréable",
+                colorBadgeClass: "bg-amber-950/80 text-amber-300 border-amber-600/50",
+                location: "Quadrant Haut-Gauche (Système Excitateur / Perception Désagréable)",
+                questionCritique: "« Est-ce normal de penser, de se sentir et d'agir ainsi ? »",
+                conditionnement: "Récompense négative (R-) : Retrait réel, anticipé ou interprété d'un objet ou d'une qualité agréable (gestion de la perte, de l'atteinte ou de la frustration).",
+                finalite: "Défense constructive de son intégrité face à l'adversité sans basculer dans la destruction, la vengeance, l'indignation aveugle ou l'intolérance.",
+                comportementsSains: [
+                    "Résoudre les conflits de manière constructive",
+                    "Gérer la colère de manière saine",
+                    "Communiquer de manière respectueuse",
+                    "Faire confiance aux autres",
+                    "Exprimer ses besoins calmement",
+                    "Développer la confiance",
+                    "Montrer du respect",
+                    "Encourager et soutenir les autres",
+                    "Être assertif de manière positive"
+                ],
+                activitesBiologiques: "Exercice physique intense, activités stimulantes mentalement, écoute de musique énergique, jeux de stratégie, puzzles, apprentissage de nouvelles compétences, participation à des débats, lecture de livres stimulants, et activités sociales dynamiques.",
+                affectsTensions: "Colère, Peur, Méfiance | Vengeance \\ Jalousie, Indignation \\ Injustice, Frustration, Intolérance \\ Impatience, Crainte \\ Angoisse, Fuite \\ Doute"
+            },
+            "optimisation": {
+                name: "Mode OPTIMISATION",
+                icon: "⚡",
+                badge: "RÉCOMPENSE (+) • Ajout de l'agréable",
+                colorBadgeClass: "bg-emerald-950/80 text-emerald-300 border-emerald-600/50",
+                location: "Quadrant Haut-Droite (Système Excitateur / Perception Agréable)",
+                questionCritique: "« Est-ce normal de penser, de se sentir et d'agir ainsi ? »",
+                conditionnement: "Récompense positive (R+) : Ajout réel, anticipé ou interprété d'un objet ou d'une qualité agréable (amplification des gains vitaux et opportunités).",
+                finalite: "Canalisation lucide et ordonnée de l'élan vital, de la passion et de la joie pour enrichir le milieu sans dilapidation maniaque ni surexploitation.",
+                comportementsSains: [
+                    "Prendre des pauses régulières",
+                    "Encourager et motiver les autres",
+                    "Participer à des activités éducatives",
+                    "Utiliser son influence de manière positive",
+                    "Investir du temps dans des projets passionnants",
+                    "Planifier et gérer ses finances",
+                    "Développer des relations authentiques",
+                    "Être honnête et transparent",
+                    "Cultiver la fidélité et la confiance",
+                    "Conduire prudemment et respecter les règles"
+                ],
+                activitesBiologiques: "Projets d'émulation intellectuelle, sport dynamique et harmonieux, transmission de savoirs, co-création passionnée, débats constructifs.",
+                affectsTensions: "Joie, Désir, Passion, Pouvoir | Audace / Résilience, Courage / Assurance, Fierté / Admiration, Optimisme / Enthousiasme, Curiosité"
+            },
+            "responsabilisation": {
+                name: "Mode RESPONSABILISATION",
+                icon: "⚖️",
+                badge: "PUNITION (-) • Retrait du désagréable",
+                colorBadgeClass: "bg-blue-950/80 text-blue-300 border-blue-600/50",
+                location: "Quadrant Bas-Droite (Système Inhibiteur / Perception Agréable)",
+                questionCritique: "« Est-ce normal de penser, de se sentir et d'agir ainsi ? »",
+                conditionnement: "Punition négative (P-) : Retrait réel, anticipé ou interprété d'un objet ou d'une qualité désagréable (soulagement, désescalade, pacification).",
+                finalite: "Stabilisation allostatique mature, engagement structurant dans le monde réel, consolidation des liens et retour à la quiétude pérenne.",
+                comportementsSains: [
+                    "Prendre des responsabilités",
+                    "Planifier et prioriser les tâches",
+                    "S'engager activement dans des relations",
+                    "Participer à des activités sociales",
+                    "Prendre des initiatives",
+                    "Trouver des passe-temps productifs",
+                    "Contribuer de manière significative",
+                    "Assumer ses responsabilités",
+                    "Développer la maturité émotionnelle"
+                ],
+                activitesBiologiques: "Activités relaxantes et créatives, méditation de pleine conscience, yoga, musique douce, respiration profonde, lecture contemplative, promenades en nature, bains chauds, dessin, cuisine, écriture introspective.",
+                affectsTensions: "Soulagement, Quiétude, Satisfaction, Confiance | Gratitude / Contentement, Justice / Acceptation, Patience / Tolérance, Calme / Sérénité"
+            },
+            "compassion": {
+                name: "Mode COMPASSION",
+                icon: "💚",
+                badge: "PUNITION (+) • Ajout du désagréable",
+                colorBadgeClass: "bg-purple-950/80 text-purple-300 border-purple-600/50",
+                location: "Quadrant Bas-Gauche (Système Inhibiteur / Perception Désagréable)",
+                questionCritique: "« Est-ce normal de penser, de se sentir et d'agir ainsi ? »",
+                conditionnement: "Punition positive (P+) : Ajout réel, anticipé ou interprété d'un objet ou d'une qualité désagréable (confrontation à la vulnérabilité ou à l'épreuve).",
+                finalite: "Accueil bienveillant de la souffrance, intégration de la perte et du deuil sans s'effondrer dans l'abattement, le mépris de soi ou le cynisme apathique.",
+                comportementsSains: [
+                    "Affronter les problèmes directement",
+                    "Chercher du soutien social",
+                    "Pratiquer l'auto-compassion",
+                    "Rechercher des solutions positives",
+                    "Cultiver l'estime de soi",
+                    "Fixer des objectifs réalisables",
+                    "Explorer de nouveaux intérêts",
+                    "Adopter une perspective optimiste",
+                    "Persévérer malgré les défis"
+                ],
+                activitesBiologiques: "Repos réparateur en environnement sécurisant, écoute empathique, marche douce dans les bois, respiration diaphragmatique lente, écriture thérapeutique.",
+                affectsTensions: "Tristesse, Dégoût, Impuissance, Rejet, Désespoir | Prudence \\ Résignation, Dédain \\ Humiliation, Pessimisme \\ Apathie"
+            },
+            "soi": {
+                name: "Noyau S.O.I. & les 15 Modulateurs",
+                icon: "🎯",
+                badge: "Situations • Objets • Individus",
+                colorBadgeClass: "bg-teal-950/80 text-teal-300 border-teal-600/50",
+                location: "Centre Absolu du Système MIRACLES",
+                questionCritique: "« Quels filtres intérieurs et contextuels modulent mon évaluation en cet instant ? »",
+                conditionnement: "Interface d'évaluation primaire : les affects résultent du croisement entre le contexte environnemental (S.O.I.) et les 15 filtres cognitifs, biologiques et sociaux.",
+                finalite: "Comprendre que l'émotion n'est jamais brute : elle est façonnée par l'histoire individuelle et les modulateurs de flexibilité attentionnelle.",
+                comportementsSains: [
+                    "Identifier si l'affect provient de la Situation (S), de l'Objet (O) ou de l'Individu (I)",
+                    "Distinguer les réactions instinctives subcorticales des raisonnements délibérés",
+                    "Activer son empathie pour décentrer son point de vue",
+                    "Élever son niveau de flexibilité cognitive pour réviser ses a priori",
+                    "Réguler son impulsivité motrice par une suspension de quelques secondes",
+                    "Mobiliser sa créativité pour imaginer une troisième voie constructive",
+                    "Réancrer son attention sur les flux intéroceptifs du souffle",
+                    "Débusquer l'influence des injonctions socioculturelles et familiales",
+                    "Rappeler ses réussites passées pour contrebalancer les biais de négativité"
+                ],
+                activitesBiologiques: "Exercices de métacognition, tenue d'un journal de bord émotionnel, dialogue socratique avec un tiers, analyse des biais cognitifs.",
+                affectsTensions: "Les 15 Filtres : Éducation, Entourage, Contexte socioculturel, Expériences de vie, Raisonnements, Réflexes / Instincts, Empathie, Créativité, Spiritualité, Niveau d'attention, Niveau de flexibilité, Motivation, Impulsivité, Surprise, Anticipation."
+            },
+            "fit": {
+                name: "Critères de Fonctionnalité F.I.T.³ (T au cube)",
+                icon: "📊",
+                badge: "F.I.T.³ : Fréquence • Intensité • Type • Temps • Timing",
+                colorBadgeClass: "bg-indigo-950/80 text-indigo-300 border-indigo-600/50",
+                location: "Axiome Clinique de Normalité, Cohérence et Proportionnalité",
+                questionCritique: "« Est-ce que mon émotion est fréquente (F), intense (I), cohérente (Type), dure (Temps) et adaptée (Timing) ? »",
+                conditionnement: "Principe fondamental : aucun affect n'est coupable en soi. Il devient dysfonctionnel uniquement lorsque ses paramètres dépassent les normes adaptatives de Fréquence, d'Intensité, de Type (cohérence), de Temps (durée) ou de Timing (moment d'apparition).",
+                finalite: "Auto-évaluation clinique rigoureuse : diagnostiquer si la réponse émotionnelle est proportionnée et fonctionnelle ou si elle nécessite un réajustement cognitif et corporel.",
+                comportementsSains: [
+                    "F — Fréquente : Évaluer si l'émotion survient à un rythme régulé ou si elle est excessivement fréquente / envahissante",
+                    "I — Intense : Mesurer si la décharge viscérale est proportionnée au stimulus ou disproportionnellement intense",
+                    "T¹ — Type (Cohérente) : Vérifier si la nature de l'émotion est cohérente et congruente avec la réalité de la situation",
+                    "T² — Temps (Dure) : Observer combien de temps elle dure et si elle s'apaise après la résolution ou s'enkyste",
+                    "T³ — Timing (Adapté) : Analyser si l'expression affective est adaptée et opportune au bon moment dans l'interaction",
+                    "Détecter les distorsions cognitives lorsqu'une émotion manque de cohérence (Type)",
+                    "Désamorcer par la respiration vagale lorsque l'émotion dure trop longtemps (Temps)",
+                    "Suspendre le passage à l'acte pour calibrer le moment opportun d'expression (Timing)",
+                    "Pratiquer le renforcement positif lors d'une réponse émotionnelle F.I.T.³ équilibrée"
+                ],
+                activitesBiologiques: "Chronométrage de la redescente somatique (Règle des 90 secondes pour le Temps), Échelle d'Intensité (EVA 0-10), Débriefing de communication (Timing & Cohérence).",
+                affectsTensions: "Formule : F.I.T.³ = Fréquence × Intensité × [Type (Cohérente) × Temps (Dure) × Timing (Adapté)]."
+            }
+        };
+
+        // Alias for compatibility
+        miraclesModes["simplification"] = miraclesModes["optimisation"];
+
+        function selectMiraclesMode(modeKey) {
+            const data = miraclesModes[modeKey];
+            if (!data) return;
+
+            // Update Tab styles
+            document.querySelectorAll(".miracles-tab-btn").forEach(btn => {
+                if (btn.getAttribute("data-mode") === modeKey || (modeKey === 'optimisation' && btn.getAttribute("data-mode") === 'simplification')) {
+                    btn.classList.add("active", "bg-emerald-600", "text-white", "border-emerald-500", "shadow-md");
+                    btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+                } else {
+                    btn.classList.remove("active", "bg-emerald-600", "text-white", "border-emerald-500", "shadow-md");
+                    btn.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                }
+            });
+
+            // Update SVG highlights
+            const quadIds = ["assertion", "optimisation", "compassion", "responsabilisation"];
+            quadIds.forEach(id => {
+                const el = document.getElementById("svg-quadrant-" + id);
+                if (el) {
+                    if (id === modeKey || (modeKey === 'simplification' && id === 'optimisation')) {
+                        el.setAttribute("stroke-width", "3.5");
+                        el.setAttribute("fill-opacity", "0.22");
+                    } else {
+                        el.setAttribute("stroke-width", "1.5");
+                        el.setAttribute("fill-opacity", "0.06");
+                    }
+                }
+            });
+
+            // Render Inspector Deck
+            const deck = document.getElementById("miraclesInspectorDeck");
+            deck.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl p-2.5 rounded-2xl bg-slate-800 border border-slate-700">${data.icon}</span>
+                        <div>
+                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${data.colorBadgeClass} mb-1">
+                                ${data.badge}
+                            </span>
+                            <h3 class="text-xl sm:text-2xl font-heading font-black text-white">${data.name}</h3>
+                            <p class="text-xs text-slate-400">${data.location}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Metacognitive Question Callout -->
+                <div class="rounded-xl bg-slate-800/80 border border-slate-750 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div class="space-y-1">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Jugement Critique Métacognitif</span>
+                        <div class="text-base sm:text-lg font-heading font-bold text-white italic">
+                            ${data.questionCritique}
+                        </div>
+                        <p class="text-xs text-slate-300">${data.finalite}</p>
+                    </div>
+                    <span class="px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-700/50 text-[11px] font-mono text-emerald-300 whitespace-nowrap">
+                        Renforcement +/-
+                    </span>
+                </div>
+
+                <!-- 2-Columns : Behaviors & Physiology -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left: Healthy Behaviors (9 Bullet points) -->
+                    <div class="lg:col-span-7 space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+                            <span class="text-emerald-400 font-bold">✓</span> Répertoire de Comportements Sains Validés
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-200">
+                            ${data.comportementsSains.map(comp => `
+                                <div class="flex items-start gap-2 p-2.5 rounded-lg bg-slate-850 border border-slate-750/80 hover:border-emerald-500/40 transition-colors">
+                                    <span class="text-emerald-400 text-xs mt-0.5">●</span>
+                                    <span class="leading-snug">${comp}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Right: Operant Mechanics & Physiology -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                            <span class="text-[11px] uppercase font-bold tracking-widest text-amber-300">Matrice du Conditionnement Opérant</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-light">${data.conditionnement}</p>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                            <span class="text-[11px] uppercase font-bold tracking-widest text-sky-300">Activités Biologiques Régulatrices</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-light">${data.activitesBiologiques}</p>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-cosmic-850 border border-slate-800 text-[11px] text-slate-400">
+                            <strong class="text-slate-300">Affects &amp; Tensions associées :</strong> ${data.affectsTensions}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Setup Tab Click Listeners
+        document.querySelectorAll(".miracles-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                selectMiraclesMode(btn.getAttribute("data-mode"));
+            });
+        });
+
+        // Initialize with default mode Assertion
+        selectMiraclesMode("assertion");
+
+        // ========================================================
+        // 2. DATA ET LOGIQUE DU NAVIGATEUR DE RÉSILIENCE
+        // ========================================================
         const pathsData = {
             "Colère": {
                 title: "De la Colère Explosive vers la Justice & la Sérénité",
@@ -367,6 +1622,7 @@
             if (!data) return;
 
             const card = document.getElementById("pathDisplayCard");
+            if (!card) return;
             card.innerHTML = `
                 <div class="border-b border-slate-800 pb-4">
                     <span class="text-xs uppercase font-bold tracking-widest text-emerald-400">Itinéraire Cartographique Recommandé</span>
@@ -410,27 +1666,912 @@
 
         // Initialize with default choice
         renderPath("Colère");
+
+        // ========================================================
+        // 3. DATA ET LOGIQUE DE RESTRUCTURATION DES PENSÉES (07)
+        // ========================================================
+        const dialogueData = {
+            "croyances": [
+                "Qu'est-ce qui pourrait invalider ma pensée actuelle ?",
+                "Je suis probablement partial, que puis-je apprendre d'autre ?",
+                "Ma conviction est-elle basée sur des faits ou des émotions ?",
+                "En pensant comme ceci, qu'est-ce que je risque de vivre ?",
+                "Si je continue à penser ainsi, est-ce que ça va m'amener à être perçu comme je le voudrais ?",
+                "Est-ce que cette pensée reflète bien la réalité ou me manque-t-il des informations ?",
+                "Quels faits pourraient contredire ma pensée actuelle ?",
+                "Quels biais cognitifs pourraient influencer mon jugement ?",
+                "Cette conviction est-elle fondée sur des preuves solides ou des suppositions ?",
+                "Quels seraient les impacts de cette pensée sur mes actions et mes relations ?",
+                "Quels sont les contre-arguments à ma position actuelle ?",
+                "Quelles preuves supplémentaires pourrais-je rechercher ?",
+                "Cette pensée est-elle influencée par des stéréotypes ou des préjugés ?",
+                "Quels seraient les avantages et les inconvénients de changer d'avis ?",
+                "Comment puis-je vérifier l'exactitude de mes croyances ?"
+            ],
+            "distorsions": [
+                "Quels sont mes angles morts dans cette situation ?",
+                "Comment quelqu'un ayant un parcours différent verrait-il cela ?",
+                "Je vais chercher des informations qui contredisent mon intuition.",
+                "Quels sont les faits objectifs dans cette situation ?",
+                "Comment puis-je voir cette situation de manière plus équilibrée ?",
+                "Je vais examiner les preuves avant de tirer des conclusions."
+            ],
+            "ouverture": [
+                "Il est possible que je me trompe.",
+                "Je ne connais qu'une partie de la vérité.",
+                "Chaque perspective m'apporte quelque chose.",
+                "Je peux explorer de nouvelles pistes.",
+                "Je peux apprendre à mieux comprendre.",
+                "Je peux développer de nouvelles compétences.",
+                "Je peux m'améliorer.",
+                "Je pourrais me tromper.",
+                "Je ne détiens pas toute la vérité.",
+                "Chaque point de vue a de la valeur.",
+                "Je peux découvrir ce qui m'échappe.",
+                "Je suis ouvert à de nouvelles idées.",
+                "Je peux apprendre de chaque situation.",
+                "Il y a toujours quelque chose à découvrir.",
+                "Je peux m'enrichir des expériences des autres.",
+                "Je suis prêt à remettre en question mes certitudes."
+            ],
+            "empathie": [
+                "Comprendre n'est pas nécessairement approuver.",
+                "Je peux écouter sans juger.",
+                "Chaque expérience est légitime.",
+                "Je peux essayer de comprendre le point de vue de l'autre.",
+                "Je vais écouter activement et sans interruption.",
+                "Chaque personne a une histoire unique qui mérite d'être entendue."
+            ],
+            "humilite": [
+                "Je suis un apprenant permanent.",
+                "Mes connaissances sont toujours à actualiser.",
+                "L'intelligence, c'est accepter ses erreurs.",
+                "Je reconnais que je ne sais pas tout.",
+                "Je suis ouvert aux critiques constructives.",
+                "L'apprentissage est un processus continu."
+            ],
+            "responsabilite": [
+                "Je choisis de...",
+                "Je préfère...",
+                "Je décide de...",
+                "J'ai la possibilité de...",
+                "Je prends la responsabilité de mes actions.",
+                "Je choisis de voir les choses sous un autre angle.",
+                "J'ai le pouvoir de changer ma perspective."
+            ],
+            "nuance": [
+                "Dans cette situation spécifique...",
+                "Pour le moment...",
+                "À ce stade...",
+                "Dans ce contexte particulier...",
+                "Il est important de considérer tous les aspects.",
+                "Chaque situation est unique.",
+                "Les circonstances peuvent changer la donne."
+            ],
+            "realisme": [
+                "Certaines personnes...",
+                "Il arrive parfois que...",
+                "Dans certains cas...",
+                "Cela peut varier selon...",
+                "Les gens réagissent différemment selon les situations.",
+                "Il y a des exceptions à chaque règle.",
+                "Les résultats peuvent varier en fonction des contextes."
+            ],
+            "resilience": [
+                "Comment puis-je transformer cette difficulté en opportunité ?",
+                "Quels sont les aspects positifs de cette situation ?",
+                "Comment puis-je rester flexible face aux changements ?",
+                "Quels sont les outils ou techniques que je peux utiliser pour gérer le stress ?"
+            ]
+        };
+
+        function renderDialogue(categoryKey) {
+            const phrases = dialogueData[categoryKey] || [];
+            const deck = document.getElementById("dialoguePhrasesDeck");
+            if (!deck) return;
+
+            deck.innerHTML = phrases.map(phrase => `
+                <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-750/90 hover:border-emerald-500/50 hover:bg-slate-800 transition-all cursor-pointer group flex items-start gap-2.5" onclick="navigator.clipboard.writeText('${phrase.replace(/'/g, "\\'")}'); alert('Phrase copiée dans le presse-papiers !');">
+                    <span class="text-emerald-400 group-hover:scale-125 transition-transform text-xs mt-0.5">💬</span>
+                    <p class="text-xs text-slate-200 leading-snug group-hover:text-white font-medium">« ${phrase} »</p>
+                </div>
+            `).join('');
+
+            document.querySelectorAll(".dialogue-cat-btn").forEach(btn => {
+                if (btn.getAttribute("data-category") === categoryKey) {
+                    btn.classList.add("active", "bg-emerald-600", "text-white", "border-emerald-500");
+                    btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+                } else {
+                    btn.classList.remove("active", "bg-emerald-600", "text-white", "border-emerald-500");
+                    btn.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                }
+            });
+        }
+
+        document.querySelectorAll(".dialogue-cat-btn").forEach(btn => {
+            btn.addEventListener("click", () => renderDialogue(btn.getAttribute("data-category")));
+        });
+        renderDialogue("croyances");
+
+        // ========================================================
+        // 4. DATA ET LOGIQUE DES 4 TEMPÉRAMENTS (14 & 16)
+        // ========================================================
+        const temperamentsData = {
+            "sanguin": {
+                name: "Tempérament Sanguin",
+                definition: "Tempérament vif et passionné, souvent associé à une forte énergie motrice et à l'impulsivité exploratrice.",
+                valeurs: "Enthousiasme, Sociabilité, Optimisme, Curiosité, Courage.",
+                badge: "Expansion Agréable &bull; Excitateur",
+                badgeClass: "bg-amber-950/80 text-amber-300 border-amber-700/50",
+                affirmations: [
+                    "Je suis plein d'énergie et d'enthousiasme.",
+                    "Je crée des liens positifs et stimulants avec les autres.",
+                    "Je vois le bon côté des choses et les opportunités d'apprentissage.",
+                    "Je suis curieux et j'aime explorer de nouvelles idées constructives.",
+                    "Je fais preuve de courage dans tout ce que j'entreprends."
+                ]
+            },
+            "colerique": {
+                name: "Tempérament Colérique",
+                definition: "Caractérisé par une forte réactivité face aux obstacles, une énergie orientée vers l'action et la quête d'équité.",
+                valeurs: "Détermination, Passion, Justice, Courage, Franchise.",
+                badge: "Action Directe &bull; Excitateur",
+                badgeClass: "bg-rose-950/80 text-rose-300 border-rose-700/50",
+                affirmations: [
+                    "Je suis déterminé et je poursuis mes objectifs avec passion.",
+                    "Je défends ce qui est juste et équitable.",
+                    "Je fais preuve de courage face aux défis.",
+                    "Je suis honnête et direct dans mes communications.",
+                    "Je canalise mon énergie de manière constructive et pacifiée."
+                ]
+            },
+            "melancolique": {
+                name: "Tempérament Mélancolique",
+                definition: "État d'intériorité profonde, d'introspection sensible et de grande capacité réflexive et empathique.",
+                valeurs: "Réflexion, Sensibilité, Introspection, Empathie, Authenticité.",
+                badge: "Intériorité &bull; Inhibiteur",
+                badgeClass: "bg-purple-950/80 text-purple-300 border-purple-700/50",
+                affirmations: [
+                    "Je prends le temps de réfléchir et de comprendre mes émotions.",
+                    "Je suis sensible aux besoins des autres avec compassion.",
+                    "Je suis authentique et fidèle à mes valeurs profondes.",
+                    "Je fais preuve d'empathie et de compassion dans mes jugements.",
+                    "Je trouve de la force et de la clarté dans mon introspection."
+                ]
+            },
+            "flegmatique": {
+                name: "Tempérament Flegmatique",
+                definition: "Tempérament calme, posé et imperturbable, garantissant la stabilité allostatique et la paix relationnelle.",
+                valeurs: "Calme, Stabilité, Patience, Tolérance, Bienveillance.",
+                badge: "Pondération &bull; Inhibiteur",
+                badgeClass: "bg-emerald-950/80 text-emerald-300 border-emerald-700/50",
+                affirmations: [
+                    "Je suis calme et serein dans toutes les situations de crise.",
+                    "Je maintiens la stabilité et l'équilibre dans ma vie.",
+                    "Je fais preuve de patience et de tolérance face aux désaccords.",
+                    "Je suis bienveillant et empathique envers les autres.",
+                    "Je trouve la paix intérieure dans la tranquillité de l'esprit."
+                ]
+            }
+        };
+
+        function renderTemperament(tempKey) {
+            const data = temperamentsData[tempKey];
+            if (!data) return;
+
+            const deck = document.getElementById("temperamentDeck");
+            if (!deck) return;
+
+            deck.innerHTML = `
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-750 pb-3">
+                    <div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${data.badgeClass} mb-1">
+                            ${data.badge}
+                        </span>
+                        <h4 class="text-xl font-heading font-black text-white">${data.name}</h4>
+                        <p class="text-xs text-slate-300 mt-0.5">${data.definition}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <div class="md:col-span-5 p-4 rounded-xl bg-cosmic-900 border border-slate-800 space-y-2">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Valeurs Fondamentales</span>
+                        <p class="text-xs text-slate-200 font-semibold">${data.valeurs}</p>
+                        <p class="text-[11px] text-slate-400 leading-relaxed pt-2 border-t border-slate-800">
+                            Ces valeurs forment le socle identitaire permettant de calibrer l'action sur le monde sans dérive impulsive.
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-7 space-y-2">
+                        <span class="text-[10px] uppercase font-bold tracking-widest text-slate-300">Affirmations Positives Thérapeutiques</span>
+                        <div class="space-y-1.5">
+                            ${data.affirmations.map(aff => `
+                                <div class="flex items-center gap-2.5 p-2 rounded-lg bg-cosmic-900 border border-slate-800 text-xs text-slate-200">
+                                    <span class="text-emerald-400 font-bold">✓</span>
+                                    <span>« ${aff} »</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.querySelectorAll(".temperament-tab-btn").forEach(btn => {
+                if (btn.getAttribute("data-temp") === tempKey) {
+                    btn.classList.add("active", "bg-emerald-600", "text-white", "border-emerald-500");
+                    btn.classList.remove("bg-slate-800", "text-slate-300", "border-slate-700");
+                } else {
+                    btn.classList.remove("active", "bg-emerald-600", "text-white", "border-emerald-500");
+                    btn.classList.add("bg-slate-800", "text-slate-300", "border-slate-700");
+                }
+            });
+        }
+
+        document.querySelectorAll(".temperament-tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => renderTemperament(btn.getAttribute("data-temp")));
+        });
+        renderTemperament("sanguin");
+
+        // ========================================================
+        // 5. DATA ET LOGIQUE DU GLOSSAIRE CLINIQUE (14 & 16)
+        // ========================================================
+        const glossaryData = [
+            // 8 Émotions de base
+            { name: "Joie", cat: "base", def: "Sentiment de bonheur intense et de plaisir, marquant la satisfaction pleine d'un besoin vital ou d'un gain inattendu." },
+            { name: "Colère", cat: "base", def: "Sentiment intense de mécontentement et d'irritation visant à défendre l'intégrité face à un obstacle perçu." },
+            { name: "Peur", cat: "base", def: "Sentiment d'angoisse ou de crainte face à un danger réel ou imaginaire, orienté vers la survie." },
+            { name: "Tristesse", cat: "base", def: "Sentiment de peine et de mélancolie signalant la perte et activant un repli protecteur d'économie d'énergie." },
+            { name: "Dégoût", cat: "base", def: "Sentiment de répulsion ou d'aversion intense visant l'expulsion ou l'éloignement d'un stimulus nocif." },
+            { name: "Attraction", cat: "base", def: "Désir pour quelque chose ou quelqu'un, force motrice de rapprochement et de connexion." },
+            { name: "Soulagement", cat: "base", def: "Sentiment de diminution ou de disparition d'une douleur, d'un danger ou d'une inquiétude pesante." },
+            { name: "Curiosité", cat: "base", def: "Désir d'explorer, de découvrir ou d'apprendre pour réduire l'incertitude dans l'environnement." },
+
+            // Sentiments Agréables Actifs (16)
+            { name: "Puissance", cat: "agr-actif", def: "Sentiment d'avoir la capacité et l'autorité pour accomplir une action décisive." },
+            { name: "Pulsion", cat: "agr-actif", def: "Force intérieure qui pousse à agir, souvent de manière instinctive et déterminée." },
+            { name: "Espoir", cat: "agr-actif", def: "Sentiment d'attente confiante et positive envers l'avenir." },
+            { name: "Amour", cat: "agr-actif", def: "Sentiment intense d'affection et d'attachement envers une personne ou une cause." },
+            { name: "Passion", cat: "agr-actif", def: "Sentiment intense et irrésistible qui focalise l'énergie vers un centre d'intérêt majeur." },
+            { name: "Admiration", cat: "agr-actif", def: "Sentiment de respect et d'appréciation enthousiaste envers ce qui excelle." },
+            { name: "Enthousiasme", cat: "agr-actif", def: "Grande excitation et intérêt dynamique pour entreprendre un projet." },
+            { name: "Optimisme", cat: "agr-actif", def: "Tendance à voir le bon côté des choses et à anticiper une issue favorable." },
+            { name: "Courage", cat: "agr-actif", def: "Force morale pour affronter le danger, la douleur ou l'adversité avec lucidité." },
+            { name: "Audace", cat: "agr-actif", def: "Courage et détermination affirmée à prendre des risques calculés." },
+            { name: "Assurance", cat: "agr-actif", def: "Confiance inébranlable en soi, en ses capacités et en son jugement." },
+            { name: "Résilience", cat: "agr-actif", def: "Capacité à surmonter les difficultés et à rebondir après des épreuves." },
+            { name: "Excitation", cat: "agr-actif", def: "Sentiment d'anticipation et de stimulation positive à l'approche d'un gain." },
+            { name: "Euphorie", cat: "agr-actif", def: "Sentiment de bonheur intense et de grande énergie expansive." },
+            { name: "Exaltation", cat: "agr-actif", def: "État de grande joie et d'excitation spirituelle ou intellectuelle." },
+            { name: "Jubilation", cat: "agr-actif", def: "Sentiment de joie exubérante et de triomphe partagé." },
+
+            // Sentiments Agréables Passifs (15)
+            { name: "Confiance", cat: "agr-passif", def: "Sentiment de sécurité et d'assurance envers autrui ou le cadre environnant." },
+            { name: "Satisfaction", cat: "agr-passif", def: "Contentement suite à la réalisation concrète de ses désirs ou besoins." },
+            { name: "Quiétude", cat: "agr-passif", def: "État de calme profond, de sérénité et d'absence de perturbations." },
+            { name: "Sérénité", cat: "agr-passif", def: "Paix intérieure profonde et absence totale de stress ou d'agitation motrice." },
+            { name: "Calme", cat: "agr-passif", def: "État de tranquillité corporelle et d'apaisement des flux neurovégétatifs." },
+            { name: "Fierté", cat: "agr-passif", def: "Sentiment de satisfaction et de dignité par rapport à ses propres réalisations." },
+            { name: "Acceptation", cat: "agr-passif", def: "Attitude de consentement et de reconnaissance lucide de la réalité telle qu'elle est." },
+            { name: "Gratitude", cat: "agr-passif", def: "Sentiment de reconnaissance et d'appréciation sincère pour les bienfaits reçus." },
+            { name: "Justice", cat: "agr-passif", def: "Sentiment de respect des droits, d'équité et d'ordre moral harmonieux." },
+            { name: "Patience", cat: "agr-passif", def: "Capacité à attendre calmement et sans irritation la maturation des événements." },
+            { name: "Tolérance", cat: "agr-passif", def: "Acceptation bienveillante des différences et des opinions divergentes." },
+            { name: "Contentement", cat: "agr-passif", def: "Sentiment durable de satisfaction allostatique et de bien-être mesuré." },
+            { name: "Paix", cat: "agr-passif", def: "Harmonie intérieure exempte de conflit cognitif ou relationnel." },
+            { name: "Plénitude", cat: "agr-passif", def: "Sentiment de complétude intérieure où aucun manque urgent ne se fait sentir." },
+            { name: "Apaisement", cat: "agr-passif", def: "Réduction sensible du stress corporel et retour au point de neutralité." },
+
+            // Sentiments Désagréables Actifs (15)
+            { name: "Méfiance", cat: "des-actif", def: "Suspicion et doute envers autrui, posture d'hypervigilance défensive." },
+            { name: "Haine", cat: "des-actif", def: "Détestation intense et hostilité persistante souhaitant la destruction de l'autre." },
+            { name: "Vengeance", cat: "des-actif", def: "Désir de punir ou de rendre le mal pour le mal subi." },
+            { name: "Jalousie", cat: "des-actif", def: "Ressentiment et envie agressive envers quelqu'un qui possède ce que l'on désire." },
+            { name: "Indignation", cat: "des-actif", def: "Sentiment de vive colère face à une injustice ou une transgression inacceptable." },
+            { name: "Injustice", cat: "des-actif", def: "Frustration et révolte face à un traitement inéquitable ou partial." },
+            { name: "Frustration", cat: "des-actif", def: "Contrariété causée par un obstacle empêchant la réalisation d'un désir ou but." },
+            { name: "Intolérance", cat: "des-actif", def: "Refus rigide d'accepter les opinions, croyances ou comportements d'autrui." },
+            { name: "Impatience", cat: "des-actif", def: "Difficulté irritable à supporter les délais ou l'attente nécessaire." },
+            { name: "Irritation", cat: "des-actif", def: "Gêne et agacement nerveux face à des stimuli contrariants répétés." },
+            { name: "Ressentiment", cat: "des-actif", def: "Rancœur et amertume entretenues dans la durée envers une blessure passée." },
+            { name: "Anxiété", cat: "des-actif", def: "Nervosité et inquiétude diffuse face à une incertitude menaçante." },
+            { name: "Crainte", cat: "des-actif", def: "Appréhension ciblée face à un danger potentiel anticipé." },
+            { name: "Angoisse", cat: "des-actif", def: "Malaise somatique intense avec constriction thoracique ou viscérale." },
+            { name: "Rage", cat: "des-actif", def: "Colère explosive incontrôlable menant à la décharge motrice destructrice." },
+
+            // Sentiments Désagréables Passifs (15)
+            { name: "Impuissance", cat: "des-passif", def: "Sentiment d'incapacité totale à agir ou à infléchir le cours d'une situation." },
+            { name: "Désespoir", cat: "des-passif", def: "Perte totale d'espoir et conviction que rien ne pourra jamais s'améliorer." },
+            { name: "Honte", cat: "des-passif", def: "Sentiment pénible de dévalorisation de soi et d'indignité sous le regard d'autrui." },
+            { name: "Humiliation", cat: "des-passif", def: "Honte et perte brutale de dignité suite à une situation dégradante imposée." },
+            { name: "Dédain", cat: "des-passif", def: "Sentiment de mépris hautain ou de supériorité froide envers autrui." },
+            { name: "Culpabilité", cat: "des-passif", def: "Remords pénible d'avoir transgressé ses principes moraux ou causé un tort." },
+            { name: "Remords", cat: "des-passif", def: "Regret cuisant accompagné d'un sentiment d'auto-condamnation morale." },
+            { name: "Regret", cat: "des-passif", def: "Tristesse causée par une décision passée avec le souhait que le cours des choses ait été différent." },
+            { name: "Découragement", cat: "des-passif", def: "Perte progressive de motivation et de foi face à la persistance d'obstacles." },
+            { name: "Déprime", cat: "des-passif", def: "Tristesse persistante et perte d'élan vital sans cause aiguë isolée." },
+            { name: "Solitude", cat: "des-passif", def: "Sentiment de manque d'attachement sécure et d'isolement social." },
+            { name: "Pessimisme", cat: "des-passif", def: "Tendance systématique à anticiper le pire dénouement possible." },
+            { name: "Apathie", cat: "des-passif", def: "Absence d'émotion, d'intérêt, de motivation ou d'élan moteur adaptatif." },
+            { name: "Résignation", cat: "des-passif", def: "Acceptation passive et subie d'une détresse sans tentative de changement." },
+            { name: "Doute", cat: "des-passif", def: "Incertitude paralysante sur soi-même, ses capacités ou la réalité environnante." }
+        ];
+
+        function renderGlossary(filter = "all", searchQuery = "") {
+            const grid = document.getElementById("glossaryGrid");
+            const countText = document.getElementById("glossaryCountText");
+            if (!grid) return;
+
+            let filtered = glossaryData;
+
+            // Apply category filter
+            if (filter !== "all") {
+                filtered = filtered.filter(item => item.cat === filter);
+            }
+
+            // Apply search query
+            if (searchQuery.trim() !== "") {
+                const q = searchQuery.toLowerCase().trim();
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(q) || item.def.toLowerCase().includes(q));
+            }
+
+            if (countText) {
+                countText.textContent = `${filtered.length} affect(s) trouvé(s) sur un corpus clinique de ${glossaryData.length}`;
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-8 text-center text-slate-500 text-xs">Aucun état affectif ne correspond à votre recherche.</div>`;
+                return;
+            }
+
+            const catBadges = {
+                "base": { label: "Émotion Primaire", cls: "bg-amber-950/80 text-amber-300 border-amber-800/40" },
+                "agr-actif": { label: "Agréable Actif", cls: "bg-emerald-950/80 text-emerald-300 border-emerald-800/40" },
+                "agr-passif": { label: "Agréable Passif", cls: "bg-teal-950/80 text-teal-300 border-teal-800/40" },
+                "des-actif": { label: "Désagréable Actif", cls: "bg-rose-950/80 text-rose-300 border-rose-800/40" },
+                "des-passif": { label: "Désagréable Passif", cls: "bg-indigo-950/80 text-indigo-300 border-indigo-800/40" }
+            };
+
+            grid.innerHTML = filtered.map(item => {
+                const b = catBadges[item.cat] || { label: "Affect", cls: "bg-slate-800 text-slate-300" };
+                return `
+                    <div class="p-3.5 rounded-xl bg-cosmic-900 border border-slate-750/90 hover:border-emerald-500/40 transition-colors flex flex-col justify-between space-y-2">
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <h5 class="text-sm font-bold text-white font-heading">${item.name}</h5>
+                                <span class="px-2 py-0.5 rounded text-[9px] font-semibold border ${b.cls}">${b.label}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${item.def}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Glossary event listeners
+        let currentFilter = "all";
+        document.querySelectorAll(".glossary-filter-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".glossary-filter-btn").forEach(b => {
+                    b.classList.remove("active", "bg-emerald-600", "text-white");
+                    b.classList.add("bg-slate-800", "text-slate-300");
+                });
+                btn.classList.add("active", "bg-emerald-600", "text-white");
+                btn.classList.remove("bg-slate-800", "text-slate-300");
+                currentFilter = btn.getAttribute("data-filter");
+                const searchVal = document.getElementById("glossarySearchInput") ? document.getElementById("glossarySearchInput").value : "";
+                renderGlossary(currentFilter, searchVal);
+            });
+        });
+
+        const searchInput = document.getElementById("glossarySearchInput");
+        if (searchInput) {
+            searchInput.addEventListener("input", (e) => {
+                renderGlossary(currentFilter, e.target.value);
+            });
+        }
+
+        // Initial render
+        renderGlossary("all", "");
+
+        // ========================================================
+        // 4. MINUTEUR SOMATIQUE 90 SECONDES (LOGIQUE HHS & GROSS)
+        // ========================================================
+        let timerRemaining = 90;
+        let timerInterval = null;
+        let timerIsRunning = false;
+        const totalDuration = 90;
+        const circumference = 565.48; // 2 * PI * 90
+
+        const countdownDisplay = document.getElementById("timerCountdownDisplay");
+        const progressRing = document.getElementById("timerProgressRing");
+        const breathingCircle = document.getElementById("breathingPacerCircle");
+        const breathingText = document.getElementById("breathingPhaseText");
+        const breathingActionPrompt = document.getElementById("breathingActionPrompt");
+        const timerStartBtn = document.getElementById("timerStartBtn");
+        const timerBtnText = document.getElementById("timerBtnText");
+        const timerResetBtn = document.getElementById("timerResetBtn");
+
+        const phaseCard1 = document.getElementById("phaseCard1");
+        const phaseCard2 = document.getElementById("phaseCard2");
+        const phaseCard3 = document.getElementById("phaseCard3");
+
+        // Gentle Web Audio Chime on phase shifts
+        function playChime(freq = 528) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = "sine";
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 1.2);
+            } catch(e) {
+                // AudioContext blocked by browser policy until user interacts
+            }
+        }
+
+        function updateTimerUI() {
+            if (countdownDisplay) {
+                countdownDisplay.innerHTML = `${timerRemaining}<span class="text-xl text-amber-400">s</span>`;
+            }
+            if (progressRing) {
+                const offset = circumference - ((timerRemaining / totalDuration) * circumference);
+                progressRing.style.strokeDashoffset = offset;
+            }
+
+            // Highlighting Phases
+            if (timerRemaining > 60) {
+                if (phaseCard1) { phaseCard1.className = "p-4 rounded-2xl bg-rose-950/40 border-2 border-rose-500 shadow-lg shadow-rose-950/50 transition-all duration-300 space-y-2"; }
+                if (phaseCard2) { phaseCard2.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+                if (phaseCard3) { phaseCard3.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+            } else if (timerRemaining > 30) {
+                if (phaseCard1) { phaseCard1.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+                if (phaseCard2) { phaseCard2.className = "p-4 rounded-2xl bg-amber-950/40 border-2 border-amber-500 shadow-lg shadow-amber-950/50 transition-all duration-300 space-y-2"; }
+                if (phaseCard3) { phaseCard3.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+            } else if (timerRemaining > 0) {
+                if (phaseCard1) { phaseCard1.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+                if (phaseCard2) { phaseCard2.className = "p-4 rounded-2xl bg-slate-850 border border-slate-800 opacity-60 transition-all duration-300 space-y-2"; }
+                if (phaseCard3) { phaseCard3.className = "p-4 rounded-2xl bg-emerald-950/40 border-2 border-emerald-500 shadow-lg shadow-emerald-950/50 transition-all duration-300 space-y-2"; }
+            }
+
+            // Breathing instructions (12-second rhythm: 4s Inspire, 2s Retain, 6s Expire)
+            if (timerIsRunning) {
+                const cycleSecond = (totalDuration - timerRemaining) % 12;
+                if (cycleSecond < 4) {
+                    if (breathingText) breathingText.textContent = "Inspirez...";
+                    if (breathingActionPrompt) breathingActionPrompt.textContent = "Inspirez profondément par le nez (4s)... Le ventre se gonfle.";
+                    if (breathingCircle) breathingCircle.style.transform = "scale(1.22)";
+                } else if (cycleSecond < 6) {
+                    if (breathingText) breathingText.textContent = "Bloquez...";
+                    if (breathingActionPrompt) breathingActionPrompt.textContent = "Rétention douce poumons pleins (2s)... Suspension apaisante.";
+                    if (breathingCircle) breathingCircle.style.transform = "scale(1.22)";
+                } else {
+                    if (breathingText) breathingText.textContent = "Expirez...";
+                    if (breathingActionPrompt) breathingActionPrompt.textContent = "Expirez lentement par la bouche (6s)... Relâchez mâchoire et épaules.";
+                    if (breathingCircle) breathingCircle.style.transform = "scale(0.85)";
+                }
+            }
+        }
+
+        function startTimer() {
+            if (timerIsRunning) {
+                // Pause
+                clearInterval(timerInterval);
+                timerIsRunning = false;
+                if (timerBtnText) timerBtnText.textContent = "Reprendre";
+                if (breathingActionPrompt) breathingActionPrompt.textContent = "Cycle en pause. Reprenez dès que vous le souhaitez.";
+                if (breathingCircle) breathingCircle.style.transform = "scale(1)";
+                return;
+            }
+
+            timerIsRunning = true;
+            if (timerBtnText) timerBtnText.textContent = "Pause";
+            playChime(528);
+
+            timerInterval = setInterval(() => {
+                if (timerRemaining > 0) {
+                    timerRemaining--;
+                    if (timerRemaining === 60) playChime(440);
+                    if (timerRemaining === 30) playChime(660);
+                    updateTimerUI();
+                } else {
+                    clearInterval(timerInterval);
+                    timerIsRunning = false;
+                    playChime(880);
+                    if (timerBtnText) timerBtnText.textContent = "Recommencer (90s)";
+                    if (breathingText) breathingText.textContent = "Apaisé";
+                    if (breathingActionPrompt) breathingActionPrompt.innerHTML = `<span class="text-emerald-400 font-bold">✨ Les 90 secondes se sont écoulées !</span> Le Système 3 est réactivé. Vous pouvez choisir une phrase de dialogue interne.`;
+                    if (breathingCircle) breathingCircle.style.transform = "scale(1)";
+                }
+            }, 1000);
+            updateTimerUI();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerIsRunning = false;
+            timerRemaining = 90;
+            if (timerBtnText) timerBtnText.textContent = "Démarrer le Cycle (90s)";
+            if (breathingText) breathingText.textContent = "Prêt";
+            if (breathingActionPrompt) breathingActionPrompt.textContent = "Appuyez sur Démarrer pour engager le protocole somatique des 90 secondes.";
+            if (breathingCircle) breathingCircle.style.transform = "scale(1)";
+            updateTimerUI();
+        }
+
+        if (timerStartBtn) timerStartBtn.addEventListener("click", startTimer);
+        if (timerResetBtn) timerResetBtn.addEventListener("click", resetTimer);
+        updateTimerUI();
+
+        // ========================================================
+        // 5. PONT DE RÉSOLUTION CRIMES -> MIRACLES (LOGIQUE)
+        // ========================================================
+        const bridgeData = {
+            "rage": {
+                title: "Explosion de Colère & Agressivité",
+                crimesMode: "Domination (R-)",
+                crimesBadge: "bg-red-950/80 text-red-300 border-red-700/50",
+                distortion: "Diabolisation & Injonction",
+                distortionDesc: "« Ils le font exprès pour me nuire, ils doivent plier immédiatement ! »",
+                mechanism: "Surtension du gradient de contrôle (+Y) sans révision cognitive (-X). Forcer autrui par la coercition.",
+                miraclesMode: "Assertion (R-)",
+                miraclesBadge: "bg-emerald-950/80 text-emerald-300 border-emerald-700/50",
+                strategy: "Suspension & Distanciation (Stratégie 01 & 04)",
+                mantra: "« Je peux exprimer mon désaccord avec fermeté sans agresser ni détruire. Ma dignité réside dans mon calme souverain. »",
+                action: "Activer la règle des 90s, baisser le volume de la voix de moitié et reformuler calmement les faits observables."
+            },
+            "controle": {
+                title: "Contrôle Maniaque & Rigidité",
+                crimesMode: "Domination (R-)",
+                crimesBadge: "bg-red-950/80 text-red-300 border-red-700/50",
+                distortion: "Injonction & Dramatisation",
+                distortionDesc: "« Tout doit être parfait selon mes règles, sinon tout s'effondre ! »",
+                mechanism: "Incapacité à tolérer l'incertitude. Sur-contrôle anxiogène épuisant les ressources allostatiques.",
+                miraclesMode: "Optimisation (R+)",
+                miraclesBadge: "bg-pink-950/80 text-pink-300 border-pink-700/50",
+                strategy: "Lâcher-prise & Économie d'Énergie (Stratégie 06)",
+                mantra: "« Je ne peux pas contrôler les personnes ni les imprévus, mais seulement ma propre réponse attentionnelle. »",
+                action: "Identifier une seule micro-tâche à déléguer immédiatement et accepter un résultat imparfait mais suffisant."
+            },
+            "theatralisation": {
+                title: "Théâtralisation & Dépendance Affective",
+                crimesMode: "Exagération (R+)",
+                crimesBadge: "bg-pink-950/80 text-pink-300 border-pink-700/50",
+                distortion: "Amplification & Dévalorisation",
+                distortionDesc: "« Si on ne me regarde pas tout de suite, c'est que je n'existe plus pour personne ! »",
+                mechanism: "Recherche compulsive de dopamine sociale par la surenchère émotionnelle dramatisée.",
+                miraclesMode: "Compassion & Auto-Validation (P+)",
+                miraclesBadge: "bg-teal-950/80 text-teal-300 border-teal-700/50",
+                strategy: "Réassurance Intérieure & Ancrage (Stratégie 09)",
+                mantra: "« Ma valeur humaine est inaltérable et ne dépend pas du flux constant d'attention extérieure. Je m'accueille en paix. »",
+                action: "Fermer les yeux 2 minutes, poser une main sur la poitrine et s'adresser un mot de réconfort inconditionnel."
+            },
+            "surengagement": {
+                title: "Surengagement Fébrile & Promesses Démesurées",
+                crimesMode: "Exagération (R+)",
+                crimesBadge: "bg-pink-950/80 text-pink-300 border-pink-700/50",
+                distortion: "Généralisation & Normalisation",
+                distortionDesc: "« Je vais tout accomplir d'un coup, c'est facile et normal d'en faire dix fois plus ! »",
+                mechanism: "Excitation non régulée, dispersion allostatique et promesses intenables menant au burn-out.",
+                miraclesMode: "Optimisation (R+)",
+                miraclesBadge: "bg-pink-950/80 text-pink-300 border-pink-700/50",
+                strategy: "Pragmatisme & Séquençage (Stratégie 08)",
+                mantra: "« Je préfère une seule action modeste mais achevée avec clarté, qu'un grand projet grandiose abandonné. »",
+                action: "Éliminer 2 engagements superflus de votre agenda aujourd'hui et vous concentrer sur la priorité absolue."
+            },
+            "complaisance": {
+                title: "Complaisance Anxieuse & Incapacité à dire Non",
+                crimesMode: "Soumission (P+)",
+                crimesBadge: "bg-blue-950/80 text-blue-300 border-blue-700/50",
+                distortion: "Victimisation & Minimisation",
+                distortionDesc: "« Ce n'est pas grave pour moi, je préfère m'effacer pour qu'il n'y ait aucun conflit... »",
+                mechanism: "Refoulement du gradient de contrôle (-Y) par terreur de la désapprobation d'autrui.",
+                miraclesMode: "Assertion (R-)",
+                miraclesBadge: "bg-emerald-950/80 text-emerald-300 border-emerald-700/50",
+                strategy: "Affirmation de Limite Saine (Stratégie 02)",
+                mantra: "« Dire non à une demande déraisonnable, c'est dire oui à ma santé mentale et à mon intégrité. »",
+                action: "Refuser poliment une sollicitation abusive avec une phrase simple : « C'est impossible pour moi en ce moment »."
+            },
+            "autodenigrement": {
+                title: "Auto-Dénigrement & Honte Toxique",
+                crimesMode: "Soumission (P+)",
+                crimesBadge: "bg-blue-950/80 text-blue-300 border-blue-700/50",
+                distortion: "Dévalorisation & Banalisation",
+                distortionDesc: "« Je suis totalement nul, je n'arriverai jamais à rien, c'est de ma faute... »",
+                mechanism: "Repli somatique d'économie adaptative extrême. Le modèle interne de soi est attaqué de l'intérieur.",
+                miraclesMode: "Compassion (P+)",
+                miraclesBadge: "bg-teal-950/80 text-teal-300 border-teal-700/50",
+                strategy: "Défusion & Recadrage Bienveillant (Stratégie 03)",
+                mantra: "« Une erreur est une information sur la tâche, jamais une sentence définitive sur ma valeur d'être humain. »",
+                action: "Traiter son esprit comme un ami cher qui trébuche : pas de punition, mais un soutien lucide."
+            },
+            "procrastination": {
+                title: "Procrastination & Évasion Numérique",
+                crimesMode: "Évasion (P-)",
+                crimesBadge: "bg-purple-950/80 text-purple-300 border-purple-700/50",
+                distortion: "Minimisation & Déresponsabilisation",
+                distortionDesc: "« Je verrai ça plus tard, ce n'est pas si urgent, encore 5 minutes sur mon téléphone... »",
+                mechanism: "Fuite de l'inconfort immédiat de l'écart de prédiction au détriment de l'horizon temporel futur.",
+                miraclesMode: "Responsabilisation (P-)",
+                miraclesBadge: "bg-sky-950/80 text-sky-300 border-sky-700/50",
+                strategy: "Micro-Action des 2 Minutes (Stratégie 11)",
+                mantra: "« Fuir la difficulté maintenant augmente la facture allostatique de demain. J'agis maintenant sur un seul micro-détail. »",
+                action: "Couper les notifications pendant 25 minutes et commencer la première ligne du travail sans viser la perfection."
+            },
+            "compensation": {
+                title: "Consommation Impulsive Compensatoire",
+                crimesMode: "Évasion (P-)",
+                crimesBadge: "bg-purple-950/80 text-purple-300 border-purple-700/50",
+                distortion: "Normalisation & Banalisation",
+                distortionDesc: "« Après ce que j'ai vécu aujourd'hui, je mérite bien cette compensation immédiate ! »",
+                mechanism: "Recours à des substances exogènes ou conduites impulsives pour anesthésier la charge affective.",
+                miraclesMode: "Responsabilisation & Veille (P-)",
+                miraclesBadge: "bg-sky-950/80 text-sky-300 border-sky-700/50",
+                strategy: "Pause Somatique & Remplacement Constructif (Stratégie 12)",
+                mantra: "« Cette impulsion n'est qu'une vague neurochimique de 90 secondes. Elle va s'éteindre si je ne la nourris pas. »",
+                action: "Boire un grand verre d'eau, lancer le minuteur 90s et faire 10 respirations lentes avant toute prise de décision."
+            },
+            "ressentiment": {
+                title: "Ressentiment Gelé & Ruminations",
+                crimesMode: "Domination / Évasion (R- / P-)",
+                crimesBadge: "bg-red-950/80 text-red-300 border-red-700/50",
+                distortion: "Généralisation & Diabolisation",
+                distortionDesc: "« Je n'oublierai jamais ce qu'ils m'ont fait, ils doivent payer jusqu'au bout ! »",
+                mechanism: "Immunisation cognitive : maintien de l'amertume pris à tort pour une armure protectrice.",
+                miraclesMode: "Assertion & Justice Équitable (R-)",
+                miraclesBadge: "bg-emerald-950/80 text-emerald-300 border-emerald-700/50",
+                strategy: "Pardon Allostatique & Décentrement (Stratégie 13)",
+                mantra: "« Garder du ressentiment, c'est boire du poison en espérant que l'autre meure. Je me libère de cette charge inutile. »",
+                action: "Écrire sans filtre la colère sur une feuille, puis la déchirer symboliquement pour clore la boucle prédictive."
+            },
+            "victimisation": {
+                title: "Victimisation Systématique & Impuissance",
+                crimesMode: "Soumission / Évasion (P+ / P-)",
+                crimesBadge: "bg-blue-950/80 text-blue-300 border-blue-700/50",
+                distortion: "Victimisation & Déresponsabilisation",
+                distortionDesc: "« C'est toujours à moi que ça arrive, je n'ai jamais de chance, le monde est injuste... »",
+                mechanism: "Position de passivité acquise justifiant l'absence d'action réparatrice.",
+                miraclesMode: "Responsabilisation & Courage (P-)",
+                miraclesBadge: "bg-sky-950/80 text-sky-300 border-sky-700/50",
+                strategy: "Restauration du Locus de Contrôle Interne (Stratégie 14)",
+                mantra: "« Même si je ne choisis pas les événements extérieurs, j'ai l'entière liberté de choisir ma posture intérieure et mes actes. »",
+                action: "Lister 3 choses concrètes sur lesquelles vous avez un pouvoir d'action immédiat et direct aujourd'hui."
+            }
+        };
+
+        function renderBridge(key) {
+            const data = bridgeData[key];
+            if (!data) return;
+            const container = document.getElementById("bridgeResolutionDisplay");
+            if (!container) return;
+
+            container.innerHTML = `
+                <!-- Face Sombre : CRIMES -->
+                <div class="rounded-2xl bg-cosmic-900 border border-red-900/40 p-5 space-y-4 shadow-xl relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">⚠️</span>
+                            <span class="text-xs uppercase font-bold tracking-wider text-rose-400">Le Piège Actif : C.R.I.M.E.S.</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-mono border ${data.crimesBadge}">
+                            ${data.crimesMode}
+                        </span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="text-xs font-bold text-slate-300">Distorsion Cognitive Active :</div>
+                        <div class="text-sm font-semibold text-rose-300">${data.distortion}</div>
+                        <div class="p-3 rounded-xl bg-slate-850/80 border border-slate-750 text-xs italic text-slate-200">
+                            ${data.distortionDesc}
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 pt-1 border-t border-slate-800 text-xs">
+                        <span class="text-slate-400 font-semibold">Impact Neuro-Fonctionnel :</span>
+                        <p class="text-slate-300 leading-relaxed">${data.mechanism}</p>
+                    </div>
+                </div>
+
+                <!-- Face Lumineuse : MIRACLES -->
+                <div class="rounded-2xl bg-gradient-to-br from-slate-900 to-emerald-950/40 border border-emerald-600/50 p-5 space-y-4 shadow-xl relative overflow-hidden">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">✨</span>
+                            <span class="text-xs uppercase font-bold tracking-wider text-emerald-400">La Porte de Sortie : M.I.R.A.C.L.E.S.</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[11px] font-mono border ${data.miraclesBadge}">
+                            ${data.miraclesMode}
+                        </span>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="text-xs font-bold text-slate-300">Stratégie Délibérée Recommandée :</div>
+                        <div class="text-sm font-semibold text-emerald-300">${data.strategy}</div>
+                        <div class="p-3 rounded-xl bg-emerald-950/30 border border-emerald-700/40 text-xs font-medium text-emerald-100 flex items-start justify-between gap-2">
+                            <span>${data.mantra}</span>
+                            <button type="button" onclick="navigator.clipboard.writeText('${data.mantra.replace(/'/g, "\\'")}'); alert('Phrase copiée dans le presse-papier !');" class="shrink-0 p-1.5 rounded-lg bg-emerald-800/60 hover:bg-emerald-700 text-emerald-200 transition-colors" title="Copier la formule">
+                                📋
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 pt-1 border-t border-slate-800 text-xs">
+                        <span class="text-emerald-400 font-semibold">Action Concrète Immédiate :</span>
+                        <p class="text-slate-300 leading-relaxed">${data.action}</p>
+                        <div class="pt-2 flex items-center gap-3">
+                            <a href="#minuteur-somatique" onclick="startTimer();" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-200 bg-amber-950/80 hover:bg-amber-900 border border-amber-600/40 transition-colors">
+                                <span>⏱️</span> Lancer les 90s de désescalade
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const bridgeSelect = document.getElementById("bridgeScenarioSelect");
+        if (bridgeSelect) {
+            bridgeSelect.addEventListener("change", (e) => {
+                renderBridge(e.target.value);
+            });
+            renderBridge(bridgeSelect.value || "rage");
+        }
+
+        // ========================================================
+        // 6. MODALE FICHE CLINIQUE DE RÉGULATION & IMPRESSION PDF
+        // ========================================================
+        window.openClinicalSheetModal = function() {
+            const modal = document.getElementById("clinicalSheetModal");
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+                document.body.style.overflow = "hidden";
+            }
+        };
+
+        window.closeClinicalSheetModal = function() {
+            const modal = document.getElementById("clinicalSheetModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+                document.body.style.overflow = "";
+            }
+        };
+
+        // Close on ESC
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeClinicalSheetModal();
+        });
+
+        // Auto-open modal if hash is #fiche-clinique or session flag is set
+        if (sessionStorage.getItem('openClinicalModal') === 'true' || window.location.hash === '#fiche-clinique') {
+            sessionStorage.removeItem('openClinicalModal');
+            setTimeout(openClinicalSheetModal, 300);
+        }
+
+        // Register Service Worker for PWA Offline Capability
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then((reg) => {
+                    console.log('Cartograffect PWA ServiceWorker enregistré avec succès :', reg.scope);
+                }).catch((err) => {
+                    console.log('Échec enregistrement ServiceWorker :', err);
+                });
+            });
+        }
     </script>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+    <!-- Modal : Fiche Clinique de Régulation Personnalisée (Impression / PDF) -->
+    <div id="clinicalSheetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto no-print">
+        <div class="relative w-full max-w-3xl rounded-3xl bg-cosmic-850 border border-slate-750 shadow-2xl p-6 sm:p-10 my-8 print-sheet-container">
+            <!-- Close Button (Screen only) -->
+            <button onclick="closeClinicalSheetModal()" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors no-print" aria-label="Fermer la fiche">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <!-- Sheet Header -->
+            <div class="print-sheet-header flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-5">
+                <div class="flex items-center gap-3">
+                    <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-heading font-black text-white">CARTOGRAFFECT</h2>
+                        <div class="text-xs font-mono text-emerald-400">FICHE CLINIQUE DE RÉGULATION AFFECTIVE</div>
+                    </div>
+                </div>
+                <div class="text-right text-[11px] text-slate-400 space-y-0.5">
+                    <div>Manuel Cabelguen, Ph. D., BCN</div>
+                    <div>Droit d'auteur enregistré OPIC n° 1233199</div>
+                    <div id="printSheetDate" class="font-mono text-slate-300">Date : 26 Septembre 2026</div>
+                </div>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
-                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
-                <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
-                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
-                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+
+            <!-- Patient / Session Info (Editable) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                <div>
+                    <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Identifiant / Patient :</label>
+                    <input type="text" id="patientNameInput" placeholder="Ex: Patient #4102 ou Manuel C." class="w-full bg-slate-900 border border-slate-750 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase font-bold text-slate-400 mb-1">Contexte / Déclencheur clinique :</label>
+                    <input type="text" id="patientContextInput" placeholder="Ex: Réaction de colère en réunion / Pression allostatique" class="w-full bg-slate-900 border border-slate-750 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
             </div>
-            <div class="text-xs text-slate-400">
-                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+
+            <!-- Clinical Protocol Body -->
+            <div class="space-y-6">
+                
+                <!-- Section 1 : Affect Principal -->
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-blue-400">1. Affect &amp; Évaluation Fonctionnelle F.I.T.T.T.</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-300">
+                        <div>
+                            <span class="text-slate-500 block">État Principal :</span>
+                            <span class="font-semibold text-white">Écart de Prédiction Saillant</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">Gradient Éprouvé :</span>
+                            <span class="font-semibold text-white">Contrôle (Axe Y) &bull; Attente (Axe X)</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block">Règle Biologique :</span>
+                            <span class="font-semibold text-emerald-400">90 secondes de décharge somatique</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2 : Diagnostic CRIMES -->
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-rose-400">2. Détection du Piège Inadapté (C.R.I.M.E.S.)</span>
+                    <p class="text-xs text-slate-300">
+                        <strong>Comportements Résultants de l’Influence de Modulations Émotionnelles Symptomatiques :</strong>
+                        Vérifier si le patient s'enferme dans la <em>Domination (R-)</em>, l'<em>Exagération (R+)</em>, la <em>Soumission (P+)</em> ou l'<em>Évasion (P-)</em> avec distorsion cognitive associée.
+                    </p>
+                </div>
+
+                <!-- Section 3 : Plan d'Action MIRACLES -->
+                <div class="p-4 rounded-2xl bg-emerald-950/20 border border-emerald-700/40 space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">3. Transmutation &amp; Alchimie (M.I.R.A.C.L.E.S.)</span>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-slate-300">Formule d'auto-dialogue thérapeutique recommandée (Mantra de régulation) :</label>
+                        <textarea id="patientMantraInput" rows="2" class="w-full bg-slate-900 border border-emerald-600/40 rounded-xl px-3 py-2 text-xs text-emerald-200 focus:outline-none">« Je suspends ma réaction motrice pendant 90 secondes. Je peux poser une limite claire avec calme et bienveillance sans écraser autrui. »</textarea>
+                    </div>
+                    <div class="text-[11px] text-slate-400 flex items-center gap-2">
+                        <span class="text-emerald-400 font-bold">✓</span> Protocole de Gross : S1 (Suspension) &rarr; At1 (Décentrement) &rarr; Ev1 (Restructuration) &rarr; R1 (Assertion).
+                    </div>
+                </div>
+
+                <!-- Section 4 : Recommandations pour l'interséance -->
+                <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 text-xs text-slate-400 space-y-1">
+                    <div class="font-bold text-slate-300">Consignes Pratiques Interséance :</div>
+                    <ul class="list-disc list-inside space-y-1 text-slate-300">
+                        <li>Pratiquer le minuteur 90 secondes à la moindre montée de tension avant toute prise de décision.</li>
+                        <li>Répéter la phrase d'auto-dialogue 3 fois par jour au repos pour consolider les réseaux préfrontaux (Système 3).</li>
+                        <li>Tenir un carnet de bord des victoires régulatrices et des écarts de prédiction désamorcés.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Print Actions (Screen only) -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mt-8 pt-5 border-t border-slate-750 no-print">
+                <span class="text-xs text-slate-400">
+                    Cliquez sur Imprimer pour générer un PDF médical ou imprimer sur papier.
+                </span>
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="window.print()" class="px-5 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg shadow-blue-600/30 transition-all text-xs flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        <span>Imprimer / Exporter en PDF</span>
+                    </button>
+                    <button type="button" onclick="closeClinicalSheetModal()" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-colors text-xs">
+                        Fermer
+                    </button>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
 
     <!-- Mobile Navigation Toggle Script -->
     <script>
@@ -454,5 +2595,6 @@
             }
         })();
     </script>
+    <script src="bilingual_modal.js"></script>
 </body>
 </html>
