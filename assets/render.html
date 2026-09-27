@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Render</title>
+<style>
+* { margin: 0; padding: 0; }
+html, body { overflow: hidden; }
+</style>
+</head><body>
+<script>
+const params = new URLSearchParams(location.search);
+const file = params.get('file') || 'logo-icon.svg';
+const w = parseInt(params.get('w')) || 512;
+const h = parseInt(params.get('h')) || 512;
+const bg = params.get('bg') || '';
+document.body.style.width = w + 'px';
+document.body.style.height = h + 'px';
+if (bg) document.body.style.background = bg;
+
+const img = document.createElement('img');
+img.src = file;
+img.width = w;
+img.height = h;
+img.style.display = 'block';
+document.body.appendChild(img);
+</script>
+</body></html>
