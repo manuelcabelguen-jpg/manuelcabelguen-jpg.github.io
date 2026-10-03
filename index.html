@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective</title>
-    <meta name="description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
+    <title>CARTOGRAFFECT | Cartographie des Affects &amp; Géométrie Computationnelle</title>
+    <meta name="description" content="Explorez la géométrie des affects humains à travers 176 entrées (8 opérateurs centraux et 168 positions affectives réparties sur 8 strates Z=0 à Z=7 selon la loi des couronnes de Manhattan |X|+|Y|=2Z-2).">
     
     <link rel="canonical" href="https://www.cartograffect.com/">
 
@@ -18,16 +20,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.cartograffect.com/">
-    <meta property="og:title" content="CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective">
-    <meta property="og:description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    <meta property="og:title" content="CARTOGRAFFECT | Cartographie des Affects &amp; Géométrie Computationnelle">
+    <meta property="og:description" content="Explorez la géométrie des affects humains à travers 176 entrées (8 opérateurs centraux et 168 positions affectives réparties sur 8 strates Z=0 à Z=7 selon la loi des couronnes de Manhattan |X|+|Y|=2Z-2).">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.cartograffect.com/">
-    <meta name="twitter:title" content="CARTOGRAFFECT | Cartographie des Émotions & Géométrie Affective">
-    <meta name="twitter:description" content="Explorez la géométrie des affects humains à travers 83 états émotionnels, leurs dynamiques, leurs zones d'ombre (Crimes) et leurs voies d'élévation (Miracles).">
+    <meta name="twitter:title" content="CARTOGRAFFECT | Cartographie des Affects &amp; Géométrie Computationnelle">
+    <meta name="twitter:description" content="Explorez la géométrie des affects humains à travers 176 entrées (8 opérateurs centraux et 168 positions affectives réparties sur 8 strates Z=0 à Z=7 selon la loi des couronnes de Manhattan |X|+|Y|=2Z-2).">
     <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
 
     <!-- Schema.org JSON-LD -->
@@ -42,7 +44,9 @@
       "operatingSystem": "All",
       "author": {
         "@type": "Person",
-        "name": "Manuel Cabelguen"
+        "name": "Dr Manuel Cabelguen",
+        "jobTitle": "Psychologue clinicien, Chercheur (Ph. D. en psychologie)",
+        "hasCredential": "Ph. D. en psychologie"
       }
     }
     </script>
@@ -118,6 +122,10 @@
                 <!-- Desktop Navigation Links -->
                 <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                     <a href="index.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg">Accueil</a>
+                    <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                        L'Article
+                    </a>
                     <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                         1. Émotions
@@ -131,13 +139,17 @@
                         3. Miracles
                     </a>
                     <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                        Scholar Drive
+                        <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                        Modèles Théoriques
                     </a>
                 </nav>
 
                 <!-- Action Button & Bilingual Modal -->
-                <div class="hidden md:flex items-center gap-3 header-action-btn">
+                <div class="hidden md:flex items-center gap-2.5 header-action-btn">
+                    <button onclick="window.replayIntroAnimation && window.replayIntroAnimation()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-300 hover:text-white bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Rejouer l'animation de démarrage">
+                        <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span>Rejouer l'intro</span>
+                    </button>
                     <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
                         <span class="text-purple-400">🌐</span> FR | EN
                     </button>
@@ -162,10 +174,15 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
             <a href="index.html" class="active-link"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+            <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
             <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
             <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
             <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
-            <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
+            <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques &amp; Concepts</a>
+            <button onclick="if (window.replayIntroAnimation) { window.replayIntroAnimation(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2 px-3 text-purple-300 hover:text-white hover:bg-purple-900/30 rounded-lg text-sm font-semibold transition-colors mt-2">
+                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span>Rejouer l'animation d'intro</span>
+            </button>
             <div class="mt-auto pt-6">
                 <a href="emotions.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Ouvrir la Carte &rarr;</a>
             </div>
@@ -173,117 +190,850 @@
 
         <!-- Hero Section with Pulsar Map -->
         <main class="flex-grow">
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <!-- Hero Section: Résumé Vulgarisé de l'Article Scientifique Fondateur -->
+        <main class="flex-grow">
+            <section id="hero-resume" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                     
-                    <!-- Left Column: Vision & Presentation -->
-                    <div class="lg:col-span-6 space-y-8">
+                    <!-- Left Column: Résumé Vulgarisé & Vision Fondamentale -->
+                    <div class="lg:col-span-6 space-y-6">
                         <div>
-                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-500/30 mb-5">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-500/30 mb-4">
                                 <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                                Traitement Prédictif &amp; Inférence Active
+                                Résumé de l'Article Scientifique &bull; Inférence Active
                             </div>
-                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-black tracking-tight text-white leading-tight">
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight text-white leading-tight">
                                 Cartographie des <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Affects</span>
                             </h1>
-                            <p class="text-sm sm:text-base font-medium text-purple-300 mt-2">
-                                Une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
+                            <p class="text-sm sm:text-base font-semibold text-purple-300 mt-2">
+                                Une architecture hiérarchique de l’expérience humaine fondée sur le traitement prédictif
                             </p>
                             <p class="text-xs text-slate-400 mt-1">
-                                Manuel Cabelguen, Ph. D., BCN &bull; Droit d'auteur enregistré OPIC n° 1233199
+                                Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien &bull; Propriété intellectuelle enregistrée OPIC n° 1233199
                             </p>
                         </div>
 
-                        <p class="text-slate-300 text-lg leading-relaxed font-light">
-                            <strong>La Cartographie des Affects</strong> unifie l’affect, l’émotion et le sentiment au sein d'une grammaire computationnelle rigoureuse. L’émotion y est définie comme la <strong>sélection d’une politique d’action</strong> visant à résoudre un écart de prédiction saillant, et le sentiment comme <strong>l’intégration consciente</strong> de cette trajectoire.
-                        </p>
+                        <!-- Résumé Vulgarisé : La Triade Fondamentale en 3 Cartouches -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            <div class="p-3 rounded-xl bg-purple-950/40 border border-purple-700/40 backdrop-blur">
+                                <span class="text-xs uppercase font-extrabold text-purple-300 block">1. L'Affect</span>
+                                <p class="text-[11px] text-slate-300 mt-1">
+                                    <strong>La charge brute :</strong> La tension bio-énergétique et viscérale ressentie avant même toute pensée.
+                                </p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-blue-950/40 border border-blue-700/40 backdrop-blur">
+                                <span class="text-xs uppercase font-extrabold text-blue-300 block">2. L'Émotion</span>
+                                <p class="text-[11px] text-slate-300 mt-1">
+                                    <strong>Le plan d'action :</strong> La stratégie immédiate choisie pour résoudre un écart imprévu dans la situation.
+                                </p>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-700/40 backdrop-blur">
+                                <span class="text-xs uppercase font-extrabold text-emerald-300 block">3. Le Sentiment</span>
+                                <p class="text-[11px] text-slate-300 mt-1">
+                                    <strong>La conscience :</strong> L'intégration narrative et lucide de notre vécu dans notre identité.
+                                </p>
+                            </div>
+                        </div>
 
-                        <p class="text-slate-400 text-base leading-relaxed">
-                            Tout écart déclenche une double évaluation adaptative : le <strong class="text-slate-200">Gradient de Contrôle (Axe Y)</strong> sur la contrôlabilité du monde (action pragmatique) et le <strong class="text-slate-200">Gradient d’Attente (Axe X)</strong> sur la révisabilité du modèle interne (mise à jour épistémique). À travers l'<strong class="text-slate-200">Axe Z</strong>, ces configurations se déploient en une taxonomie hiérarchique d’attracteurs probabilistes régie par un budget attentionnel fini (norme L1 de Manhattan).
-                        </p>
-
-                        <!-- Highlights Pills -->
-                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2">
-                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-purple-400 text-lg mb-1">⚙️</div>
-                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 1</div>
-                                <div class="text-xs font-semibold text-white">Moteur Prédictif</div>
-                            </div>
-                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-sky-400 text-lg mb-1">⚡</div>
-                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 2</div>
-                                <div class="text-xs font-semibold text-white">Noyau Affectif</div>
-                            </div>
-                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-emerald-400 text-lg mb-1">📐</div>
-                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 3</div>
-                                <div class="text-xs font-semibold text-white">Matrice Affective</div>
-                            </div>
-                            <div class="p-3.5 rounded-xl bg-slate-800/40 border border-slate-700/60 backdrop-blur">
-                                <div class="text-pink-400 text-lg mb-1">🏛️</div>
-                                <div class="text-[11px] uppercase font-bold tracking-wider text-slate-400">Volet 4</div>
-                                <div class="text-xs font-semibold text-white">Taxonomie Hiérarchique</div>
-                            </div>
+                        <!-- Synthèse vulgarisée -->
+                        <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
+                            <p>
+                                <strong>La révolution de l'esprit prédictif :</strong> Notre psychisme ne subit pas passivement le monde. Il anticipe en permanence ce qui devrait se produire. Dès qu'un imprévu surgit, une <em>surprise</em> (énergie libre) jaillit.
+                            </p>
+                            <p class="text-slate-400 text-xs sm:text-sm">
+                                Pour la résoudre, l'organisme évalue instantanément deux leviers : 
+                                <strong class="text-purple-300">Puis-je changer le monde extérieur ?</strong> (Gradient de Contrôle Y) ou 
+                                <strong class="text-sky-300">Dois-je assouplir mes exigences intérieures ?</strong> (Gradient d'Attente X). 
+                                Ces combinaisons engendrent toutes nos émotions selon un budget d'attention mesuré mathématiquement (Norme de Manhattan).
+                            </p>
                         </div>
 
                         <!-- CTA Group -->
-                        <div class="flex flex-wrap items-center gap-4 pt-2">
-                            <a href="emotions.html" class="px-6 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-lg shadow-purple-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
-                                <span>Explorer la Matrice Interactive</span>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <div class="flex flex-wrap items-center gap-3 pt-1">
+                            <a href="#partie-moteur-predictif" class="px-5 py-3 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-600/30 transition-all transform hover:-translate-y-0.5 flex items-center gap-2 text-xs sm:text-sm">
+                                <span>Découvrir le résumé pas-à-pas &darr;</span>
                             </a>
-                            <a href="#theorie" class="px-6 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700 transition-colors">
-                                Architecture Théorique
+                            <a href="emotions.html" class="px-4 py-3 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/40 transition-all text-xs sm:text-sm flex items-center gap-2">
+                                <span>🧭</span>
+                                <span>Carte Interactive 2D/3D</span>
                             </a>
-                        </div>
-
-                        <!-- Direct Interactive Clinical Tools Bar -->
-                        <div class="pt-2 flex flex-wrap items-center gap-2.5">
-                            <span class="text-[11px] uppercase tracking-wider font-bold text-slate-400 mr-1">Outils Directs :</span>
-                            <a href="miracles.html#minuteur-somatique" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-600/40 transition-colors">
-                                <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                                <span>⏱️</span> Minuteur 90s
-                            </a>
-                            <a href="miracles.html#pont-resolution" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-purple-200 bg-purple-950/70 hover:bg-purple-900 border border-purple-600/40 transition-colors">
-                                <span>🌉</span> Pont CRIMES &rarr; MIRACLES
-                            </a>
-                            <a href="emotions.html" onclick="sessionStorage.setItem('openTab','tab-fittt');" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-200 bg-indigo-950/70 hover:bg-indigo-900 border border-indigo-600/40 transition-colors">
-                                <span>📊</span> Test F.I.T.T.T.
-                            </a>
-                            <a href="miracles.html" onclick="sessionStorage.setItem('openClinicalModal','true');" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-blue-200 bg-blue-950/70 hover:bg-blue-900 border border-blue-600/40 transition-colors">
-                                <span>📄</span> Fiche Clinique PDF
+                            <a href="article.html" class="px-4 py-3 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 transition-colors text-xs sm:text-sm">
+                                <span>📄</span> Article Intégral
                             </a>
                         </div>
                     </div>
 
-                    <!-- Right Column: Interactive Pulsar / Logo Animation -->
+                    <!-- Right Column: Cartograffect Dynamique 3D / 2D (Inférence Active & Couronnes de Manhattan) -->
                     <div class="lg:col-span-6 flex flex-col items-center">
-                        <div class="w-full relative rounded-2xl bg-gradient-to-b from-slate-800/40 to-slate-900/60 border border-slate-700/60 p-4 shadow-2xl backdrop-blur-xl">
-                            <!-- Visual Header Bar -->
-                            <div class="flex items-center justify-between pb-3 px-2 border-b border-slate-800 text-xs text-slate-400 font-mono">
-                                <span class="flex items-center gap-2">
-                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                    Dynamique Vectorielle de l'Affect
-                                </span>
-                                <span>Axe X (Attente) &bull; Axe Y (Contrôle) &bull; Axe Z (Profondeur)</span>
+                        <div class="w-full relative rounded-2xl bg-gradient-to-b from-slate-900/90 via-cosmic-800/90 to-cosmic-900/95 border border-purple-500/30 p-4 sm:p-5 shadow-2xl shadow-purple-950/40 backdrop-blur-xl flex flex-col gap-3">
+                            
+                            <!-- Control Toolbar & Visual Header Bar -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800/80 text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="relative flex h-2.5 w-2.5">
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                    </span>
+                                    <span class="font-heading font-bold text-white text-xs sm:text-sm tracking-wide">
+                                        Cartograffect Dynamique
+                                    </span>
+                                    <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-purple-900/50 text-purple-300 border border-purple-500/30">
+                                        176 Entrées &bull; Inférence Active
+                                    </span>
+                                </div>
+
+                                <!-- View Mode & Interactive Buttons -->
+                                <div class="flex items-center gap-1.5 ml-auto">
+                                    <!-- 3D / 2D Mode Switcher -->
+                                    <div class="bg-slate-800/90 p-0.5 rounded-lg border border-slate-700/70 flex items-center shadow-inner" id="viewModeGroup">
+                                        <button id="btnView3D" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all bg-purple-600 text-white shadow-sm flex items-center gap-1" title="Perspective 3D Octaédrique">
+                                            <span>🌐</span> 3D
+                                        </button>
+                                        <button id="btnView2D" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center gap-1" title="Projection 2D Losanges Manhattan">
+                                            <span>📐</span> 2D
+                                        </button>
+                                    </div>
+
+                                    <!-- Auto Orbit Button -->
+                                    <button id="btnAutoRotate" class="p-1.5 px-2 text-[11px] font-semibold text-purple-300 bg-purple-900/50 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Basculer la rotation automatique">
+                                        <span id="rotateIcon" class="inline-block animate-spin">🔄</span>
+                                    </button>
+
+                                    <!-- Trigger Pulse Button -->
+                                    <button id="btnPulseWave" class="px-2.5 py-1 text-[11px] font-bold text-amber-200 bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Déclencher un cycle d'inférence active">
+                                        <span>⚡</span> <span class="hidden xs:inline">Pulsation</span>
+                                    </button>
+                                </div>
                             </div>
 
-                            <!-- Pulsar Container -->
-                            <div class="pulsar-container mt-2 flex items-center justify-center min-h-[280px] sm:min-h-[420px] lg:min-h-[520px]">
-                                <svg id="logoCanvas" class="w-full h-auto max-w-[620px] aspect-square"></svg>
+                            <!-- Strata Filter Pill Bar -->
+                            <div class="flex items-center justify-between gap-1 overflow-x-auto pb-1 text-[11px] font-mono no-scrollbar border-b border-slate-800/60" id="heroStrataFilters">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider shrink-0 mr-1">Strates :</span>
+                                <div class="flex items-center gap-1 shrink-0">
+                                    <button data-z="all" class="hero-strata-btn active px-2 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white transition-all">Toutes (176)</button>
+                                    <button data-z="2" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=0..2 Prototypes</button>
+                                    <button data-z="3" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=3</button>
+                                    <button data-z="4" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=4</button>
+                                    <button data-z="5" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=5</button>
+                                    <button data-z="6" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=6</button>
+                                    <button data-z="7" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=7</button>
+                                </div>
                             </div>
 
-                            <p class="text-center text-xs text-slate-400 mt-2 italic">
-                                Trajectoires d'inférence active : Point de Veille (0,0,0) &rarr; Surprise (0,0,1) &rarr; Anticipation (0,0,2) &rarr; Résolution dans la Matrice.
-                            </p>
+                            <!-- Interactive 3D/2D Canvas Visualizer Container -->
+                            <div class="relative w-full aspect-square max-w-[560px] mx-auto rounded-xl bg-gradient-to-b from-[#060a14] via-[#09101f] to-[#04070d] border border-slate-800/90 shadow-inner overflow-hidden select-none cursor-grab active:cursor-grabbing" id="heroVisualizerContainer">
+                                
+                                <canvas id="heroCartograffectCanvas" class="w-full h-full block"></canvas>
+
+                                <!-- Floating Glassmorphic HUD Badge (Hover/Select info) -->
+                                <div id="heroAffectHud" class="absolute top-3 left-3 right-3 sm:right-auto sm:max-w-xs pointer-events-none transition-all duration-300 opacity-95">
+                                    <div class="rounded-xl bg-slate-950/85 backdrop-blur-md border border-purple-500/40 p-3 shadow-xl text-left space-y-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <div class="flex items-center gap-1.5">
+                                                <span id="hudAffectDot" class="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-sm shadow-yellow-400/50"></span>
+                                                <span id="hudAffectName" class="font-heading font-extrabold text-white text-sm">Joie</span>
+                                                <span id="hudAffectCode" class="font-mono text-[10px] text-purple-300 px-1.5 py-0.2 rounded bg-purple-950/70 border border-purple-600/40">X0 / Y+2 / Z2</span>
+                                            </div>
+                                            <span id="hudAffectType" class="text-[9px] uppercase tracking-wider font-bold text-slate-400 font-mono">Axiale</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-300 font-medium" id="hudAffectDesc">
+                                            Orientation axiale Y+2 (contrôlabilité du monde maximale).
+                                        </div>
+                                        <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800">
+                                            <span id="hudAffectFormula">|X| + |Y| = 2 (Z=2)</span>
+                                            <span id="hudAffectSym" class="text-indigo-300">Opposé : Tristesse</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rotation Drag Helper Indicator (fades out after first interaction) -->
+                                <div id="dragHint" class="absolute bottom-3 right-3 pointer-events-none text-[10px] font-mono text-slate-400/80 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 backdrop-blur-sm flex items-center gap-1.5">
+                                    <span>🖱️ Glisser pour pivoter 3D</span>
+                                </div>
+
+                                <!-- Orientation Compass / Axes Overlay -->
+                                <div class="absolute bottom-3 left-3 pointer-events-none text-[9px] font-mono text-slate-400/80 bg-slate-900/70 px-2 py-1 rounded-md border border-slate-800/80 flex flex-col gap-0.5">
+                                    <div class="text-purple-300 font-bold">+Y Contrôle (Action)</div>
+                                    <div class="text-sky-300 font-bold">&plusmn;X Attente (Modèle)</div>
+                                    <div class="text-emerald-300 font-bold">+Z Profondeur / Temps</div>
+                                </div>
+                            </div>
+
+                            <!-- Live Active Inference Trajectory Telemetry Bar -->
+                            <div class="w-full rounded-xl bg-slate-950/70 border border-slate-800/90 p-2.5 sm:p-3 flex flex-col gap-2">
+                                <div class="flex items-center justify-between text-[11px] font-mono">
+                                    <span class="flex items-center gap-1.5 text-slate-300 font-semibold">
+                                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                                        <span>Cycle d'Inférence Active :</span>
+                                    </span>
+                                    <span id="activeInferenceStatus" class="text-purple-300 font-bold">
+                                        Éveil Homéostatique
+                                    </span>
+                                </div>
+                                <!-- 4-Step Visual Progress Track -->
+                                <div class="grid grid-cols-4 gap-1.5 text-center text-[10px] font-mono">
+                                    <div id="stepVeille" class="p-1.5 rounded-lg bg-purple-900/40 border border-purple-500/50 text-purple-200 transition-all">
+                                        <div class="font-bold text-[10px]">1. VEILLE</div>
+                                        <div class="text-[9px] text-slate-400">Origine (0,0,0)</div>
+                                    </div>
+                                    <div id="stepSurprise" class="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 transition-all">
+                                        <div class="font-bold text-[10px]">2. SURPRISE</div>
+                                        <div class="text-[9px] text-slate-400">Écart (0,0,1)</div>
+                                    </div>
+                                    <div id="stepAnticipation" class="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 transition-all">
+                                        <div class="font-bold text-[10px]">3. ANTICIPATION</div>
+                                        <div class="text-[9px] text-slate-400">Politique (0,0,2)</div>
+                                    </div>
+                                    <div id="stepResolution" class="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 text-slate-400 transition-all">
+                                        <div class="font-bold text-[10px]">4. RÉSOLUTION</div>
+                                        <div class="text-[9px] text-slate-400" id="stepTargetLabel">Matrice (X,Y,Z)</div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
                 </div>
             </section>
 
-            <!-- 3 Fundamental Territories Cards -->
-            <section id="territoires" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+            <!-- Floating Quick Section Dots (Desktop Lateral Navigation) -->
+            <nav class="floating-dots-nav" aria-label="Navigation rapide par page">
+                <button class="floating-dot active" data-target="#hero-resume" aria-label="Résumé de l'Article"><span class="dot-tooltip">✨ Résumé de l'Article</span></button>
+                <button class="floating-dot" data-target="#partie-moteur-predictif" aria-label="1. Moteur Prédictif"><span class="dot-tooltip">⚙️ 1. Moteur Prédictif</span></button>
+                <button class="floating-dot" data-target="#partie-noyau-affectif" aria-label="2. Noyau Affectif"><span class="dot-tooltip">⚡ 2. Noyau Affectif (X, Y)</span></button>
+                <button class="floating-dot" data-target="#partie-matrice-couronnes" aria-label="3. Matrice & Couronnes"><span class="dot-tooltip">📐 3. Matrice & Couronnes</span></button>
+                <button class="floating-dot" data-target="#partie-palier-conscience" aria-label="4. Paliers de Conscience"><span class="dot-tooltip">🏛️ 4. 8 Paliers de Conscience</span></button>
+                <button class="floating-dot" data-target="#partie-clinique-action" aria-label="5. Clinique & Action"><span class="dot-tooltip">🧭 5. Clinique & F.I.T.T.T.</span></button>
+                <button class="floating-dot" data-target="#navigateur-geometrique" aria-label="6. Radar & 3D"><span class="dot-tooltip">🌐 6. Radar & Navigator</span></button>
+                <button class="floating-dot" data-target="#territoires" aria-label="7. Les 3 Territoires"><span class="dot-tooltip">🗺️ 7. Les 3 Territoires</span></button>
+            </nav>
+
+            <!-- Sticky Navigation Tabs Bar (Visible immediately under hero and sticks on scroll) -->
+            <div id="stickySummaryNav" class="sticky-tabs-container">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="sticky-tabs-track">
+                        <span class="text-[11px] font-mono font-bold uppercase text-purple-400 shrink-0 mr-1 hidden sm:inline flex items-center gap-1">
+                            <span>📖</span> Sommaire Déroulé :
+                        </span>
+                        <a href="#hero-resume" class="sticky-tab-btn active"><span>✨</span> Résumé de l'Article</a>
+                        <a href="#partie-moteur-predictif" class="sticky-tab-btn"><span>⚙️</span> 1. Moteur Prédictif</a>
+                        <a href="#partie-noyau-affectif" class="sticky-tab-btn"><span>⚡</span> 2. Noyau Affectif (X, Y)</a>
+                        <a href="#partie-matrice-couronnes" class="sticky-tab-btn"><span>📐</span> 3. Matrice &amp; Couronnes</a>
+                        <a href="#partie-palier-conscience" class="sticky-tab-btn"><span>🏛️</span> 4. 8 Paliers de Conscience</a>
+                        <a href="#partie-clinique-action" class="sticky-tab-btn"><span>🧭</span> 5. Clinique &amp; F.I.T.T.T.</a>
+                        <a href="#navigateur-geometrique" class="sticky-tab-btn"><span>🌐</span> 6. Radar &amp; 3D</a>
+                        <a href="#territoires" class="sticky-tab-btn"><span>🗺️</span> 7. Territoires</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======================================================== -->
+            <!-- PARTIE 1 : LE MOTEUR PRÉDICTIF & LA SURPRISE             -->
+            <!-- ======================================================== -->
+            <section id="partie-moteur-predictif" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    
+                    <!-- Left: Explication Vulgarisée -->
+                    <div class="lg:col-span-6 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/40 text-purple-300 border border-purple-500/30">
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            Volet 1 &bull; Vulgarisation Scientifique
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight">
+                            1. Le Moteur Prédictif : <span class="text-purple-400">La Psychologie de l'Anticipation</span>
+                        </h2>
+                        <p class="text-base text-slate-300 leading-relaxed font-light">
+                            Contrairement à l'idée d'une perception passive où nous ne ferions que subir les stimuli extérieurs, la psychologie cognitive moderne démontre que notre esprit est un <strong>moteur prédictif permanent</strong> (Friston, 2010).
+                        </p>
+
+                        <div class="space-y-3 text-xs sm:text-sm text-slate-400 leading-relaxed">
+                            <div class="p-4 rounded-xl bg-slate-850/80 border border-slate-750 flex items-start gap-3">
+                                <span class="text-xl">🔮</span>
+                                <div>
+                                    <strong class="text-white block mb-0.5">La Prédiction Descendante (Top-Down) :</strong>
+                                    Avant même d'être confronté à une situation, notre esprit projette des schémas d'attente et des représentations préalables sur ce qu'il <em>s'attend</em> à percevoir. Si la situation est conforme, aucun signal d'alerte n'est émis.
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-850/80 border border-slate-750 flex items-start gap-3">
+                                <span class="text-xl">⚡</span>
+                                <div>
+                                    <strong class="text-white block mb-0.5">L'Écart de Prédiction (Surprise / Énergie Libre) :</strong>
+                                    Un collègue vous annonce un imprévu ? Un bruit retentit dans la nuit ? La réalité dévie de l'attente : un signal d'erreur jaillit. Cet écart génère une charge brute : <strong>l'affect</strong>.
+                                </div>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-850/80 border border-slate-750 flex items-start gap-3">
+                                <span class="text-xl">🛠️</span>
+                                <div>
+                                    <strong class="text-white block mb-0.5">L'Inférence Active (Résoudre l'écart) :</strong>
+                                    Pour retrouver sa stabilité interne, l'esprit cherche à résorber cet écart : soit en agissant concrètement sur la situation extérieure, soit en réajustant ses propres attentes et croyances.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Schéma Visuel Interactif de la Double Boucle -->
+                    <div class="lg:col-span-6">
+                        <div class="rounded-3xl bg-slate-900/90 border border-purple-500/30 p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <span class="text-xs uppercase font-bold tracking-wider text-purple-300 font-mono flex items-center gap-2">
+                                    <span>⚙️</span> Schéma Didactique : La Double Boucle Cognitive &amp; Émotionnelle
+                                </span>
+                                <span class="text-[10px] font-mono text-slate-400 bg-slate-800 px-2 py-0.5 rounded">Boucle Rapide vs Boucle Lente</span>
+                            </div>
+
+                            <!-- SVG Explanatory Diagram -->
+                            <div class="relative w-full aspect-[4/3] max-w-[480px] mx-auto flex items-center justify-center">
+                                <svg viewBox="0 0 500 360" class="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="gradTopDown" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.8"/>
+                                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.8"/>
+                                        </linearGradient>
+                                        <linearGradient id="gradBottomUp" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#ec4899" stop-opacity="0.8"/>
+                                            <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.8"/>
+                                        </linearGradient>
+                                    </defs>
+
+                                    <!-- Modèle interne / Croyances Box -->
+                                    <rect x="140" y="20" width="220" height="60" rx="12" fill="#1e1b4b" stroke="#8b5cf6" stroke-width="2"/>
+                                    <text x="250" y="45" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">MODÈLE INTERNE &amp; CROYANCES</text>
+                                    <text x="250" y="65" fill="#c4b5fd" font-size="10" text-anchor="middle" font-family="sans-serif">Prédictions &bull; Croyances antérieures</text>
+
+                                    <!-- Downward Prediction Arrow -->
+                                    <path d="M 210 85 L 210 145" stroke="#8b5cf6" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrow)"/>
+                                    <text x="135" y="120" fill="#a78bfa" font-size="10" font-weight="bold" font-family="sans-serif">1. Prédiction (Top-Down)</text>
+
+                                    <!-- Central Error Detector (Comparator) -->
+                                    <circle cx="250" cy="180" r="45" fill="#0f172a" stroke="#ec4899" stroke-width="3"/>
+                                    <text x="250" y="175" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">COMPARAISON</text>
+                                    <text x="250" y="195" fill="#ffffff" font-size="13" font-weight="black" text-anchor="middle" font-family="sans-serif">&Delta; ÉCART</text>
+
+                                    <!-- Upward Sensory Arrow -->
+                                    <path d="M 290 275 L 290 225" stroke="#ec4899" stroke-width="3" marker-end="url(#arrow)"/>
+                                    <text x="365" y="250" fill="#f472b6" font-size="10" font-weight="bold" font-family="sans-serif">2. Signaux du Monde</text>
+
+                                    <!-- Reality / Sensory Inputs Box -->
+                                    <rect x="140" y="280" width="220" height="60" rx="12" fill="#182235" stroke="#38bdf8" stroke-width="2"/>
+                                    <text x="250" y="305" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">MONDE EXTÉRIEUR &amp; CORPS</text>
+                                    <text x="250" y="325" fill="#7dd3fc" font-size="10" text-anchor="middle" font-family="sans-serif">Flux sensoriels réels (Bottom-Up)</text>
+
+                                    <!-- Resolution Pathways (Left = Action, Right = Update) -->
+                                    <path d="M 205 180 Q 70 180 70 280" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-dasharray="4,4"/>
+                                    <text x="70" y="165" fill="#4ade80" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">Action (Changer le monde)</text>
+
+                                    <path d="M 295 180 Q 430 180 430 80" fill="none" stroke="#eab308" stroke-width="2.5" stroke-dasharray="4,4"/>
+                                    <text x="430" y="195" fill="#facc15" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">Mise à jour (Changer d'avis)</text>
+                                </svg>
+                            </div>
+
+                            <p class="text-xs text-slate-400 text-center italic">
+                                L'émotion naît précisément au centre de ce schéma : dans l'écart entre ce qui était attendu et ce qui arrive réellement.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#hero-resume" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Retour au Résumé
+                    </a>
+                    <a href="#partie-noyau-affectif" class="text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 2 : Le Noyau Affectif (X, Y)</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- PARTIE 2 : LE NOYAU AFFECTIF (AXE X ET AXE Y)            -->
+            <!-- ======================================================== -->
+            <section id="partie-noyau-affectif" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    
+                    <!-- Left: Boussole Cardinale Vulgarisée -->
+                    <div class="lg:col-span-6 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-900/40 text-blue-300 border border-blue-500/30">
+                            <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                            Volet 2 &bull; La Boussole Adaptative
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight">
+                            2. Le Noyau Affectif : <span class="text-blue-400">Les 2 Évaluations Cognitives Clés</span>
+                        </h2>
+                        <p class="text-base text-slate-300 leading-relaxed font-light">
+                            Face à l'écart de prédiction, notre psychisme ne réagit pas par hasard. Il tranche instantanément deux questions adaptatives orthogonales :
+                        </p>
+
+                        <!-- The 2 Gradients Explained -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-purple-950/40 border border-purple-700/40 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 font-bold flex items-center justify-center text-xs">Y</span>
+                                    <h3 class="font-bold text-white text-sm">Axe Y &bull; Contrôle du Monde</h3>
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    <em>« Puis-je changer la situation extérieure ? »</em>
+                                </p>
+                                <div class="text-[11px] text-slate-400 space-y-1 pt-1 border-t border-purple-800/40 font-mono">
+                                    <div><strong class="text-purple-300">+Y (Action) :</strong> Monde perçu contrôlable.</div>
+                                    <div><strong class="text-slate-400">-Y (Repli) :</strong> Monde non modifiable.</div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-sky-950/40 border border-sky-700/40 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-lg bg-sky-500/20 text-sky-300 font-bold flex items-center justify-center text-xs">X</span>
+                                    <h3 class="font-bold text-white text-sm">Axe X &bull; Attente Intérieure</h3>
+                                </div>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    <em>« Dois-je changer ma vision ou mes exigences ? »</em>
+                                </p>
+                                <div class="text-[11px] text-slate-400 space-y-1 pt-1 border-t border-sky-800/40 font-mono">
+                                    <div><strong class="text-sky-300">+X (Adaptable) :</strong> Modèle interne révisable.</div>
+                                    <div><strong class="text-slate-400">-X (Rigide) :</strong> Modèle interne non révisable.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            Ce croisement cartésien génère une grille de lecture infaillible pour décoder toute réaction humaine, de la crise de colère au calme olympien.
+                        </p>
+                    </div>
+
+                    <!-- Right: 4 Quadrants Card Interactive Visualizer -->
+                    <div class="lg:col-span-6">
+                        <div class="rounded-3xl bg-slate-900/90 border border-blue-500/30 p-6 sm:p-8 shadow-2xl space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2 text-xs">
+                                <span class="font-bold text-white uppercase font-mono">Les 4 Stratégies Émotionnelles de Base</span>
+                                <span class="text-blue-400 font-mono text-[11px]">Strate Z = 2</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- Quadrant 1: Colère -->
+                                <div class="p-3.5 rounded-xl bg-rose-950/40 border border-rose-600/40 hover:bg-rose-900/40 transition-colors">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="font-bold text-rose-300">💥 COLÈRE</span>
+                                        <span class="font-mono text-[10px] text-slate-400">-X, +Y</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-300">
+                                        <em>« Mon attente est non négociable (-X) et j'agis de force pour faire plier le monde (+Y). »</em>
+                                    </p>
+                                </div>
+
+                                <!-- Quadrant 2: Désir -->
+                                <div class="p-3.5 rounded-xl bg-pink-950/40 border border-pink-600/40 hover:bg-pink-900/40 transition-colors">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="font-bold text-pink-300">✨ DÉSIR / ÉLAN</span>
+                                        <span class="font-mono text-[10px] text-slate-400">+X, +Y</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-300">
+                                        <em>« Je suis souple sur les moyens (+X) et je me mobilise pour atteindre l'objectif (+Y). »</em>
+                                    </p>
+                                </div>
+
+                                <!-- Quadrant 3: Dégoût -->
+                                <div class="p-3.5 rounded-xl bg-amber-950/40 border border-amber-600/40 hover:bg-amber-900/40 transition-colors">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="font-bold text-amber-300">🛑 DÉGOÛT / REJET</span>
+                                        <span class="font-mono text-[10px] text-slate-400">-X, -Y</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-300">
+                                        <em>« Situation inacceptable (-X) et impossible à modifier (-Y) : le seul salut est l'expulsion. »</em>
+                                    </p>
+                                </div>
+
+                                <!-- Quadrant 4: Calme -->
+                                <div class="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-600/40 hover:bg-emerald-900/40 transition-colors">
+                                    <div class="flex items-center justify-between text-xs mb-1">
+                                        <span class="font-bold text-emerald-300">🌿 CALME / ACCEPTATION</span>
+                                        <span class="font-mono text-[10px] text-slate-400">+X, -Y</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-300">
+                                        <em>« Le monde ne changera pas (-Y), j'ajuste donc sereinement mes attentes internes (+X). »</em>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+                                <span>Symétrie par inversion : <strong>Colère &harr; Calme</strong></span>
+                                <span><strong>Désir &harr; Dégoût</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#partie-moteur-predictif" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : Moteur Prédictif
+                    </a>
+                    <a href="#partie-matrice-couronnes" class="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 3 : La Matrice &amp; Couronnes L1</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- PARTIE 3 : LA MATRICE & LA LOI DES COURONNES (NORME L1)  -->
+            <!-- ======================================================== -->
+            <section id="partie-matrice-couronnes" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    
+                    <!-- Left: Explication de la Loi de Manhattan -->
+                    <div class="lg:col-span-6 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-900/40 text-emerald-300 border border-emerald-500/30">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                            Volet 3 &bull; Géométrie de Manhattan
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight">
+                            3. La Règle de Manhattan : <span class="text-emerald-400">Le Budget Attentionnel Fini</span>
+                        </h2>
+                        <p class="text-base text-slate-300 leading-relaxed font-light">
+                            Pourquoi ne peut-on pas être simultanément en rage absolue et en contemplation zen ? Parce que l'esprit humain dispose d'une ressource attentionnelle strictement finie régie par la <strong>Norme L1 de Manhattan</strong> :
+                        </p>
+
+                        <div class="p-4 rounded-2xl bg-cosmic-900 border border-emerald-500/40 font-mono text-center">
+                            <div class="text-xl sm:text-2xl font-black text-emerald-300 tracking-wider">
+                                |X| + |Y| = 2Z - 2
+                            </div>
+                            <div class="text-xs text-slate-400 mt-1">
+                                Loi universelle de conservation attentionnelle pour chaque strate Z
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                            <p>
+                                <strong>La géométrie en losange :</strong> Dans les rues quadrillées de Manhattan, pour aller d'un point à un autre, vous ne coupez pas en diagonale : vous devez additionner les blocs horizontaux et verticaux.
+                            </p>
+                            <p>
+                                Sur le plan psychologique, c'est identique : si vous concentrez toute votre énergie dans l'action sur la situation ($|Y|=2$), il ne reste plus de ressource pour réviser votre attente ($|X|=0$). C'est l'axe axial de la <strong>Joie</strong> (monde conquis) ou de la <strong>Tristesse</strong> (monde perdu).
+                            </p>
+                            <p class="text-slate-400 text-xs">
+                                Cette loi déploie exactement <strong>176 entrées</strong> (8 opérateurs centraux et 168 positions) réparties en couronnes fermées sans le moindre flou arbitraire.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Right: Schéma Visuel de la Couronne Z=2 (8 Prototypes) -->
+                    <div class="lg:col-span-6">
+                        <div class="rounded-3xl bg-slate-900/90 border border-emerald-500/30 p-6 sm:p-8 shadow-2xl space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2 text-xs">
+                                <span class="font-bold text-white uppercase font-mono">Couronne Z=2 : Les 8 Émotions Fondamentales</span>
+                                <span class="text-emerald-400 font-mono text-[11px]">Rayon r = 2 &bull; Somme |X|+|Y|=2</span>
+                            </div>
+
+                            <!-- SVG Diamond of Manhattan Ring -->
+                            <div class="relative w-full aspect-square max-w-[420px] mx-auto flex items-center justify-center">
+                                <svg viewBox="-140 -140 280 280" class="w-full h-full select-none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Axes -->
+                                    <line x1="-120" y1="0" x2="120" y2="0" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4"/>
+                                    <line x1="0" y1="-120" x2="0" y2="120" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+                                    <!-- Manhattan Diamond line (|X|+|Y|=100) -->
+                                    <polygon points="0,-100 100,0 0,100 -100,0" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="2,2"/>
+
+                                    <!-- Center Operator Anticipation (0,0,2) -->
+                                    <circle cx="0" cy="0" r="14" fill="#6d28d9" stroke="#a78bfa" stroke-width="2"/>
+                                    <text x="0" y="4" fill="#ffffff" font-size="8" font-weight="bold" text-anchor="middle" font-family="sans-serif">ANTICIPATION</text>
+
+                                    <!-- 4 Axial Emotions (Joie, Tristesse, Espoir, Peur) -->
+                                    <!-- Top: Joie (0, +2) -->
+                                    <circle cx="0" cy="-100" r="12" fill="#eab308" stroke="#fef08a" stroke-width="2"/>
+                                    <text x="0" y="-115" fill="#facc15" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">JOIE (0, +2)</text>
+
+                                    <!-- Bottom: Tristesse (0, -2) -->
+                                    <circle cx="0" cy="100" r="12" fill="#3b82f6" stroke="#93c5fd" stroke-width="2"/>
+                                    <text x="0" y="125" fill="#60a5fa" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">TRISTESSE (0, -2)</text>
+
+                                    <!-- Right: Espoir (+2, 0) -->
+                                    <circle cx="100" cy="0" r="12" fill="#06b6d4" stroke="#a5f3fc" stroke-width="2"/>
+                                    <text x="105" y="-12" fill="#22d3ee" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">ESPOIR (+2, 0)</text>
+
+                                    <!-- Left: Peur (-2, 0) -->
+                                    <circle cx="-100" cy="0" r="12" fill="#a855f7" stroke="#e9d5ff" stroke-width="2"/>
+                                    <text x="-105" y="-12" fill="#c084fc" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">PEUR (-2, 0)</text>
+
+                                    <!-- 4 Diagonal Emotions -->
+                                    <!-- Top-Left: Colère (-1, +1) -->
+                                    <circle cx="-50" cy="-50" r="10" fill="#ef4444" stroke="#fca5a5" stroke-width="1.5"/>
+                                    <text x="-65" y="-62" fill="#f87171" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">COLÈRE (-1,+1)</text>
+
+                                    <!-- Top-Right: Désir (+1, +1) -->
+                                    <circle cx="50" cy="-50" r="10" fill="#ec4899" stroke="#fbcfe8" stroke-width="1.5"/>
+                                    <text x="65" y="-62" fill="#f472b6" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">DÉSIR (+1,+1)</text>
+
+                                    <!-- Bottom-Left: Dégoût (-1, -1) -->
+                                    <circle cx="-50" cy="50" r="10" fill="#f97316" stroke="#fed7aa" stroke-width="1.5"/>
+                                    <text x="-65" y="70" fill="#fb923c" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">DÉGOÛT (-1,-1)</text>
+
+                                    <!-- Bottom-Right: Calme (+1, -1) -->
+                                    <circle cx="50" cy="50" r="10" fill="#10b981" stroke="#a7f3d0" stroke-width="1.5"/>
+                                    <text x="65" y="70" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle" font-family="sans-serif">CALME (+1,-1)</text>
+                                </svg>
+                            </div>
+
+                            <p class="text-xs text-slate-400 text-center">
+                                8 points fermés sur la première couronne. En changeant d'échelle (Z=3, 4, 5...), le losange s'agrandit pour accueillir des sentiments de plus en plus sophistiqués.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#partie-noyau-affectif" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : Le Noyau Affectif
+                    </a>
+                    <a href="#partie-palier-conscience" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 4 : Les 8 Paliers de Conscience</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- PARTIE 4 : LES 8 PALIERS DE CONSCIENCE (STRATES Z=0..7)  -->
+            <!-- ======================================================== -->
+            <section id="partie-palier-conscience" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+                <div class="space-y-8">
+                    <div class="max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-pink-900/40 text-pink-300 border border-pink-500/30 mb-3">
+                            <span class="w-2 h-2 rounded-full bg-pink-400"></span>
+                            Volet 4 &bull; Hiérarchie Temporelle &amp; Abstraction
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight">
+                            4. Les 8 Paliers de Conscience : <span class="text-pink-400">L'Axe Z Temporel</span>
+                        </h2>
+                        <p class="text-base text-slate-300 leading-relaxed font-light mt-2">
+                            L'axe Z ne rajoute pas une "troisième couleur" : il représente <strong>l'horizon temporel d'anticipation</strong>. Plus vous montez dans les strates, plus l'esprit s'élève du réflexe corporel immédiat vers la réflexion à long terme et les idéaux transcendantaux.
+                        </p>
+                    </div>
+
+                    <!-- 8 Strata Interactive Visual Cards Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Z=0 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-purple-400">STRATE Z=0</span>
+                                <span class="text-lg">🌱</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Éveil Homéostatique</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                L'état basal : maintien de la vie, respiration, température, vigilance sans objet cognitif.
+                            </p>
+                        </div>
+
+                        <!-- Z=1 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-blue-400">STRATE Z=1</span>
+                                <span class="text-lg">⚡</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Réactivité Sensorimotrice</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Réflexes en millisecondes : sursaut, clignement, retrait au contact de la douleur.
+                            </p>
+                        </div>
+
+                        <!-- Z=2 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-purple-500/40 bg-purple-950/20 shadow-md space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-emerald-400">STRATE Z=2 &bull; COEUR</span>
+                                <span class="text-lg">🧭</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Prototypes Émotionnels</h3>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">
+                                Les 8 émotions de base : Peur, Colère, Joie, Tristesse, Calme, Désir, Dégoût, Espoir.
+                            </p>
+                        </div>
+
+                        <!-- Z=3 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-pink-400">STRATE Z=3</span>
+                                <span class="text-lg">🤝</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Sentiments Sociaux</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                L'autre entre dans le calcul : honte, fierté, empathie, culpabilité, reconnaissance.
+                            </p>
+                        </div>
+
+                        <!-- Z=4 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-indigo-400">STRATE Z=4</span>
+                                <span class="text-lg">🧠</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Métacognition &amp; Soi</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Penser à ce qu'on ressent : recul critique, planification stratégique, identité personnelle.
+                            </p>
+                        </div>
+
+                        <!-- Z=5 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-amber-400">STRATE Z=5</span>
+                                <span class="text-lg">🎭</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Traits &amp; Personnalité</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Attracteurs chroniques : tempérament durable, schémas de vie récurrents.
+                            </p>
+                        </div>
+
+                        <!-- Z=6 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-rose-400">STRATE Z=6</span>
+                                <span class="text-lg">⚖️</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Éthique &amp; Idéaux</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Dépassement de soi : sens de la justice, engagement altruiste, dévouement à un idéal.
+                            </p>
+                        </div>
+
+                        <!-- Z=7 -->
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold text-cyan-400">STRATE Z=7</span>
+                                <span class="text-lg">🌌</span>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Transcendance</h3>
+                            <p class="text-[11px] text-slate-400 leading-relaxed">
+                                Sérénité totale : sentiment d'unité cosmique, illumination, paix absolue et inconditionnelle.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Direct Link to Geometric Radar Below -->
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-purple-950/60 via-slate-900 to-indigo-950/60 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="text-xs text-slate-300">
+                            <strong>Envie d'explorer les 176 entrées en détail ?</strong> Le Navigateur Géométrique plus bas permet d'inspecter chaque strate sur le radar de Manhattan et en projection 3D.
+                        </div>
+                        <a href="#navigateur-geometrique" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-md transition-all shrink-0">
+                            Ouvrir le Radar Géométrique &darr;
+                        </a>
+                    </div>
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#partie-matrice-couronnes" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : La Règle de Manhattan
+                    </a>
+                    <a href="#partie-clinique-action" class="text-pink-400 hover:text-pink-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 5 : Guide Clinique &amp; F.I.T.T.T.</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- PARTIE 5 : GUIDE CLINIQUE & TEST F.I.T.T.T.              -->
+            <!-- ======================================================== -->
+            <section id="partie-clinique-action" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    
+                    <!-- Left: Explication Clinique et F.I.T.T.T. -->
+                    <div class="lg:col-span-6 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-900/40 text-amber-300 border border-amber-500/30">
+                            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                            Volet 5 &bull; Outils Cliniques &amp; Régulation
+                        </div>
+                        <h2 class="text-3xl sm:text-4xl font-heading font-black text-white leading-tight">
+                            5. Applications Pratiques : <span class="text-amber-400">Le Test F.I.T.T.T. &amp; Les 90s</span>
+                        </h2>
+                        <p class="text-base text-slate-300 leading-relaxed font-light">
+                            Une émotion n'est jamais "bonne" ou "mauvaise" en soi. Elle est saine ou inadaptée selon un barème clinique précis : le <strong>Test F.I.T.T.T.</strong>
+                        </p>
+
+                        <!-- F.I.T.T.T. Criteria List -->
+                        <div class="space-y-2 text-xs sm:text-sm">
+                            <div class="p-3 rounded-xl bg-slate-850/80 border border-slate-750 flex items-center justify-between">
+                                <span class="font-bold text-white"><span class="text-amber-400">F</span> &bull; Fréquence :</span>
+                                <span class="text-slate-300">Survient-elle trop souvent par rapport à la normale ?</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-850/80 border border-slate-750 flex items-center justify-between">
+                                <span class="font-bold text-white"><span class="text-amber-400">I</span> &bull; Intensité :</span>
+                                <span class="text-slate-300">Dépasse-t-elle l'amplitude requise pour l'événement ?</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-850/80 border border-slate-750 flex items-center justify-between">
+                                <span class="font-bold text-white"><span class="text-amber-400">T</span> &bull; Type :</span>
+                                <span class="text-slate-300">Est-ce la bonne réponse (ex: colère au lieu de tristesse) ?</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-amber-950/30 border border-amber-600/40 flex items-center justify-between text-amber-200">
+                                <span class="font-bold"><span class="text-amber-400 font-black">T</span> &bull; Temps (&lt; 90s) :</span>
+                                <span>La vague émotionnelle s'éteint-elle en moins de 90 secondes ?</span>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-850/80 border border-slate-750 flex items-center justify-between">
+                                <span class="font-bold text-white"><span class="text-amber-400">T</span> &bull; Timing :</span>
+                                <span class="text-slate-300">Survient-elle au bon moment ou avec décalage ?</span>
+                            </div>
+                        </div>
+
+                        <!-- 90 Seconds Rule Callout -->
+                        <div class="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 text-xs text-slate-300 leading-relaxed">
+                            <strong class="text-amber-300 block mb-1">⏱️ La Règle Psychologique des 90 Secondes (Régulation Émotionnelle) :</strong>
+                            Lorsqu'une émotion aiguë jaillit, l'impulsion réactionnelle brute s'apaise naturellement en environ <strong>90 secondes</strong>. Si la détresse ou la colère persiste au-delà, ce sont les ruminations cognitives et les pensées en boucle qui l'entretiennent.
+                        </div>
+                    </div>
+
+                    <!-- Right: Two Paths (CRIMES vs MIRACLES) -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <div class="rounded-3xl bg-slate-900/90 border border-slate-750 p-6 sm:p-8 shadow-2xl space-y-5">
+                            <div class="text-xs uppercase font-bold tracking-wider text-slate-400 border-b border-slate-800 pb-2">
+                                Les Deux Chemins Après les 90 Secondes :
+                            </div>
+
+                            <!-- Path A: Crimes -->
+                            <div class="p-5 rounded-2xl bg-gradient-to-r from-rose-950/40 to-slate-900 border border-rose-800/40 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-rose-400">Chemin 1 &bull; Dérégulation</span>
+                                    <span class="text-lg">⚠️</span>
+                                </div>
+                                <h3 class="text-base font-heading font-black text-white">Le Modèle C.R.I.M.E.S.</h3>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Quand l'émotion n'est pas régulée, elle se transforme en comportement symptomatique nuisible : <strong>Domination, Exagération, Évasion ou Soumission</strong>.
+                                </p>
+                                <a href="crimes.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-rose-300 hover:text-white transition-colors">
+                                    <span>Explorer le Territoire des Crimes &rarr;</span>
+                                </a>
+                            </div>
+
+                            <!-- Path B: Miracles -->
+                            <div class="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-slate-900 border border-emerald-800/40 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">Chemin 2 &bull; Transformation</span>
+                                    <span class="text-lg">✨</span>
+                                </div>
+                                <h3 class="text-base font-heading font-black text-white">Le Modèle M.I.R.A.C.L.E.S.</h3>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    La voie de la résilience et de l'alchimie affective : <strong>Assertion, Optimisation, Compassion et Responsabilisation</strong> pour réinitialiser le système.
+                                </p>
+                                <a href="miracles.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300 hover:text-white transition-colors">
+                                    <span>Explorer le Territoire des Miracles &rarr;</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#partie-palier-conscience" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : Paliers de Conscience
+                    </a>
+                    <a href="#navigateur-geometrique" class="text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Section 6 : Radar &amp; Navigateur Géométrique</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ======================================================== -->
+            <!-- SECTION 7 : LES TROIS TERRITOIRES DE L'EXPÉRIENCE        -->
+            <!-- ======================================================== -->
+            <section id="territoires" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
                 <div class="text-center max-w-3xl mx-auto mb-14">
                     <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/20">Structure Globale</span>
                     <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Les Trois Territoires de l'Expérience</h2>
@@ -303,12 +1053,12 @@
                             <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-2">ÉMOTIONS</h3>
                             <div class="text-[11px] font-mono text-blue-300 mb-3">La Cartographie Fondamentale &bull; Test F.I.T.T.T.</div>
                             <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                                <strong>La Matrice Sensorimotrice et Cognitive.</strong> Visualisez en 2D les 83 états affectifs, évaluez la fonctionnalité de vos affects par le test clinique <strong>F.I.T.T.T.</strong> (Fréquence, Intensité, Type, Temps &lt; 90s, Timing) et explorez le Noyau Affectif.
+                                <strong>La Matrice Sensorimotrice et Cognitive.</strong> Visualisez en 2D et 3D les 176 entrées (8 opérateurs et 168 positions réparties sur 8 strates hiérarchiques de Z=0 à Z=7), évaluez la fonctionnalité de vos affects par le test clinique <strong>F.I.T.T.T.</strong> (Fréquence, Intensité, Type, Temps &lt; 90s, Timing) et explorez les 84 paires de correspondances axiales, diagonales et controlatérales.
                             </p>
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Cartographie interactive des 83 états &amp; 5 strates</li>
-                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Test F.I.T.T.T. de détection du dysfonctionnel</li>
-                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Règle biologique des 90 secondes</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Cartographie interactive des 176 entrées &amp; 8 strates (Z=0 à Z=7)</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Loi des couronnes |X|+|Y| = 2Z - 2 &bull; N(Z) = 8(Z-1)</li>
+                                <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Test F.I.T.T.T. &amp; Règle de régulation des 90 secondes</li>
                             </ul>
                         </div>
                         <a href="emotions.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-blue-300 bg-blue-950/40 hover:bg-blue-900/60 border border-blue-500/30 transition-colors">
@@ -332,7 +1082,7 @@
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
                                 <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> Catalogue interactif de 85+ comportements nuisibles</li>
                                 <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> 12 Distorsions cognitives &amp; formules de justification</li>
-                                <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> Neurochimie des 4 désirs &amp; substances endo/exo</li>
+                                <li class="flex items-center gap-2"><span class="text-rose-400 font-bold">✓</span> Psychologie motivationnelle des 4 désirs &amp; facteurs de bascule</li>
                             </ul>
                         </div>
                         <a href="crimes.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-rose-300 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 transition-colors">
@@ -351,12 +1101,12 @@
                             <h3 class="text-2xl font-heading font-bold text-white mt-1 mb-2">M.I.R.A.C.L.E.S.</h3>
                             <div class="text-[11px] font-mono text-emerald-300 mb-3">Régulation Attentionnelle &amp; Comportementale</div>
                             <p class="text-slate-300 text-sm leading-relaxed mb-6">
-                                <strong>Modèle Intégré de la Régulation Attentionnelle et Comportementale.</strong> Les 4 quadrants vertueux : <strong>Assertion (R-)</strong>, <strong>Optimisation (R+)</strong>, <strong>Compassion (P+)</strong> et <strong>Responsabilisation (P-)</strong>.
+                                <strong>Modèle Intégré de la Régulation Attentionnelle et Comportementale.</strong> Les 4 quadrants vertueux : <strong>Assertion (R-)</strong>, <strong>Optimisation (R+)</strong>, <strong>Compassion (P+)</strong> et <strong>Responsabilisation (P-)</strong> menant aux strates transcendantales (Z=6 et Z=7).
                             </p>
                             <ul class="space-y-2 text-xs text-slate-400 mb-6">
                                 <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> 14 Stratégies de restructuration &amp; 60+ dialogues internes</li>
-                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Neurobiologie des Systèmes 1, 2, 3 &amp; Modèle de Gross</li>
-                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Écologie du S.O.I., 4 tempéraments &amp; glossaire des 70 affects</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Psychologie de la régulation (Systèmes 1, 2, 3) &amp; Modèle de Gross</li>
+                                <li class="flex items-center gap-2"><span class="text-emerald-400 font-bold">✓</span> Écologie du S.O.I., 4 tempéraments &amp; élévation transcendantale</li>
                             </ul>
                         </div>
                         <a href="miracles.html" class="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-lg text-sm font-semibold text-emerald-300 bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-500/30 transition-colors">
@@ -377,28 +1127,28 @@
                                 Une Grammaire Fonctionnelle de l’Affect
                             </h2>
                             <p class="text-slate-300 text-base leading-relaxed">
-                                Dépassant les limites du modèle circumplexe (Russell, 1980), Cartograffect ne traite pas l'activation comme une coordonnée spatiale. La valence s'y lit à partir des polarités de charge/décharge de l'énergie libre, et l'espace s'articule sur deux gradients adaptatifs orthogonaux et une profondeur temporelle :
+                                Dépassant les limites du modèle circumplexe (Russell, 1980), Cartograffect ne traite pas l'activation comme une simple coordonnée spatiale. La valence s'y déduit des polarités de charge/décharge de l'énergie libre, et l'espace s'articule sur deux gradients adaptatifs orthogonaux et une profondeur temporelle régie par la géométrie discrète :
                             </p>
                             <div class="space-y-4">
                                 <div class="flex items-start gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">Y</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">Axe Y – Gradient de Contrôle (Interface Perceptive)</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">Incertitude sensorimotrice. Capacité que l'organisme s'attribue pour agir sur le monde : monde perçu comme contrôlable (+Y, décharge pragmatique) ou non modifiable (-Y, charge pragmatique / repli adaptatif).</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe Y – Contrôle : Contrôlabilité du monde (Interface Perceptive)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Capacité que l'organisme s'attribue pour agir sur le monde : monde perçu comme contrôlable (+Y, action pragmatique) ou non modifiable (-Y, acceptation ou repli adaptatif).</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm shrink-0">X</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">Axe X – Gradient d’Attente (Interface Subjective)</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">Incertitude cognitive. Souplesse des croyances internes : modèle interne révisable (+X, décharge épistémique / mise à jour) ou non révisable (-X, charge épistémique / rigidité cognitive / maintien).</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe X – Attente : Révisabilité du modèle interne (Interface Subjective)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Souplesse des croyances internes : modèle interne révisable (+X, mise à jour épistémique) ou rigide (-X, maintien et résistance cognitive).</p>
                                     </div>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">Z</div>
                                     <div>
-                                        <h4 class="text-white font-semibold text-sm">Axe Z – Profondeur Inférentielle &amp; Budget Attentionnel (Norme L1)</h4>
-                                        <p class="text-slate-400 text-xs mt-0.5">L'Axe Z indexe le budget attentionnel fini alloué selon la contrainte de Manhattan : <span class="font-mono text-purple-300">|X| + |Y| = 2Z - 2</span> (pour Z &ge; 2). Déploie 5 couches hiérarchiques centrées sur des opérateurs de suspension : Surprise (Z=1), Anticipation (Z=2), Émoi (Z=3), Réserve (Z=4) et Recul (Z=5).</p>
+                                        <h4 class="text-white font-semibold text-sm">Axe Z – Profondeur temporelle &amp; Niveau d’abstraction (Norme L1)</h4>
+                                        <p class="text-slate-400 text-xs mt-0.5">Loi des couronnes : <span class="font-mono text-purple-300 font-bold">|X| + |Y| = 2Z - 2</span> avec <span class="font-mono text-purple-300 font-bold">N(Z) = 8(Z - 1)</span>. Déploie 8 strates hiérarchiques (Z=0 à Z=7) comportant 8 opérateurs centraux à (0,0,Z) et 168 positions affectives réparties sur 6 couronnes complètes (somme = 176 entrées).</p>
                                     </div>
                                 </div>
                             </div>
@@ -406,8 +1156,8 @@
 
                         <!-- Mini Visual Schema: 4 Quadrants & Matrice -->
                         <div class="bg-cosmic-900/80 rounded-2xl p-6 border border-slate-700/60 shadow-inner flex flex-col justify-center">
-                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2 text-center">La Matrice Affective (Strate Z = 2)</h3>
-                            <p class="text-[11px] text-slate-400 text-center mb-4">Croisement de la contrôlabilité du monde (+Y/-Y) et de la révisabilité du modèle (+X/-X)</p>
+                            <h3 class="text-xs uppercase font-bold tracking-wider text-slate-400 mb-2 text-center">La Première Couronne (Strate Z = 2 &bull; 8 Prototypes)</h3>
+                            <p class="text-[11px] text-slate-400 text-center mb-4">Organisée autour de l'Anticipation (0,0,2) &bull; Formule |X|+|Y| = 2</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-center quadrant-grid">
                                 <div class="p-4 rounded-xl bg-purple-900/20 border border-purple-700/30">
                                     <div class="text-[11px] text-purple-400 font-bold uppercase">Haut-Gauche (-X, +Y)</div>
@@ -430,12 +1180,127 @@
                                     <div class="text-[11px] text-slate-400 mt-1">Modèle révisable &bull; Monde non contrôlable (Diagonale de compensation : ajustement interne)</div>
                                 </div>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-800 text-center">
+                            <div class="mt-4 pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
                                 <a href="emotions.html" class="text-xs font-semibold text-purple-400 hover:text-purple-300">
-                                    Explorer les 83 attracteurs et leurs trajectoires sur la carte interactive &rarr;
+                                    Explorer les 176 entrées et 84 paires de symétrie sur la carte &rarr;
+                                </a>
+                                <a href="article.html" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-md transition-all flex items-center gap-1.5 shrink-0">
+                                    <span>📖</span> Consulter l'Article Théorique Intégral &rarr;
                                 </a>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Innovative Geometric Navigator Section: Octahedral Architecture Explorer -->
+            <section id="navigateur-geometrique" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 text-purple-300 border border-purple-500/30">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                        Innovation Géométrique &bull; Algorithme des 171 Entrées / 176 Total
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">
+                        Navigateur Géométrique des Strates &amp; Couronnes
+                    </h2>
+                    <p class="text-slate-400 mt-3 text-sm sm:text-base leading-relaxed">
+                        Chaque strate <span class="font-mono text-purple-300">Z</span> déploie un opérateur central <span class="font-mono text-purple-300">(0,0,Z)</span> et une couronne de Manhattan fermée régie par la loi stricte <span class="font-mono text-purple-300 font-bold">|X| + |Y| = 2Z - 2</span> générant exactement <span class="font-mono text-purple-300 font-bold">N(Z) = 8(Z - 1)</span> positions admissibles.
+                    </p>
+                </div>
+
+                <!-- Strata Selector Pills (Z=0 to Z=7) -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar" id="strataPillsContainer">
+                    <!-- Injected dynamically via JS or rendered as buttons -->
+                </div>
+
+                <!-- Interactive Dual Cockpit (Radar Manhattan + Fiche Computationnelle) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    <!-- Left Column: Dynamic Manhattan Radar (SVG) -->
+                    <div class="lg:col-span-6 rounded-2xl bg-cosmic-850/80 border border-slate-800 p-6 shadow-2xl relative overflow-hidden flex flex-col items-center">
+                        <div class="w-full flex items-center justify-between pb-3 border-b border-slate-800 text-xs">
+                            <span class="font-mono text-slate-300 font-semibold flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+                                <span id="radarStrataTitle">Strate Z = 2</span>
+                            </span>
+                            <span class="text-purple-400 font-mono text-[11px]" id="radarFormulaBadge">|X| + |Y| = 2 &bull; 8 positions</span>
+                        </div>
+
+                        <!-- SVG Canvas for Current Manhattan Ring -->
+                        <div class="relative w-full max-w-[440px] aspect-square my-4 flex items-center justify-center">
+                            <svg id="stratumRadarSvg" viewBox="-14.5 -14.5 29 29" class="w-full h-full transform rotate-0 transition-transform duration-500">
+                                <!-- Axes -->
+                                <line x1="-13.5" y1="0" x2="13.5" y2="0" stroke="#334155" stroke-width="0.15" stroke-dasharray="0.5, 0.5"/>
+                                <line x1="0" y1="-13.5" x2="0" y2="13.5" stroke="#334155" stroke-width="0.15" stroke-dasharray="0.5, 0.5"/>
+                                <!-- Manhattan diamond and points dynamically drawn -->
+                                <g id="radarDiamondGroup"></g>
+                                <g id="radarPointsGroup"></g>
+                            </svg>
+                            <!-- Center label helper -->
+                            <div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-2 text-[9px] font-mono text-slate-300 uppercase">
+                                <div class="text-center text-purple-400 font-semibold">+Y Contrôle (Action)</div>
+                                <div class="flex justify-between">
+                                    <span class="text-sky-400 font-semibold">-X Attente (Maintien)</span>
+                                    <span class="text-sky-400 font-semibold">+X Attente (Mise à jour)</span>
+                                </div>
+                                <div class="text-center text-purple-400 font-semibold">-Y Contrôle (Repli / Acceptation)</div>
+                            </div>
+                        </div>
+
+                        <div class="w-full text-center text-xs text-slate-300 flex items-center justify-center gap-4 pt-2 border-t border-slate-800">
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-400"></span> Opérateur Central</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Axiales (X=0 / Y=0)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-pink-400"></span> Diagonales (|X|=|Y|)</span>
+                            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Latérales</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Interactive Strata Identity & Emotion Card -->
+                    <div class="lg:col-span-6 space-y-5">
+                        
+                        <!-- Strata Overview Box -->
+                        <div class="rounded-2xl bg-slate-900/80 border border-slate-800 p-5 shadow-xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-widest text-purple-400 font-bold" id="strataBadge">STRATE Z=2 &bull; PROTOTYPES</span>
+                                    <h3 class="text-xl font-heading font-bold text-white mt-0.5" id="strataHeading">Première couronne &amp; Opérateur Anticipation</h3>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs font-mono font-bold text-indigo-300" id="strataCount">9 Entrées (1 op + 8 affects)</div>
+                                    <div class="text-[10px] font-mono text-slate-300" id="strataManhattanRadius">Rayon r = 2Z - 2 = 2</div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed" id="strataDescription">
+                                L'Anticipation (0,0,2) occupe le centre comme opérateur descendant d'orientation, tandis que les huit prototypes fondamentaux occupent la première couronne.
+                            </p>
+                            
+                            <!-- Typology Quick Filter Buttons -->
+                            <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-slate-800/80">
+                                <span class="text-[10px] font-bold uppercase text-slate-300 mr-1">Filtrer :</span>
+                                <button onclick="filterRadarByType('all')" class="geo-type-btn active px-2.5 py-1 rounded text-xs font-semibold bg-purple-600 text-white" data-type="all">Toutes</button>
+                                <button onclick="filterRadarByType('operator')" class="geo-type-btn px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-type="operator">Opérateur</button>
+                                <button onclick="filterRadarByType('axial')" class="geo-type-btn px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-type="axial">Axiales</button>
+                                <button onclick="filterRadarByType('diagonal')" class="geo-type-btn px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-type="diagonal">Diagonales</button>
+                                <button onclick="filterRadarByType('lateral')" class="geo-type-btn px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white" data-type="lateral">Latérales</button>
+                            </div>
+                        </div>
+
+                        <!-- Emotion Quick Selector Grid -->
+                        <div class="rounded-2xl bg-slate-900/80 border border-slate-800 p-5 shadow-xl space-y-3">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-bold text-slate-300 uppercase tracking-wider text-[11px]">Positions de la strate courante</span>
+                                <span class="text-slate-300 font-mono text-[10px]" id="currentListCount">8 affects affichés</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 max-h-40 overflow-y-auto pr-1" id="strataAffectButtons">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Selected Affect Identity & Correspondence Card -->
+                        <div class="rounded-2xl bg-gradient-to-br from-cosmic-800 via-slate-900 to-purple-950/30 border border-purple-500/30 p-5 shadow-2xl space-y-4" id="affectDetailCard">
+                            <!-- Populated dynamically -->
+                        </div>
+
                     </div>
                 </div>
             </section>
@@ -454,8 +1319,9 @@
                     <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                     <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
                 </div>
-                <div class="text-xs text-slate-400">
-                    &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+                <div class="text-xs text-slate-400 text-center md:text-right">
+                    <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                    <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
                 </div>
             </div>
         </footer>
@@ -497,6 +1363,9 @@
     </script>
 
     <!-- Main Logic & Animation Script -->
+    <script src="cartograffect_model.js"></script>
+    <script src="octahedral_navigator.js"></script>
+    <script src="dynamic_cartograffect.js"></script>
     <script src="script.js"></script>
     <script src="bilingual_modal.js"></script>
 

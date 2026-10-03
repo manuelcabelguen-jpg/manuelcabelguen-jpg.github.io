@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
     <title>Mentions Légales & Propriété Intellectuelle | Cartograffect</title>
     <meta name="description" content="Cadre juridique, propriété intellectuelle, certificat OPIC 1233199, licences GNU AGPLv3 et CC BY-NC-SA 4.0 pour le projet Cartograffect et ses outils computationnels.">
     <link rel="canonical" href="https://www.cartograffect.com/mentions-legales.html">
@@ -73,9 +75,13 @@
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                 <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+                </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">3. Miracles</a>
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Modèles Théoriques</a>
             </nav>
 
             <div class="hidden md:inline-flex header-action-btn">
@@ -99,9 +105,11 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html" class="active-link"><span class="menu-dot bg-slate-400"></span>Mentions Légales &amp; PI</a>
     </div>
 
@@ -132,9 +140,10 @@
                 <p>
                     Le site internet <strong>www.cartograffect.com</strong> ainsi que l'infrastructure de recherche computationnelle associée sont édités et dirigés par :
                 </p>
-                <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1 text-xs">
-                    <div><strong class="text-white">Auteur, Chercheur et Éditeur :</strong> Manuel Cabelguen</div>
-                    <div><strong class="text-white">Domaine de Recherche :</strong> Modélisation biophysiologique des affects, géométrie cognitive et outils d'intelligence artificielle clinique.</div>
+                <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
+                    <div><strong class="text-white">Auteur, Chercheur et Éditeur :</strong> Dr Manuel Cabelguen</div>
+                    <div><strong class="text-white">Titres &amp; Qualifications :</strong> Ph. D. en psychologie, Psychologue clinicien.</div>
+                    <div><strong class="text-white">Domaine de Recherche :</strong> Modélisation psychologique des affects, géométrie cognitive et outils d'intelligence artificielle clinique.</div>
                     <div><strong class="text-white">Plateformes et Outils Rattachés :</strong> <em>Dr Puck</em>, <em>ScIAnse</em>, <em>SchémIA</em>.</div>
                     <div><strong class="text-white">Hébergement Technique :</strong> GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis (GitHub Pages).</div>
                 </div>
@@ -149,7 +158,7 @@
             </h2>
             <div class="p-6 rounded-2xl bg-cosmic-850 border border-slate-700/80 space-y-4 text-sm text-slate-300 leading-relaxed">
                 <p>
-                    L'architecture conceptuelle, l'ontologie des émotions et l'organisation théorique du modèle biophysiologique et clinique « Cartograffect » font l’objet d’une protection formelle au titre du droit d’auteur international, enregistrée auprès de l'autorité compétente :
+                    L'architecture conceptuelle, l'ontologie des émotions et l'organisation théorique du modèle psychologique et clinique « Cartograffect » font l’objet d’une protection formelle au titre du droit d’auteur international, enregistrée auprès de l'autorité compétente :
                 </p>
                 <div class="p-5 rounded-xl bg-purple-950/30 border border-purple-600/40 space-y-2">
                     <div class="flex items-center gap-2 text-purple-300 font-bold text-sm">
@@ -163,7 +172,7 @@
                     </div>
                 </div>
                 <p class="text-xs text-slate-400">
-                    Cette protection couvre expressément la signature unique de cartographie des affects, la formalisation de la métrique L1 de Manhattan (Cabelguen, 2026), l'Interface Attentionnelle (Cabelguen, 2026), les 83 coordonnées affectives, leurs symétries et correspondances controlatérales, ainsi que les axiomes cliniques des 3 Territoires (Émotions, Crimes, Miracles).
+                    Cette protection couvre expressément la signature unique de cartographie des affects, la formalisation de la métrique L1 de Manhattan (Cabelguen, 2026), l'Interface Attentionnelle (Cabelguen, 2026), les 176 entrées et coordonnées affectives (8 opérateurs centraux et 168 positions sur les couronnes Z=2 à Z=7), leurs symétries et correspondances axiales, diagonales et controlatérales, ainsi que les axiomes cliniques des 3 Territoires (Émotions, Crimes, Miracles).
                 </p>
             </div>
         </section>
@@ -299,8 +308,9 @@
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                 <a href="mentions-legales.html" class="text-purple-400 font-semibold">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-400">
-                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
     </footer>

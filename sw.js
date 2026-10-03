@@ -1,8 +1,10 @@
 // Cartograffect Service Worker for offline capability & PWA caching
-const CACHE_NAME = 'cartograffect-v1.1';
+const CACHE_NAME = 'cartograffect-v1.2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './maintenance.html',
+  './maintenance_guard.js',
   './emotions.html',
   './crimes.html',
   './miracles.html',
@@ -10,6 +12,7 @@ const ASSETS_TO_CACHE = [
   './manifest.json',
   './style.css',
   './assets/logo.png',
+  './assets/logo-icon.svg',
   './assets/favicon.svg',
   './assets/favicon-32.png',
   './assets/apple-touch-icon.png'

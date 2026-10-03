@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
     <script src="maintenance_guard.js"></script>
-    <title>Modèles Théoriques | Affects, Émotions & Sentiments | Cartograffect</title>
-    <meta name="description" content="Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés (Russell, Ekman, Scherer, Barrett) et Algorithme Cartograffect 3.6.">
-    <link rel="canonical" href="https://www.cartograffect.com/scholar_drive.html">
+    <title>L'Article Théorique | Cartographie des affects : architecture hiérarchique fondée sur le traitement prédictif</title>
+    <meta name="description" content="Publication théorique officielle : Cartographie des affects, une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Dr Manuel Cabelguen, Ph. D.">
+    <link rel="canonical" href="https://www.cartograffect.com/article.html">
 
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
@@ -17,19 +17,19 @@
     <meta name="theme-color" content="#070b14">
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.cartograffect.com/scholar_drive.html">
-    <meta property="og:title" content="Modèles Théoriques | Affects, Émotions & Sentiments | Cartograffect">
-    <meta property="og:description" content="Fondements conceptuels des affects, émotions et sentiments, modèles historiques comparés et Algorithme Cartograffect 3.6 par Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://www.cartograffect.com/article.html">
+    <meta property="og:title" content="Cartographie des affects : une architecture hiérarchique fondée sur le traitement prédictif">
+    <meta property="og:description" content="Une grammaire fonctionnelle unifiée de l'affect, de l'émotion et du sentiment par Dr Manuel Cabelguen, Ph. D., BCN.">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet">
     
-    <!-- KaTeX for crisp mathematical rendering -->
+    <!-- KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
@@ -43,10 +43,12 @@
                     fontFamily: {
                         sans: ['DM Sans', 'Inter', 'sans-serif'],
                         heading: ['Outfit', 'sans-serif'],
+                        serif: ['Newsreader', 'Georgia', 'serif'],
                         mono: ['Fira Code', 'monospace']
                     },
                     colors: {
                         cosmic: {
+                            950: '#03060a',
                             900: '#070b14',
                             850: '#0b1120',
                             800: '#0e1726',
@@ -60,34 +62,71 @@
         }
     </script>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .academic-text {
+            font-family: 'Newsreader', Georgia, serif;
+            font-size: 1.125rem;
+            line-height: 1.85;
+            color: #cbd5e1;
+        }
+        .academic-text p {
+            margin-bottom: 1.35rem;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        .figure-card {
+            background: linear-gradient(180deg, rgba(14, 23, 38, 0.95) 0%, rgba(7, 11, 20, 0.98) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+        }
+        .badge-op {
+            font-family: 'Fira Code', monospace;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            color: #c4b5fd;
+        }
+        .callout-didactic {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+            border-left: 4px solid #8b5cf6;
+        }
+        .toc-link.active {
+            color: #c084fc;
+            font-weight: 700;
+            border-left: 2px solid #c084fc;
+            padding-left: 0.75rem;
+        }
+        @media print {
+            header, footer, #viewModeBar, #didacticSimulator, #tocSidebar, .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .academic-text {
+                color: black !important;
+                font-size: 11pt !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
-
-    <!-- Floating Lateral Dots Indicator -->
-    <div class="floating-dots-nav hidden xl:flex" aria-label="Progression de lecture">
-        <div class="floating-dot active" data-target="#hero-theorie-resume" title="Vue d'Ensemble"></div>
-        <div class="floating-dot" data-target="#triade-definitions" title="1. Affect vs Émotion vs Sentiment"></div>
-        <div class="floating-dot" data-target="#modeles-historiques" title="2. Modèles Historiques Comparés"></div>
-        <div class="floating-dot" data-target="#algorithme-36" title="3. Algorithme 3.6 & Norme L1"></div>
-        <div class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications"></div>
-        <div class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique"></div>
-    </div>
+<body class="bg-cosmic-950 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
 
     <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/90 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
                 <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
                     <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
-                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Modèles Théoriques &amp; Algorithme 3.6</span>
+                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Article Théorique Officiel</span>
                 </div>
             </a>
 
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                 <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
-                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                <a href="article.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
                 </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
@@ -99,18 +138,18 @@
                 <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-emerald-400"></span>3. Miracles
                 </a>
-                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>Modèles Théoriques
+                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>Modèles Théoriques
                 </a>
             </nav>
 
             <div class="hidden md:flex items-center gap-3">
-                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Imprimer ou enregistrer en PDF">
+                    <span>🖨️</span> Imprimer / PDF
+                </button>
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
                     <span class="text-purple-400">🌐</span> FR | EN
                 </button>
-                <a href="emotions.html" class="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-600/30 transition-all">
-                    Ouvrir la Carte &rarr;
-                </a>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -120,567 +159,944 @@
         </div>
     </header>
 
-    <!-- Mobile Fullscreen Menu Overlay -->
+    <!-- Mobile Navigation Overlay -->
     <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
         <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
-        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
+        <a href="article.html" class="active-link"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
-        <a href="scholar_drive.html" class="active-link"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
     </div>
 
-    <!-- Sticky Navigation Tabs -->
-    <nav class="sticky-tabs-container" id="stickyTheorieNav" aria-label="Navigation des Modèles Théoriques">
-        <div class="sticky-tabs-track">
-            <a href="#hero-theorie-resume" class="sticky-tab-btn active"><span class="tab-badge">✨</span> Vue d'Ensemble</a>
-            <a href="#triade-definitions" class="sticky-tab-btn"><span class="tab-badge">🧠</span> 1. Affect vs Émotion vs Sentiment</a>
-            <a href="#modeles-historiques" class="sticky-tab-btn"><span class="tab-badge">🏛️</span> 2. Modèles Historiques Comparés</a>
-            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge">⚙️</span> 3. Algorithme 3.6 &amp; Norme L1</a>
-            <a href="#scholar-drive-docs" class="sticky-tab-btn"><span class="tab-badge">📂</span> 4. Publications &amp; Documents</a>
-            <a href="#bibliographie" class="sticky-tab-btn"><span class="tab-badge">📚</span> 5. Corpus Bibliographique</a>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
-        
-        <!-- Hero Section : Résumé Vulgarisé des Modèles Théoriques -->
-        <section id="hero-theorie-resume" class="page-section relative rounded-3xl bg-gradient-to-br from-purple-950/40 via-cosmic-850 to-slate-900 border border-purple-800/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
-            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-purple-600/15 blur-3xl pointer-events-none"></div>
-            <div class="max-w-4xl relative z-10 space-y-5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-950/80 text-purple-300 border border-purple-700/50">
-                    <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                    Centre de Référence Scientifique &bull; Modèles Théoriques des Affects
-                </div>
-                <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
-                    Modèles Théoriques : <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-300 bg-clip-text text-transparent">Affects, Émotions &amp; Sentiments</span>
-                </h1>
-                <p class="text-purple-300 text-sm sm:text-base font-semibold tracking-wide">
-                    Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien &bull; Enregistrement auprès de l'OPIC n° 1233199
-                </p>
-                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
-                    Bienvenue dans le centre de clarification théorique et épistémologique de <strong>Cartograffect</strong>. Cet espace offre une définition rigoureuse et vulgarisée des distinctions fondamentales entre <strong>affect</strong>, <strong>émotion</strong> et <strong>sentiment</strong>, met en perspective les grands modèles historiques (Russell, Ekman, Scherer, Barrett) et présente la synthèse computationnelle par l'inférence active (Algorithme 3.6).
-                </p>
-
-                <!-- Quick Filter Buttons -->
-                <div class="flex flex-wrap gap-2.5 pt-2">
-                    <a href="#triade-definitions" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center gap-1.5">
-                        <span>🧠</span> Triade : Affect, Émotion, Sentiment
-                    </a>
-                    <a href="#modeles-historiques" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🏛️</span> Modèles Historiques Comparés
-                    </a>
-                    <a href="#algorithme-36" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>⚙️</span> Algorithme 3.6 &amp; Norme L1
-                    </a>
-                    <a href="#scholar-drive-docs" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>📂</span> Publications &amp; Scholar Drive
-                    </a>
-                    <a href="#bibliographie" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>📚</span> Corpus (49 Références)
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================================== -->
-        <!-- SECTION 1 : LA TRIADE FONDAMENTALE                       -->
-        <!-- AFFECT vs ÉMOTION vs SENTIMENT                           -->
-        <!-- ======================================================== -->
-        <section id="triade-definitions" class="page-section rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-10">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-5">
-                <div>
-                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Fondements Conceptuels &amp; Épistémologiques</span>
-                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        La Triade Fondamentale : Affect, Émotion &amp; Sentiment
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                        Dans le langage courant et même dans certaines littératures cliniques, ces trois termes sont fréquemment confondus. <strong>Cartograffect</strong> établit une démarcation rigoureuse fondée sur l'échelle temporelle, la nature de l'expérience vécue et la profondeur d'élaboration psychologique.
-                    </p>
-                </div>
-                <span class="px-3.5 py-1.5 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50 shadow-sm">
-                    Taxonomie Hiérarchique Cabelguen (2026)
-                </span>
-            </div>
-
-            <!-- Conceptual Cards -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Card 1 : AFFECT -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-purple-600/30 hover:border-purple-500/60 transition-all flex flex-col justify-between space-y-4 shadow-lg">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-purple-950 text-purple-300 border border-purple-800/60">
-                                Niveau 1 &bull; Infraconscient
-                            </span>
-                            <span class="text-2xl">⚡</span>
-                        </div>
-                        <h3 class="text-xl font-heading font-extrabold text-white">1. L'AFFECT</h3>
-                        <div class="text-xs font-semibold text-purple-300">Le Flux Intéroceptif Brut &amp; la Charge Adaptative</div>
-                        <p class="text-xs text-slate-300 leading-relaxed font-light">
-                            L'affect est le tonus psychologique de fond et l'état de base de l'organisme. C'est le baromètre intéroceptif continu de notre équilibre intérieur (vitalité, tension corporelle, bien-être ou malaise diffus). Il n'a pas besoin de mots ni d'objet précis : il est simplement agréable ou désagréable, tonique ou léthargique.
-                        </p>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
-                            <div class="text-slate-400"><strong class="text-purple-300">Vecteur computationnel :</strong> Écart de prédiction intéroceptif brut ($\epsilon_p$) non catégorisé.</div>
-                            <div class="text-slate-400"><strong class="text-purple-300">Échelle de temps :</strong> Permanente et continue (bruit de fond psychophysique).</div>
-                            <div class="text-slate-400"><strong class="text-purple-300">Substrat Psychologique :</strong> Intéroception diffuse, valence hédonique élémentaire (plaisir / déplaisir) et niveau d'activation.</div>
-                        </div>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-purple-200/80 italic">
-                        Exemple : La fatigue sourde, la lourdeur d'un malaise indéterminé, la vitalité matinale.
-                    </div>
-                </div>
-
-                <!-- Card 2 : ÉMOTION -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-sky-600/30 hover:border-sky-500/60 transition-all flex flex-col justify-between space-y-4 shadow-lg">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-sky-950 text-sky-300 border border-sky-800/60">
-                                Niveau 2 &bull; Réactionnel
-                            </span>
-                            <span class="text-2xl">🎯</span>
-                        </div>
-                        <h3 class="text-xl font-heading font-extrabold text-white">2. L'ÉMOTION</h3>
-                        <div class="text-xs font-semibold text-sky-300">Le Programme d'Action Sensorimoteur &amp; Heuristique</div>
-                        <p class="text-xs text-slate-300 leading-relaxed font-light">
-                            L'émotion est une réponse dynamique brève à un événement saillant (externe ou interne). C'est un programme d'action heuristique qui réorganise en quelques fractions de seconde l'ensemble du système (attention, posture, décharge hormonale, motricité) pour répondre à l'urgence environnementale.
-                        </p>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
-                            <div class="text-slate-400"><strong class="text-sky-300">Vecteur computationnel :</strong> Sélection d'une politique d'action motrice ($\pi$) à horizon court ($Z=1$ à $Z=3$).</div>
-                            <div class="text-slate-400"><strong class="text-sky-300">Échelle de temps :</strong> Brève (1 à 90 secondes de décharge physiologique).</div>
-                            <div class="text-slate-400"><strong class="text-sky-300">Substrat Psychologique :</strong> Évaluation de pertinence immédiate, survenue d'un objet saillant, tendance à l'action orientée (approche / évitement).</div>
-                        </div>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-sky-200/80 italic">
-                        Exemple : Le sursaut face à un freinage d'urgence, la poussée de colère face à une injustice flagrante.
-                    </div>
-                </div>
-
-                <!-- Card 3 : SENTIMENT -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-emerald-600/30 hover:border-emerald-500/60 transition-all flex flex-col justify-between space-y-4 shadow-lg">
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950 text-emerald-300 border border-emerald-800/60">
-                                Niveau 3 &bull; Phénoménologique
-                            </span>
-                            <span class="text-2xl">🌱</span>
-                        </div>
-                        <h3 class="text-xl font-heading font-extrabold text-white">3. LE SENTIMENT</h3>
-                        <div class="text-xs font-semibold text-emerald-300">L'Intégration Métacognitive Consciente &amp; Narrative</div>
-                        <p class="text-xs text-slate-300 leading-relaxed font-light">
-                            Le sentiment est la prise de conscience réflexive et l'attribution de sens à l'état affectif et émotionnel. Il relie la sensation corporelle à la mémoire autobiographique, aux croyances sur soi, aux valeurs et aux anticipations futures. Il peut persister sur des mois ou des années.
-                        </p>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
-                            <div class="text-slate-400"><strong class="text-emerald-300">Vecteur computationnel :</strong> Inférence hiérarchique profonde ($Z=4$ à $Z=7$) avec modèle génératif de soi et Theory of Mind.</div>
-                            <div class="text-slate-400"><strong class="text-emerald-300">Échelle de temps :</strong> Prolongée (heures, jours, années ; stabilisé par le récit intérieur).</div>
-                            <div class="text-slate-400"><strong class="text-emerald-300">Substrat Psychologique :</strong> Conscience phénoménologique, mémoire autobiographique, intégration aux valeurs et récit de soi.</div>
-                        </div>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800/80 text-[11px] text-emerald-200/80 italic">
-                        Exemple : L'amour durable pour un proche, le deuil élaboré, l'amertume silencieuse ou la gratitude sereine.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Synthesis Diagram & Comparison Table -->
-            <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-6">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <h3 class="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
-                        <span>📊</span> Matrice Comparative Synoptique
-                    </h3>
-                    <span class="text-xs text-purple-400 font-mono">Modélisation en Inférence Active (Friston &amp; Cabelguen)</span>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="border-b border-slate-750 text-slate-400 uppercase tracking-wider font-semibold">
-                                <th class="py-3 px-4">Dimension</th>
-                                <th class="py-3 px-4 text-purple-300">Affect</th>
-                                <th class="py-3 px-4 text-sky-300">Émotion</th>
-                                <th class="py-3 px-4 text-emerald-300">Sentiment</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800 text-slate-300">
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-white">Nature du Signal</td>
-                                <td class="py-3 px-4">Écart intéroceptif brut, sensation viscérale globale</td>
-                                <td class="py-3 px-4">Programme d'action somato-moteur réactif et ciblé</td>
-                                <td class="py-3 px-4">Évaluation cognitive narrative et conscience du Soi</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-white">Horizon Temporel</td>
-                                <td class="py-3 px-4">Flux continu ($Z=0$)</td>
-                                <td class="py-3 px-4">Ponctuel, 1 à 90 secondes ($Z=1$ à $Z=3$)</td>
-                                <td class="py-3 px-4">Durable, des heures aux années ($Z=4$ à $Z=7$)</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-white">Niveau de Conscience</td>
-                                <td class="py-3 px-4">Infraconscient ou pré-réflexif</td>
-                                <td class="py-3 px-4">Conscience d'accès (irruption phénoménologique)</td>
-                                <td class="py-3 px-4">Conscience réflexive et métacognition verbale</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-white">Fonction Allostatique</td>
-                                <td class="py-3 px-4">Indiquer l'écart homéostatique global</td>
-                                <td class="py-3 px-4">Mobiliser l'action pour restaurer l'équilibre immédiat</td>
-                                <td class="py-3 px-4">Orienter les choix existentiels et les liens sociaux à long terme</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 font-semibold text-white">Levier Thérapeutique</td>
-                                <td class="py-3 px-4">Somatique, sommeil, respiration, intéroception</td>
-                                <td class="py-3 px-4">Désescalade émotionnelle, règle des 90s, désamorçage</td>
-                                <td class="py-3 px-4">Restructuration cognitive, réévaluation narrative, thérapie d'acceptation</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================================== -->
-        <!-- SECTION 2 : MODÈLES THÉORIQUES COMPARÉS                  -->
-        <!-- RUSSELL, EKMAN, SCHERER, BARRETT & CARTOGRAFFECT        -->
-        <!-- ======================================================== -->
-        <section id="modeles-historiques" class="page-section rounded-3xl bg-slate-850/95 border border-slate-750 p-6 sm:p-10 shadow-2xl space-y-10">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-5">
-                <div>
-                    <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Épistémologie &amp; Histoire des Sciences</span>
-                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        Modèles Théoriques Historiques Comparés &amp; Synthèse Cartograffect
-                    </h2>
-                    <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                        Depuis un demi-siècle, la recherche affective oscille entre modèles dimensionnels, théories des émotions discrètes et constructivisme social. Découvrez comment ces approches se complètent et comment l'inférence active unifie l'ensemble.
-                    </p>
-                </div>
-                <span class="px-3.5 py-1.5 rounded-full text-xs font-mono bg-sky-950/80 text-sky-300 border border-sky-700/50">
-                    5 Paradigmes Majeurs
-                </span>
-            </div>
-
-            <!-- Historical Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Model 1 : Russell -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">1980</span>
-                        <span class="text-xl">⭕</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-heading font-bold text-white">Le Circumplexe de Russell</h3>
-                        <p class="text-xs text-purple-300 font-medium">James A. Russell &bull; Espace 2D Continu</p>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed font-light">
-                        Propose un plan cartésien circulaire structuré autour de deux axes orthogonaux : la <strong>Valence</strong> (Plaisir vs Déplaisir) et l'<strong>Éveil</strong> (Arousal : Haute vs Basse activation).
-                    </p>
-                    <div class="space-y-2 text-[11px] pt-3 border-t border-slate-850">
-                        <div class="text-emerald-400"><strong>+ Apport :</strong> Premier modèle continu rejetant le découpage arbitraire en tiroirs étanches.</div>
-                        <div class="text-rose-400"><strong>- Limite :</strong> Confusion clinique majeure : la Peur et la Colère occupent le même quadrant sans distinguer l'action d'approche de l'action d'évitement.</div>
-                    </div>
-                </div>
-
-                <!-- Model 2 : Ekman -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-blue-500/50 transition-all space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">1992</span>
-                        <span class="text-xl">🎭</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-heading font-bold text-white">Émotions de Base d'Ekman</h3>
-                        <p class="text-xs text-blue-300 font-medium">Paul Ekman &bull; Programmes Discrets Innés</p>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed font-light">
-                        Postule l'existence de 6 émotions discrètes universelles (Joie, Tristesse, Peur, Colère, Dégoût, Surprise), dotées de programmes affectifs innés et d'expressions faciales stéréotypées.
-                    </p>
-                    <div class="space-y-2 text-[11px] pt-3 border-t border-slate-850">
-                        <div class="text-emerald-400"><strong>+ Apport :</strong> Ancrage évolutionnaire fort et outils de décodage des micro-expressions faciales (FACS).</div>
-                        <div class="text-rose-400"><strong>- Limite :</strong> Essentialisme réfuté empiriquement : absence d'empreinte universelle unique pour chaque émotion et immense variabilité culturelle et individuelle.</div>
-                    </div>
-                </div>
-
-                <!-- Model 3 : Scherer -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-amber-500/50 transition-all space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">2001</span>
-                        <span class="text-xl">⚙️</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-heading font-bold text-white">Processus Composant (CPM)</h3>
-                        <p class="text-xs text-amber-300 font-medium">Klaus Scherer &bull; Évaluation Cognitive Séquentielle</p>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed font-light">
-                        L'émotion émerge d'une séquence rapide de vérifications évaluatives (Appraisal Checks) : nouveauté, valeur intrinsèque, pertinence pour les buts, potentiel de maîtrise et normes sociales.
-                    </p>
-                    <div class="space-y-2 text-[11px] pt-3 border-t border-slate-850">
-                        <div class="text-emerald-400"><strong>+ Apport :</strong> Modèle dynamique synchronisant les 5 composantes psychologiques (cognitive, somatique, motivationnelle, motrice, subjective).</div>
-                        <div class="text-rose-400"><strong>- Limite :</strong> Reste essentiellement descriptif et qualitatif, sans formalisation mathématique d'un budget attentionnel conservé.</div>
-                    </div>
-                </div>
-
-                <!-- Model 4 : Lisa Feldman Barrett -->
-                <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-pink-500/50 transition-all space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">2017</span>
-                        <span class="text-xl">🧩</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-heading font-bold text-white">Émotions Construites</h3>
-                        <p class="text-xs text-pink-300 font-medium">Lisa Feldman Barrett &bull; Constructivisme Psychologique Prédictif</p>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed font-light">
-                        L'esprit ne "détecte" pas passivement des émotions toutes faites : il les construit activement en projetant des concepts émotionnels et des schémas d'interprétation acquis sur des ressentis corporels de base (Core Affect).
-                    </p>
-                    <div class="space-y-2 text-[11px] pt-3 border-t border-slate-850">
-                        <div class="text-emerald-400"><strong>+ Apport :</strong> Révolution conceptuelle réconciliant esprit prédictif, régulation adaptative interne et malléabilité culturelle de l'expérience affective.</div>
-                        <div class="text-rose-400"><strong>- Limite :</strong> Manque d'une cartographie géométrique opérationnelle et d'une règle métrique formelle pour les applications cliniques.</div>
-                    </div>
-                </div>
-
-                <!-- Model 5 : CARTOGRAFFECT SYNTHÈSE (Colspan 2) -->
-                <div class="md:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-purple-950/60 via-cosmic-900 to-indigo-950/50 border-2 border-purple-500/50 hover:border-purple-400 transition-all space-y-4 shadow-xl">
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-purple-600 text-white shadow-sm">
-                            2026 &bull; Synthèse Définitive
-                        </span>
-                        <span class="text-xs font-mono text-purple-300">OPIC n° 1233199</span>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-heading font-black text-white">La Synthèse Cartograffect : Algorithme 3.6</h3>
-                        <p class="text-xs text-purple-300 font-semibold">Dr Manuel Cabelguen, Ph. D. &bull; Inférence Active &amp; Traitement Prédictif</p>
-                    </div>
-                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
-                        <strong>Cartograffect unifie ces 50 ans d'histoire</strong> en dotant le constructivisme prédictif d'une géométrie invariante rigoureuse sous contrainte de <strong>norme de Manhattan ($L_1$)</strong> :
-                    </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
-                            <span class="font-bold text-sky-300 block mb-1">Axe X : Gradient d'Attente</span>
-                            Révisabilité bayésienne du modèle interne face au flux sensoriel (+X : révisable / -X : rigide).
-                        </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
-                            <span class="font-bold text-purple-300 block mb-1">Axe Y : Gradient de Contrôle</span>
-                            Capacité motrice perçue d'infléchir le monde par l'action pragmatique (+Y : contrôlable / -Y : subi).
-                        </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
-                            <span class="font-bold text-emerald-300 block mb-1">Axe Z : Profondeur Inférentielle</span>
-                            Horizon temporel de prédiction et degré de conscience (Z=0 à Z=7).
-                        </div>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-purple-950/60 border border-purple-700/60 font-mono text-purple-200 text-xs flex flex-wrap items-center justify-between gap-2">
-                        <span>Loi Attentionnelle L1 : $|X| + |Y| = 2Z - 2$</span>
-                        <span>Antagonisme Symétrique : $\mathcal{A}(X,Y,Z) = (-X,-Y,Z)$</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================================== -->
-        <!-- SECTION 3 : ALGORITHME DU CARTOGRAFFECT 3.6             -->
-        <!-- ======================================================== -->
-        <section id="algorithme-36" class="page-section rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
-                <div>
-                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Axiomatique &amp; Computation</span>
-                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        Algorithme du Cartograffect &bull; Version 3.6
-                    </h2>
-                </div>
-                <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
-                    Propriété Intellectuelle OPIC n° 1233199
-                </span>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Box 1 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-300 font-bold flex items-center justify-center text-sm border border-purple-500/40">Y</span>
-                        <h3 class="text-base font-bold text-white">Gradient de Contrôle (Axe Y)</h3>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Modélise l'<strong>incertitude sensorimotrice</strong>. Évalue la probabilité subjective que l'action pragmatique de l'organisme puisse modifier l'état du monde pour résorber l'écart de prédiction.
-                    </p>
-                    <div class="text-[11px] font-mono text-purple-300 pt-2 border-t border-slate-800">
-                        +Y : Monde contrôlable &bull; -Y : Monde non modifiable
-                    </div>
-                </div>
-
-                <!-- Box 2 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-300 font-bold flex items-center justify-center text-sm border border-sky-500/40">X</span>
-                        <h3 class="text-base font-bold text-white">Gradient d'Attente (Axe X)</h3>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Modélise l'<strong>incertitude cognitive</strong>. Évalue le degré de révisabilité du modèle interne de l'organisme face aux données sensorielles entrantes (mise à jour bayésienne).
-                    </p>
-                    <div class="text-[11px] font-mono text-sky-300 pt-2 border-t border-slate-800">
-                        +X : Modèle révisable &bull; -X : Modèle non révisable
-                    </div>
-                </div>
-
-                <!-- Box 3 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-3">
-                    <div class="flex items-center gap-2">
-                        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-sm border border-emerald-500/40">Z</span>
-                        <h3 class="text-base font-bold text-white">Profondeur Inférentielle (Axe Z)</h3>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        Indexe l'<strong>horizon temporel</strong> et le degré d'abstraction (Z=0 à Z=5). Ne porte aucun contenu propre mais régule la précision attentionnelle sous la contrainte métrique L1.
-                    </p>
-                    <div class="text-[11px] font-mono text-emerald-300 pt-2 border-t border-slate-800">
-                        Budget L1 : |X| + |Y| = 2Z - 2 (pour Z &ge; 2)
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mathematical Core -->
-            <div id="equations-formelles" class="p-6 rounded-2xl bg-cosmic-900 border border-purple-800/40 space-y-4">
-                <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Formalisation Mathématique &amp; Invariance</span>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300">
-                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
-                        <div class="font-bold text-white">1. Conservation Attentionnelle de Manhattan (L1) :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-purple-300 text-sm">
-                            ||(X, Y)||_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2
-                        </div>
-                        <p class="text-slate-400 text-[11px]">
-                            Garantit qu'à profondeur inférentielle fixée, la charge cognitive et sensorimotrice est strictement conservée.
-                        </p>
-                    </div>
-
-                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
-                        <div class="font-bold text-white">2. Antagonisme Central par Inversion :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-indigo-300 text-sm">
-                            \mathcal{A}(X, Y, Z) = (-X, -Y, Z)
-                        </div>
-                        <p class="text-slate-400 text-[11px]">
-                            Tout attracteur possède un opposé fonctionnel exact inversant simultanément la révisabilité interne et la contrôlabilité externe (ex: Colère $\leftrightarrow$ Calme, Désir $\leftrightarrow$ Dégoût).
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================================================== -->
-        <!-- SECTION 4 : SCHOLAR DRIVE & DOCUMENTS DE RECHERCHE      -->
-        <!-- ======================================================== -->
-        <section id="scholar-drive-docs" class="page-section rounded-3xl bg-slate-850/95 border border-slate-750 p-6 sm:p-10 shadow-2xl space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
-                <div>
-                    <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Ressources Académiques</span>
-                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        Documents de Recherche &amp; Synthèses
-                    </h2>
-                </div>
-                <span class="px-3 py-1 rounded-full text-xs font-mono bg-sky-950/80 text-sky-300 border border-sky-700/50">
-                    Accès Chercheurs &amp; Praticiens
-                </span>
-            </div>
-
-            <!-- Featured Research Publication Card -->
-            <div class="rounded-2xl bg-gradient-to-br from-purple-950/60 via-cosmic-900 to-slate-900 border-2 border-purple-500/50 p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div class="space-y-3 max-w-3xl">
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-600 text-white shadow-sm">
-                            ⭐ Publication Phare
-                        </span>
-                        <span class="text-xs font-mono text-purple-300">
-                            Dr Manuel Cabelguen, Ph. D., BCN &bull; OPIC n° 1233199
-                        </span>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-heading font-black text-white leading-snug">
-                        Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
-                    </h3>
-                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                        Article théorique de référence établissant la grammaire fonctionnelle unifiée en 4 volets (Moteur prédictif, Noyau affectif L1, Matrice affective et Taxonomie hiérarchique), résolvant les clivages historiques (Russell, Ekman, Scherer, Barrett) et posant 3 prédictions empiriques falsifiables.
-                    </p>
-                </div>
-                <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto">
-                    <a href="article.html" class="px-5 py-3 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center justify-center gap-2">
-                        <span>📖</span> Lire l'Article &amp; Figures
-                    </a>
-                    <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. OPIC n° 1233199.'); alert('Citation copiée !');" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all text-xs flex items-center justify-center gap-1.5">
-                        <span>📋</span> Copier Citation
+    <!-- Reading Mode Floating Sub-Bar -->
+    <div id="viewModeBar" class="sticky top-20 z-30 w-full bg-cosmic-900/95 backdrop-blur border-b border-slate-800/80 px-4 py-2.5">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Mode de lecture :</span>
+                <div class="inline-flex rounded-lg bg-slate-800/90 p-0.5 border border-slate-700/80 shadow-inner">
+                    <button id="btnModeDidactic" onclick="setReadingMode('didactic')" class="px-3 py-1 rounded-md font-semibold text-white bg-purple-600 transition-all flex items-center gap-1.5 shadow-sm">
+                        <span>💡</span> <strong>Mode Didactique &amp; Pédagogique</strong>
+                    </button>
+                    <button id="btnModeAcademic" onclick="setReadingMode('academic')" class="px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                        <span>📜</span> <strong>Texte Académique Intégral</strong>
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Doc 1 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl">📄</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Algorithme 3.6</span>
-                        </div>
-                        <h3 class="text-base font-bold text-white">Algorithme du Cartograffect 3.6</h3>
-                        <p class="text-xs text-slate-300">
-                            Document de référence formalisant les 4 volets : Moteur Prédictif, Noyau Affectif, Matrice Z=2 et Taxonomie hiérarchique des 176 entrées (8 opérateurs centraux et 168 positions affectives réparties sur 8 strates Z=0 à Z=7).
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">Dr Manuel Cabelguen, Ph. D.</span>
-                        <a href="https://docs.google.com/document/d/1VwLSbfWCPPsk7ruqWaFB0026-awqgXSX/edit" target="_blank" rel="noopener noreferrer" class="font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1">
-                            <span>Consulter</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Doc 2 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-emerald-500/50 transition-all flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl">✨</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Modèle MIRACLES</span>
-                        </div>
-                        <h3 class="text-base font-bold text-white">Modèle M.I.R.A.C.L.E.S. &amp; Régulation Psychologique</h3>
-                        <p class="text-xs text-slate-300">
-                            Modèle intégré de régulation attentionnelle : Systèmes 1, 2, 3, modèle séquentiel de James Gross et 14 stratégies de restructuration cognitive.
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">18 Pages de Référence</span>
-                        <a href="miracles.html" class="font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-                            <span>Explorer</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Doc 3 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-rose-500/50 transition-all flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl">⚠️</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Modèle CRIMES</span>
-                        </div>
-                        <h3 class="text-base font-bold text-white">Modèle C.R.I.M.E.S. &amp; Dérégulation</h3>
-                        <p class="text-xs text-slate-300">
-                            Catalogue de 85+ comportements nuisibles, 12 distorsions cognitives et justifications verbales, et psychologie motivationnelle des 4 désirs fondamentaux.
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">85+ Items Cliniques</span>
-                        <a href="crimes.html" class="font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1">
-                            <span>Explorer</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
+            <!-- Quick Jump Buttons -->
+            <div class="hidden lg:flex items-center gap-2 text-[11px] font-mono">
+                <span class="text-slate-400">Accès figures :</span>
+                <a href="#figure-1" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700">Fig. 1 (Architecture)</a>
+                <a href="#figure-2" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700">Fig. 2 (Noyau L1)</a>
+                <a href="#figure-3" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-slate-700">Fig. 3 (Matrice)</a>
+                <a href="#figure-4" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-pink-300 border border-slate-700">Fig. 4 (Taxonomie)</a>
+                <a href="#didacticSimulator" class="px-2.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-700 font-bold">⚡ Simulateur</a>
             </div>
-        </section>
+        </div>
+    </div>
 
-        <!-- ======================================================== -->
-        <!-- SECTION 5 : CORPUS SCIENTIFIQUE INTERNATIONAL COMPLET    -->
-        <!-- ======================================================== -->
-        <!-- ======================================================== -->
+    <!-- Main Container -->
+    <div class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- Sidebar Navigation (Table of Contents) -->
+            <aside id="tocSidebar" class="hidden lg:block lg:col-span-3 sticky top-36 space-y-4 max-h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar pr-2">
+                <div class="p-4 rounded-2xl bg-cosmic-900 border border-slate-800 shadow-xl space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Sommaire de l'article</span>
+                        <span class="text-[10px] font-mono text-slate-400">9 Sections</span>
+                    </div>
+                    <nav class="space-y-1.5 text-xs text-slate-300 font-medium">
+                        <a href="#resume" class="block py-1 hover:text-purple-300 transition-colors toc-link">0. Résumé &amp; Abstract</a>
+                        <a href="#section-1" class="block py-1 hover:text-purple-300 transition-colors toc-link">1. Introduction &amp; Clivages</a>
+                        <a href="#section-2" class="block py-1 hover:text-purple-300 transition-colors toc-link">2. Position Épistémologique</a>
+                        <a href="#section-3" class="block py-1 hover:text-purple-300 transition-colors toc-link">3. Fondements Théoriques</a>
+                        <a href="#section-4" class="block py-1 hover:text-purple-300 transition-colors toc-link">4. Le Moteur Prédictif</a>
+                        <a href="#section-5" class="block py-1 hover:text-purple-300 transition-colors toc-link">5. Le Noyau Affectif</a>
+                        <a href="#section-6" class="block py-1 hover:text-purple-300 transition-colors toc-link">6. La Matrice Affective</a>
+                        <a href="#section-7" class="block py-1 hover:text-purple-300 transition-colors toc-link">7. La Taxonomie Hiérarchique</a>
+                        <a href="#section-8" class="block py-1 hover:text-purple-300 transition-colors toc-link">8. Discussion &amp; Prédictions</a>
+                        <a href="#section-9" class="block py-1 hover:text-purple-300 transition-colors toc-link">9. Conclusion &amp; Droit d'Auteur</a>
+                        <a href="#references" class="block py-1 hover:text-purple-300 transition-colors toc-link">Références Bibliographiques</a>
+                    </nav>
+                </div>
+
+                <!-- Didactic Quick Tool Callout -->
+                <div class="p-4 rounded-2xl bg-gradient-to-br from-purple-950/60 to-slate-900 border border-purple-800/40 shadow-xl space-y-2">
+                    <span class="text-[10px] uppercase font-bold text-purple-300 tracking-wider flex items-center gap-1">
+                        <span>💡</span> Idée Clé Didactique
+                    </span>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">
+                        Un affect n'est pas une simple erreur de prédiction, mais l'<strong>évaluation des solutions</strong> (agir ou apprendre) dont l'organisme croit disposer.
+                    </p>
+                </div>
+            </aside>
+
+            <!-- Main Article Document -->
+            <main class="lg:col-span-9 space-y-12">
+
+                <!-- Article Header / Front Matter -->
+                <section class="rounded-3xl bg-gradient-to-br from-purple-950/40 via-cosmic-850 to-slate-900 border border-purple-800/40 p-6 sm:p-12 shadow-2xl relative overflow-hidden">
+                    <div class="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-purple-600/10 blur-3xl pointer-events-none"></div>
+                    
+                    <div class="relative z-10 space-y-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-950 text-purple-300 border border-purple-700/60">
+                                Article Théorique &bull; Prépublication
+                            </span>
+                            <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800/90 text-slate-300 border border-slate-700">
+                                Droit d'auteur OPIC n° 1233199
+                            </span>
+                        </div>
+
+                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-heading font-black text-white tracking-tight leading-tight">
+                            Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
+                        </h1>
+
+                        <p class="text-base sm:text-xl font-heading italic text-purple-200/90 font-light">
+                            Mapping Affect: A Hierarchical Architecture of Affective Experience Grounded in Predictive Processing
+                        </p>
+
+                        <!-- Author & Affiliation Details -->
+                        <div class="pt-4 border-t border-purple-800/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm text-slate-300">
+                            <div>
+                                <div class="font-bold text-white text-base">Manuel Cabelguen, Ph. D., BCN</div>
+                                <div class="text-slate-400 mt-0.5">Psychologue, Programmes correctionnels, Service correctionnel du Canada</div>
+                                <div class="text-slate-400">Établissement La Macaza (Québec), Canada</div>
+                            </div>
+                            <div class="sm:text-right font-mono text-xs text-purple-300">
+                                <div>Correspondance :</div>
+                                <a href="mailto:manuelcabelguen@gmail.com" class="hover:underline text-purple-400">manuelcabelguen@gmail.com</a>
+                                <div class="text-slate-400 text-[11px] mt-1">© 2026 Manuel Cabelguen</div>
+                            </div>
+                        </div>
+
+                        <!-- Citation Helper Card -->
+                        <div class="p-3.5 rounded-xl bg-cosmic-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                            <div class="font-mono text-slate-300 text-[11px]">
+                                <span class="text-purple-400 font-bold">Citation APA :</span> Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. OPIC n° 1233199.
+                            </div>
+                            <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. Droit d’auteur enregistré auprès de l’OPIC n° 1233199.'); alert('Citation copiée dans le presse-papier !');" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 shrink-0 font-semibold transition-all">
+                                📋 Copier Citation
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- DIDACTIC INTERACTIVE SIMULATOR (CALLOUT)                -->
+                <!-- ======================================================== -->
+                <section id="didacticSimulator" class="rounded-3xl bg-slate-900 border-2 border-purple-500/50 p-6 sm:p-8 shadow-2xl space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">⚡</span>
+                            <div>
+                                <h3 class="text-lg font-heading font-black text-white">Simulateur Didactique de l'Affect Prédictif</h3>
+                                <p class="text-xs text-purple-300">Expérimentez la genèse d'un affect en sélectionnant les deux évaluations adaptatives</p>
+                            </div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-purple-950 text-purple-300 border border-purple-700">
+                            Didactique Interactive
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Step 1: Contrôle (Axe Y) -->
+                        <div class="p-4 rounded-2xl bg-cosmic-950 border border-slate-800 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-400">1. Contrôlabilité du Monde (Axe Y)</span>
+                            <p class="text-xs text-slate-400">Puis-je agir concrètement pour changer la situation ?</p>
+                            <div class="space-y-1.5">
+                                <button onclick="simSetY(1)" id="btnY_pos" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-purple-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between">
+                                    <span>+Y : Monde Contrôlable (Action)</span>
+                                    <span class="text-[10px] font-mono text-purple-400">+1</span>
+                                </button>
+                                <button onclick="simSetY(0)" id="btnY_zero" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-purple-500 bg-purple-900/40 text-purple-200 transition-all flex items-center justify-between">
+                                    <span>Y0 : Contrôle Indéterminé</span>
+                                    <span class="text-[10px] font-mono text-purple-300">0</span>
+                                </button>
+                                <button onclick="simSetY(-1)" id="btnY_neg" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-purple-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between">
+                                    <span>-Y : Monde Non Contrôlable (Repli)</span>
+                                    <span class="text-[10px] font-mono text-purple-400">-1</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Attente (Axe X) -->
+                        <div class="p-4 rounded-2xl bg-cosmic-950 border border-slate-800 space-y-3">
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-400">2. Révisabilité du Modèle (Axe X)</span>
+                            <p class="text-xs text-slate-400">Suis-je prêt à mettre à jour mes croyances internes ?</p>
+                            <div class="space-y-1.5">
+                                <button onclick="simSetX(1)" id="btnX_pos" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-sky-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between">
+                                    <span>+X : Modèle Révisable (Mise à jour)</span>
+                                    <span class="text-[10px] font-mono text-sky-400">+1</span>
+                                </button>
+                                <button onclick="simSetX(0)" id="btnX_zero" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-sky-500 bg-sky-900/40 text-sky-200 transition-all flex items-center justify-between">
+                                    <span>X0 : Attente Indéterminée</span>
+                                    <span class="text-[10px] font-mono text-sky-300">0</span>
+                                </button>
+                                <button onclick="simSetX(-1)" id="btnX_neg" class="w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-sky-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between">
+                                    <span>-X : Modèle Non Révisable (Maintien)</span>
+                                    <span class="text-[10px] font-mono text-sky-400">-1</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Resulting Affect Prototype -->
+                        <div class="p-5 rounded-2xl bg-gradient-to-br from-purple-950/80 to-cosmic-950 border border-purple-500/50 flex flex-col justify-between space-y-3">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold tracking-wider text-purple-300">Prototype Émergent</span>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span id="simResultName" class="text-2xl font-heading font-black text-white">Anticipation</span>
+                                    <span id="simResultCoords" class="text-xs font-mono px-2 py-0.5 rounded bg-purple-900/60 text-purple-300 border border-purple-600/40">(0, 0, 2)</span>
+                                </div>
+                                <div id="simResultType" class="text-xs font-semibold text-purple-400 mt-1">Opérateur Central de Suspension</div>
+                                <p id="simResultDesc" class="text-xs text-slate-300 mt-2 leading-relaxed">
+                                    Aucune évaluation n'est encore tranchée. L'action immédiate est suspendue en attente de l'allocation attentionnelle.
+                                </p>
+                            </div>
+
+                            <div class="pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+                                <span id="simResultL1">Norme L1 : |X| + |Y| = 0</span>
+                                <span id="simResultOpposite" class="text-indigo-300">Opposé : Auto-inversé</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 0 : RÉSUMÉ & ABSTRACT                            -->
+                <!-- ======================================================== -->
+                <section id="resume" class="space-y-6">
+                    <!-- French Summary Card -->
+                    <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
+                                <span>🇫🇷</span> Résumé (Français)
+                            </h2>
+                            <span class="text-xs font-mono text-purple-400 font-semibold">Publication de Référence</span>
+                        </div>
+                        <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
+                            <p><strong>Objectifs.</strong> L’étude scientifique des émotions demeure fragmentée entre les théories des émotions de base, les approches dimensionnelles, les modèles d’évaluation cognitive et le constructionnisme. Cet article vise à dépasser ces clivages en proposant une grammaire fonctionnelle unifiée de l’affect, de l’émotion et du sentiment. S’appuyant sur les cadres du traitement prédictif, de l’inférence intéroceptive et de l’allostasie, nous présentons une cartographie intégrative et heuristique de l’expérience affective.</p>
+                            <p><strong>Cadre et démarche.</strong> Adoptant une démarche théorique structurée, cette construction s’ancre dans les développements récents des sciences cognitives et de la psychologie computationnelle. Le principe de minimisation de l’écart de prédiction, socle du traitement prédictif, sert de point d’appui pour articuler une architecture fonctionnelle à quatre volets : un <em>Moteur prédictif</em>, un <em>Noyau affectif</em>, une <em>Matrice affective</em> et une <em>Taxonomie hiérarchique</em>, synthétisés sous forme graphique.</p>
+                            <p><strong>Proposition.</strong> Ce cadre redéfinit l’émotion comme la sélection d’une politique d’action visant à résoudre un écart de prédiction saillant, et le sentiment comme l’intégration consciente de cette trajectoire. Structurellement, tout écart perçu déclenche une double évaluation, portant sur la contrôlabilité du monde extérieur (action pragmatique) et sur la révisabilité du modèle génératif interne (mise à jour épistémique). Le croisement de ces deux évaluations génère des configurations prototypiques élémentaires. Déployées à travers différents niveaux de profondeur temporelle et d’abstraction, ces configurations s’organisent en une Taxonomie hiérarchique d’attracteurs probabilistes, formant ainsi une structure logique des états affectifs.</p>
+                            <p><strong>Conclusions.</strong> La cartographie des affects constitue un modèle conceptuel structuré offrant une grammaire fonctionnelle de l’expérience affective, centrée exclusivement sur les dynamiques et processus psychologiques. La dynamique structurelle et le placement des prototypes émotionnels proposés formulent des hypothèses, ouvrant de nouvelles voies pour la recherche empirique et la modélisation en psychologie cognitive.</p>
+                            <div class="pt-2 text-xs font-mono text-purple-300">
+                                <strong>Mots-clés :</strong> affect ; émotion ; traitement prédictif ; inférence active ; inférence intéroceptive ; allostasie.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- English Abstract Card -->
+                    <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/60 border border-slate-800/80 shadow-xl space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <h2 class="text-xl font-heading font-bold text-slate-200 flex items-center gap-2">
+                                <span>🇬🇧</span> Abstract (English)
+                            </h2>
+                            <span class="text-xs font-mono text-slate-400">English Version</span>
+                        </div>
+                        <div class="text-sm text-slate-300 space-y-3 leading-relaxed italic">
+                            <p><strong>Objectives.</strong> The scientific study of emotions remains fragmented among basic emotion theories, dimensional approaches, cognitive appraisal models, and psychological constructionism. This article aims to overcome these divides by proposing a unified functional grammar of affect, emotion, and feeling. Drawing on the frameworks of predictive processing, interoceptive inference, and allostasis, we present an integrative and heuristic cartography of the affective experience.</p>
+                            <p><strong>Framework and approach.</strong> Adopting a structured theoretical approach, this framework is rooted in recent developments in cognitive science and computational psychology. The principle of prediction error minimization, the core of predictive processing, serves as the starting point for articulating a four-component functional architecture: a <em>Predictive Engine</em>, an <em>Affective Core</em>, an <em>Affective Matrix</em>, and a <em>Hierarchical Taxonomy</em>, synthesized graphically.</p>
+                            <p><strong>Proposal.</strong> This framework redefines emotion as the selection of an action policy aimed at resolving a salient prediction error, and feeling as the conscious integration of this trajectory. Structurally, any perceived error triggers a dual evaluation, bearing on the controllability of the external world (pragmatic action) and on the revisability of the internal generative model (epistemic update). The intersection of these two evaluations generates elementary prototypical configurations. Deployed across varying levels of temporal depth and abstraction, these configurations organize into a hierarchical taxonomy of probabilistic attractors, thereby forming a logical structure of affective states.</p>
+                            <p><strong>Conclusions.</strong> The cartography of affects constitutes a structured conceptual model offering a functional grammar of affective experience, centered exclusively on psychological processes and dynamics. The structural dynamics and the placement of the proposed emotional prototypes generate hypotheses, opening new avenues for empirical research and cognitive psychology modeling.</p>
+                            <div class="pt-2 text-xs font-mono text-slate-400 not-italic">
+                                <strong>Keywords:</strong> affect; emotion; predictive processing; active inference; interoceptive inference; allostasis.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- DIDACTIC COMPARISON: 4 HISTORICAL THEORIES               -->
+                <!-- ======================================================== -->
+                <section class="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-xs uppercase font-bold tracking-widest text-indigo-400">Synthèse Pédagogique</span>
+                        <h3 class="text-xl sm:text-2xl font-heading font-black text-white mt-1">
+                            Comment CARTOGRAFFECT unifie et résout les 4 théories historiques
+                        </h3>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-750 text-slate-300 font-bold uppercase text-[11px]">
+                                    <th class="py-3 px-3">Théorie &amp; Auteurs</th>
+                                    <th class="py-3 px-3">Postulat Fondamental</th>
+                                    <th class="py-3 px-3 text-rose-300">Limite / Paradoxe Historique</th>
+                                    <th class="py-3 px-3 text-purple-300 bg-purple-950/30">Résolution par CARTOGRAFFECT</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/80 text-slate-300">
+                                <tr>
+                                    <td class="py-3.5 px-3 font-semibold text-white">Émotions de Base<br><span class="text-[10px] text-slate-400 font-normal">Ekman (1992), Panksepp (1998)</span></td>
+                                    <td class="py-3.5 px-3">Programmes psychologiques discrets avec signatures émotionnelles fixes.</td>
+                                    <td class="py-3.5 px-3 text-rose-300">Incapacité à isoler des programmes étanches ; échoue sur la nuance dynamique.</td>
+                                    <td class="py-3.5 px-3 bg-purple-950/20 text-purple-200">Les émotions de base deviennent des <strong>attracteurs probabilistes prototypiques</strong> sans essence rigide.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-3 font-semibold text-white">Modèle Circumplexe<br><span class="text-[10px] text-slate-400 font-normal">Russell (1980), Fontaine (2007)</span></td>
+                                    <td class="py-3.5 px-3">Espace 2D continu défini par la Valence (-/+) et l'Activation (faible/forte).</td>
+                                    <td class="py-3.5 px-3 text-rose-300">Met la <strong>Peur</strong> et la <strong>Colère</strong> dans le même quadrant sans expliquer leur divergence d'action.</td>
+                                    <td class="py-3.5 px-3 bg-purple-950/20 text-purple-200">L'activation n'est plus un axe spatial. Peur (-2,0,2) et Colère (-1,1,2) sont distinguées par la <strong>contrôlabilité du monde</strong>.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-3 font-semibold text-white">Évaluation Cognitive (Appraisal)<br><span class="text-[10px] text-slate-400 font-normal">Lazarus (1991), Scherer (2005)</span></td>
+                                    <td class="py-3.5 px-3">Évaluation cognitive séquentielle de pertinence pour les buts de l'individu.</td>
+                                    <td class="py-3.5 px-3 text-rose-300"><strong>Paradoxe temporel</strong> : comment une évaluation séquentielle complexe précède-t-elle une réaction en 50ms ?</td>
+                                    <td class="py-3.5 px-3 bg-purple-950/20 text-purple-200">Résolu par le <strong>traitement prédictif bayésien descendant</strong> : les évaluations sont des a priori immédiats.</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 px-3 font-semibold text-white">Constructionnisme<br><span class="text-[10px] text-slate-400 font-normal">Barrett (2017)</span></td>
+                                    <td class="py-3.5 px-3">Catégorisation d'affects primordiaux par des concepts socioculturels et linguistiques.</td>
+                                    <td class="py-3.5 px-3 text-rose-300">Risque d'anthropocentrisme ; peine à synchroniser les réponses somatiques sans repères.</td>
+                                    <td class="py-3.5 px-3 bg-purple-950/20 text-purple-200">Fournit la <strong>structure géométrique universelle</strong> (Moteur et Noyau L1) sur laquelle la culture s'incarne.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 1 : INTRODUCTION                                 -->
+                <!-- ======================================================== -->
+                <section id="section-1" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 1</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">1. Introduction</h2>
+                    </div>
+
+                    <div class="callout-didactic p-5 rounded-2xl space-y-2">
+                        <span class="text-xs uppercase font-bold text-purple-300 tracking-wider">💡 Synthèse Didactique de l'Introduction</span>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Historiquement opposées à la raison, les émotions sont aujourd'hui reconnues comme les moteurs de notre adaptation psychologique et comportementale. Mais la science actuelle était jusqu'ici divisée entre quatre écoles inconciliables. Le traitement prédictif montre que l'esprit humain fonctionne comme un système bayésien qui minimise les erreurs entre ses attentes et ses représentations perceptives. Cartograffect apporte la <strong>structure macroscopique et la grammaire fonctionnelle</strong> qui manquaient pour transformer ces signaux d'erreur en émotions précises et conscientes.
+                        </p>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            L’étude des émotions a longtemps pâti d’une marginalisation héritée d’une lecture dualiste opposant la raison aux passions. Cette vision a été relativisée par la psychologie cognitive et affective, qui a restitué aux émotions un statut fonctionnel en démontrant leur rôle fondamental dans la cognition, la prise de décision et la régulation du comportement (Damasio, 1994). Néanmoins, l’élaboration d’une théorie unifiée de leur organisation demeure un défi majeur (Schiller et al., 2024). Les approches cherchant à isoler des signatures émotionnelles discrètes et étanches se sont heurtées à des limites persistantes : l’expérience émotionnelle émerge plutôt de processus psychologiques dynamiques, intégrés et contextualisés que de catégories préprogrammées rigides (Barrett, 2017 ; Lindquist et al., 2012).
+                        </p>
+                        <p>
+                            Cette complexité épistémologique se reflète dans quatre grands cadres théoriques, chacun circonscrit par ses limites inhérentes. La théorie des émotions de base postule un nombre restreint d’émotions universelles dotées de signatures émotionnelles spécifiques, mais peine à rendre compte de la genèse dynamique des nuances affectives (Ekman, 1992). Les approches dimensionnelles décrivent l’univers affectif selon des axes continus de valence et d’activation, sans élucider l’origine fonctionnelle de ces axes (Fontaine et al., 2007 ; Russell, 1980). Les théories de l’évaluation cognitive font dépendre l’émotion d’une évaluation de la pertinence d’un événement pour les buts de l’individu, et se heurtent à un paradoxe temporel entre évaluation délibérée et réactions quasi instantanées (Lazarus, 1991 ; Scherer, 2005). Le constructionnisme, enfin, conçoit l’émotion comme une catégorisation d’affects fondamentaux à partir du contexte et de la culture (Barrett, 2017), mais s’expose à un anthropocentrisme qui rend difficile l’établissement d’une continuité avec la cognition animale (Panksepp, 2000) et peine à élucider le mécanisme capable de synchroniser les réponses somatiques en l’absence de programmes innés (Adolphs et al., 2019).
+                        </p>
+                        <p>
+                            Aucun de ces modèles ne fournit donc à lui seul un cadre unifié. Sur ce point, le cadre théorique du traitement prédictif offre une perspective prometteuse par une modélisation du système cognitif comme un agent bayésien qui réduit l’incertitude en actualisant ses croyances internes ou en agissant sur le monde (Friston, 2010 ; Rao &amp; Ballard, 1999). Le cadre repose sur deux notions socles : la <em>croyance</em>, entendue comme estimation probabiliste d’un état du monde, et la <em>hiérarchie</em>, qui organise ces croyances selon une temporalité et un degré d’abstraction croissants (Bottemanne, Longuet, et al., 2022). Appliquée aux signaux internes de l'organisme, cette mécanique se comprend selon une inférence intéroceptive, où les états affectifs émergent de la dynamique des prédictions intéroceptives et de la résolution de leurs écarts (Barrett &amp; Simmons, 2015 ; Seth, 2013 ; Seth &amp; Friston, 2016). Le traitement prédictif demeure néanmoins incomplet (Lee et al., 2021) : s’il fournit un moteur computationnel universel, il ne précise ni la structure macroscopique sur laquelle cette dynamique opère, ni la grammaire qui traduit un signal d’écart en une expérience subjective distincte.
+                        </p>
+                        <p>
+                            Cet article a pour objectif de proposer une architecture affective unifiée, représentée sous la forme d’une heuristique graphique et mise en relation avec les principes du traitement prédictif et de la minimisation des écarts de prédiction. Ancrée dans la psychologie cognitive et computationnelle, cette cartographie affective fournit une <strong>grammaire fonctionnelle et psychologique de l’expérience affective</strong>. La thèse défendue peut se formuler ainsi : <em>deux évaluations adaptatives, la révisabilité du modèle interne et la contrôlabilité de la situation, chacune susceptible d’être tranchée positivement, tranchée négativement ou de demeurer indéterminée, engendrent par leur croisement une grammaire qualitative des configurations affectives, reprise récursivement à des niveaux croissants d’abstraction</em>.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 2 : POSITION ÉPISTÉMOLOGIQUE                     -->
+                <!-- ======================================================== -->
+                <section id="section-2" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 2</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">2. Position Épistémologique</h2>
+                    </div>
+
+                    <!-- 3 Levels Callout -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-[10px] uppercase font-bold text-purple-400 font-mono">1. Niveau Computationnel</span>
+                            <div class="text-sm font-bold text-white mt-1">Quel problème est résolu ?</div>
+                            <p class="text-xs text-slate-400 mt-1">Le principe d'énergie libre (FEP) : maintenir l'adaptation de l'agent en minimisant l'incertitude et la surprise informationnelle.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-700/50">
+                            <span class="text-[10px] uppercase font-bold text-purple-300 font-mono">2. Niveau Algorithmique</span>
+                            <div class="text-sm font-bold text-white mt-1">CARTOGRAFFECT s'y situe</div>
+                            <p class="text-xs text-slate-300 mt-1">L'inférence active : quelles représentations, gradients d'attente/contrôle et opérations sont déployés.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+                            <span class="text-[10px] uppercase font-bold text-purple-400 font-mono">3. Niveau Implémentation</span>
+                            <div class="text-sm font-bold text-white mt-1">Substrat biologique (Hors champ)</div>
+                            <p class="text-xs text-slate-400 mt-1">Substrat physique et biologique dont le modèle s'abstrait pour se concentrer sur l'architecture psychologique.</p>
+                        </div>
+                    </div>
+
+                    <!-- Distinct Definitions: Affect, Emotion, Sentiment -->
+                    <div class="p-5 rounded-2xl bg-cosmic-900 border border-purple-500/30 space-y-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Terminologie Stricte du Modèle</span>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-purple-300 text-sm">Affect :</span>
+                                <p class="text-slate-300 mt-1">Perception brute de l’état computationnel ; tension vectorielle générée pour résoudre l’incertitude.</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-sky-300 text-sm">Émotion :</span>
+                                <p class="text-slate-300 mt-1">Sélection d’une politique d’action lorsque l’affect est catégorisé et rattaché à une cause inférée dans un contexte.</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                                <span class="font-bold text-emerald-300 text-sm">Sentiment :</span>
+                                <p class="text-slate-300 mt-1">Expérience consciente et intégrée de cette trajectoire d’action déployée dans le temps.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            Le présent article constitue une contribution théorique et non une revue systématique : il ne vise pas à recenser exhaustivement un corpus, mais à confronter les principales traditions théoriques des affects au traitement prédictif afin d’en articuler une architecture fonctionnelle cohérente. Les travaux mobilisés ont été retenus selon deux critères : leur caractère fondateur au sein de l’une des quatre grandes traditions du champ, ou leur contribution formelle au traitement prédictif appliqué à l’affect. Cette démarche est heuristique avant d’être déductive, puisqu’elle part d’observations cliniques et de régularités phénoménologiques, puis propose une architecture susceptible de les rendre intelligibles.
+                        </p>
+                        <p>
+                            Un tel emprunt aux modèles formels de la cognition computationnelle doit d’abord se prémunir contre l’erreur logique consistant à projeter le fonctionnement d’une partie restreinte du système biologique sur des propriétés psychologiques complexes qui n’ont de sens qu’au niveau de la personne entière en interaction avec son milieu (Gauld et al., 2021). À cet égard, trois niveaux doivent impérativement être distingués : le principe d’énergie libre, comme structure formelle dépourvue en elle-même de contenu empirique, l’inférence active, comme théorie de processus qui l’interprète, et le codage prédictif, comme hypothèse d’implémentation (Andrews, 2021). Autrement dit, il importe de distinguer le niveau computationnel qui définit le problème résolu, le niveau algorithmique qui décrit les représentations et les opérations mobilisées, et le niveau de l’implémentation qui désigne le substrat physiologique (Marr, 2010). La cartographie des affects se situe explicitement aux deux premiers niveaux, en expliquant comment les contenus de l’expérience affective se structurent, se transforment et se relient, en maintenant une stricte indépendance vis-à-vis des substrats d'implémentation.
+                        </p>
+                        <p>
+                            Ce choix épistémologique appelle une précision ontologique. La correspondance retenue entre le corps et la couverture markovienne, d’une part, et l’esprit et les états internes du modèle génératif, d’autre part, ne réintroduit aucun dualisme. Les deux termes ne désignent pas deux substances en interaction causale, mais deux perspectives, phénoménologique et computationnelle, sur un même processus d’auto-organisation de l'agent. La présente proposition ne cherche donc pas à expliquer l’une par l’autre, mais à rendre leurs structures mutuellement lisibles.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 3 : FONDEMENTS THÉORIQUES                        -->
+                <!-- ======================================================== -->
+                <section id="section-3" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 3</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">3. Fondements Théoriques du Traitement Prédictif Affectif</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                            <span class="text-xs font-bold uppercase text-purple-400">3.1 Cognition Incarnée &amp; Inférence Active</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                L'action humaine est régie par deux valeurs complémentaires :
+                                <br>&bull; <strong>Valeur pragmatique :</strong> agir sur le monde pour atteindre un état désiré (réduire le risque).
+                                <br>&bull; <strong>Valeur épistémique :</strong> explorer et apprendre pour réduire l'incertitude sur le monde.
+                            </p>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+                            <span class="text-xs font-bold uppercase text-sky-400">3.2 Inférence Intéroceptive &amp; Allostasie</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                &bull; <strong>Homéostasie :</strong> réaction corrective passive après écart (Point de Veille 0,0,0).
+                                <br>&bull; <strong>Allostasie :</strong> régulation proactive par anticipation avant la perturbation.
+                                <br>&bull; <strong>Valence :</strong> signal de réussite ($-\frac{dF}{dt}$) ou d'échec de la résolution allostatique.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            S’inscrivant dans le cadre de la cognition incarnée, située et étendue, le traitement prédictif conçoit l'esprit non pas comme un processeur abstrait désincarné, mais comme un système engagé dans une boucle dynamique perception-action au service de l'adaptation psychologique et comportementale (Clark, 2013, 2016). Le formalisme de l’inférence active modélise l’organisme comme un agent bayésien qui maintient sa viabilité en minimisant la divergence entre ses prédictions et les signaux sensoriels, et ce, soit en ajustant ses modèles internes, soit en agissant sur son environnement pour conformer la réalité sensorielle à ses attentes (Friston et al., 2017 ; Pezzulo et al., 2015). L’action y est évaluée selon deux valeurs complémentaires : une valeur pragmatique, qui consiste à atteindre un état souhaité, et une valeur épistémique, qui consiste à réduire l’incertitude. L’organisme ne cherche donc pas à modéliser le monde de manière exhaustive, mais plutôt à préserver son intégrité adaptative.
+                        </p>
+                        <p>
+                            L’allostasie désigne une régulation par anticipation, par laquelle l’organisme ajuste ses paramètres physiologiques en prévision des besoins à venir plutôt qu’en réaction à un écart déjà survenu, les points de consigne étant eux-mêmes variables et déterminés par l’expérience passée (Sterling, 2012). Elle se distingue ainsi de l’homéostasie, qui corrige les déviations autour de points de consigne fixes une fois celles-ci constatées. Cette distinction s’avère structurante pour le modèle proposé : le Point de Veille relève du régime homéostatique, tandis que le déplacement sur les Axes X et Y relève du régime allostatique, l’Anticipation engageant les ressources avant la survenue de la perturbation.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 4 : LE MOTEUR PRÉDICTIF & FIGURE 1               -->
+                <!-- ======================================================== -->
+                <section id="section-4" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 4</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">4. Le Moteur Prédictif</h2>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            Le Moteur prédictif décrit la manière dont l’organisme gère l’incertitude à travers trois interfaces interdépendantes : subjective, perceptive et attentionnelle, que nous projetons respectivement sur les Axes X, Y et Z. Nous le formulons dans le cadre de l’inférence active (Friston, 2010 ; Friston et al., 2017). Les états du système s’y partitionnent en quatre ensembles : les états externes sont les fluctuations du milieu, les états sensoriels en enregistrent les perturbations, les états actifs portent les réponses effectrices et les états internes hébergent le modèle génératif. Les deux ensembles médiateurs forment une <strong>couverture markovienne</strong>, dont la propriété définitionnelle est une indépendance conditionnelle : l’intérieur et l’extérieur ne communiquent qu’à travers cette frontière (Kirchhoff et al., 2018).
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 1 INTERACTIVE SVG -->
+                    <div id="figure-1" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <span class="text-xs font-mono uppercase text-purple-400 font-bold">Figure 1 &bull; Schéma Vectoriel Officiel</span>
+                                <h3 class="text-lg font-heading font-bold text-white">Architecture unifiée et dynamique vectorielle de l’affect</h3>
+                            </div>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs">Moteur Prédictif</span>
+                        </div>
+
+                        <!-- Vectorial Diagram SVG -->
+                        <div class="w-full max-w-3xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-4 overflow-hidden">
+                            <svg viewBox="0 0 800 500" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="gradY" x1="0" y1="1" x2="0" y2="0">
+                                        <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3"/>
+                                        <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+                                    </linearGradient>
+                                    <linearGradient id="gradX" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stop-color="#ef4444" stop-opacity="0.4"/>
+                                        <stop offset="100%" stop-color="#10b981" stop-opacity="0.8"/>
+                                    </linearGradient>
+                                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- Grid & Outer Boundary (Markov Blanket) -->
+                                <rect x="40" y="40" width="720" height="420" rx="20" fill="#070c18" stroke="#334155" stroke-dasharray="4 4" stroke-width="1.5"/>
+                                <text x="60" y="70" fill="#64748b" font-family="Outfit" font-size="12" font-weight="bold" letter-spacing="1.5">COUVERTURE MARKOVIENNE (CORPS &amp; SENSATIONS)</text>
+
+                                <!-- Axis Y: Contrôle -->
+                                <line x1="400" y1="420" x2="400" y2="80" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#arrow)"/>
+                                <text x="410" y="95" fill="#c084fc" font-family="Outfit" font-weight="bold" font-size="13">AXE Y &bull; CONTRÔLE (+Y)</text>
+                                <text x="410" y="112" fill="#94a3b8" font-size="10">Action pragmatique / Monde modifiable</text>
+                                <text x="410" y="415" fill="#64748b" font-family="Outfit" font-weight="bold" font-size="11">-Y &bull; Monde non modifiable / Repli</text>
+
+                                <!-- Axis X: Attente -->
+                                <line x1="120" y1="260" x2="680" y2="260" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+                                <text x="670" y="250" fill="#38bdf8" font-family="Outfit" font-weight="bold" font-size="13" text-anchor="end">AXE X &bull; ATTENTE (+X)</text>
+                                <text x="670" y="275" fill="#94a3b8" font-size="10" text-anchor="end">Mise à jour épistémique / Modèle révisable</text>
+                                <text x="130" y="275" fill="#f87171" font-family="Outfit" font-weight="bold" font-size="11">-X &bull; Modèle non révisable / Maintien</text>
+
+                                <!-- Point de Veille (0,0,0) -->
+                                <circle cx="400" cy="260" r="14" fill="#334155" stroke="#94a3b8" stroke-width="2"/>
+                                <text x="400" y="295" fill="#e2e8f0" font-family="Outfit" font-weight="bold" font-size="12" text-anchor="middle">Point de Veille (0,0,0)</text>
+                                <text x="400" y="310" fill="#64748b" font-size="10" text-anchor="middle">Équilibre Homéostatique de Fond</text>
+
+                                <!-- Dynamic Trajectory Steps -->
+                                <!-- 1. Rupture par la Surprise (0,0,1) -->
+                                <path d="M 400 246 Q 370 200 370 170" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="3 3" marker-end="url(#arrow)"/>
+                                <circle cx="370" cy="170" r="10" fill="#f59e0b"/>
+                                <text x="355" y="165" fill="#fbbf24" font-family="Outfit" font-weight="bold" font-size="12" text-anchor="end">Surprise (0,0,1)</text>
+                                <text x="355" y="180" fill="#94a3b8" font-size="10" text-anchor="end">Rupture ascendante d'écart</text>
+
+                                <!-- 2. Orientation par l'Anticipation (0,0,2) -->
+                                <path d="M 370 170 Q 400 150 440 140" fill="none" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arrow)"/>
+                                <circle cx="440" cy="140" r="10" fill="#8b5cf6"/>
+                                <text x="455" y="135" fill="#c084fc" font-family="Outfit" font-weight="bold" font-size="12">Anticipation (0,0,2)</text>
+                                <text x="455" y="150" fill="#94a3b8" font-size="10">Opérateur descendant &bull; Suspension</text>
+
+                                <!-- 3. Projection vers la Matrice -->
+                                <path d="M 440 140 Q 550 130 580 180" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrow)"/>
+                                <circle cx="580" cy="180" r="8" fill="#10b981"/>
+                                <text x="595" y="180" fill="#34d399" font-family="Outfit" font-weight="bold" font-size="11">Attracteur Résolu (X,Y,Z)</text>
+
+                                <!-- 4 Feedback Loops (Inferences) -->
+                                <rect x="60" y="380" width="180" height="55" rx="8" fill="#0f172a" stroke="#1e293b"/>
+                                <text x="70" y="402" fill="#38bdf8" font-family="Outfit" font-weight="bold" font-size="11">Inférence Sensorielle</text>
+                                <text x="70" y="420" fill="#94a3b8" font-size="9">Signaux viscéraux &amp; extéroceptifs</text>
+
+                                <rect x="560" y="380" width="180" height="55" rx="8" fill="#0f172a" stroke="#1e293b"/>
+                                <text x="570" y="402" fill="#a855f7" font-family="Outfit" font-weight="bold" font-size="11">Inférence Active</text>
+                                <text x="570" y="420" fill="#94a3b8" font-size="9">Action motrice sur le monde</text>
+                            </svg>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="text-xs text-slate-300 leading-relaxed pt-2">
+                            <strong class="text-white">Légende Figure 1.</strong> <em>Architecture unifiée et dynamique vectorielle de l’affect.</em> Le Moteur prédictif est structuré autour du Point de Veille (0, 0, 0), un bassin attracteur de stabilité relative situé au niveau zéro de l’Axe Z. L’Interface Perceptive est projetée sur l’Axe Y du Contrôle, l’Interface Subjective sur l’Axe X de l’Attente, et l’Interface Attentionnelle sur l’Axe Z de la profondeur temporelle, de l’abstraction et de la précision. La Surprise provoque la sortie du Point de Veille vers la position initiale (0, 0, 1), marquant une entrée indéterminée dans le plan orthogonal des Axes X et Y. L’Anticipation, qui opère au niveau suivant (0, 0, 2), oriente ensuite le déplacement vers une configuration définie sur les Axes X et Y. La composition de ces deux opérateurs structure l’état affectif primaire et amorce la trajectoire de résolution.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 5 : LE NOYAU AFFECTIF & FIGURE 2                 -->
+                <!-- ======================================================== -->
+                <section id="section-5" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 5</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">5. Le Noyau Affectif</h2>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            L’affect primaire se déploie au sein du Noyau affectif, une structure dynamique où se condensent les forces régulatrices de l’organisme. S’appuyant sur les trois interfaces, le Noyau projette les fluctuations affectives et cognitives sous forme de coordonnées organisées selon une double dynamique de <strong>charge</strong> (écart non résorbé / énergie libre croissante) et de <strong>décharge</strong> (écart résorbé / énergie libre décroissante).
+                        </p>
+                        <p>
+                            Le système cognitif étant assujetti à des contraintes attentionnelles (Feldman &amp; Friston, 2010), nous postulons que la résolution d’un écart peut être représentée par une allocation finie entre deux voies, l’action pragmatique sur le monde et la révision épistémique du modèle interne. L’emploi de la métrique de Manhattan (norme L1) traduit cette conservation du budget attentionnel :
+                        </p>
+                        <div class="my-4 p-4 rounded-xl bg-cosmic-900 border border-purple-800/50 text-center font-mono text-purple-300 text-sm sm:text-base">
+                            $$|X| + |Y| = 2Z - 2, \quad \text{pour } Z \ge 2, \text{ avec } X, Y \in \mathbb{Z}$$
+                        </div>
+                        <p>
+                            Sur le plan géométrique, cette contrainte définit à chaque strate une ligne de niveau de la norme L1, soit un <strong>losange de rayon 2Z − 2</strong> centré sur l’opérateur (0, 0, Z) de la strate. À Z = 2, le budget est égal à 2. Les solutions entières se réduisent strictement à 8 positions : 4 positions axiales saturées (&plusmn;2, 0) et (0, &plusmn;2) où une seule dimension tranche, et 4 positions combinées équilibrées (&plusmn;1, &plusmn;1) où les deux dimensions sont conjointement résolues.
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 2 INTERACTIVE SVG -->
+                    <div id="figure-2" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <span class="text-xs font-mono uppercase text-sky-400 font-bold">Figure 2 &bull; Schéma Géométrique</span>
+                                <h3 class="text-lg font-heading font-bold text-white">Schéma du Noyau affectif en coupe à la strate Z = 2</h3>
+                            </div>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs">Norme L1 (|X|+|Y|=2)</span>
+                        </div>
+
+                        <!-- SVG Losange Manhattan L1 -->
+                        <div class="w-full max-w-xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center">
+                            <svg viewBox="0 0 500 500" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Axes -->
+                                <line x1="250" y1="30" x2="250" y2="470" stroke="#475569" stroke-width="1.5"/>
+                                <line x1="30" y1="250" x2="470" y2="250" stroke="#475569" stroke-width="1.5"/>
+                                <text x="250" y="20" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">Axe Y — Contrôle</text>
+                                <text x="480" y="254" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold">Axe X</text>
+
+                                <!-- L1 Diamond (Manhattan Contour) -->
+                                <polygon points="250,90 410,250 250,410 90,250" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6 4"/>
+                                <text x="360" y="150" fill="#c084fc" font-family="Fira Code" font-size="11">strate Z = 2</text>
+                                <text x="360" y="165" fill="#94a3b8" font-family="Fira Code" font-size="10">|X| + |Y| = 2</text>
+
+                                <!-- Center : Anticipation (0,0,2) -->
+                                <circle cx="250" cy="250" r="7" fill="#8b5cf6"/>
+                                <text x="265" y="245" fill="#e2e8f0" font-family="Fira Code" font-size="11" font-weight="bold">(0, 0, 2) Anticipation</text>
+                                <text x="265" y="260" fill="#94a3b8" font-family="Fira Code" font-size="9">Surprise (0,0,1) en sous-strate</text>
+
+                                <!-- 4 Axial Configurations (hollow circles = instables) -->
+                                <!-- Joie (0, +2) -->
+                                <circle cx="250" cy="90" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="250" y="75" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="middle">(0, +2)</text>
+                                
+                                <!-- Tristesse (0, -2) -->
+                                <circle cx="250" cy="410" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="250" y="430" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="middle">(0, -2)</text>
+                                
+                                <!-- Courage (+2, 0) -->
+                                <circle cx="410" cy="250" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="425" y="254" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold">(+2, 0)</text>
+
+                                <!-- Peur (-2, 0) -->
+                                <circle cx="90" cy="250" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="75" y="254" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-2, 0)</text>
+
+                                <!-- 4 Combined Configurations (filled discs = attracteurs stables) -->
+                                <!-- Désir (+1, +1) -->
+                                <circle cx="330" cy="170" r="8" fill="#10b981"/>
+                                <text x="345" y="165" fill="#34d399" font-family="Fira Code" font-size="11" font-weight="bold">(+1, +1)</text>
+
+                                <!-- Colère (-1, +1) -->
+                                <circle cx="170" cy="170" r="8" fill="#ef4444"/>
+                                <text x="155" y="165" fill="#f87171" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-1, +1)</text>
+
+                                <!-- Calme (+1, -1) -->
+                                <circle cx="330" cy="330" r="8" fill="#06b6d4"/>
+                                <text x="345" y="340" fill="#22d3ee" font-family="Fira Code" font-size="11" font-weight="bold">(+1, -1)</text>
+
+                                <!-- Dégoût (-1, -1) -->
+                                <circle cx="170" cy="330" r="8" fill="#a855f7"/>
+                                <text x="155" y="340" fill="#c084fc" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-1, -1)</text>
+                            </svg>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="text-xs text-slate-300 leading-relaxed pt-2">
+                            <strong class="text-white">Légende Figure 2.</strong> <em>Schéma du Noyau affectif, en coupe à la strate Z = 2.</em> L’axe vertical Y correspond au Gradient de Contrôle et l’axe horizontal X au Gradient d’Attente. Les quatre configurations axiales, en <strong>cercles évidés</strong>, représentent des états de transition dynamiquement instables où une seule dimension est résolue ((0, &plusmn;2) et (&plusmn;2, 0)). Les quatre configurations combinées, en <strong>disques pleins</strong>, correspondent aux attracteurs locaux où les deux dimensions sont conjointement résolues ((&plusmn;1, &plusmn;1)). Le losange en trait discontinu matérialise la contrainte de répartition de Manhattan $|X| + |Y| = 2$.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 6 : LA MATRICE AFFECTIVE & FIGURE 3              -->
+                <!-- ======================================================== -->
+                <section id="section-6" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 6</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">6. La Matrice Affective</h2>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            La Matrice affective a pour fonction fondamentale de traduire la dynamique computationnelle du Noyau en un espace de projection phénoménologique, accomplissant ainsi l’arrimage entre le niveau algorithmique de l’inférence active et l’expérience vécue. En fixant des étiquettes sémantiques sur ces positions, elle permet d’associer à chacune une catégorie émotionnelle qui ne constitue ni une essence biologique ni un programme fixe, mais bien un <strong>prototype fonctionnel</strong>.
+                        </p>
+                        <p>
+                            Deux diagonales organisent les prototypes combinés :
+                            <br>&bull; <strong>Diagonale de congruence :</strong> les deux polarités sont de même signe. Le <strong>Désir (+1, +1, 2)</strong> unit un modèle révisable et un monde contrôlable ; son opposé, le <strong>Dégoût (-1, -1, 2)</strong>, unit un modèle non révisable et un monde non contrôlable (rejet impératif).
+                            <br>&bull; <strong>Diagonale de compensation :</strong> les polarités sont de signes opposés. La <strong>Colère (-1, +1, 2)</strong> unit un modèle non révisable et un monde contrôlable (l'action s'impose pour aligner le monde sur mes attentes) ; son opposé, le <strong>Calme (+1, -1, 2)</strong>, unit un modèle révisable et un monde non contrôlable (l'effort d'action est suspendu pour réviser le modèle).
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 3 INTERACTIVE SVG -->
+                    <div id="figure-3" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <span class="text-xs font-mono uppercase text-emerald-400 font-bold">Figure 3 &bull; Matrice Sémantique</span>
+                                <h3 class="text-lg font-heading font-bold text-white">Matrice affective en coupe à la strate Z = 2</h3>
+                            </div>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs">8 Prototypes &amp; Inversion Centrale</span>
+                        </div>
+
+                        <!-- SVG Matrice -->
+                        <div class="w-full max-w-xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center">
+                            <svg viewBox="0 0 500 500" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Axes -->
+                                <line x1="250" y1="40" x2="250" y2="460" stroke="#475569" stroke-width="2"/>
+                                <line x1="40" y1="250" x2="460" y2="250" stroke="#475569" stroke-width="2"/>
+                                <text x="250" y="30" fill="#e2e8f0" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">monde contrôlable (+Y)</text>
+                                <text x="250" y="480" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">monde non contrôlable (-Y)</text>
+                                <text x="470" y="254" fill="#38bdf8" font-family="Outfit" font-size="11" font-weight="bold">modèle révisable (+X)</text>
+                                <text x="30" y="254" fill="#f87171" font-family="Outfit" font-size="11" font-weight="bold" text-anchor="end">modèle non révisable (-X)</text>
+
+                                <!-- Central Inversion Diagonal Lines -->
+                                <line x1="160" y1="160" x2="340" y2="340" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4 4"/>
+                                <line x1="340" y1="160" x2="160" y2="340" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+                                <!-- Center : Anticipation -->
+                                <circle cx="250" cy="250" r="5" fill="#94a3b8"/>
+                                <text x="250" y="240" fill="#94a3b8" font-family="Outfit" font-size="11" text-anchor="middle">Anticipation (0,0,2)</text>
+
+                                <!-- Prototypes Labels -->
+                                <!-- Joie -->
+                                <text x="250" y="100" fill="#facc15" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Joie</text>
+                                <!-- Tristesse -->
+                                <text x="250" y="410" fill="#38bdf8" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Tristesse</text>
+                                <!-- Peur -->
+                                <text x="110" y="245" fill="#f87171" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Peur</text>
+                                <!-- Courage -->
+                                <text x="390" y="245" fill="#34d399" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Courage</text>
+
+                                <!-- Colère -->
+                                <text x="140" y="140" fill="#ef4444" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Colère</text>
+                                <!-- Désir -->
+                                <text x="360" y="140" fill="#ec4899" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Désir</text>
+                                <!-- Dégoût -->
+                                <text x="140" y="370" fill="#a855f7" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Dégoût</text>
+                                <!-- Calme -->
+                                <text x="360" y="370" fill="#06b6d4" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Calme</text>
+                            </svg>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="text-xs text-slate-300 leading-relaxed pt-2">
+                            <strong class="text-white">Légende Figure 3.</strong> <em>Matrice affective, en coupe à la strate Z = 2.</em> L’axe vertical oppose ainsi le monde contrôlable (+Y) au monde non contrôlable (−Y), et l’axe horizontal le modèle révisable (+X) au modèle non révisable (−X). Les diagonales en trait discontinu relient les configurations dont les polarités s’inversent conjointement par l'inversion centrale $(X,Y) \to (-X,-Y)$, constituant la relation d'antagonisme adaptatif majeur (Colère &harr; Calme et Désir &harr; Dégoût).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 7 : LA TAXONOMIE HIÉRARCHIQUE & FIGURE 4         -->
+                <!-- ======================================================== -->
+                <section id="section-7" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 7</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">7. La Taxonomie Hiérarchique (Les 5 Couches)</h2>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            Appliquée à chaque niveau de l’Axe Z, la structure de la Matrice se reprend en une Taxonomie hiérarchique. Cette Taxonomie organise l’univers affectif selon des niveaux croissants de profondeur temporelle, d’abstraction et d’intégration des modèles génératifs.
+                        </p>
+                    </div>
+
+                    <!-- 5 Strata Hierarchy Visual Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-slate-400 font-bold">Niveau 0 (Z = 0)</span>
+                            <div class="font-bold text-white text-sm">Point de Veille (0,0,0)</div>
+                            <p class="text-xs text-slate-400">Veille homéostatique de fond ; flux intéroceptifs sans saillance ni profondeur inférentielle.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-amber-950/30 border border-amber-800/40 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-amber-300 font-bold">1ère Couche (Z = 1)</span>
+                            <div class="font-bold text-white text-sm">Surprise (0,0,1)</div>
+                            <p class="text-xs text-slate-300">Rupture de veille ; enregistrement d'un écart saillant sans orientation encore déterminée.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-700/50 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-purple-300 font-bold">2e Couche (Z = 2)</span>
+                            <div class="font-bold text-white text-sm">Anticipation (0,0,2)</div>
+                            <p class="text-xs text-slate-300">Première couronne affective : 4 axiales (Joie, Tristesse, Peur, Courage) et 4 combinées (Désir, Colère, Calme, Dégoût).</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-pink-950/30 border border-pink-800/40 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-pink-300 font-bold">3e Couche (Z = 3)</span>
+                            <div class="font-bold text-white text-sm">Émoi (0,0,3)</div>
+                            <p class="text-xs text-slate-300">Émotions réactives : la configuration persiste, s'intensifie ou se différencie selon son histoire immédiate (|X|+|Y|=4).</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-indigo-950/30 border border-indigo-800/40 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-indigo-300 font-bold">4e Couche (Z = 4)</span>
+                            <div class="font-bold text-white text-sm">Réserve (0,0,4)</div>
+                            <p class="text-xs text-slate-300">Sentiments réflexifs : modèles de second ordre portant sur autrui et sur le modèle de soi (|X|+|Y|=6).</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-800/40 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-emerald-300 font-bold">5e Couche (Z = 5)</span>
+                            <div class="font-bold text-white text-sm">Recul (0,0,5)</div>
+                            <p class="text-xs text-slate-300">Orientations stables &amp; Humeurs : paramètres lents du modèle génératif sur classes étendues de situations (|X|+|Y|=8).</p>
+                        </div>
+                    </div>
+
+                    <!-- FIGURE 4 INTERACTIVE MAP OVERVIEW -->
+                    <div id="figure-4" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                            <div>
+                                <span class="text-xs font-mono uppercase text-pink-400 font-bold">Figure 4 &bull; Taxonomie Hiérarchique Complète</span>
+                                <h3 class="text-lg font-heading font-bold text-white">Synthèse de la Taxonomie Hiérarchique des Affects</h3>
+                            </div>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs">Arbre des 5 Couches</span>
+                        </div>
+
+                        <!-- Visual Hierarchy Tree Schema -->
+                        <div class="w-full bg-cosmic-950 rounded-2xl border border-slate-800 p-6 space-y-4 text-xs font-mono">
+                            <div class="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
+                                <span>&uarr; Écarts de prédiction ascendants (sensations)</span>
+                                <span>&darr; Prédictions descendantes (croyances &amp; culture)</span>
+                            </div>
+
+                            <!-- Stratum 5 -->
+                            <div class="p-3 rounded-xl bg-emerald-950/40 border border-emerald-700/40 flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-bold text-emerald-300">Z=5 &bull; Recul (0,0,5) [Humeurs &amp; Orientations Stables] :</span>
+                                <div class="flex flex-wrap gap-1 text-[11px] text-slate-300">
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">PUISSANCE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">AMOUR</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">HAINE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">SÉRÉNITÉ</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">DÉSESPOIR</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-emerald-800">IMPUISSANCE</span>
+                                </div>
+                            </div>
+
+                            <!-- Stratum 4 -->
+                            <div class="p-3 rounded-xl bg-indigo-950/40 border border-indigo-700/40 flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-bold text-indigo-300">Z=4 &bull; Réserve (0,0,4) [Sentiments Réflexifs &amp; Modèles de Soi] :</span>
+                                <div class="flex flex-wrap gap-1 text-[11px] text-slate-300">
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">FIERTÉ</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">ENGAGEMENT</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">INJUSTICE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">HONTE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">CONFIANCE</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-indigo-800">MÉFIANCE</span>
+                                </div>
+                            </div>
+
+                            <!-- Stratum 3 -->
+                            <div class="p-3 rounded-xl bg-pink-950/40 border border-pink-700/40 flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-bold text-pink-300">Z=3 &bull; Émoi (0,0,3) [Émotions Réactives &amp; Histoire Immédiate] :</span>
+                                <div class="flex flex-wrap gap-1 text-[11px] text-slate-300">
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Euphorie</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Frustration</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Anxiété</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Chagrin</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Curiosité</span>
+                                    <span class="px-2 py-0.5 rounded bg-slate-900 border border-pink-800">Retrait</span>
+                                </div>
+                            </div>
+
+                            <!-- Stratum 2 -->
+                            <div class="p-3 rounded-xl bg-purple-950/50 border border-purple-600/50 flex flex-wrap items-center justify-between gap-2">
+                                <span class="font-bold text-purple-300">Z=2 &bull; Anticipation (0,0,2) [Première Couronne Prototypique] :</span>
+                                <div class="flex flex-wrap gap-1 text-[11px] text-white">
+                                    <span class="px-2 py-0.5 rounded bg-yellow-900/60 border border-yellow-600 font-bold">Joie</span>
+                                    <span class="px-2 py-0.5 rounded bg-pink-900/60 border border-pink-600 font-bold">Désir</span>
+                                    <span class="px-2 py-0.5 rounded bg-red-900/60 border border-red-600 font-bold">Colère</span>
+                                    <span class="px-2 py-0.5 rounded bg-rose-900/60 border border-rose-600 font-bold">Peur</span>
+                                    <span class="px-2 py-0.5 rounded bg-emerald-900/60 border border-emerald-600 font-bold">Courage</span>
+                                    <span class="px-2 py-0.5 rounded bg-cyan-900/60 border border-cyan-600 font-bold">Calme</span>
+                                    <span class="px-2 py-0.5 rounded bg-purple-900/60 border border-purple-600 font-bold">Dégoût</span>
+                                    <span class="px-2 py-0.5 rounded bg-blue-900/60 border border-blue-600 font-bold">Tristesse</span>
+                                </div>
+                            </div>
+
+                            <!-- Stratum 1 & 0 -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div class="p-2.5 rounded-lg bg-amber-950/30 border border-amber-800/40 text-center">
+                                    <span class="font-bold text-amber-300">Z=1 &bull; Surprise (0,0,1)</span>
+                                    <div class="text-[10px] text-slate-400">Rupture de veille &bull; Écart non orienté</div>
+                                </div>
+                                <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-center">
+                                    <span class="font-bold text-slate-300">Z=0 &bull; Point de Veille (0,0,0)</span>
+                                    <div class="text-[10px] text-slate-400">Maintien homéostatique de fond</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Legend -->
+                        <div class="text-xs text-slate-300 leading-relaxed pt-2">
+                            <strong class="text-white">Légende Figure 4.</strong> <em>La Taxonomie hiérarchique.</em> La figure déploie le niveau initial et les cinq couches de l’inférence affective, de complexité croissante, reflétant des niveaux supérieurs de profondeur temporelle, d’abstraction et d’intégration des modèles génératifs. À chaque couche, le centre (0, 0, Z) est occupé par un opérateur et non par un prototype : la Surprise (Z = 1), l’Anticipation (Z = 2), l’Émoi (Z = 3), la Réserve (Z = 4) et le Recul (Z = 5). Les écarts de prédiction remontent des couches basses vers les couches hautes, tandis que celles-ci agissent en retour comme des a priori descendants.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 8 : DISCUSSION & PRÉDICTIONS EMPIRIQUES          -->
+                <!-- ======================================================== -->
+                <section id="section-8" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 8</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">8. Discussion, Applications &amp; Prédictions Empiriques</h2>
+                    </div>
+
+                    <!-- Clinical Applications (Depression & Biases) -->
+                    <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-800 space-y-4">
+                        <span class="text-xs uppercase font-bold tracking-wider text-rose-400">Application Psychopathologique &amp; Biais Attentionnels</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+                            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                                <h4 class="font-bold text-white text-sm">Le Trouble Dépressif comme Verrouillage Profond</h4>
+                                <p class="leading-relaxed">
+                                    La dépression se caractérise par une <strong>immunisation cognitive</strong> (maintien des croyances négatives malgré les démentis). Dans le modèle, elle correspond à une charge d'Attente (-X, modèle non révisable) couplée à une absence d'action (-Y, monde non contrôlable), soit le <strong>quadrant du Dégoût cristallisé à Z=5</strong> où les paramètres lents du modèle génératif ont une forte inertie.
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                                <h4 class="font-bold text-white text-sm">Biais Attentionnels &amp; Habitudes d'Échantillonnage</h4>
+                                <p class="leading-relaxed">
+                                    Un sur-échantillonnage de l'éveil somatique ou à l'inverse un biais externe bloque l'intégration multimodale. Ce verrouillage empêche de réduire l'incertitude sur les états affectifs latents, confinant l'agent dans des <strong>attracteurs axiaux indéterminés</strong> et entravant l'acquisition de nuances émotionnelles.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3 Testable Empirical Predictions (CRITICAL SCIENTIFIC CONTRIBUTION) -->
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-indigo-950/60 to-purple-950/60 border border-indigo-700/50 space-y-4">
+                        <div class="flex items-center justify-between border-b border-indigo-800/40 pb-2">
+                            <span class="text-xs uppercase font-bold tracking-wider text-indigo-300">Falsifiabilité &amp; Réfutation Scientifique</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-900/60 text-indigo-300 border border-indigo-600/40">3 Hypothèses Testables</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                                <span class="font-bold text-purple-300 text-sm">Prédiction 1 : Arbitrage L1</span>
+                                <p class="text-slate-300 leading-relaxed">
+                                    En manipulant la contrôlabilité d'une situation (Axe Y), le taux de révision des croyances (Axe X) doit varier en sens inverse. Une covariation positive réfuterait la contrainte de Manhattan.
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                                <span class="font-bold text-sky-300 text-sm">Prédiction 2 : Instabilité Axiale</span>
+                                <p class="text-slate-300 leading-relaxed">
+                                    Les temps de séjour dans les positions axiales (Joie, Tristesse, Peur, Courage) doivent être significativement plus brefs que dans les attracteurs combinés (Colère, Calme, etc.).
+                                </p>
+                            </div>
+                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
+                                <span class="font-bold text-emerald-300 text-sm">Prédiction 3 : Inertie de Profondeur</span>
+                                <p class="text-slate-300 leading-relaxed">
+                                    Une configuration engagée à une strate profonde ($Z=5$, humeurs) présente une inertie supérieure et une résistance accrue à l'information contradictoire par rapport à $Z=2$ ou $Z=3$.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- SECTION 9 : CONCLUSION & MENTIONS LÉGALES               -->
+                <!-- ======================================================== -->
+                <section id="section-9" class="space-y-6">
+                    <div class="border-b border-purple-800/40 pb-2">
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 9</span>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">9. Conclusion &amp; Statut de Propriété Intellectuelle</h2>
+                    </div>
+
+                    <div class="academic-text">
+                        <p>
+                            La cartographie des affects propose une architecture conceptuelle mise en relation avec le traitement prédictif pour organiser la psychologie des émotions. Sa contribution principale est de <strong>cesser de considérer l’affect comme une perturbation de la cognition</strong>, pour plutôt le repositionner comme son principe organisateur et comme l’opérateur adaptatif fondamental face à l’incertitude (Clark, 2013).
+                        </p>
+                        <p>
+                            L’affect y est conçu comme le produit d’une interaction prédictive continue entre les Interfaces Perceptive, Subjective et Attentionnelle. L’Attente et le Contrôle qui en découlent structurent une Matrice affective cartographiant non pas un espace figé, mais bien des gradients et des attracteurs probabilistes, à partir desquels se déploie une Taxonomie hiérarchique allant des processus primordiaux aux orientations affectives stables.
+                        </p>
+                    </div>
+
+                    <!-- Conflicts of interest and Legal -->
+                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 text-xs text-slate-400">
+                        <div class="font-bold text-white text-sm">Conflits d’intérêts &amp; Sources de Financement</div>
+                        <p>L’auteur déclare n’avoir aucun conflit d’intérêts potentiel en lien avec la recherche, la rédaction ou la publication de cet article. Ce travail n’a bénéficié d’aucune source de financement spécifique issue d’organismes subventionnaires des secteurs public, commercial ou à but non lucratif.</p>
+                        <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-500">
+                            Prépublication théorique. &copy; 2026 Manuel Cabelguen. Tous droits réservés. Droit d’auteur enregistré auprès de l’OPIC (n° 1233199). Ce travail a été réalisé à titre personnel, en dehors des fonctions de l’auteur ; les opinions exprimées n’engagent que celui-ci et ne représentent pas nécessairement la position du Service correctionnel du Canada.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- BIBLIOGRAPHIE EXHAUSTIVE                                -->
+                <!-- ======================================================== -->
+                <!-- ======================================================== -->
                 <!-- BIBLIOGRAPHIE EXHAUSTIVE (49 PUBLICATIONS)               -->
                 <!-- ======================================================== -->
-                <section id="bibliographie" class="page-section space-y-6 pt-6">
+                <section id="references" class="space-y-6 pt-6">
                     <div class="border-b border-purple-800/40 pb-3 flex flex-wrap items-center justify-between gap-4">
                         <div>
                             <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Appareil Critique &bull; Corpus Théorique</span>
@@ -856,7 +1272,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Interoceptive predictions in the brain</div>
                         <p class="text-slate-400 text-[11px]">Nature Reviews Neuroscience, 16(7), 419–429.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Modèle Embodied Predictive Interoception Coding (EPIC). Démontre que l'inférence intéroceptive fonctionne par cascades prédictives descendantes reliant représentations cognitives et éprouvés corporels.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Modèle Embodied Predictive Interoception Coding (EPIC). Démontre l'architecture prédictive reliant les représentations cognitives descendantes aux régulations et éprouvés intéroceptifs.
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -1627,7 +2043,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">The brain basis of emotion: A meta-analytic review</div>
                         <p class="text-slate-400 text-[11px]">Behavioral and Brain Sciences, 35(3), 121–143.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Méta-analyse démontrant l'échec de la quête de signatures émotionnelles rigides et isolées ; appuie la vision d'attracteurs probabilistes dynamiques et distribués dans l'espace psychologique.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Méta-analyse démontrant l'absence de signatures émotionnelles isolées ou rigides ; appuie la vision d'attracteurs probabilistes psychologiques dynamiques et distribués.
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -1853,7 +2269,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Core affect and the psychological construction of emotion</div>
                         <p class="text-slate-400 text-[11px]">Psychological Review, 110(1), 145–172.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Théorisation du « core affect » (affect primaire) comme état affectif de base permanent (valence et activation) accessible aux strates basses de la conscience.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Théorisation du « core affect » (affect primaire) comme état affectif fondamental (valence et activation) accessible aux strates intuitives de la conscience.
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -2144,7 +2560,9 @@
                     </div>
                 </section>
 
-    </main>
+            </main>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
@@ -2155,10 +2573,11 @@
             </div>
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="article.html" class="text-purple-400 font-semibold">L'Article</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
                 <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
-                <a href="scholar_drive.html" class="text-purple-400 font-semibold">Modèles Théoriques</a>
+                <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-400 text-center md:text-right">
@@ -2168,8 +2587,80 @@
         </div>
     </footer>
 
-    <!-- Mobile Navigation Toggle Script -->
+    <!-- Interactive Simulator & Mode Scripts -->
     <script>
+        // Reading Mode Switcher (Didactic vs Academic)
+        function setReadingMode(mode) {
+            const callouts = document.querySelectorAll('.callout-didactic');
+            const sim = document.getElementById('didacticSimulator');
+            const btnDidactic = document.getElementById('btnModeDidactic');
+            const btnAcademic = document.getElementById('btnModeAcademic');
+
+            if (mode === 'academic') {
+                callouts.forEach(c => c.classList.add('hidden'));
+                if (sim) sim.classList.add('hidden');
+                btnAcademic.className = "px-3 py-1 rounded-md font-semibold text-white bg-purple-600 transition-all flex items-center gap-1.5 shadow-sm";
+                btnDidactic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+            } else {
+                callouts.forEach(c => c.classList.remove('hidden'));
+                if (sim) sim.classList.remove('hidden');
+                btnDidactic.className = "px-3 py-1 rounded-md font-semibold text-white bg-purple-600 transition-all flex items-center gap-1.5 shadow-sm";
+                btnAcademic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+            }
+        }
+
+        // Didactic Simulator Logic
+        let simX = 0;
+        let simY = 0;
+
+        const prototypes = {
+            "0,0": { name: "Anticipation", coords: "(0, 0, 2)", type: "Opérateur Central de Suspension", desc: "Aucune évaluation n'est encore tranchée. L'action est suspendue pour allouer le budget attentionnel.", opp: "Auto-inversé (0,0)" },
+            "0,1": { name: "Joie", coords: "(0, +2, 2)", type: "Orientation Axiale Pure (Instable)", desc: "Décharge de Contrôle sur le monde sans que le versant épistémique (Attente) ne soit encore fixé. Élan moteur.", opp: "Tristesse (0, -2)" },
+            "0,-1": { name: "Tristesse", coords: "(0, -2, 2)", type: "Orientation Axiale Pure (Instable)", desc: "Charge de Contrôle : la puissance d'agir se replie devant un monde non immédiatement transformable.", opp: "Joie (0, +2)" },
+            "1,0": { name: "Courage", coords: "(+2, 0, 2)", type: "Orientation Axiale Pure (Instable)", desc: "Décharge d'Attente : possibilité d'une révision constructive du modèle dans un monde encore incertain.", opp: "Peur (-2, 0)" },
+            "-1,0": { name: "Peur", coords: "(-2, 0, 2)", type: "Orientation Axiale Pure (Instable)", desc: "Charge d'Attente : anticipation d'une menace ou contradiction interne sans conduite motrice déterminée.", opp: "Courage (+2, 0)" },
+            "1,1": { name: "Désir", coords: "(+1, +1, 2)", type: "Attracteur Combiné (Diagonale Congruente)", desc: "Modèle interne révisable (+X) et Monde contrôlable (+Y). Élan vers l'état souhaité via l'action.", opp: "Dégoût (-1, -1)" },
+            "-1,1": { name: "Colère", coords: "(-1, +1, 2)", type: "Attracteur Combiné (Diagonale Compensation)", desc: "Modèle non révisable (-X) et Monde contrôlable (+Y). Action corrective pour aligner le monde sur le modèle.", opp: "Calme (+1, -1)" },
+            "1,-1": { name: "Calme", coords: "(+1, -1, 2)", type: "Attracteur Combiné (Diagonale Compensation)", desc: "Modèle révisable (+X) et Monde non contrôlable (-Y). Suspension de l'effort : ajustement interne plutôt que transformation.", opp: "Colère (-1, +1)" },
+            "-1,-1": { name: "Dégoût", coords: "(-1, -1, 2)", type: "Attracteur Combiné (Diagonale Congruente)", desc: "Modèle non révisable (-X) et Monde non contrôlable (-Y). Rejet impératif et distanciation adaptative.", opp: "Désir (+1, +1)" }
+        };
+
+        function simSetY(val) {
+            simY = val;
+            ['btnY_pos', 'btnY_zero', 'btnY_neg'].forEach(id => {
+                const b = document.getElementById(id);
+                b.className = "w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-purple-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between";
+            });
+            const activeId = val === 1 ? 'btnY_pos' : (val === 0 ? 'btnY_zero' : 'btnY_neg');
+            document.getElementById(activeId).className = "w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-purple-500 bg-purple-900/50 text-white transition-all flex items-center justify-between shadow-md";
+            updateSimulatorUI();
+        }
+
+        function simSetX(val) {
+            simX = val;
+            ['btnX_pos', 'btnX_zero', 'btnX_neg'].forEach(id => {
+                const b = document.getElementById(id);
+                b.className = "w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-slate-700 hover:border-sky-500 bg-slate-900 text-slate-300 transition-all flex items-center justify-between";
+            });
+            const activeId = val === 1 ? 'btnX_pos' : (val === 0 ? 'btnX_zero' : 'btnX_neg');
+            document.getElementById(activeId).className = "w-full py-2 px-3 rounded-lg text-xs font-semibold text-left border border-sky-500 bg-sky-900/50 text-white transition-all flex items-center justify-between shadow-md";
+            updateSimulatorUI();
+        }
+
+        function updateSimulatorUI() {
+            const key = `${simX},${simY}`;
+            const data = prototypes[key] || prototypes["0,0"];
+            document.getElementById('simResultName').textContent = data.name;
+            document.getElementById('simResultCoords').textContent = data.coords;
+            document.getElementById('simResultType').textContent = data.type;
+            document.getElementById('simResultDesc').textContent = data.desc;
+            document.getElementById('simResultOpposite').textContent = "Opposé : " + data.opp;
+
+            const l1 = Math.abs(simX * (simY === 0 ? 2 : 1)) + Math.abs(simY * (simX === 0 ? 2 : 1));
+            document.getElementById('simResultL1').textContent = `Budget L1 : |X| + |Y| = ${l1}`;
+        }
+
+        // Mobile Menu Toggle
         (function() {
             const mobileBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -2190,7 +2681,7 @@
             }
         })();
 
-        // Auto-render KaTeX mathematical formulas
+        // KaTeX Math Rendering
         document.addEventListener("DOMContentLoaded", () => {
             if (typeof renderMathInElement === 'function') {
                 renderMathInElement(document.body, {
@@ -2200,33 +2691,9 @@
                     ],
                     throwOnError: false
                 });
-            } else {
-                window.addEventListener('load', () => {
-                    if (typeof renderMathInElement === 'function') {
-                        renderMathInElement(document.body, {
-                            delimiters: [
-                                {left: '$$', right: '$$', display: true},
-                                {left: '$', right: '$', display: false}
-                            ],
-                            throwOnError: false
-                        });
-                    }
-                });
             }
         });
-
-        // Register Service Worker for PWA Offline Capability
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then((reg) => {
-                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
-                }).catch((err) => {
-                    console.log('SW registration error :', err);
-                });
-            });
-        }
     </script>
-    <script src="script.js"></script>
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
 </body>

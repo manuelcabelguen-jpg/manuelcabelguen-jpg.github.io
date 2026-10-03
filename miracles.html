@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
     <title>Territoire des MIRACLES | Cartograffect</title>
     <meta name="description" content="Explorez les voies de résilience et d'alchimie affective : comment transformer la peur en courage, le ressentiment en justice et le chagrin en sérénité.">
     <link rel="canonical" href="https://www.cartograffect.com/miracles.html">
@@ -77,6 +79,9 @@
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                 <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+                </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                     1. Émotions
@@ -90,8 +95,8 @@
                     3. Miracles
                 </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                    Scholar Drive
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    Modèles Théoriques
                 </a>
             </nav>
 
@@ -120,28 +125,40 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html" class="active-link"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
-        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques &amp; Concepts</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="emotions.html" class="!bg-gradient-to-r !from-blue-600 !to-purple-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Voir la Carte 2D &rarr;</a>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+    <!-- Floating Quick Section Dots for MIRACLES -->
+    <nav class="floating-dots-nav" aria-label="Navigation rapide par page MIRACLES">
+        <button class="floating-dot active" data-target="#hero-miracles-resume" aria-label="Résumé M.I.R.A.C.L.E.S."><span class="dot-tooltip">✨ Résumé M.I.R.A.C.L.E.S.</span></button>
+        <button class="floating-dot" data-target="#modele-miracles" aria-label="1. Les 4 Piliers"><span class="dot-tooltip">🌱 1. Les 4 Piliers Vertueux</span></button>
+        <button class="floating-dot" data-target="#pont-resolution" aria-label="2. Pont CRIMES ➔ MIRACLES"><span class="dot-tooltip">🌉 2. Pont CRIMES &rarr; MIRACLES</span></button>
+        <button class="floating-dot" data-target="#minuteur-somatique" aria-label="3. Minuteur 90s"><span class="dot-tooltip">⏱️ 3. Minuteur 90s</span></button>
+        <button class="floating-dot" data-target="#restructuration-pensees" aria-label="4. Restructuration"><span class="dot-tooltip">💡 4. Restructuration Cognitive</span></button>
+        <button class="floating-dot" data-target="#soi-temperaments" aria-label="5. S.O.I. &amp; Tempéraments"><span class="dot-tooltip">🎯 5. S.O.I. &amp; Tempéraments</span></button>
+        <button class="floating-dot" data-target="#glossaire-affects" aria-label="6. Glossaire Affects"><span class="dot-tooltip">📖 6. Glossaire des Affects</span></button>
+    </nav>
 
-        <!-- Hero Section -->
-        <section class="relative rounded-3xl bg-gradient-to-br from-emerald-950/50 via-cosmic-850 to-slate-900 border border-emerald-800/50 p-8 sm:p-14 overflow-hidden shadow-2xl">
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-12">
+
+        <!-- Hero Section: Résumé Vulgarisé du Modèle M.I.R.A.C.L.E.S. -->
+        <section id="hero-miracles-resume" class="page-section relative rounded-3xl bg-gradient-to-br from-emerald-950/50 via-cosmic-850 to-slate-900 border border-emerald-800/50 p-6 sm:p-12 overflow-hidden shadow-2xl">
             <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-emerald-600/15 blur-3xl pointer-events-none"></div>
             <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-teal-600/10 blur-3xl pointer-events-none"></div>
             
             <div class="max-w-4xl relative z-10 space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-950/80 text-emerald-300 border border-emerald-700/50">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Territoire 3 &bull; Fondation Théorique &amp; Clinique
+                    Territoire 3 &bull; Résumé Vulgarisé du Modèle M.I.R.A.C.L.E.S.
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
                     Modèle <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">M.I.R.A.C.L.E.S.</span>
@@ -149,31 +166,58 @@
                 <p class="text-emerald-300 text-sm sm:text-base font-semibold tracking-wide">
                     Modèle Intégré de la Régulation Attentionnelle et Comportementale en Lien aux Émotions et aux Sentiments
                 </p>
-                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
-                    Dans l'architecture Cartograffect, le <strong>« Miracle »</strong> ne relève pas de la pensée magique, mais d'une modélisation neuro-comportementale rigoureuse : l'articulation entre le système biologique (excitateur / inhibiteur), la valence perceptive (agréable / désagréable), le noyau <strong>S.O.I.</strong> (Situations, Objets, Individus) et les 4 matrices du conditionnement opérant menant aux conduites saines d'<strong>Assertion</strong>, de <strong>Simplification</strong>, de <strong>Responsabilisation</strong> et de <strong>Compassion</strong>.
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-900/40">
+                        <span class="text-xs uppercase font-extrabold text-emerald-300 block">1. L'Alchimie Émotionnelle</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Transformer la peur en prudence, la colère en justice, le chagrin en gratitude.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-900/40">
+                        <span class="text-xs uppercase font-extrabold text-teal-300 block">2. La Désescalade 90s</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Laisser passer la vague biochimique somatique par la cohérence cardiaque.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-emerald-900/40">
+                        <span class="text-xs uppercase font-extrabold text-cyan-300 block">3. L'Élévation Vers Z=7</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Passer de la réaction impulsive à la clarté sereine et à la transcendance.</p>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed font-light">
+                    Dans l'architecture Cartograffect, le <strong>« Miracle »</strong> ne relève pas de la magie, mais d'une <strong>alchimie psychologique et comportementale rigoureuse</strong> : comment restaurer la flexibilité de son modèle interne pour transformer l'énergie bloquée des émotions en forces vertueuses d'<strong>Assertion, d'Optimisation, de Compassion et de Responsabilisation</strong>.
                 </p>
-                <div class="flex flex-wrap gap-2.5 pt-2">
-                    <a href="#modele-miracles" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all text-xs flex items-center gap-1.5">
-                        <span>📐</span> Modèle M.I.R.A.C.L.E.S.
+
+                <div class="flex flex-wrap gap-2.5 pt-1">
+                    <a href="#modele-miracles" class="px-4 py-2.5 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>Dérouler les parties ci-dessous &darr;</span>
                     </a>
-                    <a href="#minuteur-somatique" class="px-3.5 py-2 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
+                    <a href="#minuteur-somatique" class="px-4 py-2.5 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                        <span>⏱️</span> Minuteur 90s Bio-Désescalade
+                        <span>⏱️</span> Minuteur 90s Somatique
                     </a>
-                    <a href="#pont-resolution" class="px-3.5 py-2 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
+                    <a href="#pont-resolution" class="px-4 py-2.5 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
                         <span>🌉</span> Pont CRIMES &rarr; MIRACLES
                     </a>
-                    <a href="#processus-neuro" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🧠</span> Modèle de Gross
-                    </a>
-                    <a href="#restructuration-pensees" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>💡</span> Restructuration (14 Stratégies)
-                    </a>
-                    <a href="#soi-temperaments" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🌱</span> 4 Tempéraments
-                    </a>
-                    <a href="#glossaire-affects" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>📖</span> Glossaire (70 Affects)
+                </div>
+            </div>
+        </section>
+
+        <!-- Sticky Navigation Tabs Bar for MIRACLES -->
+        <div id="stickyMiraclesNav" class="sticky-tabs-container">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="sticky-tabs-track">
+                    <span class="text-[11px] font-mono font-bold uppercase text-emerald-400 shrink-0 mr-1 hidden sm:inline flex items-center gap-1">
+                        <span>✨</span> Parcours M.I.R.A.C.L.E.S. :
+                    </span>
+                    <a href="#hero-miracles-resume" class="sticky-tab-btn active"><span>✨</span> Résumé Vulgarisé</a>
+                    <a href="#modele-miracles" class="sticky-tab-btn"><span>🌱</span> 1. 4 Quadrants Vertueux</a>
+                    <a href="#pont-resolution" class="sticky-tab-btn"><span>🌉</span> 2. Pont CRIMES &rarr; MIRACLES</a>
+                    <a href="#minuteur-somatique" class="sticky-tab-btn"><span>⏱️</span> 3. Minuteur Somatique 90s</a>
+                    <a href="#restructuration-pensees" class="sticky-tab-btn"><span>💡</span> 4. 14 Stratégies Restructuration</a>
+                    <a href="#soi-temperaments" class="sticky-tab-btn"><span>🎯</span> 5. S.O.I. &amp; Tempéraments</a>
+                    <a href="#glossaire-affects" class="sticky-tab-btn"><span>📖</span> 6. Glossaire 70 Affects</a>
+                </div>
+            </div>
+        </div>
                     </a>
                     <button type="button" onclick="openClinicalSheetModal()" class="px-3.5 py-2 rounded-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-lg shadow-blue-900/40 transition-all text-xs flex items-center gap-1.5">
                         <span>📄</span> Fiche Clinique PDF
@@ -183,7 +227,7 @@
         </section>
 
         <!-- Section 11 : Le Modèle Intégré MIRACLES -->
-        <section id="modele-miracles" class="rounded-3xl bg-slate-850/90 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="modele-miracles" class="page-section rounded-3xl bg-slate-850/90 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -203,7 +247,7 @@
                         <span>📖</span> Énoncé Théorique Fondamental
                     </div>
                     <p class="italic text-slate-300/90 font-light">
-                        « Tout individu, pour s'adapter à son environnement, présente un système biologique complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical du système excitateur/inhibiteur). Le système excitateur sert à éviter un danger ou à identifier dans l'environnement les éléments indispensables à la survie (protection/nourriture/reproduction) et le système inhibiteur sert à faire cesser, régénérer ou réguler le comportement résultant de l'action du système excitateur. Ces systèmes qui peuvent être régulés par diverses substances, mécanismes physiologiques ou activités (endogènes/exogènes) doivent également distinguer les éléments nécessaires des superflus afin de répondre adéquatement à l'environnement. Différents affects vont résulter de ces deux systèmes selon un apprentissage associant une multitude d'éléments de l'environnement perçus comme étant agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à toute une gamme possible d'émotions ou de sentiments variant selon les particularités dans lesquelles aura évolué l'individu, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I) et durant le développement de l'individu. Une régulation efficace du processus émotionnel peut s'opérer depuis la sélection de la situation à la modulation de la réponse émotionnelle. Grâce à la composante naturelle de base de ces affects, ils seront jugés fonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) correspondent aux attentes normatives du milieu de vie de l'individu. De ces affects peuvent émerger une tendance vers un mode d'affirmation assertif, optimisé, compatissant et responsable, et favoriser des comportements bénéfiques qui conduisent à un bon fonctionnement social. »
+                        « Tout individu, pour s'adapter à son environnement, présente un système psychologique et adaptatif complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical de l'activation / inhibition comportementale). Le système d'activation sert à faire face à un enjeu ou à identifier dans l'environnement les éléments indispensables à l'adaptation (protection/nourriture/reproduction/reconnaissance) et le système de régulation sert à apaiser, régénérer ou tempérer le comportement résultant de l'action. Ces dynamiques, qui peuvent être équilibrées par des stratégies cognitives, des mécanismes d'apaisement ou des activités saines, doivent également distinguer les éléments nécessaires des superflus afin de répondre adéquatement à la réalité. Différents affects vont résulter de ces deux systèmes selon un apprentissage associant une multitude d'éléments perçus comme agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à toute une gamme possible d'émotions ou de sentiments variant selon les particularités de son histoire de vie, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I). Une régulation efficace du processus émotionnel peut s'opérer depuis la sélection de la situation jusqu'à la modulation de la réponse émotionnelle. Grâce à la composante naturelle de base de ces affects, ils seront jugés fonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) correspondent aux exigences normatives du milieu de vie. De ces affects peuvent émerger une tendance vers un mode d'affirmation assertif, optimisé, compatissant et responsable, et favoriser des comportements bénéfiques qui conduisent à un épanouissement social durable. »
                     </p>
                 </div>
             </div>
@@ -519,11 +563,11 @@
         <!-- ======================================================== -->
         <!-- SECTION 15 : MODÈLE DES PROCESSUS DE RÉGULATION (GROSS) -->
         <!-- ======================================================== -->
-        <section id="processus-neuro" class="rounded-3xl bg-slate-850/95 border border-sky-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="processus-regulation" class="page-section rounded-3xl bg-slate-850/95 border border-sky-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
-                        <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Neurobiologie Intégrative (15)</span>
+                        <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Psychologie de la Régulation (15)</span>
                         <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
                             Processus de Régulation Émotionnelle &amp; Comportementale
                         </h2>
@@ -533,23 +577,23 @@
                     </span>
                 </div>
                 <p class="text-slate-300 text-sm leading-relaxed font-light">
-                    La régulation émotionnelle opère selon une trajectoire temporelle allant du stimulus à la réponse motrice. Elle s'appuie sur trois systèmes neurobiologiques interconnectés et traverse une cascade séquentielle régie par des filtres et des biais spécifiques.
+                    La régulation émotionnelle opère selon une trajectoire temporelle allant de la perception de la situation à la réponse comportementale. Elle mobilise trois niveaux de traitement psychologique interconnectés (implicite, contextuel et exécutif) et traverse une cascade séquentielle régie par des filtres attentionnels et des biais cognitifs.
                 </p>
             </div>
 
-            <!-- The 3 Neurobiological Systems Cards -->
+            <!-- The 3 Psychological Regulation Systems Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="rounded-2xl bg-cosmic-900 border border-slate-750 p-5 space-y-3 hover:border-amber-500/50 transition-all">
                     <div class="flex items-center justify-between">
                         <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 font-bold flex items-center justify-center text-sm border border-amber-500/40">S1</span>
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-amber-300 border border-amber-900/60">Implicite / Réflexe</span>
                     </div>
-                    <h3 class="text-base font-heading font-bold text-white">Système 1 &bull; Voie T-A + HHS</h3>
+                    <h3 class="text-base font-heading font-bold text-white">Système 1 &bull; Traitement Implicite &amp; Réflexe</h3>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong>Thalamo-Amygdalien + Axe Hypothalamo-Hypophysaire-Surrénalien.</strong> Régulation implicite, intuitive et automatique. Traitement ultra-rapide des menaces sans passer par le cortex conscient.
+                        <strong>Niveau automatique et intuitif.</strong> Régulation implicite, spontanée et non délibérée. Détection ultra-rapide des signaux d'alerte et des perturbations sans médiation consciente préalable.
                     </p>
                     <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
-                        <span class="text-amber-400 font-semibold">Biais associés :</span> Biais physiologiques, hypervigilance neurovégétative.
+                        <span class="text-amber-400 font-semibold">Biais associés :</span> Biais d'urgence, hyperréactivité émotionnelle, focalisation sur la menace.
                     </div>
                 </div>
 
@@ -558,12 +602,12 @@
                         <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-300 font-bold flex items-center justify-center text-sm border border-sky-500/40">S2</span>
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-sky-300 border border-sky-900/60">Explicite / Délibéré</span>
                     </div>
-                    <h3 class="text-base font-heading font-bold text-white">Système 2 &bull; Voie T-C-A + Hyp.</h3>
+                    <h3 class="text-base font-heading font-bold text-white">Système 2 &bull; Traitement Délibéré &amp; Contextuel</h3>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong>Thalamo-Cortico-Amygdalien + Hippocampe.</strong> Régulation explicite et mémoire de travail sollicitée. Contextualisation spatio-temporelle, rappel d'expériences antérieures et modélisation mentale.
+                        <strong>Niveau narratif et mémoire de travail.</strong> Régulation explicite et réflexion contextuelle. Rappel d'expériences antérieures, mise en perspective spatio-temporelle et évaluation de la situation.
                     </p>
                     <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
-                        <span class="text-sky-400 font-semibold">Biais associés :</span> Biais attentionnels, mémoire sélective.
+                        <span class="text-sky-400 font-semibold">Biais associés :</span> Biais attentionnels, mémoire sélective, distorsions cognitives d'interprétation.
                     </div>
                 </div>
 
@@ -572,12 +616,12 @@
                         <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold flex items-center justify-center text-sm border border-emerald-500/40">S3</span>
                         <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-emerald-300 border border-emerald-900/60">Contrôle Exécutif</span>
                     </div>
-                    <h3 class="text-base font-heading font-bold text-white">Système 3 &bull; PFC + CCA + MPD + FÉ</h3>
+                    <h3 class="text-base font-heading font-bold text-white">Système 3 &bull; Contrôle Exécutif &amp; Métacognition</h3>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        <strong>Cortex Préfrontal + Cortex Cingulaire Antérieur + Mode par Défaut + Fonctions Exécutives.</strong> Contrôle cognitif et modulateur/inhibiteur de S1 et S2. Métacognition, flexibilité et réévaluation sémantique.
+                        <strong>Niveau de régulation supérieure et fonctions exécutives.</strong> Contrôle cognitif et modulation des impulsions automatiques de S1 et S2. Métacognition, flexibilité psychologique et réévaluation sémantique.
                     </p>
                     <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400">
-                        <span class="text-emerald-400 font-semibold">Effet :</span> Inhibition motrice, réévaluation de sens, restructuration.
+                        <span class="text-emerald-400 font-semibold">Effet :</span> Inhibition motrice délibérée, réévaluation du sens, restructuration cognitive.
                     </div>
                 </div>
             </div>
@@ -673,17 +717,17 @@
                     <div>
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-950/80 text-amber-300 border border-amber-600/40 mb-2">
                             <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                            Neurobiologie &bull; Règle des 90 Secondes (Gross &amp; HHS)
+                            Psychologie de la Régulation &bull; Règle des 90 Secondes
                         </div>
                         <h3 class="text-2xl sm:text-3xl font-heading font-black text-white">
-                            Minuteur Somatique de Bio-Désescalade (90s)
+                            Minuteur Somatique de Désescalade Émotionnelle (90s)
                         </h3>
                         <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                            La vague neurochimique brute d'une émotion aiguë (Adrénaline &amp; Cortisol via l'axe HHS) possède une durée de vie physiologique de <strong>90 secondes</strong>. Si l'émotion persiste au-delà, ce n'est plus la biologie, mais la boucle prédictive et les ruminations cognitives qui l'entretiennent.
+                            La vague émotionnelle aiguë consécutive à une contrariété ou un choc possède une intensité spontanée d'environ <strong>90 secondes</strong>. Si l'émotion persiste au-delà, ce sont les ruminations cognitives, les interprétations subjectives et l'auto-dialogue intérieur qui l'entretiennent.
                         </p>
                     </div>
                     <span class="px-3.5 py-1.5 rounded-full text-xs font-mono bg-amber-900/40 text-amber-300 border border-amber-600/30">
-                        Physiologie du Système 1 &rarr; Système 3
+                        Régulation du Système 1 &rarr; Système 3
                     </span>
                 </div>
 
@@ -723,10 +767,10 @@
                         </div>
                     </div>
 
-                    <!-- Right: The 3 Biological Phases -->
+                    <!-- Right: The 3 Psychological Phases -->
                     <div class="lg:col-span-7 space-y-4">
                         <div class="text-xs uppercase font-bold tracking-wider text-slate-400">
-                            Chronologie de Résorption Physiologique (Système 1 &rarr; Système 3) :
+                            Chronologie de Résorption Émotionnelle (Système 1 &rarr; Système 3) :
                         </div>
 
                         <!-- Phase 1 -->
@@ -734,12 +778,12 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-300 font-bold text-xs flex items-center justify-center border border-rose-500/40">1</span>
-                                    <h4 class="text-sm font-bold text-white">0s à 30s &bull; Pic Neurochimique HHS (Système 1)</h4>
+                                    <h4 class="text-sm font-bold text-white">0s à 30s &bull; Pic Émotionnel Réflexe (Système 1)</h4>
                                 </div>
-                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950/80 text-rose-300 border border-rose-800/40">Adrénaline &amp; Cortisol</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950/80 text-rose-300 border border-rose-800/40">Charge Émotionnelle Brute</span>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                <strong>Règle d'or : Suspension Motrice.</strong> Ne pas envoyer de message, ne pas chercher à argumenter, ne pas prendre de décision. L'amygdale court-circuite temporairement le raisonnement.
+                                <strong>Règle d'or : Suspension Motrice.</strong> Ne pas envoyer de message, ne pas chercher à argumenter, ne pas prendre de décision à chaud. L'intensité émotionnelle submerge temporairement le discernement réfléchi.
                             </p>
                             <div class="text-[11px] text-amber-400/90 font-medium">
                                 Action somatique : Inspirer par le nez (4s), bloquer doucement (2s), souffler lentement (6s).
@@ -751,12 +795,12 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center justify-center border border-amber-500/40">2</span>
-                                    <h4 class="text-sm font-bold text-white">30s à 60s &bull; Bascule Parasympathique &amp; Frein Vagal</h4>
+                                    <h4 class="text-sm font-bold text-white">30s à 60s &bull; Désescalade de la Tension &amp; Apaisement</h4>
                                 </div>
-                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/40">Nerf Vague &amp; Acétylcholine</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-amber-300 border border-amber-800/40">Apaisement Psychophysique</span>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                La décharge hormonale commence à être métabolisée. Le rythme cardiaque ralentit naturellement si aucune nouvelle pensée catastrophique ne vient relancer la boucle.
+                                L'intensité de la réaction émotionnelle commence à décroître naturellement si aucune nouvelle pensée catastrophique ne vient relancer la boucle d'anxiété ou de rancœur.
                             </p>
                             <div class="text-[11px] text-amber-400/90 font-medium">
                                 Action somatique : Relâcher consciemment les mâchoires, ouvrir les mains et abaisser les épaules.
@@ -768,12 +812,12 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs flex items-center justify-center border border-emerald-500/40">3</span>
-                                    <h4 class="text-sm font-bold text-white">60s à 90s &bull; Réactivation Préfrontale (Système 3)</h4>
+                                    <h4 class="text-sm font-bold text-white">60s à 90s &bull; Reprise du Contrôle Réfléchi &amp; Lucidité (Système 3)</h4>
                                 </div>
-                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/40">Cortex Préfrontal &amp; FÉ</span>
+                                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/40">Contrôle Exécutif &amp; Métacognition</span>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Le cerveau exécutif reprend les commandes. Le seuil de discernement rationnel est restauré. Vous êtes maintenant en capacité d'appliquer la <strong>restructuration cognitive MIRACLES</strong>.
+                                Le discernement rationnel reprend les commandes. Le recul critique est pleinement restauré. Vous êtes maintenant en capacité d'appliquer la <strong>restructuration cognitive MIRACLES</strong>.
                             </p>
                             <div class="text-[11px] text-emerald-400 font-medium">
                                 Passerelle : Choisir une phrase de dialogue interne constructive ci-dessous.
@@ -833,7 +877,7 @@
         <!-- ======================================================== -->
         <!-- SECTION 07 : RESTRUCTURATION DES PENSÉES (14 STRATÉGIES) -->
         <!-- ======================================================== -->
-        <section id="restructuration-pensees" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="restructuration-pensees" class="page-section rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -970,7 +1014,7 @@
         <!-- ======================================================== -->
         <!-- SECTION 04-06 & 16 : S.O.I., AFFIRMATION & TEMPÉRAMENTS -->
         <!-- ======================================================== -->
-        <section id="soi-temperaments" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="soi-temperaments" class="page-section rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -1101,7 +1145,7 @@
         <!-- ======================================================== -->
         <!-- SECTION 14 & 16 : GLOSSAIRE CLINIQUE DES AFFECTS         -->
         <!-- ======================================================== -->
-        <section id="glossaire-affects" class="rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="glossaire-affects" class="page-section rounded-3xl bg-slate-850/95 border border-emerald-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -1203,7 +1247,7 @@
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 font-mono">
-                        Désactivation sympathique
+                        Apaisement de la tension émotionnelle
                     </div>
                 </div>
 
@@ -1273,7 +1317,7 @@
                     <div class="text-3xl mb-1">🗺️</div>
                     <h3 class="text-base font-heading font-bold text-white">Prêt à Explorer ?</h3>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        Visualisez ces trajectoires directement sur la carte interactive 2D avec ses 83 émotions reliées.
+                        Visualisez ces trajectoires directement sur la carte interactive 2D et 3D avec ses 176 entrées et 84 paires de symétrie reliées.
                     </p>
                     <a href="emotions.html" class="inline-block w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 shadow-md transition-all">
                         Ouvrir la Carte 2D &rarr;
@@ -1298,8 +1342,9 @@
                 <a href="miracles.html" class="text-emerald-400 font-semibold">3. Miracles</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-400">
-                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
     </footer>
@@ -1330,7 +1375,7 @@
                     "Encourager et soutenir les autres",
                     "Être assertif de manière positive"
                 ],
-                activitesBiologiques: "Exercice physique intense, activités stimulantes mentalement, écoute de musique énergique, jeux de stratégie, puzzles, apprentissage de nouvelles compétences, participation à des débats, lecture de livres stimulants, et activités sociales dynamiques.",
+                activitesRegulatrices: "Exercice physique intense, activités stimulantes mentalement, écoute de musique énergique, jeux de stratégie, puzzles, apprentissage de nouvelles compétences, participation à des débats, lecture de livres stimulants, et activités sociales dynamiques.",
                 affectsTensions: "Colère, Peur, Méfiance | Vengeance \\ Jalousie, Indignation \\ Injustice, Frustration, Intolérance \\ Impatience, Crainte \\ Angoisse, Fuite \\ Doute"
             },
             "optimisation": {
@@ -1354,7 +1399,7 @@
                     "Cultiver la fidélité et la confiance",
                     "Conduire prudemment et respecter les règles"
                 ],
-                activitesBiologiques: "Projets d'émulation intellectuelle, sport dynamique et harmonieux, transmission de savoirs, co-création passionnée, débats constructifs.",
+                activitesRegulatrices: "Projets d'émulation intellectuelle, sport dynamique et harmonieux, transmission de savoirs, co-création passionnée, débats constructifs.",
                 affectsTensions: "Joie, Désir, Passion, Pouvoir | Audace / Résilience, Courage / Assurance, Fierté / Admiration, Optimisme / Enthousiasme, Curiosité"
             },
             "responsabilisation": {
@@ -1377,7 +1422,7 @@
                     "Assumer ses responsabilités",
                     "Développer la maturité émotionnelle"
                 ],
-                activitesBiologiques: "Activités relaxantes et créatives, méditation de pleine conscience, yoga, musique douce, respiration profonde, lecture contemplative, promenades en nature, bains chauds, dessin, cuisine, écriture introspective.",
+                activitesRegulatrices: "Activités relaxantes et créatives, méditation de pleine conscience, yoga, musique douce, respiration profonde, lecture contemplative, promenades en nature, bains chauds, dessin, cuisine, écriture introspective.",
                 affectsTensions: "Soulagement, Quiétude, Satisfaction, Confiance | Gratitude / Contentement, Justice / Acceptation, Patience / Tolérance, Calme / Sérénité"
             },
             "compassion": {
@@ -1400,7 +1445,7 @@
                     "Adopter une perspective optimiste",
                     "Persévérer malgré les défis"
                 ],
-                activitesBiologiques: "Repos réparateur en environnement sécurisant, écoute empathique, marche douce dans les bois, respiration diaphragmatique lente, écriture thérapeutique.",
+                activitesRegulatrices: "Repos réparateur en environnement sécurisant, écoute empathique, marche douce dans les bois, respiration diaphragmatique lente, écriture thérapeutique.",
                 affectsTensions: "Tristesse, Dégoût, Impuissance, Rejet, Désespoir | Prudence \\ Résignation, Dédain \\ Humiliation, Pessimisme \\ Apathie"
             },
             "soi": {
@@ -1410,7 +1455,7 @@
                 colorBadgeClass: "bg-teal-950/80 text-teal-300 border-teal-600/50",
                 location: "Centre Absolu du Système MIRACLES",
                 questionCritique: "« Quels filtres intérieurs et contextuels modulent mon évaluation en cet instant ? »",
-                conditionnement: "Interface d'évaluation primaire : les affects résultent du croisement entre le contexte environnemental (S.O.I.) et les 15 filtres cognitifs, biologiques et sociaux.",
+                conditionnement: "Interface d'évaluation primaire : les affects résultent du croisement entre le contexte environnemental (S.O.I.) et les 15 filtres cognitifs, psychologiques et sociaux.",
                 finalite: "Comprendre que l'émotion n'est jamais brute : elle est façonnée par l'histoire individuelle et les modulateurs de flexibilité attentionnelle.",
                 comportementsSains: [
                     "Identifier si l'affect provient de la Situation (S), de l'Objet (O) ou de l'Individu (I)",
@@ -1423,7 +1468,7 @@
                     "Débusquer l'influence des injonctions socioculturelles et familiales",
                     "Rappeler ses réussites passées pour contrebalancer les biais de négativité"
                 ],
-                activitesBiologiques: "Exercices de métacognition, tenue d'un journal de bord émotionnel, dialogue socratique avec un tiers, analyse des biais cognitifs.",
+                activitesRegulatrices: "Exercices de métacognition, tenue d'un journal de bord émotionnel, dialogue socratique avec un tiers, analyse des biais cognitifs.",
                 affectsTensions: "Les 15 Filtres : Éducation, Entourage, Contexte socioculturel, Expériences de vie, Raisonnements, Réflexes / Instincts, Empathie, Créativité, Spiritualité, Niveau d'attention, Niveau de flexibilité, Motivation, Impulsivité, Surprise, Anticipation."
             },
             "fit": {
@@ -1437,7 +1482,7 @@
                 finalite: "Auto-évaluation clinique rigoureuse : diagnostiquer si la réponse émotionnelle est proportionnée et fonctionnelle ou si elle nécessite un réajustement cognitif et corporel.",
                 comportementsSains: [
                     "F — Fréquente : Évaluer si l'émotion survient à un rythme régulé ou si elle est excessivement fréquente / envahissante",
-                    "I — Intense : Mesurer si la décharge viscérale est proportionnée au stimulus ou disproportionnellement intense",
+                    "I — Intense : Mesurer si la décharge émotionnelle est proportionnée au stimulus ou disproportionnellement intense",
                     "T¹ — Type (Cohérente) : Vérifier si la nature de l'émotion est cohérente et congruente avec la réalité de la situation",
                     "T² — Temps (Dure) : Observer combien de temps elle dure et si elle s'apaise après la résolution ou s'enkyste",
                     "T³ — Timing (Adapté) : Analyser si l'expression affective est adaptée et opportune au bon moment dans l'interaction",
@@ -1446,7 +1491,7 @@
                     "Suspendre le passage à l'acte pour calibrer le moment opportun d'expression (Timing)",
                     "Pratiquer le renforcement positif lors d'une réponse émotionnelle F.I.T.³ équilibrée"
                 ],
-                activitesBiologiques: "Chronométrage de la redescente somatique (Règle des 90 secondes pour le Temps), Échelle d'Intensité (EVA 0-10), Débriefing de communication (Timing & Cohérence).",
+                activitesRegulatrices: "Chronométrage de la redescente somatique (Règle des 90 secondes pour le Temps), Échelle d'Intensité (EVA 0-10), Débriefing de communication (Timing & Cohérence).",
                 affectsTensions: "Formule : F.I.T.³ = Fréquence × Intensité × [Type (Cohérente) × Temps (Dure) × Timing (Adapté)]."
             }
         };
@@ -1539,8 +1584,8 @@
                         </div>
 
                         <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
-                            <span class="text-[11px] uppercase font-bold tracking-widest text-sky-300">Activités Biologiques Régulatrices</span>
-                            <p class="text-xs text-slate-300 leading-relaxed font-light">${data.activitesBiologiques}</p>
+                            <span class="text-[11px] uppercase font-bold tracking-widest text-sky-300">Activités Régulatrices &amp; Pratiques</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-light">${data.activitesRegulatrices}</p>
                         </div>
 
                         <div class="p-3 rounded-xl bg-cosmic-850 border border-slate-800 text-[11px] text-slate-400">
@@ -1949,7 +1994,7 @@
             { name: "Satisfaction", cat: "agr-passif", def: "Contentement suite à la réalisation concrète de ses désirs ou besoins." },
             { name: "Quiétude", cat: "agr-passif", def: "État de calme profond, de sérénité et d'absence de perturbations." },
             { name: "Sérénité", cat: "agr-passif", def: "Paix intérieure profonde et absence totale de stress ou d'agitation motrice." },
-            { name: "Calme", cat: "agr-passif", def: "État de tranquillité corporelle et d'apaisement des flux neurovégétatifs." },
+            { name: "Calme", cat: "agr-passif", def: "État de tranquillité intérieure, d'apaisement corporel et de sérénité psychologique." },
             { name: "Fierté", cat: "agr-passif", def: "Sentiment de satisfaction et de dignité par rapport à ses propres réalisations." },
             { name: "Acceptation", cat: "agr-passif", def: "Attitude de consentement et de reconnaissance lucide de la réalité telle qu'elle est." },
             { name: "Gratitude", cat: "agr-passif", def: "Sentiment de reconnaissance et d'appréciation sincère pour les bienfaits reçus." },
@@ -2244,7 +2289,7 @@
                 crimesBadge: "bg-pink-950/80 text-pink-300 border-pink-700/50",
                 distortion: "Amplification & Dévalorisation",
                 distortionDesc: "« Si on ne me regarde pas tout de suite, c'est que je n'existe plus pour personne ! »",
-                mechanism: "Recherche compulsive de dopamine sociale par la surenchère émotionnelle dramatisée.",
+                mechanism: "Recherche compulsive de validation sociale et de gratification immédiate par la surenchère émotionnelle dramatisée.",
                 miraclesMode: "Compassion & Auto-Validation (P+)",
                 miraclesBadge: "bg-teal-950/80 text-teal-300 border-teal-700/50",
                 strategy: "Réassurance Intérieure & Ancrage (Stratégie 09)",
@@ -2313,7 +2358,7 @@
                 miraclesMode: "Responsabilisation & Veille (P-)",
                 miraclesBadge: "bg-sky-950/80 text-sky-300 border-sky-700/50",
                 strategy: "Pause Somatique & Remplacement Constructif (Stratégie 12)",
-                mantra: "« Cette impulsion n'est qu'une vague neurochimique de 90 secondes. Elle va s'éteindre si je ne la nourris pas. »",
+                mantra: "« Cette impulsion n'est qu'une vague émotionnelle passagère de 90 secondes. Elle va s'éteindre si je ne l'alimente pas de ruminations. »",
                 action: "Boire un grand verre d'eau, lancer le minuteur 90s et faire 10 respirations lentes avant toute prise de décision."
             },
             "ressentiment": {
@@ -2372,7 +2417,7 @@
                     </div>
 
                     <div class="space-y-1.5 pt-1 border-t border-slate-800 text-xs">
-                        <span class="text-slate-400 font-semibold">Impact Neuro-Fonctionnel :</span>
+                        <span class="text-slate-400 font-semibold">Impact Psychologique &amp; Régulateur :</span>
                         <p class="text-slate-300 leading-relaxed">${data.mechanism}</p>
                     </div>
                 </div>
@@ -2483,7 +2528,7 @@
                     </div>
                 </div>
                 <div class="text-right text-[11px] text-slate-400 space-y-0.5">
-                    <div>Manuel Cabelguen, Ph. D., BCN</div>
+                    <div>Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien</div>
                     <div>Droit d'auteur enregistré OPIC n° 1233199</div>
                     <div id="printSheetDate" class="font-mono text-slate-300">Date : 26 Septembre 2026</div>
                 </div>
@@ -2517,8 +2562,8 @@
                             <span class="font-semibold text-white">Contrôle (Axe Y) &bull; Attente (Axe X)</span>
                         </div>
                         <div>
-                            <span class="text-slate-500 block">Règle Biologique :</span>
-                            <span class="font-semibold text-emerald-400">90 secondes de décharge somatique</span>
+                            <span class="text-slate-500 block">Règle Psychologique :</span>
+                            <span class="font-semibold text-emerald-400">90 secondes d'apaisement émotionnel</span>
                         </div>
                     </div>
                 </div>

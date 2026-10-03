@@ -1,6 +1,6 @@
 /**
  * CARTOGRAFFECT - Guide Bilingue & Lexique International (FR <-> EN)
- * Manuel Cabelguen, Ph. D., BCN • OPIC n° 1233199
+ * Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
  */
 
 (function() {
@@ -15,7 +15,7 @@
                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30">
                             International Research Ready • OPIC n° 1233199
                         </span>
-                        <span class="text-xs text-slate-400">Dr Manuel Cabelguen, Ph. D., BCN</span>
+                        <span class="text-xs text-slate-400">Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien</span>
                     </div>
                     <h3 class="font-heading font-extrabold text-2xl text-white flex items-center gap-2">
                         <span>🌐</span> Lexique Bilingue &amp; Terminologie Internationale
@@ -56,55 +56,55 @@
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-bold text-white">Gradient d'Attente (Axe X)</span>
-                                <span class="text-[10px] text-purple-400 font-mono">X ∈ [-8, +8]</span>
+                                <span class="text-[10px] text-purple-400 font-mono">X ∈ [-12, +12]</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Expectation Gradient / Predictive Prior</div>
-                            <p class="text-[11px] text-slate-400">Degré d'anticipation ou probabilité a priori attribuée à la configuration de l'état futur.</p>
+                            <div class="text-xs text-indigo-300 font-medium">Expectation Gradient / Internal Model Revisability</div>
+                            <p class="text-[11px] text-slate-400">Révisabilité du modèle interne : souplesse épistémique (+X) vs maintien rigide (-X).</p>
                         </div>
 
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
                                 <span class="font-bold text-white">Gradient de Contrôle (Axe Y)</span>
-                                <span class="text-[10px] text-purple-400 font-mono">Y ∈ [-8, +8]</span>
+                                <span class="text-[10px] text-purple-400 font-mono">Y ∈ [-12, +12]</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Control Gradient / Active Inference &amp; Agency</div>
-                            <p class="text-[11px] text-slate-400">Estimation de la capacité agentique à altérer activement l'environnement sensoriel.</p>
+                            <div class="text-xs text-indigo-300 font-medium">Control Gradient / World Controllability</div>
+                            <p class="text-[11px] text-slate-400">Contrôlabilité du monde : action pragmatique (+Y) vs repli ou acceptation (-Y).</p>
                         </div>
 
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">Profondeur Inférentielle (Axe Z)</span>
-                                <span class="text-[10px] text-purple-400 font-mono">Z ∈ {0, 1, 2, 3, 4, 5}</span>
+                                <span class="font-bold text-white">Profondeur &amp; Abstraction (Axe Z)</span>
+                                <span class="text-[10px] text-purple-400 font-mono">Z ∈ {0, 1, 2, ..., 7}</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Inferential Depth Stratum / Hierarchical Level</div>
-                            <p class="text-[11px] text-slate-400">Niveau d'abstraction et complexité temporelle : de la veille (Z=0) aux humeurs intégratives (Z=5).</p>
+                            <div class="text-xs text-indigo-300 font-medium">Temporal Depth &amp; Abstraction Level</div>
+                            <p class="text-[11px] text-slate-400">8 strates d'abstraction : du Point de Veille (Z=0) aux Sentiments Transcendantaux (Z=7).</p>
                         </div>
 
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">Norme de Manhattan (L1)</span>
+                                <span class="font-bold text-white">Loi des Couronnes (Norme L1)</span>
                                 <span class="text-[10px] text-purple-400 font-mono">|X| + |Y| = 2Z - 2</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Manhattan Taxicab L1 Norm / Attentional Conservation</div>
-                            <p class="text-[11px] text-slate-400">Loi de conservation du budget attentionnel fini contraignant l'espace affectif en losanges réguliers.</p>
+                            <div class="text-xs text-indigo-300 font-medium">Manhattan Crown Law / N(Z) = 8(Z-1)</div>
+                            <p class="text-[11px] text-slate-400">176 entrées : 8 opérateurs centraux (0,0,Z) + 168 affects sur 6 couronnes (8, 16, 24, 32, 40, 48).</p>
                         </div>
 
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">Antagonismes Centraux</span>
-                                <span class="text-[10px] text-purple-400 font-mono">A(X,Y,Z) = (-X,-Y,Z)</span>
+                                <span class="font-bold text-white">Typologie Géométrique</span>
+                                <span class="text-[10px] text-purple-400 font-mono">Axiales, Diagonales, Latérales</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Central Antagonisms / Inversive Mirror Pairs</div>
-                            <p class="text-[11px] text-slate-400">Paires d'états diamétralement opposés sur la même strate géométrique (ex: Peur ⇄ Courage).</p>
+                            <div class="text-xs text-indigo-300 font-medium">Geometric Typology of Affects</div>
+                            <p class="text-[11px] text-slate-400">Positions axiales (X=0 ou Y=0), diagonales (|X|=|Y|), latérales (X≠0, Y≠0, |X|≠|Y|) et 8 opérateurs centraux.</p>
                         </div>
 
                         <div class="term-card p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
                             <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">Dérive Allostatique</span>
-                                <span class="text-[10px] text-purple-400 font-mono">Allostasis</span>
+                                <span class="font-bold text-white">Correspondances &amp; Symétries</span>
+                                <span class="text-[10px] text-purple-400 font-mono">Axiales, Diag., Controlatérales</span>
                             </div>
-                            <div class="text-xs text-indigo-300 font-medium">Allostatic Overload / Predictive Drift</div>
-                            <p class="text-[11px] text-slate-400">Coût d'adaptation physiologique continu face aux erreurs de prédiction non résolues.</p>
+                            <div class="text-xs text-indigo-300 font-medium">Geometric &amp; Semantic Correspondences</div>
+                            <p class="text-[11px] text-slate-400">Inversions centrales (-X,-Y) et croisements Td(X,Y)=(Y,X) et Ti(X,Y)=(-Y,-X) (84 paires).</p>
                         </div>
                     </div>
                 </div>
@@ -203,16 +203,28 @@
                 <!-- Section Citation -->
                 <div class="term-group" data-group="citation">
                     <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
-                        <span>📚</span> Format de Citation Officielle (APA 7th)
+                        <span>📚</span> Formats de Citation Officielle (APA 7th &amp; Publications)
                     </h4>
-                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
-                        <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80" id="apaCitationText">
-                            Cabelguen, M. (2026). <em>Cartograffect : Algorithme tridimensionnel des affects sous norme L1 et dynamique d'inférence active</em> (Certificat d'enregistrement de droit d'auteur OPIC n° 1233199). Montréal, QC : Cartograffect Publications. https://www.cartograffect.com
-                        </p>
-                        <div class="flex items-center gap-3">
+                    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+                        <div class="space-y-1.5">
+                            <span class="text-[11px] font-bold text-purple-300 uppercase">1. Article Théorique de Référence :</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80">
+                                Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Enregistrement de droit d'auteur OPIC n° 1233199). Prépublication théorique. https://www.cartograffect.com/article.html
+                            </p>
+                        </div>
+                        <div class="space-y-1.5">
+                            <span class="text-[11px] font-bold text-sky-300 uppercase">2. Algorithme &amp; Modèle Computationnel 3.6 :</span>
+                            <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80" id="apaCitationText">
+                                Cabelguen, M. (2026). <em>Cartograffect : Algorithme tridimensionnel des affects sous norme L1 et dynamique d'inférence active</em> (Certificat d'enregistrement de droit d'auteur OPIC n° 1233199). Montréal, QC : Cartograffect Publications. https://www.cartograffect.com
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3 pt-1">
                             <button onclick="copyCitationText()" id="copyCitationBtn" class="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md">
-                                <span>📋</span> Copier la référence APA
+                                <span>📋</span> Copier la référence APA de l'Article
                             </button>
+                            <a href="article.html" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-all">
+                                <span>📖</span> Consulter l'Article en Ligne
+                            </a>
                             <span id="copySuccessNotice" class="text-xs text-emerald-400 hidden">✓ Citation copiée dans le presse-papiers !</span>
                         </div>
                     </div>

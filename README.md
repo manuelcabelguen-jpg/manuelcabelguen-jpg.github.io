@@ -1,7 +1,7 @@
 # CARTOGRAFFECT
 
 > **Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif**  
-> *Manuel Cabelguen, Ph. D., BCN*  
+> *Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien*  
 > Droit d'auteur enregistré auprès de l'OPIC (Office de la propriété intellectuelle du Canada) n° 1233199  
 > Site officiel : [www.cartograffect.com](https://www.cartograffect.com)
 

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
     <title>Territoire des CRIMES (C.R.I.M.E.S.) | Cartograffect</title>
-    <meta name="description" content="Explorez l'anatomie des dérégulations émotionnelles : Modèle C.R.I.M.E.S., 85+ comportements nuisibles, distorsions cognitives, justifications et neurobiologie des addictions.">
+    <meta name="description" content="Explorez l'anatomie des dérégulations émotionnelles : Modèle C.R.I.M.E.S., 85+ comportements nuisibles, distorsions cognitives, justifications et dynamique psychologique des addictions et compulsions.">
     <link rel="canonical" href="https://www.cartograffect.com/crimes.html">
 
     <!-- Favicons -->
@@ -78,6 +80,9 @@
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                 <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+                </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                     1. Émotions
@@ -91,8 +96,8 @@
                     3. Miracles
                 </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                    Scholar Drive
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    Modèles Théoriques
                 </a>
             </nav>
 
@@ -121,28 +126,38 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html" class="active-link"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
-        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques &amp; Concepts</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="miracles.html" class="!bg-gradient-to-r !from-emerald-600 !to-teal-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-emerald-600/30">Vers les Miracles &rarr;</a>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-16">
+    <!-- Floating Quick Section Dots for CRIMES -->
+    <nav class="floating-dots-nav" aria-label="Navigation rapide par page CRIMES">
+        <button class="floating-dot active" data-target="#hero-crimes-resume" aria-label="Résumé C.R.I.M.E.S."><span class="dot-tooltip">✨ Résumé C.R.I.M.E.S.</span></button>
+        <button class="floating-dot" data-target="#modele-crimes" aria-label="1. Les 4 Quadrants"><span class="dot-tooltip">⚔️ 1. Les 4 Modes Nuisibles</span></button>
+        <button class="floating-dot" data-target="#comportements-nuisibles" aria-label="2. Comportements"><span class="dot-tooltip">⚠️ 2. 85+ Comportements</span></button>
+        <button class="floating-dot" data-target="#distorsions-cognitives" aria-label="3. Distorsions"><span class="dot-tooltip">🪞 3. 12 Distorsions Cognitives</span></button>
+        <button class="floating-dot" data-target="#activation-inhibition" aria-label="4. Activation &amp; Régulation"><span class="dot-tooltip">⚖️ 4. Activation &amp; Régulation</span></button>
+    </nav>
 
-        <!-- Hero Section -->
-        <section class="relative rounded-3xl bg-gradient-to-br from-rose-950/50 via-cosmic-850 to-slate-900 border border-rose-900/40 p-8 sm:p-14 overflow-hidden shadow-2xl">
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-12">
+
+        <!-- Hero Section: Résumé Vulgarisé du Modèle C.R.I.M.E.S. -->
+        <section id="hero-crimes-resume" class="page-section relative rounded-3xl bg-gradient-to-br from-rose-950/50 via-cosmic-850 to-slate-900 border border-rose-900/40 p-6 sm:p-12 overflow-hidden shadow-2xl">
             <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-rose-600/15 blur-3xl pointer-events-none"></div>
             <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-amber-600/10 blur-3xl pointer-events-none"></div>
             
             <div class="max-w-4xl relative z-10 space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose-950/80 text-rose-300 border border-rose-700/50">
                     <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-                    Territoire 2 &bull; Modèle C.R.I.M.E.S. &bull; Pathologie &amp; Biais
+                    Territoire 2 &bull; Résumé Vulgarisé du Modèle C.R.I.M.E.S.
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
                     Modèle <span class="bg-gradient-to-r from-rose-400 via-red-300 to-amber-300 bg-clip-text text-transparent">C.R.I.M.E.S.</span>
@@ -150,37 +165,62 @@
                 <p class="text-rose-300 text-sm sm:text-base font-semibold tracking-wide">
                     Comportements Résultants de l’Influence de Modulations Émotionnelles Symptomatiques
                 </p>
-                <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
-                    Dans l'architecture Cartograffect, le <strong>« Crime »</strong> ne relève pas de la justice criminelle ordinaire, mais de la dérégulation adaptative : le moment critique où une réponse émotionnelle se fige dans l'un des 4 quadrants dysfonctionnels — <strong>Domination</strong>, <strong>Exagération</strong>, <strong>Soumission</strong> ou <strong>Évasion</strong> — renforcée par des distorsions cognitives et des discours de justification.
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-rose-900/40">
+                        <span class="text-xs uppercase font-extrabold text-rose-300 block">1. L'Écart Bloqué</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">L'émotion naturelle ne redescend pas sous 90s : le système se fige en alerte.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-rose-900/40">
+                        <span class="text-xs uppercase font-extrabold text-amber-300 block">2. Le Piège Comportemental</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">L'individu bascule dans 1 des 4 modes : Dominer, Exagérer, Fuir ou Se Soumettre.</p>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-rose-900/40">
+                        <span class="text-xs uppercase font-extrabold text-purple-300 block">3. L'Auto-Justification</span>
+                        <p class="text-[11px] text-slate-300 mt-0.5">Le mental fabrique 12 distorsions cognitives pour légitimer la conduite toxique.</p>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed font-light">
+                    Dans l'architecture Cartograffect, le <strong>« Crime »</strong> ne relève pas de la justice pénale ordinaire, mais de la <strong>dérégulation adaptative</strong> : le moment précis où une politique d'action saine s'emballe et devient un fardeau pour soi et pour autrui.
                 </p>
-                <div class="flex flex-wrap gap-2.5 pt-2">
-                    <a href="#modele-crimes" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all text-xs flex items-center gap-1.5">
-                        <span>📐</span> Modèle C.R.I.M.E.S.
+
+                <div class="flex flex-wrap gap-2.5 pt-1">
+                    <a href="#modele-crimes" class="px-4 py-2.5 rounded-xl font-semibold text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>Dérouler les parties ci-dessous &darr;</span>
                     </a>
-                    <a href="miracles.html#pont-resolution" class="px-3.5 py-2 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
-                        <span>🌉</span> Pont de Résolution vers MIRACLES &rarr;
+                    <a href="miracles.html#pont-resolution" class="px-4 py-2.5 rounded-xl font-semibold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-600/50 shadow-lg shadow-purple-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>🌉</span> Pont vers MIRACLES &rarr;
                     </a>
-                    <a href="miracles.html#minuteur-somatique" class="px-3.5 py-2 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
+                    <a href="miracles.html#minuteur-somatique" class="px-4 py-2.5 rounded-xl font-semibold text-amber-200 hover:text-white bg-amber-950/70 hover:bg-amber-900 border border-amber-600/50 shadow-lg shadow-amber-900/30 transition-all text-xs flex items-center gap-1.5">
                         <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-                        <span>⏱️</span> Minuteur 90s (Bio-Désescalade)
-                    </a>
-                    <a href="#comportements-nuisibles" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>⚠️</span> 85+ Comportements
-                    </a>
-                    <a href="#distorsions-cognitives" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🪞</span> 12 Distorsions
-                    </a>
-                    <a href="#neurochimie-substances" class="px-3 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🧪</span> Neurochimie
+                        <span>⏱️</span> Minuteur 90s
                     </a>
                 </div>
             </div>
         </section>
 
+        <!-- Sticky Navigation Tabs Bar for CRIMES -->
+        <div id="stickyCrimesNav" class="sticky-tabs-container">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="sticky-tabs-track">
+                    <span class="text-[11px] font-mono font-bold uppercase text-rose-400 shrink-0 mr-1 hidden sm:inline flex items-center gap-1">
+                        <span>⚡</span> Déroulé C.R.I.M.E.S. :
+                    </span>
+                    <a href="#hero-crimes-resume" class="sticky-tab-btn active"><span>✨</span> Résumé Vulgarisé</a>
+                    <a href="#modele-crimes" class="sticky-tab-btn"><span>⚔️</span> 1. Les 4 Modes Symptomatiques</a>
+                    <a href="#comportements-nuisibles" class="sticky-tab-btn"><span>⚠️</span> 2. 85+ Comportements Nuisibles</a>
+                    <a href="#distorsions-cognitives" class="sticky-tab-btn"><span>🪞</span> 3. 12 Distorsions Cognitives</a>
+                    <a href="#activation-inhibition" class="sticky-tab-btn"><span>⚖️</span> 4. Activation &amp; Régulation</a>
+                    <a href="miracles.html#pont-resolution" class="sticky-tab-btn"><span>🌉</span> 5. Pont vers MIRACLES &rarr;</a>
+                </div>
+            </div>
+        </div>
+
         <!-- ======================================================== -->
         <!-- SECTION 10 & 12 : LE MODÈLE INTÉGRÉ C.R.I.M.E.S.         -->
         <!-- ======================================================== -->
-        <section id="modele-crimes" class="rounded-3xl bg-slate-850/90 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="modele-crimes" class="page-section rounded-3xl bg-slate-850/90 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -200,7 +240,7 @@
                         <span>📖</span> Énoncé Théorique Fondamental C.R.I.M.E.S.
                     </div>
                     <p class="italic text-slate-300/90 font-light">
-                        « Tout individu, pour s'adapter à son environnement, présente un système biologique complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical du système excitateur/inhibiteur). Ces systèmes peuvent être exacerbés par diverses substances/drogues, mécanismes physiologiques ou activités (endogènes/exogènes). Le système excitateur, qui sert à éviter un danger ou à identifier dans l'environnement les éléments indispensables à la survie (protection/nourriture/reproduction), peut ainsi être amené à confondre des éléments superflus comme une nécessité absolue. Le système inhibiteur, qui sert à faire cesser, régénérer ou réguler le comportement résultant de l'action du système excitateur et dont les besoins auraient été comblés, peut se voir exacerbé avec pour effet de réduire la réponse à l'environnement. Différents affects vont résulter de ces deux systèmes selon un apprentissage associant une multitude d'éléments de l'environnement perçus comme étant agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à l'apprentissage de toute une gamme possible d'émotions ou de sentiments variant selon les particularités dans lesquelles aura évolué l'individu, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I) et durant le développement de l'individu. Une dysrégulation peut intervenir à différents stades du processus émotionnel, allant de la sélection de la situation à la modulation de la réponse émotionnelle. Malgré la composante naturelle de base de ces affects, ils seront jugés dysfonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) ne correspondent pas ou plus aux attentes normatives du milieu de vie de l'individu. De ces affects peuvent émerger une tendance vers un mode d'affirmation (confrontation/exagération/évasion/soumission), et favoriser des comportements nuisibles qui conduisent à un dysfonctionnement social. »
+                        « Tout individu, pour s'adapter à son environnement, présente un système psychologique et adaptatif complexe lui permettant à la fois d'activer ou d'inhiber un comportement (axe vertical de l'activation / inhibition comportementale). Ces dynamiques peuvent être exacerbées par diverses substances, mécanismes d'évasion ou activités compulsives. Le système d'activation, qui sert à faire face à un enjeu ou à identifier dans l'environnement les éléments indispensables à l'adaptation (protection/nourriture/reproduction/reconnaissance), peut ainsi être amené à confondre des éléments superflus comme une nécessité absolue. Le système de régulation et d'inhibition, qui sert à apaiser, tempérer ou réorienter le comportement résultant de l'activation dont les buts auraient été atteints, peut se voir émoussé ou débordé avec pour effet de réduire la capacité de réponse adéquate à l'environnement. Différents affects vont résulter de ces deux dynamiques selon un apprentissage associant une multitude d'éléments perçus comme agréables ou désagréables (axe horizontal). La somme de tous ces éléments en interaction avec l'individu conduira à l'apprentissage de toute une gamme possible d'émotions ou de sentiments variant selon les particularités dans lesquelles aura évolué l'individu, ce qui constituera la base de sa personnalité et de son identité, pouvant se moduler selon les Situations, les Objets et les Individus (S.O.I) et durant le développement de l'individu. Une dysrégulation peut intervenir à différents stades du processus émotionnel, allant de la sélection de la situation à la modulation de la réponse émotionnelle. Malgré la composante naturelle de base de ces affects, ils seront jugés dysfonctionnels dans la mesure où la Fréquence, l'Intensité, le Type, la Durée ou le moment (F.I.T) ne correspondent pas ou plus aux attentes normatives du milieu de vie de l'individu. De ces affects peuvent émerger une tendance vers un mode d'affirmation (confrontation/exagération/évasion/soumission), et favoriser des comportements nuisibles qui conduisent à un dysfonctionnement social. »
                     </p>
                 </div>
             </div>
@@ -406,7 +446,7 @@
         <!-- ======================================================== -->
         <!-- SECTION 09 & 11 : 85+ COMPORTEMENTS NUISIBLES            -->
         <!-- ======================================================== -->
-        <section id="comportements-nuisibles" class="rounded-3xl bg-slate-850/95 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="comportements-nuisibles" class="page-section rounded-3xl bg-slate-850/95 border border-rose-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -453,7 +493,7 @@
         <!-- ======================================================== -->
         <!-- SECTION 05, 06 & 08 : 12 DISTORSIONS & JUSTIFICATIONS     -->
         <!-- ======================================================== -->
-        <section id="distorsions-cognitives" class="rounded-3xl bg-slate-850/95 border border-amber-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="distorsions-cognitives" class="page-section rounded-3xl bg-slate-850/95 border border-amber-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
@@ -494,84 +534,84 @@
         </section>
 
         <!-- ======================================================== -->
-        <!-- SECTION 01 : NEUROCHIMIE & SUBSTANCES                   -->
+        <!-- SECTION 01 : DYNAMIQUE D'ACTIVATION & DE RÉGULATION     -->
         <!-- ======================================================== -->
-        <section id="neurochimie-substances" class="rounded-3xl bg-slate-850/95 border border-purple-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        <section id="activation-inhibition" class="page-section rounded-3xl bg-slate-850/95 border border-purple-800/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="space-y-3">
                 <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                     <div>
-                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Fondements Biologiques (01 &amp; 12)</span>
+                        <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Fondements Psychologiques &amp; Motivationnels (01 &amp; 12)</span>
                         <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                            L'Équilibre Excitateur / Inhibiteur &amp; Neurochimie des Substances
+                            L'Équilibre Activation / Inhibition &amp; Dynamique des Pulsions
                         </h2>
                     </div>
                     <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
-                        Endogène vs Exogène &bull; 4 Désirs Fondamentaux
+                        Motivation &bull; 4 Désirs Fondamentaux
                     </span>
                 </div>
                 <p class="text-slate-300 text-sm leading-relaxed font-light">
-                    Tout être vivant possède deux systèmes neurobiologiques fondamentaux régis par des neurotransmetteurs et des hormones. Lorsqu'ils sont exacerbés par des substances exogènes ou un déséquilibre interne, ils font basculer l'organisme dans la pathologie C.R.I.M.E.S.
+                    Tout individu dispose de deux dynamiques psychologiques fondamentales : une force d'activation tournée vers l'action et une force régulatrice d'inhibition et de modération. Lorsqu'elles sont déséquilibrées par des distorsions cognitives, des assuétudes ou un emballement affectif, elles font basculer le sujet dans les comportements dysfonctionnels C.R.I.M.E.S.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Système Excitateur -->
+                <!-- Système Excitateur / Activation -->
                 <div class="rounded-2xl bg-cosmic-900 border border-rose-900/40 p-6 space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <span class="text-xs uppercase font-bold tracking-wider text-rose-400 flex items-center gap-2">
-                            <span>⚡</span> SYSTÈME EXCITATEUR
+                            <span>⚡</span> SYSTÈME D'ACTIVATION &amp; PULSIONS D'ACTION
                         </span>
-                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Éveil &bull; Réactivité &bull; Dopamine</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Éveil &bull; Réactivité &bull; Motivation</span>
                     </div>
                     
                     <div class="space-y-2 text-xs text-slate-300">
-                        <strong class="text-white block">Les 4 Désirs Fondamentaux (Circuit de Récompense) :</strong>
+                        <strong class="text-white block">Les 4 Désirs Fondamentaux (Psychologie Motivationnelle) :</strong>
                         <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
-                            <li><strong class="text-rose-300">La sexualité :</strong> Pulsion reproductive et attachement</li>
-                            <li><strong class="text-rose-300">La nourriture :</strong> Appétence calorique et subsistance</li>
-                            <li><strong class="text-rose-300">L'information :</strong> Réduction de l'incertitude dans le milieu</li>
-                            <li><strong class="text-rose-300">Le statut social :</strong> Reconnaissance et dominance au sein du groupe</li>
+                            <li><strong class="text-rose-300">La sexualité :</strong> Pulsion affective et besoin d'attachement</li>
+                            <li><strong class="text-rose-300">La nourriture :</strong> Subsistance corporelle et appétence</li>
+                            <li><strong class="text-rose-300">L'information :</strong> Réduction de l'incertitude et clarté cognitive</li>
+                            <li><strong class="text-rose-300">Le statut social :</strong> Reconnaissance, estime et sentiment d'appartenance</li>
                         </ul>
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
-                        <div class="text-rose-400 font-semibold">Influences Endogènes :</div>
-                        <p class="text-slate-300">Adrénaline, ocytocine, cortisol, dopamine, testostérone &bull; Système nerveux sympathique.</p>
+                        <div class="text-rose-400 font-semibold">Facteurs Psychologiques et Affectifs d'Activation :</div>
+                        <p class="text-slate-300">Sentiment d'urgence, état d'alerte, poussée émotionnelle impulsive, quête avide de gratification.</p>
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
-                        <div class="text-rose-400 font-semibold">Substances Exogènes (Facteurs d'Exacerbation) :</div>
-                        <p class="text-slate-300">Cocaïne / crack, PCP, méthamphétamine / speed, méthylphénidate (Ritaline), ecstasy (MDMA), sativa, stéroïdes, caféine, nicotine.</p>
+                        <div class="text-rose-400 font-semibold">Facteurs d'Exacerbation &amp; Compulsions :</div>
+                        <p class="text-slate-300">Substances excitantes, surstimulation sensorielle, addiction aux écrans, surenchère narcissique, dépendances comportementales.</p>
                     </div>
                 </div>
 
-                <!-- Système Inhibiteur -->
+                <!-- Système Inhibiteur / Régulation -->
                 <div class="rounded-2xl bg-cosmic-900 border border-emerald-900/40 p-6 space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <span class="text-xs uppercase font-bold tracking-wider text-emerald-400 flex items-center gap-2">
-                            <span>🛡️</span> SYSTÈME INHIBITEUR
+                            <span>🛡️</span> SYSTÈME DE RÉGULATION &amp; CONTRÔLE INHIBITEUR
                         </span>
-                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Calme &bull; Satiété &bull; GABA</span>
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Apaisement &bull; Temporisation &bull; Tempérance</span>
                     </div>
                     
                     <div class="space-y-2 text-xs text-slate-300">
                         <strong class="text-white block">Les 4 Fonctions Régulatrices Fondamentales :</strong>
                         <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
-                            <li><strong class="text-emerald-300">La protection :</strong> Préservation de l'homéostasie viscérale</li>
-                            <li><strong class="text-emerald-300">La raison :</strong> Inhibition frontale des passages à l'acte pulsionnels</li>
-                            <li><strong class="text-emerald-300">La satiété :</strong> Sentiment de satisfaction qui réduit temporairement le désir</li>
-                            <li><strong class="text-emerald-300">Le rejet :</strong> Capacité à refuser ou à s'éloigner des stimuli indésirables</li>
+                            <li><strong class="text-emerald-300">La protection :</strong> Préservation de l'intégrité et sécurité psychologique</li>
+                            <li><strong class="text-emerald-300">La raison :</strong> Contrôle cognitif et régulation des passages à l'acte impulsifs</li>
+                            <li><strong class="text-emerald-300">La satiété :</strong> Sentiment d'accomplissement et apaisement temporaire du désir</li>
+                            <li><strong class="text-emerald-300">Le rejet :</strong> Capacité d'affirmation, refus et mise à distance des situations toxiques</li>
                         </ul>
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
-                        <div class="text-emerald-400 font-semibold">Influences Endogènes :</div>
-                        <p class="text-slate-300">Sérotonine, endocannabinoïdes (Anandamide), GABA, endorphines, adénosine &bull; Système nerveux parasympathique.</p>
+                        <div class="text-emerald-400 font-semibold">Facteurs Psychologiques et Régulateurs Internes :</div>
+                        <p class="text-slate-300">Capacité d'apaisement intérieur, sentiment de sécurité, tolérance à la frustration, sérénité psychologique.</p>
                     </div>
 
                     <div class="p-3.5 rounded-xl bg-slate-850 border border-slate-800 space-y-1.5 text-xs">
-                        <div class="text-emerald-400 font-semibold">Substances Exogènes (Facteurs d'Exacerbation) :</div>
-                        <p class="text-slate-300">Opioïdes, GHB, solvants, barbituriques, alcool, benzodiazépines, kétamine, indica, mélatonine, antihistaminiques.</p>
+                        <div class="text-emerald-400 font-semibold">Facteurs d'Anesthésie &amp; d'Émoussement :</div>
+                        <p class="text-slate-300">Substances sédatives, repli passif, anesthésie émotionnelle, évitement expérientiel, fuite de la réalité.</p>
                     </div>
                 </div>
             </div>
@@ -735,8 +775,9 @@
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-400">
-                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
     </footer>
@@ -777,7 +818,7 @@
                 colorBadgeClass: "bg-amber-950/80 text-amber-300 border-amber-600/50",
                 location: "Quadrant Haut-Droite (Système Excitateur / Perception Agréable)",
                 questionCritique: "« Biais & Jugement : Ces sentiments sont vrais ! Rien n'est impossible, je dois tout avoir. »",
-                conditionnement: "Récompense positive (R+) addictive : course effrénée aux shoots dopaminergiques, mégalomanie, surmenage jusqu'à l'effondrement.",
+                conditionnement: "Renforcement positif (R+) compulsif : course effrénée à la gratification immédiate, mégalomanie, surmenage jusqu'à l'effondrement.",
                 distorsions: "Injonction, Généralisation, Normalisation.",
                 justification: "« Tout le monde le fait... C'est normal de réussir à tout prix... Je dois être le meilleur en tout... Personne ne le saura... »",
                 comportementsNuisibles: [

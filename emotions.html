@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
     <title>Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect</title>
     <meta name="description" content="Architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Exploration interactive des Gradients de Contrôle (Y), d'Attente (X) et de Profondeur (Z) régis par la norme L1 de Manhattan.">
     <link rel="canonical" href="https://www.cartograffect.com/emotions.html">
@@ -40,6 +42,9 @@
     <!-- Three.js for 3D Inferential Pyramid -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Cartograffect Mathematical Model (176 entries & 8 strata) -->
+    <script src="cartograffect_model.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -249,6 +254,9 @@
             <!-- Navigation Links -->
             <nav class="hidden md:flex items-center gap-1 lg:gap-2">
                 <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
+                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+                </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-semibold text-blue-300 bg-blue-900/40 border border-blue-500/30 rounded-lg flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                     1. Émotions
@@ -262,8 +270,8 @@
                     3. Miracles
                 </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                    Scholar Drive
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    Modèles Théoriques
                 </a>
             </nav>
 
@@ -296,10 +304,11 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html" class="active-link"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
         <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
         <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
-        <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Scholar Drive &amp; Recherche</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
             <a href="index.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">&larr; Retour à l'Accueil</a>
@@ -361,14 +370,18 @@
                     </div>
 
                     <!-- Symmetry & Antagonism Lines Toggles -->
-                    <div class="lg:col-span-5 flex flex-wrap gap-4 items-center border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
-                        <label class="flex items-center gap-2 text-xs font-medium text-purple-300 cursor-pointer select-none">
-                            <input type="checkbox" id="showControlateralToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
-                            <span>Antagonismes centraux (X,Y)&rarr;(-X,-Y)</span>
+                    <div class="lg:col-span-5 flex flex-wrap gap-3 items-center border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-emerald-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showAxialToggle" class="rounded bg-slate-900 border-slate-700 text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
+                            <span>Axiales (12)</span>
                         </label>
-                        <label class="flex items-center gap-2 text-xs font-medium text-sky-300 cursor-pointer select-none">
-                            <input type="checkbox" id="showSymetricalToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4">
-                            <span>Symétries axiales</span>
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-amber-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showDiagonalToggle" class="rounded bg-slate-900 border-slate-700 text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
+                            <span>Diagonales (12)</span>
+                        </label>
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-purple-300 cursor-pointer select-none">
+                            <input type="checkbox" id="showControlateralToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
+                            <span>Controlatérales (60)</span>
                         </label>
                     </div>
 
@@ -384,33 +397,53 @@
                     </div>
                 </div>
 
-                <!-- Category / Strata Filters Row -->
-                <div class="mt-4 pt-4 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider">Filtrer par Strates d'Inférence (Axe Z) :</span>
-                    <div class="flex flex-wrap gap-2 sm:gap-3">
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                <!-- Typology Quick Filter Row -->
+                <div class="mt-3 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider">Typologie Géométrique :</span>
+                    <div class="flex flex-wrap gap-1.5" id="typologyFilterGroup">
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-purple-600 text-white shadow-sm transition-all" data-typo="all">Toutes (176)</button>
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="operator">8 Opérateurs Centraux</button>
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="axial">Positions Axiales (24)</button>
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="diagonal">Positions Diagonales (24)</button>
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="lateral">Positions Latérales (120)</button>
+                    </div>
+                </div>
+
+                <!-- Category / Strata Filters Row (Z=0 to Z=7) -->
+                <div class="mt-3 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider">Strates d'Inférence (Axe Z, |X|+|Y|=2Z-2) :</span>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="0" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=0 Veille</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=0 Veille (1)</span>
                         </label>
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="1" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=1 Surprise</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=1 Surprise (1)</span>
                         </label>
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="2" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=2 1re Couronne &bull; Anticipation</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=2 Couronne 1 (8)</span>
                         </label>
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="3" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=3 Émotions Réactives &bull; Émoi</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=3 Réactives (16)</span>
                         </label>
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="4" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=4 Sentiments Réflexifs &bull; Réserve</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=4 Relationnelles (24)</span>
                         </label>
-                        <label class="inline-flex items-center gap-1.5 text-slate-300 cursor-pointer">
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="5" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=5 Humeurs &bull; Recul</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=5 Dispositions (32)</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="6" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=6 Identités (40)</span>
+                        </label>
+                        <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
+                            <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="7" checked>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=7 Transcendantaux (48)</span>
                         </label>
                     </div>
                 </div>
@@ -424,7 +457,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 mb-3 px-1">
                         <span class="font-mono text-purple-300 flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                            <span>Axe Y: Contrôle [-8; +8] | Axe X: Attente [-8; +8] | Axe Z: Profondeur [0 à 5]</span>
+                            <span>Axe Y: Contrôle [-12; +12] | Axe X: Attente [-12; +12] | Axe Z: Profondeur [0 à 7] | 176 Entrées</span>
                         </span>
                         
                         <!-- 2D / 3D & Presentation Mode Buttons -->
@@ -735,42 +768,61 @@
                     </div>
                 </div>
 
-                <!-- 5 Layers Hierarchy Synthesis -->
+                <!-- 8 Strata Hierarchy Synthesis (176 Entries) -->
                 <div class="mt-10">
-                    <h3 class="text-lg font-heading font-bold text-white mb-4">Les 5 Couches de la Taxonomie Hiérarchique</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 1 &bull; Opérateur Surprise (0,0,1)</span>
-                            <div class="text-white font-semibold text-sm mt-1">Processus Primordial</div>
-                            <p class="text-slate-400 mt-1">Trace d'un écart ascendant non encore orienté sur les axes.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <h3 class="text-lg font-heading font-bold text-white">L'Architecture des 8 Strates d'Inférence (176 Entrées)</h3>
+                        <span class="text-xs font-mono text-purple-300 bg-purple-950/80 px-2.5 py-1 rounded-lg border border-purple-800/40">
+                            N(Z) = 8(Z - 1) &bull; |X| + |Y| = 2Z - 2
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 0 &bull; Veille (0,0,0)</span>
+                            <div class="text-white font-semibold text-xs mt-1">Origine Structurale (1 entrée)</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Bassin attracteur de repos homéostatique de fond.</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 2 &bull; Opérateur Anticipation (0,0,2)</span>
-                            <div class="text-white font-semibold text-sm mt-1">Première Couronne Affective</div>
-                            <p class="text-slate-400 mt-1">Budget = 2. Déploiement des 4 axiales et des 4 prototypes combinés.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 1 &bull; Surprise (0,0,1)</span>
+                            <div class="text-white font-semibold text-xs mt-1">Rupture Ascendante (1 entrée)</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Opérateur de saillance amorçant la trajectoire.</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 3 &bull; Opérateur Émoi (0,0,3)</span>
-                            <div class="text-white font-semibold text-sm mt-1">Émotions Réactives</div>
-                            <p class="text-slate-400 mt-1">Budget = 4. L'affect persiste, s'intensifie et se différencie avec son objet immédiat.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 2 &bull; Anticipation (0,0,2)</span>
+                            <div class="text-white font-semibold text-xs mt-1">1re Couronne : 8 Prototypes</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 2 &bull; 4 axiaux (Joie, Tristesse, Peur, Courage) + 4 diagonaux.</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 4 &bull; Opérateur Réserve (0,0,4)</span>
-                            <div class="text-white font-semibold text-sm mt-1">Sentiments Réflexifs</div>
-                            <p class="text-slate-400 mt-1">Budget = 6. Contrôlabilité sur autrui et révisabilité du modèle de soi (second ordre).</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 3 &bull; Émoi (0,0,3)</span>
+                            <div class="text-white font-semibold text-xs mt-1">16 Émotions Réactives</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 4 &bull; 4 axiaux, 4 diagonaux et 8 latéraux (N=16).</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 5 &bull; Opérateur Recul (0,0,5)</span>
-                            <div class="text-white font-semibold text-sm mt-1">Humeurs &amp; Orientations Stables</div>
-                            <p class="text-slate-400 mt-1">Budget = 8. Paramètres lents du modèle génératif sur des horizons étendus.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 4 &bull; Réserve (0,0,4)</span>
+                            <div class="text-white font-semibold text-xs mt-1">24 États Relationnels</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 6 &bull; Intersubjectivité et second ordre (N=24).</p>
                         </div>
-                        <div class="p-4 rounded-xl bg-slate-900/60 border border-purple-800/40">
-                            <span class="text-purple-300 font-bold font-mono">Récursivité &bull; S'émouvoir &rarr; Se retenir &rarr; Prendre du recul</span>
-                            <div class="text-white font-semibold text-sm mt-1">Élargissement de l'Horizon</div>
-                            <p class="text-slate-400 mt-1">Invariance formelle des lois régulatrices avec abstraction croissante.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 5 &bull; Recul (0,0,5)</span>
+                            <div class="text-white font-semibold text-xs mt-1">32 Dispositions Durables</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 8 &bull; Humeurs et traits durables de personnalité (N=32).</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                            <span class="text-purple-400 font-bold font-mono">Z = 6 &bull; Saisie (0,0,6)</span>
+                            <div class="text-white font-semibold text-xs mt-1">40 Identités Affectives</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 10 &bull; Postures existentielles et cristallisation (N=40).</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/60 border border-purple-800/40">
+                            <span class="text-rose-400 font-bold font-mono">Z = 7 &bull; Suspension (0,0,7)</span>
+                            <div class="text-white font-semibold text-xs mt-1">48 Transcendantaux</div>
+                            <p class="text-slate-400 mt-1 text-[11px]">Budget = 12 &bull; Suspension face à l'incommensurable (N=48).</p>
                         </div>
                     </div>
-            </div>
+                    <div class="mt-4 p-3 rounded-xl bg-purple-950/30 border border-purple-800/30 flex flex-wrap items-center justify-between text-xs text-slate-300">
+                        <span><strong>Total :</strong> 8 Opérateurs Centraux (0,0,Z) + 168 Positions Affectives (Z=2 à 7) = <strong>176 Entrées Distinctes</strong>.</span>
+                        <span class="font-mono text-purple-300">Somme des couronnes : ∑ N(Z) = 8 + 16 + 24 + 32 + 40 + 48 = 168</span>
+                    </div>
+                </div>
         </div>
 
         <!-- TAB 4: TEST DE FONCTIONNALITÉ F.I.T.T.T. -->
@@ -928,8 +980,9 @@
                 <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
-            <div class="text-xs text-slate-400">
-                &copy; 2024–2026 Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
     </footer>
@@ -959,138 +1012,22 @@
 
     <!-- MAIN INTERACTIVE D3 SCRIPT & LOGIC -->
     <script>
-        // --- 1. Dataset of Affective Attractors & Operators grounded in Predictive Processing ---
-        // Axes: X = Gradient d'Attente (Modèle révisable +X vs non-révisable -X)
-        //       Y = Gradient de Contrôle (Monde contrôlable +Y vs non-contrôlable -Y)
-        //       Z = Profondeur inférentielle & niveau d'abstraction (Z in {0, 1, 2, 3, 4, 5})
-        // Manhattan L1 Budget constraint for Z >= 2: |X| + |Y| = 2Z - 2
-        const emotionsData = [
-            // --- Opérateurs Centraux de Transition & Suspension (X0, Y0) ---
-            { name: "Point de Veille", x: 0, y: 0, z: 0, category: 0, group: "Veille", code: "X0 / Y0 / Z0", type: "operator", desc: "Bassin attracteur de repos homéostatique de fond (0,0,0). Les flux intéroceptifs s'écoulent sans saillance particulière." },
-            { name: "Surprise", x: 0, y: 0, z: 1, category: 1, group: "Surprise", code: "X0 / Y0 / Z1", type: "operator", desc: "Rupture de la veille par voie ascendante (0,0,1). Écart de prédiction saillant enregistré sans orientation déterminée sur les Axes X et Y." },
-            { name: "Anticipation", x: 0, y: 0, z: 2, category: 2, group: "Anticipation", code: "X0 / Y0 / Z2", type: "operator", desc: "Opérateur descendant de l'Interface Subjective (0,0,2). Suspend la décharge immédiate et oriente le flux vers l'un des 8 attracteurs de la 1re couronne." },
-            { name: "Émoi", x: 0, y: 0, z: 3, category: 3, group: "Émoi", code: "X0 / Y0 / Z3", type: "operator", desc: "Opérateur de suspension de la 3e couche (0,0,3). Précède l'allocation attentionnelle face à la situation et son histoire immédiate." },
-            { name: "Réserve", x: 0, y: 0, z: 4, category: 4, group: "Réserve", code: "X0 / Y0 / Z4", type: "operator", desc: "Opérateur réflexif de second ordre (0,0,4). Précède l'évaluation de l'effet sur autrui et la révision du modèle de soi." },
-            { name: "Recul", x: 0, y: 0, z: 5, category: 5, group: "Recul", code: "X0 / Y0 / Z5", type: "operator", desc: "Opérateur d'élargissement de l'horizon temporel (0,0,5). Précède l'ajustement des paramètres lents régissant des classes étendues de situations (humeurs)." },
-
-            // --- 2e Couche (Z=2) : Première Couronne Affective (|X| + |Y| = 2) ---
-            // 4 Orientations axiales pures (instables, une dimension indéterminée)
-            { name: "Joie", x: 0, y: 2, z: 2, category: 2, group: "Joie", code: "X0 / Y+2 / Z2", type: "axial" },
-            { name: "Tristesse", x: 0, y: -2, z: 2, category: 2, group: "Tristesse", code: "X0 / Y-2 / Z2", type: "axial" },
-            { name: "Courage", x: 2, y: 0, z: 2, category: 2, group: "Courage", code: "X+2 / Y0 / Z2", type: "axial" },
-            { name: "Peur", x: -2, y: 0, z: 2, category: 2, group: "Peur", code: "X-2 / Y0 / Z2", type: "axial" },
-            // 4 Prototypes combinés équilibrés (attracteurs locaux stables, |X|=|Y|=1)
-            { name: "Désir", x: 1, y: 1, z: 2, category: 2, group: "Désir", code: "X+1 / Y+1 / Z2", type: "combine" },
-            { name: "Colère", x: -1, y: 1, z: 2, category: 2, group: "Colère", code: "X-1 / Y+1 / Z2", type: "combine" },
-            { name: "Calme", x: 1, y: -1, z: 2, category: 2, group: "Calme", code: "X+1 / Y-1 / Z2", type: "combine" },
-            { name: "Dégoût", x: -1, y: -1, z: 2, category: 2, group: "Dégoût", code: "X-1 / Y-1 / Z2", type: "combine" },
-
-            // --- 3e Couche (Z=3) : Émotions Réactives (|X| + |Y| = 4) ---
-            { name: "Élan", x: 0, y: 4, z: 3, category: 3, group: "Joie", code: "X0 / Y+4 / Z3", type: "axial" },
-            { name: "Euphorie", x: 1, y: 3, z: 3, category: 3, group: "Joie", code: "X+1 / Y+3 / Z3", type: "lateral" },
-            { name: "Consternation", x: -1, y: 3, z: 3, category: 3, group: "Joie", code: "X-1 / Y+3 / Z3", type: "lateral" },
-            { name: "Exaltation", x: 2, y: 2, z: 3, category: 3, group: "Désir", code: "X+2 / Y+2 / Z3", type: "combine" },
-            { name: "Exaspération", x: -2, y: 2, z: 3, category: 3, group: "Colère", code: "X-2 / Y+2 / Z3", type: "combine" },
-            { name: "Curiosité", x: 4, y: 0, z: 3, category: 3, group: "Courage", code: "X+4 / Y0 / Z3", type: "axial" },
-            { name: "Émerveillement", x: 3, y: 1, z: 3, category: 3, group: "Courage", code: "X+3 / Y+1 / Z3", type: "lateral" },
-            { name: "Enchantement", x: 3, y: -1, z: 3, category: 3, group: "Courage", code: "X+3 / Y-1 / Z3", type: "lateral" },
-            { name: "Soulagement", x: 2, y: -2, z: 3, category: 3, group: "Calme", code: "X+2 / Y-2 / Z3", type: "combine" },
-            { name: "Déception", x: -2, y: -2, z: 3, category: 3, group: "Dégoût", code: "X-2 / Y-2 / Z3", type: "combine" },
-            { name: "Chagrin", x: -1, y: -3, z: 3, category: 3, group: "Tristesse", code: "X-1 / Y-3 / Z3", type: "lateral" },
-            { name: "Réconfort", x: 1, y: -3, z: 3, category: 3, group: "Tristesse", code: "X+1 / Y-3 / Z3", type: "lateral" },
-            { name: "Abattement", x: 0, y: -4, z: 3, category: 3, group: "Tristesse", code: "X0 / Y-4 / Z3", type: "axial" },
-            { name: "Doute", x: -4, y: 0, z: 3, category: 3, group: "Peur", code: "X-4 / Y0 / Z3", type: "axial" },
-            { name: "Panique", x: -3, y: 1, z: 3, category: 3, group: "Peur", code: "X-3 / Y+1 / Z3", type: "lateral" },
-            { name: "Frisson", x: -3, y: -1, z: 3, category: 3, group: "Peur", code: "X-3 / Y-1 / Z3", type: "lateral" },
-
-            // --- 4e Couche (Z=4) : Sentiments Réflexifs (|X| + |Y| = 6) ---
-            { name: "Ambivalence", x: 0, y: 6, z: 4, category: 4, group: "Joie", code: "X0 / Y+6 / Z4", type: "axial" },
-            { name: "Amour", x: 1, y: 5, z: 4, category: 4, group: "Joie", code: "X+1 / Y+5 / Z4", type: "lateral" },
-            { name: "Haine", x: -1, y: 5, z: 4, category: 4, group: "Joie", code: "X-1 / Y+5 / Z4", type: "lateral" },
-            { name: "Assurance", x: 2, y: 4, z: 4, category: 4, group: "Joie", code: "X+2 / Y+4 / Z4", type: "lateral" },
-            { name: "Envie", x: -2, y: 4, z: 4, category: 4, group: "Joie", code: "X-2 / Y+4 / Z4", type: "lateral" },
-            { name: "Engagement", x: 3, y: 3, z: 4, category: 4, group: "Désir", code: "X+3 / Y+3 / Z4", type: "combine" },
-            { name: "Frustration", x: -3, y: 3, z: 4, category: 4, group: "Colère", code: "X-3 / Y+3 / Z4", type: "combine" },
-            { name: "Conviction", x: 6, y: 0, z: 4, category: 4, group: "Courage", code: "X+6 / Y0 / Z4", type: "axial" },
-            { name: "Épanouissement", x: 5, y: 1, z: 4, category: 4, group: "Courage", code: "X+5 / Y+1 / Z4", type: "lateral" },
-            { name: "Affection", x: 5, y: -1, z: 4, category: 4, group: "Courage", code: "X+5 / Y-1 / Z4", type: "lateral" },
-            { name: "Fierté", x: 4, y: 2, z: 4, category: 4, group: "Courage", code: "X+4 / Y+2 / Z4", type: "lateral" },
-            { name: "Admiration", x: 4, y: -2, z: 4, category: 4, group: "Courage", code: "X+4 / Y-2 / Z4", type: "lateral" },
-            { name: "Acceptation", x: 3, y: -3, z: 4, category: 4, group: "Calme", code: "X+3 / Y-3 / Z4", type: "combine" },
-            { name: "Rejet", x: -3, y: -3, z: 4, category: 4, group: "Dégoût", code: "X-3 / Y-3 / Z4", type: "combine" },
-            { name: "Indifférence", x: 0, y: -6, z: 4, category: 4, group: "Tristesse", code: "X0 / Y-6 / Z4", type: "axial" },
-            { name: "Plénitude", x: 1, y: -5, z: 4, category: 4, group: "Tristesse", code: "X+1 / Y-5 / Z4", type: "lateral" },
-            { name: "Vide", x: -1, y: -5, z: 4, category: 4, group: "Tristesse", code: "X-1 / Y-5 / Z4", type: "lateral" },
-            { name: "Sérénité", x: 2, y: -4, z: 4, category: 4, group: "Tristesse", code: "X+2 / Y-4 / Z4", type: "lateral" },
-            { name: "Honte", x: -2, y: -4, z: 4, category: 4, group: "Tristesse", code: "X-2 / Y-4 / Z4", type: "lateral" },
-            { name: "Stupeur", x: -6, y: 0, z: 4, category: 4, group: "Peur", code: "X-6 / Y0 / Z4", type: "axial" },
-            { name: "Manque", x: -5, y: 1, z: 4, category: 4, group: "Peur", code: "X-5 / Y+1 / Z4", type: "lateral" },
-            { name: "Mépris", x: -5, y: -1, z: 4, category: 4, group: "Peur", code: "X-5 / Y-1 / Z4", type: "lateral" },
-            { name: "Anxiété", x: -4, y: 2, z: 4, category: 4, group: "Peur", code: "X-4 / Y+2 / Z4", type: "lateral" },
-            { name: "Crainte", x: -4, y: -2, z: 4, category: 4, group: "Peur", code: "X-4 / Y-2 / Z4", type: "lateral" },
-
-            // --- 5e Couche (Z=5) : Orientations Affectives Stables / Humeurs (|X| + |Y| = 8) ---
-            { name: "Agitation", x: 0, y: 8, z: 5, category: 5, group: "Joie", code: "X0 / Y+8 / Z5", type: "axial" },
-            { name: "Invulnérabilité", x: 1, y: 7, z: 5, category: 5, group: "Joie", code: "X+1 / Y+7 / Z5", type: "lateral" },
-            { name: "Imprudence", x: -1, y: 7, z: 5, category: 5, group: "Joie", code: "X-1 / Y+7 / Z5", type: "lateral" },
-            { name: "Puissance", x: 2, y: 6, z: 5, category: 5, group: "Joie", code: "X+2 / Y+6 / Z5", type: "lateral" },
-            { name: "Intolérance", x: -2, y: 6, z: 5, category: 5, group: "Joie", code: "X-2 / Y+6 / Z5", type: "lateral" },
-            { name: "Confiance", x: 3, y: 5, z: 5, category: 5, group: "Joie", code: "X+3 / Y+5 / Z5", type: "lateral" },
-            { name: "Injustice", x: -3, y: 5, z: 5, category: 5, group: "Joie", code: "X-3 / Y+5 / Z5", type: "lateral" },
-            { name: "Intérêt", x: 4, y: 4, z: 5, category: 5, group: "Désir", code: "X+4 / Y+4 / Z5", type: "combine" },
-            { name: "Mécontentement", x: -4, y: 4, z: 5, category: 5, group: "Colère", code: "X-4 / Y+4 / Z5", type: "combine" },
-            { name: "Certitude", x: 8, y: 0, z: 5, category: 5, group: "Courage", code: "X+8 / Y0 / Z5", type: "axial" },
-            { name: "Espoir", x: 7, y: 1, z: 5, category: 5, group: "Courage", code: "X+7 / Y+1 / Z5", type: "lateral" },
-            { name: "Prudence", x: 7, y: -1, z: 5, category: 5, group: "Courage", code: "X+7 / Y-1 / Z5", type: "lateral" },
-            { name: "Optimisme", x: 6, y: 2, z: 5, category: 5, group: "Courage", code: "X+6 / Y+2 / Z5", type: "lateral" },
-            { name: "Tolérance", x: 6, y: -2, z: 5, category: 5, group: "Courage", code: "X+6 / Y-2 / Z5", type: "lateral" },
-            { name: "Honneur", x: 5, y: 3, z: 5, category: 5, group: "Courage", code: "X+5 / Y+3 / Z5", type: "lateral" },
-            { name: "Justice", x: 5, y: -3, z: 5, category: 5, group: "Courage", code: "X+5 / Y-3 / Z5", type: "lateral" },
-            { name: "Contentement", x: 4, y: -4, z: 5, category: 5, group: "Calme", code: "X+4 / Y-4 / Z5", type: "combine" },
-            { name: "Désintérêt", x: -4, y: -4, z: 5, category: 5, group: "Dégoût", code: "X-4 / Y-4 / Z5", type: "combine" },
-            { name: "Apathie", x: 0, y: -8, z: 5, category: 5, group: "Tristesse", code: "X0 / Y-8 / Z5", type: "axial" },
-            { name: "Patience", x: 1, y: -7, z: 5, category: 5, group: "Tristesse", code: "X+1 / Y-7 / Z5", type: "lateral" },
-            { name: "Désespoir", x: -1, y: -7, z: 5, category: 5, group: "Tristesse", code: "X-1 / Y-7 / Z5", type: "lateral" },
-            { name: "Sécurité", x: 2, y: -6, z: 5, category: 5, group: "Tristesse", code: "X+2 / Y-6 / Z5", type: "lateral" },
-            { name: "Pessimisme", x: -2, y: -6, z: 5, category: 5, group: "Tristesse", code: "X-2 / Y-6 / Z5", type: "lateral" },
-            { name: "Quiétude", x: 3, y: -5, z: 5, category: 5, group: "Tristesse", code: "X+3 / Y-5 / Z5", type: "lateral" },
-            { name: "Déshonneur", x: -3, y: -5, z: 5, category: 5, group: "Tristesse", code: "X-3 / Y-5 / Z5", type: "lateral" },
-            { name: "Incertitude", x: -8, y: 0, z: 5, category: 5, group: "Peur", code: "X-8 / Y0 / Z5", type: "axial" },
-            { name: "Impatience", x: -7, y: 1, z: 5, category: 5, group: "Peur", code: "X-7 / Y+1 / Z5", type: "lateral" },
-            { name: "Vulnérabilité", x: -7, y: -1, z: 5, category: 5, group: "Peur", code: "X-7 / Y-1 / Z5", type: "lateral" },
-            { name: "Insécurité", x: -6, y: 2, z: 5, category: 5, group: "Peur", code: "X-6 / Y+2 / Z5", type: "lateral" },
-            { name: "Impuissance", x: -6, y: -2, z: 5, category: 5, group: "Peur", code: "X-6 / Y-2 / Z5", type: "lateral" },
-            { name: "Inquiétude", x: -5, y: 3, z: 5, category: 5, group: "Peur", code: "X-5 / Y+3 / Z5", type: "lateral" },
-            { name: "Méfiance", x: -5, y: -3, z: 5, category: 5, group: "Peur", code: "X-5 / Y-3 / Z5", type: "lateral" }
-        ];
-
-        const processedData = emotionsData;
+        // --- 1. Dataset of 176 Affective Attractors & Operators (Cartograffect Model) ---
+        // Constraint: |X| + |Y| = 2Z - 2 for Z in [2..7] (N(Z) = 8(Z-1))
+        // 8 Central Operators at (0, 0, Z) for Z in [0..7]
+        const processedData = CartograffectModel.emotions;
         let emotionalPath = [];
+        let activeTypologyFilter = "all";
 
         // Colors & Scales
-        const colorGroups = {
-            "Joie": "#facc15",
-            "Tristesse": "#60a5fa",
-            "Peur": "#c084fc",
-            "Courage": "#4ade80",
-            "Colère": "#f87171",
-            "Calme": "#38bdf8",
-            "Désir": "#f472b6",
-            "Dégoût": "#94a3b8",
-            "Veille": "#64748b",
-            "Surprise": "#fbbf24",
-            "Anticipation": "#a855f7",
-            "Émoi": "#ec4899",
-            "Réserve": "#818cf8",
-            "Recul": "#06b6d4"
-        };
+        const colorGroups = CartograffectModel.groupColors;
         const colorScale = d3.scaleOrdinal().domain(Object.keys(colorGroups)).range(Object.values(colorGroups));
 
         const radiusScale = d3.scaleOrdinal()
-            .domain([0, 1, 2, 3, 4, 5])
-            .range([8, 7.5, 7, 6.5, 6, 5.5]);
+            .domain([0, 1, 2, 3, 4, 5, 6, 7])
+            .range([8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5]);
 
-        // D3 Chart Dimensions
+        // D3 Chart Dimensions (extended domain [-13, 13] to encompass Z=7 where |X|+|Y|=12)
         const width = 800;
         const height = 800;
         const margin = { top: 35, right: 35, bottom: 45, left: 45 };
@@ -1103,8 +1040,9 @@
         const chartW = width - margin.left - margin.right;
         const chartH = height - margin.top - margin.bottom;
 
-        const xScale = d3.scaleLinear().domain([-8.5, 8.5]).range([0, chartW]);
-        const yScale = d3.scaleLinear().domain([-8.5, 8.5]).range([chartH, 0]);
+        const maxCoord = 13;
+        const xScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([0, chartW]);
+        const yScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([chartH, 0]);
 
         // Defs & Markers
         const defs = svg.append("defs");
@@ -1120,10 +1058,10 @@
 
         // Predictive Processing Quadrants
         const quadrantData = [
-            { x: xScale(0), y: yScale(8.5), w: xScale(8.5) - xScale(0), h: yScale(0) - yScale(8.5), color: "rgba(244, 114, 182, 0.04)", label: "+X / +Y : Modèle Révisable & Monde Contrôlable (Désir)", lx: xScale(4.25), ly: yScale(8.1) },
-            { x: xScale(-8.5), y: yScale(8.5), w: xScale(0) - xScale(-8.5), h: yScale(0) - yScale(8.5), color: "rgba(248, 113, 113, 0.04)", label: "-X / +Y : Modèle Non Révisable & Monde Contrôlable (Colère)", lx: xScale(-4.25), ly: yScale(8.1) },
-            { x: xScale(-8.5), y: yScale(0), w: xScale(0) - xScale(-8.5), h: yScale(-8.5) - yScale(0), color: "rgba(96, 165, 250, 0.04)", label: "-X / -Y : Modèle Non Révisable & Monde Non Contrôlable (Dégoût)", lx: xScale(-4.25), ly: yScale(-8.1) },
-            { x: xScale(0), y: yScale(0), w: xScale(8.5) - xScale(0), h: yScale(-8.5) - yScale(0), color: "rgba(56, 189, 248, 0.04)", label: "+X / -Y : Modèle Révisable & Monde Non Contrôlable (Calme)", lx: xScale(4.25), ly: yScale(-8.1) }
+            { x: xScale(0), y: yScale(maxCoord), w: xScale(maxCoord) - xScale(0), h: yScale(0) - yScale(maxCoord), color: "rgba(244, 114, 182, 0.04)", label: "+X / +Y : Modèle Révisable & Monde Contrôlable (Désir / Sublimation)", lx: xScale(6.5), ly: yScale(12.3) },
+            { x: xScale(-maxCoord), y: yScale(maxCoord), w: xScale(0) - xScale(-maxCoord), h: yScale(0) - yScale(maxCoord), color: "rgba(248, 113, 113, 0.04)", label: "-X / +Y : Modèle Non Révisable & Monde Contrôlable (Colère / Effondrement)", lx: xScale(-6.5), ly: yScale(12.3) },
+            { x: xScale(-maxCoord), y: yScale(0), w: xScale(0) - xScale(-maxCoord), h: yScale(-maxCoord) - yScale(0), color: "rgba(96, 165, 250, 0.04)", label: "-X / -Y : Modèle Non Révisable & Monde Non Contrôlable (Dégoût / Dissolution)", lx: xScale(-6.5), ly: yScale(-12.3) },
+            { x: xScale(0), y: yScale(0), w: xScale(maxCoord) - xScale(0), h: yScale(-maxCoord) - yScale(0), color: "rgba(56, 189, 248, 0.04)", label: "+X / -Y : Modèle Révisable & Monde Non Contrôlable (Calme / Impassibilité)", lx: xScale(6.5), ly: yScale(-12.3) }
         ];
 
         svg.selectAll(".quadrant-bg").data(quadrantData).enter().append("rect")
@@ -1132,9 +1070,9 @@
             .attr("width", d => d.w).attr("height", d => d.h)
             .attr("fill", d => d.color);
 
-        // Grid lines
-        const xAxisGrid = d3.axisBottom(xScale).tickSize(-chartH).tickFormat("").ticks(17);
-        const yAxisGrid = d3.axisLeft(yScale).tickSize(-chartW).tickFormat("").ticks(17);
+        // Grid lines (ticks for all integers from -12 to +12)
+        const xAxisGrid = d3.axisBottom(xScale).tickSize(-chartH).tickFormat("").ticks(27);
+        const yAxisGrid = d3.axisLeft(yScale).tickSize(-chartW).tickFormat("").ticks(27);
         svg.append("g").attr("class", "grid x-grid").attr("transform", `translate(0,${chartH})`).call(xAxisGrid);
         svg.append("g").attr("class", "grid y-grid").call(yAxisGrid);
 
@@ -1144,17 +1082,20 @@
 
         // Groups for overlay elements
         const manhattanDiamondsGroup = svg.append("g").attr("class", "manhattan-diamonds-group");
+        const axialLinesGroup = svg.append("g").attr("class", "axial-lines-group").style("visibility", "hidden");
+        const diagonalLinesGroup = svg.append("g").attr("class", "diagonal-lines-group").style("visibility", "hidden");
         const controlateralLinesGroup = svg.append("g").attr("class", "controlateral-lines-group").style("visibility", "hidden");
-        const symetricalLinesGroup = svg.append("g").attr("class", "symetrical-lines-group").style("visibility", "hidden");
         const pathGroup = svg.append("g").attr("class", "path-group");
 
-        // Draw Manhattan L1 Diamonds: |X| + |Y| = 2Z - 2 for Z in [2, 3, 4, 5]
+        // Draw Manhattan L1 Diamonds: |X| + |Y| = 2Z - 2 for Z in [2..7]
         const diamondLine = d3.line().x(d => xScale(d[0])).y(d => yScale(d[1]));
         const strataDiamonds = [
-            { z: 2, r: 2, label: "Z=2 : |X|+|Y|=2 (1re Couronne)", color: "rgba(168, 85, 247, 0.65)", bg: "rgba(168, 85, 247, 0.03)" },
-            { z: 3, r: 4, label: "Z=3 : |X|+|Y|=4 (Émotions Réactives)", color: "rgba(99, 102, 241, 0.50)", bg: "rgba(99, 102, 241, 0.02)" },
-            { z: 4, r: 6, label: "Z=4 : |X|+|Y|=6 (Sentiments Réflexifs)", color: "rgba(59, 130, 246, 0.40)", bg: "rgba(59, 130, 246, 0.015)" },
-            { z: 5, r: 8, label: "Z=5 : |X|+|Y|=8 (Orientations Stables)", color: "rgba(14, 165, 233, 0.35)", bg: "none" }
+            { z: 2, r: 2, label: "Z=2 : |X|+|Y|=2 (8 prototypes)", color: "rgba(168, 85, 247, 0.70)", bg: "rgba(168, 85, 247, 0.04)" },
+            { z: 3, r: 4, label: "Z=3 : |X|+|Y|=4 (16 réactives)", color: "rgba(99, 102, 241, 0.60)", bg: "rgba(99, 102, 241, 0.03)" },
+            { z: 4, r: 6, label: "Z=4 : |X|+|Y|=6 (24 relationnelles)", color: "rgba(59, 130, 246, 0.50)", bg: "rgba(59, 130, 246, 0.02)" },
+            { z: 5, r: 8, label: "Z=5 : |X|+|Y|=8 (32 durables)", color: "rgba(14, 165, 233, 0.45)", bg: "rgba(14, 165, 233, 0.015)" },
+            { z: 6, r: 10, label: "Z=6 : |X|+|Y|=10 (40 identités)", color: "rgba(232, 121, 249, 0.40)", bg: "none" },
+            { z: 7, r: 12, label: "Z=7 : |X|+|Y|=12 (48 transcendants)", color: "rgba(244, 63, 94, 0.35)", bg: "none" }
         ];
 
         strataDiamonds.forEach(d => {
@@ -1184,80 +1125,47 @@
             .text(d => d.label);
 
         // Axes ticks
-        const xAxis = d3.axisBottom(xScale).ticks(17).tickFormat(d3.format("d"));
-        const yAxis = d3.axisLeft(yScale).ticks(17).tickFormat(d3.format("d"));
+        const xAxis = d3.axisBottom(xScale).ticks(27).tickFormat(d3.format("d"));
+        const yAxis = d3.axisLeft(yScale).ticks(27).tickFormat(d3.format("d"));
         svg.append("g").attr("transform", `translate(0,${chartH})`).call(xAxis);
         svg.append("g").call(yAxis);
 
         svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("x", chartW / 2).attr("y", chartH + 36).text("Gradient d'Attente (Axe X) : Modèle non révisable (-X) ⟵ 0 ⟶ Modèle révisable (+X)");
         svg.append("text").attr("class", "axis-label").attr("text-anchor", "middle").attr("transform", "rotate(-90)").attr("x", -chartH / 2).attr("y", -30).text("Gradient de Contrôle (Axe Y) : Monde non contrôlable (-Y) ⟵ 0 ⟶ Monde contrôlable (+Y)");
 
-        // Central Inversion Pairs (Antagonismes régulateurs: (X,Y) -> (-X,-Y))
-        const controlateralPairs = [
-            ["Colère", "Calme"],
-            ["Désir", "Dégoût"],
-            ["Exaspération", "Soulagement"],
-            ["Exaltation", "Déception"],
-            ["Consternation", "Enchantement"],
-            ["Panique", "Réconfort"],
-            ["Euphorie", "Frisson"],
-            ["Émerveillement", "Chagrin"],
-            ["Frustration", "Acceptation"],
-            ["Engagement", "Rejet"],
-            ["Haine", "Affection"],
-            ["Envie", "Admiration"],
-            ["Anxiété", "Sérénité"],
-            ["Manque", "Plénitude"],
-            ["Amour", "Mépris"],
-            ["Assurance", "Crainte"],
-            ["Fierté", "Honte"],
-            ["Épanouissement", "Vide"],
-            ["Mécontentement", "Contentement"],
-            ["Intérêt", "Désintérêt"],
-            ["Puissance", "Impuissance"],
-            ["Confiance", "Méfiance"],
-            ["Optimisme", "Pessimisme"],
-            ["Espoir", "Désespoir"],
-            ["Prudence", "Imprudence"],
-            ["Tolérance", "Intolérance"],
-            ["Justice", "Injustice"],
-            ["Sécurité", "Insécurité"],
-            ["Patience", "Impatience"],
-            ["Quiétude", "Inquiétude"],
-            ["Invulnérabilité", "Vulnérabilité"]
-        ];
+        // 1. Draw Axial Symmetries Lines (12 paires)
+        CartograffectModel.axialPairs.forEach(pair => {
+            const e1 = processedData.find(d => d.name === pair[0]);
+            const e2 = processedData.find(d => d.name === pair[1]);
+            if (e1 && e2) {
+                axialLinesGroup.append("line").attr("class", "axial-line")
+                    .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
+                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y))
+                    .attr("stroke", "#10b981").attr("stroke-width", 1.5).attr("stroke-dasharray", "3 3").attr("opacity", 0.7);
+            }
+        });
 
-        // Axial Symmetries (Inversion sur un seul axe)
-        const symetricalPairs = [
-            ["Joie", "Tristesse"],     // Inversion du Contrôle Y (+2 vs -2 à X=0)
-            ["Courage", "Peur"],        // Inversion de l'Attente X (+2 vs -2 à Y=0)
-            ["Élan", "Abattement"],     // Y=+4 vs Y=-4
-            ["Curiosité", "Doute"],     // X=+4 vs X=-4
-            ["Ambivalence", "Indifférence"], // Y=+6 vs Y=-6
-            ["Conviction", "Stupeur"],  // X=+6 vs X=-6
-            ["Agitation", "Apathie"],   // Y=+8 vs Y=-8
-            ["Certitude", "Incertitude"]// X=+8 vs X=-8
-        ];
+        // 2. Draw Diagonal Correspondences Lines (12 paires)
+        CartograffectModel.diagonalPairs.forEach(pair => {
+            const e1 = processedData.find(d => d.name === pair[0]);
+            const e2 = processedData.find(d => d.name === pair[1]);
+            if (e1 && e2) {
+                diagonalLinesGroup.append("line").attr("class", "diagonal-line")
+                    .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
+                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y))
+                    .attr("stroke", "#f59e0b").attr("stroke-width", 1.5).attr("stroke-dasharray", "4 3").attr("opacity", 0.7);
+            }
+        });
 
-        // Draw Central Antagonism Lines
-        controlateralPairs.forEach(pair => {
+        // 3. Draw Controlateral Correspondences Lines (60 paires strictes Td/Ti)
+        CartograffectModel.controlateralPairs.forEach(pair => {
             const e1 = processedData.find(d => d.name === pair[0]);
             const e2 = processedData.find(d => d.name === pair[1]);
             if (e1 && e2) {
                 controlateralLinesGroup.append("line").attr("class", "controlateral-line")
                     .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
-                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y));
-            }
-        });
-
-        // Draw Axial Symmetry Lines
-        symetricalPairs.forEach(pair => {
-            const e1 = processedData.find(d => d.name === pair[0]);
-            const e2 = processedData.find(d => d.name === pair[1]);
-            if (e1 && e2) {
-                symetricalLinesGroup.append("line").attr("class", "symetrical-line")
-                    .attr("x1", xScale(e1.x)).attr("y1", yScale(e1.y))
-                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y));
+                    .attr("x2", xScale(e2.x)).attr("y2", yScale(e2.y))
+                    .attr("stroke", "#c084fc").attr("stroke-width", 1.2).attr("stroke-dasharray", "2 2").attr("opacity", 0.55);
             }
         });
 
@@ -1274,50 +1182,81 @@
             const contentEl = document.getElementById("iaResponseContent");
 
             const strataNames = [
-                "Z=0 : Basse homéostatique (Veille)",
-                "Z=1 : Rupture ascendante (Surprise)",
-                "Z=2 : 1re Couronne affective (Anticipation)",
-                "Z=3 : Émotions réactives (Émoi)",
-                "Z=4 : Sentiments réflexifs (Réserve)",
-                "Z=5 : Orientations stables & Humeurs (Recul)"
+                "Z=0 : Point de Veille (0,0,0)",
+                "Z=1 : Rupture ascendante & Surprise (0,0,1)",
+                "Z=2 : 1re Couronne & Anticipation (8 prototypes)",
+                "Z=3 : Émotions réactives & Émoi (16 positions)",
+                "Z=4 : États relationnels & Réserve (24 positions)",
+                "Z=5 : Dispositions durables & Recul (32 positions)",
+                "Z=6 : Identités affectives & Saisie (40 positions)",
+                "Z=7 : Sentiments transcendantaux & Suspension (48 positions)"
             ];
 
             const typeNames = {
-                "operator": "Opérateur de phase / suspension",
-                "axial": "Orientation axiale instable (1 dimension résolue)",
-                "combine": "Prototype combiné équilibré (attracteur stable)",
-                "lateral": "Position latérale pondérée (|X|≠|Y|)"
+                "operator": "Opérateur central (0, 0, Z)",
+                "axial": "Position axiale (X=0 ou Y=0)",
+                "diagonal": "Position diagonale (|X|=|Y|)",
+                "lateral": "Position latérale (|X|≠|Y|)"
             };
+
+            // Detect Correspondences
+            let pairedAxial = CartograffectModel.axialPairs.find(p => p[0] === emotion.name || p[1] === emotion.name);
+            let axialCounterpart = pairedAxial ? (pairedAxial[0] === emotion.name ? pairedAxial[1] : pairedAxial[0]) : null;
+
+            let pairedDiag = CartograffectModel.diagonalPairs.find(p => p[0] === emotion.name || p[1] === emotion.name);
+            let diagCounterpart = pairedDiag ? (pairedDiag[0] === emotion.name ? pairedDiag[1] : pairedDiag[0]) : null;
+
+            let pairedControlat = CartograffectModel.controlateralPairs.find(p => p[0] === emotion.name || p[1] === emotion.name);
+            let controlatCounterpart = pairedControlat ? (pairedControlat[0] === emotion.name ? pairedControlat[1] : pairedControlat[0]) : null;
+
+            let correspondenceHtml = "";
+            if (axialCounterpart) {
+                correspondenceHtml += `<div class="p-2.5 rounded-lg bg-emerald-950/60 border border-emerald-600/40 text-xs">
+                    <span class="font-bold text-emerald-300">Correspondance Axiale :</span> 
+                    Inversion centrale (X,Y) &rarr; (-X,-Y) sur axe principal avec <strong class="text-white">${axialCounterpart}</strong>.
+                </div>`;
+            }
+            if (diagCounterpart) {
+                correspondenceHtml += `<div class="p-2.5 rounded-lg bg-amber-950/60 border border-amber-600/40 text-xs">
+                    <span class="font-bold text-amber-300">Correspondance Diagonale :</span> 
+                    Inversion centrale |X|=|Y| avec <strong class="text-white">${diagCounterpart}</strong>.
+                </div>`;
+            }
+            if (controlatCounterpart) {
+                correspondenceHtml += `<div class="p-2.5 rounded-lg bg-purple-950/60 border border-purple-600/40 text-xs">
+                    <span class="font-bold text-purple-300">Correspondance Controlatérale (Td/Ti) :</span> 
+                    Croisement géométrique et opposition de sens stricte avec <strong class="text-white">${controlatCounterpart}</strong>.
+                </div>`;
+            }
 
             titleEl.innerHTML = `<span>✨</span> Fiche Computationnelle : <span class="text-white">${emotion.name}</span>`;
             badgeEl.textContent = `${strataNames[emotion.z] || 'Strate Z=' + emotion.z}`;
 
-            const attenteStatus = emotion.x > 0 ? `Modèle révisable (+${emotion.x}) &bull; Décharge épistémique` : emotion.x < 0 ? `Modèle non révisable (${emotion.x}) &bull; Charge épistémique (maintien)` : "Attente indéterminée (X0)";
-            const controleStatus = emotion.y > 0 ? `Monde contrôlable (+${emotion.y}) &bull; Décharge pragmatique` : emotion.y < 0 ? `Monde non contrôlable (${emotion.y}) &bull; Charge pragmatique (repli adaptatif)` : "Contrôle indéterminé (Y0)";
+            const attenteStatus = emotion.x > 0 ? `Modèle révisable (+${emotion.x}) &bull; Décharge épistémique` : emotion.x < 0 ? `Modèle non révisable (${emotion.x}) &bull; Charge épistémique (maintien)` : "Attente neutre / indéterminée (X0)";
+            const controleStatus = emotion.y > 0 ? `Monde contrôlable (+${emotion.y}) &bull; Décharge pragmatique` : emotion.y < 0 ? `Monde non contrôlable (${emotion.y}) &bull; Charge pragmatique (repli adaptatif)` : "Contrôle neutre / indéterminé (Y0)";
             const budgetL1 = Math.abs(emotion.x) + Math.abs(emotion.y);
 
             contentEl.innerHTML = `
                 <div class="identity-card-section animate-fadeIn space-y-3">
                     <div class="p-3 bg-purple-900/30 border border-purple-500/30 rounded-xl">
-                        <div class="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider">Coordonnées Théoriques</div>
+                        <div class="text-[11px] font-mono text-purple-300 font-bold uppercase tracking-wider">Coordonnées Géométriques Strictes</div>
                         <div class="text-sm font-mono text-white mt-0.5">X = ${emotion.x} (Attente) | Y = ${emotion.y} (Contrôle) | Z = ${emotion.z} (Profondeur)</div>
-                        <div class="text-[11px] text-slate-400 mt-1 font-mono">Norme Manhattan : |X| + |Y| = ${budgetL1} ${emotion.z >= 2 ? `(= 2Z - 2)` : ''} &bull; ${typeNames[emotion.type] || 'Attracteur'}</div>
+                        <div class="text-[11px] text-slate-400 mt-1 font-mono">Norme Manhattan : |X| + |Y| = ${budgetL1} ${emotion.z >= 2 ? `(= 2Z - 2)` : ''} &bull; ${typeNames[emotion.type] || 'Position'}</div>
                     </div>
 
+                    ${correspondenceHtml}
+
                     <h4>1. Évaluation Épistémique (Axe X — Gradient d'Attente)</h4>
-                    <p class="text-slate-300">${attenteStatus}. Répond à la question fondamentale : <em>« Que signifie cet événement pour ma compréhension du monde ? »</em></p>
+                    <p class="text-slate-300">${attenteStatus}. Répond à : <em>« Que signifie cet événement pour la révisabilité de mon modèle interne ? »</em></p>
 
                     <h4>2. Évaluation Pragmatique (Axe Y — Gradient de Contrôle)</h4>
-                    <p class="text-slate-300">${controleStatus}. Répond à la question fondamentale : <em>« Que puis-je faire pour changer l'environnement ? »</em></p>
+                    <p class="text-slate-300">${controleStatus}. Répond à : <em>« Quelle prise motrice ai-je sur l'environnement ? »</em></p>
 
                     <h4>3. Niveau d'Abstraction & Profondeur Temporelle (Axe Z)</h4>
-                    <p class="text-slate-300">Strate Z = ${emotion.z}. ${emotion.desc || `L'Axe Z indexe le budget attentionnel fini mobilisé pour résorber l'écart de prédiction. Plus Z est élevé, plus le modèle génératif sollicité est lent, abstrait et doté d'une forte inertie adaptative.`}</p>
+                    <p class="text-slate-300">Strate Z = ${emotion.z}. ${emotion.desc || `L'Axe Z indexe le budget attentionnel fini alloué selon la norme L1 (|X|+|Y| = 2Z - 2). Plus Z est élevé, plus le niveau d'abstraction et la portée temporelle sont profonds.`}</p>
 
-                    <h4>4. Dynamique de Minimisation de l'Énergie Libre</h4>
-                    <p class="text-slate-300">La valence se lit à partir des polarités axiales (décharge = énergie libre décroissante vs charge = énergie libre croissante). L'activation somatique n'est pas un lieu dans l'espace, mais un paramètre de vitesse et de mobilisation transversal à la trajectoire.</p>
-
-                    <h4>5. Antagonisme Adaptatif Central</h4>
-                    <p class="text-slate-300">Par inversion centrale <strong>(X, Y) &rarr; (-X, -Y)</strong>, l'antagoniste fonctionnel de cet état inverse simultanément ses polarités d'action et d'apprentissage, matérialisant la stratégie régulatrice opposée.</p>
+                    <h4>4. Règle de Conservation du Budget Attentionnel</h4>
+                    <p class="text-slate-300">Sur la couronne Z=${emotion.z >= 2 ? emotion.z : 2}, toute allocation supplémentaire au Contrôle (|Y|) s'effectue au détriment de l'Attente (|X|), garantissant la finitude énergétique de l'organisme.</p>
                 </div>
             `;
         }
@@ -1355,7 +1294,7 @@
                 .attr("r", 0)
                 .attr("fill", d => colorScale(d.group))
                 .attr("stroke", d => d.type === "operator" ? "#ffffff" : "#0f172a")
-                .attr("stroke-width", d => d.type === "operator" ? 2.5 : 1.5)
+                .attr("stroke-width", d => d.type === "operator" ? 2.5 : 1.2)
                 .style("opacity", 0.95);
 
             const mergedCircles = circlesEnter.merge(circles);
@@ -1375,14 +1314,20 @@
                     }
                 } else {
                     renderIdentityCard(d);
-                    // Highlight central counterpart
-                    const allPairs = [...controlateralPairs, ...symetricalPairs];
-                    const oppositePair = allPairs.find(p => p[0] === d.name || p[1] === d.name);
-                    const oppositeName = oppositePair ? (oppositePair[0] === d.name ? oppositePair[1] : oppositePair[0]) : null;
+                    
+                    // Identify related counterparts
+                    const relatedNames = [d.name];
+                    const pAx = CartograffectModel.axialPairs.find(p => p[0] === d.name || p[1] === d.name);
+                    if (pAx) relatedNames.push(pAx[0] === d.name ? pAx[1] : pAx[0]);
+                    const pDiag = CartograffectModel.diagonalPairs.find(p => p[0] === d.name || p[1] === d.name);
+                    if (pDiag) relatedNames.push(pDiag[0] === d.name ? pDiag[1] : pDiag[0]);
+                    const pCtrl = CartograffectModel.controlateralPairs.find(p => p[0] === d.name || p[1] === d.name);
+                    if (pCtrl) relatedNames.push(pCtrl[0] === d.name ? pCtrl[1] : pCtrl[0]);
 
                     pointsGroup.selectAll(".emotion-point").transition().duration(200)
-                        .style("opacity", p => (p.name === d.name || p.group === d.group || p.name === oppositeName) ? 1.0 : 0.15)
-                        .attr("stroke-width", p => p.name === d.name ? 3.5 : (p.type === "operator" ? 2.5 : 1.5));
+                        .style("opacity", p => (relatedNames.includes(p.name) || p.group === d.group) ? 1.0 : 0.12)
+                        .attr("stroke-width", p => p.name === d.name ? 3.5 : (relatedNames.includes(p.name) ? 2.5 : 1.2))
+                        .attr("stroke", p => p.name === d.name ? "#ffffff" : (relatedNames.includes(p.name) ? "#facc15" : "#0f172a"));
                 }
             }
 
@@ -1392,7 +1337,7 @@
                     tooltip.transition().duration(100).style("opacity", 1);
                     tooltip.html(`
                         <div class="font-bold text-white text-xs">${d.name}</div>
-                        <div class="text-[10px] text-purple-300 font-mono mt-0.5">${d.code} &bull; ${d.group}</div>
+                        <div class="text-[10px] text-purple-300 font-mono mt-0.5">${d.code} &bull; ${d.group} (${d.type})</div>
                         <div class="text-[10px] text-slate-300 mt-0.5">Attente (X): ${d.x} | Contrôle (Y): ${d.y} | Strate: Z=${d.z}</div>
                     `).style("left", (event.pageX + 15) + "px").style("top", (event.pageY - 20) + "px");
                 })
@@ -1404,7 +1349,7 @@
                     d3.select(event.currentTarget).attr("stroke", "#ffffff").attr("stroke-width", 3);
                 })
                 .on("blur", (event, d) => {
-                    d3.select(event.currentTarget).attr("stroke", d.type === "operator" ? "#ffffff" : "#0f172a").attr("stroke-width", d.type === "operator" ? 2.5 : 1.5);
+                    d3.select(event.currentTarget).attr("stroke", d.type === "operator" ? "#ffffff" : "#0f172a").attr("stroke-width", d.type === "operator" ? 2.5 : 1.2);
                 })
                 .on("keydown", (event, d) => {
                     if (event.key === "Enter" || event.key === " ") {
@@ -1423,7 +1368,7 @@
 
             const labelsEnter = labels.enter().append("g")
                 .attr("class", "emotion-label-group")
-                .attr("transform", d => `translate(${xScale(d.x) + 10}, ${yScale(d.y)})`)
+                .attr("transform", d => `translate(${xScale(d.x) + 8}, ${yScale(d.y)})`)
                 .style("opacity", 0);
 
             labelsEnter.append("rect").attr("class", "label-background");
@@ -1431,7 +1376,7 @@
 
             const mergedLabels = labelsEnter.merge(labels);
             mergedLabels.transition(t)
-                .attr("transform", d => `translate(${xScale(d.x) + 10}, ${yScale(d.y)})`)
+                .attr("transform", d => `translate(${xScale(d.x) + 8}, ${yScale(d.y)})`)
                 .style("opacity", 1)
                 .style("visibility", d3.select("#showNamesToggle").property("checked") ? "visible" : "hidden");
 
@@ -1454,9 +1399,26 @@
             d3.selectAll(".category-filter:checked").each(function() {
                 selectedCategories.push(+this.value);
             });
-            const filteredData = processedData.filter(d => selectedCategories.includes(d.category));
-            updateChart(filteredData);
+            let filtered = processedData.filter(d => selectedCategories.includes(d.category));
+            if (activeTypologyFilter !== "all") {
+                filtered = filtered.filter(d => d.type === activeTypologyFilter);
+            }
+            updateChart(filtered);
         }
+
+        // Typology Filter Buttons setup
+        document.querySelectorAll("#typologyFilterGroup .typo-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll("#typologyFilterGroup .typo-btn").forEach(b => {
+                    b.classList.remove("bg-purple-600", "text-white", "shadow-sm");
+                    b.classList.add("bg-slate-800", "text-slate-300");
+                });
+                btn.classList.add("bg-purple-600", "text-white", "shadow-sm");
+                btn.classList.remove("bg-slate-800", "text-slate-300");
+                activeTypologyFilter = btn.getAttribute("data-typo");
+                handleFilterUpdate();
+            });
+        });
 
         handleFilterUpdate();
 
@@ -1465,11 +1427,14 @@
         d3.select("#showNamesToggle").on("change", function(e) {
             labelsGroup.selectAll(".emotion-label-group").style("visibility", e.target.checked ? "visible" : "hidden");
         });
+        d3.select("#showAxialToggle").on("change", function(e) {
+            axialLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
+        });
+        d3.select("#showDiagonalToggle").on("change", function(e) {
+            diagonalLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
+        });
         d3.select("#showControlateralToggle").on("change", function(e) {
             controlateralLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
-        });
-        d3.select("#showSymetricalToggle").on("change", function(e) {
-            symetricalLinesGroup.style("visibility", e.target.checked ? "visible" : "hidden");
         });
         d3.select("#showIntensityCircleToggle").on("change", function(e) {
             manhattanDiamondsGroup.style("visibility", e.target.checked ? "visible" : "hidden");
@@ -1730,7 +1695,7 @@
                 fitttResultScoreBadge.className = "p-3 rounded-xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 font-bold text-sm flex items-center justify-between";
                 fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Équilibré</span><span>✓ Normatif</span>`;
                 fitttResultTitle.textContent = `${name} : Réponse Adaptative Saine`;
-                fitttResultDesc.textContent = `Votre vécu de ${name} s'inscrit dans les normes physiologiques saines. La durée respecte la règle homéostatique des 90 secondes et la charge correspond à la situation sans débordement toxique.`;
+                fitttResultDesc.textContent = `Votre vécu de ${name} s'inscrit dans une régulation émotionnelle saine et adaptative. La durée respecte la règle psychologique des 90 secondes et la charge affective correspond à la situation sans débordement toxique.`;
                 fitttGuidanceText.textContent = "Consolidez cette régulation par le raisonnement logique et introspectif (MIRACLES). Aucun réajustement urgent requis.";
                 fitttLinkAction.href = "miracles.html#modele-miracles";
                 fitttLinkAction.textContent = "Consolider avec le Modèle M.I.R.A.C.L.E.S. →";
@@ -1740,7 +1705,7 @@
                 fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Tension Modérée</span><span>⚠️ Vigilance</span>`;
                 fitttResultTitle.textContent = `${name} : Risque d'Enkystement Affectif`;
                 fitttResultDesc.textContent = `L'affect ${name} commence à dépasser le cadre contextuel : sa durée excessive ou sa fréquence indique que le système génératif réalimente en boucle l'écart de prédiction au lieu de revenir à la neutralité (0,0,0).`;
-                fitttGuidanceText.textContent = "Appliquez les 4 leviers de transmutation : Accueil somatique immédiat, décentrement épistémique et désamorçage des ruminations.";
+                fitttGuidanceText.textContent = "Appliquez les 4 leviers de transmutation : Accueil émotionnel immédiat, décentrement épistémique et désamorçage des ruminations.";
                 fitttLinkAction.href = "miracles.html#navigateur-resilience";
                 fitttLinkAction.textContent = "Activer le Navigateur de Résilience →";
                 fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-amber-600 hover:bg-amber-500 shadow-lg shadow-amber-600/30 transition-all";
@@ -1850,31 +1815,33 @@
             scene3D.add(pointLight);
 
             // Coordinate scale
-            const scaleXY = 20; // 1 unit = 20 px
-            const scaleZ = 65;  // 1 Z layer = 65 px
+            const scaleXY = 15; // 1 unit = 15 px (max 12 * 15 = 180 px)
+            const scaleZ = 48;  // 1 Z layer = 48 px
 
-            // Stratum colors
+            // Stratum colors (8 strata)
             const stratumColors = {
                 0: 0x94a3b8, // Veille
-                1: 0xc084fc, // Surprise
+                1: 0xfbbf24, // Surprise
                 2: 0xa855f7, // 1re Couronne
-                3: 0x3b82f6, // Émotions réactives
-                4: 0xec4899, // Sentiments réflexifs
-                5: 0x14b8a6  // Humeurs
+                3: 0x6366f1, // Émotions réactives
+                4: 0x3b82f6, // États relationnels
+                5: 0x06b6d4, // Dispositions durables
+                6: 0xe879f9, // Identités affectives
+                7: 0xf43f5e  // Sentiments transcendants
             };
 
             // Build Vertical Axis Z Line
             const zAxisGeo = new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(0, -60, 0),
-                new THREE.Vector3(0, 5.5 * scaleZ - 100, 0)
+                new THREE.Vector3(0, 7.5 * scaleZ - 80, 0)
             ]);
             const zAxisMat = new THREE.LineDashedMaterial({ color: 0xa855f7, dashSize: 6, gapSize: 4 });
             const zAxisLine = new THREE.Line(zAxisGeo, zAxisMat);
             zAxisLine.computeLineDistances();
             scene3D.add(zAxisLine);
 
-            // Build Horizontal Planes & Manhattan Diamonds for Z=2,3,4,5
-            [2, 3, 4, 5].forEach(z => {
+            // Build Horizontal Planes & Manhattan Diamonds for Z in [2, 3, 4, 5, 6, 7]
+            [2, 3, 4, 5, 6, 7].forEach(z => {
                 const yElev = (z - 1.5) * scaleZ - 70;
                 const budget = 2 * z - 2;
 
@@ -1909,7 +1876,7 @@
                 const planeMat = new THREE.MeshBasicMaterial({
                     color: stratumColors[z] || 0x8b5cf6,
                     transparent: true,
-                    opacity: 0.04,
+                    opacity: 0.035,
                     side: THREE.DoubleSide
                 });
                 const planeMesh = new THREE.Mesh(planeGeo, planeMat);
@@ -1918,11 +1885,11 @@
                 scene3D.add(planeMesh);
             });
 
-            // Add 83 Affect Spheres
+            // Add 176 Affect Spheres
             clickableSpheres.length = 0;
-            const sphereGeo = new THREE.SphereGeometry(3.8, 16, 16);
+            const sphereGeo = new THREE.SphereGeometry(3.4, 16, 16);
 
-            emotionsData.forEach(d => {
+            processedData.forEach(d => {
                 const yElev = (d.z - 1.5) * scaleZ - 70;
                 const xPos = d.x * scaleXY;
                 const zPos = -d.y * scaleXY;
@@ -1933,7 +1900,7 @@
                     roughness: 0.2,
                     metalness: 0.6,
                     emissive: color,
-                    emissiveIntensity: d.category === 0 ? 0.2 : 0.45
+                    emissiveIntensity: d.category === 0 ? 0.2 : (d.type === "operator" ? 0.6 : 0.4)
                 });
 
                 const sphere = new THREE.Mesh(sphereGeo, mat);
@@ -1942,21 +1909,21 @@
                 scene3D.add(sphere);
                 clickableSpheres.push(sphere);
 
-                // Floating 3D Text Canvas Sprite for main emotions
-                if (d.z <= 2 || ["Colère", "Peur", "Joie", "Tristesse", "Désir", "Calme", "Dégoût", "Courage"].includes(d.name)) {
+                // Floating 3D Text Canvas Sprite for Operators and Cardinal Prototypes
+                if (d.type === "operator" || d.z <= 2 || ["Colère", "Peur", "Joie", "Tristesse", "Désir", "Calme", "Dégoût", "Courage", "Infini", "Néant"].includes(d.name)) {
                     const canvas = document.createElement("canvas");
-                    canvas.width = 160;
+                    canvas.width = 180;
                     canvas.height = 40;
                     const ctx = canvas.getContext("2d");
-                    ctx.font = "bold 20px DM Sans, sans-serif";
-                    ctx.fillStyle = "#f1f5f9";
+                    ctx.font = "bold 18px DM Sans, sans-serif";
+                    ctx.fillStyle = d.type === "operator" ? "#fde047" : "#f1f5f9";
                     ctx.textAlign = "center";
-                    ctx.fillText(d.name, 80, 26);
+                    ctx.fillText(d.name, 90, 26);
 
                     const texture = new THREE.CanvasTexture(canvas);
                     const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true, opacity: 0.85 });
                     const sprite = new THREE.Sprite(spriteMat);
-                    sprite.position.set(xPos, yElev + 8, zPos);
+                    sprite.position.set(xPos, yElev + 7, zPos);
                     sprite.scale.set(24, 6, 1);
                     scene3D.add(sprite);
                 }
