@@ -149,14 +149,15 @@ body.journey-started .z-gauge { opacity: 1; }
     list-style: none;
     margin: 0; padding: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     justify-content: space-between;
     height: 220px;
     font-size: 0.78rem;
     color: var(--muted);
 }
-.z-gauge__stops li { line-height: 1.2; transform: translateY(-0.5em); transition: color 0.5s; }
-.z-gauge__stops li:last-child { transform: translateY(0.5em); }
+.z-gauge__stops li { line-height: 1.2; transition: color 0.5s; }
+.z-gauge__stops li:first-child { transform: translateY(0.5em); }
+.z-gauge__stops li:last-child { transform: translateY(-0.5em); }
 .z-gauge__stops strong { display: block; font-family: var(--font-head); font-size: 0.85rem; color: var(--ink-soft); }
 .z-gauge__stops li.is-current { color: #fff; }
 .z-gauge__stops li.is-current strong { color: #fff; }
@@ -168,6 +169,7 @@ body.journey-started .z-gauge { opacity: 1; }
         bottom: 1rem;
         left: 50%;
         transform: translateX(-50%);
+        max-width: calc(100vw - 1.5rem);
         padding: 0.45rem 0.9rem;
         border-radius: 999px;
         background: rgba(15, 23, 42, 0.85);
@@ -176,8 +178,9 @@ body.journey-started .z-gauge { opacity: 1; }
         -webkit-backdrop-filter: blur(10px);
     }
     .z-gauge__track { display: none; }
-    .z-gauge__stops { flex-direction: row; height: auto; gap: 0.9rem; }
-    .z-gauge__stops li, .z-gauge__stops li:last-child { transform: none; opacity: 0.55; }
+    .z-gauge__stops { flex-direction: row; height: auto; gap: 0.75rem; white-space: nowrap; }
+    .z-gauge__stops li, .z-gauge__stops li:first-child, .z-gauge__stops li:last-child { transform: none; opacity: 0.55; }
+    .z-gauge__stops strong { font-size: clamp(0.72rem, 2.6vw, 0.82rem); }
     .z-gauge__stops li.is-current { opacity: 1; }
     .z-gauge__stops .mono { display: none; }
 }
@@ -730,6 +733,26 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 .note--warn { color: #fde68a; }
 .note--warn a, .note--recall a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
 .note--recall { color: var(--ink-soft); }
+.recall-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-left: 0.35rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(15, 23, 42, 0.55);
+    color: var(--muted);
+    font: 600 0.78rem/1.3 var(--font-sans);
+    cursor: pointer;
+    vertical-align: baseline;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.recall-clear:hover {
+    color: #fff;
+    border-color: rgba(148, 163, 184, 0.45);
+    background: rgba(30, 41, 59, 0.85);
+}
 
 /* --------------------------------------------------------------------------
    Mouvement réduit

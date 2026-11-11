@@ -106,9 +106,16 @@
         return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
     }
     function fmtSec(sec) { return sec.toFixed(1).replace('.', ',') + ' s'; }
+    function fmtSigned(n) {
+        if (n > 0) return '+' + n;
+        if (n < 0) return '\u2212' + Math.abs(n);
+        return '0';
+    }
     function fmtCoord(x, y, z) {
-        var f = function (n) { return n > 0 ? '+' + n : String(n); };
-        return '(' + f(x) + ', ' + f(y) + ', ' + z + ')';
+        return '(' + fmtSigned(x) + ', ' + fmtSigned(y) + ', ' + z + ')';
+    }
+    function fmtAxisCoord(x, y, z) {
+        return '(X=' + fmtSigned(x) + ', Y=' + fmtSigned(y) + ', Z=' + z + ')';
     }
     function announce(msg) {
         var live = $('#sr-live');
@@ -602,8 +609,7 @@
 
     /** Leviers d'abord (langage du visiteur), coordonnées ensuite. */
     function codeLine(e) {
-        var f = function (n) { return n > 0 ? '+' + n : String(n); };
-        return 'Agir ' + f(e.y) + ' · Ajuster ' + f(e.x) + '   —   ' + fmtCoord(e.x, e.y, e.z);
+        return 'Agir ' + fmtSigned(e.y) + ' · Ajuster ' + fmtSigned(e.x) + '   —   ' + fmtCoord(e.x, e.y, e.z);
     }
 
     function addStep(list, cls, ms, title, text) {
@@ -770,12 +776,32 @@
             var saved = JSON.parse(raw);
             var em = saved && saved.name ? M.getByName(saved.name) : null;
             if (!em) return;
-            el.textContent = typo('Dernier passage enregistré sur cet appareil : ' + em.name + ' ' + fmtCoord(em.x, em.y, em.z) + ' — ');
+            clear(el);
+            el.appendChild(document.createTextNode(
+                typo('Dernier passage enregistré sur cet appareil : ' + em.name + ' ' + fmtAxisCoord(em.x, em.y, em.z) + ' — ')
+            ));
             var a = document.createElement('a');
             a.href = 'emotions.html?id=' + encodeURIComponent(em.name);
             a.textContent = 'retrouver cette position sur la carte';
             el.appendChild(a);
-            el.appendChild(document.createTextNode('.'));
+            el.appendChild(document.createTextNode('. '));
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'recall-clear';
+            btn.id = 'btn-clear-recall';
+            btn.setAttribute('aria-label', 'Effacer le dernier passage enregistré');
+            btn.innerHTML = '<span aria-hidden="true">&times;</span> Effacer';
+            btn.addEventListener('click', function () {
+                try {
+                    localStorage.removeItem('cartograffect_voyage');
+                } catch (err) { /* stockage indisponible : sans conséquence */ }
+                el.hidden = true;
+                clear(el);
+                announce('Dernier passage enregistré effacé.');
+                var startBtn = $('#btn-start');
+                if (startBtn) startBtn.focus();
+            });
+            el.appendChild(btn);
             el.hidden = false;
         } catch (e) { /* stockage indisponible : sans conséquence */ }
     }

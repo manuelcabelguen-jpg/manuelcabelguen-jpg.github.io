@@ -194,45 +194,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!sections.length || (!tabs.length && !dots.length)) return;
 
+        function scrollToAnchor(targetId, event) {
+            if (!targetId || targetId.length < 2 || !targetId.startsWith('#')) return;
+            let targetEl = null;
+            try {
+                targetEl = document.querySelector(targetId);
+            } catch (e) {
+                return;
+            }
+            if (!targetEl) return;
+
+            event.preventDefault();
+            const headerOffset = 150;
+            if (window.lenisInstance) {
+                window.lenisInstance.scrollTo(targetEl, { offset: -headerOffset });
+            } else {
+                const elementPosition = targetEl.getBoundingClientRect().top;
+                const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - headerOffset);
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+            history.pushState(null, null, targetId);
+        }
+
         // Smooth click handler on tabs
         tabs.forEach(tab => {
             tab.addEventListener('click', (e) => {
-                const targetId = tab.getAttribute('href');
-                if (targetId && targetId.startsWith('#')) {
-                    const targetEl = document.querySelector(targetId);
-                    if (targetEl) {
-                        e.preventDefault();
-                        const headerOffset = 135;
-                        const elementPosition = targetEl.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                        });
-                        history.pushState(null, null, targetId);
-                    }
-                }
+                scrollToAnchor(tab.getAttribute('href'), e);
+            });
+        });
+
+        // Smooth click handler on in-page section links (e.g. section-nav-footer)
+        document.querySelectorAll('main a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                scrollToAnchor(link.getAttribute('href'), e);
             });
         });
 
         // Smooth click on floating dots
         dots.forEach(dot => {
             dot.addEventListener('click', (e) => {
-                const targetId = dot.getAttribute('data-target');
-                if (targetId) {
-                    const targetEl = document.querySelector(targetId);
-                    if (targetEl) {
-                        e.preventDefault();
-                        const headerOffset = 135;
-                        const elementPosition = targetEl.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                        });
-                        history.pushState(null, null, targetId);
-                    }
-                }
+                scrollToAnchor(dot.getAttribute('data-target'), e);
             });
         });
 

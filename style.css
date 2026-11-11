@@ -326,14 +326,15 @@ header .header-action-btn button {
    ============================================================ */
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 150px;
 }
 
 section[id] {
-    scroll-margin-top: 140px;
+    scroll-margin-top: 150px;
 }
 
 .page-section {
-    scroll-margin-top: 140px;
+    scroll-margin-top: 150px;
     min-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;

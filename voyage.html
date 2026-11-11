@@ -51,7 +51,7 @@
             <img src="assets/logo-96.png" width="96" height="96" alt="">
             <span>CARTOGRAFFECT</span>
         </a>
-        <a href="index.html" class="v-skip" id="skip-voyage">Passer le voyage &rarr;</a>
+        <a href="index.html" class="v-skip" id="skip-voyage"><span aria-hidden="true">&larr;</span> Retour à l'accueil</a>
     </header>
 
     <!-- Halo de respiration (Veille) -->
@@ -61,10 +61,10 @@
     <div class="z-gauge" id="z-gauge" data-z="0" role="group" aria-label="Progression dans le circuit affectif">
         <div class="z-gauge__track" aria-hidden="true"><span class="z-gauge__dot"></span></div>
         <ol class="z-gauge__stops">
-            <li data-stop="2"><strong>Anticipation</strong><span class="mono">Z=2 · (0,0,2)</span></li>
-            <li data-stop="1"><strong>Surprise</strong><span class="mono">Z=1 · (0,0,1)</span></li>
-            <li data-stop="0" class="is-current" aria-current="step"><strong>Veille</strong><span class="mono">Z=0 ·
-                    (0,0,0)</span></li>
+            <li data-stop="0" class="is-current" aria-current="step"><strong>Z=0 &middot; Veille</strong><span
+                    class="mono">(0,0,0)</span></li>
+            <li data-stop="1"><strong>Z=1 &middot; Surprise</strong><span class="mono">(0,0,1)</span></li>
+            <li data-stop="2"><strong>Z=2 &middot; Anticipation</strong><span class="mono">(0,0,2)</span></li>
         </ol>
     </div>
 
@@ -86,7 +86,8 @@
             <ol class="seuil-steps">
                 <li><span class="num" aria-hidden="true">1</span><span>Lisez à votre rythme, comme d'habitude, et passez
                         au paragraphe suivant quand vous êtes prêt·e.</span></li>
-                <li><span class="num" aria-hidden="true">2</span><span>Laissez-vous surprendre.</span></li>
+                <li><span class="num" aria-hidden="true">2</span><span>Observez simplement ce qui se passe en vous au
+                        fil de la lecture.</span></li>
                 <li><span class="num" aria-hidden="true">3</span><span>Répondez spontanément à deux questions.</span>
                 </li>
             </ol>
@@ -105,7 +106,8 @@
                 L'expérience n'a pas pu se charger. Rechargez la page, ou <a
                     href="index.html#partie-moteur-predictif">découvrez le modèle expliqué pas à pas</a>.
             </p>
-            <button type="button" id="btn-start" class="v-btn">Commencer</button>
+            <button type="button" id="btn-start" class="v-btn">Commencer le voyage <span
+                    aria-hidden="true">&rarr;</span></button>
             <p class="note note--recall" id="seuil-recall" hidden></p>
         </section>
 
