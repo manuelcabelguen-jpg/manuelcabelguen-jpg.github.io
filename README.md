@@ -95,6 +95,10 @@ Le site web statique est structuré pour une consultation scientifique transpare
 - **`dynamic_cartograffect.js`** : Visualiseur 3D octaédrique et plan de Manhattan interactif en temps réel.
 - **`octahedral_navigator.js`** : Navigateur géométrique octaédrique par strates et filtrage des positions.
 - **`voyage.js`** : Moteur interactif du parcours phénoménologique guidé (`voyage.html`).
+- **`hero_octahedron.js`** : Scène WebGL Three.js de l'octaèdre 3D et des particules d'énergie libre en page d'accueil.
+- **`corpus_system.js`** : Base bibliographique et moteur de recherche du corpus scientifique (49 références et citations BibTeX).
+- **`command_palette.js`** : Palette de commandes et de recherche rapide (`Cmd+K` / `Ctrl+K`) à travers les strates, pages et concepts.
+- **`bilingual_modal.js`** : Modale du guide bilingue et lexique terminologique international (FR ⇄ EN).
 
 ---
 

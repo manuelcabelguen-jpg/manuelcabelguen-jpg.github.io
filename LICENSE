@@ -1,0 +1,62 @@
+CARTOGRAFFECT® — Double Licence & Propriété Intellectuelle
+==========================================================
+
+Copyright © 2026 Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien.
+Tous droits réservés.
+
+--------------------------------------------------------------------------------
+1. MARQUE DÉPOSÉE (TRADEMARK)
+--------------------------------------------------------------------------------
+CARTOGRAFFECT® est une marque déposée de Manuel Cabelguen.
+L'utilisation du nom, du logo et des signes distinctifs de CARTOGRAFFECT® demeure
+exclusivement réservée à son titulaire, sauf autorisation écrite préalable.
+Aucune des licences ci-dessous n'accorde de droits sur la marque déposée.
+
+--------------------------------------------------------------------------------
+2. ARCHITECTURE THÉORIQUE, TAXONOMIE, ONTOLOGIE & TEXTES — CC BY-NC-SA 4.0
+--------------------------------------------------------------------------------
+L'architecture théorique, le modèle hiérarchique, la taxonomie des 176 positions
+affectives, l'ontologie, les fiches conceptuelles et l'ensemble des contenus
+textuels scientifiques (enregistrés auprès de l'Office de la propriété
+intellectuelle du Canada — OPIC n° 1233199) sont distribués sous licence :
+
+  Creative Commons Attribution - Pas d'Utilisation Commerciale - Partage dans
+  les Mêmes Conditions 4.0 International (CC BY-NC-SA 4.0)
+
+Texte juridique complet :
+  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+Vous êtes libre de partager et d'adapter ces contenus selon les conditions :
+- Attribution : créditer Manuel Cabelguen, mentionner CARTOGRAFFECT® et lier
+  la source (https://www.cartograffect.com / DOI : 10.5281/zenodo.24022795).
+- Pas d'Utilisation Commerciale (NC) : aucune exploitation commerciale sans
+  autorisation écrite préalable de l'auteur.
+- Partage dans les Mêmes Conditions (SA) : toute œuvre dérivée doit être
+  diffusée sous la même licence CC BY-NC-SA 4.0.
+
+--------------------------------------------------------------------------------
+3. CODE SOURCE, ALGORITHMES & PREUVES FORMELLES LEAN 4 — GNU AGPLv3
+--------------------------------------------------------------------------------
+Le code source applicatif (HTML, CSS, JavaScript), les algorithmes de calcul et
+de visualisation ainsi que les preuves formelles mécanisées en Lean 4
+(DOI : 10.5281/zenodo.23833938) sont distribués sous les termes de la licence :
+
+  GNU Affero General Public License, version 3 ou ultérieure (AGPL-3.0-or-later)
+
+Texte officiel de la licence :
+  https://www.gnu.org/licenses/agpl-3.0.txt
+
+Ce programme est un logiciel libre ; vous pouvez le redistribuer et/ou le
+modifier selon les termes de la licence publique générale Affero GNU publiée
+par la Free Software Foundation, soit la version 3 de la licence, soit (à votre
+gré) toute version ultérieure.
+
+Ce programme est distribué dans l'espoir qu'il sera utile, mais SANS AUCUNE
+GARANTIE, sans même la garantie implicite de COMMERCIALISABILITÉ ou
+D'ADÉQUATION À UN USAGE PARTICULIER. Consultez la GNU Affero General Public
+License pour plus de détails.
+
+Note sur la disponibilité réseau (AGPLv3, section 13) : si vous modifiez le
+code source et permettez à des utilisateurs d'interagir avec le logiciel à
+distance via un réseau informatique, vous devez mettre le code source complet
+correspondant à disposition de ces utilisateurs sous GNU AGPLv3.
