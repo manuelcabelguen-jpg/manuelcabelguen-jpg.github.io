@@ -51,7 +51,8 @@
             <img src="assets/logo-96.png" width="96" height="96" alt="">
             <span>CARTOGRAFFECT</span>
         </a>
-        <a href="index.html" class="v-skip" id="skip-voyage"><span aria-hidden="true">&larr;</span> Retour à l'accueil</a>
+        <a href="index.html" class="v-skip" id="skip-voyage"><span aria-hidden="true">&larr;</span> Retour à
+            l'accueil</a>
     </header>
 
     <!-- Halo de respiration (Veille) -->
@@ -143,14 +144,12 @@
                 <p class="surprise__line1">Vous venez de lire environ <strong id="surprise-words">0</strong>&nbsp;mots
                     en <strong id="surprise-seconds">0</strong>&nbsp;secondes.</p>
                 <p class="surprise__line2">Vous ne vous attendiez pas à ce que cette page vous regarde lire.</p>
-                <p class="surprise__privacy">Ce calcul est resté dans votre navigateur&nbsp;: rien n'a été envoyé.</p>
-                <p id="surprise-hint" class="surprise__hint" hidden>Touchez l'écran ou appuyez sur une touche dès que
-                    vous êtes prêt·e.</p>
+                <p id="surprise-hint" class="surprise__hint">Touchez l'écran ou appuyez sur une touche pour continuer.</p>
 
                 <div id="surprise-after" class="surprise-after" hidden>
                     <p class="reaction">Il vous a fallu <strong id="reaction-time">—</strong> pour réagir.</p>
                     <p>
-                        C'était la <strong>Surprise</strong> <span class="coord">(0, 0, 1)</span>&nbsp;: un écart entre
+                        C'était la <strong>Surprise</strong> <span class="coord">(X=0, Y=0, Z=1)</span>&nbsp;: un écart entre
                         ce que votre cerveau prévoyait et ce qui est arrivé.
                         Votre attention vient de quitter le pilote automatique.
                     </p>
@@ -168,7 +167,7 @@
                     <svg id="dia-anticip" class="diamond" viewBox="-170 -170 340 340" role="img"
                         aria-labelledby="anticip-caption"></svg>
                     <p class="caption" id="anticip-caption">Votre point est au centre&nbsp;: l'Anticipation <span
-                            class="coord">(0, 0, 2)</span>. Rien n'est encore engagé.</p>
+                            class="coord">(X=0, Y=0, Z=2)</span>. Rien n'est encore engagé.</p>
                 </div>
 
                 <div class="split__text">
@@ -178,16 +177,17 @@
                         spontanément&nbsp;: il n'y a pas de bonne réponse.</p>
 
                     <fieldset class="question" id="q-y">
-                        <legend><span class="lever lever--y">Agir</span>Face à cette page qui vous a surpris·e, que
+                        <legend><span class="lever lever--y">1/2 &middot; AGIR OU LAISSER</span>Face à cette page qui vous a surpris·e, que
                             faites-vous&nbsp;?</legend>
                         <div class="choices">
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-plus" value="1"><span class="choice__icon"
-                                    aria-hidden="true">&uarr;</span><span>Je prends la main&nbsp;: je veux savoir où ça
-                                    mène.</span></label>
+                                    aria-hidden="true">&uarr;</span><span>Je prends la main&nbsp;: j'agis pour orienter la
+                                    suite.</span></label>
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-zero" value="0"><span class="choice__icon"
-                                    aria-hidden="true">&middot;</span><span>J'attends de voir.</span></label>
+                                    aria-hidden="true">&middot;</span><span>J'observe avant d'agir&nbsp;: je suspends mon
+                                    geste.</span></label>
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-minus" value="-1"><span class="choice__icon"
                                     aria-hidden="true">&darr;</span><span>Je laisse faire&nbsp;: ce n'est pas moi qui
@@ -196,7 +196,7 @@
                     </fieldset>
 
                     <fieldset class="question" id="q-x" hidden>
-                        <legend><span class="lever lever--x">Ajuster</span>Ce que vous pensiez trouver en arrivant
+                        <legend><span class="lever lever--x">2/2 &middot; AJUSTER OU TENIR</span>Ce que vous pensiez trouver en arrivant
                             ici&hellip;</legend>
                         <div class="choices">
                             <label class="choice" data-axis="x"><input type="radio" class="sr-only" name="lever-x"
@@ -212,7 +212,7 @@
                         </div>
                     </fieldset>
 
-                    <button type="button" id="btn-resolve" class="v-btn" disabled>Voir où cela me mène &rarr;</button>
+                    <button type="button" id="btn-resolve" class="v-btn" disabled>Révéler ma position affective &rarr;</button>
                 </div>
             </div>
         </section>

@@ -69,13 +69,15 @@ h1:focus, h2:focus, .veille-text p:focus { outline: none; }
 .v-topbar {
     position: fixed;
     inset: 0 0 auto 0;
+    width: 100%;
     z-index: 40;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
     padding: 0.9rem clamp(1rem, 3vw, 2rem);
-    background: linear-gradient(to bottom, rgba(7, 11, 20, 0.92), rgba(7, 11, 20, 0));
+    padding-bottom: 24px;
+    background: linear-gradient(180deg, #0b0d13 75%, rgba(11, 13, 19, 0) 100%);
     pointer-events: none;
 }
 .v-topbar > * { pointer-events: auto; }
@@ -235,7 +237,7 @@ main#voyage { position: relative; z-index: 1; }
 }
 .scene--narrow { max-width: 44rem; }
 .scene--wide { max-width: 76rem; }
-@media (max-width: 1100px) { .scene { padding-left: 1.25rem; padding-right: 1.25rem; } }
+@media (max-width: 1100px) { .scene { padding-left: 1.25rem; padding-right: 1.25rem; padding-bottom: 140px; } }
 @media (min-width: 1101px) { .scene--wide { padding-left: 9rem; } }
 
 .scene.is-entering { animation: sceneIn 0.9s var(--ease) both; }
@@ -336,7 +338,7 @@ h3 { font-size: 1.35rem; font-weight: 700; }
 /* --------------------------------------------------------------------------
    Veille (texte anodin)
    -------------------------------------------------------------------------- */
-#scene-veille { justify-content: flex-start; padding-top: 34vh; padding-bottom: 38vh; }
+#scene-veille { justify-content: flex-start; padding-top: 34vh; padding-bottom: 140px; }
 
 .veille-text p {
     font-family: var(--font-serif);
@@ -410,17 +412,12 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 }
 .surprise__line1 strong { color: var(--amber); }
 .surprise__line2 { color: #fde68a; animation-delay: 1.3s; }
-.surprise__privacy {
-    font-size: 0.92rem;
-    color: var(--muted);
-    margin: 1.4rem 0 0;
-    animation: lineIn 0.7s var(--ease) 2.2s both;
-}
 .surprise__hint {
-    margin-top: 1.6rem;
+    margin-top: 1.5rem;
     font-size: 0.95rem;
-    color: var(--ink-soft);
-    animation: lineIn 0.6s var(--ease) both, softPulse 2.4s ease-in-out 0.6s infinite;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    animation: lineIn 0.6s var(--ease) 1.4s both, softPulse 2.4s ease-in-out 2s infinite;
 }
 @keyframes softPulse { 50% { opacity: 0.55; } }
 
@@ -513,19 +510,41 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 /* --------------------------------------------------------------------------
    Questions (Anticipation)
    -------------------------------------------------------------------------- */
+#scene-anticipation {
+    padding-top: 5.25rem;
+    padding-bottom: 3rem;
+}
+@media (max-width: 1100px) {
+    #scene-anticipation { padding-bottom: 140px; }
+}
+#scene-anticipation .eyebrow { margin-bottom: 0.65rem; }
+#scene-anticipation h2 {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.4rem);
+}
+#scene-anticipation .lead {
+    margin-top: 0;
+    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+}
+#scene-anticipation .v-btn {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1.5rem;
+}
+
 .question {
-    margin: 1.8rem 0 0;
+    margin: 1.15rem 0 0;
     padding: 0;
     border: 0;
     min-width: 0;
+    scroll-margin-top: 6rem;
     animation: lineIn 0.6s var(--ease) both;
 }
 .question legend {
     padding: 0;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.6rem;
     font-family: var(--font-head);
     font-weight: 700;
-    font-size: 1.18rem;
+    font-size: 1.08rem;
     color: #fff;
     line-height: 1.35;
 }
@@ -542,20 +561,20 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 .lever--y { color: #ddd6fe; background: rgba(124, 58, 237, 0.35); border: 1px solid rgba(168, 85, 247, 0.45); }
 .lever--x { color: #bae6fd; background: rgba(3, 105, 161, 0.35); border: 1px solid rgba(56, 189, 248, 0.45); }
 
-.choices { display: grid; gap: 0.6rem; }
+.choices { display: grid; gap: 0.5rem; }
 .choice {
     position: relative;
     display: flex;
     align-items: center;
-    gap: 0.9rem;
+    gap: 0.8rem;
     width: 100%;
-    padding: 0.95rem 1.1rem;
+    padding: 0.65rem 1rem;
     text-align: left;
     border-radius: 14px;
     border: 1px solid var(--line);
     background: var(--panel);
     color: var(--ink-soft);
-    font: 500 1rem/1.4 var(--font-sans);
+    font: 500 0.96rem/1.38 var(--font-sans);
     cursor: pointer;
     transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.2s var(--ease);
 }

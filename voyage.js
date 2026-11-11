@@ -48,7 +48,7 @@
        Libellés et récits (premier jet à relire par l'auteur)
        ------------------------------------------------------------------ */
     var CHOICE_LABELS = {
-        y: { '1': 'Je prends la main : je veux savoir où ça mène.', '0': "J'attends de voir.", '-1': "Je laisse faire : ce n'est pas moi qui décide ici." },
+        y: { '1': "Je prends la main : j'agis pour orienter la suite.", '0': "J'observe avant d'agir : je suspends mon geste.", '-1': "Je laisse faire : ce n'est pas moi qui décide ici." },
         x: { '1': 'Je suis prêt·e à le revoir.', '0': 'Je ne sais pas encore.', '-1': "Je m'en tiens à ce que j'attendais." }
     };
 
@@ -266,22 +266,32 @@
         setStage(1);
 
         setTimeout(function () {
-            $('#surprise-words').textContent = state.words;
-            $('#surprise-seconds').textContent = Math.round(state.readSec);
+            var secs = Math.round(state.readSec);
+            var prefix = secs < 12 ? 'Vous venez de parcourir ces ' : 'Vous venez de lire environ ';
+            var line1 = $('.surprise__line1');
+            if (line1) {
+                line1.innerHTML = prefix + '<strong id="surprise-words">' + state.words +
+                    '</strong>\u00a0mots en <strong id="surprise-seconds">' + secs + '</strong>\u00a0secondes.';
+            }
             var box = $('#surprise-box');
             box.hidden = false;
             box.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-            announce('Vous venez de lire environ ' + state.words + ' mots en ' + Math.round(state.readSec) +
+            announce(prefix + state.words + ' mots en ' + secs +
                 ' secondes. Vous ne vous attendiez pas à ce que cette page vous regarde lire.');
-            // La 2e phrase apparaît à +1,3 s : on mesure la réaction à partir de là.
-            setTimeout(armReaction, reduceMotion ? 300 : 1500);
+            // La 2e phrase apparaît à +1,3 s : on arme la réaction à ce moment avec un délai de sécurité.
+            setTimeout(armReaction, reduceMotion ? 300 : 1300);
         }, 750);
     }
 
     // Touches qui ne traduisent pas une réaction (navigation, modificateurs)
     var IGNORED_KEYS = /^(Tab|Shift|Control|Alt|AltGraph|Meta|CapsLock|Fn|OS)$/;
-    var MIN_REACTION_MS = 250; // en deçà : geste en cours, pas une réaction
+    var MIN_REACTION_MS = 700; // délai de sécurité : empêche un clic accidentel de sauter la surprise
     var TAP_SLOP_PX = 12;      // au-delà : glissement/défilement, pas un tap
+
+    function isTopbarTarget(target) {
+        var el = target && target.nodeType === 3 ? target.parentElement : target;
+        return Boolean(el && el.closest && el.closest('.v-topbar'));
+    }
 
     function armReaction() {
         var tStart = now();
@@ -300,12 +310,13 @@
 
         function onDown(ev) {
             if (ev.isPrimary === false) return;
-            if (ev.target && ev.target.closest && ev.target.closest('.v-topbar')) return;
+            if (isTopbarTarget(ev.target)) return;
             downPos = { x: ev.clientX, y: ev.clientY };
         }
         function onCancel() { downPos = null; }
         function onUp(ev) {
             if (!downPos || ev.isPrimary === false) return;
+            if (isTopbarTarget(ev.target)) { downPos = null; return; }
             var dx = ev.clientX - downPos.x;
             var dy = ev.clientY - downPos.y;
             downPos = null;
@@ -314,11 +325,12 @@
         }
         function onClick(ev) {
             // Repli pour lecteurs d'écran / navigation sans pointeur (évite d'ignorer un tap iOS)
-            if (ev.target && ev.target.closest && ev.target.closest('.v-topbar')) return;
+            if (isTopbarTarget(ev.target)) return;
             completeReaction('click');
         }
         function onKey(ev) {
             if (IGNORED_KEYS.test(ev.key || '')) return;
+            if (isTopbarTarget(ev.target)) return;
             completeReaction('keydown');
         }
 
@@ -516,10 +528,14 @@
         if (youAnticip) moveYou(youAnticip, p.x, p.y);
 
         var cap = $('#anticip-caption');
-        if (p.x === 0 && p.y === 0) {
-            cap.innerHTML = 'Votre point reste au centre&nbsp;: l\'Anticipation <span class="coord">(0, 0, 2)</span>.';
+        var coordHtml = '<span class="coord">' + fmtAxisCoord(p.x, p.y, 2) + '</span>';
+        if (state.x == null) {
+            cap.innerHTML = coordHtml + ' &mdash; Premier levier choisi. Répondez à la seconde question pour répartir votre budget d\'attention sur la couronne (|X|\u00a0+\u00a0|Y|\u00a0=\u00a02).';
+        } else if (p.x === 0 && p.y === 0) {
+            cap.innerHTML = 'Votre point reste au centre&nbsp;: l\'Anticipation ' + coordHtml + '.';
         } else {
-            cap.textContent = typo('Votre point se déplace : votre attention se répartit entre les deux leviers, sans jamais sortir de la couronne.');
+            cap.innerHTML = 'Votre point se déplace en ' + coordHtml +
+                '&nbsp;: votre attention se répartit entre les deux leviers, sans jamais sortir de la couronne.';
         }
 
         $('#btn-resolve').disabled = !(state.x != null && state.y != null);
