@@ -68,16 +68,16 @@ h1:focus, h2:focus, .veille-text p:focus { outline: none; }
    -------------------------------------------------------------------------- */
 .v-topbar {
     position: fixed;
-    inset: 0 0 auto 0;
-    width: 100%;
-    z-index: 40;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.9rem clamp(1rem, 3vw, 2rem);
-    padding-bottom: 24px;
-    background: linear-gradient(180deg, #0b0d13 75%, rgba(11, 13, 19, 0) 100%);
+    padding: 16px 24px 28px;
+    background: linear-gradient(180deg, #0b0d13 80%, rgba(11, 13, 19, 0) 100%);
     pointer-events: none;
 }
 .v-topbar > * { pointer-events: auto; }
@@ -126,6 +126,10 @@ h1:focus, h2:focus, .veille-text p:focus { outline: none; }
     transition: opacity 0.8s var(--ease);
 }
 body.journey-started .z-gauge { opacity: 1; }
+body.is-final-stage .z-gauge {
+    opacity: 0;
+    pointer-events: none;
+}
 
 .z-gauge__track {
     position: relative;
@@ -511,28 +515,33 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
    Questions (Anticipation)
    -------------------------------------------------------------------------- */
 #scene-anticipation {
-    padding-top: 5.25rem;
-    padding-bottom: 3rem;
+    padding-top: 5rem;
+    padding-bottom: 2.5rem;
 }
 @media (max-width: 1100px) {
     #scene-anticipation { padding-bottom: 140px; }
 }
-#scene-anticipation .eyebrow { margin-bottom: 0.65rem; }
+#scene-anticipation .eyebrow { margin-bottom: 0.5rem; }
 #scene-anticipation h2 {
-    margin-bottom: 0.5rem;
-    font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.4rem);
+    margin-bottom: 0.45rem;
+    font-size: clamp(1.65rem, 1.2rem + 1.4vw, 2.25rem);
 }
 #scene-anticipation .lead {
     margin-top: 0;
-    font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+    font-size: clamp(0.98rem, 0.94rem + 0.25vw, 1.1rem);
 }
 #scene-anticipation .v-btn {
-    margin-top: 1.25rem;
+    margin-top: 1.15rem;
     padding: 0.85rem 1.5rem;
+}
+#scene-anticipation .choice__icon {
+    width: 1.85rem;
+    height: 1.85rem;
+    font-size: 0.98rem;
 }
 
 .question {
-    margin: 1.15rem 0 0;
+    margin: 1rem 0 0;
     padding: 0;
     border: 0;
     min-width: 0;
@@ -646,6 +655,8 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 .timeline li:last-child { padding-bottom: 0; }
 .timeline time {
     justify-self: start;
+    align-self: start;
+    height: fit-content;
     position: relative;
     z-index: 1;
     padding: 0.2rem 0.55rem;
@@ -710,17 +721,24 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 .map-link { stroke: rgba(236, 72, 153, 0.8); stroke-width: 1.6; stroke-dasharray: 5 3.6; opacity: 0; transition: opacity 0.8s; }
 .map.is-labelled .map-link { opacity: 1; }
 
+#scene-ouverture { padding-bottom: 64px; }
+@media (max-width: 1100px) {
+    #scene-resolution, #scene-ouverture { padding-bottom: 64px; }
+}
+
 .exits {
     margin-top: clamp(2.5rem, 5vw, 4rem);
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+    align-items: stretch;
 }
 @media (max-width: 900px) { .exits { grid-template-columns: 1fr; } }
 .exit {
     display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
     padding: 1.2rem 1.3rem;
     border-radius: var(--radius);
     border: 1px solid var(--line);
@@ -731,6 +749,11 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
     font: inherit;
     cursor: pointer;
     transition: transform 0.25s var(--ease), border-color 0.25s, background 0.25s;
+}
+.exit__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
 }
 .exit:hover { transform: translateY(-3px); border-color: rgba(168, 85, 247, 0.5); background: rgba(46, 16, 101, 0.4); }
 .exit__icon { font-size: 1.5rem; line-height: 1; }
@@ -744,6 +767,7 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
     border-top: 1px solid var(--line);
     font-size: 0.9rem;
     color: var(--muted);
+    text-align: center;
 }
 .disclaimer a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
 .disclaimer a:hover { color: #fff; }

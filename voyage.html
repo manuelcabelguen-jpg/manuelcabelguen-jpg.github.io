@@ -144,12 +144,14 @@
                 <p class="surprise__line1">Vous venez de lire environ <strong id="surprise-words">0</strong>&nbsp;mots
                     en <strong id="surprise-seconds">0</strong>&nbsp;secondes.</p>
                 <p class="surprise__line2">Vous ne vous attendiez pas à ce que cette page vous regarde lire.</p>
-                <p id="surprise-hint" class="surprise__hint">Touchez l'écran ou appuyez sur une touche pour continuer.</p>
+                <p id="surprise-hint" class="surprise__hint">Touchez l'écran ou appuyez sur une touche pour continuer.
+                </p>
 
                 <div id="surprise-after" class="surprise-after" hidden>
                     <p class="reaction">Il vous a fallu <strong id="reaction-time">—</strong> pour réagir.</p>
                     <p>
-                        C'était la <strong>Surprise</strong> <span class="coord">(X=0, Y=0, Z=1)</span>&nbsp;: un écart entre
+                        C'était la <strong>Surprise</strong> <span class="coord">(X=0, Y=0, Z=1)</span>&nbsp;: un écart
+                        entre
                         ce que votre cerveau prévoyait et ce qui est arrivé.
                         Votre attention vient de quitter le pilote automatique.
                     </p>
@@ -177,16 +179,19 @@
                         spontanément&nbsp;: il n'y a pas de bonne réponse.</p>
 
                     <fieldset class="question" id="q-y">
-                        <legend><span class="lever lever--y">1/2 &middot; AGIR OU LAISSER</span>Face à cette page qui vous a surpris·e, que
+                        <legend><span class="lever lever--y">1/2 &middot; AGIR OU LAISSER</span>Face à cette page qui
+                            vous a surpris·e, que
                             faites-vous&nbsp;?</legend>
                         <div class="choices">
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-plus" value="1"><span class="choice__icon"
-                                    aria-hidden="true">&uarr;</span><span>Je prends la main&nbsp;: j'agis pour orienter la
+                                    aria-hidden="true">&uarr;</span><span>Je prends la main&nbsp;: j'agis pour orienter
+                                    la
                                     suite.</span></label>
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-zero" value="0"><span class="choice__icon"
-                                    aria-hidden="true">&middot;</span><span>J'observe avant d'agir&nbsp;: je suspends mon
+                                    aria-hidden="true">&middot;</span><span>J'observe avant d'agir&nbsp;: je suspends
+                                    mon
                                     geste.</span></label>
                             <label class="choice" data-axis="y"><input type="radio" class="sr-only" name="lever-y"
                                     id="choice-y-minus" value="-1"><span class="choice__icon"
@@ -196,23 +201,28 @@
                     </fieldset>
 
                     <fieldset class="question" id="q-x" hidden>
-                        <legend><span class="lever lever--x">2/2 &middot; AJUSTER OU TENIR</span>Ce que vous pensiez trouver en arrivant
-                            ici&hellip;</legend>
+                        <legend><span class="lever lever--x">2/2 &middot; AJUSTER OU TENIR</span>Ce que vous vous
+                            attendiez à
+                            vivre en arrivant ici&hellip;</legend>
                         <div class="choices">
                             <label class="choice" data-axis="x"><input type="radio" class="sr-only" name="lever-x"
                                     id="choice-x-plus" value="1"><span class="choice__icon"
-                                    aria-hidden="true">&rarr;</span><span>Je suis prêt·e à le revoir.</span></label>
+                                    aria-hidden="true">&rarr;</span><span>J'ajuste mes attentes&nbsp;: je m'ouvre à cet
+                                    imprévu.</span></label>
                             <label class="choice" data-axis="x"><input type="radio" class="sr-only" name="lever-x"
                                     id="choice-x-zero" value="0"><span class="choice__icon"
-                                    aria-hidden="true">&middot;</span><span>Je ne sais pas encore.</span></label>
+                                    aria-hidden="true">&middot;</span><span>Je suspends mon jugement&nbsp;: je ne sais
+                                    pas
+                                    encore.</span></label>
                             <label class="choice" data-axis="x"><input type="radio" class="sr-only" name="lever-x"
                                     id="choice-x-minus" value="-1"><span class="choice__icon"
-                                    aria-hidden="true">&larr;</span><span>Je m'en tiens à ce que
-                                    j'attendais.</span></label>
+                                    aria-hidden="true">&larr;</span><span>Je garde mes repères&nbsp;: je m'en tiens à ce
+                                    que j'attendais.</span></label>
                         </div>
                     </fieldset>
 
-                    <button type="button" id="btn-resolve" class="v-btn" disabled>Révéler ma position affective &rarr;</button>
+                    <button type="button" id="btn-resolve" class="v-btn" disabled>Révéler ma position affective
+                        &rarr;</button>
                 </div>
             </div>
         </section>
@@ -264,27 +274,23 @@
 
             <div class="exits">
                 <a id="exit-map" class="exit exit--primary" href="emotions.html">
-                    <span class="exit__icon" aria-hidden="true">🧭</span>
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">🧭</span>
                     <span><strong>Explorer la carte depuis ma position</strong><small>Les 176 états affectifs, en 2D et
-                            en 3D</small></span>
+                            en 3D</small></span></span>
                 </a>
                 <a id="exit-understand" class="exit" href="index.html#partie-moteur-predictif">
-                    <span class="exit__icon" aria-hidden="true">📖</span>
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">📖</span>
                     <span><strong>Comprendre ce qui vient de se passer</strong><small>Le modèle expliqué pas à
-                            pas</small></span>
+                            pas</small></span></span>
                 </a>
                 <button type="button" id="btn-replay" class="exit">
-                    <span class="exit__icon" aria-hidden="true">🔁</span>
-                    <span><strong>Refaire le voyage autrement</strong><small>Voir où mène un autre choix</small></span>
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">🔁</span>
+                    <span><strong>Refaire le voyage autrement</strong><small>Voir où mène un autre choix</small></span></span>
                 </button>
             </div>
 
             <p class="disclaimer">
                 Ce voyage illustre le modèle Cartograffect&nbsp;; ce n'est pas un outil diagnostique.
-                Si une émotion devient difficile à vivre, parlez-en à un·e professionnel·le.
-                En cas de détresse, 24&nbsp;h/24&nbsp;: au Canada, <a href="tel:988"><strong>9-8-8</strong></a> (appel
-                ou texto)&nbsp;;
-                en France, <a href="tel:3114"><strong>3114</strong></a> (numéro national de prévention du suicide).
             </p>
         </section>
 

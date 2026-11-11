@@ -49,7 +49,7 @@
        ------------------------------------------------------------------ */
     var CHOICE_LABELS = {
         y: { '1': "Je prends la main : j'agis pour orienter la suite.", '0': "J'observe avant d'agir : je suspends mon geste.", '-1': "Je laisse faire : ce n'est pas moi qui décide ici." },
-        x: { '1': 'Je suis prêt·e à le revoir.', '0': 'Je ne sais pas encore.', '-1': "Je m'en tiens à ce que j'attendais." }
+        x: { '1': "J'ajuste mes attentes : je m'ouvre à cet imprévu.", '0': 'Je suspends mon jugement : je ne sais pas encore.', '-1': "Je garde mes repères : je m'en tiens à ce que j'attendais." }
     };
 
     var STORIES = {
@@ -111,9 +111,6 @@
         if (n < 0) return '\u2212' + Math.abs(n);
         return '0';
     }
-    function fmtCoord(x, y, z) {
-        return '(' + fmtSigned(x) + ', ' + fmtSigned(y) + ', ' + z + ')';
-    }
     function fmtAxisCoord(x, y, z) {
         return '(X=' + fmtSigned(x) + ', Y=' + fmtSigned(y) + ', Z=' + z + ')';
     }
@@ -147,6 +144,7 @@
             var s = document.getElementById(sid);
             if (s) s.hidden = (sid !== id);
         });
+        document.body.classList.toggle('is-final-stage', id === 'scene-resolution' || id === 'scene-ouverture');
         var scene = document.getElementById(id);
         scene.classList.remove('is-entering');
         void scene.offsetWidth; // relance l'animation
@@ -370,16 +368,17 @@
 
     function activationOf(sec) {
         if (sec == null) return { label: 'non mesurée', text: '' };
-        if (sec < 1.5) return { label: 'vive', text: 'une activation vive : votre système s\'est mobilisé presque immédiatement.' };
-        if (sec < 3.5) return { label: 'modérée', text: 'une activation modérée : le temps de saisir ce qui se passait.' };
-        return { label: 'posée', text: 'une activation posée : vous avez pris le temps de laisser l\'écart se déposer.' };
+        if (sec < 1.5) return { label: 'vive', text: 'une activation vive — votre système s\'est mobilisé presque immédiatement.' };
+        if (sec < 3.5) return { label: 'modérée', text: 'une activation modérée — le temps de saisir ce qui se passait.' };
+        return { label: 'posée', text: 'une activation posée — vous avez pris le temps de laisser l\'écart se déposer.' };
     }
 
     function readingOf(wpm) {
-        if (wpm > 600) return 'Vous parcouriez le texte en diagonale (≈ ' + wpm + ' mots/min) : rien ne semblait mériter une lecture attentive.';
+        if (wpm > 600) return 'Vous parcouriez le texte en diagonale (défilement rapide) : rien ne semblait mériter une lecture attentive.';
         if (wpm > 350) return 'Vous lisiez à un rythme rapide (≈ ' + wpm + ' mots/min).';
         if (wpm >= 120) return 'Vous lisiez à un rythme tranquille (≈ ' + wpm + ' mots/min).';
-        return 'Vous lisiez à un rythme lent et posé (≈ ' + wpm + ' mots/min).';
+        if (wpm >= 80) return 'Vous lisiez à un rythme lent et posé (≈ ' + wpm + ' mots/min).';
+        return 'Vous lisiez à un rythme lent et posé.';
     }
 
     /* ------------------------------------------------------------------
@@ -582,7 +581,7 @@
         setTimeout(function () { moveYou(you, res.x, res.y); }, reduceMotion ? 0 : 450);
         $('#resol-caption').textContent = typo(isCenter
             ? 'Votre point est resté au centre de la première couronne.'
-            : 'Votre point ' + fmtCoord(res.x, res.y, 2) + ' et, en pointillé, son opposé par inversion centrale' + (opp ? ' : ' + opp.name + '.' : '.'));
+            : 'Votre point ' + fmtAxisCoord(res.x, res.y, 2) + ' et, en pointillé, son opposé par inversion centrale' + (opp ? ' : ' + opp.name + '.' : '.'));
 
         // Récit horodaté
         var act = activationOf(state.reaction);
@@ -592,12 +591,13 @@
             ' Votre système prédictif n\'avait rien à signaler : tout ce qui arrivait correspondait à ce qu\'il attendait.');
         addStep(tl, 'stage-surprise', state.tSurprise - state.t0, 'Surprise',
             'La page s\'est interrompue au milieu d\'un mot et s\'est adressée à vous. Il vous a fallu ' +
-            (state.reaction != null ? fmtSec(state.reaction) : 'un instant') + ' pour réagir : ' + act.text +
+            (state.reaction != null ? fmtSec(state.reaction) : 'un instant') + ' pour réagir' +
+            (act.text ? ' : ' + act.text : '.') +
             ' Un écart venait de s\'ouvrir entre ce que vous prévoyiez et ce qui arrivait.');
         addStep(tl, 'stage-anticip', state.tAnticip - state.t0, 'Anticipation',
-            'Deux questions se sont posées : pouvez-vous agir sur ce qui arrive ? Êtes-vous prêt·e à revoir ce que vous attendiez ? ' +
+            'Deux questions se sont posées : pouvez-vous agir sur ce qui arrive ? Comment ajustez-vous vos attentes face à cet imprévu ? ' +
             'Vous avez répondu « ' + CHOICE_LABELS.y[String(state.y)] + ' », puis « ' + CHOICE_LABELS.x[String(state.x)] + ' ».');
-        addStep(tl, 'stage-result', state.tResol - state.t0, (isCenter ? 'Anticipation' : res.name) + ' ' + fmtCoord(res.x, res.y, res.z),
+        addStep(tl, 'stage-result', state.tResol - state.t0, (isCenter ? 'Anticipation' : res.name) + ' ' + fmtAxisCoord(res.x, res.y, res.z),
             story.vecu);
 
         // Encadrés complémentaires
@@ -605,7 +605,7 @@
         clear(extra);
         if (opp) {
             addCard(extra, 'story__card story__card--opp',
-                '<strong>Son opposé : ' + opp.name + ' ' + fmtCoord(opp.x, opp.y, opp.z) + '.</strong> ' +
+                '<strong>Son opposé : ' + opp.name + ' ' + fmtAxisCoord(opp.x, opp.y, opp.z) + '.</strong> ' +
                 'Si vous aviez répondu à l\'inverse sur les deux leviers, c\'est lui que vous auriez traversé. ' +
                 'Dans Cartograffect, chaque émotion a son antagoniste, symétrique par rapport au centre.');
         } else {
@@ -625,7 +625,7 @@
 
     /** Leviers d'abord (langage du visiteur), coordonnées ensuite. */
     function codeLine(e) {
-        return 'Agir ' + fmtSigned(e.y) + ' · Ajuster ' + fmtSigned(e.x) + '   —   ' + fmtCoord(e.x, e.y, e.z);
+        return 'Agir ' + fmtSigned(e.y) + ' · Ajuster ' + fmtSigned(e.x) + '   —   ' + fmtAxisCoord(e.x, e.y, e.z);
     }
 
     function addStep(list, cls, ms, title, text) {
@@ -673,8 +673,9 @@
         clear(card);
         if (next) {
             var n = document.createElement('p'); n.className = 'prolong-card__name'; n.textContent = next.name;
-            var c = document.createElement('p'); c.className = 'prolong-card__code'; c.textContent = next.code;
-            var d = document.createElement('p'); d.textContent = typo(next.desc);
+            var c = document.createElement('p'); c.className = 'prolong-card__code'; c.textContent = fmtAxisCoord(next.x, next.y, next.z);
+            var d = document.createElement('p');
+            d.textContent = typo(next.desc.replace(/\(\s*0\s*,\s*0\s*,\s*3\s*\)/g, fmtAxisCoord(0, 0, 3)));
             card.appendChild(n); card.appendChild(c); card.appendChild(d);
         }
 
@@ -745,7 +746,7 @@
             nl.textContent = next.name;
         }
 
-        $('#map-caption').textContent = typo('Votre point ' + fmtCoord(res.x, res.y, res.z) +
+        $('#map-caption').textContent = typo('Votre point ' + fmtAxisCoord(res.x, res.y, res.z) +
             ' sur la carte complète : 168 émotions réparties sur six couronnes (Z = 2 à 7), ' +
             'autour de l\'axe des 8 opérateurs centraux, soit 176 positions en tout. ' +
             'Chaque losange est un niveau plus profond : plus l\'horizon s\'élargit, plus les nuances se multiplient.');
