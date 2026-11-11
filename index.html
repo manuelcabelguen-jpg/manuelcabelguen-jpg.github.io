@@ -114,7 +114,7 @@
 
         <!-- Top Navigation Bar -->
         <header class="sticky site-header top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08]" style="background-color: rgba(10, 11, 20, 0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 51; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6 lg:gap-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3 lg:gap-4">
                 <a href="index.html" class="flex items-center gap-3 group shrink-0">
                     <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                     <div class="flex flex-col">
@@ -124,45 +124,41 @@
                 </a>
 
                 <!-- Desktop Navigation Links -->
-                <nav class="hidden md:flex items-center gap-1.5 lg:gap-2.5 ml-4 lg:ml-8">
-                    <a href="index.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg">Accueil</a>
-                    <a href="voyage.html" class="px-3 py-2 text-sm font-semibold text-amber-300 hover:text-white bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/30 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm" title="Vivre le Voyage affectif en 2 minutes">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                <nav class="hidden md:flex items-center gap-1 lg:gap-1.5 ml-2 lg:ml-4">
+                    <a href="index.html" class="px-2.5 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg whitespace-nowrap">Accueil</a>
+                    <a href="voyage.html" class="px-2.5 py-2 text-sm font-semibold text-amber-300 hover:text-white bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/30 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="Vivre le Voyage affectif en 2 minutes">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
                         ✨ Le Voyage
                     </a>
-                    <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                    <a href="article.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>
                         L'Article
                     </a>
-                    <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                    <a href="emotions.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span>
                         1. Émotions
                     </a>
-                    <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                    <a href="scholar_drive.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        <span class="w-2 h-2 rounded-full bg-indigo-400 shrink-0"></span>
                         Modèles Théoriques
                     </a>
                 </nav>
 
                 <!-- Action Button & Bilingual Modal -->
-                <div class="hidden md:flex items-center gap-2.5 header-action-btn">
-                    <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
+                <div class="hidden md:flex items-center gap-2 header-action-btn">
+                    <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer whitespace-nowrap" title="Recherche globale (Cmd + K / Ctrl + K)">
                         <span class="text-purple-400">🔍</span>
                         <span>Recherche</span>
                         <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
                     </button>
-                    <button onclick="window.replayIntroAnimation && window.replayIntroAnimation()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-300 hover:text-white bg-purple-950/40 hover:bg-purple-900/60 border border-purple-500/30 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Rejouer l'animation de démarrage">
-                        <svg class="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <span>Intro</span>
-                    </button>
-                    <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
+                    <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="Lexique Bilingue FR / EN & Citation">
                         <span class="text-purple-400">🌐</span> FR | EN
                     </button>
-                    <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Dépôt GitHub officiel (Code Open Source AGPLv3)">
-                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="Dépôt GitHub officiel (Code Open Source AGPLv3)">
+                        <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                         <span>GitHub</span>
                     </a>
-                    <a href="emotions.html" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
+                    <a href="emotions.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
                         Ouvrir la Carte &rarr;
                     </a>
                 </div>
@@ -333,16 +329,16 @@
                             </div>
 
                             <!-- Strata Filter Pill Bar -->
-                            <div class="flex items-center justify-between gap-1 overflow-x-auto pb-1 text-[11px] font-mono no-scrollbar border-b border-slate-800/60" id="heroStrataFilters">
+                            <div class="flex flex-wrap items-center gap-1 pb-2 text-[11px] font-mono border-b border-slate-800/60" id="heroStrataFilters">
                                 <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider shrink-0 mr-1">Strates :</span>
-                                <div class="flex items-center gap-1 shrink-0">
-                                    <button data-z="all" class="hero-strata-btn active px-2 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white transition-all">Toutes (176)</button>
-                                    <button data-z="2" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=0..2 Prototypes</button>
-                                    <button data-z="3" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=3</button>
-                                    <button data-z="4" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=4</button>
-                                    <button data-z="5" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=5</button>
-                                    <button data-z="6" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=6</button>
-                                    <button data-z="7" class="hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=7</button>
+                                <div class="flex flex-wrap items-center gap-1">
+                                    <button data-z="all" class="hero-strata-btn active px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white transition-all">Toutes (176)</button>
+                                    <button data-z="2" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=0..2 Prototypes</button>
+                                    <button data-z="3" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=3</button>
+                                    <button data-z="4" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=4</button>
+                                    <button data-z="5" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=5</button>
+                                    <button data-z="6" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=6</button>
+                                    <button data-z="7" class="hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all">Z=7</button>
                                 </div>
                             </div>
 
@@ -387,13 +383,11 @@
 
                             <!-- Live Active Inference Trajectory Telemetry Bar -->
                             <div class="w-full rounded-xl bg-slate-950/70 border border-slate-800/90 p-2.5 sm:p-3 flex flex-col gap-2">
-                                <div class="flex items-center justify-between text-[11px] font-mono">
-                                    <span class="flex items-center gap-1.5 text-slate-300 font-semibold">
-                                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
-                                        <span>Cycle d'Inférence Active :</span>
-                                    </span>
-                                    <span id="activeInferenceStatus" class="text-purple-300 font-bold">
-                                        Éveil Homéostatique
+                                <div class="w-full flex flex-row items-center gap-1.5 text-[10.5px] sm:text-[11px] font-mono whitespace-nowrap overflow-hidden">
+                                    <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0"></span>
+                                    <span class="text-slate-300 font-semibold shrink-0">Cycle d'Inférence Active &mdash;</span>
+                                    <span id="activeInferenceStatus" class="text-purple-300 font-bold truncate min-w-0">
+                                        1. Éveil Homéostatique de Fond (0,0,0)
                                     </span>
                                 </div>
                                 <!-- 4-Step Visual Progress Track -->
@@ -423,20 +417,6 @@
                 </div>
             </section>
 
-            <!-- Floating Quick Section Dots (Desktop Lateral Navigation) -->
-            <nav class="floating-dots-nav" aria-label="Navigation rapide par page">
-                <button class="floating-dot active" data-target="#hero-resume" aria-label="La Boussole des Émotions"><span class="dot-tooltip">✨ La Boussole des Émotions</span></button>
-                <button class="floating-dot" data-target="#ancres-epistemologiques" aria-label="Aux Origines de la Science"><span class="dot-tooltip">🏛️ Aux Origines de la Science</span></button>
-                <button class="floating-dot" data-target="#partie-moteur-predictif" aria-label="1. Le Cerveau Anticipateur"><span class="dot-tooltip">⚙️ 1. Le Cerveau Anticipateur</span></button>
-                <button class="floating-dot" data-target="#partie-noyau-affectif" aria-label="2. Les 2 Leviers Universels"><span class="dot-tooltip">⚡ 2. Les 2 Leviers (Agir ou S'adapter)</span></button>
-                <button class="floating-dot" data-target="#partie-matrice-couronnes" aria-label="3. L'Équilibre Attentionnel"><span class="dot-tooltip">📐 3. L'Équilibre Attentionnel</span></button>
-                <button class="floating-dot" data-target="#partie-palier-conscience" aria-label="4. L'Élévation de la Conscience"><span class="dot-tooltip">🏛️ 4. Du Réflexe aux Idéaux</span></button>
-                <button class="floating-dot" data-target="#partie-clinique-action" aria-label="5. Apprivoiser la Vague en 90s"><span class="dot-tooltip">🧭 5. La Vague des 90s &amp; F.I.T.T.T.</span></button>
-                <button class="floating-dot" data-target="#territoires" aria-label="6. Les 3 Étapes du Cheminement"><span class="dot-tooltip">🗺️ 6. Les 3 Territoires</span></button>
-                <button class="floating-dot" data-target="#navigateur-geometrique" aria-label="7. L'Explorateur Interactif"><span class="dot-tooltip">🌐 7. L'Explorateur 3D</span></button>
-                <button class="floating-dot" data-target="#section-applications-citation" aria-label="8. Applications &amp; Citation"><span class="dot-tooltip">📚 8. Pour Qui ? &amp; Citation</span></button>
-            </nav>
-
             <!-- Sticky Navigation Tabs Bar (Visible immediately under hero and sticks on scroll) -->
             <div id="stickySummaryNav" class="sticky-tabs-container" style="top: 5rem; background-color: rgba(10, 11, 20, 0.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index: 50; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -447,10 +427,9 @@
                         <a href="#partie-noyau-affectif" class="sticky-tab-btn"><span>⚡</span> 2. Les 2 Leviers</a>
                         <a href="#partie-matrice-couronnes" class="sticky-tab-btn"><span>📐</span> 3. Équilibre Attentionnel</a>
                         <a href="#partie-palier-conscience" class="sticky-tab-btn"><span>🏛️</span> 4. Niveaux de Conscience</a>
-                        <a href="#partie-clinique-action" class="sticky-tab-btn"><span>🧭</span> 5. Vague des 90s</a>
-                        <a href="#territoires" class="sticky-tab-btn"><span>🗺️</span> 6. Territoires</a>
-                        <a href="#navigateur-geometrique" class="sticky-tab-btn"><span>🌐</span> 7. Radar &amp; 3D</a>
-                        <a href="#section-applications-citation" class="sticky-tab-btn"><span>📚</span> 8. Pour Qui ? &amp; Citation</a>
+                        <a href="#architecture-scientifique" class="sticky-tab-btn"><span>💎</span> 5. Architecture &amp; Preuves</a>
+                        <a href="#navigateur-geometrique" class="sticky-tab-btn"><span>🌐</span> 6. Explorateur 176</a>
+                        <a href="#section-applications-citation" class="sticky-tab-btn"><span>📚</span> 7. Pour Qui &amp; Citation</a>
                     </div>
                 </div>
             </div>
@@ -531,7 +510,7 @@
                                     «&nbsp;Toutes nos passions sont bonnes de leur nature, et nous n'avons rien à éviter que leurs mauvais usages. Le principal remède est d'attendre que l'émotion du sang s'apaise avant de se déterminer.&nbsp;»
                                 </blockquote>
                                 <p class="text-xs text-slate-400">
-                                    <strong class="text-sky-300">L'apport Cartograffect&nbsp;:</strong> L'émotion est formalisée comme une configuration affective catégorisée et rattachée à une cause inférée, couplée à la sélection d'une politique d'action visant à résorber un écart de prédiction saillant.
+                                    <strong class="text-sky-300">L'apport Cartograffect&nbsp;:</strong> Avant de déclencher une politique d'action, l'esprit évalue la cause de l'écart de prédiction et régule l'alerte corporelle brute (affect) pour sélectionner une réponse adaptée plutôt qu'impulsive.
                                 </p>
                             </div>
                             <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
@@ -667,10 +646,10 @@
 
                 <div class="section-nav-footer text-slate-400">
                     <a href="#ancres-epistemologiques" class="hover:text-white flex items-center gap-1.5 transition-colors">
-                        <span>&uarr;</span> Précédent : Les Ancres Épistémologiques
+                        <span>&uarr;</span> Précédent : Origines
                     </a>
                     <a href="#partie-noyau-affectif" class="text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1.5 transition-colors">
-                        <span>Partie 2 : Le Noyau Affectif (X, Y)</span> <span>&darr;</span>
+                        <span>Partie 2 : Les 2 Leviers (X, Y)</span> <span>&darr;</span>
                     </a>
                 </div>
             </section>
@@ -795,10 +774,10 @@
 
                 <div class="section-nav-footer text-slate-400">
                     <a href="#partie-moteur-predictif" class="hover:text-white flex items-center gap-1.5 transition-colors">
-                        <span>&uarr;</span> Précédent : Moteur Prédictif
+                        <span>&uarr;</span> Précédent : 1. Cerveau Anticipateur
                     </a>
                     <a href="#partie-matrice-couronnes" class="text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-1.5 transition-colors">
-                        <span>Partie 3 : La Matrice &amp; Couronnes L1</span> <span>&darr;</span>
+                        <span>Partie 3 : Équilibre Attentionnel</span> <span>&darr;</span>
                     </a>
                 </div>
             </section>
@@ -822,13 +801,17 @@
                             Pourquoi ne peut-on pas être simultanément en rage totale et en contemplation sereine ? Parce que notre esprit dispose d'une énergie attentionnelle finie régie par une loi d'équilibre naturel :
                         </p>
 
-                        <div class="p-4 rounded-2xl bg-cosmic-900 border border-emerald-500/40 font-mono text-center">
-                            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-xl sm:text-2xl font-black text-emerald-300 tracking-wider">
-                                <span>|X| + |Y| = 2Z - 2</span>
-                                <span class="hidden sm:inline text-slate-600 font-normal">|</span>
-                                <span class="text-lg sm:text-xl text-emerald-400/90">N(Z) = 8(Z - 1)</span>
+                        <div class="p-4 rounded-2xl bg-cosmic-900 border border-emerald-500/40 font-mono text-center space-y-2">
+                            <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+                                <span class="px-3 py-1 rounded-xl bg-emerald-950/70 border border-emerald-500/40 text-base sm:text-xl font-black text-emerald-300 tracking-wider">
+                                    |X| + |Y| = 2Z - 2
+                                </span>
+                                <span class="text-emerald-400/80 font-sans text-sm" aria-hidden="true">&bull;</span>
+                                <span class="px-3 py-1 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-sm sm:text-lg font-bold text-emerald-400/95 tracking-wide">
+                                    N(Z) = 8(Z - 1) <span class="text-xs font-medium text-slate-400">(pour Z &ge; 2)</span>
+                                </span>
                             </div>
-                            <div class="text-xs text-slate-400 mt-1">
+                            <div class="text-xs text-slate-400">
                                 Loi universelle de conservation attentionnelle (Norme L₁) &amp; dénombrement des positions
                             </div>
                         </div>
@@ -914,10 +897,10 @@
 
                 <div class="section-nav-footer text-slate-400">
                     <a href="#partie-noyau-affectif" class="hover:text-white flex items-center gap-1.5 transition-colors">
-                        <span>&uarr;</span> Précédent : Le Noyau Affectif
+                        <span>&uarr;</span> Précédent : 2. Les 2 Leviers
                     </a>
                     <a href="#partie-palier-conscience" class="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1.5 transition-colors">
-                        <span>Partie 4 : Les 8 Paliers de Conscience</span> <span>&darr;</span>
+                        <span>Partie 4 : Niveaux de Conscience</span> <span>&darr;</span>
                     </a>
                 </div>
             </section>
@@ -962,7 +945,7 @@
                             </div>
                             <h3 class="text-sm font-bold text-white">Surprise — Réactivité Sensorimotrice</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
-                                Réflexes en millisecondes : sursaut, clignement, retrait au contact de la douleur.
+                                Signal d'écart de prédiction immédiat (haute précision) : sursaut d'alerte, interruption de l'action en cours et mobilisation instantanée de l'attention.
                             </p>
                         </div>
 
@@ -1020,7 +1003,7 @@
                                 <span class="text-xs font-mono font-bold text-rose-400">STRATE Z=6</span>
                                 <span class="text-lg">⚖️</span>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Saisissement — Identités Affectives (Z = 6)</h3>
+                            <h3 class="text-sm font-bold text-white">Saisissement — Identités Affectives</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
                                 Dépassement de soi : sens de la justice, engagement altruiste, dévouement à un idéal.
                             </p>
@@ -1052,17 +1035,14 @@
 
                 <div class="section-nav-footer text-slate-400">
                     <a href="#partie-matrice-couronnes" class="hover:text-white flex items-center gap-1.5 transition-colors">
-                        <span>&uarr;</span> Précédent : La Règle de Manhattan
+                        <span>&uarr;</span> Précédent : 3. Équilibre Attentionnel
                     </a>
-                    <a href="#partie-clinique-action" class="text-pink-400 hover:text-pink-300 font-semibold flex items-center gap-1.5 transition-colors">
-                        <span>Partie 5 : Guide Clinique &amp; F.I.T.T.T.</span> <span>&darr;</span>
+                    <a href="#architecture-scientifique" class="text-pink-400 hover:text-pink-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 5 : Architecture &amp; Preuves</span> <span>&darr;</span>
                     </a>
                 </div>
             </section>
 
-            <!-- ======================================================== -->
-            <!-- PARTIE 5 : GUIDE CLINIQUE & TEST F.I.T.T.T.              -->
-            <!-- ======================================================== -->
             <!-- ======================================================== -->
             <!-- ARCHITECTURE SCIENTIFIQUE OFFICIELLE                    -->
             <!-- ======================================================== -->
@@ -1121,6 +1101,7 @@
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Zenodo DOI: 10.5281/zenodo.24022795</li>
                                 <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Dépôt OSF: osf.io/z89sg</li>
+                                <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Architecture sous CC BY-NC-SA 4.0</li>
                             </ul>
                         </div>
                         <div class="pt-5 mt-4 border-t border-slate-800">
@@ -1184,6 +1165,16 @@
                     </div>
 
                 </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#partie-palier-conscience" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : 4. Niveaux de Conscience
+                    </a>
+                    <a href="#navigateur-geometrique" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 6 : Explorateur 176</span> <span>&darr;</span>
+                    </a>
+                </div>
+            </section>
 
             <!-- Innovative Geometric Navigator Section: Octahedral Architecture Explorer -->
             <section id="navigateur-geometrique" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
@@ -1252,13 +1243,13 @@
                         
                         <!-- Strata Overview Box -->
                         <div class="rounded-2xl bg-slate-900/80 border border-slate-800 p-5 shadow-xl space-y-3">
-                            <div class="flex items-center justify-between">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                 <div>
                                     <span class="text-[10px] font-mono uppercase tracking-widest text-purple-400 font-bold" id="strataBadge">STRATE Z=2 &bull; PROTOTYPES</span>
-                                    <h3 class="text-xl font-heading font-bold text-white mt-0.5" id="strataHeading">Première couronne &amp; Opérateur Anticipation</h3>
+                                    <h3 class="text-xl font-heading font-bold text-white mt-0.5" id="strataHeading">Première couronne (8 prototypes) &amp; Opérateur Anticipation (0,0,2)</h3>
                                 </div>
-                                <div class="text-right">
-                                    <div class="text-xs font-mono font-bold text-indigo-300" id="strataCount">9 Entrées (1 op + 8 affects)</div>
+                                <div class="sm:text-right">
+                                    <div class="text-xs font-mono font-bold text-indigo-300" id="strataCount">9 Entrées sur la strate (8 prototypes sur la couronne N(2)=8 + 1 opérateur central)</div>
                                     <div class="text-[10px] font-mono text-slate-300" id="strataManhattanRadius">Rayon r = 2Z - 2 = 2</div>
                                 </div>
                             </div>
@@ -1294,6 +1285,15 @@
                         </div>
 
                     </div>
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#architecture-scientifique" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : 5. Architecture &amp; Preuves
+                    </a>
+                    <a href="#section-applications-citation" class="text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Partie 7 : Pour Qui &amp; Citation</span> <span>&darr;</span>
+                    </a>
                 </div>
             </section>
             <!-- ======================================================== -->
@@ -1382,18 +1382,22 @@
                                     <strong>CARTOGRAFFECT&reg;</strong> est une marque déposée de Manuel Cabelguen &bull; Droit d'auteur enregistré à l'OPIC n° 1233199.
                                 </p>
                             </div>
-                            <button id="btnCopyCitation" onclick="copyCitationText()" class="self-start sm:self-center px-4 py-2.5 rounded-xl font-semibold text-xs text-white bg-purple-600 hover:bg-purple-500 border border-purple-400/40 shadow-lg shadow-purple-600/30 transition-all flex items-center gap-2 shrink-0">
+                            <button id="btnCopyCitation" onclick="copyApaCitations()" class="self-start sm:self-center px-4 py-2.5 rounded-xl font-semibold text-xs text-white bg-purple-600 hover:bg-purple-500 border border-purple-400/40 shadow-lg shadow-purple-600/30 transition-all flex items-center gap-2 shrink-0">
                                 <span id="copyIcon">📋</span>
                                 <span id="copyText">Copier la citation APA</span>
                             </button>
                         </div>
 
-                        <div class="relative bg-slate-950/90 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto select-all" id="citationBox">
-Article théorique :
-Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 1.0.1) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795 | OSF: https://osf.io/z89sg
-
-Formalisation Lean 4 :
-Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4 (version v1.0.0) [Logiciel]. Zenodo. https://doi.org/10.5281/zenodo.23833938
+                        <div class="relative bg-slate-950/90 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto select-all space-y-3" id="citationBox">
+                            <div>
+                                <div class="text-purple-300 font-semibold mb-1">Article théorique :</div>
+                                <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 1.0.1) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795</div>
+                                <div class="text-slate-400 mt-1">OSF : https://osf.io/z89sg</div>
+                            </div>
+                            <div>
+                                <div class="text-indigo-300 font-semibold mb-1">Formalisation Lean 4 :</div>
+                                <div>Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4</em> (version v1.0.0) [Logiciel]. Zenodo. https://doi.org/10.5281/zenodo.23833938</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1405,6 +1409,15 @@ Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique v
                         </a>
                     </div>
 
+                </div>
+
+                <div class="section-nav-footer text-slate-400">
+                    <a href="#navigateur-geometrique" class="hover:text-white flex items-center gap-1.5 transition-colors">
+                        <span>&uarr;</span> Précédent : 6. Explorateur 176
+                    </a>
+                    <a href="#hero-resume" class="text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1.5 transition-colors">
+                        <span>Retour en haut : La Boussole</span> <span>&uarr;</span>
+                    </a>
                 </div>
             </section>
         </main>
@@ -1468,9 +1481,11 @@ Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique v
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
         })();
 
-        // Clipboard Copy Helper for Academic Citation
-        function copyCitationText() {
-            const text = "Cabelguen, M. (2024–2026). Cartographie des affects : une architecture hiérarchique de l'expérience humaine fondée sur le traitement prédictif. CARTOGRAFFECT® (Marque déposée). Droit d'auteur enregistré à l'OPIC (n° 1233199). www.cartograffect.com";
+        // Clipboard Copy Helper for Academic APA 7 Citations
+        function copyApaCitations() {
+            const text =
+                "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 1.0.1) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795\n\n" +
+                "Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4 (version v1.0.0) [Logiciel]. Zenodo. https://doi.org/10.5281/zenodo.23833938";
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
                     const copyText = document.getElementById('copyText');

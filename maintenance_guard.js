@@ -72,36 +72,38 @@
             window.location.replace(MAINTENANCE_URL);
         },
 
-        // Afficher le badge flottant discret indiquant que l'aperçu privé est actif (repliable en micro-pastille)
+        // Afficher le badge discret dans le footer indiquant que l'aperçu privé est actif
         injectPreviewBanner: function () {
             if (document.getElementById('cartograffect-preview-banner')) return;
 
-            // Ingestion des styles de la pastille repliable
+            const footer = document.querySelector('footer');
+            if (!footer) return;
+
+            // Injection des styles de la pastille dans le footer (aucun chevauchement avec le Hero)
             if (!document.getElementById('ctg-preview-banner-style')) {
                 const style = document.createElement('style');
                 style.id = 'ctg-preview-banner-style';
                 style.textContent = `
+                    #cartograffect-preview-banner-wrap {
+                        display: flex;
+                        justify-content: center;
+                        margin-top: 16px;
+                    }
                     #cartograffect-preview-banner {
-                        position: fixed;
-                        bottom: 12px;
-                        left: 12px;
-                        right: auto;
-                        z-index: 999999;
                         background: rgba(14, 23, 38, 0.88);
                         border: 1px solid rgba(168, 85, 247, 0.45);
                         color: #e2e8f0;
-                        padding: 4px 10px;
+                        padding: 5px 12px;
                         border-radius: 9999px;
                         font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
                         font-size: 11px;
                         font-weight: 500;
-                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(168, 85, 247, 0.15);
-                        backdrop-filter: blur(10px);
-                        display: flex;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+                        display: inline-flex;
                         align-items: center;
                         gap: 8px;
                         cursor: pointer;
-                        opacity: 0.75;
+                        opacity: 0.85;
                         transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                         user-select: none;
                         max-width: fit-content;
@@ -111,25 +113,23 @@
                         opacity: 1;
                         background: rgba(11, 17, 32, 0.98);
                         border-color: rgba(168, 85, 247, 0.7);
-                        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 18px rgba(168, 85, 247, 0.35);
-                        padding: 6px 14px;
+                        box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.6), 0 0 14px rgba(168, 85, 247, 0.25);
                     }
                     #cartograffect-preview-banner .ctg-banner-details {
-                        display: none;
+                        display: inline-flex;
                         align-items: center;
                         gap: 8px;
-                    }
-                    #cartograffect-preview-banner:hover .ctg-banner-details,
-                    #cartograffect-preview-banner:focus-within .ctg-banner-details {
-                        display: inline-flex;
                     }
                 `;
                 document.head.appendChild(style);
             }
 
+            const wrap = document.createElement('div');
+            wrap.id = 'cartograffect-preview-banner-wrap';
+
             const banner = document.createElement('div');
             banner.id = 'cartograffect-preview-banner';
-            banner.setAttribute('title', 'Aperçu Privé Actif (Survolez pour étendre ou reverrouiller)');
+            banner.setAttribute('title', 'Aperçu Privé Actif');
 
             banner.innerHTML = `
                 <span style="display:inline-flex; align-items:center; gap:6px;">
@@ -152,7 +152,8 @@
                 </span>
             `;
 
-            document.body.appendChild(banner);
+            wrap.appendChild(banner);
+            footer.appendChild(wrap);
 
             const btnRelock = document.getElementById('ctg-btn-relock');
             if (btnRelock) {

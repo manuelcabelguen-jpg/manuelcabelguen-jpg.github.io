@@ -18,7 +18,15 @@
     'use strict';
 
     var M = window.CartograffectModel;
-    if (!M) { console.error('[Voyage] cartograffect_model.js introuvable.'); return; }
+    if (!M) {
+        console.error('[Voyage] cartograffect_model.js introuvable.');
+        // Message visible plutôt qu'un bouton inerte
+        var loadErr = document.getElementById('load-error');
+        if (loadErr) loadErr.hidden = false;
+        var startBtn = document.getElementById('btn-start');
+        if (startBtn) startBtn.disabled = true;
+        return;
+    }
 
     var SVGNS = 'http://www.w3.org/2000/svg';
     var DIA = 50;   // 1 unité du modèle = 50 px dans le losange Z=2
@@ -115,6 +123,11 @@
         var m = text.replace(/\u00a0/g, ' ').trim().match(/[^\s]+/g);
         return m ? m.length : 0;
     }
+    function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+    /** Typographie française : espace insécable avant : ; ? ! » et après «. */
+    function typo(s) {
+        return String(s).replace(/ ([:;?!»])/g, '\u00a0$1').replace(/« /g, '«\u00a0');
+    }
 
     /* ------------------------------------------------------------------
        Scènes & jauge Z
@@ -141,59 +154,85 @@
         if (!gauge) return;
         gauge.setAttribute('data-z', String(z));
         Array.prototype.forEach.call(gauge.querySelectorAll('[data-stop]'), function (li) {
-            li.classList.toggle('is-current', Number(li.getAttribute('data-stop')) === z);
+            var isCur = Number(li.getAttribute('data-stop')) === z;
+            li.classList.toggle('is-current', isCur);
+            if (isCur) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
         });
     }
 
     /* ------------------------------------------------------------------
        Z=0 · VEILLE
+       Les paragraphes apparaissent un par un, à la demande du lecteur :
+       le temps passé sur chacun donne un rythme de lecture réellement
+       mesuré, quelle que soit la taille de l'écran. Le dernier paragraphe
+       est coupé au moment où ce rythme indique que la phrase clé est lue.
        ------------------------------------------------------------------ */
+    var READ = { idx: 0, paraStart: 0, sampleWords: 0, sampleMs: 0, cutTimer: null };
+
+    function paraEl(i) { return document.querySelector('#veille-text p[data-para="' + i + '"]'); }
+
+    function lastWordsBeforeCut() {
+        var last = $('#veille-last');
+        return countWords(last.firstElementChild.textContent + ' ' + $('#veille-cut-before').textContent);
+    }
+
     function startVeille() {
         document.body.classList.add('journey-started', 'is-breathing');
         showScene('scene-veille');
         setStage(0);
         state.t0 = now();
-        announce('Veille. Lisez le texte à votre rythme.');
+        READ.idx = 0;
+        READ.paraStart = state.t0;
+        READ.sampleWords = 0;
+        READ.sampleMs = 0;
+        paraEl(0).classList.add('is-revealed');
+        $('#btn-next-para').hidden = false;
+        announce('Veille. Lisez le texte à votre rythme, puis passez à la suite.');
+    }
 
-        var last = $('#veille-last');
-        var minSec = Math.min(30, Math.max(9, wordsBeforeCut() / 5)); // ≈ 300 mots/min au plus vite
-        var triggered = false;
-        var observer = null;
+    function nextParagraph() {
+        var t = now();
+        var cur = paraEl(READ.idx);
+        READ.sampleWords += countWords(cur.textContent);
+        READ.sampleMs += t - READ.paraStart;
+        READ.idx += 1;
+        READ.paraStart = t;
 
-        function trigger() {
-            if (triggered) return;
-            triggered = true;
-            if (observer) observer.disconnect();
-            clearTimeout(fallback);
-            triggerSurprise();
+        var p = paraEl(READ.idx);
+        if (!p) return;
+        p.hidden = false;
+        p.classList.add('is-revealed');
+
+        // Amène le nouveau paragraphe vers le haut de l'écran, sans le couper
+        var top = p.getBoundingClientRect().top + window.pageYOffset - window.innerHeight * 0.28;
+        window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? 'auto' : 'smooth' });
+
+        if (p.id === 'veille-last') {
+            $('#btn-next-para').hidden = true;
+            // Le bouton vient d'être masqué : garder le focus dans la lecture
+            p.setAttribute('tabindex', '-1');
+            try { p.focus({ preventScroll: true }); } catch (e) { p.focus(); }
+            scheduleCut();
+        } else {
+            announce(p.textContent);
         }
+    }
 
-        if ('IntersectionObserver' in window) {
-            observer = new IntersectionObserver(function (entries) {
-                entries.forEach(function (en) {
-                    if (!en.isIntersecting) return;
-                    var elapsed = (now() - state.t0) / 1000;
-                    // Laisse le temps de lire les dernières lignes avant la rupture
-                    var wait = Math.max(1800, (minSec - elapsed) * 1000);
-                    setTimeout(trigger, wait);
-                });
-            }, { rootMargin: '0px 0px -30% 0px' });
-            observer.observe(last);
-        }
-        var fallback = setTimeout(trigger, 55000);
+    function scheduleCut() {
+        // Rythme mesuré sur les paragraphes précédents, borné à des valeurs plausibles
+        var wpm = READ.sampleMs > 0 ? READ.sampleWords / (READ.sampleMs / 60000) : 250;
+        wpm = clamp(wpm, 90, 900);
+        var wait = clamp(lastWordsBeforeCut() / wpm * 60000, 2500, 30000);
+        READ.cutTimer = setTimeout(triggerSurprise, wait);
     }
 
     function wordsBeforeCut() {
         var paras = document.querySelectorAll('#veille-text p');
         var txt = '';
         Array.prototype.forEach.call(paras, function (p) {
-            if (p.id === 'veille-last') {
-                txt += ' ' + p.firstElementChild.textContent + ' ' + $('#veille-cut-before').textContent;
-            } else {
-                txt += ' ' + p.textContent;
-            }
+            if (p.id !== 'veille-last') txt += ' ' + p.textContent;
         });
-        return countWords(txt);
+        return countWords(txt) + lastWordsBeforeCut();
     }
 
     /* ------------------------------------------------------------------
@@ -203,7 +242,7 @@
         state.tSurprise = now();
         state.readSec = (state.tSurprise - state.t0) / 1000;
         state.words = wordsBeforeCut();
-        state.wpm = Math.round(state.words / (state.readSec / 60));
+        state.wpm = Math.round(state.words / (Math.max(1, state.readSec) / 60));
 
         // Interruption au milieu du mot
         var after = $('#veille-cut-after');
@@ -232,29 +271,82 @@
         }, 750);
     }
 
+    // Touches qui ne traduisent pas une réaction (navigation, modificateurs)
+    var IGNORED_KEYS = /^(Tab|Shift|Control|Alt|AltGraph|Meta|CapsLock|Fn|OS)$/;
+    var MIN_REACTION_MS = 250; // en deçà : geste en cours, pas une réaction
+    var TAP_SLOP_PX = 12;      // au-delà : glissement/défilement, pas un tap
+
     function armReaction() {
         var tStart = now();
         var done = false;
-        var hintTimer = setTimeout(function () { if (!done) $('#surprise-hint').hidden = false; }, 6000);
-        var evts = ['keydown', 'pointerdown', 'wheel', 'touchstart'];
+        var downPos = null;
+        // Consigne affichée d'emblée : on mesure la réaction, pas le temps de deviner quoi faire
+        $('#surprise-hint').hidden = false;
 
-        function onReact() {
+        function cleanup() {
+            window.removeEventListener('pointerdown', onDown, true);
+            window.removeEventListener('pointerup', onUp, true);
+            window.removeEventListener('pointercancel', onCancel, true);
+            window.removeEventListener('click', onClick, true);
+            window.removeEventListener('keydown', onKey, true);
+        }
+
+        function onDown(ev) {
+            if (ev.isPrimary === false) return;
+            if (ev.target && ev.target.closest && ev.target.closest('.v-topbar')) return;
+            downPos = { x: ev.clientX, y: ev.clientY };
+        }
+        function onCancel() { downPos = null; }
+        function onUp(ev) {
+            if (!downPos || ev.isPrimary === false) return;
+            var dx = ev.clientX - downPos.x;
+            var dy = ev.clientY - downPos.y;
+            downPos = null;
+            if (Math.hypot(dx, dy) > TAP_SLOP_PX) return;
+            completeReaction('pointer');
+        }
+        function onClick(ev) {
+            // Repli pour lecteurs d'écran / navigation sans pointeur (évite d'ignorer un tap iOS)
+            if (ev.target && ev.target.closest && ev.target.closest('.v-topbar')) return;
+            completeReaction('click');
+        }
+        function onKey(ev) {
+            if (IGNORED_KEYS.test(ev.key || '')) return;
+            completeReaction('keydown');
+        }
+
+        function completeReaction(kind) {
             if (done) return;
+            if (now() - tStart < MIN_REACTION_MS) return;
             done = true;
-            clearTimeout(hintTimer);
-            evts.forEach(function (ev) { window.removeEventListener(ev, onReact, true); });
+            cleanup();
             state.reaction = (now() - tStart) / 1000;
             $('#surprise-hint').hidden = true;
             $('#reaction-time').textContent = fmtSec(state.reaction);
             var afterBox = $('#surprise-after');
             afterBox.hidden = false;
-            setTimeout(function () {
+            function revealNext() {
                 afterBox.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
                 $('#btn-to-anticipation').focus({ preventScroll: true });
-            }, 50);
+            }
+            // Si la réaction est une touche (Espace, Entrée…), attendre qu'elle soit relâchée
+            // avant de donner le focus au bouton, sinon le relâchement l'activerait aussitôt.
+            if (kind === 'keydown') {
+                window.addEventListener('keyup', function onUpKey() {
+                    window.removeEventListener('keyup', onUpKey, true);
+                    setTimeout(revealNext, 50);
+                }, true);
+            } else {
+                setTimeout(revealNext, 50);
+            }
             announce('Il vous a fallu ' + fmtSec(state.reaction) + ' pour réagir. C\'était la Surprise.');
         }
-        evts.forEach(function (ev) { window.addEventListener(ev, onReact, { capture: true, passive: true }); });
+
+        window.addEventListener('pointerdown', onDown, true);
+        window.addEventListener('pointerup', onUp, true);
+        window.addEventListener('pointercancel', onCancel, true);
+        window.addEventListener('click', onClick, true);
+        window.addEventListener('keydown', onKey, true);
     }
 
     function activationOf(sec) {
@@ -321,9 +413,8 @@
             var cx = e.x * DIA, cy = -e.y * DIA;
             var cls = 'dia-dot';
             if (opts.focus && opts.focus.name !== 'Anticipation') {
-                if (e.name === opts.focus.name) cls += '';
-                else if (opts.opposite && e.name === opts.opposite.name) cls += ' is-opposite';
-                else cls += ' is-dim';
+                if (opts.opposite && e.name === opts.opposite.name) cls += ' is-opposite';
+                else if (e.name !== opts.focus.name) cls += ' is-dim';
             } else if (!opts.labels) {
                 cls += ' is-mute';
             }
@@ -363,24 +454,45 @@
        Z=2 · ANTICIPATION
        ------------------------------------------------------------------ */
     var youAnticip = null;
+    var ANTICIP_CAPTION = null; // légende initiale, restaurée à chaque nouveau passage
 
-    function startAnticipation() {
+    function resetChoices() {
+        state.x = null;
+        state.y = null;
+        state.result = null;
+        Array.prototype.forEach.call(document.querySelectorAll('.choice'), function (label) {
+            label.classList.remove('is-selected');
+            var input = label.querySelector('input');
+            if (input) input.checked = false;
+        });
+        $('#q-x').hidden = true;
+        $('#btn-resolve').disabled = true;
+        if (ANTICIP_CAPTION !== null) $('#anticip-caption').innerHTML = ANTICIP_CAPTION;
+    }
+
+    function startAnticipation(opts) {
+        opts = opts || {};
+        cancelMapAnim();
         state.tAnticip = now();
+        resetChoices();
         document.body.classList.remove('is-ruptured');
         document.body.classList.add('is-later');
         showScene('scene-anticipation');
         setStage(2);
         youAnticip = drawDiamond($('#dia-anticip'), { labels: false });
-        announce('Anticipation. Votre cerveau cherche la suite. Deux questions.');
+        announce(opts.replay
+            ? 'Nouveau passage par l\'Anticipation. Répondez autrement pour voir où cela mène.'
+            : 'Anticipation. Votre cerveau cherche la suite. Deux questions.');
     }
 
-    function onChoice(btn) {
-        var axis = btn.getAttribute('data-axis');
-        var val = Number(btn.getAttribute('data-value'));
+    function onChoice(input) {
+        var label = input.closest('.choice');
+        var axis = label.getAttribute('data-axis');
+        var val = Number(input.value);
         state[axis] = val;
 
-        Array.prototype.forEach.call(document.querySelectorAll('.choice[data-axis="' + axis + '"]'), function (b) {
-            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        Array.prototype.forEach.call(document.querySelectorAll('.choice[data-axis="' + axis + '"]'), function (l) {
+            l.classList.toggle('is-selected', l === label);
         });
 
         if (axis === 'y') {
@@ -400,7 +512,7 @@
         if (p.x === 0 && p.y === 0) {
             cap.innerHTML = 'Votre point reste au centre&nbsp;: l\'Anticipation <span class="coord">(0, 0, 2)</span>.';
         } else {
-            cap.textContent = 'Votre point se déplace : votre attention se répartit entre les deux leviers, sans jamais sortir de la couronne.';
+            cap.textContent = typo('Votre point se déplace : votre attention se répartit entre les deux leviers, sans jamais sortir de la couronne.');
         }
 
         $('#btn-resolve').disabled = !(state.x != null && state.y != null);
@@ -436,19 +548,18 @@
         sw.style.color = color;
         sw.setAttribute('aria-hidden', 'true');
         title.appendChild(sw);
-        title.appendChild(document.createTextNode(isCenter ? 'Anticipation : en suspens' : res.name));
-        $('#resol-coord').textContent = 'X ' + fmtCoord(res.x, res.y, res.z).slice(1, -1).replace(/, /g, ' · Y ').replace(/ · Y (\d)$/, ' · Z $1');
+        title.appendChild(document.createTextNode(isCenter ? typo('Anticipation : en suspens') : res.name));
         $('#resol-coord').textContent = codeLine(res);
-        $('#resol-lead').textContent = story.levers;
+        $('#resol-lead').textContent = typo(story.levers);
 
         // Losange : départ du centre puis glissement vers la position
         var svg = $('#dia-resol');
         var you = drawDiamond(svg, { labels: true, focus: res, opposite: opp });
         moveYou(you, 0, 0);
         setTimeout(function () { moveYou(you, res.x, res.y); }, reduceMotion ? 0 : 450);
-        $('#resol-caption').textContent = isCenter
+        $('#resol-caption').textContent = typo(isCenter
             ? 'Votre point est resté au centre de la première couronne.'
-            : 'Votre point ' + fmtCoord(res.x, res.y, 2) + ' et, en pointillé, son opposé par inversion centrale' + (opp ? ' : ' + opp.name + '.' : '.');
+            : 'Votre point ' + fmtCoord(res.x, res.y, 2) + ' et, en pointillé, son opposé par inversion centrale' + (opp ? ' : ' + opp.name + '.' : '.'));
 
         // Récit horodaté
         var act = activationOf(state.reaction);
@@ -462,7 +573,7 @@
             ' Un écart venait de s\'ouvrir entre ce que vous prévoyiez et ce qui arrivait.');
         addStep(tl, 'stage-anticip', state.tAnticip - state.t0, 'Anticipation',
             'Deux questions se sont posées : pouvez-vous agir sur ce qui arrive ? Êtes-vous prêt·e à revoir ce que vous attendiez ? ' +
-            'Vous avez répondu « ' + CHOICE_LABELS.y[String(state.y)] + ' », puis « ' + CHOICE_LABELS.x[String(state.x)] + ' »');
+            'Vous avez répondu « ' + CHOICE_LABELS.y[String(state.y)] + ' », puis « ' + CHOICE_LABELS.x[String(state.x)] + ' ».');
         addStep(tl, 'stage-result', state.tResol - state.t0, (isCenter ? 'Anticipation' : res.name) + ' ' + fmtCoord(res.x, res.y, res.z),
             story.vecu);
 
@@ -489,9 +600,10 @@
         announce('Résolution : ' + (isCenter ? 'Anticipation, en suspens.' : res.name + '.') + ' ' + story.levers);
     }
 
+    /** Leviers d'abord (langage du visiteur), coordonnées ensuite. */
     function codeLine(e) {
         var f = function (n) { return n > 0 ? '+' + n : String(n); };
-        return 'X ' + f(e.x) + ' · Y ' + f(e.y) + ' · Z ' + e.z + '   —   Agir ' + f(e.y) + ' / Ajuster ' + f(e.x);
+        return 'Agir ' + f(e.y) + ' · Ajuster ' + f(e.x) + '   —   ' + fmtCoord(e.x, e.y, e.z);
     }
 
     function addStep(list, cls, ms, title, text) {
@@ -502,9 +614,9 @@
         time.textContent = fmtClock(ms);
         var body = document.createElement('div');
         var h = document.createElement('h4');
-        h.textContent = title;
+        h.textContent = typo(title);
         var p = document.createElement('p');
-        p.textContent = text;
+        p.textContent = typo(text);
         body.appendChild(h);
         body.appendChild(p);
         li.appendChild(time);
@@ -515,7 +627,7 @@
     function addCard(parent, cls, html) {
         var d = document.createElement('div');
         d.className = cls;
-        d.innerHTML = html;
+        d.innerHTML = typo(html);
         parent.appendChild(d);
     }
 
@@ -530,17 +642,17 @@
         // Prolongement dans le même groupe à Z=3 : (X, Y) → (2X, 2Y)
         var next = M.emotions.filter(function (e) { return e.z === 3 && e.x === 2 * res.x && e.y === 2 * res.y; })[0];
 
-        $('#ouv-lead').textContent = isCenter
+        $('#ouv-lead').textContent = typo(isCenter
             ? 'La suspension peut se prolonger d\'un niveau. À la strate suivante (Z = 3), le centre porte un autre nom :'
-            : 'Votre point a peut-être déjà glissé d\'un cran plus loin. Dans le groupe ' + res.group +
-              ', la strate suivante (Z = 3) porte un nom :';
+            : 'Votre point a pu glisser d\'un cran plus loin. Dans le groupe ' + res.group +
+              ', la strate suivante (Z = 3) porte un nom :');
 
         var card = $('#prolong-card');
         clear(card);
         if (next) {
             var n = document.createElement('p'); n.className = 'prolong-card__name'; n.textContent = next.name;
             var c = document.createElement('p'); c.className = 'prolong-card__code'; c.textContent = next.code;
-            var d = document.createElement('p'); d.textContent = next.desc;
+            var d = document.createElement('p'); d.textContent = typo(next.desc);
             card.appendChild(n); card.appendChild(c); card.appendChild(d);
         }
 
@@ -553,7 +665,7 @@
                 ? 'Autres nuances voisines du même groupe&nbsp;: <strong>' + others.join('</strong>, <strong>') + '</strong>.'
                 : '';
         } else {
-            nuances.textContent = 'Le prochain élément d\'information fera basculer le point vers l\'une des seize émotions réactives de ce niveau.';
+            nuances.textContent = typo('Le prochain élément d\'information fera basculer le point vers l\'une des seize émotions réactives de ce niveau.');
         }
 
         // Sortie vers la carte depuis la position du visiteur
@@ -563,7 +675,16 @@
         announce('Ouverture. ' + (next ? 'Prolongement possible : ' + next.name + '.' : ''));
     }
 
+    var mapRevealTimer = null;
+    var mapRafId = null;
+
+    function cancelMapAnim() {
+        if (mapRevealTimer) { clearTimeout(mapRevealTimer); mapRevealTimer = null; }
+        if (mapRafId) { cancelAnimationFrame(mapRafId); mapRafId = null; }
+    }
+
     function drawMap(res, next) {
+        cancelMapAnim();
         var svg = $('#map-full');
         clear(svg);
         svg.classList.remove('is-revealed', 'is-labelled');
@@ -602,9 +723,10 @@
             nl.textContent = next.name;
         }
 
-        $('#map-caption').textContent = 'Votre point ' + fmtCoord(res.x, res.y, res.z) +
-            ' parmi les 176 positions de Cartograffect, réparties sur huit niveaux (Z = 0 à 7). ' +
-            'Chaque losange est un niveau plus profond : plus l\'horizon s\'élargit, plus les nuances se multiplient.';
+        $('#map-caption').textContent = typo('Votre point ' + fmtCoord(res.x, res.y, res.z) +
+            ' sur la carte complète : 168 émotions réparties sur six couronnes (Z = 2 à 7), ' +
+            'autour de l\'axe des 8 opérateurs centraux, soit 176 positions en tout. ' +
+            'Chaque losange est un niveau plus profond : plus l\'horizon s\'élargit, plus les nuances se multiplient.');
 
         var from = 68, to = 272;
         if (reduceMotion) {
@@ -613,7 +735,8 @@
             return;
         }
         setViewBox(svg, from);
-        setTimeout(function () {
+        mapRevealTimer = setTimeout(function () {
+            mapRevealTimer = null;
             svg.classList.add('is-revealed');
             animate(2600, function (k) { setViewBox(svg, from + (to - from) * k); }, function () {
                 svg.classList.add('is-labelled');
@@ -632,23 +755,48 @@
             if (start === null) start = ts;
             var t = Math.min(1, (ts - start) / duration);
             step(ease(t));
-            if (t < 1) requestAnimationFrame(frame); else if (done) done();
+            if (t < 1) mapRafId = requestAnimationFrame(frame);
+            else { mapRafId = null; if (done) done(); }
         }
-        requestAnimationFrame(frame);
+        mapRafId = requestAnimationFrame(frame);
+    }
+
+    function renderLastPassage() {
+        var el = $('#seuil-recall');
+        if (!el) return;
+        try {
+            var raw = localStorage.getItem('cartograffect_voyage');
+            if (!raw) return;
+            var saved = JSON.parse(raw);
+            var em = saved && saved.name ? M.getByName(saved.name) : null;
+            if (!em) return;
+            el.textContent = typo('Dernier passage enregistré sur cet appareil : ' + em.name + ' ' + fmtCoord(em.x, em.y, em.z) + ' — ');
+            var a = document.createElement('a');
+            a.href = 'emotions.html?id=' + encodeURIComponent(em.name);
+            a.textContent = 'retrouver cette position sur la carte';
+            el.appendChild(a);
+            el.appendChild(document.createTextNode('.'));
+            el.hidden = false;
+        } catch (e) { /* stockage indisponible : sans conséquence */ }
     }
 
     /* ------------------------------------------------------------------
        Liaisons
        ------------------------------------------------------------------ */
     function init() {
+        ANTICIP_CAPTION = $('#anticip-caption').innerHTML;
+        renderLastPassage();
         $('#btn-start').addEventListener('click', startVeille);
-        $('#btn-to-anticipation').addEventListener('click', startAnticipation);
-        Array.prototype.forEach.call(document.querySelectorAll('.choice'), function (b) {
-            b.addEventListener('click', function () { onChoice(b); });
+        $('#btn-next-para').addEventListener('click', nextParagraph);
+        $('#btn-to-anticipation').addEventListener('click', function () { startAnticipation(); });
+        Array.prototype.forEach.call(document.querySelectorAll('.choice input[type="radio"]'), function (input) {
+            input.addEventListener('change', function () { onChoice(input); });
         });
         $('#btn-resolve').addEventListener('click', resolve);
         $('#btn-to-ouverture').addEventListener('click', startOuverture);
-        $('#btn-replay').addEventListener('click', function () { window.location.reload(); });
+        // Refaire le voyage autrement : retour direct aux deux leviers. Relire le texte
+        // n'aurait plus de sens, la surprise étant désormais connue.
+        $('#btn-replay').addEventListener('click', function () { startAnticipation({ replay: true }); });
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

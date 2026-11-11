@@ -31,10 +31,10 @@
         },
         2: {
             title: "Prototypes Fondamentaux",
-            subtitle: "Noyau affectif & Première couronne",
+            subtitle: "Première couronne (8 prototypes)",
             operator: "Anticipation (0,0,2)",
             r: 2,
-            countText: "9 Entrées (1 op + 8 prototypes)",
+            countText: "9 Entrées sur la strate (8 prototypes sur la couronne N(2)=8 + 1 opérateur central)",
             desc: "Strate Z=2 : Première couronne de huit prototypes fondamentaux (Joie, Tristesse, Peur, Courage, Désir, Colère, Calme, Dégoût) organisée autour de l'Anticipation (0,0,2), opérateur central descendant d'orientation.",
             formula: "|X| + |Y| = 2 • N(2) = 8"
         },
@@ -171,7 +171,7 @@
         document.getElementById('radarStrataTitle').textContent = `Strate Z = ${z} : ${meta.title}`;
         document.getElementById('radarFormulaBadge').textContent = meta.formula;
         document.getElementById('strataBadge').textContent = `STRATE Z=${z} • ${meta.title.toUpperCase()}`;
-        document.getElementById('strataHeading').textContent = `${meta.subtitle} & Opérateur ${meta.operator.split(' ')[0]}`;
+        document.getElementById('strataHeading').textContent = `${meta.subtitle} & Opérateur ${meta.operator}`;
         document.getElementById('strataCount').textContent = meta.countText;
         document.getElementById('strataManhattanRadius').textContent = z >= 2 ? `Rayon Manhattan r = 2Z - 2 = ${meta.r}` : 'Point unique / Opérateur';
         document.getElementById('strataDescription').textContent = meta.desc;

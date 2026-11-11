@@ -71,7 +71,7 @@
                 "group": "Joie",
                 "code": "X0/Y+2/Z2",
                 "type": "axial",
-                "desc": "Orientation géométrique axiale Y+2 (contrôlabilité du monde maximale, attente non résolue)."
+                "desc": "Orientation géométrique axiale Y+2 (contrôlabilité pragmatique maximale, modèle interne stable sans besoin de révision épistémique, X=0)."
         },
         {
                 "id": 9,
@@ -83,7 +83,7 @@
                 "group": "Tristesse",
                 "code": "X0/Y-2/Z2",
                 "type": "axial",
-                "desc": "Orientation géométrique axiale Y-2 (incontrôlabilité du monde constatée, attente non résolue)."
+                "desc": "Orientation géométrique axiale Y-2 (incontrôlabilité pragmatique constatée, modèle interne stable sans besoin de révision épistémique, X=0)."
         },
         {
                 "id": 10,

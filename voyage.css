@@ -36,6 +36,7 @@ html { scroll-behavior: smooth; }
 body.voyage {
     margin: 0;
     min-height: 100vh;
+    min-height: 100svh;
     background: radial-gradient(ellipse at 50% -10%, #111a2e 0%, var(--bg) 55%) fixed, var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
@@ -60,7 +61,7 @@ body.voyage {
     outline-offset: 3px;
     border-radius: 10px;
 }
-h1:focus, h2:focus { outline: none; }
+h1:focus, h2:focus, .veille-text p:focus { outline: none; }
 
 /* --------------------------------------------------------------------------
    Barre supérieure
@@ -222,6 +223,7 @@ main#voyage { position: relative; z-index: 1; }
 
 .scene {
     min-height: 100vh;
+    min-height: 100svh;
     margin: 0 auto;
     padding: 7rem clamp(1.25rem, 4vw, 2.5rem) 6rem;
     display: flex;
@@ -344,6 +346,31 @@ h3 { font-size: 1.35rem; font-weight: 700; }
 body.is-ruptured .veille-text p:not(#veille-last) { opacity: 0.28; filter: blur(0.6px); }
 body.is-ruptured #veille-last { color: #fff; }
 body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; }
+
+/* Apparition progressive des paragraphes */
+.veille-text p.is-revealed { animation: paraIn 0.8s var(--ease) both; }
+@keyframes paraIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Bouton discret « Suite » */
+.v-next {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: -0.8rem;
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: 600 0.95rem/1 var(--font-sans);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.v-next:hover { color: #fff; border-color: rgba(148, 163, 184, 0.45); background: var(--panel); }
 
 @keyframes glitch {
     0%   { transform: translate(0, 0); text-shadow: none; }
@@ -514,6 +541,7 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
 
 .choices { display: grid; gap: 0.6rem; }
 .choice {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.9rem;
@@ -540,10 +568,12 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
     color: var(--muted);
     transition: background 0.2s, color 0.2s;
 }
-.choice[data-axis="y"][aria-pressed="true"] { color: #fff; border-color: rgba(168, 85, 247, 0.7); background: rgba(76, 29, 149, 0.45); }
-.choice[data-axis="y"][aria-pressed="true"] .choice__icon { background: var(--violet); color: #fff; }
-.choice[data-axis="x"][aria-pressed="true"] { color: #fff; border-color: rgba(56, 189, 248, 0.7); background: rgba(7, 89, 133, 0.45); }
-.choice[data-axis="x"][aria-pressed="true"] .choice__icon { background: var(--sky); color: #04121f; }
+.choice[data-axis="y"].is-selected { color: #fff; border-color: rgba(168, 85, 247, 0.7); background: rgba(76, 29, 149, 0.45); }
+.choice[data-axis="y"].is-selected .choice__icon { background: var(--violet); color: #fff; }
+.choice[data-axis="x"].is-selected { color: #fff; border-color: rgba(56, 189, 248, 0.7); background: rgba(7, 89, 133, 0.45); }
+.choice[data-axis="x"].is-selected .choice__icon { background: var(--sky); color: #04121f; }
+/* Les boutons radio sont visuellement masqués : l'anneau de focus passe sur la carte */
+.choice:has(input:focus-visible) { outline: 3px solid var(--amber); outline-offset: 3px; }
 
 /* --------------------------------------------------------------------------
    Résolution & récit
@@ -693,6 +723,13 @@ body.is-ruptured #veille-last.glitch { animation: glitch 0.42s steps(2, end) 1; 
     font-size: 0.9rem;
     color: var(--muted);
 }
+.disclaimer a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 2px; }
+.disclaimer a:hover { color: #fff; }
+
+/* Messages d'avertissement (sans JavaScript / échec de chargement) */
+.note--warn { color: #fde68a; }
+.note--warn a, .note--recall a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+.note--recall { color: var(--ink-soft); }
 
 /* --------------------------------------------------------------------------
    Mouvement réduit

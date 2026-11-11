@@ -421,9 +421,9 @@
         if (this.dom.strataButtons) {
             this.dom.strataButtons.forEach(b => {
                 if (b.getAttribute('data-z') === String(z)) {
-                    b.className = "hero-strata-btn active px-2 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white transition-all";
+                    b.className = "hero-strata-btn active px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-600 text-white transition-all";
                 } else {
-                    b.className = "hero-strata-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all";
+                    b.className = "hero-strata-btn px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all";
                 }
             });
         }
@@ -683,12 +683,42 @@
             this.drawAffectNode(ctx, p);
         }
 
-        // 8. Render Labels for Prototypes & Operators
+        // 8. Render Labels without center collision
+        // By default (strataFilter === 'all'), show only: active node, its opposite, active cycle operator, and hovered node.
+        // When filtering a single stratum (strataFilter !== 'all'), show labels for that stratum.
         if (this.showLabels) {
+            const isSingleStratum = (this.strataFilter !== 'all');
+            const oppositePoint = this.getOppositePoint(this.selectedPoint);
+            const activeOperator = this.getActiveCycleOperator();
+
+            const labelsToDraw = [];
             for (const p of renderList) {
-                if (p.z <= 2 || p.type === 'operator' || p === this.selectedPoint || p === this.hoveredPoint) {
-                    this.drawNodeLabel(ctx, p);
+                const isPriority = (
+                    p === this.selectedPoint ||
+                    p === oppositePoint ||
+                    p === activeOperator ||
+                    p === this.hoveredPoint
+                );
+
+                if (isSingleStratum) {
+                    // In 2D mode on Z=0..2, central operators share (0,0), so show only the active cycle operator among operators
+                    if (this.camera.mode === '2D' && this.strataFilter === '2' && p.type === 'operator' && !isPriority) {
+                        continue;
+                    }
+                    labelsToDraw.push(p);
+                } else if (isPriority) {
+                    labelsToDraw.push(p);
                 }
+            }
+
+            // Draw selected and hovered labels last so they stay crisp and on top
+            labelsToDraw.sort((a, b) => {
+                const rank = (pt) => (pt === this.hoveredPoint ? 3 : (pt === this.selectedPoint ? 2 : (pt === oppositePoint ? 1 : 0)));
+                return rank(a) - rank(b);
+            });
+
+            for (const p of labelsToDraw) {
+                this.drawNodeLabel(ctx, p);
             }
         }
 
@@ -966,20 +996,20 @@
 
         if (phase === 1) {
             d.statusText.textContent = "1. Éveil Homéostatique de Fond (0,0,0)";
-            d.statusText.className = "text-sky-300 font-bold animate-pulse";
+            d.statusText.className = "text-sky-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepVeille) d.stepVeille.className = activeClass("bg-sky-950/80", "border-sky-500", "text-sky-200");
         } else if (phase === 2) {
             d.statusText.textContent = "2. Écart de Prédiction / Rupture de Saillance (0,0,1)";
-            d.statusText.className = "text-amber-300 font-bold animate-pulse";
+            d.statusText.className = "text-amber-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepSurprise) d.stepSurprise.className = activeClass("bg-amber-950/80", "border-amber-500", "text-amber-200");
         } else if (phase === 3) {
             d.statusText.textContent = "3. Orientation Épistémique / Anticipation (0,0,2)";
-            d.statusText.className = "text-purple-300 font-bold animate-pulse";
+            d.statusText.className = "text-purple-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepAnticipation) d.stepAnticipation.className = activeClass("bg-purple-950/80", "border-purple-500", "text-purple-200");
         } else if (phase >= 4) {
             const targetName = target ? target.name : "Affect";
             d.statusText.textContent = `4. Résolution d'Inférence : ${targetName} (${target.x}, ${target.y}, ${target.z})`;
-            d.statusText.className = "text-emerald-300 font-bold";
+            d.statusText.className = "text-emerald-300 font-bold truncate min-w-0";
             if (d.stepResolution) d.stepResolution.className = activeClass("bg-emerald-950/80", "border-emerald-500", "text-emerald-200");
         }
     };
@@ -1123,16 +1153,43 @@
         ctx.restore();
     };
 
+    Visualizer.getOppositePoint = function(point) {
+        if (!point) return null;
+        if (window.CartograffectModel && window.CartograffectModel.getSymmetryPair) {
+            const oppName = window.CartograffectModel.getSymmetryPair(point.name);
+            if (oppName) {
+                const found = this.points.find(pt => pt.name === oppName);
+                if (found) return found;
+            }
+        }
+        if (point.type !== 'operator') {
+            return this.points.find(pt => pt.z === point.z && pt.x === -point.x && pt.y === -point.y) || null;
+        }
+        return null;
+    };
+
+    Visualizer.getActiveCycleOperator = function() {
+        const phase = this.inference.phase;
+        let opZ = 0;
+        if (phase === 1) opZ = 0;
+        else if (phase === 2) opZ = 1;
+        else if (phase === 3) opZ = 2;
+        else {
+            const target = this.inference.targetAffect || this.selectedPoint;
+            opZ = target ? target.z : 2;
+        }
+        return (
+            this.points.find(pt => pt.type === 'operator' && pt.z === opZ) ||
+            this.points.find(pt => pt.type === 'operator' && pt.z === 2) ||
+            this.points.find(pt => pt.type === 'operator') ||
+            null
+        );
+    };
+
     Visualizer.drawNodeLabel = function(ctx, p) {
         const isHovered = (p === this.hoveredPoint);
         const isSelected = (p === this.selectedPoint);
         const isOperator = (p.type === 'operator');
-        const isTarget = (this.inference.targetAffect === p);
-
-        // In 3D mode, only show operators Z=0,1,2,7 unless hovered/selected, to keep view pristine
-        if (this.camera.mode === '3D' && !isHovered && !isSelected && !isTarget) {
-            if (isOperator && p.z > 2 && p.z < 7) return;
-        }
 
         const color = GROUP_COLORS[p.group] || "#e2e8f0";
         const fontSize = isHovered ? 12 : (isSelected ? 11 : 9);
@@ -1141,7 +1198,7 @@
         ctx.font = `${isHovered || isSelected ? 'bold' : '600'} ${fontSize}px "DM Sans", system-ui, sans-serif`;
 
         let text = p.name;
-        if (isOperator && (p.z <= 2 || p.z === 7)) {
+        if (isOperator) {
             text = `${p.name} (Z${p.z})`;
         }
 
