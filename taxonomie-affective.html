@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
+    <title>4. La Taxonomie Affective : Les 176 États &amp; Carte 2D/3D | CARTOGRAFFECT</title>
+    <meta name="description" content="Composante 4 de Cartograffect : la Taxonomie Affective Hiérarchique (AffectiveTaxonomy.lean &amp; Lexicon176.lean). Explorez en 2D (D3) et 3D (Three.js) les 176 états répartis sur 8 strates (Z=0..7), 9 groupes et 84 paires antagonistes.">
+    <link rel="canonical" href="https://www.cartograffect.com/taxonomie-affective.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/taxonomie-affective.html">
+    <meta property="og:title" content="4. La Taxonomie Affective : 176 États &amp; Carte 2D/3D | CARTOGRAFFECT">
+    <meta property="og:description" content="Cartographie interactive 2D et 3D des 176 états affectifs humains sur 8 strates hiérarchiques (Z=0 à Z=7) avec simulateur de trajectoires.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- D3.js, Three.js, Modèle & Théorie Cartograffect -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="cartograffect_model.js"></script>
+    <script src="cartograffect_theory.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        cosmic: {
+                            900: '#070b14',
+                            850: '#0b1120',
+                            800: '#0e1726',
+                            700: '#152136',
+                            600: '#1f2e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .tooltip-2d {
+            position: fixed;
+            padding: 8px 12px;
+            font-size: 12px;
+            background: rgba(11, 17, 32, 0.96);
+            color: #f1f5f9;
+            border: 1px solid rgba(236, 72, 153, 0.45);
+            border-radius: 10px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.12s ease;
+            box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.65);
+            z-index: 60;
+            backdrop-filter: blur(8px);
+        }
+        .chart-svg-container svg {
+            user-select: none;
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .fullscreen-panel {
+            position: fixed !important;
+            inset: 1rem !important;
+            z-index: 70 !important;
+            height: calc(100vh - 2rem) !important;
+            width: calc(100vw - 2rem) !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+    </style>
+</head>
+<body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-pink-600 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08]" style="background-color: rgba(10, 11, 20, 0.92);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <a href="index.html" class="flex items-center gap-3 group shrink-0">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="text-[10px] tracking-widest uppercase text-pink-400 font-semibold">4. La Taxonomie Affective</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-1.5">
+                <a href="index.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors whitespace-nowrap">Accueil</a>
+                <a href="voyage.html" class="px-2.5 py-2 text-sm font-semibold text-amber-300 hover:text-white bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/30 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                    ✨ Le Voyage
+                </a>
+                <!-- Architecture 4 Composantes Dropdown -->
+                <div class="relative">
+                    <button id="modelDropdownBtn" type="button" aria-expanded="false" class="px-2.5 py-2 text-sm font-semibold text-pink-300 bg-pink-950/50 border border-pink-500/40 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-pink-400 shrink-0"></span>
+                        <span>Le Modèle</span>
+                        <svg class="w-3.5 h-3.5 text-pink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-72 rounded-2xl bg-cosmic-850/95 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-950/60 p-2 z-50 space-y-1">
+                        <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">1. Le Moteur Prédictif</div>
+                                <div class="text-[11px] text-slate-400">Interfaces, précision &amp; gradients A/C</div>
+                            </div>
+                        </a>
+                        <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-sky-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">2. Le Noyau Affectif</div>
+                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L₁</div>
+                            </div>
+                        </a>
+                        <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">3. La Matrice Affective</div>
+                                <div class="text-[11px] text-slate-400">Valence, prototypes Z=2 &amp; dynamique</div>
+                            </div>
+                        </a>
+                        <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl bg-pink-900/40 border border-pink-500/30 text-white">
+                            <span class="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">4. La Taxonomie Affective</div>
+                                <div class="text-[11px] text-pink-200/80">176 états (Z=0..7) &amp; Carte 2D/3D</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="article.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>L'Article
+                </a>
+                <a href="scholar_drive.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 shrink-0"></span>Modèles Théoriques
+                </a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span><span>Recherche Rapide</span><kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="voyage.html"><span class="menu-dot bg-amber-400"></span>✨ Le Voyage affectif (2 min)</a>
+        <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-500">Modèle en 4 Composantes</div>
+        <a href="moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
+        <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
+        <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
+        <a href="taxonomie-affective.html" class="active-link"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
+    </div>
+
+    <!-- Tooltip Container -->
+    <div id="tooltip2D" class="tooltip-2d"></div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
+
+        <!-- 4-Step Architectural Stepper -->
+        <nav aria-label="Les 4 composantes emboîtées de Cartograffect" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <a href="moteur-predictif.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-purple-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Moteur Prédictif</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">Interfaces &amp; Gradients A/C</div>
+                </div>
+            </a>
+            <a href="noyau-affectif.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-sky-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-sky-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">2</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Noyau Affectif</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">Espace (X,Y,Z) &amp; L₁</div>
+                </div>
+            </a>
+            <a href="matrice-affective.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">3</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Matrice Affective</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">Valence &amp; Prototypes Z=2</div>
+                </div>
+            </a>
+            <a href="taxonomie-affective.html" class="p-3 rounded-2xl bg-pink-950/60 border-2 border-pink-500/70 shadow-lg shadow-pink-950/40 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-pink-600 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">4</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-white truncate">Taxonomie Affective</div>
+                    <div class="text-[10px] text-pink-300 font-mono truncate">176 États &amp; Carte 2D/3D</div>
+                </div>
+            </a>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-pink-950/45 via-cosmic-850 to-cosmic-900 border border-pink-500/25 p-6 sm:p-10 shadow-2xl">
+            <div class="max-w-4xl space-y-4">
+                <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-pink-500/15 border border-pink-400/30 text-pink-300 text-xs font-mono">
+                    <span>COMPOSANTE 4 / 4</span>
+                    <span class="text-pink-500">&bull;</span>
+                    <span>AffectiveTaxonomy.lean &amp; Lexicon176.lean</span>
+                    <span class="text-pink-500">&bull;</span>
+                    <span>Article §7–8 &amp; Fig. 4</span>
+                </div>
+                <h1 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                    4. La Taxonomie Affective Hiérarchique : 176 États &amp; Carte 2D / 3D
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                    En déployant le moteur et la matrice le long des <strong>8 strates de profondeur inférentielle ($Z=0..7$)</strong>, Cartograffect engendre sans collision spatiale un répertoire exhaustif de <strong>176 positions</strong> : 8 opérateurs centraux et 168 états périphériques (9 groupes taxonomiques, 17 sous-secteurs fonctionnels, 84 paires antagonistes axiales, diagonales et controlatérales $T_d / T_i$).
+                </p>
+                <div class="flex flex-wrap gap-3 pt-2">
+                    <a href="#explorer-176" class="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-pink-600/25 transition-all">
+                        Explorer la Carte 2D / Pyramide 3D ↓
+                    </a>
+                    <a href="#scenario-lab" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs sm:text-sm font-semibold transition-all">
+                        Simulateur de Trajectoires ↓
+                    </a>
+                    <a href="#strates-z" class="px-4 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/70 text-purple-200 border border-purple-500/40 text-xs sm:text-sm font-semibold transition-all">
+                        Les 8 Strates Z=0..7 ↓
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 1: INTERACTIVE 2D/3D MAP + IDENTITY CARD -->
+        <section id="explorer-176" class="space-y-6">
+            <!-- Filter & Search Controls -->
+            <div class="rounded-3xl bg-cosmic-850 border border-slate-800 p-4 sm:p-5 shadow-xl space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
+                    <!-- Search -->
+                    <div class="lg:col-span-4 space-y-1">
+                        <label for="emotionSearchInput" class="text-[11px] font-mono uppercase text-slate-400">Rechercher un état parmi les 176</label>
+                        <div class="flex gap-2">
+                            <input id="emotionSearchInput" list="emotionDatalist" type="text" placeholder="Ex : Colère, Haine, Affection, Honte, Joie..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-pink-500">
+                            <datalist id="emotionDatalist"></datalist>
+                        </div>
+                    </div>
+
+                    <!-- Filter Z -->
+                    <div class="lg:col-span-2 space-y-1">
+                        <label for="filterStratum" class="text-[11px] font-mono uppercase text-slate-400">Strate Z</label>
+                        <select id="filterStratum" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-pink-500">
+                            <option value="all">Toutes (Z=0..7)</option>
+                            <option value="0">Z=0 — Veille (1)</option>
+                            <option value="1">Z=1 — Surprise (1)</option>
+                            <option value="2">Z=2 — Prototypes (9)</option>
+                            <option value="3">Z=3 — Réactives (17)</option>
+                            <option value="4">Z=4 — Réflexifs (25)</option>
+                            <option value="5">Z=5 — Orientations (33)</option>
+                            <option value="6">Z=6 — Identités (41)</option>
+                            <option value="7">Z=7 — Transcendantal (49)</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Group -->
+                    <div class="lg:col-span-2 space-y-1">
+                        <label for="filterGroup" class="text-[11px] font-mono uppercase text-slate-400">Groupe / Secteur</label>
+                        <select id="filterGroup" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-pink-500">
+                            <option value="all">Tous les groupes</option>
+                            <option value="Courage">Courage (X+)</option>
+                            <option value="Peur">Peur (X−)</option>
+                            <option value="Joie">Joie (Y+)</option>
+                            <option value="Tristesse">Tristesse (Y−)</option>
+                            <option value="Désir">Désir (X+, Y+)</option>
+                            <option value="Dégoût">Dégoût (X−, Y−)</option>
+                            <option value="Colère">Colère (X−, Y+)</option>
+                            <option value="Calme">Calme (X+, Y−)</option>
+                            <option value="Centre">Opérateurs Centraux</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Geometry -->
+                    <div class="lg:col-span-2 space-y-1">
+                        <label for="filterGeometry" class="text-[11px] font-mono uppercase text-slate-400">Typologie</label>
+                        <select id="filterGeometry" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-pink-500">
+                            <option value="all">Toutes géométries</option>
+                            <option value="operator">Opérateurs Centraux (8)</option>
+                            <option value="axial">Axiales (24)</option>
+                            <option value="diagonal">Diagonales (24)</option>
+                            <option value="lateral">Latérales (120)</option>
+                        </select>
+                    </div>
+
+                    <!-- Reset -->
+                    <div class="lg:col-span-2 flex gap-2">
+                        <button id="resetFiltersBtn" type="button" class="w-full px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 cursor-pointer transition-colors">
+                            Réinitialiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Status bar -->
+                <div class="flex flex-wrap items-center justify-between gap-2 text-xs pt-2 border-t border-slate-800/80">
+                    <div class="text-slate-400">
+                        Affichage : <strong id="visibleCountBadge" class="text-white font-mono">176</strong> / 176 positions actives
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-slate-500 text-[11px] hidden sm:inline">Vue :</span>
+                        <button type="button" class="view-mode-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer" data-mode="split">2D + 3D</button>
+                        <button type="button" class="view-mode-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white cursor-pointer" data-mode="2d">2D seule</button>
+                        <button type="button" class="view-mode-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white cursor-pointer" data-mode="3d">3D seule</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2D Chart + 3D Pyramid Grid -->
+            <div id="vizGrid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Left/Main Visualizations (8 cols on split, 12 on single view) -->
+                <div id="vizPanelsCol" class="lg:col-span-8 space-y-6">
+                    <div id="vizPanelsInner" class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                        <!-- 2D D3 Matrix -->
+                        <div id="panel2D" class="rounded-3xl bg-cosmic-850 border border-slate-800 p-4 shadow-xl flex flex-col">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-wider text-pink-400">Projection Plan (X, Y)</span>
+                                    <h2 class="text-sm font-bold text-white">Carte 2D D3 (Couronnes Z=2..7)</h2>
+                                </div>
+                                <button id="fullscreen2DBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700 cursor-pointer" title="Plein écran 2D">⛶ Agrandir</button>
+                            </div>
+                            <div id="chart-2d" class="chart-svg-container relative flex-grow flex items-center justify-center rounded-2xl bg-cosmic-900 border border-slate-800/80 overflow-hidden"></div>
+                        </div>
+
+                        <!-- 3D Three.js Pyramid -->
+                        <div id="panel3D" class="rounded-3xl bg-cosmic-850 border border-slate-800 p-4 shadow-xl flex flex-col">
+                            <div class="flex items-center justify-between gap-2 mb-2">
+                                <div>
+                                    <span class="text-[10px] font-mono uppercase tracking-wider text-sky-400">Espace Empilé (X, Y, Z)</span>
+                                    <h2 class="text-sm font-bold text-white">Pyramide Orbitale 3D (Three.js)</h2>
+                                </div>
+                                <button id="fullscreen3DBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700 cursor-pointer" title="Plein écran 3D">⛶ Agrandir</button>
+                            </div>
+                            <div id="pyramid-3d" class="relative w-full h-[380px] sm:h-[420px] rounded-2xl bg-cosmic-900 border border-slate-800/80 overflow-hidden cursor-grab active:cursor-grabbing">
+                                <div class="absolute bottom-2 left-3 z-10 pointer-events-none text-[10px] font-mono text-slate-400 bg-cosmic-900/75 px-2 py-0.5 rounded">
+                                    Glisser : orbiter &bull; Molette : zoom &bull; Clic : sélectionner
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Computational Identity Card (4 cols) -->
+                <aside id="identity-card" class="lg:col-span-4 rounded-3xl bg-cosmic-850 border border-pink-500/30 p-5 sm:p-6 shadow-xl space-y-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span id="cardStratumBadge" class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-pink-950 text-pink-300 border border-pink-500/30">Strate Z=2</span>
+                                <span id="cardCoordsBadge" class="text-xs font-mono text-slate-300"></span>
+                            </div>
+                            <h2 id="cardName" class="font-heading text-2xl sm:text-3xl font-extrabold text-white mt-1.5">Colère</h2>
+                            <div id="cardSubMeta" class="text-[11px] font-mono text-slate-400"></div>
+                        </div>
+                        <span id="cardColorDot" class="w-4 h-4 rounded-full mt-2 shrink-0 ring-2 ring-white/20"></span>
+                    </div>
+
+                    <p id="cardDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+
+                    <!-- Computational Properties from CartograffectTheory -->
+                    <div class="grid grid-cols-2 gap-2.5 text-xs">
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Groupe Taxonomique</div>
+                            <div id="cardTaxGroup" class="font-bold text-white mt-0.5"></div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Sous-Secteur</div>
+                            <div id="cardSubsector" class="font-semibold text-pink-300 mt-0.5"></div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Régime Énergétique</div>
+                            <div id="cardRegime" class="font-bold mt-0.5"></div>
+                        </div>
+                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-[10px] font-mono text-slate-400 uppercase">Valence Lexicogr.</div>
+                            <div id="cardValence" class="font-bold mt-0.5"></div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-slate-900/75 border border-slate-800 text-[11px] text-slate-300 leading-relaxed" id="cardValenceRule"></div>
+
+                    <!-- Formal Antagonist & Symmetry Type -->
+                    <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-700/80 space-y-2">
+                        <div class="flex items-center justify-between text-[11px]">
+                            <span class="font-mono uppercase text-slate-400">Antagoniste Formel</span>
+                            <span id="cardSymmetryType" class="font-mono text-amber-300"></span>
+                        </div>
+                        <button id="cardOppositeBtn" type="button" class="w-full px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-white flex items-center justify-between cursor-pointer transition-colors">
+                            <span id="cardOppositeLabel">Calme (+1, −1, 2)</span>
+                            <span class="text-pink-300">Sélectionner &rarr;</span>
+                        </button>
+                    </div>
+
+                    <!-- Actions: Trace Dissipation / Quick Picks -->
+                    <div class="space-y-2 pt-1">
+                        <button id="traceDissipationBtn" type="button" class="w-full px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg cursor-pointer transition-all">
+                            Tracer sa dissipation allostatique sur 2D/3D
+                        </button>
+                        <button id="clearPathBtn" type="button" class="w-full px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 cursor-pointer transition-colors">
+                            Effacer la trajectoire active
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SCENARIO & TRAJECTORY SIMULATOR -->
+        <section id="scenario-lab" class="rounded-3xl bg-cosmic-850 border border-purple-500/25 p-6 sm:p-8 shadow-xl space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-purple-400">Simulateur Dynamique — Boucle &amp; Escalade</span>
+                    <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-1">Analyseur de Scénarios &amp; Trajectoires Affectives</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" class="scenario-preset-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-950/60 hover:bg-amber-900/70 text-amber-200 border border-amber-500/40 cursor-pointer" data-preset="cafe">☕ Café gâté (§7.3)</button>
+                    <button type="button" class="scenario-preset-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-blue-950/60 hover:bg-blue-900/70 text-blue-200 border border-blue-500/40 cursor-pointer" data-preset="deuil">💔 Perte &amp; Résilience</button>
+                    <button type="button" class="scenario-preset-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-950/60 hover:bg-orange-900/70 text-orange-200 border border-orange-500/40 cursor-pointer" data-preset="injustice">⚡ Colère &amp; Retour</button>
+                    <button type="button" class="scenario-preset-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-900/70 text-emerald-200 border border-emerald-500/40 cursor-pointer" data-preset="defi">⛰️ Défi &amp; Courage</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <div class="lg:col-span-5 space-y-3">
+                    <label for="scenarioInput" class="text-xs font-mono uppercase text-slate-400">Décrivez une situation ou choisissez un cas clinique ci-dessus :</label>
+                    <textarea id="scenarioInput" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500" placeholder="Ex : Je renverse mon café le matin, je me reproche mon imprudence, j'ai honte puis j'ai l'impression de tout rater..."></textarea>
+                    <button id="analyzeScenarioBtn" type="button" class="w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white text-xs sm:text-sm font-bold shadow-lg cursor-pointer transition-all">
+                        Analyser &amp; Tracer la Trajectoire sur la Carte 2D/3D
+                    </button>
+                </div>
+
+                <div class="lg:col-span-7 rounded-2xl bg-slate-900/85 border border-slate-800 p-5 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 id="scenarioResultTitle" class="text-base font-bold text-white">Exemple canonique §7.3 : Le Café Gâté</h3>
+                        <span id="scenarioMetaBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-500/30">Escalade Z=1 → Z=5 → Z=0</span>
+                    </div>
+                    <p id="scenarioResultText" class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Cliquez sur un scénario prédéfini ou saisissez votre propre situation pour observer l'évolution des coordonnées $(X, Y, Z)$ et cliquer sur chaque étape de la trajectoire.
+                    </p>
+                    <div id="scenarioPathPills" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: THEORETICAL MODEL RE-INJECTION (§7 & §8) -->
+        <section id="strates-z" class="space-y-8 pt-4">
+            <div class="border-b border-slate-800 pb-4">
+                <span class="text-xs font-mono uppercase tracking-widest text-pink-400">Fondements Théoriques — Article §7 &amp; §8</span>
+                <h2 class="font-heading text-2xl sm:text-3xl font-bold text-white mt-1">Boucle Récursive, 8 Strates Hiérarchiques &amp; Symétries Antagonistes</h2>
+            </div>
+
+            <!-- 7.1 5-Step Active Inference Loop -->
+            <div class="rounded-3xl bg-cosmic-850 border border-slate-800 p-6 sm:p-8 space-y-5">
+                <div class="space-y-1">
+                    <span class="text-xs font-mono uppercase text-purple-400">§7.1 — Dynamique Complète</span>
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold text-white">La boucle récursive de l'inférence active en 5 temps</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div class="font-mono font-bold text-amber-300">1. Saillance (Z=1)</div>
+                        <p class="text-slate-300 leading-relaxed">Un écart dépasse le seuil sensoriel : l'opérateur ascendant <strong>Surprise</strong> interrompt le repos de <em>Veille</em>.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div class="font-mono font-bold text-emerald-300">2. Prototypes (Z=2)</div>
+                        <p class="text-slate-300 leading-relaxed"><strong>Anticipation</strong> évalue les gradients A/C et projette l'état sur l'un des 8 prototypes fondamentaux.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div class="font-mono font-bold text-sky-300">3. Contexte (Z=3)</div>
+                        <p class="text-slate-300 leading-relaxed">Attribution d'une cause immédiate : l'affect primaire devient une des 16 <strong>émotions réactives</strong>.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div class="font-mono font-bold text-pink-300">4. Consolidation (Z=4..6)</div>
+                        <p class="text-slate-300 leading-relaxed">Si l'écart résiste, il recrute sentiments réflexifs (Z=4), humeurs durables (Z=5) et identité (Z=6).</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
+                        <div class="font-mono font-bold text-purple-300">5. Cadre (Z=7) &amp; Retour</div>
+                        <p class="text-slate-300 leading-relaxed">Réévaluation du cadre ultime (Z=7) ou dissipation graduelle par paliers vers le <strong>Point de Veille</strong>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7.2 8 Strata Cards with #strate-0 .. #strate-7 anchors -->
+            <div class="space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold text-white">§7.2 — Les 8 Strates Hiérarchiques (5+2 Couronnes + Point de Veille)</h3>
+                    <span class="text-xs text-slate-400">Cliquez sur une strate pour filtrer directement la carte 2D/3D</span>
+                </div>
+                <div id="strataCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            </div>
+
+            <!-- 7.3 Escalation Example + 7.4 Controlateral Symmetry Td/Ti -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <article class="rounded-3xl bg-cosmic-850 border border-amber-500/25 p-6 space-y-3">
+                    <span class="text-xs font-mono uppercase text-amber-400">§7.3 — Exemple d'Escalade Verticale</span>
+                    <h3 class="text-xl font-bold text-white">Du café gâté au Désespoir</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Un simple écart sensoriel (un café impropre le matin) déclenche d'abord une <strong>Surprise (0,0,1)</strong> puis un <strong>Dégoût (−1,−1,2)</strong> vite résorbé. Mais s'il survient dans un modèle génératif fragilisé qui s'impute l'échec, la perturbation escalade verticalement en <strong>Honte (−2,−4,4)</strong> puis en <strong>Désespoir (−1,−7,5)</strong> : le même signe de gradient négatif envahit des couches temporelles et identitaires de plus en plus profondes.
+                    </p>
+                </article>
+
+                <article class="rounded-3xl bg-cosmic-850 border border-pink-500/25 p-6 space-y-3">
+                    <span class="text-xs font-mono uppercase text-pink-400">§7.4 — Symétrie Controlatérale T<sub>d</sub> / T<sub>i</sub></span>
+                    <h3 class="text-xl font-bold text-white">Pourquoi Haine ↔ Affection et non « Plénitude » ?</h3>
+                    <p class="text-sm text-slate-300 leading-relaxed">
+                        Pour les états axiaux et diagonaux, l'antagoniste est donné par <strong>inversion centrale</strong> $(X, Y) \mapsto (-X, -Y)$. Mais pour les 120 états <strong>latéraux</strong> ($|X| \neq |Y|$), l'axe dominant bascule : la symétrie est une <strong>réflexion diagonale controlatérale</strong> $(X, Y) \mapsto (-Y, -X)$. Ainsi à la strate $Z=4$, <strong>Haine (−1, +5, 4)</strong> a pour véritable antagoniste <strong>Affection (+5, −1, 4)</strong>, tandis que <strong>Plénitude (+1, −5, 4)</strong> s'oppose à <strong>Manque (−5, +1, 4)</strong>.
+                    </p>
+                </article>
+            </div>
+
+            <!-- §8 Literature Dialogue, Falsifiable Predictions, Clinic & Lean Verification -->
+            <div class="rounded-3xl bg-cosmic-850 border border-slate-800 p-6 sm:p-8 space-y-6">
+                <div class="space-y-1">
+                    <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">§8 — Dialogue Théorique, Clinique &amp; Prédictions Falsifiables</span>
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold text-white">Ce que prédit Cartograffect et sa validation formelle</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                        <div class="font-mono text-xs font-bold text-sky-300">Prédiction 1 — Arbitrage L₁</div>
+                        <p class="text-slate-300 leading-relaxed">Sous budget fini $|X|+|Y|=2Z-2$, augmenter simultanément l'exploration épistémique ($X$) et le contrôle moteur ($Y$) impose un compromis mesurable sur les états latéraux.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                        <div class="font-mono text-xs font-bold text-orange-300">Prédiction 2 — Signatures Autonomiques</div>
+                        <p class="text-slate-300 leading-relaxed">À budget L₁ égal sur $Z=2$, la compensation ergotrope (Colère : $X<0, Y>0$) et le relâchement trophotrope (Calme : $X>0, Y<0$) produisent des signatures physiologiques inversées.</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                        <div class="font-mono text-xs font-bold text-emerald-300">Prédiction 3 — Hystérésis Allostatique</div>
+                        <p class="text-slate-300 leading-relaxed">Le retour d'une charge élevée ne s'effectue pas par saut instantané à $(0,0,0)$ mais par paliers successifs de $Z$ avec fenêtre de rémanence mesurable.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                    <div class="p-4 rounded-2xl bg-purple-950/25 border border-purple-500/25 space-y-1.5">
+                        <div class="font-bold text-white">Apport Clinique : Normothymie vs Dépression</div>
+                        <p class="text-slate-300 leading-relaxed">
+                            La <strong>normothymie</strong> n'est pas l'absence d'émotion, mais la plasticité de naviguer sur $Z=2..7$ tout en retrouvant le bassin attracteur du <em>Point de Veille (0,0,0)</em>. La <strong>dépression</strong> se modélise comme un verrouillage prolongé des basses couronnes négatives et des strates identitaires ($X<0, Z=5..6$) avec effondrement de la précision engagée.
+                        </p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-emerald-950/25 border border-emerald-500/25 space-y-1.5">
+                        <div class="font-bold text-white">Certification Formelle Lean 4 &amp; Propriété Intellectuelle</div>
+                        <p class="text-slate-300 leading-relaxed">
+                            L'ensemble des 6 modules (<code>PredictiveEngine</code>, <code>CoreAffect</code>, <code>AffectiveMatrix</code>, <code>AffectiveTaxonomy</code>, <code>Lexicon176</code>) vérifie <strong>17 théorèmes formels avec 0 <code>sorry</code></strong> sous Lean 4 (DOI Zenodo : <code>10.5281/zenodo.23833938</code> &bull; Marque déposée OPIC n° <code>1233199</code>).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Progression Footer -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-800">
+            <a href="matrice-affective.html" class="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold transition-colors">
+                &larr; Niveau 3 : La Matrice Affective
+            </a>
+            <div class="flex flex-wrap gap-3">
+                <a href="article.html" class="px-4 py-2.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/70 text-purple-200 border border-purple-500/40 text-xs sm:text-sm font-semibold transition-all">
+                    Lire l'Article Scientifique Intégral &rarr;
+                </a>
+                <a href="voyage.html" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition-all">
+                    ✨ Vivre Le Voyage (2 min) &rarr;
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-5 text-xs text-slate-300">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="moteur-predictif.html" class="hover:text-white transition-colors">1. Moteur Prédictif</a>
+                <a href="noyau-affectif.html" class="hover:text-white transition-colors">2. Noyau Affectif</a>
+                <a href="matrice-affective.html" class="hover:text-white transition-colors">3. Matrice Affective</a>
+                <a href="taxonomie-affective.html" class="text-pink-400 font-semibold">4. Taxonomie (176)</a>
+                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
+                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+            </div>
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> &bull; OPIC n° 1233199</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function() {
+            if (window.CartograffectTheory) {
+                window.CartograffectTheory.initNavMenus();
+            }
+
+            const M = window.CartograffectModel;
+            const T = window.CartograffectTheory;
+            if (!M || !T) return;
+
+            const allEmotions = M.emotions || [];
+            const fmtSign = v => (v > 0 ? '+' + v : String(v));
+
+            // State
+            let selectedEmotion = M.getByName('Colère') || allEmotions[0];
+            let activePathSteps = [];
+            const filters = { stratum: 'all', group: 'all', geometry: 'all' };
+
+            // Populate Datalist
+            const datalist = document.getElementById('emotionDatalist');
+            if (datalist) {
+                allEmotions.forEach(em => {
+                    const opt = document.createElement('option');
+                    opt.value = em.name;
+                    opt.label = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z}) — ${em.group}`;
+                    datalist.appendChild(opt);
+                });
+            }
+
+            // Populate 8 Strata Cards (#strate-0 .. #strate-7)
+            const strataGrid = document.getElementById('strataCardsGrid');
+            if (strataGrid && Array.isArray(M.strata)) {
+                M.strata.forEach(st => {
+                    const totalAtZ = M.getByStrata(st.z).length;
+                    const card = document.createElement('button');
+                    card.type = 'button';
+                    card.id = `strate-${st.z}`;
+                    card.className = 'text-left p-4 rounded-2xl bg-cosmic-850 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 transition-all space-y-2 cursor-pointer';
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-pink-950/70 text-pink-300 border border-pink-500/30">Z = ${st.z}</span>
+                            <span class="text-[11px] font-mono text-slate-400">L₁=${st.budget} &bull; ${totalAtZ} état${totalAtZ > 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="text-sm font-bold text-white">${st.name}</div>
+                        <div class="text-[11px] font-mono text-purple-300">Opérateur : ${st.operator}</div>
+                        <p class="text-xs text-slate-400 leading-relaxed">${st.desc}</p>
+                    `;
+                    card.addEventListener('click', () => {
+                        document.getElementById('filterStratum').value = String(st.z);
+                        filters.stratum = String(st.z);
+                        applyFiltersAndRender();
+                        const op = M.getByName(st.operator);
+                        if (op) handleEmotionSelect(op);
+                        document.getElementById('explorer-176').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                    strataGrid.appendChild(card);
+                });
+            }
+
+            function matchesFilters(em) {
+                if (filters.stratum !== 'all' && String(em.z) !== filters.stratum) return false;
+                if (filters.group !== 'all') {
+                    if (filters.group === 'Centre') {
+                        if (em.type !== 'operator') return false;
+                    } else if (em.group !== filters.group) {
+                        return false;
+                    }
+                }
+                if (filters.geometry !== 'all' && em.type !== filters.geometry) return false;
+                return true;
+            }
+
+            // ===================== 2D D3 MATRIX =====================
+            const chartHost = document.getElementById('chart-2d');
+            const tooltip = document.getElementById('tooltip2D');
+            const size2D = 720;
+            const margin2D = 48;
+            const maxCoord = 13;
+
+            const svg = d3.select(chartHost)
+                .append('svg')
+                .attr('viewBox', `0 0 ${size2D} ${size2D}`)
+                .attr('role', 'img')
+                .attr('aria-label', 'Carte 2D D3 des 176 états affectifs Cartograffect');
+
+            const defs = svg.append('defs');
+            defs.append('marker')
+                .attr('id', 'path-arrow')
+                .attr('viewBox', '0 0 10 10')
+                .attr('refX', 8)
+                .attr('refY', 5)
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('orient', 'auto-start-reverse')
+                .append('path')
+                .attr('d', 'M 0 1.5 L 9 5 L 0 8.5 z')
+                .attr('fill', '#fbbf24');
+
+            const xScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([margin2D, size2D - margin2D]);
+            const yScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([size2D - margin2D, margin2D]);
+
+            // Subtle dark canvas background
+            svg.append('rect')
+                .attr('width', size2D)
+                .attr('height', size2D)
+                .attr('fill', '#070b14');
+
+            // Manhattan L1 diamonds for Z=2..7 (radii 2,4,6,8,10,12)
+            const gridG = svg.append('g');
+            [2, 4, 6, 8, 10, 12].forEach((r, idx) => {
+                const pts = [
+                    [xScale(0), yScale(r)],
+                    [xScale(r), yScale(0)],
+                    [xScale(0), yScale(-r)],
+                    [xScale(-r), yScale(0)]
+                ].map(p => p.join(',')).join(' ');
+                gridG.append('polygon')
+                    .attr('points', pts)
+                    .attr('fill', 'none')
+                    .attr('stroke', '#1e293b')
+                    .attr('stroke-width', r === 2 ? 1.5 : 1)
+                    .attr('stroke-dasharray', r === 2 ? 'none' : '4,4');
+                gridG.append('text')
+                    .attr('x', xScale(0) + 4)
+                    .attr('y', yScale(r) - 4)
+                    .attr('fill', '#475569')
+                    .attr('font-size', '10px')
+                    .attr('font-family', 'Fira Code, monospace')
+                    .text(`Z=${idx + 2}`);
+            });
+
+            // Diagonal guidelines
+            gridG.append('line')
+                .attr('x1', xScale(-12)).attr('y1', yScale(-12))
+                .attr('x2', xScale(12)).attr('y2', yScale(12))
+                .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
+            gridG.append('line')
+                .attr('x1', xScale(-12)).attr('y1', yScale(12))
+                .attr('x2', xScale(12)).attr('y2', yScale(-12))
+                .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
+
+            // Axes
+            gridG.append('line')
+                .attr('x1', xScale(-maxCoord + 0.5)).attr('y1', yScale(0))
+                .attr('x2', xScale(maxCoord - 0.5)).attr('y2', yScale(0))
+                .attr('stroke', '#475569').attr('stroke-width', 1.5);
+            gridG.append('line')
+                .attr('x1', xScale(0)).attr('y1', yScale(-maxCoord + 0.5))
+                .attr('x2', xScale(0)).attr('y2', yScale(maxCoord - 0.5))
+                .attr('stroke', '#475569').attr('stroke-width', 1.5);
+
+            // Axis Titles
+            gridG.append('text').attr('x', xScale(0)).attr('y', 22).attr('text-anchor', 'middle').attr('fill', '#7dd3fc').attr('font-size', '12px').attr('font-weight', '700').text('Y+ (DÉCHARGE DE CONTRÔLE)');
+            gridG.append('text').attr('x', xScale(0)).attr('y', size2D - 14).attr('text-anchor', 'middle').attr('fill', '#60a5fa').attr('font-size', '12px').attr('font-weight', '700').text('Y− (CHARGE DE CONTRÔLE)');
+            gridG.append('text').attr('x', 16).attr('y', yScale(0) - 8).attr('text-anchor', 'start').attr('fill', '#fb7185').attr('font-size', '11px').attr('font-weight', '700').text('X− Attente');
+            gridG.append('text').attr('x', size2D - 16).attr('y', yScale(0) - 8).attr('text-anchor', 'end').attr('fill', '#34d399').attr('font-size', '11px').attr('font-weight', '700').text('Attente X+');
+
+            const oppVectorG = svg.append('g').attr('class', 'opposite-vector-layer');
+            const pathLayerG = svg.append('g').attr('class', 'emotional-path-layer');
+            const nodesG = svg.append('g').attr('class', 'nodes-layer');
+            const labelsG = svg.append('g').attr('class', 'labels-layer');
+
+            function nodeColor(em) {
+                return (M.groupColors && M.groupColors[em.group]) ? M.groupColors[em.group] : '#c084fc';
+            }
+
+            const circles = nodesG.selectAll('circle.em-node')
+                .data(allEmotions)
+                .enter()
+                .append('circle')
+                .attr('class', 'em-node')
+                .attr('cx', d => xScale(d.x))
+                .attr('cy', d => yScale(d.y))
+                .attr('r', d => d.type === 'operator' ? 4 + d.z * 0.5 : (d.z === 2 ? 7 : 5.2))
+                .attr('fill', d => nodeColor(d))
+                .attr('stroke', '#070b14')
+                .attr('stroke-width', 1.4)
+                .style('cursor', 'pointer')
+                .on('mouseover', function(event, d) {
+                    tooltip.style.opacity = '1';
+                    tooltip.innerHTML = `<div class="font-bold text-white">${d.name}</div><div class="font-mono text-[11px] text-pink-300">(${fmtSign(d.x)}, ${fmtSign(d.y)}, Z=${d.z})</div><div class="text-[11px] text-slate-400">${d.group} &bull; ${T.geometryType(d.x, d.y).label}</div>`;
+                })
+                .on('mousemove', function(event) {
+                    tooltip.style.left = `${event.clientX + 14}px`;
+                    tooltip.style.top = `${event.clientY - 12}px`;
+                })
+                .on('mouseout', function() {
+                    tooltip.style.opacity = '0';
+                })
+                .on('click', function(event, d) {
+                    handleEmotionSelect(d);
+                });
+
+            // Selective readable labels (Z=2 prototypes + selected + path endpoints)
+            function update2DVisuals() {
+                let visibleCount = 0;
+                const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
+
+                circles
+                    .attr('opacity', d => {
+                        const ok = matchesFilters(d);
+                        if (ok) visibleCount++;
+                        if (selectedEmotion && d.id === selectedEmotion.id) return 1;
+                        if (opp && d.id === opp.id) return 0.95;
+                        return ok ? (d.type === 'operator' ? 0.55 : 0.92) : 0.1;
+                    })
+                    .attr('r', d => {
+                        if (selectedEmotion && d.id === selectedEmotion.id) return 9.5;
+                        if (opp && d.id === opp.id) return 8;
+                        return d.type === 'operator' ? 4 + d.z * 0.45 : (d.z === 2 ? 7 : 5.2);
+                    })
+                    .attr('stroke', d => {
+                        if (selectedEmotion && d.id === selectedEmotion.id) return '#ffffff';
+                        if (opp && d.id === opp.id) return '#fbbf24';
+                        return '#070b14';
+                    })
+                    .attr('stroke-width', d => {
+                        if (selectedEmotion && d.id === selectedEmotion.id) return 2.8;
+                        if (opp && d.id === opp.id) return 2.2;
+                        return 1.3;
+                    });
+
+                document.getElementById('visibleCountBadge').textContent = visibleCount;
+
+                // Antagonist link
+                oppVectorG.selectAll('*').remove();
+                if (selectedEmotion && opp && !(selectedEmotion.x === 0 && selectedEmotion.y === 0)) {
+                    oppVectorG.append('line')
+                        .attr('x1', xScale(selectedEmotion.x))
+                        .attr('y1', yScale(selectedEmotion.y))
+                        .attr('x2', xScale(opp.x))
+                        .attr('y2', yScale(opp.y))
+                        .attr('stroke', '#fbbf24')
+                        .attr('stroke-width', 1.8)
+                        .attr('stroke-dasharray', '5,4')
+                        .attr('opacity', 0.85);
+                }
+
+                // Labels for filtered view or selected + opposite + Z=2 prototypes
+                labelsG.selectAll('*').remove();
+                const showSingleStratum = filters.stratum !== 'all';
+                allEmotions.forEach(d => {
+                    const isSel = selectedEmotion && d.id === selectedEmotion.id;
+                    const isOpp = opp && d.id === opp.id;
+                    const shouldLabel = isSel || isOpp || (d.z === 2 && d.type !== 'operator' && matchesFilters(d)) || (showSingleStratum && matchesFilters(d) && d.type !== 'operator');
+                    if (shouldLabel) {
+                        labelsG.append('text')
+                            .attr('x', xScale(d.x))
+                            .attr('y', yScale(d.y) - (isSel ? 13 : 10))
+                            .attr('text-anchor', 'middle')
+                            .attr('fill', isSel ? '#ffffff' : (isOpp ? '#fde68a' : '#cbd5e1'))
+                            .attr('font-size', isSel ? '12px' : '10px')
+                            .attr('font-weight', isSel ? '700' : '500')
+                            .style('pointer-events', 'none')
+                            .text(d.name);
+                    }
+                });
+            }
+
+            // ===================== 3D THREE.JS PYRAMID =====================
+            let scene3D, camera3D, renderer3D, controls3D, clickableSpheres = [], pathLine3D = null, highlightRing3D = null;
+            const sphereMap3D = new Map();
+            const container3D = document.getElementById('pyramid-3d');
+
+            function coordTo3D(em) {
+                const xyScale = 1.65;
+                const zScale = 2.6;
+                return new THREE.Vector3(em.x * xyScale, (em.z - 3.5) * zScale, -em.y * xyScale);
+            }
+
+            function init3DVisualization() {
+                if (!container3D || typeof THREE === 'undefined') return;
+
+                const width = container3D.clientWidth || 480;
+                const height = container3D.clientHeight || 400;
+
+                scene3D = new THREE.Scene();
+                scene3D.background = new THREE.Color(0x070b14);
+
+                camera3D = new THREE.PerspectiveCamera(45, width / height, 0.1, 300);
+                camera3D.position.set(22, 14, 26);
+
+                renderer3D = new THREE.WebGLRenderer({ antialias: true });
+                renderer3D.setSize(width, height);
+                renderer3D.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                container3D.appendChild(renderer3D.domElement);
+
+                if (THREE.OrbitControls) {
+                    controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
+                    controls3D.enableDamping = true;
+                    controls3D.dampingFactor = 0.06;
+                }
+
+                // Lighting
+                scene3D.add(new THREE.AmbientLight(0xffffff, 0.72));
+                const dirLight = new THREE.DirectionalLight(0xf9a8d4, 0.9);
+                dirLight.position.set(18, 28, 16);
+                scene3D.add(dirLight);
+
+                // Central vertical Z axis spindle (Z=0..7)
+                const spindleGeo = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(0, (0 - 3.5) * 2.6, 0),
+                    new THREE.Vector3(0, (7 - 3.5) * 2.6, 0)
+                ]);
+                scene3D.add(new THREE.Line(spindleGeo, new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.7 })));
+
+                // Manhattan diamond wireframe per Z=2..7
+                for (let z = 2; z <= 7; z++) {
+                    const r = (2 * z - 2) * 1.65;
+                    const yPos = (z - 3.5) * 2.6;
+                    const diamondGeo = new THREE.BufferGeometry().setFromPoints([
+                        new THREE.Vector3(0, yPos, -r),
+                        new THREE.Vector3(r, yPos, 0),
+                        new THREE.Vector3(0, yPos, r),
+                        new THREE.Vector3(-r, yPos, 0),
+                        new THREE.Vector3(0, yPos, -r)
+                    ]);
+                    scene3D.add(new THREE.Line(diamondGeo, new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.65 })));
+                }
+
+                // Create spheres for all 176 emotions
+                const baseGeo = new THREE.SphereGeometry(0.42, 16, 16);
+                allEmotions.forEach(em => {
+                    const mat = new THREE.MeshStandardMaterial({
+                        color: new THREE.Color(nodeColor(em)),
+                        roughness: 0.35,
+                        metalness: 0.15,
+                        transparent: true,
+                        opacity: 0.92
+                    });
+                    const mesh = new THREE.Mesh(baseGeo, mat);
+                    mesh.position.copy(coordTo3D(em));
+                    mesh.userData = { emotion: em };
+                    if (em.type === 'operator') {
+                        mesh.scale.setScalar(1.2);
+                    }
+                    scene3D.add(mesh);
+                    clickableSpheres.push(mesh);
+                    sphereMap3D.set(em.id, mesh);
+                });
+
+                // Highlight halo ring
+                const ringGeo = new THREE.TorusGeometry(0.78, 0.08, 12, 32);
+                const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                highlightRing3D = new THREE.Mesh(ringGeo, ringMat);
+                highlightRing3D.rotation.x = Math.PI / 2;
+                scene3D.add(highlightRing3D);
+
+                // Raycasting click
+                const raycaster = new THREE.Raycaster();
+                const mouse = new THREE.Vector2();
+                let pointerDownPos = null;
+
+                renderer3D.domElement.addEventListener('pointerdown', e => {
+                    pointerDownPos = { x: e.clientX, y: e.clientY };
+                });
+
+                renderer3D.domElement.addEventListener('pointerup', e => {
+                    if (!pointerDownPos) return;
+                    const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+                    if (dist > 6) return; // Ignore drag orbits
+                    const rect = renderer3D.domElement.getBoundingClientRect();
+                    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera3D);
+                    const hits = raycaster.intersectObjects(clickableSpheres);
+                    if (hits.length > 0 && hits[0].object.userData.emotion) {
+                        handleEmotionSelect(hits[0].object.userData.emotion);
+                    }
+                });
+
+                function resize3D() {
+                    if (!renderer3D || !camera3D || !container3D) return;
+                    const w = container3D.clientWidth;
+                    const h = container3D.clientHeight;
+                    if (w > 0 && h > 0) {
+                        camera3D.aspect = w / h;
+                        camera3D.updateProjectionMatrix();
+                        renderer3D.setSize(w, h);
+                    }
+                }
+                if (typeof ResizeObserver !== 'undefined') {
+                    new ResizeObserver(resize3D).observe(container3D);
+                }
+                window.addEventListener('resize', resize3D);
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    if (controls3D) controls3D.update();
+                    if (highlightRing3D) highlightRing3D.rotation.z += 0.025;
+                    renderer3D.render(scene3D, camera3D);
+                }
+                animate();
+            }
+
+            function update3DVisuals() {
+                if (!scene3D) return;
+                const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
+                clickableSpheres.forEach(mesh => {
+                    const em = mesh.userData.emotion;
+                    const ok = matchesFilters(em);
+                    const isSel = selectedEmotion && em.id === selectedEmotion.id;
+                    const isOpp = opp && em.id === opp.id;
+                    mesh.material.opacity = (isSel || isOpp) ? 1 : (ok ? 0.9 : 0.14);
+                    const targetScale = isSel ? 1.75 : (isOpp ? 1.45 : (em.type === 'operator' ? 1.15 : 1.0));
+                    mesh.scale.setScalar(targetScale);
+                });
+                if (highlightRing3D && selectedEmotion) {
+                    highlightRing3D.position.copy(coordTo3D(selectedEmotion));
+                }
+            }
+
+            // ===================== PATH DRAWING (2D + 3D) =====================
+            function drawEmotionalPath(steps) {
+                activePathSteps = Array.isArray(steps) ? steps.filter(Boolean) : [];
+                pathLayerG.selectAll('*').remove();
+
+                if (pathLine3D && scene3D) {
+                    scene3D.remove(pathLine3D);
+                    pathLine3D = null;
+                }
+
+                if (activePathSteps.length < 2) return;
+
+                // Draw segment-by-segment on 2D SVG for clean arrows
+                for (let i = 0; i < activePathSteps.length - 1; i++) {
+                    const a = activePathSteps[i];
+                    const b = activePathSteps[i + 1];
+                    pathLayerG.append('line')
+                        .attr('x1', xScale(a.x))
+                        .attr('y1', yScale(a.y))
+                        .attr('x2', xScale(b.x))
+                        .attr('y2', yScale(b.y))
+                        .attr('stroke', '#fbbf24')
+                        .attr('stroke-width', 2.6)
+                        .attr('marker-end', 'url(#path-arrow)')
+                        .attr('opacity', 0.9);
+                }
+
+                // Step badges
+                activePathSteps.forEach((s, idx) => {
+                    const g = pathLayerG.append('g')
+                        .attr('transform', `translate(${xScale(s.x)}, ${yScale(s.y)})`)
+                        .style('cursor', 'pointer')
+                        .on('click', () => {
+                            const match = M.getByName(s.name);
+                            if (match) handleEmotionSelect(match);
+                        });
+                    g.append('circle')
+                        .attr('r', 10)
+                        .attr('fill', '#fbbf24')
+                        .attr('stroke', '#070b14')
+                        .attr('stroke-width', 2);
+                    g.append('text')
+                        .attr('y', 3.5)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', '#070b14')
+                        .attr('font-size', '10px')
+                        .attr('font-weight', '800')
+                        .text(String(idx + 1));
+                });
+
+                // 3D polyline
+                if (scene3D && typeof THREE !== 'undefined') {
+                    const pts3D = activePathSteps.map(s => coordTo3D(s));
+                    const geo = new THREE.BufferGeometry().setFromPoints(pts3D);
+                    const mat = new THREE.LineBasicMaterial({ color: 0xfbbf24, linewidth: 2 });
+                    pathLine3D = new THREE.Line(geo, mat);
+                    scene3D.add(pathLine3D);
+                }
+            }
+
+            // ===================== IDENTITY CARD RENDERING =====================
+            function renderIdentityCard(em) {
+                if (!em) return;
+                const stratumMeta = M.getStrataMeta(em.z) || { name: `Strate ${em.z}` };
+                const geom = T.geometryType(em.x, em.y);
+                const taxGrp = T.classifyTaxonomicGroup(em.x, em.y);
+                const subsec = T.classifySubsector(em.x, em.y);
+                const regime = T.computeEnergyRegime(em.x, em.y);
+                const valence = T.computeHedonicPolarity(em.x, em.y);
+                const opp = M.getOpposite(em.name);
+
+                document.getElementById('cardStratumBadge').textContent = `Z=${em.z} • ${stratumMeta.name}`;
+                document.getElementById('cardCoordsBadge').textContent = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z})`;
+                document.getElementById('cardName').textContent = em.name;
+                document.getElementById('cardSubMeta').textContent = `${em.code || ''} • ${geom.label} • Budget L₁ = ${Math.abs(em.x) + Math.abs(em.y)}`;
+                document.getElementById('cardColorDot').style.backgroundColor = nodeColor(em);
+                document.getElementById('cardDesc').textContent = em.desc || '';
+
+                document.getElementById('cardTaxGroup').textContent = taxGrp.label;
+                document.getElementById('cardSubsector').textContent = subsec.label;
+                const regEl = document.getElementById('cardRegime');
+                regEl.textContent = regime.label;
+                regEl.style.color = regime.color;
+
+                const valEl = document.getElementById('cardValence');
+                valEl.textContent = valence.label;
+                valEl.className = 'font-bold mt-0.5 ' + (valence.polarity === 'positive' ? 'text-emerald-300' : (valence.polarity === 'negative' ? 'text-rose-300' : 'text-purple-300'));
+                document.getElementById('cardValenceRule').innerHTML = `<strong class="text-white">Loi de valence :</strong> ${valence.rule}`;
+
+                const symTypeEl = document.getElementById('cardSymmetryType');
+                const oppBtn = document.getElementById('cardOppositeBtn');
+                const oppLbl = document.getElementById('cardOppositeLabel');
+                if (opp) {
+                    oppBtn.disabled = false;
+                    oppBtn.classList.remove('opacity-50');
+                    oppLbl.textContent = `${opp.name} (${fmtSign(opp.x)}, ${fmtSign(opp.y)}, ${opp.z})`;
+                    oppBtn.onclick = () => handleEmotionSelect(opp);
+                    symTypeEl.textContent = em.type === 'lateral'
+                        ? 'Réflexion diagonale Td/Ti : (−Y, −X)'
+                        : 'Inversion centrale : (−X, −Y)';
+                } else {
+                    oppBtn.disabled = true;
+                    oppBtn.classList.add('opacity-50');
+                    oppLbl.textContent = 'Opérateur central (auto-dual sur l\'axe Z)';
+                    oppBtn.onclick = null;
+                    symTypeEl.textContent = 'Pivot central (X=0, Y=0)';
+                }
+            }
+
+            function handleEmotionSelect(em) {
+                if (!em) return;
+                selectedEmotion = em;
+                const searchInput = document.getElementById('emotionSearchInput');
+                if (searchInput && document.activeElement !== searchInput) {
+                    searchInput.value = em.name;
+                }
+                renderIdentityCard(em);
+                update2DVisuals();
+                update3DVisuals();
+            }
+
+            function applyFiltersAndRender() {
+                update2DVisuals();
+                update3DVisuals();
+            }
+
+            // ===================== SCENARIO SIMULATOR =====================
+            const scenarioPresets = {
+                cafe: {
+                    title: 'Exemple §7.3 : Le Café Gâté (Escalade Verticale & Récupération)',
+                    badge: 'Z=1 → Z=2 → Z=4 → Z=5 → Z=0',
+                    text: 'Rupture sensorielle par goût altéré (Surprise Z=1) → Rejet protecteur immédiat (Dégoût Z=2) → Auto-attribution culpabilisante sur un modèle fragilisé (Honte Z=4) → Généralisation temporelle défavorable (Désespoir Z=5) → Dissipation graduelle vers le Point de Veille.',
+                    names: ['Surprise', 'Dégoût', 'Honte', 'Désespoir', 'Point de Veille']
+                },
+                deuil: {
+                    title: 'Trajectoire Clinique : Perte, Travail de Deuil & Résilience',
+                    badge: 'Z=1 → Z=2 → Z=3 → Z=5 → Z=4 → Z=0',
+                    text: 'Choc de l\'annonce (Surprise Z=1) → Mise en charge rétentive du contrôle (Tristesse Z=2) → Contextualisation réactive (Chagrin Z=3) → Abattement temporel (Désespoir Z=5) → Intégration apaisée (Sérénité Z=4) → Retour à la disponibilité basale (Point de Veille).',
+                    names: ['Surprise', 'Tristesse', 'Chagrin', 'Désespoir', 'Sérénité', 'Point de Veille']
+                },
+                injustice: {
+                    title: 'Compensation Ergotrope : Frustration → Colère → Apaisement',
+                    badge: 'Z=1 → Z=2 → Z=6 → Z=2 → Z=0',
+                    text: 'Obstacle imprévu (Surprise Z=1) → Compensation motrice sur attente négative (Colère −1,+1,2) → Escalade identitaire si non résorbée (Fureur −4,+6,6) → Bascule trophotrope vers l\'économie d\'effort (Calme +1,−1,2) → Point de Veille.',
+                    names: ['Surprise', 'Colère', 'Fureur', 'Calme', 'Point de Veille']
+                },
+                defi: {
+                    title: 'Réévaluation Épistémique : Peur → Courage → Joie',
+                    badge: 'Z=1 → Z=2 → Z=4 → Z=2 → Z=0',
+                    text: 'Nouveauté menaçante (Surprise Z=1) → Anticipation de risque subi (Peur −2,0,2) → Engagement volontaire de l\'attente (Courage +2,0,2) → Consolidation positive (Fierté +4,+2,4) → Décharge résolutive (Joie 0,+2,2) → Point de Veille.',
+                    names: ['Surprise', 'Peur', 'Courage', 'Fierté', 'Joie', 'Point de Veille']
+                }
+            };
+
+            function activateScenario(title, badge, text, steps) {
+                const validSteps = steps.filter(Boolean);
+                document.getElementById('scenarioResultTitle').textContent = title;
+                document.getElementById('scenarioMetaBadge').textContent = badge;
+                document.getElementById('scenarioResultText').textContent = text;
+
+                const pillsHost = document.getElementById('scenarioPathPills');
+                pillsHost.innerHTML = '';
+                validSteps.forEach((st, idx) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-pink-900/60 border border-slate-700 hover:border-pink-500/50 text-xs font-semibold text-white cursor-pointer transition-colors flex items-center gap-1.5';
+                    btn.innerHTML = `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold inline-flex items-center justify-center">${idx + 1}</span><span>${st.name}</span><span class="font-mono text-[10px] text-slate-400">(Z=${st.z})</span>`;
+                    btn.onclick = () => handleEmotionSelect(st);
+                    pillsHost.appendChild(btn);
+                    if (idx < validSteps.length - 1) {
+                        const arr = document.createElement('span');
+                        arr.className = 'text-amber-400 self-center text-xs font-bold';
+                        arr.textContent = '→';
+                        pillsHost.appendChild(arr);
+                    }
+                });
+
+                drawEmotionalPath(validSteps);
+                if (validSteps.length > 1) {
+                    handleEmotionSelect(validSteps[1]);
+                }
+            }
+
+            function runScenarioAnalysis(rawText) {
+                const txt = (rawText || '').toLowerCase().trim();
+                if (!txt) {
+                    const p = scenarioPresets.cafe;
+                    activateScenario(p.title, p.badge, p.text, p.names.map(n => M.getByName(n)));
+                    return;
+                }
+
+                // Direct lexicon mention check + lexical gradient scoring
+                const exactMatches = allEmotions.filter(e => e.name.length > 3 && txt.includes(e.name.toLowerCase()));
+                if (exactMatches.length >= 2) {
+                    const steps = [M.getByName('Surprise'), ...exactMatches.slice(0, 4), M.getByName('Point de Veille')];
+                    activateScenario(
+                        'Trajectoire Inférée à partir de votre Récit',
+                        `${steps.filter(Boolean).length} étapes`,
+                        `États détectés directement dans votre situation et reliés depuis l'alerte initiale (Surprise) jusqu'au retour à l'équilibre basal.`,
+                        steps
+                    );
+                    return;
+                }
+
+                let scoreX = 0;
+                let scoreY = 0;
+                let targetZ = 3;
+
+                if (/(menace|danger|peur|angoiss|inquiet|échec|raté|perdu|honte|rejet|injust|trah)/i.test(txt)) scoreX -= 2;
+                if (/(espoir|réussi|confian|opportun|courage|fièr|fier|aim|soutien|solut)/i.test(txt)) scoreX += 2;
+                if (/(agis|action|réagir|combatt|colère|enerv|énerv|fuir|fuit|joie|enthousias|élan)/i.test(txt)) scoreY += 2;
+                if (/(impuissan|bloqu|triste|figé|paralys|fatigue|subi|calme|serein|repos)/i.test(txt)) scoreY -= 2;
+                if (/(toujours|jamais|tout|vie|identité|avenir|profond|désespoir)/i.test(txt)) targetZ = 5;
+                else if (/(honte|culpabil|faute|regard|relation|longtemps)/i.test(txt)) targetZ = 4;
+
+                // Nearest candidate at Z=2 and targetZ
+                const findNearest = (zLevel, tx, ty) => {
+                    const pool = M.getByStrata(zLevel).filter(e => e.type !== 'operator');
+                    if (!pool.length) return null;
+                    return pool.reduce((best, cur) => {
+                        const dCur = Math.abs(cur.x - tx) + Math.abs(cur.y - ty);
+                        const dBest = Math.abs(best.x - tx) + Math.abs(best.y - ty);
+                        return dCur < dBest ? cur : best;
+                    }, pool[0]);
+                };
+
+                const protoZ2 = exactMatches[0] || findNearest(2, scoreX, scoreY);
+                const scaleFactor = (2 * targetZ - 2) / 2;
+                const deepTarget = findNearest(targetZ, scoreX * scaleFactor, scoreY * scaleFactor);
+                const oppRecovery = protoZ2 ? M.getOpposite(protoZ2.name) : M.getByName('Calme');
+
+                const steps = [M.getByName('Surprise'), protoZ2, deepTarget, oppRecovery, M.getByName('Point de Veille')];
+                activateScenario(
+                    'Modélisation Inférentielle de Votre Situation',
+                    `Attente ${scoreX >= 0 ? '≥0' : '<0'} • Contrôle ${scoreY >= 0 ? '≥0' : '<0'} • Z=${targetZ}`,
+                    `L'analyse évalue les gradients implicites du récit : amorce par Surprise (Z=1), cristallisation sur ${protoZ2 ? protoZ2.name : 'Z=2'}, approfondissement vers ${deepTarget ? deepTarget.name : 'Z=' + targetZ}, puis résorption allostatique.`,
+                    steps
+                );
+            }
+
+            // ===================== EVENT LISTENERS =====================
+            document.getElementById('filterStratum').addEventListener('change', e => {
+                filters.stratum = e.target.value;
+                applyFiltersAndRender();
+            });
+            document.getElementById('filterGroup').addEventListener('change', e => {
+                filters.group = e.target.value;
+                applyFiltersAndRender();
+            });
+            document.getElementById('filterGeometry').addEventListener('change', e => {
+                filters.geometry = e.target.value;
+                applyFiltersAndRender();
+            });
+            document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+                filters.stratum = 'all';
+                filters.group = 'all';
+                filters.geometry = 'all';
+                document.getElementById('filterStratum').value = 'all';
+                document.getElementById('filterGroup').value = 'all';
+                document.getElementById('filterGeometry').value = 'all';
+                applyFiltersAndRender();
+            });
+
+            document.getElementById('emotionSearchInput').addEventListener('input', e => {
+                const val = e.target.value.trim();
+                const found = M.getByName(val) || allEmotions.find(em => em.name.toLowerCase() === val.toLowerCase());
+                if (found) handleEmotionSelect(found);
+            });
+
+            document.getElementById('traceDissipationBtn').addEventListener('click', () => {
+                if (!selectedEmotion) return;
+                const path = T.computeDissipationPath(selectedEmotion);
+                drawEmotionalPath(path);
+            });
+
+            document.getElementById('clearPathBtn').addEventListener('click', () => {
+                drawEmotionalPath([]);
+            });
+
+            // View Mode toggle (Split / 2D / 3D)
+            document.querySelectorAll('.view-mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mode = btn.dataset.mode;
+                    const p2 = document.getElementById('panel2D');
+                    const p3 = document.getElementById('panel3D');
+                    const inner = document.getElementById('vizPanelsInner');
+                    document.querySelectorAll('.view-mode-btn').forEach(b => {
+                        const active = b.dataset.mode === mode;
+                        b.className = active
+                            ? 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer'
+                            : 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white cursor-pointer';
+                    });
+                    if (mode === 'split') {
+                        p2.classList.remove('hidden');
+                        p3.classList.remove('hidden');
+                        inner.className = 'grid grid-cols-1 xl:grid-cols-2 gap-5';
+                    } else if (mode === '2d') {
+                        p2.classList.remove('hidden');
+                        p3.classList.add('hidden');
+                        inner.className = 'grid grid-cols-1 gap-5';
+                    } else {
+                        p2.classList.add('hidden');
+                        p3.classList.remove('hidden');
+                        inner.className = 'grid grid-cols-1 gap-5';
+                    }
+                });
+            });
+
+            // Fullscreen toggles
+            function togglePanelFullscreen(panelId, btnId) {
+                const panel = document.getElementById(panelId);
+                const btn = document.getElementById(btnId);
+                if (!panel || !btn) return;
+                const isFs = panel.classList.toggle('fullscreen-panel');
+                btn.textContent = isFs ? '✕ Quitter' : '⛶ Agrandir';
+            }
+            document.getElementById('fullscreen2DBtn').addEventListener('click', () => togglePanelFullscreen('panel2D', 'fullscreen2DBtn'));
+            document.getElementById('fullscreen3DBtn').addEventListener('click', () => togglePanelFullscreen('panel3D', 'fullscreen3DBtn'));
+
+            // Scenarios
+            document.querySelectorAll('.scenario-preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const p = scenarioPresets[btn.dataset.preset];
+                    if (!p) return;
+                    activateScenario(p.title, p.badge, p.text, p.names.map(n => M.getByName(n)));
+                });
+            });
+            document.getElementById('analyzeScenarioBtn').addEventListener('click', () => {
+                runScenarioAnalysis(document.getElementById('scenarioInput').value);
+            });
+
+            // Initialize 3D + handle URL params (?id=, ?highlight=, ?z=) & hash (#strate-0..7)
+            window.addEventListener('DOMContentLoaded', () => {
+                init3DVisualization();
+
+                const params = new URLSearchParams(window.location.search);
+                const targetName = params.get('id') || params.get('highlight');
+                const targetZ = params.get('z');
+                const hash = window.location.hash;
+
+                if (targetZ && /^[0-7]$/.test(targetZ)) {
+                    filters.stratum = targetZ;
+                    document.getElementById('filterStratum').value = targetZ;
+                } else if (hash && /^#strate-([0-7])$/.test(hash)) {
+                    const zNum = hash.replace('#strate-', '');
+                    filters.stratum = zNum;
+                    document.getElementById('filterStratum').value = zNum;
+                }
+
+                let initEm = targetName ? (M.getByName(targetName) || allEmotions.find(e => e.name.toLowerCase() === targetName.toLowerCase())) : null;
+                if (!initEm && filters.stratum !== 'all') {
+                    const listAtZ = M.getByStrata(Number(filters.stratum));
+                    initEm = listAtZ[0] || M.getByName('Colère');
+                }
+                if (!initEm) initEm = M.getByName('Colère') || allEmotions[0];
+
+                handleEmotionSelect(initEm);
+
+                // Load default §7.3 example path without overriding selection unless desired
+                const cafe = scenarioPresets.cafe;
+                const cafeSteps = cafe.names.map(n => M.getByName(n)).filter(Boolean);
+                const pillsHost = document.getElementById('scenarioPathPills');
+                if (pillsHost) {
+                    cafeSteps.forEach((st, idx) => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-pink-900/60 border border-slate-700 hover:border-pink-500/50 text-xs font-semibold text-white cursor-pointer transition-colors flex items-center gap-1.5';
+                        btn.innerHTML = `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold inline-flex items-center justify-center">${idx + 1}</span><span>${st.name}</span><span class="font-mono text-[10px] text-slate-400">(Z=${st.z})</span>`;
+                        btn.onclick = () => { drawEmotionalPath(cafeSteps); handleEmotionSelect(st); };
+                        pillsHost.appendChild(btn);
+                        if (idx < cafeSteps.length - 1) {
+                            const arr = document.createElement('span');
+                            arr.className = 'text-amber-400 self-center text-xs font-bold';
+                            arr.textContent = '→';
+                            pillsHost.appendChild(arr);
+                        }
+                    });
+                }
+            });
+        })();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+    <script src="bilingual_modal.js"></script>
+    <script src="command_palette.js"></script>
+</body>
+</html>
+

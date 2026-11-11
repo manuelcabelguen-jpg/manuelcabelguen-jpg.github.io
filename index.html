@@ -134,10 +134,43 @@
                         <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>
                         L'Article
                     </a>
-                    <a href="emotions.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                        <span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span>
-                        1. Émotions
-                    </a>
+                    <div class="relative">
+                        <button id="modelDropdownBtn" type="button" aria-expanded="false" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                            <span class="w-2 h-2 rounded-full bg-blue-400 shrink-0"></span>
+                            <span>Le Modèle</span>
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-72 rounded-2xl bg-cosmic-850/95 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-950/60 p-2 z-50 space-y-1">
+                            <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                                <span class="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0"></span>
+                                <div>
+                                    <div class="text-xs font-bold">1. Le Moteur Prédictif</div>
+                                    <div class="text-[11px] text-slate-400">Interfaces, précision &amp; gradients A/C</div>
+                                </div>
+                            </a>
+                            <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                                <span class="w-2 h-2 rounded-full bg-sky-400 mt-1.5 shrink-0"></span>
+                                <div>
+                                    <div class="text-xs font-bold">2. Le Noyau Affectif</div>
+                                    <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L₁</div>
+                                </div>
+                            </a>
+                            <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></span>
+                                <div>
+                                    <div class="text-xs font-bold">3. La Matrice Affective</div>
+                                    <div class="text-[11px] text-slate-400">Valence, prototypes Z=2 &amp; dynamique</div>
+                                </div>
+                            </a>
+                            <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                                <span class="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0"></span>
+                                <div>
+                                    <div class="text-xs font-bold">4. La Taxonomie Affective</div>
+                                    <div class="text-[11px] text-slate-400">176 états (Z=0..7) &amp; Carte 2D/3D</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                     <a href="scholar_drive.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
                         <span class="w-2 h-2 rounded-full bg-indigo-400 shrink-0"></span>
                         Modèles Théoriques
@@ -158,7 +191,7 @@
                         <svg class="w-3.5 h-3.5 fill-current shrink-0" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                         <span>GitHub</span>
                     </a>
-                    <a href="emotions.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
+                    <a href="taxonomie-affective.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5 whitespace-nowrap">
                         Ouvrir la Carte &rarr;
                     </a>
                 </div>
@@ -189,7 +222,11 @@
                 <span>✨ Vivre le Voyage affectif (2 min)</span>
             </a>
             <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
-            <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+            <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-500">Modèle en 4 Composantes</div>
+            <a href="moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
+            <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
+            <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
+            <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
             <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques &amp; Concepts</a>
             <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer"><span class="menu-dot bg-slate-400"></span>Dépôt GitHub du Site</a>
             <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer"><span class="menu-dot bg-indigo-400"></span>Dépôt GitHub Lean 4</a>
@@ -198,7 +235,7 @@
                 <span>Rejouer l'animation d'intro</span>
             </button>
             <div class="mt-auto pt-6">
-                <a href="emotions.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Ouvrir la Carte &rarr;</a>
+                <a href="taxonomie-affective.html" class="!bg-gradient-to-r !from-purple-600 !to-indigo-600 !text-white !font-bold !justify-center !border-0 shadow-lg shadow-purple-600/30">Ouvrir la Carte &rarr;</a>
             </div>
         </div>
 
@@ -270,7 +307,7 @@
                                 <span class="text-base group-hover:scale-110 transition-transform">✨</span>
                                 <span>Vivre le Voyage affectif (2 min) &rarr;</span>
                             </a>
-                            <a href="emotions.html" class="px-4 py-3 rounded-xl font-bold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-500/40 shadow-lg shadow-purple-950/40 transition-all text-xs sm:text-sm flex items-center gap-2">
+                            <a href="taxonomie-affective.html" class="px-4 py-3 rounded-xl font-bold text-purple-200 hover:text-white bg-purple-950/70 hover:bg-purple-900 border border-purple-500/40 shadow-lg shadow-purple-950/40 transition-all text-xs sm:text-sm flex items-center gap-2">
                                 <span>🧭</span>
                                 <span>Explorer la Carte 3D</span>
                             </a>
@@ -1051,18 +1088,18 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     
-                    <!-- Carte 1 : Carte des 176 Émotions -->
+                    <!-- Carte 1 : Modèle en 4 Composantes & Taxonomie 176 -->
                     <div class="rounded-2xl bg-gradient-to-b from-blue-950/30 via-slate-900 to-cosmic-900 border border-blue-500/30 p-6 flex flex-col justify-between shadow-xl hover:border-blue-400/60 transition-all duration-300 group">
                         <div class="space-y-4">
                             <div class="w-12 h-12 rounded-xl bg-blue-950/60 border border-blue-500/40 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                                 🧭
                             </div>
                             <div>
-                                <span class="text-[10px] font-mono uppercase tracking-widest text-blue-400 font-bold block">Espace Cartographique</span>
-                                <h3 class="text-lg font-heading font-bold text-white mt-1">La Carte des 176 Émotions</h3>
+                                <span class="text-[10px] font-mono uppercase tracking-widest text-blue-400 font-bold block">4 Composantes Emboîtées</span>
+                                <h3 class="text-lg font-heading font-bold text-white mt-1">Du Moteur Prédictif aux 176 États</h3>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Navigation 2D et 3D sur les 8 strates (Z=0 à Z=7). Visualisation des 84 paires antagonistes formelles et de la métrique L₁ de Manhattan.
+                                Explorez chaque niveau formel : <a href="moteur-predictif.html" class="text-purple-300 underline">1. Moteur</a>, <a href="noyau-affectif.html" class="text-sky-300 underline">2. Noyau</a>, <a href="matrice-affective.html" class="text-emerald-300 underline">3. Matrice</a> et la carte 2D/3D de la <a href="taxonomie-affective.html" class="text-pink-300 underline">4. Taxonomie</a>.
                             </p>
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-blue-400">✓</span> 176 positions sans collision</li>
@@ -1070,8 +1107,8 @@
                             </ul>
                         </div>
                         <div class="pt-5 mt-4 border-t border-slate-800">
-                            <a href="emotions.html" class="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-950/50 gap-2">
-                                <span>Explorer la Carte</span>
+                            <a href="taxonomie-affective.html" class="inline-flex items-center justify-center w-full px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-950/50 gap-2">
+                                <span>Explorer la Taxonomie (176)</span>
                                 <span>&rarr;</span>
                             </a>
                         </div>
@@ -1401,7 +1438,7 @@
 
                     <!-- Bannière d'appel à l'action final -->
                     <div class="text-center py-6">
-                        <a href="emotions.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-heading font-bold text-base text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:from-purple-500 hover:to-indigo-500 shadow-2xl shadow-purple-600/40 border border-purple-400/30 transition-all transform hover:-translate-y-1">
+                        <a href="taxonomie-affective.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl font-heading font-bold text-base text-white bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:from-purple-500 hover:to-indigo-500 shadow-2xl shadow-purple-600/40 border border-purple-400/30 transition-all transform hover:-translate-y-1">
                             <span>🧭 Lancer l'Exploration de la Carte Interactive</span>
                             <span>&rarr;</span>
                         </a>
@@ -1429,7 +1466,10 @@
                 </div>
                 <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                     <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
-                    <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                    <a href="moteur-predictif.html" class="hover:text-white transition-colors">1. Moteur</a>
+                    <a href="noyau-affectif.html" class="hover:text-white transition-colors">2. Noyau</a>
+                    <a href="matrice-affective.html" class="hover:text-white transition-colors">3. Matrice</a>
+                    <a href="taxonomie-affective.html" class="hover:text-white transition-colors">4. Taxonomie (176)</a>
                     <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                     <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
                     <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-1 text-purple-300">
@@ -1548,6 +1588,7 @@
 
     <!-- Main Logic & Animation Script -->
     <script src="cartograffect_model.js"></script>
+    <script src="cartograffect_theory.js"></script>
     <script src="octahedral_navigator.js"></script>
     <script src="dynamic_cartograffect.js"></script>
     <script src="script.js"></script>

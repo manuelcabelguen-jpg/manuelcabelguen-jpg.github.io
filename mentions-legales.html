@@ -78,7 +78,43 @@
                 <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
                 </a>
-                <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">1. Émotions</a>
+                <div class="relative">
+                    <button id="modelDropdownBtn" type="button" aria-expanded="false" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                        <span>Le Modèle</span>
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-72 rounded-2xl bg-[#0b1120]/95 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-950/60 p-2 z-50 space-y-1">
+                        <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">1. Le Moteur Prédictif</div>
+                                <div class="text-[11px] text-slate-400">Interfaces, précision &amp; gradients A/C</div>
+                            </div>
+                        </a>
+                        <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-sky-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">2. Le Noyau Affectif</div>
+                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L₁</div>
+                            </div>
+                        </a>
+                        <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">3. La Matrice Affective</div>
+                                <div class="text-[11px] text-slate-400">Valence, prototypes Z=2 &amp; dynamique</div>
+                            </div>
+                        </a>
+                        <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">4. La Taxonomie Affective</div>
+                                <div class="text-[11px] text-slate-400">176 états (Z=0..7) &amp; Carte 2D/3D</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Modèles Théoriques</a>
             </nav>
 
@@ -114,7 +150,11 @@
         </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
         <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
-        <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
+        <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-500">Modèle en 4 Composantes</div>
+        <a href="moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
+        <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
+        <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
+        <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
         <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html" class="active-link"><span class="menu-dot bg-slate-400"></span>Mentions Légales &amp; PI</a>
     </div>
@@ -332,7 +372,10 @@
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
                 <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
-                <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
+                <a href="moteur-predictif.html" class="hover:text-white transition-colors">1. Moteur</a>
+                <a href="noyau-affectif.html" class="hover:text-white transition-colors">2. Noyau</a>
+                <a href="matrice-affective.html" class="hover:text-white transition-colors">3. Matrice</a>
+                <a href="taxonomie-affective.html" class="hover:text-white transition-colors">4. Taxonomie (176)</a>
                 <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="text-purple-400 font-semibold">Mentions Légales &amp; PI</a>
             </div>
@@ -366,6 +409,7 @@
         })();
     </script>
     <script src="cartograffect_model.js"></script>
+    <script src="cartograffect_theory.js"></script>
     <script src="command_palette.js"></script>
 </body>
 </html>

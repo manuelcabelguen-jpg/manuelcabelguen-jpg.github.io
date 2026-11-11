@@ -692,7 +692,7 @@
         }
 
         // Sortie vers la carte depuis la position du visiteur
-        $('#exit-map').href = 'emotions.html?id=' + encodeURIComponent(res.name);
+        $('#exit-map').href = 'taxonomie-affective.html?id=' + encodeURIComponent(res.name);
 
         drawMap(res, next);
         announce('Ouverture. ' + (next ? 'Prolongement possible : ' + next.name + '.' : ''));
@@ -798,7 +798,7 @@
                 typo('Dernier passage enregistré sur cet appareil : ' + em.name + ' ' + fmtAxisCoord(em.x, em.y, em.z) + ' — ')
             ));
             var a = document.createElement('a');
-            a.href = 'emotions.html?id=' + encodeURIComponent(em.name);
+            a.href = 'taxonomie-affective.html?id=' + encodeURIComponent(em.name);
             a.textContent = 'retrouver cette position sur la carte';
             el.appendChild(a);
             el.appendChild(document.createTextNode('. '));

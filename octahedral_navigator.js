@@ -427,7 +427,7 @@
 
             <!-- Accès direct à la Matrice 2D/3D -->
             <div class="pt-2 flex flex-wrap items-center gap-2">
-                <a href="emotions.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5">
+                <a href="taxonomie-affective.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5">
                     <span>🧭</span> Explorer dans la Carte Complète des 176 Émotions
                 </a>
             </div>

@@ -12,31 +12,34 @@
     { id: 'voyage', title: 'Le Voyage Affectif — Vivre le Circuit d\'une Émotion (2 min)', category: 'Expérience', url: 'voyage.html', icon: '✨', badge: 'Interactif' },
 
     // Territoires & Navigation principale
-    { id: 't1', title: 'Carte Interactive — Exploration des 176 Émotions (Z=0 à Z=7)', category: 'Exploration', url: 'emotions.html', icon: '🧭', badge: 'Matrice' },
+    { id: 'comp1', title: '1. Le Moteur Prédictif — Interfaces Perceptive, Subjective, Attentionnelle & Gradients A/C', category: 'Modèle', url: 'moteur-predictif.html', icon: '⚡', badge: 'Niveau 1' },
+    { id: 'comp2', title: '2. Le Noyau Affectif — Espace (X, Y, Z), Métrique L₁ & Opérateurs Centraux', category: 'Modèle', url: 'noyau-affectif.html', icon: '🧭', badge: 'Niveau 2' },
+    { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: '🔷', badge: 'Niveau 3' },
+    { id: 't1', title: '4. La Taxonomie Affective — Carte Interactive 2D/3D des 176 États (Z=0 à Z=7)', category: 'Exploration', url: 'taxonomie-affective.html', icon: '🌐', badge: 'Niveau 4' },
             { id: 't4', title: 'Article Théorique — Monographie Intégrale (Dr M. Cabelguen)', category: 'Recherche', url: 'article.html', icon: '📄', badge: 'OPIC 1233199' },
     { id: 'lean4', title: 'Preuve Formelle Lean 4.35 — 17 Théorèmes & 0 Sorry (DOI: 10.5281/zenodo.23833938)', category: 'Recherche', url: 'https://doi.org/10.5281/zenodo.23833938', icon: '💎', badge: 'Lean 4' },
     { id: 't5', title: 'Scholar Drive — Corpus Conceptuel & Références', category: 'Recherche', url: 'scholar_drive.html', icon: '📚', badge: 'Corpus' },
     { id: 't6', title: 'Accueil — Synthèse du Moteur Prédictif', category: 'Navigation', url: 'index.html', icon: '🏠', badge: 'Accueil' },
 
     // Strates Z (Norme L1)
-    { id: 'z0', title: 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: 'Strate Z', url: 'emotions.html#strate-0', icon: '0', badge: 'Origine' },
-    { id: 'z1', title: 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: 'Strate Z', url: 'emotions.html#strate-1', icon: '1', badge: 'Saillance' },
-    { id: 'z2', title: 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: 'Strate Z', url: 'emotions.html#strate-2', icon: '2', badge: 'Première Couronne' },
-    { id: 'z3', title: 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: 'Strate Z', url: 'emotions.html#strate-3', icon: '3', badge: 'Émoi' },
-    { id: 'z4', title: 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: 'Strate Z', url: 'emotions.html#strate-4', icon: '4', badge: 'Réserve' },
-    { id: 'z5', title: 'Strate Z = 5 — Dispositions Durables & Humeurs (|X|+|Y|=8)', category: 'Strate Z', url: 'emotions.html#strate-5', icon: '5', badge: 'Recul' },
-    { id: 'z6', title: 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: 'Strate Z', url: 'emotions.html#strate-6', icon: '6', badge: 'Saisissement' },
-    { id: 'z7', title: 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12)', category: 'Strate Z', url: 'emotions.html#strate-7', icon: '7', badge: 'Suspension' },
+    { id: 'z0', title: 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-0', icon: '0', badge: 'Origine' },
+    { id: 'z1', title: 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-1', icon: '1', badge: 'Saillance' },
+    { id: 'z2', title: 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-2', icon: '2', badge: 'Première Couronne' },
+    { id: 'z3', title: 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-3', icon: '3', badge: 'Émoi' },
+    { id: 'z4', title: 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-4', icon: '4', badge: 'Réserve' },
+    { id: 'z5', title: 'Strate Z = 5 — Dispositions Durables & Humeurs (|X|+|Y|=8)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-5', icon: '5', badge: 'Recul' },
+    { id: 'z6', title: 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-6', icon: '6', badge: 'Saisissement' },
+    { id: 'z7', title: 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-7', icon: '7', badge: 'Suspension' },
 
     // Prototypes Axiaux et Diagonaux Clés
-    { id: 'p_joie', title: 'Joie — X0 / Y+2 / Z2 (Décharge de Contrôle)', category: 'Affect Clé', url: 'emotions.html?id=Joie', icon: '☀️', badge: 'Axial' },
-    { id: 'p_tristesse', title: 'Tristesse — X0 / Y-2 / Z2 (Charge de Contrôle)', category: 'Affect Clé', url: 'emotions.html?id=Tristesse', icon: '💧', badge: 'Axial' },
-    { id: 'p_courage', title: 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente)', category: 'Affect Clé', url: 'emotions.html?id=Courage', icon: '🛡️', badge: 'Axial' },
-    { id: 'p_peur', title: 'Peur — X-2 / Y0 / Z2 (Charge d’Attente)', category: 'Affect Clé', url: 'emotions.html?id=Peur', icon: '⚡', badge: 'Axial' },
-    { id: 'p_desir', title: 'Désir — X+1 / Y+1 / Z2 (Attracteur Équilibré)', category: 'Affect Clé', url: 'emotions.html?id=Désir', icon: '🔥', badge: 'Diagonal' },
-    { id: 'p_colere', title: 'Colère — X-1 / Y+1 / Z2 (Modèle Rigide & Action)', category: 'Affect Clé', url: 'emotions.html?id=Colère', icon: '⚔️', badge: 'Diagonal' },
-    { id: 'p_calme', title: 'Calme — X+1 / Y-1 / Z2 (Modèle Révisable & Lâcher-prise)', category: 'Affect Clé', url: 'emotions.html?id=Calme', icon: '🍃', badge: 'Diagonal' },
-    { id: 'p_degout', title: 'Dégoût — X-1 / Y-1 / Z2 (Rejet & Non-contrôle)', category: 'Affect Clé', url: 'emotions.html?id=Dégoût', icon: '🛑', badge: 'Diagonal' },
+    { id: 'p_joie', title: 'Joie — X0 / Y+2 / Z2 (Décharge de Contrôle)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Joie', icon: '☀️', badge: 'Axial' },
+    { id: 'p_tristesse', title: 'Tristesse — X0 / Y-2 / Z2 (Charge de Contrôle)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Tristesse', icon: '💧', badge: 'Axial' },
+    { id: 'p_courage', title: 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Courage', icon: '🛡️', badge: 'Axial' },
+    { id: 'p_peur', title: 'Peur — X-2 / Y0 / Z2 (Charge d’Attente)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Peur', icon: '⚡', badge: 'Axial' },
+    { id: 'p_desir', title: 'Désir — X+1 / Y+1 / Z2 (Attracteur Équilibré)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Désir', icon: '🔥', badge: 'Diagonal' },
+    { id: 'p_colere', title: 'Colère — X-1 / Y+1 / Z2 (Modèle Rigide & Action)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Colère', icon: '⚔️', badge: 'Diagonal' },
+    { id: 'p_calme', title: 'Calme — X+1 / Y-1 / Z2 (Modèle Révisable & Lâcher-prise)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Calme', icon: '🍃', badge: 'Diagonal' },
+    { id: 'p_degout', title: 'Dégoût — X-1 / Y-1 / Z2 (Rejet & Non-contrôle)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Dégoût', icon: '🛑', badge: 'Diagonal' },
 
     // Concepts computationnels & Neurosciences
     { id: 'c1', title: 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', url: 'article.html#theorie', icon: '⚡', badge: 'Physique' },
@@ -57,7 +60,7 @@
           id: `emo-${e.id !== undefined ? e.id : e.name}`,
           title: `${e.name} — ${e.code || `X${e.x}/Y${e.y}/Z${e.z}`} (${e.desc || 'Affect du modèle'})`,
           category: `Affect • Z=${e.z}`,
-          url: `emotions.html?id=${encodeURIComponent(e.name)}`,
+          url: `taxonomie-affective.html?id=${encodeURIComponent(e.name)}`,
           icon: e.type === 'operator' ? '⭐' : (e.type === 'axial' ? '◈' : '🔹'),
           badge: e.group || `Z=${e.z}`
         }));

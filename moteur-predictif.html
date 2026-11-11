@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
+    <title>1. Le Moteur Prédictif : Interfaces &amp; Gradients A/C | CARTOGRAFFECT</title>
+    <meta name="description" content="Composante 1 de Cartograffect : le Moteur prédictif (PredictiveEngine.lean). Découvrez comment les Interfaces Perceptive, Subjective et Attentionnelle convertissent un écart de prédiction en gradients d'Attente (A) et de Contrôle (C) pondérés par la précision.">
+    <link rel="canonical" href="https://www.cartograffect.com/moteur-predictif.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/moteur-predictif.html">
+    <meta property="og:title" content="1. Le Moteur Prédictif : Interfaces &amp; Gradients A/C | CARTOGRAFFECT">
+    <meta property="og:description" content="Comment l'esprit prédictif évalue l'incertitude de résolution d'un écart via les Interfaces Perceptive (C), Subjective (A) et Attentionnelle (précision).">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Modèle & Théorie Cartograffect -->
+    <script src="cartograffect_model.js"></script>
+    <script src="cartograffect_theory.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        cosmic: {
+                            900: '#070b14',
+                            850: '#0b1120',
+                            800: '#0e1726',
+                            700: '#152136',
+                            600: '#1f2e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08]" style="background-color: rgba(10, 11, 20, 0.92);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <a href="index.html" class="flex items-center gap-3 group shrink-0">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <div class="flex flex-col">
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">1. Le Moteur Prédictif</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-1.5">
+                <a href="index.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors whitespace-nowrap">Accueil</a>
+                <a href="voyage.html" class="px-2.5 py-2 text-sm font-semibold text-amber-300 hover:text-white bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/30 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                    ✨ Le Voyage
+                </a>
+                <!-- Architecture 4 Composantes Dropdown -->
+                <div class="relative">
+                    <button id="modelDropdownBtn" type="button" aria-expanded="false" class="px-2.5 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>
+                        <span>Le Modèle</span>
+                        <svg class="w-3.5 h-3.5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-72 rounded-2xl bg-cosmic-850/95 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-950/60 p-2 z-50 space-y-1">
+                        <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl bg-purple-900/40 border border-purple-500/30 text-white">
+                            <span class="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">1. Le Moteur Prédictif</div>
+                                <div class="text-[11px] text-purple-200/80">Interfaces, précision &amp; gradients A/C</div>
+                            </div>
+                        </a>
+                        <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-sky-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">2. Le Noyau Affectif</div>
+                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L₁</div>
+                            </div>
+                        </a>
+                        <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">3. La Matrice Affective</div>
+                                <div class="text-[11px] text-slate-400">Valence, prototypes Z=2 &amp; dynamique</div>
+                            </div>
+                        </a>
+                        <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
+                            <span class="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0"></span>
+                            <div>
+                                <div class="text-xs font-bold">4. La Taxonomie Affective</div>
+                                <div class="text-[11px] text-slate-400">176 états (Z=0..7) &amp; Carte 2D/3D</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <a href="article.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-purple-400 shrink-0"></span>L'Article
+                </a>
+                <a href="scholar_drive.html" class="px-2.5 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 shrink-0"></span>Modèles Théoriques
+                </a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
+                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="Lexique Bilingue FR / EN & Citation">
+                    <span class="text-purple-400">🌐</span> FR | EN
+                </button>
+                <a href="taxonomie-affective.html" class="px-3.5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all whitespace-nowrap">
+                    Carte 176 &rarr;
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
+        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span><span>Recherche Rapide</span><kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
+        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
+        <a href="voyage.html"><span class="menu-dot bg-amber-400"></span>✨ Le Voyage affectif (2 min)</a>
+        <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-500">Modèle en 4 Composantes</div>
+        <a href="moteur-predictif.html" class="active-link"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
+        <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
+        <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
+        <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
+        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
+        <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
+        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
+
+        <!-- 4-Step Architectural Stepper -->
+        <nav aria-label="Les 4 composantes emboîtées de Cartograffect" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <a href="moteur-predictif.html" class="p-3 rounded-2xl bg-purple-950/60 border-2 border-purple-500/70 shadow-lg shadow-purple-950/40 flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-purple-600 text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">1</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-white truncate">Moteur Prédictif</div>
+                    <div class="text-[10px] text-purple-300 font-mono truncate">Interfaces &amp; Gradients A/C</div>
+                </div>
+            </a>
+            <a href="noyau-affectif.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-sky-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-sky-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">2</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Noyau Affectif</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">Espace (X,Y,Z) &amp; L₁</div>
+                </div>
+            </a>
+            <a href="matrice-affective.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">3</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Matrice Affective</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">Valence &amp; Prototypes Z=2</div>
+                </div>
+            </a>
+            <a href="taxonomie-affective.html" class="p-3 rounded-2xl bg-slate-900/70 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 transition-all flex items-center gap-3">
+                <span class="w-8 h-8 rounded-xl bg-slate-800 text-pink-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">4</span>
+                <div class="min-w-0">
+                    <div class="text-xs font-bold text-slate-200 truncate">Taxonomie Affective</div>
+                    <div class="text-[10px] text-slate-400 font-mono truncate">176 États &amp; Carte 2D/3D</div>
+                </div>
+            </a>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="rounded-3xl bg-gradient-to-br from-purple-950/40 via-cosmic-850 to-slate-900 border border-purple-500/30 p-7 sm:p-10 shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-purple-600/15 blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="lg:col-span-8 space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/50 text-purple-300 border border-purple-500/30">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                        Composante 1 &bull; Section 4 de l'Article &bull; Module PredictiveEngine.lean
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white leading-tight">
+                        Le Moteur Prédictif : <span class="bg-gradient-to-r from-purple-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Gérer l'Incertitude</span>
+                    </h1>
+                    <p class="text-sm sm:text-base text-slate-300 leading-relaxed max-w-3xl">
+                        Premier niveau de l'architecture Cartograffect, le Moteur prédictif reçoit une seule grandeur d'entrée — <strong>l'écart de prédiction saillant</strong> — et en évalue l'incertitude de résolution au moyen de trois interfaces fonctionnelles interdépendantes : <strong>Perceptive</strong> (Contrôle C), <strong>Subjective</strong> (Attente A) et <strong>Attentionnelle</strong> (pondération de précision).
+                    </p>
+                </div>
+                <div class="lg:col-span-4 rounded-2xl bg-slate-950/80 border border-purple-500/30 p-4 space-y-2 text-xs">
+                    <div class="font-mono text-purple-300 font-bold uppercase tracking-wider text-[11px]">Règle Terminologique Stricte</div>
+                    <p class="text-slate-300 leading-relaxed">
+                        Les signes <strong class="text-emerald-300">(+)</strong>, <strong class="text-rose-300">(−)</strong> et <strong class="text-slate-200">(0)</strong> qualifient ici exclusivement un <strong>état fonctionnel de résolution</strong> (<em>décharge</em>, <em>charge</em> ou <em>neutralité</em> sous seuil), et <strong>jamais</strong> une valence hédonique (qui n'émerge qu'au niveau 3, dans la Matrice affective).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Lab: Simulateur du Moteur Prédictif -->
+        <section id="simulateur-moteur" class="space-y-6">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <span class="text-xs font-mono uppercase tracking-widest text-purple-400 font-bold">Laboratoire Interactif • PredictiveEngine.lean</span>
+                    <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Simulateur du Moteur Prédictif &amp; Boucle d'Inférence</h2>
+                </div>
+                <div class="flex flex-wrap gap-1.5 text-xs">
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors" data-preset="veille">🌱 Veille basale</button>
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-amber-950/60 hover:bg-amber-900/60 text-amber-200 border border-amber-500/40 transition-colors" data-preset="surprise">⚡ Surprise (0,0,1)</button>
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-sky-950/60 hover:bg-sky-900/60 text-sky-200 border border-sky-500/40 transition-colors" data-preset="remanence">🌊 Rémanence</button>
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-rose-950/60 hover:bg-rose-900/60 text-rose-200 border border-rose-500/40 transition-colors" data-preset="colere">⚔️ A− / C+ (Colère)</button>
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-200 border border-emerald-500/40 transition-colors" data-preset="calme">🍃 A+ / C− (Calme)</button>
+                    <button type="button" class="engine-preset px-3 py-1.5 rounded-lg bg-pink-950/60 hover:bg-pink-900/60 text-pink-200 border border-pink-500/40 transition-colors" data-preset="desir">🔥 A+ / C+ (Désir)</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Controls Column (5 cols) -->
+                <div class="lg:col-span-5 rounded-2xl bg-cosmic-850 border border-slate-700/70 p-6 space-y-5 shadow-xl">
+                    <div class="space-y-3 pb-4 border-b border-slate-800">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-bold text-white uppercase tracking-wider">1. Écart de Prédiction &amp; Hystérésis</span>
+                            <span id="valMagnitudeBadge" class="font-mono text-amber-300 font-bold">Magnitude : 6</span>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                <span>Amplitude de l'écart montant</span>
+                                <span id="lblMag" class="font-mono text-white">6 / 10</span>
+                            </div>
+                            <input id="inpMagnitude" type="range" min="0" max="10" value="6" class="w-full accent-amber-400 cursor-pointer">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                    <span>Seuil sensoriel</span>
+                                    <span id="lblSensory" class="font-mono text-amber-300">4</span>
+                                </div>
+                                <input id="inpSensory" type="range" min="1" max="9" value="4" class="w-full accent-purple-500 cursor-pointer">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                    <span>Seuil de résorption (&le; sens.)</span>
+                                    <span id="lblResorption" class="font-mono text-sky-300">2</span>
+                                </div>
+                                <input id="inpResorption" type="range" min="1" max="9" value="2" class="w-full accent-sky-400 cursor-pointer">
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-slate-400 leading-relaxed">
+                            Invariant d'hystérésis (<code class="text-purple-300">resorptionThreshold &le; sensoryThreshold</code>) : explique la rémanence temporaire d'un état affectif entre ces deux seuils.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3 pb-4 border-b border-slate-800">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-bold text-white uppercase tracking-wider">2. Interface Attentionnelle (Précision)</span>
+                            <span id="valPrecisionBadge" class="font-mono text-emerald-300 font-bold">Engagée</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                    <span>Précision allouée (&Pi;)</span>
+                                    <span id="lblPrecision" class="font-mono text-emerald-300">6</span>
+                                </div>
+                                <input id="inpPrecision" type="range" min="0" max="10" value="6" class="w-full accent-emerald-400 cursor-pointer">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                                    <span>Seuil d'engagement</span>
+                                    <span id="lblEngagement" class="font-mono text-slate-300">4</span>
+                                </div>
+                                <input id="inpEngagement" type="range" min="1" max="9" value="4" class="w-full accent-slate-400 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">3. Interface Subjective &rarr; Gradient d'Attente (A)</label>
+                            <div class="grid grid-cols-3 gap-2" id="btnGroupAttente">
+                                <button type="button" data-val="neg" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A− (Charge)</button>
+                                <button type="button" data-val="zero" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A0 (Neutre)</button>
+                                <button type="button" data-val="pos" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-sky-600 border border-sky-400 text-white transition-all">A+ (Décharge)</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-purple-300 uppercase tracking-wider mb-2">4. Interface Perceptive &rarr; Gradient de Contrôle (C)</label>
+                            <div class="grid grid-cols-3 gap-2" id="btnGroupControle">
+                                <button type="button" data-val="neg" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C− (Charge)</button>
+                                <button type="button" data-val="zero" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C0 (Neutre)</button>
+                                <button type="button" data-val="pos" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-purple-600 border border-purple-400 text-white transition-all">C+ (Décharge)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Diagram + Telemetry Output (7 cols) -->
+                <div class="lg:col-span-7 space-y-5">
+                    <!-- Interactive Figure 1 SVG -->
+                    <div class="rounded-2xl bg-cosmic-850 border border-slate-700/70 p-5 shadow-xl">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800 text-xs mb-4">
+                            <span class="font-mono font-bold text-purple-300">Figure 1 Interactive • Circulation des Interfaces &amp; Couverture Markovienne</span>
+                            <span id="svgStagePill" class="px-2.5 py-0.5 rounded-full bg-purple-900/60 border border-purple-500/40 font-mono text-[11px] text-purple-200">Déploiement Z=2</span>
+                        </div>
+                        <svg viewBox="0 0 760 400" class="w-full h-auto select-none rounded-xl bg-cosmic-900 border border-slate-800/80" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arrP" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
+                                </marker>
+                                <marker id="arrS" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                                </marker>
+                                <marker id="arrA" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+                                </marker>
+                            </defs>
+                            <!-- Markov Blanket Outer Boundary -->
+                            <rect x="20" y="18" width="720" height="364" rx="18" fill="#070b14" stroke="#334155" stroke-dasharray="5 5" stroke-width="1.5"/>
+                            <text x="38" y="42" fill="#64748b" font-family="Fira Code, monospace" font-size="10" font-weight="bold">COUVERTURE MARKOVIENNE (FRONTIÈRE SENSORIELLE ET ACTIVE DE L'ORGANISME)</text>
+
+                            <!-- Interface Subjective (Top Left) -->
+                            <rect id="boxSubjective" x="45" y="70" width="230" height="105" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="62" y="95" fill="#38bdf8" font-family="Outfit, sans-serif" font-size="13" font-weight="bold">INTERFACE SUBJECTIVE</text>
+                            <text x="62" y="113" fill="#94a3b8" font-size="10">Modèles génératifs, mémoire, culture</text>
+                            <text x="62" y="131" fill="#cbd5e1" font-family="Fira Code, monospace" font-size="10">Inférence générative contextuelle</text>
+                            <text id="svgAttenteTxt" x="62" y="156" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="12" font-weight="bold">Gradient Attente : A+ (Décharge)</text>
+
+                            <!-- Interface Perceptive (Bottom Left) -->
+                            <rect id="boxPerceptive" x="45" y="225" width="230" height="105" rx="14" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+                            <text x="62" y="250" fill="#c084fc" font-family="Outfit, sans-serif" font-size="13" font-weight="bold">INTERFACE PERCEPTIVE</text>
+                            <text x="62" y="268" fill="#94a3b8" font-size="10">Afférences sensorielles &amp; motricité</text>
+                            <text x="62" y="286" fill="#cbd5e1" font-family="Fira Code, monospace" font-size="10">Source de Surprise (0,0,1)</text>
+                            <text id="svgControleTxt" x="62" y="311" fill="#d8b4fe" font-family="Fira Code, monospace" font-size="12" font-weight="bold">Gradient Contrôle : C+ (Décharge)</text>
+
+                            <!-- Entrée Écart (Bottom Center-Left) -->
+                            <rect id="boxDiscrepancy" x="310" y="285" width="150" height="65" rx="12" fill="#1e1b4b" stroke="#f59e0b" stroke-width="2"/>
+                            <text x="385" y="310" fill="#fbbf24" font-family="Outfit, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">ÉCART DE PRÉDICTION</text>
+                            <text id="svgMagTxt" x="385" y="332" fill="#ffffff" font-family="Fira Code, monospace" font-size="11" text-anchor="middle">Mag = 6 | Seuil = 4</text>
+
+                            <!-- Interface Attentionnelle (Center) -->
+                            <rect id="boxAttentional" x="315" y="130" width="175" height="115" rx="14" fill="#0b1528" stroke="#10b981" stroke-width="2"/>
+                            <text x="402" y="154" fill="#34d399" font-family="Outfit, sans-serif" font-size="13" font-weight="bold" text-anchor="middle">INT. ATTENTIONNELLE</text>
+                            <text x="402" y="172" fill="#94a3b8" font-size="10" text-anchor="middle">Pondération de précision (&Pi;)</text>
+                            <text x="402" y="188" fill="#cbd5e1" font-size="10" text-anchor="middle">Aucun gradient polarisé propre</text>
+                            <text id="svgPrecTxt" x="402" y="212" fill="#6ee7b7" font-family="Fira Code, monospace" font-size="11" font-weight="bold" text-anchor="middle">&Pi; = 6 (&ge; 4 : Engagée)</text>
+                            <text id="svgCouplingTxt" x="402" y="230" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="10" text-anchor="middle">Couplage (A+, C+)</text>
+
+                            <!-- Output -> Noyau Affectif (Right) -->
+                            <rect id="boxOutput" x="530" y="135" width="185" height="105" rx="14" fill="#161b33" stroke="#ec4899" stroke-width="2"/>
+                            <text x="622" y="160" fill="#f472b6" font-family="Outfit, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">VERS LE NOYAU AFFECTIF</text>
+                            <text id="svgCoordsTxt" x="622" y="186" fill="#ffffff" font-family="Fira Code, monospace" font-size="15" font-weight="bold" text-anchor="middle">(X=+1, Y=+1, Z=2)</text>
+                            <text id="svgProtoTxt" x="622" y="208" fill="#fbcfe8" font-family="Outfit, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Prototype : Désir</text>
+                            <text id="svgL1Txt" x="622" y="226" fill="#94a3b8" font-family="Fira Code, monospace" font-size="10" text-anchor="middle">Budget L1 : |X|+|Y| = 2</text>
+
+                            <!-- Arrows -->
+                            <path d="M 275 122 Q 298 122 315 162" fill="none" stroke="#38bdf8" stroke-width="2.2" marker-end="url(#arrS)"/>
+                            <path d="M 275 277 Q 298 277 315 220" fill="none" stroke="#a855f7" stroke-width="2.2" marker-end="url(#arrP)"/>
+                            <path d="M 310 315 L 275 305" fill="none" stroke="#fbbf24" stroke-width="2.2" marker-end="url(#arrA)"/>
+                            <path d="M 490 187 L 530 187" fill="none" stroke="#ec4899" stroke-width="2.5" marker-end="url(#arrP)"/>
+                            <!-- Feedback loop arrows -->
+                            <path d="M 402 130 Q 402 65 275 90" fill="none" stroke="#34d399" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arrS)"/>
+                            <text x="345" y="68" fill="#6ee7b7" font-size="9" font-family="Fira Code, monospace" text-anchor="middle">Voie épistémique (rétroaction A)</text>
+                            <path d="M 480 245 Q 510 345 275 318" fill="none" stroke="#34d399" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arrP)"/>
+                            <text x="480" y="348" fill="#6ee7b7" font-size="9" font-family="Fira Code, monospace" text-anchor="middle">Voie pragmatique (rétroaction C)</text>
+                        </svg>
+                    </div>
+
+                    <!-- Live Computational Telemetry Card -->
+                    <div class="rounded-2xl bg-gradient-to-br from-slate-900 to-purple-950/30 border border-purple-500/30 p-5 space-y-3 shadow-xl">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <h3 id="engineResultTitle" class="text-lg font-heading font-bold text-white">Déploiement Diagonal Z=2 (+1, +1, 2)</h3>
+                            <span id="engineResultBadge" class="text-xs font-mono px-2.5 py-1 rounded-lg bg-purple-900/60 text-purple-200 border border-purple-500/40">Prototype : Désir</span>
+                        </div>
+                        <p id="engineResultDesc" class="text-xs sm:text-sm text-slate-300 leading-relaxed"></p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+                            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                                <div class="text-[10px] font-mono uppercase text-sky-400 font-bold">Régime Épistémique (A)</div>
+                                <div id="engineRegimeA" class="text-white font-semibold mt-0.5"></div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+                                <div class="text-[10px] font-mono uppercase text-purple-400 font-bold">Régime Pragmatique (C)</div>
+                                <div id="engineRegimeC" class="text-white font-semibold mt-0.5"></div>
+                            </div>
+                        </div>
+                        <div class="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                            <span class="text-slate-400">Transmettre ces coordonnées au niveau suivant :</span>
+                            <a id="engineToCoreLink" href="noyau-affectif.html?z=2" class="px-3.5 py-1.5 rounded-xl font-bold text-white bg-sky-600 hover:bg-sky-500 transition-colors">
+                                Inspecter dans le Noyau Affectif &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Theoretical Exposition Section 1: Fondements -->
+        <section class="rounded-3xl bg-slate-900/60 border border-slate-800 p-7 sm:p-10 space-y-6">
+            <div class="max-w-3xl">
+                <span class="text-xs font-mono uppercase tracking-widest text-purple-400 font-bold">Sections 3 &amp; 4 de l'Article • Fondements Théoriques</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Inférence Active, Allostasie Intéroceptive &amp; Couverture Markovienne</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <div class="p-5 rounded-2xl bg-cosmic-900/80 border border-slate-800 space-y-2">
+                    <div class="text-purple-300 font-heading font-bold text-base">Cognition Incarnée &amp; Inférence Active</div>
+                    <p>L'organisme maintient sa viabilité en minimisant la divergence entre ses prédictions et les signaux sensoriels : soit en ajustant ses modèles internes (<strong>valeur épistémique</strong>, réduisant l'ambiguïté), soit en agissant sur le monde (<strong>valeur pragmatique</strong>, réduisant le risque attendu) (Friston, 2010 ; Clark, 2016 ; Parr et al., 2022).</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-cosmic-900/80 border border-slate-800 space-y-2">
+                    <div class="text-sky-300 font-heading font-bold text-base">Allostasie vs Homéostasie</div>
+                    <p>L'<strong>homéostasie</strong> corrige les déviations autour de points de consigne fixes (Point de Veille). L'<strong>allostasie</strong> (Sterling, 2012 ; Barrett &amp; Simmons, 2015 ; Seth, 2013) ajuste proactivement les paramètres physiologiques en prévision des besoins à venir. À ce stade primaire, l'affect est pré-sémantique et pré-linguistique.</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-cosmic-900/80 border border-slate-800 space-y-2">
+                    <div class="text-emerald-300 font-heading font-bold text-base">Précaution Épistémologique</div>
+                    <p>Les trois interfaces ne désignent <strong>pas</strong> trois structures neuroanatomiques distinctes (éviter l'erreur méréologique, Gauld et al., 2021) mais une décomposition fonctionnelle des échanges au travers de la frontière sensorielle et active de l'organisme (Kirchhoff et al., 2018).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Les 3 Interfaces et leurs Gradients -->
+        <section class="space-y-6">
+            <div>
+                <span class="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">Décomposition Fonctionnelle</span>
+                <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">Les Trois Interfaces du Moteur Prédictif</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Interface Perceptive -->
+                <div class="rounded-2xl bg-cosmic-850 border border-purple-500/30 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="px-2.5 py-1 rounded-lg bg-purple-900/50 text-purple-300 font-mono text-xs font-bold">Axe Y • Contrôle (C)</span>
+                        <span class="text-xs font-mono text-slate-400">Versant sensoriel &amp; actif</span>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold text-white">1. Interface Perceptive</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Réactive, elle traite les afférences intéroceptives, proprioceptives et extéroceptives, et organise les ajustements sensorimoteurs. C'est la source de la <strong>Surprise (0, 0, 1)</strong> lorsqu'un écart franchit le seuil de saillance sensorielle. Elle confronte les retours afférents aux effets attendus de l'action.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                        <li><strong class="text-slate-200 font-mono">C0 (Contrôle Neutre) :</strong> régime de routine ; micro-écarts sous le seuil de saillance.</li>
+                        <li><strong class="text-rose-300 font-mono">C− (Contrôle Incertain) :</strong> l'événement excède les capacités d'action estimées &rarr; charge pragmatique (réduction / suspension de l'effort).</li>
+                        <li><strong class="text-emerald-300 font-mono">C+ (Contrôle Certain) :</strong> situation jugée modifiable par l'action &rarr; décharge pragmatique (mobilisation).</li>
+                    </ul>
+                </div>
+
+                <!-- Interface Subjective -->
+                <div class="rounded-2xl bg-cosmic-850 border border-sky-500/30 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="px-2.5 py-1 rounded-lg bg-sky-900/50 text-sky-300 font-mono text-xs font-bold">Axe X • Attente (A)</span>
+                        <span class="text-xs font-mono text-slate-400">Versant prédictif interne</span>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold text-white">2. Interface Subjective</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Prédictive, elle intègre les sensations aux représentations issues de la mémoire, des apprentissages et du contexte socioculturel. Elle génère l'<strong>Anticipation (0, 0, 2)</strong>, projection proactive descendante qui suspend la décharge immédiate pour orienter la résolution vers la première couronne.
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                        <li><strong class="text-slate-200 font-mono">A0 (Attente Neutre) :</strong> flux conformes aux croyances d'arrière-plan, aucune saillance épistémique.</li>
+                        <li><strong class="text-rose-300 font-mono">A− (Attente Incertaine) :</strong> l'écart contredit le modèle ou présente une ambiguïté non résolue &rarr; charge épistémique (modèle maintenu non révisable).</li>
+                        <li><strong class="text-emerald-300 font-mono">A+ (Attente Certaine) :</strong> intégration possible par mise à jour des croyances &rarr; décharge épistémique (modèle révisable).</li>
+                    </ul>
+                </div>
+
+                <!-- Interface Attentionnelle -->
+                <div class="rounded-2xl bg-cosmic-850 border border-emerald-500/30 p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-900/50 text-emerald-300 font-mono text-xs font-bold">Axe Z • Précision (&Pi;)</span>
+                        <span class="text-xs font-mono text-slate-400">Pondération &amp; Profondeur</span>
+                    </div>
+                    <h3 class="text-xl font-heading font-bold text-white">3. Interface Attentionnelle</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        Mécanisme d'action mentale (Smith et al., 2019 ; Feldman &amp; Friston, 2010), elle <strong>n'évalue aucun contenu propre</strong> et ne produit aucun gradient polarisé. Elle module la précision accordée aux signaux et projette (A, C) en coordonnées (X, Y, Z).
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
+                        <li><strong class="text-emerald-300">Règle de transition :</strong> persistance d'un écart non résolu + précision suffisante font passer Z de 0 &rarr; 1 &rarr; 2.</li>
+                        <li><strong class="text-emerald-300">Conservation à Z=2 :</strong> une seule dimension engagée capte tout le poids (&plusmn;2, 0) ou (0, &plusmn;2) ; les deux engagées se le partagent (&plusmn;1, &plusmn;1).</li>
+                        <li><strong class="text-slate-200">Note :</strong> précision et profondeur Z demeurent deux paramètres distincts reliés par cette règle.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Les 4 Opérations Inférentielles & les 9 Couplages -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-6 rounded-2xl bg-cosmic-850 border border-slate-800 p-6 space-y-4">
+                <span class="text-xs font-mono uppercase tracking-widest text-purple-400 font-bold">Boucle Récursive • InferentialOperation</span>
+                <h3 class="text-xl font-heading font-bold text-white">Les 4 Opérations Inférentielles Non Séquentielles</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    La circulation entre les trois interfaces opère en parallèle et de façon récursive (jamais strictement séquentielle) via quatre opérations formalisées dans <code class="text-purple-300">PredictiveEngine.lean</code> :
+                </p>
+                <div class="space-y-2.5 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start gap-3">
+                        <div><strong class="text-purple-300">1. Inférence sensorielle ascendante</strong><div class="text-slate-400 mt-0.5">Remontée des écarts viscéraux, proprioceptifs et extéroceptifs.</div></div>
+                        <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-mono text-[10px] shrink-0">Perceptive</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start gap-3">
+                        <div><strong class="text-purple-300">2. Mise en œuvre de l'action</strong><div class="text-slate-400 mt-0.5">Engagement moteur et ajustements comportementaux sur le corps/monde.</div></div>
+                        <span class="px-2 py-0.5 rounded bg-purple-950 text-purple-300 font-mono text-[10px] shrink-0">Perceptive</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start gap-3">
+                        <div><strong class="text-sky-300">3. Inférence générative contextuelle</strong><div class="text-slate-400 mt-0.5">Production d'hypothèses causales et de scénarios prospectifs (Anticipation).</div></div>
+                        <span class="px-2 py-0.5 rounded bg-sky-950 text-sky-300 font-mono text-[10px] shrink-0">Subjective</span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex justify-between items-start gap-3">
+                        <div><strong class="text-emerald-300">4. Inférence intégrative &amp; rétroaction</strong><div class="text-slate-400 mt-0.5">Actualisation pondérée de l'état latent et réinjection vers A et C.</div></div>
+                        <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-mono text-[10px] shrink-0">Attentionnelle</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 rounded-2xl bg-cosmic-850 border border-slate-800 p-6 space-y-4">
+                <span class="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">allCouplings • 9 Combinaisons</span>
+                <h3 class="text-xl font-heading font-bold text-white">Les 9 Couplages (A, C) : Voies Réflexive &amp; Comportementale</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    Les trois états de chaque gradient définissent exactement <strong>9 couplages</strong> : 9 possibilités d'action sur la voie ascendante réflexive (vers l'Interface Subjective) et 9 politiques d'action sur la voie descendante comportementale (vers le corps et le monde) :
+                </p>
+                <div class="grid grid-cols-3 gap-2 text-[11px] font-mono text-center">
+                    <div class="p-2.5 rounded-xl bg-rose-950/30 border border-rose-500/30">
+                        <div class="font-bold text-rose-300">(A−, C+)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Charge X / Décharge Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (−1, +1, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-purple-950/30 border border-purple-500/30">
+                        <div class="font-bold text-purple-300">(A0, C+)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Neutre X / Décharge Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (0, +2, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-pink-950/30 border border-pink-500/30">
+                        <div class="font-bold text-pink-300">(A+, C+)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Double Décharge</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (+1, +1, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30">
+                        <div class="font-bold text-amber-300">(A−, C0)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Charge X / Neutre Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (−2, 0, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-600/60">
+                        <div class="font-bold text-white">(A0, C0)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Neutralité globale</div>
+                        <div class="text-[10px] text-slate-400">&rarr; Veille (0,0,0)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30">
+                        <div class="font-bold text-cyan-300">(A+, C0)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Décharge X / Neutre Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (+2, 0, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-orange-950/30 border border-orange-500/30">
+                        <div class="font-bold text-orange-300">(A−, C−)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Double Charge</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (−1, −1, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-blue-950/30 border border-blue-500/30">
+                        <div class="font-bold text-blue-300">(A0, C−)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Neutre X / Charge Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (0, −2, 2)</div>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
+                        <div class="font-bold text-emerald-300">(A+, C−)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Décharge X / Charge Y</div>
+                        <div class="text-[10px] text-slate-400">&rarr; (+1, −1, 2)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bottom Progression Footer -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-slate-800">
+            <a href="index.html" class="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold transition-colors">
+                &larr; Retour à l'Accueil
+            </a>
+            <a href="noyau-affectif.html" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold shadow-lg transition-all">
+                Niveau 2 : Le Noyau Affectif (X, Y, Z &amp; L₁) &rarr;
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+            </div>
+            <div class="flex flex-wrap justify-center gap-5 text-xs text-slate-300">
+                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="moteur-predictif.html" class="text-purple-400 font-semibold">1. Moteur Prédictif</a>
+                <a href="noyau-affectif.html" class="hover:text-white transition-colors">2. Noyau Affectif</a>
+                <a href="matrice-affective.html" class="hover:text-white transition-colors">3. Matrice Affective</a>
+                <a href="taxonomie-affective.html" class="hover:text-white transition-colors">4. Taxonomie (176)</a>
+                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
+                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+            </div>
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> &bull; OPIC n° 1233199</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            const inpMag = document.getElementById('inpMagnitude');
+            const inpSensory = document.getElementById('inpSensory');
+            const inpResorption = document.getElementById('inpResorption');
+            const inpPrecision = document.getElementById('inpPrecision');
+            const inpEngagement = document.getElementById('inpEngagement');
+
+            let stateA = 'pos';
+            let stateC = 'pos';
+
+            function updateButtonStyles(selector, activeVal, activeClass) {
+                document.querySelectorAll(selector).forEach(btn => {
+                    const isActive = btn.dataset.val === activeVal;
+                    btn.className = btn.className.split(' ')[0] + ' py-2 px-2 rounded-xl text-xs font-mono font-bold transition-all ' +
+                        (isActive ? activeClass : 'bg-slate-900 border border-slate-700 text-slate-300 hover:text-white');
+                });
+            }
+
+            function renderEngine() {
+                // Enforce hysteresis invariant: resorption <= sensory
+                if (Number(inpResorption.value) > Number(inpSensory.value)) {
+                    inpResorption.value = inpSensory.value;
+                }
+
+                const mag = Number(inpMag.value);
+                const sens = Number(inpSensory.value);
+                const resorp = Number(inpResorption.value);
+                const prec = Number(inpPrecision.value);
+                const eng = Number(inpEngagement.value);
+
+                document.getElementById('lblMag').textContent = `${mag} / 10`;
+                document.getElementById('valMagnitudeBadge').textContent = `Magnitude : ${mag}`;
+                document.getElementById('lblSensory').textContent = sens;
+                document.getElementById('lblResorption').textContent = resorp;
+                document.getElementById('lblPrecision').textContent = prec;
+                document.getElementById('lblEngagement').textContent = eng;
+
+                const out = window.CartograffectTheory.evaluateEngine({
+                    magnitude: mag,
+                    sensoryThreshold: sens,
+                    resorptionThreshold: resorp,
+                    allocatedPrecision: prec,
+                    engagementThreshold: eng,
+                    attente: stateA,
+                    controle: stateC,
+                    descendingSuspension: prec >= eng
+                });
+
+                document.getElementById('valPrecisionBadge').textContent = out.isAttentionalEngaged ? 'Engagée (Π ≥ seuil)' : 'Sous seuil';
+                document.getElementById('valPrecisionBadge').className = 'font-mono font-bold ' + (out.isAttentionalEngaged ? 'text-emerald-300' : 'text-amber-300');
+
+                const aInfo = window.CartograffectTheory.polarityLabel(stateA, 'A');
+                const cInfo = window.CartograffectTheory.polarityLabel(stateC, 'C');
+
+                document.getElementById('svgAttenteTxt').textContent = `Gradient Attente : ${aInfo.code} (${aInfo.regime})`;
+                document.getElementById('svgControleTxt').textContent = `Gradient Contrôle : ${cInfo.code} (${cInfo.regime})`;
+                document.getElementById('svgMagTxt').textContent = `Mag = ${mag} | Seuil = ${sens}`;
+                document.getElementById('svgPrecTxt').textContent = `Π = ${prec} (${out.isAttentionalEngaged ? '≥' : '<'} ${eng} : ${out.isAttentionalEngaged ? 'Engagée' : 'Latente'})`;
+                document.getElementById('svgCouplingTxt').textContent = `Couplage (${aInfo.code}, ${cInfo.code})`;
+
+                const { x, y, z } = out.coords;
+                document.getElementById('svgCoordsTxt').textContent = `(X=${x >= 0 && x !== 0 ? '+' + x : x}, Y=${y >= 0 && y !== 0 ? '+' + y : y}, Z=${z})`;
+                const protoName = out.matchedPrototype ? out.matchedPrototype.name : (out.stage === 'remanence' ? 'Rémanence' : 'Indéterminé');
+                document.getElementById('svgProtoTxt').textContent = `État : ${protoName}`;
+                document.getElementById('svgL1Txt').textContent = `Budget L₁ : |X|+|Y| = ${out.budgetL1}`;
+                document.getElementById('svgStagePill').textContent = out.stageLabel;
+
+                document.getElementById('engineResultTitle').textContent = out.stageLabel;
+                document.getElementById('engineResultBadge').textContent = `État : ${protoName}`;
+                document.getElementById('engineResultDesc').textContent = out.stageDesc;
+                document.getElementById('engineRegimeA').textContent = `${aInfo.title} — ${aInfo.desc}`;
+                document.getElementById('engineRegimeC').textContent = `${cInfo.title} — ${cInfo.desc}`;
+
+                const link = document.getElementById('engineToCoreLink');
+                if (link) {
+                    link.href = `noyau-affectif.html?z=${z}&x=${x}&y=${y}`;
+                }
+            }
+
+            document.querySelectorAll('.a-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    stateA = btn.dataset.val;
+                    updateButtonStyles('.a-btn', stateA, 'bg-sky-600 border border-sky-400 text-white');
+                    renderEngine();
+                });
+            });
+
+            document.querySelectorAll('.c-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    stateC = btn.dataset.val;
+                    updateButtonStyles('.c-btn', stateC, 'bg-purple-600 border border-purple-400 text-white');
+                    renderEngine();
+                });
+            });
+
+            [inpMag, inpSensory, inpResorption, inpPrecision, inpEngagement].forEach(el => {
+                el.addEventListener('input', renderEngine);
+            });
+
+            const presets = {
+                veille:    { mag: 1, sens: 4, resorp: 2, prec: 2, eng: 4, a: 'zero', c: 'zero' },
+                surprise:  { mag: 6, sens: 4, resorp: 2, prec: 2, eng: 4, a: 'zero', c: 'zero' },
+                remanence: { mag: 3, sens: 4, resorp: 2, prec: 4, eng: 4, a: 'zero', c: 'zero' },
+                colere:    { mag: 7, sens: 4, resorp: 2, prec: 7, eng: 4, a: 'neg',  c: 'pos'  },
+                calme:     { mag: 6, sens: 4, resorp: 2, prec: 6, eng: 4, a: 'pos',  c: 'neg'  },
+                desir:     { mag: 6, sens: 4, resorp: 2, prec: 7, eng: 4, a: 'pos',  c: 'pos'  }
+            };
+
+            document.querySelectorAll('.engine-preset').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const p = presets[btn.dataset.preset];
+                    if (!p) return;
+                    inpMag.value = p.mag;
+                    inpSensory.value = p.sens;
+                    inpResorption.value = p.resorp;
+                    inpPrecision.value = p.prec;
+                    inpEngagement.value = p.eng;
+                    stateA = p.a;
+                    stateC = p.c;
+                    updateButtonStyles('.a-btn', stateA, 'bg-sky-600 border border-sky-400 text-white');
+                    updateButtonStyles('.c-btn', stateC, 'bg-purple-600 border border-purple-400 text-white');
+                    renderEngine();
+                });
+            });
+
+            renderEngine();
+        })();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
+    <script src="bilingual_modal.js"></script>
+    <script src="command_palette.js"></script>
+</body>
+</html>
+
