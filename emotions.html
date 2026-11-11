@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
     <script src="maintenance_guard.js"></script>
-    <title>Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect</title>
-    <meta name="description" content="Architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Exploration interactive des Gradients de Contrôle (Y), d'Attente (X) et de Profondeur (Z) régis par la norme L1 de Manhattan.">
+    <title>La Carte des 176 Émotions | CARTOGRAFFECT</title>
+    <meta name="description" content="Explorez la boussole interactive des 176 émotions humaines : Levier d'Action (Y), Levier d'Adaptation (X) et Niveaux de Conscience (Z). Modèle de Manuel Cabelguen.">
     <link rel="canonical" href="https://www.cartograffect.com/emotions.html">
 
     <!-- Favicons -->
@@ -19,16 +19,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.cartograffect.com/emotions.html">
-    <meta property="og:title" content="Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect">
-    <meta property="og:description" content="Architecture hiérarchique de l'expérience affective : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
+    <meta property="og:title" content="Matrice des 176 Affects &amp; Traitement Prédictif | CARTOGRAFFECT">
+    <meta property="og:description" content="Explorez la matrice interactive des 176 affects humains : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://www.cartograffect.com/emotions.html">
-    <meta name="twitter:title" content="Matrice des AFFECTS &amp; Traitement Prédictif | Cartograffect">
-    <meta name="twitter:description" content="Architecture hiérarchique de l'expérience affective : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
+    <meta name="twitter:title" content="Matrice des 176 Affects &amp; Traitement Prédictif | CARTOGRAFFECT">
+    <meta name="twitter:description" content="Explorez la matrice interactive des 176 affects humains : Gradients de Contrôle (Axe Y), d'Attente (Axe X) et Profondeur Inférentielle (Axe Z).">
     <meta name="twitter:image" content="https://www.cartograffect.com/assets/og-preview.png">
     
     <!-- Fonts -->
@@ -36,14 +36,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- D3.js -->
+    <!-- D3.js, Three.js & Modèle Cartograffect -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    
-    <!-- Three.js for 3D Inferential Pyramid -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
-    <!-- Cartograffect Mathematical Model (176 entries & 8 strata) -->
     <script src="cartograffect_model.js"></script>
     
     <!-- Tailwind CSS -->
@@ -112,22 +108,22 @@
 
         .tick text {
             font-size: 10px;
-            fill: #64748b;
+            fill: #94a3b8;
             font-family: ui-monospace, monospace;
         }
 
         .quadrant-label {
             font-size: 11px;
-            fill: #94a3b8;
+            fill: #cbd5e1;
             text-anchor: middle;
             font-weight: 600;
             letter-spacing: 0.5px;
-            opacity: 0.65;
+            opacity: 0.9;
         }
 
         .emotion-label-text {
-            font-size: 8.5px;
-            fill: #f1f5f9;
+            font-size: 9.5px;
+            fill: #ffffff;
             pointer-events: none;
             font-weight: 600;
         }
@@ -233,6 +229,35 @@
             color: #cbd5e1;
             line-height: 1.55;
         }
+
+        /* Mode Plein Écran pour le conteneur du canevas */
+        #chartAreaCard:fullscreen {
+            padding: 1.25rem;
+            background: #070b14 !important;
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            border-radius: 0;
+            border: none;
+        }
+        #chartAreaCard:fullscreen #chart2DWrapper {
+            flex: 1;
+            height: calc(100vh - 110px);
+            max-height: none;
+            align-items: center;
+        }
+        #chartAreaCard:fullscreen #chart2DWrapper svg {
+            max-height: 100%;
+            height: 100%;
+            width: auto;
+        }
+        #chartAreaCard:fullscreen #chart3DWrapper {
+            flex: 1;
+            height: calc(100vh - 110px) !important;
+            max-height: none;
+        }
     </style>
 
     <!-- Custom CSS -->
@@ -243,10 +268,10 @@
     <!-- Top Navigation Bar -->
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+            <a href="index.html" class="flex items-center gap-3 group mr-8 shrink-0" style="margin-right: 2rem;">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
                     <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Territoire des Émotions</span>
                 </div>
             </a>
@@ -261,14 +286,6 @@
                     <span class="w-2 h-2 rounded-full bg-blue-400"></span>
                     1. Émotions
                 </a>
-                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>
-                    2. Crimes
-                </a>
-                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    3. Miracles
-                </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
                     Modèles Théoriques
@@ -277,16 +294,15 @@
 
             <!-- Quick Action / API Settings / Bilingual -->
             <div class="hidden md:flex items-center gap-2 header-action-btn">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
                 <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
                     <span class="text-purple-400">🌐</span> FR | EN
                 </button>
-                <button id="openApiKeyModal" class="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-purple-300 bg-slate-800/60 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors flex items-center gap-1.5" title="Configurer une clé Gemini API personnelle">
-                    <span>✨ Clé IA</span>
-                    <span id="apiKeyIndicator" class="w-2 h-2 rounded-full bg-slate-500"></span>
-                </button>
-                <a href="index.html" class="hidden sm:inline-flex px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 rounded-lg border border-slate-700">
-                    &larr; Accueil
-                </a>
+                
             </div>
 
             <!-- Mobile Menu Button -->
@@ -303,11 +319,14 @@
         <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span>
+            <span>Recherche Rapide</span>
+            <kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
         <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html" class="active-link"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
-        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
-        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
         <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales</a>
         <div class="mt-auto pt-6">
@@ -316,77 +335,78 @@
     </div>
 
     <!-- Main Container -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full pb-20">
 
-        <!-- Page Header -->
-        <div class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/40 text-purple-300 border border-purple-500/30 mb-2">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>
-                    Traitement Prédictif &bull; Inférence Active
+        <!-- Hero Section : Matrice des Affects -->
+        <section class="w-full max-w-[1280px] mx-auto mb-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8 items-center">
+                <div class="lg:col-span-7">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-900/40 text-purple-300 border border-purple-500/30 mb-2.5 shadow-sm whitespace-nowrap" style="white-space: nowrap;">
+                        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                        <span>TRAITEMENT PRÉDICTIF • INFÉRENCE ACTIVE</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-[42px] font-heading font-black text-white tracking-tight leading-tight">
+                        Matrice des Affects <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent block sm:inline sm:ml-1">• 176 Émotions</span>
+                    </h1>
                 </div>
-                <h1 class="text-3xl sm:text-4xl font-heading font-black text-white tracking-tight">
-                    Matrice des <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Affects</span>
-                </h1>
-                <p class="text-slate-400 text-sm mt-1 max-w-3xl leading-relaxed">
-                    Cartographie hiérarchique de l’expérience affective : le <strong>Gradient de Contrôle (Axe Y)</strong> évalue la capacité d’agir sur le monde, le <strong>Gradient d’Attente (Axe X)</strong> évalue la révisabilité du modèle interne, et l'<strong>Axe Z</strong> indexe le budget attentionnel fini sous la norme L1 de Manhattan : <span class="font-mono text-purple-300">|X| + |Y| = 2Z - 2</span>.
-                </p>
+                <div class="lg:col-span-5">
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed border-l-2 border-purple-500/40 pl-3.5 py-0.5">
+                        Repérez ce que vous ressentez en temps réel : explorez la matrice computationnelle unifiée, découvrez les deux leviers d'adaptation (agir ou lâcher-prise) et visualisez les relations antagonistes certifiées sous Lean 4.
+                    </p>
+                </div>
             </div>
+        </section>
 
-            <!-- Tab Buttons -->
-            <div class="flex p-1 bg-slate-800/60 border border-slate-700/80 rounded-xl shrink-0 self-start md:self-auto overflow-x-auto">
-                <button class="tab-btn active px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-chart">
-                    🗺️ Matrice Interactive (Axes X-Y &amp; L1)
+        <!-- Barre d'Onglets Principaux (Pleine largeur, alignée, sans troncature) -->
+        <div class="w-full max-w-[1280px] mx-auto mb-8">
+            <nav class="flex flex-wrap items-center gap-2 p-1.5 bg-slate-800/70 border border-slate-700/80 rounded-2xl shadow-lg backdrop-blur-md" role="tablist" aria-label="Navigation des 4 volets">
+                <button class="tab-btn active px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl text-slate-300 hover:text-white transition-all whitespace-nowrap" data-tab="tab-chart" role="tab" aria-selected="true">
+                    🗺️ Matrice Interactive (Axes X-Y & L1)
                 </button>
-                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-noyau">
-                    ⚙️ Moteur &amp; Noyau Affectif
+                <button class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl text-slate-300 hover:text-white transition-all whitespace-nowrap" data-tab="tab-noyau" role="tab" aria-selected="false">
+                    ⚙️ Moteur & Noyau Affectif
                 </button>
-                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-matrice">
-                    📐 Matrice &amp; Taxonomie Hiérarchique
+                <button class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl text-slate-300 hover:text-white transition-all whitespace-nowrap" data-tab="tab-matrice" role="tab" aria-selected="false">
+                    📐 Matrice & Taxonomie Hiérarchique
                 </button>
-                <button class="tab-btn px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-400 border border-transparent transition-all whitespace-nowrap" data-tab="tab-fittt">
-                    📊 Test de Fonctionnalité F.I.T.T.T.
-                </button>
-            </div>
+                </nav>
         </div>
 
         <!-- TAB 1: CARTOGRAFFECT (CHART) -->
         <div id="tab-chart" class="tab-content block space-y-6">
 
             <!-- Control Bar Card -->
-            <div class="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-5 shadow-xl backdrop-blur-md">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-                    
-                    <!-- Display Toggles -->
-                    <div class="lg:col-span-4 flex flex-wrap gap-4 items-center">
-                        <label class="flex items-center gap-2 text-xs font-medium text-slate-300 cursor-pointer select-none">
+            <div class="bg-slate-800/40 border border-slate-700/60 rounded-2xl p-5 shadow-xl backdrop-blur-md space-y-3.5">
+                
+                <!-- Ligne 1 : CALQUES & AXES DE SYMÉTRIE (PAIRES) -->
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <span class="text-slate-400 font-bold uppercase tracking-wider text-xs whitespace-nowrap">CALQUES & AXES DE SYMÉTRIE (PAIRES) :</span>
+                        
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer select-none">
                             <input type="checkbox" id="showNamesToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4" checked>
                             <span>Afficher les noms</span>
                         </label>
-                        <label class="flex items-center gap-2 text-xs font-medium text-purple-300 cursor-pointer select-none">
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-purple-300 cursor-pointer select-none">
                             <input type="checkbox" id="showIntensityCircleToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-4 h-4" checked>
                             <span>Losanges L1 (|X|+|Y|=2Z-2)</span>
                         </label>
-                    </div>
-
-                    <!-- Symmetry & Antagonism Lines Toggles -->
-                    <div class="lg:col-span-5 flex flex-wrap gap-3 items-center border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
                         <label class="flex items-center gap-1.5 text-xs font-medium text-emerald-300 cursor-pointer select-none">
                             <input type="checkbox" id="showAxialToggle" class="rounded bg-slate-900 border-slate-700 text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5">
-                            <span>Axiales (12)</span>
+                            <span>Paires Axiales (12 axes)</span>
                         </label>
                         <label class="flex items-center gap-1.5 text-xs font-medium text-amber-300 cursor-pointer select-none">
                             <input type="checkbox" id="showDiagonalToggle" class="rounded bg-slate-900 border-slate-700 text-amber-600 focus:ring-amber-500 w-3.5 h-3.5">
-                            <span>Diagonales (12)</span>
+                            <span>Paires Diagonales (12 axes)</span>
                         </label>
                         <label class="flex items-center gap-1.5 text-xs font-medium text-purple-300 cursor-pointer select-none">
                             <input type="checkbox" id="showControlateralToggle" class="rounded bg-slate-900 border-slate-700 text-purple-600 focus:ring-purple-500 w-3.5 h-3.5">
-                            <span>Controlatérales (60)</span>
+                            <span>Paires Controlatérales (60 axes)</span>
                         </label>
                     </div>
 
                     <!-- Path Mode -->
-                    <div class="lg:col-span-3 flex items-center justify-start lg:justify-end gap-3 border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-3 lg:pt-0 lg:pl-5">
+                    <div class="flex items-center gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-700/60 shrink-0">
                         <label class="flex items-center gap-2 text-xs font-semibold text-rose-300 cursor-pointer select-none">
                             <input type="checkbox" id="pathModeToggle" class="rounded bg-slate-900 border-slate-700 text-rose-600 focus:ring-rose-500 w-4 h-4">
                             <span>Tracer une Trajectoire</span>
@@ -397,22 +417,29 @@
                     </div>
                 </div>
 
-                <!-- Typology Quick Filter Row -->
-                <div class="mt-3 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider">Typologie Géométrique :</span>
+                <!-- Ligne 2 : TYPOLOGIE GÉOMÉTRIQUE -->
+                <div class="pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider">TYPOLOGIE GÉOMÉTRIQUE :</span>
                     <div class="flex flex-wrap gap-1.5" id="typologyFilterGroup">
                         <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-purple-600 text-white shadow-sm transition-all" data-typo="all">Toutes (176)</button>
                         <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="operator">8 Opérateurs Centraux</button>
                         <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="axial">Positions Axiales (24)</button>
                         <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="diagonal">Positions Diagonales (24)</button>
-                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="lateral">Positions Latérales (120)</button>
+                        <button type="button" class="typo-btn px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-800 text-slate-300 hover:text-white transition-all" data-typo="lateral">Positions Controlatérales (120)</button>
                     </div>
                 </div>
 
-                <!-- Category / Strata Filters Row (Z=0 to Z=7) -->
-                <div class="mt-3 pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span class="text-slate-400 font-bold uppercase tracking-wider">Strates d'Inférence (Axe Z, |X|+|Y|=2Z-2) :</span>
-                    <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                <!-- Ligne 3 : STRATES D'INFÉRENCE -->
+                <div class="pt-3 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400 font-bold uppercase tracking-wider">STRATES D'INFÉRENCE (AXE Z) :</span>
+                        <span id="activeFilterCount" class="px-2 py-0.5 rounded-full bg-purple-900/60 text-purple-300 font-mono text-[11px] border border-purple-500/30">176 / 176</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" id="selectAllStrataBtn" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 transition-colors">Tout cocher</button>
+                        <button type="button" id="clearAllStrataBtn" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 transition-colors">Tout décocher</button>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2 w-full pt-1">
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="0" checked>
                             <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=0 Veille (1)</span>
@@ -423,27 +450,27 @@
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="2" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=2 Couronne 1 (8)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=2 Anticipation • C1 (9)</span>
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="3" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=3 Réactives (16)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=3 Émoi • Réactives (17)</span>
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="4" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=4 Relationnelles (24)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=4 Réserve • Relationnelles (25)</span>
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="5" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=5 Dispositions (32)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=5 Recul • Dispositions (33)</span>
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="6" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=6 Identités (40)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=6 Saisie • Identités (41)</span>
                         </label>
                         <label class="inline-flex items-center gap-1 text-slate-300 cursor-pointer">
                             <input type="checkbox" class="category-filter rounded text-purple-600 focus:ring-0 w-3.5 h-3.5" value="7" checked>
-                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=7 Transcendantaux (48)</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-700/50 text-[11px] font-mono">Z=7 Suspension • Transcendants (49)</span>
                         </label>
                     </div>
                 </div>
@@ -527,6 +554,16 @@
                             <span>Tracer la Trajectoire Active</span>
                             <span>&rarr;</span>
                         </button>
+
+                        <div id="apiKeyNotice" class="hidden mt-2 p-2 rounded-lg bg-amber-950/70 border border-amber-500/40 text-[11px] text-amber-200"></div>
+
+                        <div class="mt-2.5 pt-2 border-t border-purple-800/30 flex items-center justify-between text-[11px] text-slate-400">
+                            <span class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>Mode Heuristique Actif</span>
+                            </span>
+                            
+                        </div>
                     </div>
 
                     <!-- Emotion Identity Card Module -->
@@ -561,7 +598,7 @@
             <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
                 <div class="max-w-3xl">
                     <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/30">Architecture Computationnelle</span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Le Moteur Prédictif &amp; le Noyau Affectif</h2>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Comment naissent nos émotions : <span class="text-purple-400">Nos 2 leviers d'action</span></h2>
                     <p class="text-slate-300 text-base leading-relaxed mt-4">
                         Le système affectif est fondé sur le principe de <strong>minimisation de l’écart de prédiction</strong> (inférence active et allostasie). Il s'articule autour de trois interfaces projetées sur les trois dimensions de l'espace :
                     </p>
@@ -572,7 +609,7 @@
                     <div class="rounded-2xl bg-slate-900/70 border border-purple-700/50 p-6 flex flex-col justify-between">
                         <div>
                             <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe Y</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">1. Interface Perceptive</h3>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">1. Agir sur la Situation (Axe Y)</h3>
                             <p class="text-xs text-slate-300 leading-relaxed">
                                 Réactive, portée sur l'environnement et les flux sensorimoteurs. Elle porte la valeur affective du <strong class="text-purple-300">Contrôle</strong> : la capacité que l'organisme s'attribue pour agir sur la situation.
                             </p>
@@ -585,7 +622,7 @@
                     <div class="rounded-2xl bg-slate-900/70 border border-sky-700/50 p-6 flex flex-col justify-between">
                         <div>
                             <div class="w-10 h-10 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe X</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">2. Interface Subjective</h3>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">2. Assouplir ses Attentes (Axe X)</h3>
                             <p class="text-xs text-slate-300 leading-relaxed">
                                 Prédictive, intégrant la mémoire, les apprentissages et le modèle du monde. Elle porte la valeur affective de l'<strong class="text-sky-300">Attente</strong> : l'évaluation de la révisabilité des croyances internes.
                             </p>
@@ -598,7 +635,7 @@
                     <div class="rounded-2xl bg-slate-900/70 border border-emerald-700/50 p-6 flex flex-col justify-between">
                         <div>
                             <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm mb-4">Axe Z</div>
-                            <h3 class="text-xl font-heading font-bold text-white mb-2">3. Interface Attentionnelle</h3>
+                            <h3 class="text-xl font-heading font-bold text-white mb-2">3. L'Énergie Mentale (Norme L1)</h3>
                             <p class="text-xs text-slate-300 leading-relaxed">
                                 Régulatrice, modulant la précision (degré de confiance accordé aux signaux). Elle porte la <strong class="text-emerald-300">Profondeur Inférentielle</strong> temporelle et conceptuelle et le budget fini (norme L1).
                             </p>
@@ -662,7 +699,7 @@
             <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-slate-700/70 rounded-3xl p-8 sm:p-12 shadow-2xl">
                 <div class="max-w-3xl">
                     <span class="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full border border-emerald-500/30">Grammaire des Configurations</span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">La Matrice Affective (Z = 2) &amp; la Taxonomie</h2>
+                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">Les 8 Familles Fondamentales <span class="text-emerald-400">et Leurs Contraires</span></h2>
                     <p class="text-slate-300 text-base leading-relaxed mt-4">
                         À la première couronne (Z = 2), huit configurations résolvent l'équation <span class="font-mono text-purple-300">|X| + |Y| = 2</span> : quatre <strong>orientations axiales</strong> instables et quatre <strong>prototypes combinés</strong> constituant des attracteurs locaux.
                     </p>
@@ -808,12 +845,12 @@
                             <p class="text-slate-400 mt-1 text-[11px]">Budget = 8 &bull; Humeurs et traits durables de personnalité (N=32).</p>
                         </div>
                         <div class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
-                            <span class="text-purple-400 font-bold font-mono">Z = 6 &bull; Saisie (0,0,6)</span>
+                            <span class="text-purple-400 font-bold font-mono">Z = 6 &bull; Saisissement (0,0,6)</span>
                             <div class="text-white font-semibold text-xs mt-1">40 Identités Affectives</div>
                             <p class="text-slate-400 mt-1 text-[11px]">Budget = 10 &bull; Postures existentielles et cristallisation (N=40).</p>
                         </div>
                         <div class="p-3.5 rounded-xl bg-slate-900/60 border border-purple-800/40">
-                            <span class="text-rose-400 font-bold font-mono">Z = 7 &bull; Suspension (0,0,7)</span>
+                            <span class="text-rose-400 font-bold font-mono">Z = 7 &bull; Vertige Ontologique (0,0,7)</span>
                             <div class="text-white font-semibold text-xs mt-1">48 Transcendantaux</div>
                             <p class="text-slate-400 mt-1 text-[11px]">Budget = 12 &bull; Suspension face à l'incommensurable (N=48).</p>
                         </div>
@@ -825,190 +862,30 @@
                 </div>
         </div>
 
-        <!-- TAB 4: TEST DE FONCTIONNALITÉ F.I.T.T.T. -->
-        <div id="tab-fittt" class="tab-content hidden space-y-8">
-            <div class="bg-gradient-to-r from-slate-850 to-cosmic-800 border border-indigo-700/60 rounded-3xl p-8 sm:p-12 shadow-2xl space-y-8">
-                <div class="max-w-3xl">
-                    <span class="text-xs uppercase font-bold tracking-widest text-indigo-400 bg-indigo-950/80 px-3 py-1 rounded-full border border-indigo-700/40">
-                        Crible Clinique &bull; Cabelguen (2026)
-                    </span>
-                    <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">
-                        Est-ce que mes émotions fittent avec le F.I.T.T.T. ?
-                    </h2>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mt-2 font-light">
-                        « Grâce à la composante naturelle de base de ces affects, ils seront jugés fonctionnels dans la mesure où la <strong>Fréquence</strong>, l'<strong>Intensité</strong>, le <strong>Type</strong>, la <strong>Durée (Temps)</strong> ou le <strong>Timing (moment)</strong> correspondent aux attentes normatives du milieu de vie de l'individu. »
-                    </p>
-                </div>
-
-                <!-- Interactive Evaluation Matrix -->
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                    
-                    <!-- Form 5 Criteria -->
-                    <div class="lg:col-span-7 bg-cosmic-900 border border-slate-750 p-6 sm:p-8 rounded-2xl space-y-6">
-                        <div class="space-y-1 border-b border-slate-800 pb-3">
-                            <label class="text-xs font-bold uppercase tracking-wider text-slate-300">1. Émotion ou Sentiment Observé :</label>
-                            <input type="text" id="fitttEmotionName" value="Colère" placeholder="Ex: Colère, Peur, Tristesse, Joie, Méfiance..." class="w-full bg-slate-850 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white font-semibold focus:outline-none focus:border-indigo-500">
-                        </div>
-
-                        <!-- F : Fréquence -->
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">F &bull; Fréquence <span class="text-slate-400 font-normal">(Nombre de fois qu'elle se répète)</span> :</span>
-                                <span id="valFText" class="font-mono text-indigo-400 font-bold">Modérée (Occasionnelle)</span>
-                            </div>
-                            <input type="range" id="sliderF" min="1" max="4" value="2" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] text-slate-500">
-                                <span>Rare (1)</span>
-                                <span>Occasionnelle (2)</span>
-                                <span>Fréquente (3)</span>
-                                <span>Envahissante (4)</span>
-                            </div>
-                        </div>
-
-                        <!-- I : Intensité -->
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">I &bull; Intensité <span class="text-slate-400 font-normal">(Charge émotive et viscérale)</span> :</span>
-                                <span id="valIText" class="font-mono text-indigo-400 font-bold">Proportionnée (Modérée)</span>
-                            </div>
-                            <input type="range" id="sliderI" min="1" max="4" value="2" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] text-slate-500">
-                                <span>Légère (1)</span>
-                                <span>Modérée (2)</span>
-                                <span>Forte (3)</span>
-                                <span>Explosive (4)</span>
-                            </div>
-                        </div>
-
-                        <!-- T1 : Type -->
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">T &bull; Type <span class="text-slate-400 font-normal">(Correspondance avec le contexte)</span> :</span>
-                                <span id="valT1Text" class="font-mono text-indigo-400 font-bold">Congruente au contexte</span>
-                            </div>
-                            <input type="range" id="sliderT1" min="1" max="3" value="1" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] text-slate-500">
-                                <span>Cohérente (1)</span>
-                                <span>Partiellement décalée (2)</span>
-                                <span>Inappropriée (3)</span>
-                            </div>
-                        </div>
-
-                        <!-- T2 : Temps -->
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">T &bull; Temps / Durée <span class="text-slate-400 font-normal">(Délai de retour au niveau neutre)</span> :</span>
-                                <span id="valT2Text" class="font-mono text-indigo-400 font-bold">Règle des 90 secondes</span>
-                            </div>
-                            <input type="range" id="sliderT2" min="1" max="4" value="1" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] text-slate-500">
-                                <span>&lt; 90s (1)</span>
-                                <span>Quelques minutes (2)</span>
-                                <span>Plusieurs heures (3)</span>
-                                <span>Enkystée en jours (4)</span>
-                            </div>
-                        </div>
-
-                        <!-- T3 : Timing -->
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="font-bold text-white">T &bull; Timing <span class="text-slate-400 font-normal">(Moment où elle est exprimée)</span> :</span>
-                                <span id="valT3Text" class="font-mono text-indigo-400 font-bold">Moment opportun</span>
-                            </div>
-                            <input type="range" id="sliderT3" min="1" max="3" value="1" class="w-full accent-indigo-500 cursor-pointer">
-                            <div class="flex justify-between text-[10px] text-slate-500">
-                                <span>Opportun / Calibré (1)</span>
-                                <span>Légèrement tardif / hâtif (2)</span>
-                                <span>Impulsif / Inopportun (3)</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Diagnostic Result Card -->
-                    <div class="lg:col-span-5 bg-cosmic-900 border border-slate-750 p-6 sm:p-8 rounded-2xl space-y-5 flex flex-col justify-between">
-                        <div class="space-y-4">
-                            <span class="text-xs uppercase font-bold tracking-widest text-indigo-400">Diagnostic Métacognitif</span>
-                            <div id="fitttResultScoreBadge" class="p-3 rounded-xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 font-bold text-sm flex items-center justify-between">
-                                <span>Fonctionnalité Globale : Équilibrée</span>
-                                <span>✓ Normative</span>
-                            </div>
-                            <h3 id="fitttResultTitle" class="text-xl font-heading font-black text-white">Réponse Adaptative Fonctionnelle</h3>
-                            <p id="fitttResultDesc" class="text-xs text-slate-300 leading-relaxed">
-                                L'émotion est cohérente avec la situation, régulée dans sa charge et respecte la redescente somatique naturelle (règle des 90 secondes). Elle sert l'adaptation sans générer de dysfonctionnement relationnel.
-                            </p>
-                        </div>
-
-                        <div id="fitttGuidanceBox" class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2 text-xs">
-                            <span class="text-[10px] uppercase font-bold tracking-widest text-emerald-400">Orientation Thérapeutique</span>
-                            <p id="fitttGuidanceText" class="text-slate-300">
-                                Maintenir la présence et consolider le renforcement positif par le raisonnement logique et introspectif.
-                            </p>
-                        </div>
-
-                        <div class="pt-2 space-y-2">
-                            <a id="fitttLinkAction" href="miracles.html#modele-miracles" class="inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all">
-                                Consulter les Leviers M.I.R.A.C.L.E.S. &rarr;
-                            </a>
-                            <div class="grid grid-cols-2 gap-2">
-                                <a href="miracles.html#minuteur-somatique" class="py-2 px-3 text-center rounded-xl font-semibold text-[11px] text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-600/40 transition-colors flex items-center justify-center gap-1">
-                                    <span>⏱️</span> Minuteur 90s
-                                </a>
-                                <a href="miracles.html#pont-resolution" class="py-2 px-3 text-center rounded-xl font-semibold text-[11px] text-purple-200 bg-purple-950/70 hover:bg-purple-900 border border-purple-600/40 transition-colors flex items-center justify-center gap-1">
-                                    <span>🌉</span> Pont de Résolution
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-    </main>
+        </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
             </div>
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
                 <a href="emotions.html" class="text-blue-400 font-semibold">1. Émotions</a>
-                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
+                <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-400 text-center md:text-right">
-                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
                 <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
     </footer>
 
-    <!-- Gemini API Key Configuration Modal -->
-    <div id="apiKeyModal" class="hidden fixed inset-0 bg-cosmic-900/80 z-50 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-purple-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="text-base font-heading font-bold text-white flex items-center gap-2">
-                    <span>✨</span> Configuration Google Gemini API
-                </h3>
-                <button id="closeApiKeyModal" class="text-slate-400 hover:text-white text-lg">&times;</button>
-            </div>
-            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
-                Le site inclut déjà une encyclopédie psychologique complète et autonome. Si vous possédez votre propre clé Google AI Studio (Gemini), vous pouvez la renseigner ici pour enrichir les fiches et scénarios avec vos prompts en direct.
-            </p>
-            <div class="mt-4">
-                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Votre Clé API (Stockée localement)</label>
-                <input type="password" id="geminiApiKeyInput" class="w-full p-2.5 rounded-lg bg-slate-800 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-purple-500" placeholder="AIzaSy...">
-            </div>
-            <div class="mt-5 flex items-center justify-end gap-3">
-                <button id="clearApiKeyBtn" class="px-3 py-1.5 text-xs text-rose-400 hover:text-rose-300">Supprimer la clé</button>
-                <button id="saveApiKeyBtn" class="px-4 py-2 text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 rounded-lg shadow-md transition-colors">Enregistrer</button>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- MAIN INTERACTIVE D3 SCRIPT & LOGIC -->
     <script>
@@ -1018,6 +895,9 @@
         const processedData = CartograffectModel.emotions;
         let emotionalPath = [];
         let activeTypologyFilter = "all";
+        let scene3D, camera3D, renderer3D, controls3D, animationFrameId;
+        let is3DInitialized = false;
+        const clickableSpheres = [];
 
         // Colors & Scales
         const colorGroups = CartograffectModel.groupColors;
@@ -1196,7 +1076,7 @@
                 "operator": "Opérateur central (0, 0, Z)",
                 "axial": "Position axiale (X=0 ou Y=0)",
                 "diagonal": "Position diagonale (|X|=|Y|)",
-                "lateral": "Position latérale (|X|≠|Y|)"
+                "lateral": "Position controlatérale (|X|≠|Y|)"
             };
 
             // Detect Correspondences
@@ -1229,7 +1109,14 @@
                 </div>`;
             }
 
-            titleEl.innerHTML = `<span>✨</span> Fiche Computationnelle : <span class="text-white">${emotion.name}</span>`;
+            let titleEmotionName = emotion.name;
+            let synonymSuffix = "";
+            if (emotion.id === 6 || emotion.name === "Saisie" || emotion.name === "Saisie / Saisissement") {
+                titleEmotionName = "Saisie";
+                synonymSuffix = ` <span class="text-xs text-purple-300 font-normal">(Synonyme : Saisissement)</span>`;
+            }
+
+            titleEl.innerHTML = `<span>✨</span> Fiche Computationnelle : <span class="text-white">${titleEmotionName}</span>${synonymSuffix}`;
             badgeEl.textContent = `${strataNames[emotion.z] || 'Strate Z=' + emotion.z}`;
 
             const attenteStatus = emotion.x > 0 ? `Modèle révisable (+${emotion.x}) &bull; Décharge épistémique` : emotion.x < 0 ? `Modèle non révisable (${emotion.x}) &bull; Charge épistémique (maintien)` : "Attente neutre / indéterminée (X0)";
@@ -1261,20 +1148,89 @@
             `;
         }
 
-        function drawEmotionalPath() {
-            pathGroup.html("");
-            if (emotionalPath.length < 2) return;
+        function handleEmotionSelect(event, d) {
+            if (!d) return;
+            if (d3.select("#pathModeToggle").property("checked")) {
+                if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
+                    emotionalPath.push(d);
+                    drawEmotionalPath();
+                    pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
+                }
+            } else {
+                renderIdentityCard(d);
+                
+                // Identify related counterparts
+                const relatedNames = [d.name];
+                const pAx = CartograffectModel.axialPairs.find(p => p[0] === d.name || p[1] === d.name);
+                if (pAx) relatedNames.push(pAx[0] === d.name ? pAx[1] : pAx[0]);
+                const pDiag = CartograffectModel.diagonalPairs.find(p => p[0] === d.name || p[1] === d.name);
+                if (pDiag) relatedNames.push(pDiag[0] === d.name ? pDiag[1] : pDiag[0]);
+                const pCtrl = CartograffectModel.controlateralPairs.find(p => p[0] === d.name || p[1] === d.name);
+                if (pCtrl) relatedNames.push(pCtrl[0] === d.name ? pCtrl[1] : pCtrl[0]);
 
-            const lineGenerator = d3.line()
-                .x(d => xScale(d.x))
-                .y(d => yScale(d.y))
-                .curve(d3.curveCatmullRom.alpha(0.5));
+                pointsGroup.selectAll(".emotion-point").transition().duration(200)
+                    .style("opacity", p => (relatedNames.includes(p.name) || p.group === d.group) ? 1.0 : 0.12)
+                    .attr("stroke-width", p => p.name === d.name ? 3.5 : (relatedNames.includes(p.name) ? 2.5 : 1.2))
+                    .attr("stroke", p => p.name === d.name ? "#ffffff" : (relatedNames.includes(p.name) ? "#facc15" : "#0f172a"));
 
-            pathGroup.append("path")
-                .datum(emotionalPath)
-                .attr("class", "path-line")
-                .attr("d", lineGenerator)
-                .attr("marker-end", "url(#arrowhead)");
+                // Sync selection with 3D WebGL Spheres if active
+                if (is3DInitialized && clickableSpheres.length > 0) {
+                    clickableSpheres.forEach(s => {
+                        if (s.userData.name === d.name) {
+                            s.scale.set(1.8, 1.8, 1.8);
+                            if (s.material) s.material.emissiveIntensity = 1.0;
+                        } else {
+                            s.scale.set(1, 1, 1);
+                            if (s.material) s.material.emissiveIntensity = s.userData.category === 0 ? 0.2 : (s.userData.type === "operator" ? 0.6 : 0.4);
+                        }
+                    });
+                }
+
+                // Immediate UX feedback on computational card
+                const responseCard = document.getElementById("iaResponseContainer");
+                if (responseCard) {
+                    responseCard.classList.remove("ring-2", "ring-purple-500/60");
+                    void responseCard.offsetWidth;
+                    responseCard.classList.add("ring-2", "ring-purple-500/60");
+                }
+
+                // Smooth scroll to card on mobile
+                if (window.innerWidth < 1024) {
+                    const cardEl = document.getElementById("iaResponseContainer");
+                    if (cardEl) {
+                        cardEl.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                }
+            }
+        }
+
+        function getNodeX(d) {
+            if (d.type === "operator" && activeTypologyFilter === "operator") {
+                const angle = (d.z / 8) * 2 * Math.PI - Math.PI / 2;
+                return xScale(0) + Math.cos(angle) * 36;
+            }
+            return xScale(d.x);
+        }
+
+        function getNodeY(d) {
+            if (d.type === "operator" && activeTypologyFilter === "operator") {
+                const angle = (d.z / 8) * 2 * Math.PI - Math.PI / 2;
+                return yScale(0) + Math.sin(angle) * 36;
+            }
+            return yScale(d.y);
+        }
+
+        function getLabelTransform(d) {
+            if (d.type === "operator" && activeTypologyFilter === "operator") {
+                const angle = (d.z / 8) * 2 * Math.PI - Math.PI / 2;
+                const lx = xScale(0) + Math.cos(angle) * 50;
+                const ly = yScale(0) + Math.sin(angle) * 50;
+                return `translate(${lx}, ${ly})`;
+            }
+            if (d.type === "operator" && activeTypologyFilter === "all") {
+                return `translate(${xScale(d.x) + 12}, ${yScale(d.y) + (d.z - 3.5) * 11})`;
+            }
+            return `translate(${xScale(d.x) + 8}, ${yScale(d.y)})`;
         }
 
         function updateChart(data) {
@@ -1289,8 +1245,8 @@
                 .attr("role", "button")
                 .attr("tabindex", "0")
                 .attr("aria-label", d => `${d.name} (${d.code}) : Attente ${d.x}, Contrôle ${d.y}, Strate Z=${d.z}`)
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y))
+                .attr("cx", d => getNodeX(d))
+                .attr("cy", d => getNodeY(d))
                 .attr("r", 0)
                 .attr("fill", d => colorScale(d.group))
                 .attr("stroke", d => d.type === "operator" ? "#ffffff" : "#0f172a")
@@ -1299,37 +1255,11 @@
 
             const mergedCircles = circlesEnter.merge(circles);
             mergedCircles.transition(t)
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y))
+                .attr("cx", d => getNodeX(d))
+                .attr("cy", d => getNodeY(d))
                 .attr("r", d => radiusScale(d.category))
                 .attr("fill", d => colorScale(d.group))
                 .attr("stroke", d => d.type === "operator" ? "#ffffff" : "#0f172a");
-
-            function handleEmotionSelect(event, d) {
-                if (d3.select("#pathModeToggle").property("checked")) {
-                    if (emotionalPath.length === 0 || emotionalPath[emotionalPath.length - 1] !== d) {
-                        emotionalPath.push(d);
-                        drawEmotionalPath();
-                        pointsGroup.selectAll(".emotion-point").classed("path-point-highlight", p => emotionalPath.includes(p));
-                    }
-                } else {
-                    renderIdentityCard(d);
-                    
-                    // Identify related counterparts
-                    const relatedNames = [d.name];
-                    const pAx = CartograffectModel.axialPairs.find(p => p[0] === d.name || p[1] === d.name);
-                    if (pAx) relatedNames.push(pAx[0] === d.name ? pAx[1] : pAx[0]);
-                    const pDiag = CartograffectModel.diagonalPairs.find(p => p[0] === d.name || p[1] === d.name);
-                    if (pDiag) relatedNames.push(pDiag[0] === d.name ? pDiag[1] : pDiag[0]);
-                    const pCtrl = CartograffectModel.controlateralPairs.find(p => p[0] === d.name || p[1] === d.name);
-                    if (pCtrl) relatedNames.push(pCtrl[0] === d.name ? pCtrl[1] : pCtrl[0]);
-
-                    pointsGroup.selectAll(".emotion-point").transition().duration(200)
-                        .style("opacity", p => (relatedNames.includes(p.name) || p.group === d.group) ? 1.0 : 0.12)
-                        .attr("stroke-width", p => p.name === d.name ? 3.5 : (relatedNames.includes(p.name) ? 2.5 : 1.2))
-                        .attr("stroke", p => p.name === d.name ? "#ffffff" : (relatedNames.includes(p.name) ? "#facc15" : "#0f172a"));
-                }
-            }
 
             mergedCircles
                 .on("mouseover", (event, d) => {
@@ -1368,7 +1298,7 @@
 
             const labelsEnter = labels.enter().append("g")
                 .attr("class", "emotion-label-group")
-                .attr("transform", d => `translate(${xScale(d.x) + 8}, ${yScale(d.y)})`)
+                .attr("transform", d => getLabelTransform(d))
                 .style("opacity", 0);
 
             labelsEnter.append("rect").attr("class", "label-background");
@@ -1376,7 +1306,7 @@
 
             const mergedLabels = labelsEnter.merge(labels);
             mergedLabels.transition(t)
-                .attr("transform", d => `translate(${xScale(d.x) + 8}, ${yScale(d.y)})`)
+                .attr("transform", d => getLabelTransform(d))
                 .style("opacity", 1)
                 .style("visibility", d3.select("#showNamesToggle").property("checked") ? "visible" : "hidden");
 
@@ -1404,6 +1334,58 @@
                 filtered = filtered.filter(d => d.type === activeTypologyFilter);
             }
             updateChart(filtered);
+
+            // Synchronize Manhattan L1 Diamonds with active strata
+            if (manhattanDiamondsGroup) {
+                manhattanDiamondsGroup.selectAll(".manhattan-diamond-path")
+                    .style("display", (d, i) => selectedCategories.includes(strataDiamonds[i].z) ? null : "none");
+                manhattanDiamondsGroup.selectAll(".manhattan-diamond-text")
+                    .style("display", (d, i) => selectedCategories.includes(strataDiamonds[i].z) ? null : "none");
+            }
+
+            // Synchronize symmetry lines with active emotions
+            const visibleNames = new Set(filtered.map(d => d.name));
+            if (axialLinesGroup) {
+                axialLinesGroup.selectAll(".axial-line")
+                    .style("display", (d, i) => {
+                        const p = CartograffectModel.axialPairs[i];
+                        return (p && visibleNames.has(p[0]) && visibleNames.has(p[1])) ? null : "none";
+                    });
+            }
+            if (diagonalLinesGroup) {
+                diagonalLinesGroup.selectAll(".diagonal-line")
+                    .style("display", (d, i) => {
+                        const p = CartograffectModel.diagonalPairs[i];
+                        return (p && visibleNames.has(p[0]) && visibleNames.has(p[1])) ? null : "none";
+                    });
+            }
+            if (controlateralLinesGroup) {
+                controlateralLinesGroup.selectAll(".controlateral-line")
+                    .style("display", (d, i) => {
+                        const p = CartograffectModel.controlateralPairs[i];
+                        return (p && visibleNames.has(p[0]) && visibleNames.has(p[1])) ? null : "none";
+                    });
+            }
+
+            // Synchronize 3D WebGL Spheres & text sprites if active
+            if (is3DInitialized && clickableSpheres.length > 0) {
+                clickableSpheres.forEach(sphere => {
+                    sphere.visible = visibleNames.has(sphere.userData.name);
+                });
+                if (scene3D) {
+                    scene3D.traverse(obj => {
+                        if (obj.isSprite && obj.userData && obj.userData.name) {
+                            obj.visible = visibleNames.has(obj.userData.name);
+                        }
+                    });
+                }
+            }
+
+            // Update live counter badge
+            const countBadge = document.getElementById("activeFilterCount");
+            if (countBadge) {
+                countBadge.textContent = `${filtered.length} / 176`;
+            }
         }
 
         // Typology Filter Buttons setup
@@ -1419,6 +1401,22 @@
                 handleFilterUpdate();
             });
         });
+
+        // Quick All / None buttons for Strata
+        const selectAllBtn = document.getElementById("selectAllStrataBtn");
+        if (selectAllBtn) {
+            selectAllBtn.addEventListener("click", () => {
+                document.querySelectorAll(".category-filter").forEach(cb => { cb.checked = true; });
+                handleFilterUpdate();
+            });
+        }
+        const clearAllBtn = document.getElementById("clearAllStrataBtn");
+        if (clearAllBtn) {
+            clearAllBtn.addEventListener("click", () => {
+                document.querySelectorAll(".category-filter").forEach(cb => { cb.checked = false; });
+                handleFilterUpdate();
+            });
+        }
 
         handleFilterUpdate();
 
@@ -1501,51 +1499,7 @@
             analyzeBtn.disabled = true;
             analyzeBtn.textContent = "Analyse en cours...";
 
-            // Check if user set Gemini API key
-            const apiKey = localStorage.getItem("cartograffect_gemini_key");
-
-            if (apiKey) {
-                try {
-                    const prompt = `Étant donné le scénario: "${text}", donne une séquence de 3 à 5 émotions dans cet ordre choisi parmi: ${processedData.map(e => e.name).join(', ')}. Réponds UNIQUEMENT un tableau JSON de noms, ex: ["Peur", "Courage", "Soulagement"].`;
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] })
-                    });
-                    const json = await res.json();
-                    const rawText = json.candidates[0].content.parts[0].text;
-                    const cleanJson = rawText.substring(rawText.indexOf('['), rawText.lastIndexOf(']') + 1);
-                    const names = JSON.parse(cleanJson);
-                    const path = names.map(n => processedData.find(e => e.name.toLowerCase() === n.toLowerCase())).filter(Boolean);
-                    if (path.length > 0) {
-                        applyScenarioPath(path, "Analyse propulsée par Gemini AI");
-                        analyzeBtn.disabled = false;
-                        analyzeBtn.textContent = "Tracer le Chemin Émotionnel →";
-                        return;
-                    }
-                } catch (err) {
-                    console.warn("Fallback to heuristic parser:", err);
-                }
-            }
-
-            // Intelligent Heuristic Lexical Matching (Zero dependency, instant fallback)
-            setTimeout(() => {
-                let chosenPath = [];
-                let explanation = "";
-
-                if (text.includes("examen") || text.includes("peur") || text.includes("stress") || text.includes("échouer")) {
-                    chosenPath = ["Appréhension", "Inquiétude", "Courage", "Soulagement", "Joie"];
-                    explanation = "Transition typique du stress de performance : de l'appréhension anticipée vers la mobilisation du courage, aboutissant au soulagement libérateur.";
-                } else if (text.includes("victoire") || text.includes("succès") || text.includes("validé") || text.includes("gagné")) {
-                    chosenPath = ["Attente", "Surprise", "Joie", "Euphorie", "Fierté"];
-                    explanation = "Ascension vertigineuse de l'affect : rupture de l'attente neutre par une surprise positive, amplifiée en euphorie puis intégrée en fierté durable.";
-                } else if (text.includes("trahison") || text.includes("menti") || text.includes("trompé") || text.includes("rupture")) {
-                    chosenPath = ["Stupeur", "Colère", "Chagrin", "Déception", "Acceptation"];
-                    explanation = "Traversée de la désillusion : la stupeur cède le pas à une poussée de colère protectrice, suivie du deuil de l'illusion avant l'acceptation pacifiée.";
-                } else if (text.includes("dispute") || text.includes("rage") || text.includes("énervé")) {
-                    chosenPath = ["Frustration", "Colère", "Exaspération", "Calme", "Sérénité"];
-                    explanation = "Cycle de la tension conflictuelle : montée de l'activation somatique jusqu'au pic d'exaspération, suivie d'une redescente régulée vers le calme.";
-                } else {
+            if (true) {
                     chosenPath = ["Anticipation", "Curiosité", "Émerveillement", "Plénitude"];
                     explanation = "Trajectoire d'exploration contemplative : l'anticipation se transforme en curiosité bienveillante, ouvrant la voie à l'épanouissement.";
                 }
@@ -1554,7 +1508,7 @@
                 applyScenarioPath(pathObjects, explanation);
 
                 analyzeBtn.disabled = false;
-                analyzeBtn.textContent = "Tracer le Chemin Émotionnel →";
+                analyzeBtn.innerHTML = `<span>Tracer la Trajectoire Active</span><span>&rarr;</span>`;
             }, 300);
         }
 
@@ -1648,129 +1602,11 @@
         matrixB.addEventListener("change", updateMatrixResult);
 
         // --- F.I.T.T.T. Functional Test Logic (Cabelguen 2026) ---
-        const sliderF = document.getElementById("sliderF");
-        const sliderI = document.getElementById("sliderI");
-        const sliderT1 = document.getElementById("sliderT1");
-        const sliderT2 = document.getElementById("sliderT2");
-        const sliderT3 = document.getElementById("sliderT3");
-        const emotionNameInput = document.getElementById("fitttEmotionName");
-
-        const valFText = document.getElementById("valFText");
-        const valIText = document.getElementById("valIText");
-        const valT1Text = document.getElementById("valT1Text");
-        const valT2Text = document.getElementById("valT2Text");
-        const valT3Text = document.getElementById("valT3Text");
-
-        const fitttResultScoreBadge = document.getElementById("fitttResultScoreBadge");
-        const fitttResultTitle = document.getElementById("fitttResultTitle");
-        const fitttResultDesc = document.getElementById("fitttResultDesc");
-        const fitttGuidanceText = document.getElementById("fitttGuidanceText");
-        const fitttLinkAction = document.getElementById("fitttLinkAction");
-
-        function updateFitttDiagnostic() {
-            if (!sliderF || !sliderI) return;
-
-            const f = parseInt(sliderF.value);
-            const i = parseInt(sliderI.value);
-            const t1 = parseInt(sliderT1.value);
-            const t2 = parseInt(sliderT2.value);
-            const t3 = parseInt(sliderT3.value);
-            const name = emotionNameInput.value.trim() || "Cet affect";
-
-            const fLabels = ["", "Rare (1)", "Occasionnelle (2)", "Fréquente (3)", "Envahissante (4)"];
-            const iLabels = ["", "Légère (1)", "Modérée (2)", "Forte (3)", "Explosive (4)"];
-            const t1Labels = ["", "Cohérente (1)", "Partiellement décalée (2)", "Inappropriée (3)"];
-            const t2Labels = ["", "Règle des 90 secondes (1)", "Quelques minutes (2)", "Plusieurs heures (3)", "Enkystée en jours (4)"];
-            const t3Labels = ["", "Moment opportun (1)", "Légèrement décalé (2)", "Impulsif / Inopportun (3)"];
-
-            if (valFText) valFText.textContent = fLabels[f];
-            if (valIText) valIText.textContent = iLabels[i];
-            if (valT1Text) valT1Text.textContent = t1Labels[t1];
-            if (valT2Text) valT2Text.textContent = t2Labels[t2];
-            if (valT3Text) valT3Text.textContent = t3Labels[t3];
-
-            const total = f + i + t1 + t2 + t3;
-
-            if (total <= 8) {
-                fitttResultScoreBadge.className = "p-3 rounded-xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 font-bold text-sm flex items-center justify-between";
-                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Équilibré</span><span>✓ Normatif</span>`;
-                fitttResultTitle.textContent = `${name} : Réponse Adaptative Saine`;
-                fitttResultDesc.textContent = `Votre vécu de ${name} s'inscrit dans une régulation émotionnelle saine et adaptative. La durée respecte la règle psychologique des 90 secondes et la charge affective correspond à la situation sans débordement toxique.`;
-                fitttGuidanceText.textContent = "Consolidez cette régulation par le raisonnement logique et introspectif (MIRACLES). Aucun réajustement urgent requis.";
-                fitttLinkAction.href = "miracles.html#modele-miracles";
-                fitttLinkAction.textContent = "Consolider avec le Modèle M.I.R.A.C.L.E.S. →";
-                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/30 transition-all";
-            } else if (total <= 12) {
-                fitttResultScoreBadge.className = "p-3 rounded-xl bg-amber-950/80 border border-amber-600/40 text-amber-300 font-bold text-sm flex items-center justify-between";
-                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Tension Modérée</span><span>⚠️ Vigilance</span>`;
-                fitttResultTitle.textContent = `${name} : Risque d'Enkystement Affectif`;
-                fitttResultDesc.textContent = `L'affect ${name} commence à dépasser le cadre contextuel : sa durée excessive ou sa fréquence indique que le système génératif réalimente en boucle l'écart de prédiction au lieu de revenir à la neutralité (0,0,0).`;
-                fitttGuidanceText.textContent = "Appliquez les 4 leviers de transmutation : Accueil émotionnel immédiat, décentrement épistémique et désamorçage des ruminations.";
-                fitttLinkAction.href = "miracles.html#navigateur-resilience";
-                fitttLinkAction.textContent = "Activer le Navigateur de Résilience →";
-                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-amber-600 hover:bg-amber-500 shadow-lg shadow-amber-600/30 transition-all";
-            } else {
-                fitttResultScoreBadge.className = "p-3 rounded-xl bg-rose-950/80 border border-rose-600/40 text-rose-300 font-bold text-sm flex items-center justify-between";
-                fitttResultScoreBadge.innerHTML = `<span>Score F.I.T.T.T. : ${total}/18 &bull; Alerte Dérégulation</span><span>🛑 Risque C.R.I.M.E.S.</span>`;
-                fitttResultTitle.textContent = `${name} : Rupture Écologique Intérieure`;
-                fitttResultDesc.textContent = `L'intensité explosive, la répétition envahissante et l'inadéquation au contexte signalent un basculement vers l'un des 4 pièges du modèle C.R.I.M.E.S. (Domination, Exagération, Soumission ou Évasion). Des distorsions cognitives et des justifications renforcent ce comportement nuisible.`;
-                fitttGuidanceText.textContent = "Désamorcez d'urgence les alibis cognitifs et identifiez les formulations piégées dans le répertoire des comportements nuisibles.";
-                fitttLinkAction.href = "crimes.html#comportements-nuisibles";
-                fitttLinkAction.textContent = "Diagnostiquer sur le Territoire des C.R.I.M.E.S. →";
-                fitttLinkAction.className = "inline-block w-full py-2.5 px-4 text-center rounded-xl font-semibold text-xs text-white bg-rose-600 hover:bg-rose-500 shadow-lg shadow-rose-600/30 transition-all";
-            }
-        }
-
-        [sliderF, sliderI, sliderT1, sliderT2, sliderT3].forEach(s => {
-            if (s) s.addEventListener("input", updateFitttDiagnostic);
-        });
-        if (emotionNameInput) emotionNameInput.addEventListener("input", updateFitttDiagnostic);
-        updateFitttDiagnostic();
-
-        // --- API Key Modal Logic ---
-        const apiKeyModal = document.getElementById("apiKeyModal");
-        const openApiKeyBtn = document.getElementById("openApiKeyModal");
-        const closeApiKeyBtn = document.getElementById("closeApiKeyModal");
-        const saveApiKeyBtn = document.getElementById("saveApiKeyBtn");
-        const clearApiKeyBtn = document.getElementById("clearApiKeyBtn");
-        const apiKeyInput = document.getElementById("geminiApiKeyInput");
-        const indicator = document.getElementById("apiKeyIndicator");
-
-        function updateKeyIndicator() {
-            const hasKey = !!localStorage.getItem("cartograffect_gemini_key");
-            indicator.className = `w-2 h-2 rounded-full ${hasKey ? 'bg-emerald-400' : 'bg-slate-500'}`;
-            if (hasKey) apiKeyInput.value = "••••••••••••••••••••";
-        }
-        updateKeyIndicator();
-
-        openApiKeyBtn.addEventListener("click", () => {
-            apiKeyModal.classList.remove("hidden");
-        });
-        closeApiKeyBtn.addEventListener("click", () => {
-            apiKeyModal.classList.add("hidden");
-        });
-        saveApiKeyBtn.addEventListener("click", () => {
-            const val = apiKeyInput.value.trim();
-            if (val && !val.includes("•")) {
-                localStorage.setItem("cartograffect_gemini_key", val);
-            }
-            updateKeyIndicator();
-            apiKeyModal.classList.add("hidden");
-        });
-        clearApiKeyBtn.addEventListener("click", () => {
-            localStorage.removeItem("cartograffect_gemini_key");
-            apiKeyInput.value = "";
-            updateKeyIndicator();
-            apiKeyModal.classList.add("hidden");
-        });
+        
 
         // ========================================================
         // 3D ORBITAL PYRAMID VISUALIZATION (THREE.JS)
         // ========================================================
-        let scene3D, camera3D, renderer3D, controls3D, animationFrameId;
-        let is3DInitialized = false;
-        const clickableSpheres = [];
-
         function init3DVisualization() {
             const container = document.getElementById("threeJsCanvasContainer");
             if (!container) return;
@@ -1951,6 +1787,9 @@
             // Animation Loop
             function animate() {
                 animationFrameId = requestAnimationFrame(animate);
+                const wrapper = document.getElementById("chart3DWrapper");
+                if (wrapper && wrapper.classList.contains("hidden")) return;
+                if (document.hidden) return;
                 controls3D.update();
                 renderer3D.render(scene3D, camera3D);
             }
@@ -2022,6 +1861,43 @@
                     document.exitFullscreen();
                 }
             });
+
+            document.addEventListener("fullscreenchange", () => {
+                const isFull = !!document.fullscreenElement;
+                toggleFullscreenBtn.innerHTML = isFull ? "<span>🗗</span>" : "<span>⛶</span>";
+                toggleFullscreenBtn.title = isFull ? "Quitter le plein écran" : "Mode Plein Écran / Présentation";
+
+                if (renderer3D && !document.getElementById("chart3DWrapper").classList.contains("hidden")) {
+                    const container = document.getElementById("threeJsCanvasContainer");
+                    if (container) {
+                        setTimeout(() => {
+                            const w = container.clientWidth;
+                            const h = container.clientHeight;
+                            camera3D.aspect = w / h;
+                            camera3D.updateProjectionMatrix();
+                            renderer3D.setSize(w, h);
+                        }, 80);
+                    }
+                }
+            });
+        }
+
+        // Auto-select emotion from URL parameter (?id=Joie or ?id=12)
+        const urlParams = new URLSearchParams(window.location.search);
+        const paramId = urlParams.get('id');
+        if (paramId) {
+            const targetEmotion = CartograffectModel.getByName(paramId) || processedData.find(e => String(e.id) === paramId);
+            if (targetEmotion) {
+                // Ensure the category checkbox is active
+                const cb = document.querySelector(`.category-filter[value="${targetEmotion.category}"]`);
+                if (cb && !cb.checked) {
+                    cb.checked = true;
+                    handleFilterUpdate();
+                }
+                setTimeout(() => {
+                    handleEmotionSelect(null, targetEmotion);
+                }, 120);
+            }
         }
     </script>
 
@@ -2049,12 +1925,7 @@
 
         // Auto-switch to tab if specified in hash or session
         window.addEventListener("DOMContentLoaded", () => {
-            if (sessionStorage.getItem('openTab') === 'tab-fittt' || window.location.hash === '#tab-fittt') {
-                sessionStorage.removeItem('openTab');
-                const btn = document.querySelector('[data-tab="tab-fittt"]');
-                if (btn) btn.click();
-            }
-        });
+            
 
         // Register Service Worker for PWA Offline Capability
         if ('serviceWorker' in navigator) {
@@ -2068,5 +1939,6 @@
         }
     </script>
     <script src="bilingual_modal.js"></script>
+    <script src="command_palette.js"></script>
 </body>
 </html>

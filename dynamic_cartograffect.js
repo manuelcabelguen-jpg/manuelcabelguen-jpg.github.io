@@ -1,6 +1,6 @@
 /**
  * CARTOGRAFFECT DYNAMIQUE - Visualiseur 3D Octaédrique & Plan de Manhattan
- * Basé sur l'Algorithme du Système Émotionnel du Dr Manuel Cabelguen (OPIC n° 1233199)
+ * Basé sur l'Algorithme du Système Émotionnel de Manuel Cabelguen (OPIC n° 1233199)
  * 176 entrées • 8 Opérateurs Centraux • 6 Couronnes de Manhattan (|X|+|Y| = 2Z - 2)
  * Inférence Active & Traitement Prédictif en temps réel (Veille -> Surprise -> Anticipation -> Résolution)
  */
@@ -98,6 +98,16 @@
         "Suspension": "#f43f5e"
     };
 
+    function hexToRgba(hex, alpha) {
+        if (!hex) return 'rgba(167, 139, 250, ' + alpha + ')';
+        if (hex.startsWith('rgba')) return hex;
+        if (hex.startsWith('rgb(')) return hex.replace(')', ', ' + alpha + ')').replace('rgb', 'rgba');
+        const c = hex.replace('#', '');
+        const full = c.length === 3 ? c.split('').map(x => x + x).join('') : c;
+        const num = parseInt(full, 16);
+        return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+    }
+
     // Candidate target affects for active inference cycling
     const DEMO_TARGET_NAMES = [
         "Désir", "Colère", "Joie", "Peur", "Courage", "Calme",
@@ -189,8 +199,13 @@
         const rect = this.container.getBoundingClientRect();
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-        const w = rect.width;
-        const h = rect.height;
+        let w = rect.width;
+        let h = rect.height;
+
+        if (w <= 0 || h <= 0) {
+            w = this.container.clientWidth || 560;
+            h = this.container.clientHeight || 560;
+        }
 
         if (w <= 0 || h <= 0) return;
 
@@ -202,10 +217,25 @@
     };
 
     Visualizer.setupEventListeners = function() {
+        if (this.eventListenersSetup) return;
+        this.eventListenersSetup = true;
+
         window.addEventListener('resize', () => this.resize());
         if (window.ResizeObserver && this.container) {
             try {
                 new ResizeObserver(() => this.resize()).observe(this.container);
+            } catch(e) {}
+        }
+
+        this.isVisible = true;
+        if ('IntersectionObserver' in window && this.container) {
+            try {
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        this.isVisible = entry.isIntersecting;
+                    });
+                }, { threshold: 0.05 });
+                obs.observe(this.container);
             } catch(e) {}
         }
 
@@ -214,8 +244,12 @@
         // Pointer drag rotation
         const onPointerDown = (e) => {
             this.camera.isDragging = true;
+            this.camera.isTouch = !!(e.touches && e.touches.length > 0);
+            this.camera.touchScrollDecided = false;
             this.camera.lastMouseX = e.clientX || (e.touches && e.touches[0].clientX);
             this.camera.lastMouseY = e.clientY || (e.touches && e.touches[0].clientY);
+            this.camera.startX = this.camera.lastMouseX;
+            this.camera.startY = this.camera.lastMouseY;
             this.camera.autoRotate = false;
             this.updateRotateBtnState();
             if (this.dom.dragHint) {
@@ -229,6 +263,21 @@
             const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
             if (this.camera.isDragging) {
+                const totalDx = clientX - (this.camera.startX || clientX);
+                const totalDy = clientY - (this.camera.startY || clientY);
+
+                // On touch devices, if the gesture is predominantly vertical, yield to normal page scroll
+                if (this.camera.isTouch && !this.camera.touchScrollDecided) {
+                    if (Math.abs(totalDy) > 8 && Math.abs(totalDy) > Math.abs(totalDx) * 1.2) {
+                        this.camera.isDragging = false;
+                        this.camera.touchScrollDecided = true;
+                        return;
+                    }
+                    if (Math.abs(totalDx) > 8 || Math.abs(totalDy) > 8) {
+                        this.camera.touchScrollDecided = true;
+                    }
+                }
+
                 const dx = clientX - this.camera.lastMouseX;
                 const dy = clientY - this.camera.lastMouseY;
                 if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
@@ -559,7 +608,12 @@
 
     Visualizer.animate = function(timestamp) {
         requestAnimationFrame(this.animate);
-        if (!this.canvas || !this.ctx) return;
+        if (!this.canvas || !this.ctx || !this.isVisible || document.hidden) return;
+
+        if (!this.width || this.width <= 0 || !this.height || this.height <= 0) {
+            this.resize();
+            if (!this.width || this.width <= 0) return;
+        }
 
         const ctx = this.ctx;
         const w = this.width;
@@ -890,6 +944,10 @@
     };
 
     Visualizer.updateTelemetryDOM = function(phase, target) {
+        if (phase === this.lastTelemetryPhase && target === this.lastTelemetryTarget) return;
+        this.lastTelemetryPhase = phase;
+        this.lastTelemetryTarget = target;
+
         const d = this.dom;
         if (!d.statusText) return;
 
@@ -1017,7 +1075,7 @@
             const glowR = r * (isHovered ? 3.0 : 2.2);
             const grad = ctx.createRadialGradient(x, y, r * 0.2, x, y, glowR);
             grad.addColorStop(0, baseColor);
-            grad.addColorStop(0.5, baseColor.replace(')', ', 0.35)').replace('rgb', 'rgba'));
+            grad.addColorStop(0.5, hexToRgba(baseColor, 0.35));
             grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
             ctx.fillStyle = grad;
@@ -1141,10 +1199,7 @@
     if (typeof document !== 'undefined') {
         const autoInit = () => {
             if (document.getElementById('heroCartograffectCanvas') && !Visualizer.isInitialized) {
-                const titleScreen = document.getElementById('title-screen');
-                if (!titleScreen || titleScreen.classList.contains('intro-hidden') || titleScreen.style.display === 'none') {
-                    Visualizer.init();
-                }
+                Visualizer.init();
             }
         };
         if (document.readyState === 'loading') {
@@ -1152,6 +1207,7 @@
         } else {
             autoInit();
         }
+        window.addEventListener('load', autoInit);
     }
 
 })(typeof window !== 'undefined' ? window : this);

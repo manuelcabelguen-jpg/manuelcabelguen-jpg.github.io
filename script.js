@@ -1,6 +1,6 @@
 /**
  * CARTOGRAFFECT • Système de modélisation géométrique des affects
- * Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
+ * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
  */
 const d3 = window.d3;
 
@@ -162,25 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
         sessionStorage.removeItem('cartograffect_intro_seen');
     } catch(e) {}
 
-    // Check if URL has hash (deep link) or skipIntro param
-    const urlParams = new URLSearchParams(window.location.search);
-    const hasHash = window.location.hash && window.location.hash.length > 1;
-    const shouldSkip = urlParams.has('skipIntro') || hasHash;
-
-    if (shouldSkip) {
-        transitionToMainContent(true);
-    } else {
-        // Wait for fonts to be ready if possible, then start intro animation
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(() => {
-                runTitleAnimation(transitionToMainContent);
-            }).catch(() => {
-                runTitleAnimation(transitionToMainContent);
-            });
-        } else {
-            runTitleAnimation(transitionToMainContent);
-        }
-    }
+    // Fast-loading modern UX: Start immediately with the interactive main content
+    // Users or researchers can click 'Rejouer l\'intro' at any time to enjoy the particle animation.
+    transitionToMainContent(true);
 
     // ============================================================
     // Universal Sticky Tabs Navigation & Section Scrollspy
@@ -303,4 +287,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize once DOM is ready or after main content reveals
     initStickyTabsAndScrollspy();
     window.initStickyTabsAndScrollspy = initStickyTabsAndScrollspy;
+
+    // ============================================================
+    // BENTO SPOTLIGHT & CURSOR GLOW
+    // ============================================================
+    function initSpotlights() {
+        document.querySelectorAll('.bento-card, .spotlight-card').forEach(card => {
+            if (card.dataset.spotlightInit) return;
+            card.dataset.spotlightInit = 'true';
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
+    }
+    initSpotlights();
+    window.initSpotlights = initSpotlights;
+
+    // ============================================================
+    // LENIS SMOOTH SCROLL (Si Lenis est disponible sur la page)
+    // ============================================================
+    if (typeof Lenis !== 'undefined' && !window.__lenis_initialized) {
+        window.__lenis_initialized = true;
+        const lenis = new Lenis({
+            duration: 1.15,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            smoothTouch: false
+        });
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+        window.lenisInstance = lenis;
+    }
 });
+

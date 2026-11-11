@@ -1,6 +1,6 @@
 /**
  * CARTOGRAFFECT - Corpus Scientifique & Moteur Bibliographique
- * Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
+ * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
  * 49 Références Fondamentales (Traitement Prédictif, Inférence Intéroceptive, Émotions, Psychiatrie Computationnelle, Affectivisme)
  */
 
@@ -658,7 +658,7 @@ root.DOMAIN_LABELS = {
 root.downloadBibtexFile = function() {
     const header = "% ==============================================================================\n" +
                    "% CARTOGRAFFECT - Corpus Bibliographique International (49 Références Fondamentales)\n" +
-                   "% Auteur du modèle : Dr Manuel Cabelguen, Ph. D., psychologue clinicien\n" +
+                   "% Auteur du modèle : Manuel Cabelguen, Ph. D., psychologue clinicien\n" +
                    "% Droit d'auteur OPIC n° 1233199 • https://www.cartograffect.com\n" +
                    "% Référence principale : Cabelguen, M. (2026). Cartographie des affects : une architecture\n" +
                    "% hiérarchique de l'expérience affective fondée sur le traitement prédictif.\n" +

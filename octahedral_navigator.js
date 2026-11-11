@@ -1,7 +1,7 @@
 /**
  * CARTOGRAFFECT - Navigateur Géométrique Octaédrique
  * Basé rigoureusement sur le document :
- * "Algorithme du système émotionnel par catégories et groupes" (Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien)
+ * "Algorithme du système émotionnel par catégories et groupes" (Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien)
  * 176 entrées (8 opérateurs centraux + 80 positions sur couronnes Z=2..7)
  */
 
@@ -68,10 +68,10 @@
         6: {
             title: "Identités Affectives",
             subtitle: "Couronne 6 • 40 positions",
-            operator: "Saisie / Saisissement (0,0,6)",
+            operator: "Saisissement (0,0,6)",
             r: 10,
             countText: "41 Entrées (1 op + 40 affects)",
-            desc: "Strate Z=6 : Identités affectives profondes et engagement existentiel (Élan, Inertie, Effacement, Affirmation...). Opérateur central : Saisie / Saisissement (0,0,6).",
+            desc: "Strate Z=6 : Identités affectives profondes et engagement existentiel (Élan, Inertie, Effacement, Affirmation...). Opérateur central : Saisissement (0,0,6).",
             formula: "|X| + |Y| = 10 • N(6) = 40"
         },
         7: {
@@ -108,13 +108,33 @@
                     ? 'bg-purple-900/60 border-purple-500/80 text-white shadow-lg shadow-purple-600/30' 
                     : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
             }`;
-            btn.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-mono font-bold ${z === currentZ ? 'text-purple-300' : 'text-slate-400'}">Z = ${z}</span>
-                    <span class="text-xs font-semibold">${meta.title}</span>
-                </div>
-                <span class="text-[10px] text-slate-400 font-mono">${meta.operator.split(' ')[0]} ${z >= 2 ? `&bull; r=${meta.r}` : ''}</span>
-            `;
+            if (z === 0) {
+                btn.innerHTML = `
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-mono font-bold ${z === currentZ ? 'text-purple-300' : 'text-slate-400'}">Z = 0</span>
+                        <span class="text-slate-500">&bull;</span>
+                        <span class="text-xs font-semibold">Point de Veille</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono">(r=0)</span>
+                `;
+            } else if (z === 1) {
+                btn.innerHTML = `
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-xs font-mono font-bold ${z === currentZ ? 'text-purple-300' : 'text-slate-400'}">Z = 1</span>
+                        <span class="text-slate-500">&bull;</span>
+                        <span class="text-xs font-semibold">Opérateur Surprise</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono">(r=0)</span>
+                `;
+            } else {
+                btn.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-mono font-bold ${z === currentZ ? 'text-purple-300' : 'text-slate-400'}">Z = ${z}</span>
+                        <span class="text-xs font-semibold">${meta.title}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 font-mono">${meta.operator.split(' ')[0]} &bull; r=${meta.r}</span>
+                `;
+            }
             btn.onclick = () => selectStrata(z);
             btn.id = `pill-z-${z}`;
             container.appendChild(btn);
@@ -405,16 +425,10 @@
 
             ${correspondenceSection}
 
-            <!-- Direct Bridges to the 3 Territories -->
+            <!-- Accès direct à la Matrice 2D/3D -->
             <div class="pt-2 flex flex-wrap items-center gap-2">
-                <a href="emotions.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5">
-                    <span>🧭</span> Ouvrir dans la Matrice 2D/3D
-                </a>
-                <a href="crimes.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-300 bg-rose-950/50 hover:bg-rose-900 border border-rose-600/30 transition-colors flex items-center gap-1.5">
-                    <span>⚡</span> Territoire C.R.I.M.E.S.
-                </a>
-                <a href="miracles.html" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-300 bg-emerald-950/50 hover:bg-emerald-900 border border-emerald-600/30 transition-colors flex items-center gap-1.5">
-                    <span>✨</span> Régulation M.I.R.A.C.L.E.S.
+                <a href="emotions.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5">
+                    <span>🧭</span> Explorer dans la Carte Complète des 176 Émotions
                 </a>
             </div>
         `;

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
     <script src="maintenance_guard.js"></script>
-    <title>Modèles Théoriques | Affects, Émotions & Sentiments | Cartograffect</title>
-    <meta name="description" content="Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés (Russell, Ekman, Scherer, Barrett) et Algorithme Cartograffect 3.6.">
+    <title>Modèles Théoriques : Affects, Émotions &amp; Sentiments | CARTOGRAFFECT</title>
+    <meta name="description" content="Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés et Algorithme Cartograffect de Manuel Cabelguen (Ph. D.).">
     <link rel="canonical" href="https://www.cartograffect.com/scholar_drive.html">
 
     <!-- Favicons -->
@@ -19,8 +19,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.cartograffect.com/scholar_drive.html">
-    <meta property="og:title" content="Modèles Théoriques | Affects, Émotions & Sentiments | Cartograffect">
-    <meta property="og:description" content="Fondements conceptuels des affects, émotions et sentiments, modèles historiques comparés et Algorithme Cartograffect 3.6 par Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien.">
+    <meta property="og:title" content="Modèles Théoriques : Affects, Émotions &amp; Sentiments | CARTOGRAFFECT">
+    <meta property="og:description" content="Fondements conceptuels des affects, émotions et sentiments, modèles historiques comparés et Architecture Formelle Cartograffect (Lean 4 / Zenodo) par Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien.">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
@@ -33,6 +33,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -68,7 +71,7 @@
         <div class="floating-dot active" data-target="#hero-theorie-resume" title="Vue d'Ensemble"></div>
         <div class="floating-dot" data-target="#triade-definitions" title="1. Affect vs Émotion vs Sentiment"></div>
         <div class="floating-dot" data-target="#modeles-historiques" title="2. Modèles Historiques Comparés"></div>
-        <div class="floating-dot" data-target="#algorithme-36" title="3. Algorithme 3.6 & Norme L1"></div>
+        <div class="floating-dot" data-target="#algorithme-36" title="3. Architecture Certifiée & Norme L1"></div>
         <div class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications"></div>
         <div class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique"></div>
     </div>
@@ -77,10 +80,10 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
-                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Modèles Théoriques &amp; Algorithme 3.6</span>
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Modèles Théoriques &amp; Architecture Certifiée</span>
                 </div>
             </a>
 
@@ -93,18 +96,17 @@
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-blue-400"></span>1. Émotions
                 </a>
-                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>2. Crimes
-                </a>
-                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>3. Miracles
-                </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg flex items-center gap-1.5">
                     <span class="w-2 h-2 rounded-full bg-indigo-400"></span>Modèles Théoriques
                 </a>
             </nav>
 
-            <div class="hidden md:flex items-center gap-3">
+            <div class="hidden md:flex items-center gap-2.5">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
                 <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
                     <span class="text-purple-400">🌐</span> FR | EN
                 </button>
@@ -125,11 +127,14 @@
         <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span>
+            <span>Recherche Rapide</span>
+            <kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
         <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
-        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
-        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
         <a href="scholar_drive.html" class="active-link"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
     </div>
@@ -140,7 +145,7 @@
             <a href="#hero-theorie-resume" class="sticky-tab-btn active"><span class="tab-badge">✨</span> Vue d'Ensemble</a>
             <a href="#triade-definitions" class="sticky-tab-btn"><span class="tab-badge">🧠</span> 1. Affect vs Émotion vs Sentiment</a>
             <a href="#modeles-historiques" class="sticky-tab-btn"><span class="tab-badge">🏛️</span> 2. Modèles Historiques Comparés</a>
-            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge">⚙️</span> 3. Algorithme 3.6 &amp; Norme L1</a>
+            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge">⚙️</span> 3. Architecture Certifiée &amp; Norme L1</a>
             <a href="#scholar-drive-docs" class="sticky-tab-btn"><span class="tab-badge">📂</span> 4. Publications &amp; Documents</a>
             <a href="#bibliographie" class="sticky-tab-btn"><span class="tab-badge">📚</span> 5. Corpus Bibliographique</a>
         </div>
@@ -158,13 +163,13 @@
                     Centre de Référence Scientifique &bull; Modèles Théoriques des Affects
                 </div>
                 <h1 class="text-3xl sm:text-5xl font-heading font-black text-white tracking-tight leading-tight">
-                    Modèles Théoriques : <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-300 bg-clip-text text-transparent">Affects, Émotions &amp; Sentiments</span>
+                    Modèles Théoriques : <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-300 bg-clip-text text-transparent">Comprendre l'Affect, l'Émotion et le Sentiment</span>
                 </h1>
                 <p class="text-purple-300 text-sm sm:text-base font-semibold tracking-wide">
-                    Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien &bull; Enregistrement auprès de l'OPIC n° 1233199
+                    Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien &bull; Enregistrement auprès de l'OPIC n° 1233199
                 </p>
                 <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-light">
-                    Bienvenue dans le centre de clarification théorique et épistémologique de <strong>Cartograffect</strong>. Cet espace offre une définition rigoureuse et vulgarisée des distinctions fondamentales entre <strong>affect</strong>, <strong>émotion</strong> et <strong>sentiment</strong>, met en perspective les grands modèles historiques (Russell, Ekman, Scherer, Barrett) et présente la synthèse computationnelle par l'inférence active (Algorithme 3.6).
+                    Bienvenue dans le centre de clarification théorique et épistémologique de <strong>Cartograffect</strong>. Cet espace offre une définition rigoureuse et vulgarisée des distinctions fondamentales entre <strong>affect</strong>, <strong>émotion</strong> et <strong>sentiment</strong>, met en perspective les grands modèles historiques (Russell, Ekman, Scherer, Barrett) et présente la synthèse computationnelle par l'inférence active (Architecture Certifiée).
                 </p>
 
                 <!-- Quick Filter Buttons -->
@@ -176,7 +181,7 @@
                         <span>🏛️</span> Modèles Historiques Comparés
                     </a>
                     <a href="#algorithme-36" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>⚙️</span> Algorithme 3.6 &amp; Norme L1
+                        <span>⚙️</span> Architecture Certifiée &amp; Norme L1
                     </a>
                     <a href="#scholar-drive-docs" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
                         <span>📂</span> Publications &amp; Scholar Drive
@@ -251,7 +256,7 @@
                         </p>
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
                             <div class="text-slate-400"><strong class="text-sky-300">Vecteur computationnel :</strong> Sélection d'une politique d'action motrice ($\pi$) à horizon court ($Z=1$ à $Z=3$).</div>
-                            <div class="text-slate-400"><strong class="text-sky-300">Échelle de temps :</strong> Brève (1 à 90 secondes de décharge physiologique).</div>
+                            <div class="text-slate-400"><strong class="text-sky-300">Échelle de temps :</strong> Brève (quelques secondes à quelques minutes de décharge physiologique).</div>
                             <div class="text-slate-400"><strong class="text-sky-300">Substrat Psychologique :</strong> Évaluation de pertinence immédiate, survenue d'un objet saillant, tendance à l'action orientée (approche / évitement).</div>
                         </div>
                     </div>
@@ -315,7 +320,7 @@
                             <tr>
                                 <td class="py-3 px-4 font-semibold text-white">Horizon Temporel</td>
                                 <td class="py-3 px-4">Flux continu ($Z=0$)</td>
-                                <td class="py-3 px-4">Ponctuel, 1 à 90 secondes ($Z=1$ à $Z=3$)</td>
+                                <td class="py-3 px-4">Ponctuel, quelques secondes à minutes ($Z=1$ à $Z=3$)</td>
                                 <td class="py-3 px-4">Durable, des heures aux années ($Z=4$ à $Z=7$)</td>
                             </tr>
                             <tr>
@@ -351,15 +356,25 @@
                 <div>
                     <span class="text-xs uppercase font-bold tracking-widest text-sky-400">Épistémologie &amp; Histoire des Sciences</span>
                     <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        Modèles Théoriques Historiques Comparés &amp; Synthèse Cartograffect
+                        Histoire et Évolution : De Descartes et Spinoza aux Neurosciences Modernes
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl">
-                        Depuis un demi-siècle, la recherche affective oscille entre modèles dimensionnels, théories des émotions discrètes et constructivisme social. Découvrez comment ces approches se complètent et comment l'inférence active unifie l'ensemble.
+                        Depuis les ruptures épistémologiques du XVIIᵉ siècle (l'objectivité géométrique de Spinoza et les remèdes corporels de Descartes) jusqu'aux débats contemporains, la recherche affective oscille entre modèles dimensionnels, théories des émotions discrètes et constructivisme. Découvrez comment ces approches se complètent et comment l'inférence active unifie l'ensemble.
                     </p>
                 </div>
                 <span class="px-3.5 py-1.5 rounded-full text-xs font-mono bg-sky-950/80 text-sky-300 border border-sky-700/50">
                     5 Paradigmes Majeurs
                 </span>
+            </div>
+
+            <!-- Epistemological Anchors Link Banner -->
+            <div class="p-4 rounded-xl bg-gradient-to-r from-purple-950/40 via-slate-900 to-sky-950/40 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                <div class="text-slate-300">
+                    <strong class="text-white">🏛️ Les Ancres Épistémologiques Fondatrices :</strong> Retrouvez les citations textuelles de <strong>Baruch Spinoza</strong> (objectivité géométrique, 1677) et de <strong>René Descartes</strong> (les remèdes des passions, Articles 46, 47, 50 &amp; 211, 1649) directement sur la page d'accueil.
+                </div>
+                <a href="index.html#ancres-epistemologiques" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-500/40 transition-all shrink-0 flex items-center gap-1.5 shadow-sm">
+                    <span>Consulter les Citations &rarr;</span>
+                </a>
             </div>
 
             <!-- Historical Grid -->
@@ -449,8 +464,8 @@
                         <span class="text-xs font-mono text-purple-300">OPIC n° 1233199</span>
                     </div>
                     <div>
-                        <h3 class="text-xl font-heading font-black text-white">La Synthèse Cartograffect : Algorithme 3.6</h3>
-                        <p class="text-xs text-purple-300 font-semibold">Dr Manuel Cabelguen, Ph. D. &bull; Inférence Active &amp; Traitement Prédictif</p>
+                        <h3 class="text-xl font-heading font-black text-white">La Synthèse Cartograffect : Architecture Fonctionnelle Certifiée</h3>
+                        <p class="text-xs text-purple-300 font-semibold">Manuel Cabelguen, Ph. D. &bull; Inférence Active &amp; Traitement Prédictif</p>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
                         <strong>Cartograffect unifie ces 50 ans d'histoire</strong> en dotant le constructivisme prédictif d'une géométrie invariante rigoureuse sous contrainte de <strong>norme de Manhattan ($L_1$)</strong> :
@@ -478,14 +493,14 @@
         </section>
 
         <!-- ======================================================== -->
-        <!-- SECTION 3 : ALGORITHME DU CARTOGRAFFECT 3.6             -->
+        <!-- SECTION 3 : ARCHITECTURE FORMELLE CERTIFIÉE LEAN 4     -->
         <!-- ======================================================== -->
         <section id="algorithme-36" class="page-section rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                 <div>
                     <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Axiomatique &amp; Computation</span>
                     <h2 class="text-2xl sm:text-3xl font-heading font-black text-white mt-1">
-                        Algorithme du Cartograffect &bull; Version 3.6
+                        La Formulation Mathématique de l'Architecture Fonctionnelle (Lean 4)
                     </h2>
                 </div>
                 <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50">
@@ -529,7 +544,7 @@
                         <h3 class="text-base font-bold text-white">Profondeur Inférentielle (Axe Z)</h3>
                     </div>
                     <p class="text-xs text-slate-300 leading-relaxed">
-                        Indexe l'<strong>horizon temporel</strong> et le degré d'abstraction (Z=0 à Z=5). Ne porte aucun contenu propre mais régule la précision attentionnelle sous la contrainte métrique L1.
+                        Indexe l'<strong>horizon temporel</strong> et le degré d'abstraction (Z=0 à Z=7, 176 entrées certifiées). Ne porte aucun contenu propre mais régule la précision attentionnelle sous la contrainte métrique L1.
                     </p>
                     <div class="text-[11px] font-mono text-emerald-300 pt-2 border-t border-slate-800">
                         Budget L1 : |X| + |Y| = 2Z - 2 (pour Z &ge; 2)
@@ -540,24 +555,35 @@
             <!-- Mathematical Core -->
             <div id="equations-formelles" class="p-6 rounded-2xl bg-cosmic-900 border border-purple-800/40 space-y-4">
                 <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Formalisation Mathématique &amp; Invariance</span>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
-                        <div class="font-bold text-white">1. Conservation Attentionnelle de Manhattan (L1) :</div>
+                        <div class="font-bold text-white">1. Conservation Budgétaire L1 :</div>
                         <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-purple-300 text-sm">
                             ||(X, Y)||_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            Garantit qu'à profondeur inférentielle fixée, la charge cognitive et sensorimotrice est strictement conservée.
+                            À strate Z fixée, la ressource attentionnelle est strictement conservée (théorème <code>z2_budget_conservation</code> et loi des 176 positions).
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
-                        <div class="font-bold text-white">2. Antagonisme Central par Inversion :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-indigo-300 text-sm">
-                            \mathcal{A}(X, Y, Z) = (-X, -Y, Z)
+                        <div class="font-bold text-white">2. Antagonismes Formels Involutifs :</div>
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-indigo-300 text-xs">
+                            \mathcal{A}_{ax,diag} = (-X, -Y, Z) \\
+                            \mathcal{A}_{lat} = \text{réflexion controlatérale}
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            Tout attracteur possède un opposé fonctionnel exact inversant simultanément la révisabilité interne et la contrôlabilité externe (ex: Colère $\leftrightarrow$ Calme, Désir $\leftrightarrow$ Dégoût).
+                            Symétrie centrale pour les 24 positions axiales/diagonales et réflexion controlatérale avec permutation d'amplitudes pour les 60 paires latérales (théorème <code>antagonistPoint_involutive</code>).
+                        </p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
+                        <div class="font-bold text-white">3. Dissipation Allostatique &amp; Lyapunov :</div>
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-emerald-300 text-xs">
+                            V(p) = 2Z + \mathbb{I}_{\text{périf}} \implies \Delta V < 0
+                        </div>
+                        <p class="text-slate-400 text-[11px]">
+                            $\Delta V$ quantifie exclusivement la décroissance allostatique de la trajectoire vers la veille (0,0,0). L'arbitrage entre Axe X et Axe Y est assuré par l'Interface Attentionnelle.
                         </p>
                     </div>
                 </div>
@@ -588,7 +614,7 @@
                             ⭐ Publication Phare
                         </span>
                         <span class="text-xs font-mono text-purple-300">
-                            Dr Manuel Cabelguen, Ph. D., BCN &bull; OPIC n° 1233199
+                            Manuel Cabelguen, Ph. D., BCN &bull; OPIC n° 1233199
                         </span>
                     </div>
                     <h3 class="text-xl sm:text-2xl font-heading font-black text-white leading-snug">
@@ -602,77 +628,76 @@
                     <a href="article.html" class="px-5 py-3 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center justify-center gap-2">
                         <span>📖</span> Lire l'Article &amp; Figures
                     </a>
-                    <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. OPIC n° 1233199.'); alert('Citation copiée !');" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all text-xs flex items-center justify-center gap-1.5">
+                    <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 1.0.1). Zenodo DOI: 10.5281/zenodo.24022795 | OSF: https://osf.io/z89sg | Lean 4: https://doi.org/10.5281/zenodo.23833938'); alert('Citation copiée !');" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all text-xs flex items-center justify-center gap-1.5">
                         <span>📋</span> Copier Citation
                     </button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <!-- Doc 1 -->
+                <!-- Doc 1 : Lean 4 Formal Verification -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-indigo-500/50 transition-all flex flex-col justify-between space-y-4">
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl">💎</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/40">Lean 4.35 (Certifié)</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">Preuves Formelles Mécanisées</h3>
+                        <p class="text-xs text-slate-300">
+                            Dépôt officiel certifié sous Lean 4 (DOI: 10.5281/zenodo.23833938) : 17 théorèmes prouvés, 0 sorry, 0 admit, 0 axiome ad hoc. Validation constructive de l'involution antagoniste et de la cohérence de bout en bout.
+                        </p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400">GNU AGPLv3</span>
+                        <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
+                            <span>Dépôt Zenodo</span>
+                            <span>&nearr;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Doc 2 : Prépublication Zenodo / OSF -->
                 <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-2xl">📄</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Algorithme 3.6</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Zenodo &bull; OSF</span>
                         </div>
-                        <h3 class="text-base font-bold text-white">Algorithme du Cartograffect 3.6</h3>
+                        <h3 class="text-base font-bold text-white">Manuscrit Théorique v1.0.1</h3>
                         <p class="text-xs text-slate-300">
-                            Document de référence formalisant les 4 volets : Moteur Prédictif, Noyau Affectif, Matrice Z=2 et Taxonomie hiérarchique des 176 entrées (8 opérateurs centraux et 168 positions affectives réparties sur 8 strates Z=0 à Z=7).
+                            Prépublication intégrale (DOI: 10.5281/zenodo.24022795 / OSF: osf.io/z89sg) : architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif, analyse des 4 théories historiques.
                         </p>
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">Dr Manuel Cabelguen, Ph. D.</span>
-                        <a href="https://docs.google.com/document/d/1VwLSbfWCPPsk7ruqWaFB0026-awqgXSX/edit" target="_blank" rel="noopener noreferrer" class="font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                        <span class="text-slate-400">CC BY-NC-SA 4.0</span>
+                        <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1">
                             <span>Consulter</span>
-                            <span>&rarr;</span>
+                            <span>&nearr;</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Doc 2 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-emerald-500/50 transition-all flex flex-col justify-between space-y-4">
+                <!-- Doc 3 : Référentiel des 176 Affects -->
+                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-blue-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-2xl">✨</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-800/40">Modèle MIRACLES</span>
+                            <span class="text-2xl">🧭</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800/40">176 Positions</span>
                         </div>
-                        <h3 class="text-base font-bold text-white">Modèle M.I.R.A.C.L.E.S. &amp; Régulation Psychologique</h3>
+                        <h3 class="text-base font-bold text-white">Taxonomie &amp; Lexique 176</h3>
                         <p class="text-xs text-slate-300">
-                            Modèle intégré de régulation attentionnelle : Systèmes 1, 2, 3, modèle séquentiel de James Gross et 14 stratégies de restructuration cognitive.
+                            Inventaire combinatoire certifié des 176 états affectifs sans collision spatiale, 8 opérateurs centraux et 84 paires antagonistes axiales, diagonales et controlatérales.
                         </p>
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">18 Pages de Référence</span>
-                        <a href="miracles.html" class="font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-                            <span>Explorer</span>
+                        <span class="text-slate-400">8 Strates (Z=0..7)</span>
+                        <a href="emotions.html" class="font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                            <span>Voir la Carte</span>
                             <span>&rarr;</span>
                         </a>
                     </div>
                 </div>
-
-                <!-- Doc 3 -->
-                <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-rose-500/50 transition-all flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-2xl">⚠️</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-800/40">Modèle CRIMES</span>
-                        </div>
-                        <h3 class="text-base font-bold text-white">Modèle C.R.I.M.E.S. &amp; Dérégulation</h3>
-                        <p class="text-xs text-slate-300">
-                            Catalogue de 85+ comportements nuisibles, 12 distorsions cognitives et justifications verbales, et psychologie motivationnelle des 4 désirs fondamentaux.
-                        </p>
-                    </div>
-                    <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400">85+ Items Cliniques</span>
-                        <a href="crimes.html" class="font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1">
-                            <span>Explorer</span>
-                            <span>&rarr;</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </div></section>
 
         <!-- ======================================================== -->
         <!-- SECTION 5 : CORPUS SCIENTIFIQUE INTERNATIONAL COMPLET    -->
@@ -2150,19 +2175,18 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
             </div>
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
-                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                 <a href="scholar_drive.html" class="text-purple-400 font-semibold">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-400 text-center md:text-right">
-                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
                 <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
@@ -2226,8 +2250,10 @@
             });
         }
     </script>
+    <script src="cartograffect_model.js"></script>
     <script src="script.js"></script>
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
+    <script src="command_palette.js"></script>
 </body>
 </html>

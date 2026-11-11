@@ -1,6 +1,6 @@
 /**
  * CARTOGRAFFECT - Guide Bilingue & Lexique International (FR <-> EN)
- * Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
+ * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
  */
 
 (function() {
@@ -15,7 +15,7 @@
                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30">
                             International Research Ready • OPIC n° 1233199
                         </span>
-                        <span class="text-xs text-slate-400">Dr Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien</span>
+                        <span class="text-xs text-slate-400">Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien</span>
                     </div>
                     <h3 class="font-heading font-extrabold text-2xl text-white flex items-center gap-2">
                         <span>🌐</span> Lexique Bilingue &amp; Terminologie Internationale
@@ -34,7 +34,6 @@
                 <div class="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold">
                     <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-purple-600 text-white transition-colors" data-filter="all">Tous les termes</button>
                     <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors" data-filter="math">Mathématiques &amp; Inférence</button>
-                    <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors" data-filter="acronyms">CRIMES &amp; MIRACLES</button>
                     <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors" data-filter="affects">8 Affects Cardinaux</button>
                     <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors" data-filter="citation">Citation APA</button>
                 </div>
@@ -105,48 +104,6 @@
                             </div>
                             <div class="text-xs text-indigo-300 font-medium">Geometric &amp; Semantic Correspondences</div>
                             <p class="text-[11px] text-slate-400">Inversions centrales (-X,-Y) et croisements Td(X,Y)=(Y,X) et Ti(X,Y)=(-Y,-X) (84 paires).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Section Acronymes -->
-                <div class="term-group" data-group="acronyms">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 mb-3 flex items-center gap-2">
-                        <span>🛡️</span> Acronymes Fondateurs : CRIMES &amp; MIRACLES
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- CRIMES -->
-                        <div class="p-4 rounded-xl bg-rose-950/20 border border-rose-800/40 space-y-2">
-                            <div class="font-heading font-bold text-sm text-rose-300 flex items-center justify-between">
-                                <span>C.R.I.M.E.S. (Territoire Sombre)</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-rose-900/50 text-rose-200">Dysrégulation</span>
-                            </div>
-                            <ul class="text-xs space-y-1.5 text-slate-300">
-                                <li><strong class="text-rose-400">C</strong>onflit ⇄ <span class="text-indigo-200">Internal Cognitive/Emotional Conflict</span></li>
-                                <li><strong class="text-rose-400">R</strong>upture ⇄ <span class="text-indigo-200">Relational / Model Rupture</span></li>
-                                <li><strong class="text-rose-400">I</strong>ncompétence ⇄ <span class="text-indigo-200">Perceived Helplessness / Low Agency</span></li>
-                                <li><strong class="text-rose-400">M</strong>anque ⇄ <span class="text-indigo-200">Chronic Deficit / Emotional Void</span></li>
-                                <li><strong class="text-rose-400">É</strong>puisement ⇄ <span class="text-indigo-200">Allostatic Exhaustion / Burnout</span></li>
-                                <li><strong class="text-rose-400">S</strong>ubmersion ⇄ <span class="text-indigo-200">Cognitive Flooding / Hyper-arousal</span></li>
-                            </ul>
-                        </div>
-
-                        <!-- MIRACLES -->
-                        <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-800/40 space-y-2">
-                            <div class="font-heading font-bold text-sm text-emerald-300 flex items-center justify-between">
-                                <span>M.I.R.A.C.L.E.S. (Territoire Lumineux)</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-900/50 text-emerald-200">Régulation</span>
-                            </div>
-                            <ul class="text-xs space-y-1.5 text-slate-300">
-                                <li><strong class="text-emerald-400">M</strong>odèle ⇄ <span class="text-indigo-200">Generative Mental Schema &amp; Reframing</span></li>
-                                <li><strong class="text-emerald-400">I</strong>ntention ⇄ <span class="text-indigo-200">Goal-directed Purposive Stance</span></li>
-                                <li><strong class="text-emerald-400">R</strong>égulation ⇄ <span class="text-indigo-200">Somatic &amp; Cognitive Homeostasis</span></li>
-                                <li><strong class="text-emerald-400">A</strong>cceptation ⇄ <span class="text-indigo-200">Experiential Acceptance / Radical Presence</span></li>
-                                <li><strong class="text-emerald-400">C</strong>ohérence ⇄ <span class="text-indigo-200">Integrative Autonomic Coherence</span></li>
-                                <li><strong class="text-emerald-400">L</strong>ibération ⇄ <span class="text-indigo-200">Release of Rigid Predictive Priors</span></li>
-                                <li><strong class="text-emerald-400">É</strong>nergie ⇄ <span class="text-indigo-200">Restoration of Metabolic Vitality</span></li>
-                                <li><strong class="text-emerald-400">S</strong>ens ⇄ <span class="text-indigo-200">Meaning Reconstruction &amp; Eudaimonia</span></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -234,7 +191,7 @@
 
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-cosmic-850 flex items-center justify-between text-xs text-slate-400">
-                <span>Certificat OPIC n° 1233199 &bull; © 2024–2026 Manuel Cabelguen</span>
+                <span>CARTOGRAFFECT&reg; (Marque déposée) &bull; OPIC n° 1233199 &bull; &copy; 2024–2026 Manuel Cabelguen</span>
                 <button onclick="closeLangModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors">
                     Fermer
                 </button>
@@ -328,7 +285,7 @@
     };
 
     window.copyCitationText = function() {
-        const text = "Cabelguen, M. (2026). Cartograffect : Algorithme tridimensionnel des affects sous norme L1 et dynamique d'inférence active (Certificat d'enregistrement de droit d'auteur OPIC n° 1233199). Montréal, QC : Cartograffect Publications. https://www.cartograffect.com";
+        const text = "Cabelguen, M. (2026). CARTOGRAFFECT® : Algorithme tridimensionnel des affects sous norme L1 et dynamique d'inférence active (Marque déposée, Certificat d'enregistrement de droit d'auteur OPIC n° 1233199). Montréal, QC : Cartograffect Publications. https://www.cartograffect.com";
         navigator.clipboard.writeText(text).then(() => {
             const notice = document.getElementById("copySuccessNotice");
             if (notice) {

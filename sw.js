@@ -1,17 +1,25 @@
 // Cartograffect Service Worker for offline capability & PWA caching
-const CACHE_NAME = 'cartograffect-v1.2';
+const CACHE_NAME = 'cartograffect-v2.0-lean';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './article.html',
+  './scholar_drive.html',
+  './emotions.html',
+  './mentions-legales.html',
   './maintenance.html',
   './maintenance_guard.js',
-  './emotions.html',
-  './crimes.html',
-  './miracles.html',
-  './mentions-legales.html',
+  './cartograffect_model.js',
+  './corpus_system.js',
+  './octahedral_navigator.js',
+  './dynamic_cartograffect.js',
+  './bilingual_modal.js',
+  './script.js',
   './manifest.json',
   './style.css',
   './assets/logo.png',
+  './assets/logo-96.png',
+  './assets/logo-192.png',
   './assets/logo-icon.svg',
   './assets/favicon.svg',
   './assets/favicon-32.png',
@@ -48,10 +56,39 @@ self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
+  const url = new URL(event.request.url);
+  const isLocalhost = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+
+  // On localhost, bypass cache entirely so development edits are always 100% fresh
+  if (isLocalhost) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+  const isHtml = event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/';
+  if (isHtml) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          return caches.match(event.request).then((cached) => {
+            return cached || caches.match('./index.html');
+          });
+        })
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for static assets (images, fonts, css)
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
-        // Return cached and refresh in background
         fetch(event.request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
@@ -59,14 +96,7 @@ self.addEventListener('fetch', (event) => {
         }).catch(() => {});
         return cachedResponse;
       }
-      return fetch(event.request).then((networkResponse) => {
-        return networkResponse;
-      }).catch(() => {
-        // Fallback to index if navigating
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
+      return fetch(event.request);
     })
   );
 });

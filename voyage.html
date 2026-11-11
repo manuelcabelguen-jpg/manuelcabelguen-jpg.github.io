@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Guard de maintenance temporaire -->
+    <script src="maintenance_guard.js"></script>
+    <title>Le Voyage affectif : vivez le circuit d'une émotion | CARTOGRAFFECT</title>
+    <meta name="description" content="En deux minutes, traversez vous-même le circuit d'une émotion : de la veille à la surprise, puis au choix entre agir et ajuster vos attentes. Une expérience interactive fondée sur le modèle Cartograffect.">
+    <link rel="canonical" href="https://www.cartograffect.com/voyage.html">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="alternate icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#070b14">
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cartograffect.com/voyage.html">
+    <meta property="og:title" content="Le Voyage affectif | CARTOGRAFFECT">
+    <meta property="og:description" content="Ne lisez pas une théorie des émotions : traversez-la. De la veille à la surprise, puis à votre première émotion, en deux minutes.">
+    <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
+    <meta property="og:locale" content="fr_FR">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Outfit:wght@600;700;800&family=EB+Garamond:ital,wght@0,400..600;1,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="voyage.css">
+</head>
+<body class="voyage">
+
+    <!-- Barre supérieure : marque + sortie toujours disponible -->
+    <header class="v-topbar">
+        <a href="index.html" class="v-brand" aria-label="Cartograffect, retour à l'accueil">
+            <img src="assets/logo-96.png" width="96" height="96" alt="">
+            <span>CARTOGRAFFECT</span>
+        </a>
+        <a href="index.html" class="v-skip" id="skip-voyage">Passer le voyage &rarr;</a>
+    </header>
+
+    <!-- Halo de respiration (Veille) -->
+    <div class="breath" aria-hidden="true"></div>
+
+    <!-- Jauge de progression dans le circuit affectif -->
+    <nav class="z-gauge" id="z-gauge" data-z="0" aria-label="Progression dans le circuit affectif">
+        <div class="z-gauge__track" aria-hidden="true"><span class="z-gauge__dot"></span></div>
+        <ol class="z-gauge__stops">
+            <li data-stop="2"><strong>Anticipation</strong><span class="mono">Z=2 · (0,0,2)</span></li>
+            <li data-stop="1"><strong>Surprise</strong><span class="mono">Z=1 · (0,0,1)</span></li>
+            <li data-stop="0" class="is-current"><strong>Veille</strong><span class="mono">Z=0 · (0,0,0)</span></li>
+        </ol>
+    </nav>
+
+    <!-- Annonces pour lecteurs d'écran -->
+    <div id="sr-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <main id="voyage">
+
+        <!-- ===================================================== -->
+        <!-- SEUIL : invitation                                     -->
+        <!-- ===================================================== -->
+        <section id="scene-seuil" class="scene scene--narrow" aria-labelledby="seuil-title">
+            <p class="eyebrow">Cartograffect &middot; Expérience</p>
+            <h1 id="seuil-title" tabindex="-1">Le <span class="grad">Voyage affectif</span></h1>
+            <p class="lead">
+                Pendant environ deux minutes, vous n'allez pas lire une théorie des émotions&nbsp;: vous allez en traverser une.
+            </p>
+            <ol class="seuil-steps">
+                <li><span class="num" aria-hidden="true">1</span><span>Lisez à votre rythme, comme d'habitude.</span></li>
+                <li><span class="num" aria-hidden="true">2</span><span>Laissez-vous surprendre.</span></li>
+                <li><span class="num" aria-hidden="true">3</span><span>Répondez spontanément à deux questions.</span></li>
+            </ol>
+            <p class="note">
+                Aucune donnée ne quitte votre navigateur. Ce voyage illustre le modèle Cartograffect&nbsp;; ce n'est pas un test psychologique.
+            </p>
+            <button type="button" id="btn-start" class="v-btn">Commencer</button>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- Z=0 VEILLE → Z=1 SURPRISE                              -->
+        <!-- ===================================================== -->
+        <section id="scene-veille" class="scene scene--narrow" aria-labelledby="veille-title" hidden>
+            <h2 id="veille-title" class="sr-only" tabindex="-1">Lecture</h2>
+
+            <div class="veille-text" id="veille-text">
+                <p>Chaque matin, quelque quatre-vingt-six milliards de neurones s'éveillent un peu avant vous. Ils vérifient la température de la pièce, le poids de la couverture, la lumière qui filtre derrière les paupières. Tout est conforme à ce qu'ils avaient prévu.</p>
+                <p>Puis la journée commence. Le café a le goût du café. L'escalier a le même nombre de marches qu'hier. La porte s'ouvre du côté où elle s'ouvre toujours. À chaque instant, votre cerveau compare ce qui arrive à ce qu'il attendait, et constate que tout correspond.</p>
+                <p>C'est un travail immense et parfaitement silencieux. Vous ne le remarquez jamais, précisément parce qu'il réussit. Quand la prédiction est juste, il n'y a rien à signaler&nbsp;: pas d'alerte, pas d'émotion, simplement le fond tranquille de la vie qui continue.</p>
+                <p id="veille-last"><span>En ce moment même, il en va de même pour cette page. Un fond sombre, des lignes de texte, une lecture sans surprise. Votre regard descend d'une ligne à l'autre à son rythme habituel. </span><span id="veille-cut-before">Rien ne mérite votre atten</span><span id="veille-cut-after">tion. Vous pouvez continuer à lire tranquillement, rien ne va changer.</span></p>
+            </div>
+
+            <div id="surprise-box" class="surprise" hidden>
+                <p class="surprise__line1">Vous venez de lire environ <strong id="surprise-words">0</strong>&nbsp;mots en <strong id="surprise-seconds">0</strong>&nbsp;secondes.</p>
+                <p class="surprise__line2">Vous ne vous attendiez pas à ce que cette page vous regarde lire.</p>
+                <p class="surprise__privacy">Ce calcul est resté dans votre navigateur&nbsp;: rien n'a été envoyé.</p>
+                <p id="surprise-hint" class="surprise__hint" hidden>Appuyez sur une touche ou touchez l'écran pour continuer.</p>
+
+                <div id="surprise-after" class="surprise-after" hidden>
+                    <p class="reaction">Il vous a fallu <strong id="reaction-time">—</strong> pour réagir.</p>
+                    <p>
+                        C'était la <strong>Surprise</strong> <span class="coord">(0, 0, 1)</span>&nbsp;: un écart entre ce que votre cerveau prévoyait et ce qui est arrivé.
+                        Votre attention vient de quitter le pilote automatique.
+                    </p>
+                    <button type="button" id="btn-to-anticipation" class="v-btn">Et maintenant&nbsp;? &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- Z=2 ANTICIPATION : les deux leviers                    -->
+        <!-- ===================================================== -->
+        <section id="scene-anticipation" class="scene scene--wide" aria-labelledby="anticip-title" hidden>
+            <div class="split">
+                <div class="split__visual">
+                    <svg id="dia-anticip" class="diamond" viewBox="-170 -170 340 340" role="img" aria-labelledby="anticip-caption"></svg>
+                    <p class="caption" id="anticip-caption">Votre point est au centre&nbsp;: l'Anticipation <span class="coord">(0, 0, 2)</span>. Rien n'est encore engagé.</p>
+                </div>
+
+                <div class="split__text">
+                    <p class="eyebrow">Z = 2 &middot; Anticipation</p>
+                    <h2 id="anticip-title" tabindex="-1">Votre cerveau cherche déjà la suite.</h2>
+                    <p class="lead">Face à l'imprévu, il se pose deux questions, toujours les mêmes. Répondez spontanément&nbsp;: il n'y a pas de bonne réponse.</p>
+
+                    <fieldset class="question" id="q-y">
+                        <legend><span class="lever lever--y">Agir</span>Face à cette page qui vous a surpris·e, que faites-vous&nbsp;?</legend>
+                        <div class="choices">
+                            <button type="button" class="choice" id="choice-y-plus" data-axis="y" data-value="1" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&uarr;</span><span>Je prends la main&nbsp;: je veux savoir où ça mène.</span></button>
+                            <button type="button" class="choice" id="choice-y-zero" data-axis="y" data-value="0" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&middot;</span><span>J'attends de voir.</span></button>
+                            <button type="button" class="choice" id="choice-y-minus" data-axis="y" data-value="-1" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&darr;</span><span>Je laisse faire&nbsp;: ce n'est pas moi qui décide ici.</span></button>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="question" id="q-x" hidden>
+                        <legend><span class="lever lever--x">Ajuster</span>Ce que vous pensiez trouver en arrivant ici&hellip;</legend>
+                        <div class="choices">
+                            <button type="button" class="choice" id="choice-x-plus" data-axis="x" data-value="1" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&rarr;</span><span>Je suis prêt·e à le revoir.</span></button>
+                            <button type="button" class="choice" id="choice-x-zero" data-axis="x" data-value="0" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&middot;</span><span>Je ne sais pas encore.</span></button>
+                            <button type="button" class="choice" id="choice-x-minus" data-axis="x" data-value="-1" aria-pressed="false"><span class="choice__icon" aria-hidden="true">&larr;</span><span>Je m'en tiens à ce que j'attendais.</span></button>
+                        </div>
+                    </fieldset>
+
+                    <button type="button" id="btn-resolve" class="v-btn" disabled>Voir où cela me mène &rarr;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- RÉSOLUTION sur la première couronne + RÉCIT            -->
+        <!-- ===================================================== -->
+        <section id="scene-resolution" class="scene scene--wide" aria-labelledby="resol-title" hidden>
+            <div class="split">
+                <div class="split__visual">
+                    <svg id="dia-resol" class="diamond" viewBox="-170 -170 340 340" role="img" aria-labelledby="resol-caption"></svg>
+                    <p class="caption" id="resol-caption"></p>
+                </div>
+                <div class="split__text">
+                    <p class="eyebrow eyebrow--pink">Résolution &middot; Première couronne</p>
+                    <h2 id="resol-title" tabindex="-1"></h2>
+                    <p class="coord-big" id="resol-coord"></p>
+                    <p class="lead" id="resol-lead"></p>
+                </div>
+            </div>
+
+            <div class="story">
+                <h3>Votre histoire, telle que Cartograffect la lit</h3>
+                <ol class="timeline" id="story-timeline"></ol>
+                <div class="story__extra" id="story-extra"></div>
+                <button type="button" id="btn-to-ouverture" class="v-btn">Et après&nbsp;? &rarr;</button>
+            </div>
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- OUVERTURE Z=3 + RÉVÉLATION DE LA CARTE                 -->
+        <!-- ===================================================== -->
+        <section id="scene-ouverture" class="scene scene--wide" aria-labelledby="ouv-title" hidden>
+            <div class="split split--reverse">
+                <div class="split__text">
+                    <p class="eyebrow eyebrow--pink">Z = 3 &middot; Émoi</p>
+                    <h2 id="ouv-title" tabindex="-1">Si vous êtes encore là, quelque chose a peut-être déjà changé.</h2>
+                    <p class="lead" id="ouv-lead"></p>
+                    <div class="prolong-card" id="prolong-card"></div>
+                    <p class="nuances" id="ouv-nuances"></p>
+                </div>
+                <div class="split__visual">
+                    <svg id="map-full" class="map" viewBox="-68 -68 136 136" role="img" aria-labelledby="map-caption"></svg>
+                    <p class="caption" id="map-caption"></p>
+                </div>
+            </div>
+
+            <div class="exits">
+                <a id="exit-map" class="exit exit--primary" href="emotions.html">
+                    <span class="exit__icon" aria-hidden="true">🧭</span>
+                    <span><strong>Explorer la carte depuis ma position</strong><small>Les 176 états affectifs, en 2D et en 3D</small></span>
+                </a>
+                <a id="exit-understand" class="exit" href="index.html#partie-moteur-predictif">
+                    <span class="exit__icon" aria-hidden="true">📖</span>
+                    <span><strong>Comprendre ce qui vient de se passer</strong><small>Le modèle expliqué pas à pas</small></span>
+                </a>
+                <button type="button" id="btn-replay" class="exit">
+                    <span class="exit__icon" aria-hidden="true">🔁</span>
+                    <span><strong>Refaire le voyage autrement</strong><small>Voir où mène un autre choix</small></span>
+                </button>
+            </div>
+
+            <p class="disclaimer">
+                Ce voyage illustre le modèle Cartograffect&nbsp;; ce n'est pas un outil diagnostique.
+                Si une émotion devient difficile à vivre, parlez-en à un·e professionnel·le.
+                Au Canada, en cas de détresse&nbsp;: <strong>9-8-8</strong> (appel ou texto, 24&nbsp;h/24).
+            </p>
+        </section>
+
+    </main>
+
+    <script src="cartograffect_model.js"></script>
+    <script src="voyage.js"></script>
+</body>
+</html>

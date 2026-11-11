@@ -65,9 +65,9 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
                     <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Cadre Juridique</span>
                 </div>
             </a>
@@ -79,12 +79,15 @@
                     <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
                 </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">1. Émotions</a>
-                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">3. Miracles</a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Modèles Théoriques</a>
             </nav>
 
-            <div class="hidden md:inline-flex header-action-btn">
+            <div class="hidden md:flex items-center gap-2.5 header-action-btn">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
                 <a href="index.html" class="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 rounded-lg border border-slate-700">
                     &larr; Retour au site
                 </a>
@@ -104,11 +107,14 @@
         <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span>
+            <span>Recherche Rapide</span>
+            <kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
         <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
-        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
-        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
         <a href="scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html" class="active-link"><span class="menu-dot bg-slate-400"></span>Mentions Légales &amp; PI</a>
     </div>
@@ -141,38 +147,52 @@
                     Le site internet <strong>www.cartograffect.com</strong> ainsi que l'infrastructure de recherche computationnelle associée sont édités et dirigés par :
                 </p>
                 <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
-                    <div><strong class="text-white">Auteur, Chercheur et Éditeur :</strong> Dr Manuel Cabelguen</div>
+                    <div><strong class="text-white">Auteur, Chercheur et Éditeur :</strong> Manuel Cabelguen</div>
                     <div><strong class="text-white">Titres &amp; Qualifications :</strong> Ph. D. en psychologie, Psychologue clinicien.</div>
                     <div><strong class="text-white">Domaine de Recherche :</strong> Modélisation psychologique des affects, géométrie cognitive et outils d'intelligence artificielle clinique.</div>
-                    <div><strong class="text-white">Plateformes et Outils Rattachés :</strong> <em>Dr Puck</em>, <em>ScIAnse</em>, <em>SchémIA</em>.</div>
+                    <div><strong class="text-white">Ressources Officielles Rattachées :</strong> Dépôt officiel Lean 4 (Zenodo DOI: 10.5281/zenodo.23833938) et Prépublication théorique (Zenodo DOI: 10.5281/zenodo.24022795 / OSF: https://osf.io/z89sg).</div>
                     <div><strong class="text-white">Hébergement Technique :</strong> GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis (GitHub Pages).</div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2 : Protection Fondamentale OPIC -->
+        <!-- Section 2 : Marque Déposée & Protection Fondamentale OPIC -->
         <section class="space-y-4">
             <h2 class="text-xl sm:text-2xl font-heading font-bold text-white flex items-center gap-3">
                 <span class="w-8 h-8 rounded-lg bg-purple-900/50 text-purple-400 flex items-center justify-center text-sm font-bold border border-purple-700/50">2</span>
-                Propriété Intellectuelle Fondamentale &amp; Droit d'Auteur
+                Marque Déposée &amp; Propriété Intellectuelle Fondamentale
             </h2>
             <div class="p-6 rounded-2xl bg-cosmic-850 border border-slate-700/80 space-y-4 text-sm text-slate-300 leading-relaxed">
                 <p>
-                    L'architecture conceptuelle, l'ontologie des émotions et l'organisation théorique du modèle psychologique et clinique « Cartograffect » font l’objet d’une protection formelle au titre du droit d’auteur international, enregistrée auprès de l'autorité compétente :
+                    La dénomination <strong>CARTOGRAFFECT&reg;</strong>, son logo, son identité visuelle ainsi que l'ensemble de l'architecture théorique et de modélisation géométrique des affects constituent des actifs protégés au titre des marques déposées et du droit d’auteur international :
                 </p>
-                <div class="p-5 rounded-xl bg-purple-950/30 border border-purple-600/40 space-y-2">
-                    <div class="flex items-center gap-2 text-purple-300 font-bold text-sm">
-                        <span>🛡️</span> Certificat d'Enregistrement de Droit d'Auteur :
+                <div class="p-5 rounded-xl bg-purple-950/30 border border-purple-600/40 space-y-3">
+                    <div>
+                        <div class="flex items-center gap-2 text-purple-300 font-bold text-sm">
+                            <span>🛡️</span> Régime de Marque Déposée :
+                        </div>
+                        <div class="text-white font-mono text-sm mt-1">
+                            Marque : <strong>CARTOGRAFFECT&reg;</strong> &bull; Titulaire exclusif : <strong>Manuel Cabelguen</strong>
+                        </div>
+                        <div class="text-xs text-slate-400 mt-0.5">
+                            La dénomination commerciale, scientifique et numérique « CARTOGRAFFECT » est une marque protégée. Tout usage commercial, reproduction ou usurpation sans accord préalable de Manuel Cabelguen est formellement interdit.
+                        </div>
                     </div>
-                    <div class="text-white font-mono text-sm">
-                        Office de la propriété intellectuelle du Canada (OPIC / CIPO) &bull; <strong>Certificat n° 1233199</strong>
-                    </div>
-                    <div class="text-xs text-slate-400 font-mono">
-                        Titulaire exclusif : &copy; 2025 Manuel Cabelguen (Cabelguen, 2025). Tous droits réservés.
+
+                    <div class="pt-2 border-t border-purple-800/40">
+                        <div class="flex items-center gap-2 text-purple-300 font-bold text-sm">
+                            <span>📜</span> Certificat d'Enregistrement de Droit d'Auteur :
+                        </div>
+                        <div class="text-white font-mono text-sm mt-1">
+                            Office de la propriété intellectuelle du Canada (OPIC / CIPO) &bull; <strong>Certificat n° 1233199</strong>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono mt-0.5">
+                            Titulaire exclusif : &copy; 2024–2026 Manuel Cabelguen. Tous droits réservés.
+                        </div>
                     </div>
                 </div>
                 <p class="text-xs text-slate-400">
-                    Cette protection couvre expressément la signature unique de cartographie des affects, la formalisation de la métrique L1 de Manhattan (Cabelguen, 2026), l'Interface Attentionnelle (Cabelguen, 2026), les 176 entrées et coordonnées affectives (8 opérateurs centraux et 168 positions sur les couronnes Z=2 à Z=7), leurs symétries et correspondances axiales, diagonales et controlatérales, ainsi que les axiomes cliniques des 3 Territoires (Émotions, Crimes, Miracles).
+                    Cette protection couvre expressément la signature unique de cartographie des affects, la formalisation de la métrique L1 de Manhattan (Cabelguen, 2026), l'Interface Attentionnelle (Cabelguen, 2026), les 176 entrées et coordonnées affectives (8 opérateurs centraux et 168 positions sur les couronnes Z=2 à Z=7), leurs symétries et correspondances axiales, diagonales et controlatérales et l'architecture hiérarchique en 4 niveaux fonctionnels emboîtés.
                 </p>
             </div>
         </section>
@@ -252,13 +272,13 @@
             </h2>
             <div class="p-6 rounded-2xl bg-cosmic-850 border border-slate-700/80 space-y-3 text-sm text-slate-300 leading-relaxed">
                 <p>
-                    Pour toute publication scientifique, thèse, communication ou rapport faisant référence au modèle, aux outils (Dr Puck, ScIAnse, SchémIA) ou à la géométrie des affects, la citation formelle suivante doit être appliquée :
+                    Pour toute publication scientifique, thèse, communication ou rapport faisant référence au modèle, à son architecture formelle ou à sa preuve mécanisée, les citations officielles suivantes doivent être appliquées :
                 </p>
-                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-purple-200 select-all space-y-2">
-                    <div><strong>Article Théorique de Référence (Format APA 7) :</strong></div>
-                    <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Droit d'auteur enregistré auprès de l'OPIC n° 1233199). Prépublication théorique. https://www.cartograffect.com</div>
-                    <div class="pt-2"><strong>Métrique computationnelle &amp; Architecture logicielle :</strong></div>
-                    <div>Cabelguen, M. (2026). <em>Métrique L1 de Manhattan et Inférence Active appliquées à la cartographie des affects</em> [Logiciel computationnel sous licence GNU AGPLv3 / CC BY-NC-SA 4.0]. Plateforme Cartograffect (Dr Puck, ScIAnse, SchémIA).</div>
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-purple-200 select-all space-y-3">
+                    <div><strong>1. Article Théorique de Référence (Format APA 7) :</strong></div>
+                    <div class="text-slate-300">Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 1.0.1) [Manuscrit théorique de référence]. Zenodo. <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">https://doi.org/10.5281/zenodo.24022795</a> | OSF: <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">https://osf.io/z89sg</a></div>
+                    <div class="pt-2"><strong>2. Formalisation Lean 4 &amp; Preuves Mécanisées :</strong></div>
+                    <div class="text-slate-300">Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4</em> (version v1.0.0) [Logiciel sous licence GNU AGPLv3]. Zenodo. <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">https://doi.org/10.5281/zenodo.23833938</a></div>
                 </div>
             </div>
         </section>
@@ -298,18 +318,18 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
             </div>
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
+                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
-                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
+                <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="text-purple-400 font-semibold">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-400 text-center md:text-right">
-                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
                 <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
@@ -337,5 +357,7 @@
             }
         })();
     </script>
+    <script src="cartograffect_model.js"></script>
+    <script src="command_palette.js"></script>
 </body>
 </html>

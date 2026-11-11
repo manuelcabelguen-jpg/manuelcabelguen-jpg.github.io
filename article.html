@@ -6,7 +6,7 @@
     <!-- Guard de maintenance temporaire -->
     <script src="maintenance_guard.js"></script>
     <title>L'Article Théorique | Cartographie des affects : architecture hiérarchique fondée sur le traitement prédictif</title>
-    <meta name="description" content="Publication théorique officielle : Cartographie des affects, une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Dr Manuel Cabelguen, Ph. D.">
+    <meta name="description" content="Publication théorique officielle : Cartographie des affects, une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Manuel Cabelguen, Ph. D.">
     <link rel="canonical" href="https://www.cartograffect.com/article.html">
 
     <!-- Favicons -->
@@ -20,7 +20,7 @@
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://www.cartograffect.com/article.html">
     <meta property="og:title" content="Cartographie des affects : une architecture hiérarchique fondée sur le traitement prédictif">
-    <meta property="og:description" content="Une grammaire fonctionnelle unifiée de l'affect, de l'émotion et du sentiment par Dr Manuel Cabelguen, Ph. D., BCN.">
+    <meta property="og:description" content="Une grammaire fonctionnelle unifiée de l'affect, de l'émotion et du sentiment par Manuel Cabelguen, Ph. D., BCN.">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
@@ -33,6 +33,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -109,6 +112,48 @@
             }
         }
     </style>
+
+    <!-- Highwire Press Tags for Google Scholar -->
+    <meta name="citation_title" content="Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif">
+    <meta name="citation_author" content="Cabelguen, Manuel">
+    <meta name="citation_publication_date" content="2026">
+    <meta name="citation_language" content="fr">
+    <meta name="citation_pdf_url" content="https://www.cartograffect.com/article.html">
+
+    <!-- Schema.org ScholarlyArticle -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": "Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif",
+      "name": "Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif",
+      "alternateName": "Mapping Affect: A Hierarchical Architecture of Affective Experience Grounded in Predictive Processing",
+      "author": {
+        "@type": "Person",
+        "name": "Manuel Cabelguen",
+        "honorificPrefix": "Dr",
+        "honorificSuffix": "Ph.D., Psychologie",
+        "jobTitle": "Psychologue",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-Des-Monts, Québec, Canada"
+        }
+      },
+      "datePublished": "2026-10-09",
+      "keywords": [
+        "affect",
+        "émotion",
+        "traitement prédictif",
+        "inférence active",
+        "inférence intéroceptive",
+        "allostasie",
+        "psychologie computationnelle"
+      ],
+      "inLanguage": "fr-FR",
+      "description": "Une architecture fonctionnelle unifiée de l'affect, de l'émotion et du sentiment mise en relation avec le traitement prédictif et l'inférence active."
+    }
+    </script>
+
 </head>
 <body class="bg-cosmic-950 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
 
@@ -116,9 +161,9 @@
     <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/90 border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
                 <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT</span>
+                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
                     <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Article Théorique Officiel</span>
                 </div>
             </a>
@@ -130,22 +175,24 @@
                     <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
                 </a>
                 <a href="emotions.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>1. Émotions
-                </a>
-                <a href="crimes.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>2. Crimes
-                </a>
-                <a href="miracles.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>3. Miracles
+                    <span class="w-2 h-2 rounded-full bg-blue-400"></span>Carte des 176 Émotions
                 </a>
                 <a href="scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>Modèles Théoriques
+                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>Modèles &amp; Corpus
+                </a>
+                <a href="voyage.html" class="px-3 py-2 text-sm font-medium text-amber-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 border border-amber-500/30 bg-amber-950/30">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>✨ Le Voyage
                 </a>
             </nav>
 
-            <div class="hidden md:flex items-center gap-3">
-                <button onclick="window.print()" class="px-3 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Imprimer ou enregistrer en PDF">
-                    <span>🖨️</span> Imprimer / PDF
+            <div class="hidden md:flex items-center gap-2.5">
+                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
+                    <span class="text-purple-400">🔍</span>
+                    <span>Recherche</span>
+                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+                </button>
+                <button onclick="window.print()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Imprimer ou enregistrer en PDF">
+                    <span>🖨️</span> Imprimer
                 </button>
                 <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm">
                     <span class="text-purple-400">🌐</span> FR | EN
@@ -164,11 +211,14 @@
         <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
+        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
+            <span>🔍</span>
+            <span>Recherche Rapide</span>
+            <kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
+        </button>
         <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
         <a href="article.html" class="active-link"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
         <a href="emotions.html"><span class="menu-dot bg-blue-400"></span>1. Territoire des Émotions</a>
-        <a href="crimes.html"><span class="menu-dot bg-rose-400"></span>2. Territoire des Crimes</a>
-        <a href="miracles.html"><span class="menu-dot bg-emerald-400"></span>3. Territoire des Miracles</a>
         <a href="scholar_drive.html"><span class="menu-dot bg-purple-400"></span>Modèles Théoriques</a>
         <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
     </div>
@@ -247,7 +297,7 @@
                     <div class="relative z-10 space-y-6">
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-950 text-purple-300 border border-purple-700/60">
-                                Article Théorique &bull; Prépublication
+                                Article Théorique &bull; Manuscrit Officiel
                             </span>
                             <span class="px-3 py-1 rounded-full text-xs font-mono bg-slate-800/90 text-slate-300 border border-slate-700">
                                 Droit d'auteur OPIC n° 1233199
@@ -257,15 +307,31 @@
                         <h1 class="text-2xl sm:text-4xl lg:text-5xl font-heading font-black text-white tracking-tight leading-tight">
                             Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
                         </h1>
+                <!-- Badges de Certification Officielle -->
+                <div class="flex flex-wrap items-center gap-2 pt-2">
+                    <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 border border-purple-500/40 text-purple-300 hover:text-white transition-colors">
+                        <span>DOI Zenodo : 10.5281/zenodo.24022795 (v1.0.1)</span>
+                    </a>
+                    <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-blue-950/80 border border-blue-500/40 text-blue-300 hover:text-white transition-colors">
+                        <span>OSF : osf.io/z89sg</span>
+                    </a>
+                    <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 hover:text-white transition-colors">
+                        <span>Lean 4 : DOI 10.5281/zenodo.23833938 (0 sorry)</span>
+                    </a>
+                </div>
 
                         <p class="text-base sm:text-xl font-heading italic text-purple-200/90 font-light">
                             Mapping Affect: A Hierarchical Architecture of Affective Experience Grounded in Predictive Processing
                         </p>
 
+                        <p class="text-sm sm:text-base font-sans text-purple-300 font-medium">
+                            Une grammaire fonctionnelle unifiée pour comprendre comment notre cerveau transforme les surprises du monde en émotions et en sentiments.
+                        </p>
+
                         <!-- Author & Affiliation Details -->
                         <div class="pt-4 border-t border-purple-800/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs sm:text-sm text-slate-300">
                             <div>
-                                <div class="font-bold text-white text-base">Manuel Cabelguen, Ph. D., BCN</div>
+                                <div class="font-bold text-white text-base">Manuel Cabelguen, Ph. D., Psychologie</div>
                                 <div class="text-slate-400 mt-0.5">Psychologue, Programmes correctionnels, Service correctionnel du Canada</div>
                                 <div class="text-slate-400">Établissement La Macaza (Québec), Canada</div>
                             </div>
@@ -279,19 +345,16 @@
                         <!-- Citation Helper Card -->
                         <div class="p-3.5 rounded-xl bg-cosmic-950/80 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                             <div class="font-mono text-slate-300 text-[11px]">
-                                <span class="text-purple-400 font-bold">Citation APA :</span> Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. OPIC n° 1233199.
+                                <span class="text-purple-400 font-bold">Citation APA :</span> Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. <em>Article théorique</em>. OPIC n° 1233199.
                             </div>
-                            <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. Droit d’auteur enregistré auprès de l’OPIC n° 1233199.'); alert('Citation copiée dans le presse-papier !');" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 shrink-0 font-semibold transition-all">
+                            <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif. Article théorique.'); alert('Citation copiée dans le presse-papier !');" class="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-purple-300 border border-slate-700 shrink-0 font-semibold transition-all">
                                 📋 Copier Citation
                             </button>
                         </div>
                     </div>
                 </section>
 
-                <!-- ======================================================== -->
-                <!-- DIDACTIC INTERACTIVE SIMULATOR (CALLOUT)                -->
-                <!-- ======================================================== -->
-                <section id="didacticSimulator" class="rounded-3xl bg-slate-900 border-2 border-purple-500/50 p-6 sm:p-8 shadow-2xl space-y-6">
+<section id="didacticSimulator" class="rounded-3xl bg-slate-900 border-2 border-purple-500/50 p-6 sm:p-8 shadow-2xl space-y-6">
                     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">⚡</span>
@@ -378,15 +441,15 @@
                             <h2 class="text-xl font-heading font-bold text-white flex items-center gap-2">
                                 <span>🇫🇷</span> Résumé (Français)
                             </h2>
-                            <span class="text-xs font-mono text-purple-400 font-semibold">Publication de Référence</span>
+                            <span class="text-xs font-mono text-purple-400 font-semibold">Publication Officielle</span>
                         </div>
                         <div class="text-sm text-slate-300 space-y-3 leading-relaxed">
-                            <p><strong>Objectifs.</strong> L’étude scientifique des émotions demeure fragmentée entre les théories des émotions de base, les approches dimensionnelles, les modèles d’évaluation cognitive et le constructionnisme. Cet article vise à dépasser ces clivages en proposant une grammaire fonctionnelle unifiée de l’affect, de l’émotion et du sentiment. S’appuyant sur les cadres du traitement prédictif, de l’inférence intéroceptive et de l’allostasie, nous présentons une cartographie intégrative et heuristique de l’expérience affective.</p>
-                            <p><strong>Cadre et démarche.</strong> Adoptant une démarche théorique structurée, cette construction s’ancre dans les développements récents des sciences cognitives et de la psychologie computationnelle. Le principe de minimisation de l’écart de prédiction, socle du traitement prédictif, sert de point d’appui pour articuler une architecture fonctionnelle à quatre volets : un <em>Moteur prédictif</em>, un <em>Noyau affectif</em>, une <em>Matrice affective</em> et une <em>Taxonomie hiérarchique</em>, synthétisés sous forme graphique.</p>
-                            <p><strong>Proposition.</strong> Ce cadre redéfinit l’émotion comme la sélection d’une politique d’action visant à résoudre un écart de prédiction saillant, et le sentiment comme l’intégration consciente de cette trajectoire. Structurellement, tout écart perçu déclenche une double évaluation, portant sur la contrôlabilité du monde extérieur (action pragmatique) et sur la révisabilité du modèle génératif interne (mise à jour épistémique). Le croisement de ces deux évaluations génère des configurations prototypiques élémentaires. Déployées à travers différents niveaux de profondeur temporelle et d’abstraction, ces configurations s’organisent en une Taxonomie hiérarchique d’attracteurs probabilistes, formant ainsi une structure logique des états affectifs.</p>
-                            <p><strong>Conclusions.</strong> La cartographie des affects constitue un modèle conceptuel structuré offrant une grammaire fonctionnelle de l’expérience affective, centrée exclusivement sur les dynamiques et processus psychologiques. La dynamique structurelle et le placement des prototypes émotionnels proposés formulent des hypothèses, ouvrant de nouvelles voies pour la recherche empirique et la modélisation en psychologie cognitive.</p>
+                            <p><strong>Objectifs :</strong> L’étude scientifique des émotions demeure fragmentée entre les théories des émotions de base, les approches dimensionnelles, les modèles d’évaluation cognitive et le constructionnisme, dont aucun ne parvient à lui seul à intégrer les niveaux biologique, cognitif et phénoménologique. Cet article propose une architecture fonctionnelle unifiée de l’affect, de l’émotion et du sentiment, mise en relation avec le traitement prédictif.</p>
+                            <p><strong>Cadre et démarche :</strong> Cette contribution théorique et heuristique part de régularités cliniques et phénoménologiques qu’elle met en relation avec l’inférence active, en se situant aux niveaux computationnel et algorithmique, plutôt qu'au niveau de l’implémentation neuroanatomique. Elle s’organise en quatre composantes emboîtées et synthétisées graphiquement. Le Moteur prédictif représente l’évaluation des possibilités de résolution d’un écart de prédiction au moyen de deux gradients d’incertitude, l’Attente et le Contrôle, pondérés par la précision. Le Noyau affectif traduit ensuite cet espace conceptuel en une représentation graphique de positions logiquement déduites d’une configuration probabiliste en un espace de coordonnées défini par des conventions explicites. La Matrice affective associe à son tour ces positions à des prototypes affectifs et propose leur traduction phénoménologique en termes de valence et d’activation. Ces prototypes rattachés à une cause inférée et traduite en émotions, permet le déploiement d’une Taxonomie hiérarchique complète selon la profondeur du traitement affectif.</p>
+                            <p><strong>Proposition :</strong> Ce modèle définit l’émotion comme une configuration affective catégorisée et rattachée à une cause inférée, associée à la sélection d’une politique d’action, visant à résoudre un écart de prédiction saillant, et le sentiment comme l’intégration consciente de cette trajectoire. Tout écart saillant est modélisé comme engageant deux évaluations, la contrôlabilité de la situation (action pragmatique) et la révisabilité du modèle interne (mise à jour épistémique), chacune pouvant être tranchée positivement, négativement ou demeurer neutre selon le seuil de saillance. Selon les mêmes conventions de construction, le croisement de ces deux évaluations définit une grammaire de configurations prototypiques et de leurs antagonismes formels. Cette grammaire est ensuite reprise récursivement à des niveaux croissants de profondeur temporelle et d’abstraction, des affects primaires aux émotions réactives, puis aux sentiments réflexifs et aux orientations affectives stables telles que les humeurs. Le modèle traite l’association des positions à des étiquettes émotionnelles comme une hypothèse de correspondance et suppose que les catégories émotionnelles se comportent comme des attracteurs probabilistes, modulés par le contexte, l’apprentissage et la culture.</p>
+                            <p><strong>Conclusions :</strong> La cartographie des affects propose une grammaire fonctionnelle de l’expérience affective visant à articuler les apports des grandes traditions du champ. Les émotions y apparaissent comme des constructions dynamiques enracinées dans des mécanismes prédictifs, tout en conservant des repères sémantiques prototypiques dont l’expression est modulée par la culture. Cette cartographie ouvre des pistes pour éclairer certaines difficultés cliniques, notamment la dépression et les biais attentionnels. Bien qu’encore théorique, cette reformulation des modèles prédictifs dans le domaine de l’affectivisme, trace de nouvelles voies pour la recherche empirique et la modélisation computationnelle.</p>
                             <div class="pt-2 text-xs font-mono text-purple-300">
-                                <strong>Mots-clés :</strong> affect ; émotion ; traitement prédictif ; inférence active ; inférence intéroceptive ; allostasie.
+                                <strong>Mots-clés :</strong> affect, émotion, traitement prédictif, inférence active, inférence intéroceptive, allostasie.
                             </div>
                         </div>
                     </div>
@@ -397,24 +460,21 @@
                             <h2 class="text-xl font-heading font-bold text-slate-200 flex items-center gap-2">
                                 <span>🇬🇧</span> Abstract (English)
                             </h2>
-                            <span class="text-xs font-mono text-slate-400">English Version</span>
+                            <span class="text-xs font-mono text-slate-400">English Manuscript</span>
                         </div>
                         <div class="text-sm text-slate-300 space-y-3 leading-relaxed italic">
-                            <p><strong>Objectives.</strong> The scientific study of emotions remains fragmented among basic emotion theories, dimensional approaches, cognitive appraisal models, and psychological constructionism. This article aims to overcome these divides by proposing a unified functional grammar of affect, emotion, and feeling. Drawing on the frameworks of predictive processing, interoceptive inference, and allostasis, we present an integrative and heuristic cartography of the affective experience.</p>
-                            <p><strong>Framework and approach.</strong> Adopting a structured theoretical approach, this framework is rooted in recent developments in cognitive science and computational psychology. The principle of prediction error minimization, the core of predictive processing, serves as the starting point for articulating a four-component functional architecture: a <em>Predictive Engine</em>, an <em>Affective Core</em>, an <em>Affective Matrix</em>, and a <em>Hierarchical Taxonomy</em>, synthesized graphically.</p>
-                            <p><strong>Proposal.</strong> This framework redefines emotion as the selection of an action policy aimed at resolving a salient prediction error, and feeling as the conscious integration of this trajectory. Structurally, any perceived error triggers a dual evaluation, bearing on the controllability of the external world (pragmatic action) and on the revisability of the internal generative model (epistemic update). The intersection of these two evaluations generates elementary prototypical configurations. Deployed across varying levels of temporal depth and abstraction, these configurations organize into a hierarchical taxonomy of probabilistic attractors, thereby forming a logical structure of affective states.</p>
-                            <p><strong>Conclusions.</strong> The cartography of affects constitutes a structured conceptual model offering a functional grammar of affective experience, centered exclusively on psychological processes and dynamics. The structural dynamics and the placement of the proposed emotional prototypes generate hypotheses, opening new avenues for empirical research and cognitive psychology modeling.</p>
+                            <p><strong>Objectives:</strong> The scientific study of emotions remains fragmented among basic emotion theories, dimensional approaches, cognitive appraisal models, and constructionism, none of which alone succeeds in integrating the biological, cognitive, and phenomenological levels. This article proposes a unified functional architecture of affect, emotion, and feeling, related to predictive processing, interoceptive inference, and allostasis.</p>
+                            <p><strong>Framework and approach:</strong> This theoretical and heuristic contribution starts from clinical and phenomenological regularities and relates them to active inference, positioning itself at the computational and algorithmic levels rather than at the level of neural implementation. It is organized into four nested components, synthesized graphically. The Predictive Engine evaluates the possibilities for resolving a salient prediction error through two uncertainty gradients, Expectation and Control, weighted by precision. According to explicit construction conventions, the Affective Core represents these gradients on two orthogonal axes and indexes processing depth, which precision modulates without directly measuring, on a third axis. The Affective Matrix maps the resulting positions onto affective prototypes and proposes their phenomenological interpretation in terms of valence and arousal. These prototypes become emotions only once linked to an inferred cause and categorized. Finally, the Hierarchical Taxonomy deploys them according to processing depth.</p>
+                            <p><strong>Proposal:</strong> The model defines emotion as a categorized affective configuration linked to an inferred cause and associated with the selection of an action policy aimed at resolving a salient prediction error, and feeling as the conscious integration of this trajectory. Any salient error is modeled as engaging two appraisals: the controllability of the situation (pragmatic action) and the revisability of the internal model (epistemic update), each of which may be appraised positively or negatively, or remain neutral when the signal specific to that dimension falls below its salience threshold. This two-appraisal partition is a modeling postulate rather than a consequence of the free energy principle. Under the same construction conventions, the intersection of these two appraisals defines a grammar of prototypical configurations and their formal antagonisms. This grammar is then applied recursively at increasing levels of temporal depth and abstraction, from primary affects to reactive emotions, then to reflexive feelings and stable affective orientations such as moods. The model treats the mapping of positions onto emotion labels as a correspondence hypothesis and posits that emotional categories behave as probabilistic attractors, modulated by context, learning, and culture.</p>
+                            <p><strong>Conclusions:</strong> The cartography of affect offers a functional grammar of affective experience that aims to articulate the contributions of the field’s major traditions. Emotions appear as dynamic constructions rooted in predictive mechanisms, while retaining prototypical landmarks. This cartography opens avenues for understanding certain clinical difficulties, notably depression and attentional biases. Although still theoretical, the model acknowledges its limitations and formulates falsifiable predictions, thereby paving the way for empirical research and computational modeling.</p>
                             <div class="pt-2 text-xs font-mono text-slate-400 not-italic">
-                                <strong>Keywords:</strong> affect; emotion; predictive processing; active inference; interoceptive inference; allostasis.
+                                <strong>Keywords:</strong> affect, emotion, predictive processing, active inference, interoceptive inference, allostasis.
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- ======================================================== -->
-                <!-- DIDACTIC COMPARISON: 4 HISTORICAL THEORIES               -->
-                <!-- ======================================================== -->
-                <section class="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
+<section class="rounded-3xl bg-slate-900/90 border border-slate-800 p-6 sm:p-8 space-y-6 shadow-xl">
                     <div class="border-b border-slate-800 pb-3">
                         <span class="text-xs uppercase font-bold tracking-widest text-indigo-400">Synthèse Pédagogique</span>
                         <h3 class="text-xl sm:text-2xl font-heading font-black text-white mt-1">
@@ -472,27 +532,30 @@
                     </div>
 
                     <div class="callout-didactic p-5 rounded-2xl space-y-2">
-                        <span class="text-xs uppercase font-bold text-purple-300 tracking-wider">💡 Synthèse Didactique de l'Introduction</span>
+                        <span class="text-xs uppercase font-bold text-purple-300 tracking-wider flex items-center gap-2">
+                            <span>💡</span> Synthèse Didactique de l'Introduction
+                        </span>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            Historiquement opposées à la raison, les émotions sont aujourd'hui reconnues comme les moteurs de notre adaptation psychologique et comportementale. Mais la science actuelle était jusqu'ici divisée entre quatre écoles inconciliables. Le traitement prédictif montre que l'esprit humain fonctionne comme un système bayésien qui minimise les erreurs entre ses attentes et ses représentations perceptives. Cartograffect apporte la <strong>structure macroscopique et la grammaire fonctionnelle</strong> qui manquaient pour transformer ces signaux d'erreur en émotions précises et conscientes.
+                            L’étude des émotions est demeurée divisée entre quatre grands paradigmes (émotions de base, approches dimensionnelles, évaluation cognitive, constructionnisme). Le cadre du traitement prédictif offre une perspective unificatrice en modélisant le cerveau comme un système bayésien qui réduit l’incertitude. Cartograffect apporte la <strong>structure macroscopique et la grammaire qualitative</strong> reliant l'inférence active à l'expérience affective vécue.
                         </p>
                     </div>
 
                     <div class="academic-text">
                         <p>
-                            L’étude des émotions a longtemps pâti d’une marginalisation héritée d’une lecture dualiste opposant la raison aux passions. Cette vision a été relativisée par la psychologie cognitive et affective, qui a restitué aux émotions un statut fonctionnel en démontrant leur rôle fondamental dans la cognition, la prise de décision et la régulation du comportement (Damasio, 1994). Néanmoins, l’élaboration d’une théorie unifiée de leur organisation demeure un défi majeur (Schiller et al., 2024). Les approches cherchant à isoler des signatures émotionnelles discrètes et étanches se sont heurtées à des limites persistantes : l’expérience émotionnelle émerge plutôt de processus psychologiques dynamiques, intégrés et contextualisés que de catégories préprogrammées rigides (Barrett, 2017 ; Lindquist et al., 2012).
+                            L’étude des émotions a longtemps pâti d’une marginalisation héritée d’une lecture dualiste opposant la raison aux passions. Cette vision a été relativisée par les neurosciences affectives, qui ont restitué aux émotions un statut fonctionnel en démontrant leur rôle fondamental dans la cognition, la prise de décision et la survie (Damasio, 1994). Néanmoins, si l’essor de l’imagerie cérébrale et des outils computationnels a catalysé des progrès importants dans la recherche sur les émotions, l’élaboration d’une théorie unifiée de leur organisation demeure un défi majeur (Schiller et al., 2024). Les approches majoritairement inductives se heurtent en effet à des limites persistantes, et les méta-analyses visant à isoler une région cérébrale spécifique pour chaque émotion discrète se sont avérées infructueuses. L’expérience émotionnelle émerge plutôt de configurations dynamiques et distribuées (Barrett, 2017 ; Lindquist et al., 2012). La diversité des approches révèle également la difficulté à unifier les niveaux biologique, cognitif, comportemental et phénoménologique.
                         </p>
                         <p>
-                            Cette complexité épistémologique se reflète dans quatre grands cadres théoriques, chacun circonscrit par ses limites inhérentes. La théorie des émotions de base postule un nombre restreint d’émotions universelles dotées de signatures émotionnelles spécifiques, mais peine à rendre compte de la genèse dynamique des nuances affectives (Ekman, 1992). Les approches dimensionnelles décrivent l’univers affectif selon des axes continus de valence et d’activation, sans élucider l’origine fonctionnelle de ces axes (Fontaine et al., 2007 ; Russell, 1980). Les théories de l’évaluation cognitive font dépendre l’émotion d’une évaluation de la pertinence d’un événement pour les buts de l’individu, et se heurtent à un paradoxe temporel entre évaluation délibérée et réactions quasi instantanées (Lazarus, 1991 ; Scherer, 2005). Le constructionnisme, enfin, conçoit l’émotion comme une catégorisation d’affects fondamentaux à partir du contexte et de la culture (Barrett, 2017), mais s’expose à un anthropocentrisme qui rend difficile l’établissement d’une continuité avec la cognition animale (Panksepp, 2000) et peine à élucider le mécanisme capable de synchroniser les réponses somatiques en l’absence de programmes innés (Adolphs et al., 2019).
+                            Cette complexité épistémologique se reflète dans quatre grands cadres théoriques, chacun circonscrit par ses limites inhérentes. La théorie des émotions de base postule un nombre restreint d’émotions universelles dotées de signatures physiologiques spécifiques, mais peine à rendre compte de la genèse dynamique des nuances affectives (Ekman, 1992). Les approches dimensionnelles décrivent l’univers affectif selon des axes continus de valence et d’activation, mais sans élucider l’origine fonctionnelle de ces axes ou d’en expliquer les mécanismes générateurs (Fontaine et al., 2007 ; Russell, 1980). Les théories de l’évaluation cognitive qui font dépendre l’émotion d’une évaluation de la pertinence d’un événement pour les buts de l’individu notamment à travers le potentiel d'ajustement ou de contrôle (Ellsworth &amp; Scherer, 2003), quant à elles se heurtent à un paradoxe temporel entre évaluation délibérée et réactions quasi instantanées (Lazarus, 1991 ; Scherer, 2005). Le constructionnisme, enfin, qui conçoit l’émotion comme une catégorisation d’affects fondamentaux à partir du contexte et de la culture (Barrett, 2017), s’expose à un anthropocentrisme qui rend difficile l’établissement d’une continuité avec la cognition animale (Panksepp, 2000) et peine à élucider le mécanisme capable de synchroniser les réponses somatiques en l’absence de programmes innés (Adolphs et al., 2019).
                         </p>
                         <p>
-                            Aucun de ces modèles ne fournit donc à lui seul un cadre unifié. Sur ce point, le cadre théorique du traitement prédictif offre une perspective prometteuse par une modélisation du système cognitif comme un agent bayésien qui réduit l’incertitude en actualisant ses croyances internes ou en agissant sur le monde (Friston, 2010 ; Rao &amp; Ballard, 1999). Le cadre repose sur deux notions socles : la <em>croyance</em>, entendue comme estimation probabiliste d’un état du monde, et la <em>hiérarchie</em>, qui organise ces croyances selon une temporalité et un degré d’abstraction croissants (Bottemanne, Longuet, et al., 2022). Appliquée aux signaux internes de l'organisme, cette mécanique se comprend selon une inférence intéroceptive, où les états affectifs émergent de la dynamique des prédictions intéroceptives et de la résolution de leurs écarts (Barrett &amp; Simmons, 2015 ; Seth, 2013 ; Seth &amp; Friston, 2016). Le traitement prédictif demeure néanmoins incomplet (Lee et al., 2021) : s’il fournit un moteur computationnel universel, il ne précise ni la structure macroscopique sur laquelle cette dynamique opère, ni la grammaire qui traduit un signal d’écart en une expérience subjective distincte.
+                            Aucun de ces modèles ne fournit donc à lui seul un cadre unifié. Sur ce point, le cadre théorique du traitement prédictif offre une perspective prometteuse par une modélisation du cerveau comme un système bayésien qui réduit l’incertitude en actualisant ses croyances internes ou en agissant sur le monde (Friston, 2010 ; Rao &amp; Ballard, 1999). Le cadre repose sur deux notions, celle de croyance, entendue comme estimation probabiliste d’un état du monde, et celle de hiérarchie, qui organise ces croyances selon une temporalité et un degré d’abstraction croissants (Bottemanne, Longuet, et al., 2022). Appliquée au milieu interne du corps, cette mécanique se comprend selon une inférence intéroceptive, où les états affectifs émergent de la dynamique des prédictions physiologiques et de la résolution de leurs écarts (Barrett &amp; Simmons, 2015 ; Seth, 2013 ; Seth &amp; Friston, 2016). Néanmoins, l’application du traitement prédictif à l’organisation des catégories affectives demeure à préciser. En effet, s’il fournit un cadre computationnel général, il ne précise ni la structure macroscopique sur laquelle cette dynamique opère, ni la grammaire qualitative qui traduit un signal d’écart en une expérience subjective distincte.
                         </p>
                         <p>
-                            Cet article a pour objectif de proposer une architecture affective unifiée, représentée sous la forme d’une heuristique graphique et mise en relation avec les principes du traitement prédictif et de la minimisation des écarts de prédiction. Ancrée dans la psychologie cognitive et computationnelle, cette cartographie affective fournit une <strong>grammaire fonctionnelle et psychologique de l’expérience affective</strong>. La thèse défendue peut se formuler ainsi : <em>deux évaluations adaptatives, la révisabilité du modèle interne et la contrôlabilité de la situation, chacune susceptible d’être tranchée positivement, tranchée négativement ou de demeurer indéterminée, engendrent par leur croisement une grammaire qualitative des configurations affectives, reprise récursivement à des niveaux croissants d’abstraction</em>.
+                            Cet article a pour objectif de proposer une architecture affective unifiée, représentée sous la forme d’une heuristique graphique et mise en relation avec les principes du traitement prédictif. Elle ne vise pas à décrire des mécanismes cérébraux spécifiques, mais à fournir une grammaire fonctionnelle de l’expérience affective. Selon la thèse défendue, deux évaluations adaptatives, la révisabilité du modèle interne et la contrôlabilité de la situation, représentées par des gradients positifs, négatifs ou localement neutres, engendrent une grammaire qualitative des configurations affectives, reprise récursivement à des niveaux croissants d’abstraction. Après avoir précisé notre position épistémologique (section 2) et les fondements du traitement prédictif affectif (section 3), nous exposerons successivement le Moteur prédictif (section 4), le Noyau affectif (section 5), la Matrice affective (section 6) et la Taxonomie hiérarchique (section 7). La discussion confrontera enfin cette architecture aux théories classiques des émotions, tout en présentant ses limites et ses hypothèses opérationnalisables (section 8).
                         </p>
                     </div>
                 </section>
+
 
                 <!-- ======================================================== -->
                 <!-- SECTION 2 : POSITION ÉPISTÉMOLOGIQUE                     -->
@@ -508,51 +571,52 @@
                         <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
                             <span class="text-[10px] uppercase font-bold text-purple-400 font-mono">1. Niveau Computationnel</span>
                             <div class="text-sm font-bold text-white mt-1">Quel problème est résolu ?</div>
-                            <p class="text-xs text-slate-400 mt-1">Le principe d'énergie libre (FEP) : maintenir l'adaptation de l'agent en minimisant l'incertitude et la surprise informationnelle.</p>
+                            <p class="text-xs text-slate-400 mt-1">Le principe d'énergie libre (FEP) : maintenir la viabilité de l'organisme en réduisant l'incertitude.</p>
                         </div>
                         <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-700/50">
                             <span class="text-[10px] uppercase font-bold text-purple-300 font-mono">2. Niveau Algorithmique</span>
                             <div class="text-sm font-bold text-white mt-1">CARTOGRAFFECT s'y situe</div>
-                            <p class="text-xs text-slate-300 mt-1">L'inférence active : quelles représentations, gradients d'attente/contrôle et opérations sont déployés.</p>
+                            <p class="text-xs text-slate-300 mt-1">L'inférence active : représentations spatiales, gradients d'Attente et de Contrôle, règles de transition.</p>
                         </div>
                         <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
                             <span class="text-[10px] uppercase font-bold text-purple-400 font-mono">3. Niveau Implémentation</span>
-                            <div class="text-sm font-bold text-white mt-1">Substrat biologique (Hors champ)</div>
-                            <p class="text-xs text-slate-400 mt-1">Substrat physique et biologique dont le modèle s'abstrait pour se concentrer sur l'architecture psychologique.</p>
+                            <div class="text-sm font-bold text-white mt-1">Substrat Neuroanatomique</div>
+                            <p class="text-xs text-slate-400 mt-1">Substrat biologique dont le modèle s'abstrait pour formaliser la grammaire fonctionnelle.</p>
                         </div>
                     </div>
 
                     <!-- Distinct Definitions: Affect, Emotion, Sentiment -->
                     <div class="p-5 rounded-2xl bg-cosmic-900 border border-purple-500/30 space-y-3">
-                        <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Terminologie Stricte du Modèle</span>
+                        <span class="text-xs uppercase font-bold tracking-wider text-purple-400">Terminologie Stricte du Modèle (James, 1884 &bull; Damasio, 2013)</span>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
                                 <span class="font-bold text-purple-300 text-sm">Affect :</span>
-                                <p class="text-slate-300 mt-1">Perception brute de l’état computationnel ; tension vectorielle générée pour résoudre l’incertitude.</p>
+                                <p class="text-slate-300 mt-1">Composante élémentaire de l’expérience associée à l’évaluation des possibilités de résolution d’un écart de prédiction. « Affect primaire » renvoie à sa forme élémentaire dans les premières couches.</p>
                             </div>
                             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
                                 <span class="font-bold text-sky-300 text-sm">Émotion :</span>
-                                <p class="text-slate-300 mt-1">Sélection d’une politique d’action lorsque l’affect est catégorisé et rattaché à une cause inférée dans un contexte.</p>
+                                <p class="text-slate-300 mt-1">Configuration affective catégorisée et rattachée à une cause inférée, associée à la sélection d’une politique d’action.</p>
                             </div>
                             <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
                                 <span class="font-bold text-emerald-300 text-sm">Sentiment :</span>
-                                <p class="text-slate-300 mt-1">Expérience consciente et intégrée de cette trajectoire d’action déployée dans le temps.</p>
+                                <p class="text-slate-300 mt-1">Expérience consciente et intégrée de cette trajectoire dans le temps, selon des strates réflexives distinctes et hiérarchisées, organisée autour de modèles de soi ou d’autrui.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="academic-text">
                         <p>
-                            Le présent article constitue une contribution théorique et non une revue systématique : il ne vise pas à recenser exhaustivement un corpus, mais à confronter les principales traditions théoriques des affects au traitement prédictif afin d’en articuler une architecture fonctionnelle cohérente. Les travaux mobilisés ont été retenus selon deux critères : leur caractère fondateur au sein de l’une des quatre grandes traditions du champ, ou leur contribution formelle au traitement prédictif appliqué à l’affect. Cette démarche est heuristique avant d’être déductive, puisqu’elle part d’observations cliniques et de régularités phénoménologiques, puis propose une architecture susceptible de les rendre intelligibles.
+                            Le présent article constitue une contribution théorique et non une revue systématique. Il confronte les principales traditions théoriques des affects au traitement prédictif afin d’en articuler une architecture fonctionnelle cohérente. Les travaux ont été retenus pour leur caractère fondateur au sein de l’une des grandes traditions du champ ou pour leur contribution au traitement prédictif appliqué à l’affect. La démarche est heuristique avant d’être déductive, en ce sens qu’elle part d’observations cliniques et de régularités phénoménologiques, puis propose une architecture susceptible de les rendre intelligibles. La géométrie qui en résulte n’est donc pas déduite du traitement prédictif, mais mise en relation avec lui, et le passage des deux évaluations aux axes orthogonaux, puis aux positions discrètes, relève de conventions de représentation, et non de théorèmes du cadre prédictif. Il est donc important de considérer que cette genèse expose le modèle à un risque de circularité, puisque les placements géométriques ont contribué à faire émerger les interprétations qui ont servi à les justifier. Par exemple, l’hypothèse développée du budget attentionnel fini est issue de la construction géométrique et ne constitue pas une prémisse du modèle. Il convient donc de distinguer les conventions de construction qui déterminent les positions graphiques admissibles et les hypothèses de correspondance qui associent ces positions à des prototypes affectifs dont les étiquettes émotionnelles, empruntées au langage, demeurent révisables. Les prédictions empiriques devraient ainsi pouvoir être testées indépendamment des étiquettes émotionnelles retenues. Chaque proposition devrait également demeurer compatible avec les mécanismes du traitement prédictif et rejoindre les significations reconnues dans l’expérience clinique et phénoménologique.
                         </p>
                         <p>
-                            Un tel emprunt aux modèles formels de la cognition computationnelle doit d’abord se prémunir contre l’erreur logique consistant à projeter le fonctionnement d’une partie restreinte du système biologique sur des propriétés psychologiques complexes qui n’ont de sens qu’au niveau de la personne entière en interaction avec son milieu (Gauld et al., 2021). À cet égard, trois niveaux doivent impérativement être distingués : le principe d’énergie libre, comme structure formelle dépourvue en elle-même de contenu empirique, l’inférence active, comme théorie de processus qui l’interprète, et le codage prédictif, comme hypothèse d’implémentation (Andrews, 2021). Autrement dit, il importe de distinguer le niveau computationnel qui définit le problème résolu, le niveau algorithmique qui décrit les représentations et les opérations mobilisées, et le niveau de l’implémentation qui désigne le substrat physiologique (Marr, 2010). La cartographie des affects se situe explicitement aux deux premiers niveaux, en expliquant comment les contenus de l’expérience affective se structurent, se transforment et se relient, en maintenant une stricte indépendance vis-à-vis des substrats d'implémentation.
+                            Par ailleurs, l’emprunt au modèle du traitement prédictif formalisé à partir des neurosciences computationnelles doit se prémunir contre l’erreur consistant à projeter le fonctionnement d’une partie restreinte du système, tel le neurone, sur des propriétés psychologiques qui n’ont de sens qu’au niveau de l’organisme en interaction avec son milieu (Gauld et al., 2021). Il convient également de bien distinguer à partir de ce modèle, le principe d’énergie libre, des théories de processus de l’inférence active et des hypothèses d’implémentation associées au codage prédictif (Andrews, 2021). De ce point de vue, au regard des niveaux d’analyse de Marr (1982/2010), la cartographie des affects vise les niveaux computationnel et algorithmique, tout en laissant certaines règles de calcul et de transition à spécifier. En effet, cette cartographie qui vise à expliquer comment les contenus de l’expérience affective se structurent, se transforment et se relient, n’a aucune prétention d’expliquer pourquoi un processus computationnel est ressenti ni à quelles structures cérébrales il correspond. Les descriptions phénoménologique et computationnelle n’y désignent donc pas deux substances en interaction, mais deux perspectives sur un même processus biologique, que la présente proposition cherche à rendre mutuellement lisibles.
                         </p>
                         <p>
-                            Ce choix épistémologique appelle une précision ontologique. La correspondance retenue entre le corps et la couverture markovienne, d’une part, et l’esprit et les états internes du modèle génératif, d’autre part, ne réintroduit aucun dualisme. Les deux termes ne désignent pas deux substances en interaction causale, mais deux perspectives, phénoménologique et computationnelle, sur un même processus d’auto-organisation de l'agent. La présente proposition ne cherche donc pas à expliquer l’une par l’autre, mais à rendre leurs structures mutuellement lisibles.
+                            Dans cet article, nous adopterons une terminologie stricte, dans le prolongement d’une tradition allant de James (1884) à Damasio (2013). Dans la terminologie propre au présent modèle, l’affect désignera la composante élémentaire de l’expérience associée à l’évaluation des possibilités de résolution d’un écart de prédiction. L’expression « affect primaire » renvoie à sa forme élémentaire dans les premières couches de la hiérarchie. L’émotion désignera une configuration affective catégorisée et rattachée à une cause inférée, associée à une politique d’action. Enfin, le sentiment désignera l’expérience consciente et intégrée de cette trajectoire dans le temps, selon des strates réflexives distinctes et hiérarchisées, organisée autour de modèles de soi ou d’autrui.
                         </p>
                     </div>
                 </section>
+
 
                 <!-- ======================================================== -->
                 <!-- SECTION 3 : FONDEMENTS THÉORIQUES                        -->
@@ -567,33 +631,45 @@
                         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
                             <span class="text-xs font-bold uppercase text-purple-400">3.1 Cognition Incarnée &amp; Inférence Active</span>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                L'action humaine est régie par deux valeurs complémentaires :
-                                <br>&bull; <strong>Valeur pragmatique :</strong> agir sur le monde pour atteindre un état désiré (réduire le risque).
-                                <br>&bull; <strong>Valeur épistémique :</strong> explorer et apprendre pour réduire l'incertitude sur le monde.
+                                L'action y est évaluée selon deux valeurs complémentaires au sein de l'énergie libre attendue :
+                                <br>&bull; <strong>Valeur pragmatique :</strong> atteindre un état souhaité en minimisant le risque.
+                                <br>&bull; <strong>Valeur épistémique :</strong> réduire l’incertitude en maximisant le gain d'information.
                             </p>
                         </div>
                         <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
                             <span class="text-xs font-bold uppercase text-sky-400">3.2 Inférence Intéroceptive &amp; Allostasie</span>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                &bull; <strong>Homéostasie :</strong> réaction corrective passive après écart (Point de Veille 0,0,0).
-                                <br>&bull; <strong>Allostasie :</strong> régulation proactive par anticipation avant la perturbation.
-                                <br>&bull; <strong>Valence :</strong> signal de réussite ($-\frac{dF}{dt}$) ou d'échec de la résolution allostatique.
+                                L’allostasie désigne la régulation prédictive ajustant les paramètres physiologiques en prévision des besoins à venir, distincte de l'homéostasie réactive. L'affect primaire émerge comme monnaie d'échange computationnelle prélinguistique.
                             </p>
                         </div>
                     </div>
 
-                    <div class="academic-text">
-                        <p>
-                            S’inscrivant dans le cadre de la cognition incarnée, située et étendue, le traitement prédictif conçoit l'esprit non pas comme un processeur abstrait désincarné, mais comme un système engagé dans une boucle dynamique perception-action au service de l'adaptation psychologique et comportementale (Clark, 2013, 2016). Le formalisme de l’inférence active modélise l’organisme comme un agent bayésien qui maintient sa viabilité en minimisant la divergence entre ses prédictions et les signaux sensoriels, et ce, soit en ajustant ses modèles internes, soit en agissant sur son environnement pour conformer la réalité sensorielle à ses attentes (Friston et al., 2017 ; Pezzulo et al., 2015). L’action y est évaluée selon deux valeurs complémentaires : une valeur pragmatique, qui consiste à atteindre un état souhaité, et une valeur épistémique, qui consiste à réduire l’incertitude. L’organisme ne cherche donc pas à modéliser le monde de manière exhaustive, mais plutôt à préserver son intégrité adaptative.
-                        </p>
-                        <p>
-                            L’allostasie désigne une régulation par anticipation, par laquelle l’organisme ajuste ses paramètres physiologiques en prévision des besoins à venir plutôt qu’en réaction à un écart déjà survenu, les points de consigne étant eux-mêmes variables et déterminés par l’expérience passée (Sterling, 2012). Elle se distingue ainsi de l’homéostasie, qui corrige les déviations autour de points de consigne fixes une fois celles-ci constatées. Cette distinction s’avère structurante pour le modèle proposé : le Point de Veille relève du régime homéostatique, tandis que le déplacement sur les Axes X et Y relève du régime allostatique, l’Anticipation engageant les ressources avant la survenue de la perturbation.
-                        </p>
+                    <div class="academic-text space-y-6">
+                        <div>
+                            <h3 class="text-lg font-heading font-bold text-purple-300 mb-2">3.1. Cognition incarnée et inférence active</h3>
+                            <p>
+                                S’inscrivant dans le cadre de la cognition incarnée, située et étendue, le traitement prédictif conçoit le cerveau non pas comme un processeur de symboles désincarné, mais comme un organe engagé dans une boucle dynamique perception-action au service de la survie (Clark, 2013, 2016). Le formalisme de l’inférence active modélise l’organisme comme un agent bayésien qui maintient sa viabilité en minimisant la divergence entre ses prédictions et les signaux sensoriels, et ce, soit en ajustant ses modèles internes, soit en agissant sur son environnement pour conformer la réalité sensorielle à ses attentes (Friston et al., 2017 ; Pezzulo et al., 2015). L’action y est évaluée selon deux valeurs complémentaires articulées au sein de l'énergie libre attendue (Parr et al., 2022), l’une pragmatique, qui consiste à atteindre un état souhaité en minimisant le risque, l’autre épistémique, qui consiste à réduire l’incertitude en maximisant le gain d'information (Friston et al., 2015). L’organisme ne cherche donc pas à modéliser le monde de manière exhaustive, mais plutôt à préserver son intégrité adaptative.
+                            </p>
+                            <p>
+                                Appliquée aux états affectifs, l’inférence active s’articule autour de trois processus. Le premier est la génération de la réponse affective, qui engage des réactions somato-viscérales et perceptives réflexes. Le deuxième est sa représentation conceptuelle, qui correspond à l’inférence probabiliste sur les concepts émotionnels discrets capables d’expliquer ces patterns d’afférences. Le troisième est l’accès conscient en mémoire de travail, qui permet la délibération et le rapport verbal (Smith et al., 2019 ; Russell &amp; Barrett, 1999). Le présent article se concentre surtout sur l’articulation dynamique des deux premiers processus, en explicitant comment les tensions computationnelles primaires s’ordonnent en attracteurs avant leur catégorisation conceptuelle.
+                            </p>
+                            <p>
+                                Le troisième y est abordé à travers la notion de sentiment, entendu comme intégration consciente de la trajectoire, par la pondération de la précision et le mécanisme qui modélise l’attention (Feldman &amp; Friston, 2010). Ces mécanismes modulent le poids relatif des prédictions descendantes et des signaux d’écart ascendants, et conditionnent l’intensité ainsi que la saillance des expériences affectives. Ce rôle est également crucial dans l’analyse des psychopathologies, puisque les perturbations de l’estimation de cette précision sont largement impliquées (Seth, 2013).
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-heading font-bold text-sky-300 mb-2">3.2. L’inférence intéroceptive</h3>
+                            <p>
+                                L’inférence intéroceptive apparaît comme fondamentale pour l’émergence de l’affect. Le cerveau y est décrit comme une machine prédictive dont l’impératif biologique est l’allostasie, réalisée en minimisant l’écart entre les attentes descendantes et les sensations viscérales entrantes au sein d'un réseau anatomo-fonctionnel distribué reliant plusieurs régions corticales et sous-corticales (Barrett &amp; Simmons, 2015). L’allostasie désigne ici une régulation prédictive, par laquelle l’organisme ajuste ses paramètres physiologiques en prévision des besoins à venir plutôt qu’en réaction à un écart déjà survenu, les points de consigne étant eux-mêmes variables et déterminés par l’expérience passée (Sterling, 2012). Elle se distingue ainsi de l’homéostasie, qui corrige les déviations autour de points de consigne fixes une fois celles-ci constatées. La dynamique de ces écarts et l’estimation de leur précision renverrait à la mobilisation ou à l’inhibition des ressources énergétiques qui traduirait le signal de réussite ou d’échec de la résolution de l’incertitude allostatique (Seth, 2013). Néanmoins, ce modèle doit se situer au niveau computationnel proprement dit, puisqu’il ne fait pas encore l’objet d’une traduction sémantique et où les a priori socioculturels auraient fait l’objet d’une catégorisation des affects en émotions discrètes. Ainsi, l’affect primaire devrait relever exclusivement d’une émergence prélinguistique qui permet de comparer des coûts métaboliques disparates et des gains d’information afin de prioriser les ressources.
+                            </p>
+                        </div>
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 4 : LE MOTEUR PRÉDICTIF & FIGURE 1               -->
+                <!-- SECTION 4 : LE MOTEUR PRÉDICTIF                          -->
                 <!-- ======================================================== -->
                 <section id="section-4" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
@@ -601,13 +677,54 @@
                         <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">4. Le Moteur Prédictif</h2>
                     </div>
 
-                    <div class="academic-text">
+                    <div class="academic-text space-y-4">
                         <p>
-                            Le Moteur prédictif décrit la manière dont l’organisme gère l’incertitude à travers trois interfaces interdépendantes : subjective, perceptive et attentionnelle, que nous projetons respectivement sur les Axes X, Y et Z. Nous le formulons dans le cadre de l’inférence active (Friston, 2010 ; Friston et al., 2017). Les états du système s’y partitionnent en quatre ensembles : les états externes sont les fluctuations du milieu, les états sensoriels en enregistrent les perturbations, les états actifs portent les réponses effectrices et les états internes hébergent le modèle génératif. Les deux ensembles médiateurs forment une <strong>couverture markovienne</strong>, dont la propriété définitionnelle est une indépendance conditionnelle : l’intérieur et l’extérieur ne communiquent qu’à travers cette frontière (Kirchhoff et al., 2018).
+                            Le Moteur prédictif, qui constitue le premier niveau de l’architecture, décrit la manière dont l’organisme gère l’incertitude à travers trois interfaces interdépendantes, subjective, perceptive et attentionnelle. Il prend donc pour objet central l’écart de prédiction saillant et évalue ses possibilités de résolution à partir des observations, des croyances et des politiques disponibles. Les deux premières calculent chacune un gradient d’incertitude, et la troisième pondère ces gradients selon leur précision. Il reçoit une seule grandeur d’entrée, l’écart de prédiction saillant que l’organisme doit résorber pour préserver sa viabilité, et en évalue l’incertitude de résolution, soit la confiance avec laquelle cet écart peut être résorbé. Le produit du Moteur se limitera ainsi à deux gradients d’incertitude, l’Attente (A) et le Contrôle (C), et à la précision qui les pondère. Ceux-ci pourront ainsi être qualifiés par un état de certitude, d’incertitude ou de veille du système dont les états sont représentés respectivement par les signes (+), (−) et (0). Cette distinction vaudra autant pour le Moteur que pour le Noyau affectif, où la valence n’apparait qu’au niveau de la Matrice. Pour le formuler selon le cadre de l’inférence active (Friston, 2010 ; Friston et al., 2017), le modèle génératif de l’organisme ne communique avec son environnement qu’à travers une frontière sensorielle et active, que l’on peut rapporter au corps en interaction par analogie fonctionnelle avec le concept formel de couverture de Markov et la représentation d’états cachés (Kirchhoff et al., 2018). Les trois interfaces constituent ainsi une décomposition fonctionnelle des échanges entre observations, modèles internes et pondération attentionnelle, et non trois structures anatomiques distinctes.
+                        </p>
+                        <p>
+                            Tout d’abord, <strong>l’Interface Perceptive</strong> correspond au versant sensoriel et actif de la frontière et se caractérise par sa réactivité. Elle traite les informations internes, proprioceptives et environnementales, organise les ajustements sensorimoteurs et se trouve mobilisée lorsqu’une sensation contredit ce qui était prédit, produisant un écart susceptible de rompre la stabilité du modèle interne. Elle constitue à ce titre la source de la <em>Surprise</em>, soit l’enregistrement d’un écart saillant avant qu’aucune valeur de Contrôle ne lui soit encore attribuée. Elle est représentée par l’opérateur « C ». Captant les afférences sensorielles et intéroceptives ascendantes, elle calcule le gradient d’incertitude sensorimotrice, c’est-à-dire la contrôlabilité de la situation, et le convertit en un état discret $C \in \{C0, C-, C+\}$. La valeur portée par ce gradient désigne donc la capacité estimée de modifier ou non la situation de manière à contribuer à la résolution de l’écart de prédiction.
+                        </p>
+                        <p>
+                            Ensuite, <strong>l’Interface Subjective</strong> correspond au versant interne de la frontière et se caractérise par sa nature prédictive. Elle intègre les sensations aux représentations construites à partir de la mémoire, des apprentissages et du contexte socioculturel, attribuant une signification à l’expérience. Associée aux processus descendants, elle génère l’<em>Anticipation</em>, soit la projection proactive de prédictions allostatiques pondérées par leur précision attendue, qui ajuste les ressources en prévision des perturbations à venir (Sterling, 2012). Elle est représentée par l’opérateur « A ». Recevant les prédictions et croyances issues du modèle génératif, elle évalue le gradient d’incertitude sémantique, c’est-à-dire la révisabilité du modèle génératif, et le convertit en un état discret $A \in \{A0, A-, A+\}$. La valeur portée par ce gradient est l’Attente, qui désigne la possibilité estimée de réviser ou non les croyances pertinentes pour intégrer l’écart de prédiction.
+                        </p>
+                        <p>
+                            <strong>L’Interface Attentionnelle</strong> assure enfin l’intégration des informations perceptives et subjectives en modulant la précision, soit le degré de confiance accordé à une sensation, à une interprétation ou à une possibilité d’action (Feldman &amp; Friston, 2010). Elle opère comme l’opérateur de pondération. Contrairement aux deux autres interfaces, elle n’évalue aucun contenu propre et ne produit donc aucun gradient polarisé. Elle agit plutôt comme un mécanisme de pondération de la précision à la sortie du Moteur prédictif, attribuant un coefficient aux gradients A et C. Sans constituer un décideur central, cette interface permet à l’agent d’échantillonner sélectivement les observations intéroceptives, somatiques ou contextuelles afin de réduire activement l’incertitude pesant sur son état latent. Cette allocation attentionnelle s’opère comme une action mentale orientée vers l'optimisation des flux internes (Smith et al., 2019), une exploration épistémique nécessaire pour intégrer les signaux multimodaux. La précision affectée à un signal et la profondeur d’un modèle hiérarchique demeurent toutefois deux paramètres distincts. Pour les relier, la cartographie postule une règle de transition selon laquelle la persistance d’un écart non résolu, combinée à une allocation attentionnelle suffisante, accroît la probabilité que cet écart soit traité à un niveau plus profond, soit avec une profondeur temporelle et un niveau d’abstraction accrus.
+                        </p>
+                        <p>
+                            La circulation entre ces interfaces est décrite ici au moyen de quatre opérations inférentielles interdépendantes et non séquentielles, formant une boucle récursive. Deux relèvent du versant perceptif et sensorimoteur, soit par l’inférence sensorielle ascendante et par la mise en œuvre de l’action. La troisième, l’inférence générative contextuelle, est portée par l’Interface Subjective et produit des hypothèses et des scénarios prospectifs. La quatrième, l’inférence intégrative, est pondérée par l’Interface Attentionnelle et actualise l’estimation de l’état corporel et cognitif selon la précision attribuée.
                         </p>
                     </div>
 
-                    <!-- FIGURE 1 INTERACTIVE SVG -->
+                    <!-- Gradients States Card -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                            <span class="text-purple-400 font-bold uppercase tracking-wider">Gradient de Contrôle (C) :</span>
+                            <ul class="space-y-1.5 text-slate-300">
+                                <li><strong class="text-white">C0 (Contrôle Neutre) :</strong> Régime de contrôle de routine. Les micro-écarts sont traités sous le seuil de saillance attentionnelle ; aucun ajustement n'est déclenché.</li>
+                                <li><strong class="text-rose-400">C− (Contrôle Incertain) :</strong> Faible possibilité estimée de résoudre l'écart saillant selon les politiques d'action disponibles (charge).</li>
+                                <li><strong class="text-emerald-400">C+ (Contrôle Certain) :</strong> Possibilité élevée estimée de résoudre l'écart selon les politiques d'action disponibles (décharge).</li>
+                            </ul>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                            <span class="text-sky-400 font-bold uppercase tracking-wider">Gradient d'Attente (A) :</span>
+                            <ul class="space-y-1.5 text-slate-300">
+                                <li><strong class="text-white">A0 (Attente Neutre) :</strong> Modèle génératif au repos ; flux d'information conformes aux croyances d'arrière-plan sans saillance sémantique.</li>
+                                <li><strong class="text-amber-400">A− (Attente Incertaine) :</strong> Événement contradictoire ou ambiguïté non résolue ; faible possibilité de révision du modèle interne qui tend à être maintenu (charge).</li>
+                                <li><strong class="text-cyan-400">A+ (Attente Certaine) :</strong> Possibilité élevée estimée de révision par mise à jour des croyances ; le modèle tend vers un changement d'état (décharge).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="academic-text space-y-4">
+                        <p>
+                            Ces deux gradients produits par le Moteur prédictif portent une même grandeur, l’incertitude de résolution de l’écart, et ne se distinguent que par leur objet, soit la révisabilité du modèle génératif pour l’Attente (A) et la contrôlabilité de la situation pour le Contrôle (C). Chacun prend trois valeurs discrètes, dont les signes qualifient exclusivement un état computationnel. La valeur négative désigne une faible confiance, soit une charge au cours de laquelle l’écart de prédiction s’accumule. La valeur positive désigne une confiance élevée, soit une décharge au cours de laquelle l’écart de prédiction se dissipe. La valeur nulle désigne la neutralité du gradient considéré qui demeure sous son seuil de saillance et n’engage donc ni charge ni décharge sur cette dimension. Cette neutralité n’implique pas la neutralité de l’ensemble du système, puisque l’autre gradient peut simultanément être engagé.
+                        </p>
+                        <p>
+                            La neutralité globale ne correspond qu’à l’état conjoint (A0, C0) du <strong>Point de Veille</strong>. Ce Point de Veille ne représente ni une absence d’activité ni un état fixe, mais un bassin de stabilité relative où les variations corporelles, perceptives et cognitives sont tolérées sous le seuil de saillance. Ce régime correspond à un contrôle réactif de type homéostatique, où le point de consigne demeure fixe et où les déviations ne déclenchent de réponse qu’au-delà d’un seuil de tolérance. Lorsqu’un écart pondéré franchit le seuil de saillance retenu, la <strong>Surprise</strong> marque la sortie du régime de veille. Un premier niveau de précision est alors alloué à l’écart, alors même que les deux gradients demeurent indéterminés. Vient ensuite l’<strong>Anticipation</strong> qui n’opère pas à ce même niveau réactif, mais à un niveau de traitement plus profond, comme opérateur descendant issu de l’Interface Subjective. Elle suspend la décharge immédiate pour orienter la résolution de l’écart vers une valeur déterminée de l’Attente, du Contrôle, ou des deux. La modélisation de l’ensemble de ces circuits et des différentes projections qu’ils opèrent permet une configuration schématique de la communication entre les différentes interfaces (Figure 1).
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 1 INTERACTIVE SVG CARD -->
                     <div id="figure-1" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
@@ -691,8 +808,9 @@
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 5 : LE NOYAU AFFECTIF & FIGURE 2                 -->
+                <!-- SECTION 5 : LE NOYAU AFFECTIF                            -->
                 <!-- ======================================================== -->
                 <section id="section-5" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
@@ -700,22 +818,58 @@
                         <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">5. Le Noyau Affectif</h2>
                     </div>
 
-                    <div class="academic-text">
+                    <div class="academic-text space-y-4">
                         <p>
-                            L’affect primaire se déploie au sein du Noyau affectif, une structure dynamique où se condensent les forces régulatrices de l’organisme. S’appuyant sur les trois interfaces, le Noyau projette les fluctuations affectives et cognitives sous forme de coordonnées organisées selon une double dynamique de <strong>charge</strong> (écart non résorbé / énergie libre croissante) et de <strong>décharge</strong> (écart résorbé / énergie libre décroissante).
+                            Le Noyau affectif constitue le second niveau de l’architecture et représente les configurations élémentaires de l’affect. Le Noyau reçoit les gradients d’Attente (A) et de Contrôle (C), pondérés par la précision, puis les représente dans un espace de coordonnées. Par convention, l’Attente figure sur l’Axe X et le Contrôle sur l’Axe Y. Sur chacun de ces axes, le signe positif désigne la certitude, le signe négatif l’incertitude et la valeur nulle un état neutre dans lequel le signal propre au gradient considéré demeure sous son seuil de saillance. L’Axe Z indexe la profondeur temporelle et le degré d’abstraction du traitement, puisque le passage d’une strate à l’autre dépend, selon une hypothèse distincte, de la persistance d’un écart non résolu et d’une allocation attentionnelle suffisante. Le Point de Veille correspond à $(0, 0, 0)$, la Surprise à $(0, 0, 1)$ et l’Anticipation à $(0, 0, 2)$. Les trajectoires sont décrites en termes de charge et de décharge computationnelles.
+                        </p>
+                        
+                        <h3 class="text-lg font-heading font-bold text-purple-300 mt-4 mb-2">5.1. Les deux gradients de l’évaluation adaptative</h3>
+                        <p>
+                            Le premier axe, <strong>l’Axe Y</strong>, reçoit le gradient de Contrôle calculé par l’Interface Perceptive et traduit la capacité que l’organisme s’attribue pour agir sur une situation donnée. Sa polarité positive correspond à l’évaluation de la situation comme suffisamment contrôlable pour envisager une action contributive à la résolution. Jugée contrôlable, la situation permet de mobiliser les ressources pour explorer, transformer ou maîtriser. Sa polarité négative correspond à une faible contrôlabilité estimée, susceptible d’orienter vers une réduction, une réorganisation ou une suspension de l’effort. Les tentatives d’action s’avérant inefficaces, l’organisme réduit sa mobilisation en se retirant ou en se protégeant, ce qui constitue une économie adaptative.
                         </p>
                         <p>
-                            Le système cognitif étant assujetti à des contraintes attentionnelles (Feldman &amp; Friston, 2010), nous postulons que la résolution d’un écart peut être représentée par une allocation finie entre deux voies, l’action pragmatique sur le monde et la révision épistémique du modèle interne. L’emploi de la métrique de Manhattan (norme L1) traduit cette conservation du budget attentionnel :
+                            Le second axe, <strong>l’Axe X</strong>, reçoit le gradient d’Attente calculé par l’Interface Subjective et traduit l’évaluation de la révisabilité des croyances internes de l’organisme face à un événement nouveau. Sa polarité positive correspond à l’évaluation du modèle interne comme révisable, ce qui ouvre la réactualisation des croyances pour intégrer les nouvelles informations et résorber ainsi l’incertitude. Sa polarité négative correspond à l’évaluation des croyances pertinentes comme difficilement révisables dans les conditions présentes. Leur maintien peut conduire à minimiser l’information discordante ou à privilégier une modification de la situation. À l’instar de la polarité négative du Contrôle, ce maintien constitue une protection adaptative du modèle.
                         </p>
-                        <div class="my-4 p-4 rounded-xl bg-cosmic-900 border border-purple-800/50 text-center font-mono text-purple-300 text-sm sm:text-base">
-                            $$|X| + |Y| = 2Z - 2, \quad \text{pour } Z \ge 2, \text{ avec } X, Y \in \mathbb{Z}$$
-                        </div>
                         <p>
-                            Sur le plan géométrique, cette contrainte définit à chaque strate une ligne de niveau de la norme L1, soit un <strong>losange de rayon 2Z − 2</strong> centré sur l’opérateur (0, 0, Z) de la strate. À Z = 2, le budget est égal à 2. Les solutions entières se réduisent strictement à 8 positions : 4 positions axiales saturées (&plusmn;2, 0) et (0, &plusmn;2) où une seule dimension tranche, et 4 positions combinées équilibrées (&plusmn;1, &plusmn;1) où les deux dimensions sont conjointement résolues.
+                            Les deux gradients demeurent ainsi intimement liés. Agir sur le monde peut rendre la situation plus prévisible, tandis qu’une meilleure compréhension de la situation peut modifier la contrôlabilité perçue. Ce couplage dynamique ne contredit pas l’orthogonalité des axes, qui exprime une distinction analytique et non une absence de covariation. Leur distinction ne sépare donc pas l’action de la cognition, mais deux stratégies complémentaires d’adaptation. Le Contrôle répond à la question « Dans quelle mesure puis-je modifier cette situation pour contribuer à résoudre l’écart de prédiction ? », et l’Attente à la question « Dans quelle mesure puis-je réviser mes croyances pour intégrer cet écart de prédiction ? ».
+                        </p>
+                        <p>
+                            Cette distinction reprend les deux principales manières pour un organisme de réduire son incertitude. L’Axe Y correspond au besoin d’agir pour aligner le monde sur ses préférences et ainsi réduire les risques potentiels. L’Axe X correspond au besoin d’apprendre, c’est-à-dire de réviser ses croyances pour mieux prédire l’avenir (Da Costa et al., 2020 ; Hesp et al., 2021). Dans les formulations de l’inférence active, ces deux besoins renvoient respectivement au terme de risque attendu et aux termes de complexité et de valeur épistémique (Parr et al., 2022). Cette décomposition ne prouve toutefois ni que deux évaluations suffisent ni que chacune correspond à une seule coordonnée psychologique. Le modèle postule donc, à ce point d’articulation, qu’un affect n’est pas la simple mesure d’un écart entre l’attente et la réalité, mais l’évaluation des solutions dont l’organisme croit disposer pour le résoudre. Réviser ses croyances ou agir sur le monde constituant les deux voies retenues pour résorber cette incertitude, la partition des axes reprend ainsi la logique même de l’adaptation au milieu.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-sky-300 mt-4 mb-2">5.2. Modulation attentionnelle et géométrie des configurations élémentaires</h3>
+                        <p>
+                            L’Axe Z représente la profondeur temporelle et le niveau d’abstraction selon lesquels une configuration de Contrôle et d’Attente est organisée. Contrairement aux Axes X et Y, qui reçoivent les gradients d’interfaces évaluant un contenu et pouvant donc porter une charge ou une décharge, il ne reçoit aucun gradient polarisé, et la profondeur qu’il indexe dépend de la précision accordée aux signaux par l’Interface Attentionnelle, sans se confondre avec elle.
+                        </p>
+                        <p>
+                            Au niveau le plus élémentaire, l’espace affectif s’organise autour de deux opérateurs centraux, la Surprise et l’Anticipation, situés à des strates distinctes, et d’une première couronne de huit configurations (figures 1 et 2). La Surprise $(0, 0, 1)$, représentée à la figure 1, enregistre l’écart mais sans orientation déterminée sur les Axes X et Y. L’Anticipation $(0, 0, 2)$ oriente ensuite la résolution vers l’une des huit configurations de la première couronne, toutes situées à $Z = 2$ (figure 2). Quatre positions axiales apparaissent lorsqu’une seule dimension est tranchée et quatre autres positions combinées apparaissent lorsque les deux dimensions sont tranchées.
+                        </p>
+                        <p>
+                            La contrainte présentée ici procède de la construction géométrique de la cartographie, et non d’une théorie formelle de l’attention. Le passage d’une position à une autre s’effectuant par étapes discrètes le long de deux axes orthogonaux, l’éloignement d’une position par rapport au centre de sa strate peut se mesurer par la somme des déplacements effectués sur chacun des axes. Cette géométrie suggère une hypothèse de répartition additive des ressources, limitée aux conditions de concurrence entre les voies pragmatique et épistémique qui sollicitent des ressources concurrentes. Leur contribution à la résolution d’un écart de prédiction pourrait être représentée par un budget additif fini. L’existence de contraintes attentionnelles est compatible avec cette lecture. À chaque strate $Z \ge 2$, la géométrie définit un rayon de placement, dont l’interprétation comme budget attentionnel reste conditionnelle et ne fait pas de Z une mesure directe de ressources attentionnelles ou de performance de résolution. La contrainte de construction s’écrit ainsi :
                         </p>
                     </div>
 
-                    <!-- FIGURE 2 INTERACTIVE SVG -->
+                    <!-- KaTeX Formula Card -->
+                    <div class="my-4 p-5 rounded-xl bg-cosmic-900 border border-purple-800/50 text-center font-mono text-purple-300 text-sm sm:text-base">
+                        $$|X| + |Y| = 2Z - 2, \quad \text{pour } Z \ge 2$$
+                    </div>
+
+                    <div class="academic-text space-y-4">
+                        <p>
+                            Le Point de Veille et la Surprise demeurent hors de cette contrainte, aucune valeur n’étant encore attribuée à X ou à Y. À chaque strate, la contrainte dessine un losange de rayon $2Z − 2$ centré sur l’opérateur $(0, 0, Z)$ de la strate, soit l’Anticipation à $Z = 2$. La profondeur Z ne mesure donc pas une intensité, mais fixe le rayon de ce losange (figures 2 et 3). Dans la lecture attentionnelle, deux configurations situées sur un même losange mobiliseraient un budget identique et ne se distingueraient que par sa répartition entre l’action sur le monde (Axe Y) et la révision du modèle interne (Axe X).
+                        </p>
+                        <p>
+                            À $Z = 2$, les positions admissibles se réduisent à quatre positions axiales, $(\pm 2, 0)$ et $(0, \pm 2)$, et à quatre positions diagonales $(\pm 1, \pm 1)$. Deux régimes coexistent ainsi sur cette couronne. Lorsque les deux dimensions sont tranchées avec une amplitude égale, le budget se répartit également entre elles et engendre les positions diagonales, que le modèle suppose constituer des attracteurs locaux. La géométrie ne le démontre pas à elle seule, ce qui exige une règle de transition établissant une convergence vers ces positions et des temps de fixation supérieurs à ceux des positions axiales. Lorsqu’une seule dimension est polarisée, l’autre demeurant localement neutre, toute l’amplitude géométrique porte sur l’axe engagé.
+                        </p>
+                        <p>
+                            Le coefficient 2 de l’équation est une convention de normalisation, choisie pour que la première couronne puisse accueillir à la fois des positions axiales et des positions combinées. Selon l’hypothèse du budget attentionnel, la réduction de la complexité par la réorganisation des croyances (Axe X) et la réduction du risque par l’action (Axe Y) seraient liées, à une strate donnée, par une contrainte de somme constante. Toute ressource allouée au contrôle du monde diminuerait d’autant la capacité à réviser le modèle interne, tandis qu’un approfondissement du traitement élargirait le budget disponible pour les deux voies. Cette hypothèse rencontre toutefois un cas limite, celui de la coopération entre les voies, où une action informative peut accroître la contrôlabilité tout en facilitant la révision du modèle, de sorte que les deux évaluations progresseraient ensemble à profondeur inchangée. La contrainte doit donc être bornée aux situations où les deux voies sollicitent des ressources concurrentes, la coopération constituant un modèle concurrent que la première prédiction doit permettre de départager.
+                        </p>
+                        <p>
+                            La même équation vaut aux strates supérieures (figure 4). À $Z = 3$, le rayon s’élève à 4, de sorte qu’une double résolution équilibrée s’y situe en $(\pm 2, \pm 2)$ et que des positions latérales du type $(\pm 3, \pm 1)$, où une dimension domine sans annuler l’autre, deviennent admissibles. Une même orientation conserve ainsi son secteur et son signe d’une strate à l’autre, seule sa position s’éloignant de l’origine à mesure que croissent la profondeur temporelle, le degré d’abstraction et le coût de révision des modèles engagés. La distance à l’origine reflète donc la profondeur de l’inférence mobilisée, et non l’intensité subjective de l’état affectif.
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 2 INTERACTIVE SVG CARD -->
                     <div id="figure-2" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
@@ -787,8 +941,9 @@
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 6 : LA MATRICE AFFECTIVE & FIGURE 3              -->
+                <!-- SECTION 6 : LA MATRICE AFFECTIVE                         -->
                 <!-- ======================================================== -->
                 <section id="section-6" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
@@ -796,18 +951,55 @@
                         <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">6. La Matrice Affective</h2>
                     </div>
 
-                    <div class="academic-text">
+                    <div class="academic-text space-y-4">
                         <p>
-                            La Matrice affective a pour fonction fondamentale de traduire la dynamique computationnelle du Noyau en un espace de projection phénoménologique, accomplissant ainsi l’arrimage entre le niveau algorithmique de l’inférence active et l’expérience vécue. En fixant des étiquettes sémantiques sur ces positions, elle permet d’associer à chacune une catégorie émotionnelle qui ne constitue ni une essence biologique ni un programme fixe, mais bien un <strong>prototype fonctionnel</strong>.
+                            La Matrice affective constitue le troisième niveau de l’architecture. Elle assure l’arrimage entre la représentation algorithmique proposée et l’expérience vécue. Dans le Noyau, la configuration est décrite sans lui attribuer de valence ni d’étiquette émotionnelle. Dans la Matrice, le modèle propose sa correspondance avec une description phénoménologique. La géométrie ne fournissant ni fonction de valence ni règle de dénomination, cette description repose sur des hypothèses de correspondance. La pertinence des dénominations proposées doit donc être examinée à partir de leur intelligibilité phénoménologique, de l’accord intersubjectif et de leur confrontation à des observations indépendantes. Un consensus terminologique ne suffit pas à valider le mécanisme postulé.
                         </p>
                         <p>
-                            Deux diagonales organisent les prototypes combinés :
-                            <br>&bull; <strong>Diagonale de congruence :</strong> les deux polarités sont de même signe. Le <strong>Désir (+1, +1, 2)</strong> unit un modèle révisable et un monde contrôlable ; son opposé, le <strong>Dégoût (-1, -1, 2)</strong>, unit un modèle non révisable et un monde non contrôlable (rejet impératif).
-                            <br>&bull; <strong>Diagonale de compensation :</strong> les polarités sont de signes opposés. La <strong>Colère (-1, +1, 2)</strong> unit un modèle non révisable et un monde contrôlable (l'action s'impose pour aligner le monde sur mes attentes) ; son opposé, le <strong>Calme (+1, -1, 2)</strong>, unit un modèle révisable et un monde non contrôlable (l'effort d'action est suspendu pour réviser le modèle).
+                            C’est à ce niveau que le modèle Circumplexe peut traduire l’état de certitude ou d’incertitude sous la forme d’une Valence, agréable ou désagréable, rattachée à la position, et d’une Activation, haute ou basse, qui qualifie la trajectoire, ce qui oriente en retour la sélection d’une politique d’action. Il faut également garder à l’esprit que la position décrit un affect, et l’étiquette qui nomme le prototype correspondant, ne devient véritablement une émotion au sens strict du terme qu’une fois l’affect rattaché à une cause inférée. Cette catégorie ne constitue donc ni une essence biologique ni un programme fixe, mais un prototype fonctionnel dont l’expression dépend de l’objet, du contexte, des apprentissages, du langage et de la profondeur engagée (Barrett, 2017 ; Russell &amp; Barrett, 1999).
+                        </p>
+                        <p>
+                            Cette transduction confère à chaque pôle computationnel sa traduction vécue. Sur le gradient de Contrôle, la charge pragmatique est proposée comme pouvant être vécue sous la forme d'une impuissance perçue, une hésitation ou une inhibition de l’action, tandis que la décharge pragmatique est éprouvée comme une puissance d’agir et une mobilisation énergétique ciblée. Sur le gradient d’Attente, la charge épistémique est éprouvée comme une suspension de la signification et l’anticipation d’une menace ou d’un coût de révision, tandis que la décharge épistémique est éprouvée comme une résorption de l’incertitude cognitive et un sentiment de prédictibilité ou d’opportunité. Les valeurs nulles n’apportent pas de contribution polarisée propre sur la dimension considérée. La valence vécue d’une configuration résulte ainsi de l’interprétation conjointe des deux pôles, et non de l’un d’eux pris isolément.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-purple-300 mt-4 mb-2">6.1. Les quatre orientations axiales</h3>
+                        <p>
+                            Les orientations axiales occupent la première couronne, à la strate $Z = 2$, lorsqu’une seule dimension est résolue. Comme toutes les positions de cette couronne, elles supposent que l’opérateur d’Anticipation $(0, 0, 2)$ ait d’abord suspendu la décharge immédiate de l’écart enregistré par la Surprise. La dimension neutre ne pouvant porter aucune part de la résolution, toute l’amplitude repose toutefois sur la seule dimension qui tranche, de sorte que la base d’évaluation est plus étroite que celle des prototypes combinés. Le modèle en tire l’hypothèse que ces positions sont dynamiquement instables et tendent à se convertir dès que la seconde dimension se précise.
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
+                            <li><strong>La Joie $(0, 2, 2)$ :</strong> associe une décharge de Contrôle à une Attente neutre (X0), constituant ainsi l’élan moteur d’approche avant que l’objet ne soit pleinement spécifié.</li>
+                            <li><strong>La Tristesse $(0, -2, 2)$ :</strong> associe une charge de Contrôle à une Attente neutre, où la puissance d’agir se replie devant une situation qui ne peut être immédiatement transformée, et ce, sans que le sort du modèle interne ne soit tranché.</li>
+                            <li><strong>La Peur $(-2, 0, 2)$ :</strong> associe une charge d’Attente à un Contrôle neutre (Y0), où l’organisme anticipe une menace ou une contradiction du modèle interne sans mobilisation saillante du gradient de Contrôle.</li>
+                            <li><strong>Le Courage $(2, 0, 2)$ :</strong> associe à l’inverse une décharge d’Attente à un Contrôle neutre, soit la possibilité d’une révision constructive du modèle dans une situation dans laquelle le signal de contrôlabilité demeure non saillant pour désigner l’action pragmatique à entreprendre.</li>
+                        </ul>
+                        <p>
+                            Deux confusions doivent être évitées. Premièrement, une faible possibilité de résolution constitue une évaluation polarisée, tandis qu’une coordonnée nulle indique un signal localement non saillant. Deuxièmement, une orientation axiale ne détermine pas à elle seule la valence globale, puisque seule la dimension tranchée indique le sens local de la résolution. Par exemple, la Joie qui représente ici une décharge de Contrôle et dont l'Attente reste neutre, pourrait tout aussi bien déboucher sur une expérience pénible. La Joie et la Tristesse désignent ainsi l’élan ou l’abattement d’une trajectoire dont la finalité reste ouverte, tandis que le Courage et la Peur en indiquent le versant d’une Attente clairement polarisée, mais dont le Contrôle neutre ne permet pas de fixer la conduite à entreprendre. Les quatre orientations axiales ne sont pas nommées d’après une liste d’émotions de base préexistante, mais d’après le terme du langage ordinaire qui recouvre le mieux la configuration computationnelle décrite. C’est avant tout la position et non le mot, qui porte le contenu théorique.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-sky-300 mt-4 mb-2">6.2. Les quatre prototypes combinés</h3>
+                        <p>
+                            Les prototypes combinés occupent les diagonales de la première couronne, à la même strate $Z = 2$ que les orientations axiales. Ils apparaissent lorsque les deux évaluations, celle de la contrôlabilité du monde (Axe Y) et celle de la révisabilité du modèle interne (Axe X), sont simultanément tranchées avec une amplitude égale, soit $|X| = |Y| = 1$. Deux diagonales les organisent : celle de congruence, dont les deux polarités sont de même signe, et celle de compensation, dont les polarités sont de signes opposés.
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
+                            <li><strong>Le Désir $(1, 1, 2)$ :</strong> associe un modèle interne révisable à un monde contrôlable, l’état souhaité pouvant ainsi être atteint par l’action.</li>
+                            <li><strong>La Colère $(-1, 1, 2)$ :</strong> associe un modèle non révisable à un monde contrôlable. Le modèle est mis en échec, mais l’organisme estime pouvoir agir pour ramener le monde à ses prédictions.</li>
+                            <li><strong>Le Calme $(1, -1, 2)$ :</strong> associe un modèle révisable à un monde non contrôlable. L’effort est alors suspendu parce que le modèle s’ajuste à la situation plutôt que de la transformer.</li>
+                            <li><strong>Le Dégoût $(-1, -1, 2)$ :</strong> associe un modèle non révisable à un monde non contrôlable. Ni la révision ni l’action n’étant estimées suffisamment efficaces pour résoudre l’écart, le prototype proposé oriente vers une mise à distance ou un rejet de l’objet.</li>
+                        </ul>
+                        <p>
+                            Ces quatre prototypes couvrent exhaustivement les quatre combinaisons de polarités non nulles retenues, et non l’ensemble des états émotionnels possibles. Enfin, deux configurations diagonalement opposées inversent conjointement leurs polarités par <strong>l’inversion centrale $(X, Y) \to (-X, -Y)$</strong>, qui constitue, à la première couronne, la relation d’antagonisme de la Matrice. Cette symétrie est formelle puisque, selon l’objet inféré, deux positions opposées peuvent conduire à une même conduite observable. Cette lecture permet de concevoir les transitions affectives comme des déplacements orientés au sein de cet espace. Cette même inversion s’applique le long des axes, la Joie à la Tristesse et le Courage à la Peur, de sorte que chacune des huit configurations de la première couronne possède son antagoniste.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-emerald-300 mt-4 mb-2">6.3. Dynamique de la Matrice</h3>
+                        <p>
+                            La Matrice ne décrit pas des états affectifs figés, mais des trajectoires. Une configuration comportant une dimension localement neutre peut devenir une configuration polarisée sur les deux dimensions lorsque le second signal devient saillant. Ces passages d’un état à l’autre ne sont ni obligatoires ni irréversibles. Ils sont guidés par l’attention, qui s’ajuste en continu en fonction des actions engagées et des retours du corps. Enfin, les apprentissages antérieurs, le contexte et le langage déterminent comment cette dynamique interne sera finalement catégorisée en émotion, ressentie et nommée.
+                        </p>
+                        <p>
+                            Le modèle postule une diminution de la mobilisation saillante et un retour vers la veille, sans que la géométrie actuelle spécifie à elle seule les étapes de ce retour. Globalement, l’organisme évaluerait la réussite de son adaptation par la valence globale de sa trajectoire et arbitrerait entre modifier ses croyances ou agir sur son environnement. Dès qu’une perturbation cesse d’être alimentée, le modèle prévoit une diminution progressive de l’effort adaptatif. Le système quitte son état de tension, regagne une position moins tranchée, puis son Point de Veille dès que la situation redevient pleinement tolérable. La géométrie définit toutefois les positions accessibles sans spécifier, à elle seule, les lois dynamiques de ce retour ni sa stabilité, qui demeurent une hypothèse à préciser et à mettre à l’épreuve. Une spécification minimale devrait préciser les déplacements permis, par exemple entre positions voisines d’une même strate ou vers la strate adjacente, la dépendance de leur probabilité aux observations et à la précision, ainsi que les critères qui distinguent un centre opérateur d’une position périphérique.
                         </p>
                     </div>
 
-                    <!-- FIGURE 3 INTERACTIVE SVG -->
+                    <!-- FIGURE 3 INTERACTIVE SVG CARD -->
                     <div id="figure-3" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
@@ -864,56 +1056,133 @@
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 7 : LA TAXONOMIE HIÉRARCHIQUE & FIGURE 4         -->
+                <!-- SECTION 7 : LA TAXONOMIE HIÉRARCHIQUE                    -->
                 <!-- ======================================================== -->
                 <section id="section-7" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
                         <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 7</span>
-                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">7. La Taxonomie Hiérarchique (Les 5 Couches)</h2>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">7. La Taxonomie Affective</h2>
                     </div>
 
-                    <div class="academic-text">
+                    <div class="academic-text space-y-4">
                         <p>
-                            Appliquée à chaque niveau de l’Axe Z, la structure de la Matrice se reprend en une Taxonomie hiérarchique. Cette Taxonomie organise l’univers affectif selon des niveaux croissants de profondeur temporelle, d’abstraction et d’intégration des modèles génératifs.
+                            Le processus ne s’interrompt pas avec l’émergence de l’émotion. Les trois niveaux de traitement de l’architecture (Moteur, Noyau et Matrice) participent à une boucle d’inférence active dans laquelle la politique d’action sélectionnée modifie le corps et l’environnement, dont les afférences de retour réalimentent à leur tour les niveaux computationnels (Clark, 2016 ; Friston et al., 2017). La Taxonomie hiérarchique constitue la quatrième composante de l’architecture, qui reprend cette boucle à différentes profondeurs plutôt que d’ajouter un quatrième niveau de traitement.
                         </p>
                     </div>
 
-                    <!-- 5 Strata Hierarchy Visual Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-slate-400 font-bold">Niveau 0 (Z = 0)</span>
-                            <div class="font-bold text-white text-sm">Point de Veille (0,0,0)</div>
-                            <p class="text-xs text-slate-400">Veille homéostatique de fond ; flux intéroceptifs sans saillance ni profondeur inférentielle.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-amber-950/30 border border-amber-800/40 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-amber-300 font-bold">1ère Couche (Z = 1)</span>
-                            <div class="font-bold text-white text-sm">Surprise (0,0,1)</div>
-                            <p class="text-xs text-slate-300">Rupture de veille ; enregistrement d'un écart saillant sans orientation encore déterminée.</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-purple-950/40 border border-purple-700/50 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-purple-300 font-bold">2e Couche (Z = 2)</span>
-                            <div class="font-bold text-white text-sm">Anticipation (0,0,2)</div>
-                            <p class="text-xs text-slate-300">Première couronne affective : 4 axiales (Joie, Tristesse, Peur, Courage) et 4 combinées (Désir, Colère, Calme, Dégoût).</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-pink-950/30 border border-pink-800/40 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-pink-300 font-bold">3e Couche (Z = 3)</span>
-                            <div class="font-bold text-white text-sm">Émoi (0,0,3)</div>
-                            <p class="text-xs text-slate-300">Émotions réactives : la configuration persiste, s'intensifie ou se différencie selon son histoire immédiate (|X|+|Y|=4).</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-indigo-950/30 border border-indigo-800/40 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-indigo-300 font-bold">4e Couche (Z = 4)</span>
-                            <div class="font-bold text-white text-sm">Réserve (0,0,4)</div>
-                            <p class="text-xs text-slate-300">Sentiments réflexifs : modèles de second ordre portant sur autrui et sur le modèle de soi (|X|+|Y|=6).</p>
-                        </div>
-                        <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-800/40 space-y-1">
-                            <span class="text-[10px] font-mono uppercase text-emerald-300 font-bold">5e Couche (Z = 5)</span>
-                            <div class="font-bold text-white text-sm">Recul (0,0,5)</div>
-                            <p class="text-xs text-slate-300">Orientations stables &amp; Humeurs : paramètres lents du modèle génératif sur classes étendues de situations (|X|+|Y|=8).</p>
+                    <!-- 5 Inferential Steps Card -->
+                    <div class="p-5 rounded-2xl bg-cosmic-900 border border-purple-500/30 space-y-3">
+                        <span class="text-xs uppercase font-bold tracking-wider text-purple-400">La Boucle d’Inférence Active à 5 Temps</span>
+                        <div class="space-y-2 text-xs text-slate-300">
+                            <p><strong>1. Évaluation parallèle :</strong> L’Interface Subjective détermine l’état du gradient d’Attente (A0, A− ou A+) à partir des modèles génératifs descendants, tandis que l’Interface Perceptive détermine l’état du gradient de Contrôle (C0, C− ou C+) à partir des afférences ascendantes.</p>
+                            <p><strong>2. Pondération et activation du Noyau :</strong> L’Interface Attentionnelle module la précision et transmet le vecteur pondéré au Noyau affectif, qui le positionne en coordonnées et formalise la charge ou la décharge computationnelle brute.</p>
+                            <p><strong>3. Transduction phénoménologique et inférence active :</strong> La Matrice affective traduit cette position en description phénoménologique, sous la forme d’une Valence (V) rattachée à la position et d’une Activation (Act) qui qualifie la trajectoire, et oriente la sélection d’une politique d’action sur le corps ou le monde.</p>
+                            <p><strong>4. Ré-échantillonnage et rétroaction :</strong> L’action modifie l’environnement et l’état corporel, et les nouveaux signaux intéroceptifs et extéroceptifs sont réinjectés dans l’Interface Perceptive.</p>
+                            <p><strong>5. Arbitrage attentionnel :</strong> L’Interface Attentionnelle oriente la résolution vers l’une des deux voies, ou vers les deux. La voie épistémique réinjecte le signal vers l’Interface Subjective afin de réviser le modèle génératif et de mettre à jour le gradient d’Attente. La voie pragmatique le réinjecte vers l’Interface Perceptive afin de réajuster l’effort physique ou la posture de contrôlabilité portée par le gradient de Contrôle. Dans la lecture fonctionnelle, les épisodes saillants mobilisent une régulation anticipatrice, tandis que le Point de Veille représente le maintien de fond dans une plage de tolérance.</p>
                         </div>
                     </div>
 
-                    <!-- FIGURE 4 INTERACTIVE MAP OVERVIEW -->
+                    <div class="academic-text space-y-4">
+                        <p>
+                            Cette boucle donne un contenu dynamique aux trajectoires. Chaque itération peut déplacer la position dans le Noyau, approfondir le traitement le long de l’Axe Z lorsque l’écart demeure non résolu, ou ramener le système vers son Point de Veille lorsque la perturbation cesse d’être alimentée. La distinction entre les deux voies reprend, au niveau de la dynamique, la partition entre valeur épistémique et valeur pragmatique qui fonde les deux gradients.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-purple-300 mt-4 mb-2">7.1. La Taxonomie hiérarchique</h3>
+                        <p>
+                            Appliquée à chaque niveau de l’Axe Z, la structure de la Matrice se reprend en une Taxonomie hiérarchique dont la figure 4 présente la synthèse. Cette Taxonomie organise l’univers affectif selon des niveaux croissants de profondeur temporelle, d’abstraction et d’intégration des modèles génératifs. Les catégories émotionnelles y sont conçues comme des attracteurs probabilistes vers lesquels une trajectoire converge avec un degré variable d’appartenance. Ce degré dépend de la cohérence momentanée entre les gradients, de l’objet inféré, du contexte, de la politique d’action sélectionnée et des concepts disponibles.
+                        </p>
+                        <p>
+                            La Taxonomie n’est donc ni strictement séquentielle ni composée de classes exclusives. Chaque couche encapsule les dynamiques des précédentes tout en les recontextualisant. Les signaux corporels remontent sous forme d’écarts de prédiction ascendants et actualisent les modèles génératifs, tandis que les concepts, les croyances et les normes sociales agissent comme des prédictions descendantes qui modulent la perception, l’attention et la sélection des politiques d’action. La culture participe à cette récursivité en rendant certaines configurations plus accessibles ou plus saillantes, sans pour autant en modifier les positions structurelles.
+                        </p>
+                        <p>
+                            Enfin, à chaque niveau, toute configuration se voit correspondre un antagoniste géométrique situé dans le secteur ou le quadrant opposé, qui en inverse les polarités et décrit la stratégie régulatrice opposée. Deux règles de construction définissent cet antagoniste :
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
+                            <li><strong>Positions axiales :</strong> s’obtient par l’inversion centrale $(X, Y) \to (-X, -Y)$, qui associe par exemple la Joie $(0, 2, 2)$ à la Tristesse $(0, -2, 2)$.</li>
+                            <li><strong>Positions diagonales et latérales :</strong> s’obtient par réflexion sur la diagonale séparant les quadrants concernés, soit $(X, Y) \to (-Y, -X)$ lorsque les polarités sont de même signe, et $(X, Y) \to (Y, X)$ lorsqu’elles sont de signes opposés. Pour les positions latérales, cette réflexion permute la dimension dominante, de sorte qu’une configuration dominée par le Contrôle a pour antagoniste une configuration dominée par l’Attente, par exemple la Haine $(-1, 5, 4)$ et l’Affection $(5, -1, 4)$. L’inversion centrale fournirait également un autre candidat, comme la Plénitude $(1, -5, 4)$, qui conserve la dimension de Contrôle dominante, mais ne correspond pas à la règle retenue pour les positions latérales. Le Manque $(-5, 1, 4)$ résulterait, quant à lui, d’une réflexion sur l’autre diagonale.</li>
+                        </ul>
+
+                        <h3 class="text-lg font-heading font-bold text-sky-300 mt-4 mb-2">7.2. Les cinq couches de l’inférence affective</h3>
+                        <p>
+                            Nous présentons une heuristique organisée autour d’un niveau initial et de cinq couches hiérarchiques. Le niveau initial $Z = 0$ correspond au Point de Veille. Les deux premières couches ont pour centres des opérateurs fonctionnels de transition, la Surprise et l’Anticipation. La position $(0, 0, 1)$ de la Surprise est la trace d’un écart de prédiction enregistré dont aucune dimension n’est résolue, de sorte que la première couche se réduit à ce centre. L’Anticipation, opérateur descendant issu de l’Interface Subjective, occupe quant à elle le centre $(0, 0, 2)$ de la deuxième couche, qui comporte en outre les huit configurations périphériques de la première couronne, vers l’une desquelles elle oriente le déplacement. Dans l’architecture proposée, ces opérateurs participent à l’organisation des couches suivantes.
+                        </p>
+                        <p>
+                            La correspondance entre les termes définis à la section 2 et les couches, soit les affects primaires à $Z = 2$, les émotions à $Z = 3$ et les sentiments à $Z = 4$, désigne le niveau où chaque modalité prédomine. Il en découle que les étiquettes de la deuxième couche, telles que la Joie ou la Peur, nomment des affects primaires sous leur forme prototypique. Ces étiquettes que la Matrice associe aux positions du noyau ne nomment une émotion au sens strict qu’une fois l’affect rattaché à une cause inférée, ce qui caractérise la troisième couche. Cette correspondance ne pose pas ces couches comme des conditions nécessaires, un affect pouvant participer à une inférence profonde et une émotion pouvant être éprouvée consciemment sans engager une strate réflexive distincte. Au-delà des deux premières, les couches se distinguent par l’objet, la complexité et l’horizon de l’inférence, et non par la nature des opérations engagées, formellement invariantes d’un niveau à l’autre.
+                        </p>
+                    </div>
+
+                    <!-- The 6 Hierarchy Strata Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-slate-400 font-bold">Z = 0 &bull; Niveau Initial</span>
+                            <div class="text-sm font-bold text-white">Point de Veille (0, 0, 0)</div>
+                            <p class="text-xs text-slate-400">Veille pure et maintien homéostatique de fond ; flux intéroceptifs sans saillance.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-amber-400 font-bold">Z = 1 &bull; 1ère Couche</span>
+                            <div class="text-sm font-bold text-white">Surprise (0, 0, 1)</div>
+                            <p class="text-xs text-slate-400">Sortie de veille sous l’effet d’un écart saillant enregistré sans orientation encore déterminée.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-purple-400 font-bold">Z = 2 &bull; 2e Couche</span>
+                            <div class="text-sm font-bold text-white">Affects Primaires &bull; Anticipation (0, 0, 2)</div>
+                            <p class="text-xs text-slate-400">Première couronne (8 prototypes) : Joie, Tristesse, Peur, Courage, Désir, Colère, Calme, Dégoût.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-sky-400 font-bold">Z = 3 &bull; 3e Couche</span>
+                            <div class="text-sm font-bold text-white">Émotions Réactives &bull; Émoi (0, 0, 3)</div>
+                            <p class="text-xs text-slate-400">Écart rattaché à une cause inférée immédiate ; réponse motrice directe.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-indigo-400 font-bold">Z = 4 &bull; 4e Couche</span>
+                            <div class="text-sm font-bold text-white">Sentiments Réflexifs &bull; Réserve (0, 0, 4)</div>
+                            <p class="text-xs text-slate-400">Modèles de soi face à autrui ; modèles génératifs de second ordre.</p>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                            <span class="text-[10px] font-mono uppercase text-emerald-400 font-bold">Z = 5 &bull; 5e Couche</span>
+                            <div class="text-sm font-bold text-white">Orientations Stables &bull; Recul (0, 0, 5)</div>
+                            <p class="text-xs text-slate-400">Humeurs et dispositions durables ; paramètres lents du modèle génératif sur larges horizons.</p>
+                        </div>
+                    </div>
+
+                    <div class="academic-text space-y-4">
+                        <p>
+                            Les centres des couches $Z \ge 3$ prolongent à chaque strate la fonction de l’Anticipation. L’Émoi $(0, 0, 3)$, la Réserve $(0, 0, 4)$ et le Recul $(0, 0, 5)$ ne constituent pas des prototypes, mais des opérateurs. Aucune des deux évaluations n’y est encore tranchée. Chacun désigne la suspension qui précède la résolution sur les Axes X et Y, soit l’allocation du budget attentionnel, portée sur l’objet propre à sa couche, à savoir la situation et son histoire immédiate pour l’Émoi, le soi engagé face à autrui pour la Réserve, et la prévisibilité de classes étendues de situations pour le Recul. Le Recul ne désigne pas ici un retrait, qui relèverait d’une polarité négative du Contrôle, mais l’élargissement de l’horizon à partir duquel la situation est considérée. Un tel centre peut être atteint de deux manières, soit par l’approfondissement d’une configuration de la strate précédente qui ne parvient pas à se résoudre, soit par un écart qui remet directement en cause un modèle plus abstrait. La progression ainsi nommée, s’émouvoir, se retenir puis prendre du recul, traduit l’élargissement de l’objet de l’inférence plutôt qu’un changement de nature des opérations.
+                        </p>
+                        <p>
+                            À titre d’illustration, chaque orientation de la première couronne se prolonge d’une strate à l’autre en conservant son secteur et son signe :
+                        </p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
+                            <li><strong>Sur les axes :</strong>
+                                <br>&bull; la <em>Joie</em> se prolonge en <strong>Enthousiasme</strong>, en <strong>Exaltation</strong> puis en <strong>Puissance</strong> ;
+                                <br>&bull; la <em>Tristesse</em> en <strong>Ennui</strong>, en <strong>Solitude</strong> puis en <strong>Impuissance</strong> ;
+                                <br>&bull; la <em>Peur</em> se prolonge en <strong>Crainte</strong>, en <strong>Doute</strong> puis en <strong>Méfiance</strong> ;
+                                <br>&bull; le <em>Courage</em> en <strong>Curiosité</strong>, en <strong>Assurance</strong> puis en <strong>Confiance</strong>.
+                            </li>
+                            <li><strong>Sur les diagonales :</strong>
+                                <br>&bull; le <em>Désir</em> se prolonge en <strong>Attrait</strong>, en <strong>Estime</strong> puis en <strong>Intérêt</strong> ;
+                                <br>&bull; le <em>Dégoût</em> en <strong>Retrait</strong>, en <strong>Rejet</strong> puis en <strong>Désintérêt</strong> ;
+                                <br>&bull; la <em>Colère</em> se prolonge en <strong>Exaspération</strong>, en <strong>Frustration</strong> puis en <strong>Insatisfaction</strong> ;
+                                <br>&bull; le <em>Calme</em> en <strong>Détente</strong>, en <strong>Acceptation</strong> puis en <strong>Satisfaction</strong>.
+                            </li>
+                            <li><strong>Les positions latérales :</strong> s’intercalent entre ces filières et en nuancent la répartition. C’est le cas par exemple de la <strong>Honte</strong> et de la <strong>Fierté</strong> à la strate réflexive, ou de l’<strong>Espoir</strong> et du <strong>Désespoir</strong> parmi les orientations stables.</li>
+                        </ul>
+                        <p>
+                            La récursivité ainsi décrite pourrait se prolonger au-delà des orientations affectives stables, la révisabilité portant alors sur le modèle de soi tenu pour invariant à travers les situations, puis sur le cadre de signification à partir duquel toute évaluation est conduite.
+                        </p>
+
+                        <h3 class="text-lg font-heading font-bold text-emerald-300 mt-4 mb-2">7.3. L’articulation des niveaux : contrôlabilité et révisabilité</h3>
+                        <p>
+                            Le passage d’une couche à l’autre obéit à une logique formelle invariante, indépendamment de la profondeur inférentielle engagée. Ce qui se transforme n’est donc pas la structure formelle de l’évaluation, mais bien la nature de son objet. À la strate des affects primaires ($Z = 2$), la contrôlabilité et la révisabilité portent sur l’écart élémentaire enregistré par la Surprise, avant tout rattachement à une cause inférée. À la strate réactive ($Z = 3$), qui caractérise les émotions, cet écart est rattaché à une cause inférée. La contrôlabilité y cible une réponse motrice directe à la situation ainsi identifiée, et la révisabilité s’applique à la prédiction sensorielle immédiate que cette situation et son histoire immédiate ont engagée. À la strate réflexive ($Z = 4$), les évaluations portent notamment sur le modèle de soi, les relations et les conséquences de la conduite sur autrui. À la strate des orientations affectives stables ($Z = 5$), enfin, les deux évaluations portent sur des classes étendues de situations, la révisabilité engageant les paramètres lents du modèle génératif qui en règlent la prévisibilité. L’architecture hiérarchique s’articule ainsi par la reprise récursive de ce même couple d’évaluations computationnelles appliqué à des objets d’inférence de plus en plus abstraits.
+                        </p>
+                        <p>
+                            La cristallisation des strates profondes, telles que les humeurs et les schémas affectifs durables, procèderait de l’apprentissage allostatique, fondé sur l’intégration répétée d’expériences reliant les concepts émotionnels aux observations intéroceptives. À mesure que les expériences s’accumulent, les distributions a priori peuvent se préciser et se stabiliser. Dans certaines conditions, cette stabilisation peut s’accompagner d’une moindre révisabilité. Elles confèrent dès lors aux attracteurs des couches supérieures, soit les sentiments réflexifs et les orientations affectives stables, une forte inertie face aux fluctuations de l’environnement. L’aptitude de l’agent à catégoriser finement son univers affectif dépendrait ainsi étroitement de la granularité et de la diversité de ses expériences précoces, qui guident la transition et la mise à jour des croyances affectives.
+                        </p>
+                    </div>
+
+                    <!-- FIGURE 4 HIERARCHY TREE CARD -->
                     <div id="figure-4" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
@@ -1004,99 +1273,161 @@
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 8 : DISCUSSION & PRÉDICTIONS EMPIRIQUES          -->
+                <!-- SECTION 8 : DISCUSSION & PRÉDICTIONS                     -->
                 <!-- ======================================================== -->
                 <section id="section-8" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
                         <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 8</span>
-                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">8. Discussion, Applications &amp; Prédictions Empiriques</h2>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">8. Discussion</h2>
                     </div>
 
-                    <!-- Clinical Applications (Depression & Biases) -->
-                    <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-800 space-y-4">
-                        <span class="text-xs uppercase font-bold tracking-wider text-rose-400">Application Psychopathologique &amp; Biais Attentionnels</span>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
-                            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                                <h4 class="font-bold text-white text-sm">Le Trouble Dépressif comme Verrouillage Profond</h4>
-                                <p class="leading-relaxed">
-                                    La dépression se caractérise par une <strong>immunisation cognitive</strong> (maintien des croyances négatives malgré les démentis). Dans le modèle, elle correspond à une charge d'Attente (-X, modèle non révisable) couplée à une absence d'action (-Y, monde non contrôlable), soit le <strong>quadrant du Dégoût cristallisé à Z=5</strong> où les paramètres lents du modèle génératif ont une forte inertie.
+                    <div class="academic-text space-y-4">
+                        <h3 class="text-lg font-heading font-bold text-purple-300 mb-2">8.1. Dialogue avec les théories existantes</h3>
+                        <p>
+                            La cartographie des affects propose une articulation possible entre la pensée typologique et le constructionnisme. Là où les théories des émotions de base conçoivent les émotions comme des types naturels universels (Ekman, 1992 ; Panksepp, 1998) et où le constructionnisme psychologique les décrit comme des phénomènes émergents et contextuels (Barrett, 2017), cette cartographie suggère que l’affect constitue un processus continu participant à l’évaluation et à la régulation des écarts de prédiction, les catégories étant conservées comme repères prototypiques. L’inférence intéroceptive permet en outre de dépasser la dichotomie historique entre origine centrale et périphérique de l’émotion, héritée de James (1884) et déjà reformulée par la distinction entre émotion et sentiment (Damasio &amp; Carvalho, 2013) ainsi que par les modèles de codétermination continue (LeDoux, 2012 ; Seth, 2013).
+                        </p>
+                        <p>
+                            La cartographie dialogue par ailleurs avec les dimensions de valence et d’activation du modèle circumplexe, dont elle propose une lecture générative (Russell, 1980, 2003). Le circumplexe situe en effet la Peur et la Colère dans un même quadrant sans rendre compte de leur différence fonctionnelle, et le Geneva Emotion Wheel place la Peur dans le seul quadrant du faible contrôle (Scherer, 2005). La présente proposition la redéfinit plutôt comme une orientation axiale instable, à Contrôle indéterminé, susceptible de basculer vers la Colère si une politique d’action se précise, ou vers le Dégoût, prototype du rejet, si l’inhibition s’impose, ce qui rend intelligibles à la fois leur voisinage et leur différenciation. Les théories de l’évaluation cognitive peuvent également y être relues (Lazarus, 1991 ; Scherer, 2005). Leur séquence d’évaluation y apparaît comme une mise en œuvre possible du principe de minimisation de l’incertitude (Friston et al., 2017), et non comme sa conséquence nécessaire, conformément au statut de postulat accordé aux deux évaluations, tandis que la régulation émotionnelle s’y comprend comme une intervention sur la précision et les a priori (Gross, 1998). La démarche rejoint enfin les initiatives contemporaines d’unification du champ et l’essor de l’affectivisme (Dukes et al., 2021 ; Schiller et al., 2024).
+                        </p>
+                        <p>
+                            La stratification proposée en couche Z qui rejoint la distinction, déjà présente dans certaines théories de l’évaluation, entre traitements sensorimoteurs, schématiques et conceptuels, permet une réorganisation autour du couple contrôlabilité–révisabilité. Ainsi, le paradoxe temporel entre évaluation délibérée et réactions quasi instantanées s’atténue dès lors que les évaluations de contrôlabilité et de révisabilité sont tranchées, aux strates basses, de manière précognitive et prélinguistique, leur reprise délibérée n’intervenant qu’aux strates réflexives. À ces strates basses, la révisabilité porte sur des prédictions sensorielles et des modèles génératifs non conceptuels, de sorte que l’incertitude qualifiée de sémantique y désigne la signification de l’écart de prédiction pour l’organisme, et non une incertitude d’ordre linguistique. De même, les deux premières couches ne requérant ni concepts ni langage, la cartographie concilie une continuité avec la cognition animale (Panksepp, 2000), la catégorisation conceptuelle sur laquelle insiste le constructionnisme s’exerçant principalement à partir de la troisième couche. Enfin, la synchronisation des réponses somatiques en l’absence de programmes innés (Adolphs et al., 2019) peut être rapportée à l’opérateur d’Anticipation, qui engage les ressources allostatiques avant toute catégorisation.
+                        </p>
+                        <p>
+                            En décrivant la genèse des affects à partir du traitement prédictif, cette cartographie pourrait servir de support heuristique à l’analyse d’un épisode affectif, sans constituer un instrument diagnostique ni une grille assignant une coordonnée à une personne. Elle permettrait de repérer l’écart devenu saillant, de distinguer ce qui paraît modifiable dans la situation de ce qui paraît révisable dans le modèle interne, puis de suivre les déplacements entre ces évaluations.
+                        </p>
+                    </div>
+
+                    <!-- Clinical Applications Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-5 rounded-2xl bg-cosmic-900 border border-rose-500/30 space-y-2">
+                            <span class="text-xs uppercase font-bold text-rose-400 tracking-wider">Application Clinique : Trouble Dépressif</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Les travaux sur la dépression décrivent trois perturbations conjointes : <strong>immunisation cognitive</strong> (maintien des croyances négatives), <strong>biais de mise à jour</strong> lié à la valence, et <strong>difficulté de désengagement</strong> (Bottemanne et al., 2022). Le modèle l'interprète comme une faible révisabilité (-X) et une faible contrôlabilité perçue (-Y), verrouillant le système aux strates profondes de la 5e couche ($Z=5$) : Désintérêt $(-4, -4, 5)$, Fermeture $(-3, -5, 5)$, Pessimisme $(-2, -6, 5)$ et Désespoir $(-1, -7, 5)$.
+                            </p>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-cosmic-900 border border-amber-500/30 space-y-2">
+                            <span class="text-xs uppercase font-bold text-amber-400 tracking-wider">Application Clinique : Biais Attentionnels</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                Les habitudes d'échantillonnage figé (centrage somatique exclusif ou négligence viscérale) maintiennent une contribution non saillante de l’un des gradients, rendant anormalement persistantes des positions affectives rigides (Smith et al., 2019 ; Tschantz et al., 2022).
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="academic-text space-y-4">
+                        <h3 class="text-lg font-heading font-bold text-sky-300 mt-4 mb-2">8.2. Forces et limites</h3>
+                        <p>
+                            La principale force proposée de cette cartographie tient à la parcimonie de sa construction, dans la mesure où un couple minimal d’évaluations adaptatives, associé à des conventions de placement explicites, organise les configurations retenues selon leur voisinage et leur opposition. La distinction en couches hiérarchiques permet de formuler, dans un même cadre, des hypothèses sur les réactions intéroceptives élémentaires et sur les sentiments réflexifs. Cette cohérence décrit la portée interne du modèle, sans établir ni que deux évaluations suffisent à rendre compte de l’ensemble des phénomènes affectifs ni que les correspondances proposées sont empiriquement valides.
+                        </p>
+                        <p>
+                            Cinq limites doivent en contrepartie être soulignées :
+                        </p>
+                        <ol class="list-decimal list-inside space-y-1.5 pl-2 text-slate-300 text-sm">
+                            <li><strong>Caractère théorique :</strong> la proposition demeure théorique, et ses composantes structurelles n’ont pas fait l’objet d’une validation empirique directe.</li>
+                            <li><strong>Décision de modélisation :</strong> la réduction à deux gradients constitue une décision de modélisation, que la décomposition de l’énergie libre attendue rend plausible sans imposer que chacun de ses termes soit porté par une coordonnée unique.</li>
+                            <li><strong>Métrique géométrique :</strong> la métrique de Manhattan et l’hypothèse du budget attentionnel qui organisent la disposition des positions ne sont pas étayées par une théorie formelle de l’attention, et une autre géométrie pourrait rendre la même structure qualitative.</li>
+                            <li><strong>Risque de circularité :</strong> la construction est exposée au risque de circularité, de sorte que la cohérence interne ne peut tenir lieu de validation.</li>
+                            <li><strong>Délimitation des catégories :</strong> la délimitation reste illustrative. La variance transculturelle de la sémantique des émotions est compatible avec l’hypothèse d’une granularité des attracteurs dépendant des réseaux sémantiques disponibles, sans établir pour autant l’universalité de l’architecture postulée (Barrett, 2017 ; Jackson et al., 2019 ; Mesquita et al., 2017).</li>
+                        </ol>
+                        <p>
+                            Enfin, la définition des seuils de saillance, la transformation des évaluations en coordonnées, la correspondance avec la valence et l’activation, ainsi que les lois de transition restent à spécifier.
+                        </p>
+                    </div>
+
+                    <!-- 3 Falsifiable Empirical Predictions -->
+                    <div class="p-6 rounded-2xl bg-gradient-to-br from-purple-950/60 to-slate-900 border-2 border-purple-500/40 space-y-4">
+                        <div class="border-b border-purple-800/40 pb-2">
+                            <span class="text-xs uppercase font-bold tracking-widest text-purple-300">Portée Épistémologique &bull; Critère de Réfutabilité</span>
+                            <h4 class="text-lg font-heading font-bold text-white mt-0.5">Trois Prédictions Empiriques Réfutables</h4>
+                        </div>
+
+                        <div class="space-y-3 text-xs text-slate-300 leading-relaxed">
+                            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                                <span class="font-bold text-purple-300 text-sm">Prédiction 1 : Arbitrage sous contrainte de budget attentionnel</span>
+                                <p>
+                                    Bornée aux situations où les voies pragmatique et épistémique sollicitent des ressources concurrentes. En manipulant la contrôlabilité d’une situation et en mesurant la révision des croyances au cours d’un même épisode, on devrait observer une relation inverse entre la résolution sur le Contrôle et la résolution sur l’Attente ($|X| + |Y| = \text{cste}$). À profondeur et ressources disponibles contrôlées, une augmentation de l’allocation à une voie devrait s’accompagner d’une diminution de l’allocation à l’autre.
                                 </p>
                             </div>
-                            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-                                <h4 class="font-bold text-white text-sm">Biais Attentionnels &amp; Habitudes d'Échantillonnage</h4>
-                                <p class="leading-relaxed">
-                                    Un sur-échantillonnage de l'éveil somatique ou à l'inverse un biais externe bloque l'intégration multimodale. Ce verrouillage empêche de réduire l'incertitude sur les états affectifs latents, confinant l'agent dans des <strong>attracteurs axiaux indéterminés</strong> et entravant l'acquisition de nuances émotionnelles.
+
+                            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                                <span class="font-bold text-sky-300 text-sm">Prédiction 2 : Instabilité des positions axiales</span>
+                                <p>
+                                    Dans des séries temporelles d’auto-évaluations répétées au cours d'un même épisode, les durées de maintien dans les positions à une seule dimension tranchée (axiales : Joie, Tristesse, Peur, Courage) devraient être significativement plus brèves que dans les positions combinées (diagonales : Désir, Colère, Calme, Dégoût), et les transitions des premières vers les secondes plus fréquentes que la transition inverse.
+                                </p>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1">
+                                <span class="font-bold text-emerald-300 text-sm">Prédiction 3 : Profondeur hiérarchique et persistance temporelle</span>
+                                <p>
+                                    Une même orientation affective induite à une strate plus profonde ($Z$ élevé) devrait présenter une persistance temporelle supérieure et une moindre modification après réception d'une information contradictoire comparable. L’absence de différence d'inertie infirmerait directement cette prédiction.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 3 Testable Empirical Predictions (CRITICAL SCIENTIFIC CONTRIBUTION) -->
-                    <div class="p-6 rounded-2xl bg-gradient-to-br from-indigo-950/60 to-purple-950/60 border border-indigo-700/50 space-y-4">
-                        <div class="flex items-center justify-between border-b border-indigo-800/40 pb-2">
-                            <span class="text-xs uppercase font-bold tracking-wider text-indigo-300">Falsifiabilité &amp; Réfutation Scientifique</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-900/60 text-indigo-300 border border-indigo-600/40">3 Hypothèses Testables</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-                                <span class="font-bold text-purple-300 text-sm">Prédiction 1 : Arbitrage L1</span>
-                                <p class="text-slate-300 leading-relaxed">
-                                    En manipulant la contrôlabilité d'une situation (Axe Y), le taux de révision des croyances (Axe X) doit varier en sens inverse. Une covariation positive réfuterait la contrainte de Manhattan.
-                                </p>
-                            </div>
-                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-                                <span class="font-bold text-sky-300 text-sm">Prédiction 2 : Instabilité Axiale</span>
-                                <p class="text-slate-300 leading-relaxed">
-                                    Les temps de séjour dans les positions axiales (Joie, Tristesse, Peur, Courage) doivent être significativement plus brefs que dans les attracteurs combinés (Colère, Calme, etc.).
-                                </p>
-                            </div>
-                            <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-                                <span class="font-bold text-emerald-300 text-sm">Prédiction 3 : Inertie de Profondeur</span>
-                                <p class="text-slate-300 leading-relaxed">
-                                    Une configuration engagée à une strate profonde ($Z=5$, humeurs) présente une inertie supérieure et une résistance accrue à l'information contradictoire par rapport à $Z=2$ ou $Z=3$.
-                                </p>
-                            </div>
-                        </div>
+                    <div class="academic-text space-y-4">
+                        <p>
+                            La mise à l’épreuve de ces prédictions suppose d’opérationnaliser les deux évaluations indépendamment des étiquettes émotionnelles. La contrôlabilité perçue et la révisabilité estimée peuvent être recueillies par auto-évaluations répétées. La révision effectivement observée des croyances constitue une mesure complémentaire, distincte de la possibilité estimée de les réviser. Le recueil d’auto-évaluations répétées au cours d’un même épisode fournirait les séries temporelles requises par la deuxième prédiction, tandis que la manipulation de l’horizon temporel ou du niveau d’abstraction de l’objet permettrait de faire varier la profondeur requise par la première et la troisième. La correspondance entre ces mesures continues et les coordonnées discrètes du Noyau reste toutefois à établir, ce qui constitue un préalable à toute validation. De plus, une mesure de non-saillance doit être distinguée d’une réponse incertaine, d’une absence de réponse et d’une valeur intermédiaire.
+                        </p>
+                        <p>
+                            Deux mises en garde adressées au cadre prédictif s’appliquent enfin à la présente proposition. La première tient à la polysémie des termes empruntés, les notions de surprise, d’attente, de contrôle et d’incertitude pouvant désigner tantôt des états ou des opérations au niveau computationnel, tantôt des expériences vécues au niveau phénoménologique. Pour limiter les confusions entre ces plans conceptuels, l’article réserve, avec une majuscule, le terme d’<strong>Attente</strong> au gradient porté par l’Axe X, celui de <strong>Contrôle</strong> au gradient porté par l’Axe Y et celui de <strong>Surprise</strong> à l’opérateur d’enregistrement d’un écart saillant. L’incertitude qualifie ici les possibilités estimées de résolution de l’écart, sans se confondre avec le sentiment conscient d’incertitude. Ces distinctions terminologiques ne présument pas d’une correspondance directe entre une description computationnelle et son expression phénoménologique. La seconde concerne la falsifiabilité, la diversité des formalismes rendant difficile toute réfutation du cadre prédictif pris globalement (Colombo &amp; Wright, 2017). C’est pourquoi les prédictions formulées ci-dessus portent sur la cartographie elle-même.
+                        </p>
                     </div>
                 </section>
 
+
                 <!-- ======================================================== -->
-                <!-- SECTION 9 : CONCLUSION & MENTIONS LÉGALES               -->
+                <!-- SECTION 9 : CONCLUSION & DÉCLARATIONS                    -->
                 <!-- ======================================================== -->
                 <section id="section-9" class="space-y-6">
                     <div class="border-b border-purple-800/40 pb-2">
                         <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Section 9</span>
-                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">9. Conclusion &amp; Statut de Propriété Intellectuelle</h2>
+                        <h2 class="text-2xl sm:text-3xl font-heading font-black text-white">9. Conclusion</h2>
                     </div>
 
-                    <div class="academic-text">
+                    <div class="academic-text space-y-4">
                         <p>
-                            La cartographie des affects propose une architecture conceptuelle mise en relation avec le traitement prédictif pour organiser la psychologie des émotions. Sa contribution principale est de <strong>cesser de considérer l’affect comme une perturbation de la cognition</strong>, pour plutôt le repositionner comme son principe organisateur et comme l’opérateur adaptatif fondamental face à l’incertitude (Clark, 2013).
+                            La cartographie des affects propose une architecture conceptuelle mise en relation avec le traitement prédictif pour organiser la psychologie des émotions. Sa contribution principale tient à une grammaire minimale, selon laquelle deux évaluations adaptatives, la révisabilité du modèle interne (Attente) et la contrôlabilité de la situation (Contrôle), chacune tranchée positivement, négativement ou demeurant neutre lorsque le signal propre au gradient est non saillant, engendrent, sous des conventions de construction explicites, les configurations affectives retenues et leurs antagonismes formels. L’affect n’y est plus considéré comme une perturbation de la cognition, mais comme une fonction qui l’oriente et comme un opérateur adaptatif face à l’incertitude.
                         </p>
                         <p>
-                            L’affect y est conçu comme le produit d’une interaction prédictive continue entre les Interfaces Perceptive, Subjective et Attentionnelle. L’Attente et le Contrôle qui en découlent structurent une Matrice affective cartographiant non pas un espace figé, mais bien des gradients et des attracteurs probabilistes, à partir desquels se déploie une Taxonomie hiérarchique allant des processus primordiaux aux orientations affectives stables.
+                            L’architecture comporte quatre composantes emboîtées, soit trois niveaux de traitement, chacun construit à partir du précédent, et une Taxonomie qui les reprend à chaque strate. Au niveau du Moteur prédictif, l’interaction continue entre les Interfaces Perceptive, Subjective et Attentionnelle convertit l’écart de prédiction en deux gradients d’incertitude, l’Attente et le Contrôle, pondérés par la précision. Au niveau du Noyau affectif, la distinction analytique et la polarité de ces gradients motivent leur mise en espace sur les Axes X et Y, tandis que l’Axe Z indexe la profondeur de traitement, que la précision module sans la mesurer, les polarités n’y désignant encore qu’une charge ou une décharge. Au niveau de la Matrice affective, enfin, ces positions reçoivent une valence et une activation vécues, qui n’émergent qu’à ce niveau phénoménologique, ainsi que des étiquettes prototypiques, qui ne nomment des émotions au sens strict qu’une fois l’affect rattaché à une cause inférée.
+                        </p>
+                        <p>
+                            La Matrice cartographie ainsi non pas un espace figé, mais représente des positions dont le statut d’attracteur probabiliste constitue une hypothèse dynamique, à partir desquels se déploie une Taxonomie hiérarchique allant des processus primordiaux aux orientations affectives stables, l’ensemble formant une boucle récursive d’inférence active. Cette organisation vise à articuler les apports des émotions de base, des approches dimensionnelles, des théories de l’évaluation cognitive et du constructionnisme. Les émotions y apparaissent comme des constructions dynamiques enracinées dans des mécanismes prédictifs, mais modulées par le contexte culturel et linguistique. La contribution du modèle réside dans l’organisation explicite de ses conventions et de ses hypothèses. Sa portée explicative dépendra de la spécification des règles de calcul, des correspondances phénoménologiques et des transitions, puis de leur mise à l’épreuve indépendante.
                         </p>
                     </div>
 
-                    <!-- Conflicts of interest and Legal -->
-                    <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 text-xs text-slate-400">
-                        <div class="font-bold text-white text-sm">Conflits d’intérêts &amp; Sources de Financement</div>
-                        <p>L’auteur déclare n’avoir aucun conflit d’intérêts potentiel en lien avec la recherche, la rédaction ou la publication de cet article. Ce travail n’a bénéficié d’aucune source de financement spécifique issue d’organismes subventionnaires des secteurs public, commercial ou à but non lucratif.</p>
-                        <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-500">
-                            Prépublication théorique. &copy; 2026 Manuel Cabelguen. Tous droits réservés. Droit d’auteur enregistré auprès de l’OPIC (n° 1233199). Ce travail a été réalisé à titre personnel, en dehors des fonctions de l’auteur ; les opinions exprimées n’engagent que celui-ci et ne représentent pas nécessairement la position du Service correctionnel du Canada.
+                    <!-- Déclarations Officielles : Conflits, Financement, IA, Propriété Intellectuelle -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 text-xs text-slate-300">
+                        <div>
+                            <span class="font-bold text-white text-sm">Conflits d’intérêts</span>
+                            <p class="text-slate-400 mt-1">
+                                L’auteur déclare n’avoir aucun conflit d’intérêts potentiel en lien avec la recherche, la rédaction ou la publication de cet article. Ce travail a été réalisé à titre personnel, en dehors des fonctions de l’auteur. Les opinions exprimées n’engagent que celui-ci.
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800">
+                            <span class="font-bold text-white text-sm">Sources de financement</span>
+                            <p class="text-slate-400 mt-1">
+                                Ce travail n’a bénéficié d’aucune source de financement spécifique issue d’organismes subventionnaires des secteurs public, commercial ou à but non lucratif.
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800">
+                            <span class="font-bold text-white text-sm">Déclaration relative à l’utilisation de l’intelligence artificielle générative</span>
+                            <p class="text-slate-400 mt-1">
+                                Lors de la préparation du manuscrit, l’auteur déclare avoir utilisé divers outils d’intelligence artificielle générative pour contribuer à la révision du texte, à l’élaboration du cadre théorique et des hypothèses, à la préparation des figures et à l’analyse des travaux cités. L’auteur a examiné et révisé l’ensemble des contenus produits ou modifiés à l’aide de ces outils, et il assume l’entière responsabilité du contenu de la publication.
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800 text-[11px] text-slate-500 font-mono">
+                            Droit d’auteur enregistré auprès de l’Office de la propriété intellectuelle du Canada (OPIC) sous le numéro d'enregistrement officiel 1233199 &bull; Reproduction et citations autorisées selon les règles académiques usuelles.
                         </div>
                     </div>
                 </section>
 
-                <!-- ======================================================== -->
-                <!-- BIBLIOGRAPHIE EXHAUSTIVE                                -->
-                <!-- ======================================================== -->
-                <!-- ======================================================== -->
-                <!-- BIBLIOGRAPHIE EXHAUSTIVE (49 PUBLICATIONS)               -->
-                <!-- ======================================================== -->
-                <section id="references" class="space-y-6 pt-6">
+<section id="references" class="space-y-6 pt-6">
                     <div class="border-b border-purple-800/40 pb-3 flex flex-wrap items-center justify-between gap-4">
                         <div>
                             <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Appareil Critique &bull; Corpus Théorique</span>
@@ -2568,20 +2899,18 @@
     <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
+                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
             </div>
             <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
                 <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
                 <a href="article.html" class="text-purple-400 font-semibold">L'Article</a>
                 <a href="emotions.html" class="hover:text-white transition-colors">1. Émotions</a>
-                <a href="crimes.html" class="hover:text-white transition-colors">2. Crimes</a>
-                <a href="miracles.html" class="hover:text-white transition-colors">3. Miracles</a>
                 <a href="scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
                 <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
             </div>
             <div class="text-xs text-slate-400 text-center md:text-right">
-                <div>&copy; 2024–2026 Dr Manuel Cabelguen &bull; Droit d'auteur OPIC n° 1233199</div>
+                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
                 <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
             </div>
         </div>
@@ -2692,8 +3021,26 @@
                     throwOnError: false
                 });
             }
+
+            // Initialisation de Lenis (Smooth Scroll inertiel)
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.15,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    smoothWheel: true,
+                    smoothTouch: false
+                });
+
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+            }
         });
     </script>
+    <script src="cartograffect_model.js"></script>
+    <script src="command_palette.js"></script>
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
 </body>

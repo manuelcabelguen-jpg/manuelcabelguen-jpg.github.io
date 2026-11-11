@@ -2,7 +2,7 @@
  * CARTOGRAFFECT - Système de Mode Maintenance & Verrouillage Temporaire
  * 
  * Permet de basculer le site en mode "En construction" tant qu'il n'est pas déverrouillé :
- * - Accessible au Dr Manuel Cabelguen via la clé d'accès ou le lien direct ?preview=cartograffect2026
+ * - Accessible à Manuel Cabelguen via la clé d'accès ou le lien direct ?preview=cartograffect2026
  * - Verrouillé par défaut pour tout visiteur public sur www.cartograffect.com
  * 
  * Pour réouvrir définitivement le site au grand public :
@@ -11,6 +11,17 @@
 
 (function () {
     'use strict';
+
+    // URL absolue de maintenance.html, résolue par rapport à ce script
+    // (robuste même lorsque 404.html est servi sur un chemin imbriqué).
+    var MAINTENANCE_URL = (function () {
+        try {
+            var src = document.currentScript && document.currentScript.src;
+            return src ? new URL('maintenance.html', src).href : 'maintenance.html';
+        } catch (e) {
+            return 'maintenance.html';
+        }
+    })();
 
     window.CARTOGRAFFECT_MAINTENANCE = {
         // === INTERRUPTEUR GÉNÉRAL ===
@@ -58,59 +69,95 @@
             try {
                 localStorage.removeItem(this.storageKey);
             } catch (e) { }
-            window.location.replace('maintenance.html');
+            window.location.replace(MAINTENANCE_URL);
         },
 
-        // Afficher le badge flottant discret indiquant que l'aperçu privé est actif
+        // Afficher le badge flottant discret indiquant que l'aperçu privé est actif (repliable en micro-pastille)
         injectPreviewBanner: function () {
             if (document.getElementById('cartograffect-preview-banner')) return;
 
+            // Ingestion des styles de la pastille repliable
+            if (!document.getElementById('ctg-preview-banner-style')) {
+                const style = document.createElement('style');
+                style.id = 'ctg-preview-banner-style';
+                style.textContent = `
+                    #cartograffect-preview-banner {
+                        position: fixed;
+                        bottom: 12px;
+                        left: 12px;
+                        right: auto;
+                        z-index: 999999;
+                        background: rgba(14, 23, 38, 0.88);
+                        border: 1px solid rgba(168, 85, 247, 0.45);
+                        color: #e2e8f0;
+                        padding: 4px 10px;
+                        border-radius: 9999px;
+                        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+                        font-size: 11px;
+                        font-weight: 500;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 0 0 10px rgba(168, 85, 247, 0.15);
+                        backdrop-filter: blur(10px);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        cursor: pointer;
+                        opacity: 0.75;
+                        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                        user-select: none;
+                        max-width: fit-content;
+                    }
+                    #cartograffect-preview-banner:hover,
+                    #cartograffect-preview-banner:focus-within {
+                        opacity: 1;
+                        background: rgba(11, 17, 32, 0.98);
+                        border-color: rgba(168, 85, 247, 0.7);
+                        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.8), 0 0 18px rgba(168, 85, 247, 0.35);
+                        padding: 6px 14px;
+                    }
+                    #cartograffect-preview-banner .ctg-banner-details {
+                        display: none;
+                        align-items: center;
+                        gap: 8px;
+                    }
+                    #cartograffect-preview-banner:hover .ctg-banner-details,
+                    #cartograffect-preview-banner:focus-within .ctg-banner-details {
+                        display: inline-flex;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
             const banner = document.createElement('div');
             banner.id = 'cartograffect-preview-banner';
-            banner.style.cssText = `
-                position: fixed;
-                bottom: 16px;
-                right: 16px;
-                z-index: 999999;
-                background: rgba(14, 23, 38, 0.95);
-                border: 1px solid rgba(168, 85, 247, 0.5);
-                color: #e2e8f0;
-                padding: 8px 14px;
-                border-radius: 9999px;
-                font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-                font-size: 12px;
-                font-weight: 500;
-                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.7), 0 0 15px rgba(168, 85, 247, 0.25);
-                backdrop-filter: blur(12px);
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            `;
+            banner.setAttribute('title', 'Aperçu Privé Actif (Survolez pour étendre ou reverrouiller)');
 
             banner.innerHTML = `
                 <span style="display:inline-flex; align-items:center; gap:6px;">
-                    <span style="width:8px; height:8px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981; display:inline-block;"></span>
-                    <strong style="color:#a78bfa;">Aperçu Privé</strong>
-                    <span style="color:#94a3b8; font-size:11px;">(Public = En construction)</span>
+                    <span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981; display:inline-block;"></span>
+                    <strong style="color:#a78bfa; font-size:11px;">Aperçu Privé</strong>
                 </span>
-                <button id="ctg-btn-relock" title="Reverrouiller pour tester l'affichage en construction" style="
-                    background: rgba(239, 68, 68, 0.2);
-                    border: 1px solid rgba(239, 68, 68, 0.4);
-                    color: #fca5a5;
-                    padding: 3px 8px;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 11px;
-                    font-weight: 600;
-                    transition: all 0.2s;
-                ">Verrouiller</button>
+                <span class="ctg-banner-details">
+                    <span style="color:#94a3b8; font-size:10px;">(Public = En construction)</span>
+                    <button id="ctg-btn-relock" title="Reverrouiller pour tester l'affichage en construction" style="
+                        background: rgba(239, 68, 68, 0.2);
+                        border: 1px solid rgba(239, 68, 68, 0.4);
+                        color: #fca5a5;
+                        padding: 2px 7px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        font-size: 10px;
+                        font-weight: 600;
+                        transition: all 0.2s;
+                    ">Verrouiller</button>
+                </span>
             `;
 
             document.body.appendChild(banner);
 
             const btnRelock = document.getElementById('ctg-btn-relock');
             if (btnRelock) {
-                btnRelock.addEventListener('click', function () {
+                btnRelock.addEventListener('click', function (e) {
+                    e.stopPropagation();
                     window.CARTOGRAFFECT_MAINTENANCE.lock();
                 });
             }
@@ -140,7 +187,7 @@
             // CAS 1 : Non déverrouillé -> Rediriger vers la page maintenance
             if (!unlocked) {
                 if (!isPageMaintenance) {
-                    window.location.replace('maintenance.html');
+                    window.location.replace(MAINTENANCE_URL);
                     return;
                 }
             }
