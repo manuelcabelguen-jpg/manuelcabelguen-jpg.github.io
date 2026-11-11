@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Si vous utilisez CARTOGRAFFECT® (architecture théorique, explorateur interactif ou code source) dans vos travaux, veuillez le citer à l'aide des métadonnées suivantes."
+title: "CARTOGRAFFECT : Une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif"
+version: "1.0.1"
+doi: "10.5281/zenodo.24022795"
+date-released: "2026-11-11"
+url: "https://www.cartograffect.com"
+repository-code: "https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io"
+license: "AGPL-3.0-or-later"
+authors:
+  - family-names: "Cabelguen"
+    given-names: "Manuel"
+    affiliation: "Psychologue clinicien, Ph. D."
+keywords:
+  - "affective science"
+  - "predictive processing"
+  - "active inference"
+  - "interoceptive inference"
+  - "allostasis"
+  - "Lean 4"
+  - "computational psychology"
+

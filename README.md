@@ -11,7 +11,7 @@
 
 ## 🌟 Présentation Théorique
 
-L'étude scientifique des affects demeure historiquement fragmentée entre les théories des émotions de base, les approches dimensionnelles (circonplexe de Russell), les modèles d'évaluation cognitive (*appraisal*) et le constructionnisme psychologique.
+L'étude scientifique des affects demeure historiquement fragmentée entre les théories des émotions de base, les approches dimensionnelles (circomplexe de Russell), les modèles d'évaluation cognitive (*appraisal*) et le constructionnisme psychologique.
 
 **CARTOGRAFFECT** unifie ces perspectives en proposant une **architecture computationnelle et fonctionnelle rigoureuse**, ancrée dans les cadres du **traitement prédictif (*predictive processing*)**, de l'**inférence active**, de l'**inférence intéroceptive** et de la **régulation allostatique**.
 
@@ -37,11 +37,11 @@ Condense les forces régulatrices selon une géométrie discrète bornée :
   $$\|X\| + \|Y\| = 2Z - 2 \quad \text{pour } Z \ge 2, \text{ avec } X, Y \in \mathbb{Z}$$
 - **8 Strates d'Inférence ($Z = 0 \dots 7$) et 8 Opérateurs Centraux $(0,0,Z)$** :
   - $Z = 0$ : **Point de Veille $(0,0,0)$** — Veille homéostatique de fond.
-  - $Z = 1$ : **Surprise $(0,0,1)$** — Rupture ascendante de repos, suspension indéterminée.
+  - $Z = 1$ : **Surprise $(0,0,1)$** — Rupture ascendante de prédiction, suspension indéterminée.
   - $Z = 2$ : **Anticipation $(0,0,2)$** — Première couronne affective.
   - $Z = 3$ : **Émoi $(0,0,3)$** — Suspension réactive.
   - $Z = 4$ : **Réserve $(0,0,4)$** — Suspension réflexive.
-  - $Z = 5$ : **Recul $(0,0,5)$** — Suspension perspective.
+  - $Z = 5$ : **Recul $(0,0,5)$** — Suspension perspectiviste.
   - $Z = 6$ : **Saisissement $(0,0,6)$** — Rupture critique de haut niveau.
   - $Z = 7$ : **Vertige Ontologique $(0,0,7)$** — Suspension existentielle.
 - **Lexique canonique de 176 positions** : 168 états périphériques satisfaisant rigoureusement la contrainte $\|X\| + \|Y\| = 2Z - 2$ combinés aux 8 opérateurs centraux de suspension.
@@ -91,7 +91,10 @@ Le site web statique est structuré pour une consultation scientifique transpare
 - **`scholar_drive.html`** : Corpus documentaire scientifique, documentation des preuves formelles Lean 4, formules mathématiques et liens de téléchargement certifiés.
 - **`article.html`** : Version Web intégrale de la prépublication v1.0.1, avec moteur de recherche interne, métadonnées Schema.org et badges scientifiques.
 - **`voyage.html`** : Parcours phénoménologique guidé à travers les strates de profondeur inférentielle.
-- **`js/cartograffect_model.js`** : Modèle JavaScript canonique généré et synchronisé à l'identique avec le lexique certifié Lean 4 (`Lexicon176.lean`).
+- **`cartograffect_model.js`** : Modèle JavaScript canonique généré et synchronisé à l'identique avec le lexique certifié Lean 4 (`Lexicon176.lean`).
+- **`dynamic_cartograffect.js`** : Visualiseur 3D octaédrique et plan de Manhattan interactif en temps réel.
+- **`octahedral_navigator.js`** : Navigateur géométrique octaédrique par strates et filtrage des positions.
+- **`voyage.js`** : Moteur interactif du parcours phénoménologique guidé (`voyage.html`).
 
 ---
 
