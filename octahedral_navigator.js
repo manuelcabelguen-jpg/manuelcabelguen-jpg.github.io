@@ -2,13 +2,13 @@
  * CARTOGRAFFECT - Navigateur Géométrique Octaédrique
  * Basé rigoureusement sur le document :
  * "Algorithme du système émotionnel par catégories et groupes" (Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien)
- * 176 entrées (8 opérateurs centraux + 80 positions sur couronnes Z=2..7)
+ * 176 entrées (8 opérateurs centraux + 168 positions sur 6 couronnes Z=2..7)
  */
 
 (function() {
     let currentZ = 2;
     let currentTypeFilter = 'all';
-    let selectedAffectId = 3; // Joie par défaut
+    let selectedAffectId = 8; // Joie par défaut (ID 3 est Émoi)
 
     const strataMeta = {
         0: {
@@ -359,7 +359,7 @@
         if (partner) {
             let corrLabel = "Correspondance Axiale (-X,-Y)";
             if (partner.relation === 'diagonal') corrLabel = "Correspondance Diagonale (-X,-Y)";
-            else if (partner.relation === 'controlateral') corrLabel = "Correspondance Controlatérale (Croisements Td / Ti)";
+            else if (partner.relation === 'controlateral') corrLabel = "Correspondance Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)";
 
             correspondenceSection = `
                 <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
@@ -369,7 +369,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <span class="text-lg">↔️</span>
+                            <span class="w-7 h-7 rounded-lg bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            </span>
                             <div>
                                 <div class="text-sm font-bold text-white">${partner.name}</div>
                                 <div class="text-[11px] font-mono text-indigo-300">${partner.code} &bull; (${partner.x}, ${partner.y}, Z${partner.z})</div>
@@ -427,8 +429,9 @@
 
             <!-- Accès direct à la Matrice 2D/3D -->
             <div class="pt-2 flex flex-wrap items-center gap-2">
-                <a href="taxonomie-affective.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5">
-                    <span>🧭</span> Explorer dans la Carte Complète des 176 Émotions
+                <a href="taxonomie-affective.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all inline-flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    <span>Explorer dans la Carte Complète des 176 États</span>
                 </a>
             </div>
         `;

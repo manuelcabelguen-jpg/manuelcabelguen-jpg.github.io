@@ -42,7 +42,11 @@
     };
 
     /**
-     * Évalue l'état complet du Moteur Prédictif selon PredictiveEngine.lean
+     * Évalue l'état complet du Moteur Prédictif selon PredictiveEngine.lean & CoreAffect.lean
+     * Supporte :
+     *   - strictness Lean 4 (`projectToCoreAffect` + `remanence_preserves_state`)
+     *   - profondeur `persistenceDepth` (d = 0..5 -> Z = 2..7)
+     *   - extension pédagogique optionnelle `weightRatioA` (0..1) pour l'asymétrie (π_A, π_C)
      */
     CartograffectTheory.evaluateEngine = function (params) {
         const magnitude = Number(params.magnitude || 0);
@@ -53,6 +57,9 @@
         const attente = params.attente || 'zero';
         const controle = params.controle || 'zero';
         const descendingSuspension = Boolean(params.descendingSuspension);
+        const persistenceDepth = Math.max(0, Math.min(5, Math.floor(Number(params.persistenceDepth || 0))));
+        const continuousAsymmetry = Boolean(params.continuousAsymmetry);
+        const weightRatioA = params.weightRatioA !== undefined ? Math.max(0.05, Math.min(0.95, Number(params.weightRatioA))) : 0.5;
 
         const isSensorilySalient = magnitude >= sensoryThreshold;
         const isInRemanenceWindow = magnitude >= resorptionThreshold && magnitude < sensoryThreshold;
@@ -61,61 +68,86 @@
 
         const aEngaged = attente !== 'zero';
         const cEngaged = controle !== 'zero';
+        const targetZ = 2 + persistenceDepth;
+        const radius = 2 * targetZ - 2; // R(Z) = 2Z - 2
+
+        const computeCrownCoords = () => {
+            if (!aEngaged && !cEngaged) return { x: 0, y: 0 };
+            if (aEngaged && !cEngaged) return { x: this.polarityToInt(attente) * radius, y: 0 };
+            if (!aEngaged && cEngaged) return { x: 0, y: this.polarityToInt(controle) * radius };
+            // Both engaged: strict Lean splits equally R/2 = Z - 1; continuous asymmetry shares R by weightRatioA
+            let ax = radius / 2;
+            if (continuousAsymmetry && targetZ >= 3) {
+                ax = Math.max(1, Math.min(radius - 1, Math.round(radius * weightRatioA)));
+            }
+            const ay = radius - ax;
+            return {
+                x: this.polarityToInt(attente) * ax,
+                y: this.polarityToInt(controle) * ay
+            };
+        };
 
         let stage = 'veille';
         let stageLabel = 'Point de Veille (0, 0, 0)';
-        let stageDesc = 'Régime homéostatique basal : l’écart demeure sous le seuil de tolérance. Neutralité globale (A0, C0).';
+        let stageDesc = 'Régime homéostatique basal : l’écart demeure sous le seuil de tolérance ou en neutralité globale (A0, C0).';
         let x = 0, y = 0, z = 0;
 
         if (isBelowResorption) {
             stage = 'veille';
             stageLabel = 'Point de Veille (0, 0, 0)';
-            stageDesc = 'Écart inférieur au seuil de résorption homéostatique : maintien dans la plage de tolérance, aucune alerte saillante.';
+            stageDesc = 'Écart inférieur au seuil de résorption homéostatique : retour ou maintien au Point de Veille (0, 0, 0).';
             x = 0; y = 0; z = 0;
         } else if (isInRemanenceWindow) {
-            stage = 'remanence';
-            stageLabel = 'Fenêtre de Rémanence (Hystérésis)';
-            stageDesc = 'L’écart résiduel reste entre le seuil de résorption (' + resorptionThreshold + ') et le seuil sensoriel (' + sensoryThreshold + ') : rémanence temporaire avant retour au Point de Veille.';
-            z = 1;
-        } else if (isSensorilySalient && !isAttentionalEngaged) {
-            stage = 'surprise';
-            stageLabel = 'Surprise (0, 0, 1)';
-            stageDesc = 'Rupture ascendante : l’écart franchit le seuil sensoriel (' + sensoryThreshold + '), mais la précision attentionnelle (' + allocatedPrecision + ' < ' + engagementThreshold + ') n’a pas encore déployé le couplage (A, C) en coordonnées spatiales.';
-            x = 0; y = 0; z = 1;
-        } else if (isSensorilySalient && isAttentionalEngaged) {
-            if (!aEngaged && !cEngaged) {
-                stage = 'anticipation';
-                stageLabel = 'Anticipation (0, 0, 2)';
-                stageDesc = 'Opérateur descendant d’orientation : précision engagée, en attente de polarisation sur Attente (A) et/ou Contrôle (C).';
-                x = 0; y = 0; z = 2;
-            } else if (aEngaged && !cEngaged) {
-                // Régime axial sur X : tout le budget L1 (2) va sur X
-                x = this.polarityToInt(attente) * 2;
-                y = 0;
-                z = 2;
-                stage = 'deployed_axial';
-                stageLabel = 'Déploiement Axial Z=2 (' + x + ', 0, 2)';
-                stageDesc = 'Une seule dimension (Attente) est tranchée : elle capte l’intégralité du poids attentionnel (|X|=2, |Y|=0).';
-            } else if (!aEngaged && cEngaged) {
-                // Régime axial sur Y : tout le budget L1 (2) va sur Y
-                x = 0;
-                y = this.polarityToInt(controle) * 2;
-                z = 2;
-                stage = 'deployed_axial';
-                stageLabel = 'Déploiement Axial Z=2 (0, ' + y + ', 2)';
-                stageDesc = 'Une seule dimension (Contrôle) est tranchée : elle capte l’intégralité du poids attentionnel (|X|=0, |Y|=2).';
+            if (aEngaged || cEngaged) {
+                const held = computeCrownCoords();
+                x = held.x; y = held.y; z = targetZ;
+                stage = 'remanence';
+                stageLabel = 'Rémanence Allostatique (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = 'Hystérésis (remanence_preserves_state) : l’écart (' + magnitude + ') est repassé sous le seuil sensoriel (' + sensoryThreshold + ') mais reste ≥ résorption (' + resorptionThreshold + '), maintenant l’état actif.';
             } else {
-                // Régime diagonal : partage équitable (±1, ±1)
-                x = this.polarityToInt(attente);
-                y = this.polarityToInt(controle);
-                z = 2;
+                stage = 'remanence_neutral';
+                stageLabel = 'Point de Veille (0, 0, 0) — Zone d’hystérésis';
+                stageDesc = 'La magnitude est dans la fenêtre d’hystérésis [' + resorptionThreshold + ', ' + sensoryThreshold + '[ mais le couplage est neutre (A0, C0) : aucun état périphérique à maintenir.';
+                x = 0; y = 0; z = 0;
+            }
+        } else if (isSensorilySalient && !aEngaged && !cEngaged) {
+            // CoreAffect.lean L264: !isSensorilySalient || c.isGlobalNeutrality => Point de Veille (0,0,0)
+            stage = 'veille';
+            stageLabel = 'Point de Veille (0, 0, 0)';
+            stageDesc = 'Couplage globalement neutre (A0, C0) : selon CoreAffect.lean, la neutralité globale conjointe n’active pas la couronne et reste au Point de Veille (0, 0, 0). Choisissez une polarité A ou C pour rompre la veille.';
+            x = 0; y = 0; z = 0;
+        } else if (isSensorilySalient && !isAttentionalEngaged) {
+            if (descendingSuspension) {
+                x = 0; y = 0; z = targetZ;
+                stage = 'anticipation';
+                stageLabel = (targetZ === 2 ? 'Anticipation' : 'Opérateur Central Z=' + z) + ' (0, 0, ' + z + ')';
+                stageDesc = 'Suspension descendante (CoreAffect.lean L267) : l’Interface Subjective retient le déploiement avant l’engagement attentionnel et place le système sur l’opérateur central d’orientation (0, 0, ' + z + ').';
+            } else {
+                x = 0; y = 0; z = 1;
+                stage = 'surprise';
+                stageLabel = 'Surprise (0, 0, 1)';
+                stageDesc = 'Rupture ascendante : l’écart franchit le seuil sensoriel (' + sensoryThreshold + '), mais la précision attentionnelle (' + allocatedPrecision + ' < ' + engagementThreshold + ') reste sous le seuil d’engagement sans suspension descendante.';
+            }
+        } else if (isSensorilySalient && isAttentionalEngaged) {
+            const pt = computeCrownCoords();
+            x = pt.x; y = pt.y; z = targetZ;
+            const gType = this.geometryType(x, y);
+            if (gType === 'axial') {
+                stage = 'deployed_axial';
+                stageLabel = 'Déploiement Axial Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = (aEngaged ? 'Seule Attente (A)' : 'Seul Contrôle (C)') + ' est tranché : il capte tout le budget attentionnel L₁ = ' + radius + '.';
+            } else if (gType === 'diagonal') {
                 stage = 'deployed_diagonal';
-                stageLabel = 'Déploiement Diagonal Z=2 (' + x + ', ' + y + ', 2)';
-                stageDesc = 'Les deux dimensions (Attente et Contrôle) sont tranchées conjointement : répartition équitable du budget attentionnel (|X|=1, |Y|=1).';
+                stageLabel = 'Déploiement Diagonal Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = 'Les deux dimensions (A et C) sont tranchées à parts égales : |X| = |Y| = ' + (radius / 2) + '.';
+            } else {
+                stage = 'deployed_lateral';
+                stageLabel = 'Déploiement Latéral Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = 'Extension par asymétrie de précision (π_A / π_C) : répartition inégale sur la couronne |X|+|Y| = ' + radius + '.';
             }
         }
 
-        // Recherche du prototype correspondant à Z=0,1,2 si disponible dans CartograffectModel
+        // Recherche du prototype / état correspondant si disponible dans CartograffectModel
         let matchedPrototype = null;
         if (root.CartograffectModel && Array.isArray(root.CartograffectModel.emotions)) {
             matchedPrototype = root.CartograffectModel.emotions.find(
@@ -131,6 +163,7 @@
             isInRemanenceWindow,
             isAttentionalEngaged,
             descendingSuspension,
+            persistenceDepth,
             coupling: { attente, controle },
             regimes: {
                 attente: this.polarityToRegime(attente),
@@ -166,6 +199,23 @@
     // =========================================================================
     // 3. AFFECTIVE MATRIX (AffectiveMatrix.lean)
     // =========================================================================
+
+    /**
+     * Calcule l'antagoniste exact selon AffectiveMatrix.lean :
+     *   - Central (0,0,Z) : fixe (0,0,Z)
+     *   - Axial (X=0 ou Y=0) : inversion centrale (-X, -Y, Z)
+     *   - Non-axial (X≠0, Y≠0, incl. diagonales et latérales) : loi unifiée
+     *     (-sgn(X)*|Y|, -sgn(Y)*|X|, Z)
+     */
+    CartograffectTheory.antagonistPoint = function (x, y, z) {
+        if (x === 0 && y === 0) return { x: 0, y: 0, z };
+        if (x === 0 || y === 0) return { x: -x, y: -y, z };
+        return {
+            x: -Math.sign(x) * Math.abs(y),
+            y: -Math.sign(y) * Math.abs(x),
+            z
+        };
+    };
 
     CartograffectTheory.computeEnergyRegime = function (x, y) {
         if (x === 0 && y === 0) {
@@ -261,25 +311,25 @@
     // =========================================================================
 
     CartograffectTheory.classifyTaxonomicGroup = function (x, y) {
-        if (x === 0 && y === 0) return { id: 'operateurCentral', label: 'Opérateur Central (0, 0, Z)' };
+        if (x === 0 && y === 0) return { id: 'operateurCentral', label: 'Opérateur Central (0, 0, Z)', orientationLabel: 'Opérateur de Suspension Centrale' };
         if (Math.abs(y) > Math.abs(x)) {
             return y > 0
-                ? { id: 'groupeJoie', label: 'Secteur Joie (Y+ dominant)' }
-                : { id: 'groupeTristesse', label: 'Secteur Tristesse (Y− dominant)' };
+                ? { id: 'groupeJoie', label: 'Secteur Joie (Y+ dominant)', orientationLabel: 'Élan / Mobilisation (Secteur Joie, Y+)' }
+                : { id: 'groupeTristesse', label: 'Secteur Tristesse (Y− dominant)', orientationLabel: 'Retenue / Apaisement (Secteur Tristesse, Y−)' };
         }
         if (Math.abs(x) > Math.abs(y)) {
             return x < 0
-                ? { id: 'groupePeur', label: 'Secteur Peur (X− dominant)' }
-                : { id: 'groupeCourage', label: 'Secteur Courage (X+ dominant)' };
+                ? { id: 'groupePeur', label: 'Secteur Peur (X− dominant)', orientationLabel: 'Maintien / Alerte Épistémique (Secteur Peur, X−)' }
+                : { id: 'groupeCourage', label: 'Secteur Courage (X+ dominant)', orientationLabel: 'Révision / Ouverture Épistémique (Secteur Courage, X+)' };
         }
         if (x > 0) {
             return y > 0
-                ? { id: 'groupeDesir', label: 'Filière Diagonale Désir (+X, +Y)' }
-                : { id: 'groupeCalme', label: 'Filière Diagonale Calme (+X, −Y)' };
+                ? { id: 'groupeDesir', label: 'Filière Diagonale Désir (+X, +Y)', orientationLabel: 'Synergie d’Approche (Filière Désir)' }
+                : { id: 'groupeCalme', label: 'Filière Diagonale Calme (+X, −Y)', orientationLabel: 'Relâchement Trophotropique (Filière Calme)' };
         }
         return y > 0
-            ? { id: 'groupeColere', label: 'Filière Diagonale Colère (−X, +Y)' }
-            : { id: 'groupeDegout', label: 'Filière Diagonale Dégoût (−X, −Y)' };
+            ? { id: 'groupeColere', label: 'Filière Diagonale Colère (−X, +Y)', orientationLabel: 'Compensation Ergotropique (Filière Colère)' }
+            : { id: 'groupeDegout', label: 'Filière Diagonale Dégoût (−X, −Y)', orientationLabel: 'Congruence Aversive (Filière Dégoût)' };
     };
 
     CartograffectTheory.classifySubsector = function (x, y) {

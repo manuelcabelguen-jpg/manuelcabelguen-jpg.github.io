@@ -27,7 +27,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- KaTeX for crisp mathematical rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -39,29 +39,7 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['DM Sans', 'Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace']
-                    },
-                    colors: {
-                        cosmic: {
-                            900: '#070b14',
-                            850: '#0b1120',
-                            800: '#0e1726',
-                            750: '#152136',
-                            700: '#1a2744',
-                            600: '#1f2e4a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="assets/tailwind.config.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
@@ -75,121 +53,129 @@
         <div class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications"></div>
         <div class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique"></div>
     </div>
-
-    <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/85 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
-                <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
-                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Modèles Théoriques &amp; Architecture Certifiée</span>
+    <!-- Unified Navigation Header -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <!-- Brand -->
+            <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
+                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
+                <div class="flex flex-col leading-none">
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Lean 4</span>
                 </div>
             </a>
 
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
-                <a href="index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
-                <a href="article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+            <!-- Desktop Primary Navigation -->
+            <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-1">
+                <a href="index.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors">Accueil</a>
+                <a href="voyage.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors inline-flex items-center gap-1.5" title="Parcours expérientiel guidé (2 min)">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    <span>Le Voyage</span>
                 </a>
-                <div class="relative">
-                    <button id="modelDropdownBtn" type="button" aria-expanded="false" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer">
-                        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
-                        <span>Le Modèle</span>
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+
+                <!-- Le Modèle Dropdown -->
+                <div class="relative" id="modelDropdownWrapper">
+                    <button type="button" id="modelDropdownBtn" aria-expanded="false" aria-haspopup="true" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors inline-flex items-center gap-1">
+                        <span>Le Mod&egrave;le</span>
+                        <svg class="w-3.5 h-3.5 opacity-75" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                     </button>
-                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-72 rounded-2xl bg-[#0b1120]/95 backdrop-blur-xl border border-purple-500/30 shadow-2xl shadow-purple-950/60 p-2 z-50 space-y-1">
-                        <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
-                            <span class="w-2 h-2 rounded-full bg-purple-400 mt-1.5 shrink-0"></span>
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/98 backdrop-blur-xl border border-slate-700/80 shadow-2xl p-2 z-50">
+                        <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-purple-500/20 border border-purple-500/35 text-purple-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
-                                <div class="text-xs font-bold">1. Le Moteur Prédictif</div>
-                                <div class="text-[11px] text-slate-400">Interfaces, précision &amp; gradients A/C</div>
+                                <div class="text-xs font-semibold text-white">Moteur Pr&eacute;dictif</div>
+                                <div class="text-[11px] text-slate-400">Interfaces, seuils &amp; gradients A/C</div>
                             </div>
                         </a>
-                        <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
-                            <span class="w-2 h-2 rounded-full bg-sky-400 mt-1.5 shrink-0"></span>
+                        <a href="noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-sky-500/20 border border-sky-500/35 text-sky-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">2</span>
                             <div>
-                                <div class="text-xs font-bold">2. Le Noyau Affectif</div>
-                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L₁</div>
+                                <div class="text-xs font-semibold text-white">Noyau Affectif</div>
+                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L&#8321;</div>
                             </div>
                         </a>
-                        <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 shrink-0"></span>
+                        <a href="matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-emerald-500/20 border border-emerald-500/35 text-emerald-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">3</span>
                             <div>
-                                <div class="text-xs font-bold">3. La Matrice Affective</div>
-                                <div class="text-[11px] text-slate-400">Valence, prototypes Z=2 &amp; dynamique</div>
+                                <div class="text-xs font-semibold text-white">Matrice Affective</div>
+                                <div class="text-[11px] text-slate-400">Orientation, valence &amp; prototypes Z=2</div>
                             </div>
                         </a>
-                        <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 hover:text-white transition-colors">
-                            <span class="w-2 h-2 rounded-full bg-pink-400 mt-1.5 shrink-0"></span>
+                        <a href="taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-pink-500/20 border border-pink-500/35 text-pink-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">4</span>
                             <div>
-                                <div class="text-xs font-bold">4. La Taxonomie Affective</div>
-                                <div class="text-[11px] text-slate-400">176 états (Z=0..7) &amp; Carte 2D/3D</div>
+                                <div class="text-xs font-semibold text-white">Taxonomie Affective</div>
+                                <div class="text-[11px] text-slate-400">176 &eacute;tats, strates Z=0..7 &amp; carte 2D/3D</div>
                             </div>
                         </a>
                     </div>
                 </div>
-                <a href="scholar_drive.html" class="px-3 py-2 text-sm font-semibold text-purple-300 bg-purple-900/40 border border-purple-500/30 rounded-lg flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-indigo-400"></span>Modèles Théoriques
-                </a>
+
+                <a href="article.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors">L'Article</a>
+                <a href="scholar_drive.html" class="px-3 py-1.5 rounded-lg text-[13px] font-semibold bg-indigo-500/15 text-indigo-200 border border-indigo-500/35 transition-colors">Corpus &amp; Preuves</a>
             </nav>
 
-            <div class="hidden md:flex items-center gap-2.5">
-                <button onclick="window.CartograffectCmd && window.CartograffectCmd.open()" class="px-2.5 py-1.5 text-xs font-semibold text-purple-200 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1.5 shadow-sm group cursor-pointer" title="Recherche globale (Cmd + K / Ctrl + K)">
-                    <span class="text-purple-400">🔍</span>
-                    <span>Recherche</span>
-                    <kbd class="px-1.5 py-0.5 text-[10px] font-mono bg-purple-900/80 border border-purple-500/50 rounded text-purple-200">⌘K</kbd>
+            <!-- Action Controls -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" data-command-trigger class="group hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="Rechercher un état affectif, concept ou niveau (Ctrl+K)">
+                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <span>Rechercher</span>
+                    <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">&#8984;K</kbd>
                 </button>
-                <button onclick="openLangModal()" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Lexique Bilingue FR / EN & Citation">
-                    <span class="text-purple-400">🌐</span> FR | EN
-                </button>
-                <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/60 rounded-lg transition-all flex items-center gap-1.5 shadow-sm" title="Dépôt GitHub officiel (Code Open Source AGPLv3)">
-                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    <span>GitHub</span>
-                </a>
-                <a href="taxonomie-affective.html" class="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-600/30 transition-all">
-                    Ouvrir la Carte &rarr;
-                </a>
-            </div>
 
-            <!-- Mobile Menu Button -->
-            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Menu">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
+                <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
+                    <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+                    <span>FR | EN</span>
+                </button>
+
+                <a href="taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
+                    <span>Carte 176</span>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+                </a>
+
+                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+            </div>
         </div>
     </header>
+    <!-- Unified Mobile Navigation Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+        <div class="w-full max-w-sm bg-[#0b1120] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-2 relative my-auto">
+            <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
+                <span class="font-heading font-bold text-sm tracking-wider text-white">NAVIGATION</span>
+                <button id="mobileMenuClose" type="button" aria-label="Fermer le menu" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
 
-    <!-- Mobile Fullscreen Menu Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
-        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-        <button onclick="if (window.CartograffectCmd) { window.CartograffectCmd.open(); document.getElementById('mobileMenu').classList.remove('open'); }" class="flex items-center gap-2.5 w-full text-left py-2.5 px-3 bg-purple-950/60 text-purple-200 border border-purple-500/40 rounded-xl text-sm font-bold transition-colors mb-2">
-            <span>🔍</span>
-            <span>Recherche Rapide</span>
-            <kbd class="ml-auto px-1.5 py-0.5 text-[10px] bg-slate-900 border border-purple-500/40 rounded text-purple-300">⌘K</kbd>
-        </button>
-        <a href="index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
-        <a href="article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
-        <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-widest text-slate-500">Modèle en 4 Composantes</div>
-        <a href="moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
-        <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
-        <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
-        <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
-        <a href="scholar_drive.html" class="active-link"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
-        <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
+            <button type="button" data-command-trigger class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-sm font-medium transition-colors">
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <span>Recherche rapide</span>
+                <kbd class="ml-auto px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">&#8984;K</kbd>
+            </button>
+
+            <a href="voyage.html"><span class="menu-dot bg-amber-400"></span>Le Voyage affectif (2 min)</a>
+            <a href="index.html"><span class="menu-dot bg-indigo-400"></span>Accueil</a>
+            <a href="moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Moteur Pr&eacute;dictif</a>
+            <a href="noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Noyau Affectif (X,Y,Z)</a>
+            <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. Matrice Affective</a>
+            <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. Taxonomie (176 &eacute;tats)</a>
+            <a href="article.html"><span class="menu-dot bg-slate-300"></span>L'Article Scientifique</a>
+            <a href="scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves Lean 4</a>
+            <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions L&eacute;gales &amp; PI</a>
+        </div>
     </div>
 
     <!-- Sticky Navigation Tabs -->
     <nav class="sticky-tabs-container" id="stickyTheorieNav" aria-label="Navigation des Modèles Théoriques">
         <div class="sticky-tabs-track">
-            <a href="#hero-theorie-resume" class="sticky-tab-btn active"><span class="tab-badge">✨</span> Vue d'Ensemble</a>
-            <a href="#triade-definitions" class="sticky-tab-btn"><span class="tab-badge">🧠</span> 1. Affect vs Émotion vs Sentiment</a>
-            <a href="#modeles-historiques" class="sticky-tab-btn"><span class="tab-badge">🏛️</span> 2. Modèles Historiques Comparés</a>
-            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge">⚙️</span> 3. Architecture Certifiée &amp; Norme L1</a>
-            <a href="#scholar-drive-docs" class="sticky-tab-btn"><span class="tab-badge">📂</span> 4. Publications &amp; Documents</a>
-            <a href="#bibliographie" class="sticky-tab-btn"><span class="tab-badge">📚</span> 5. Corpus Bibliographique</a>
+            <a href="#hero-theorie-resume" class="sticky-tab-btn active"><span class="tab-badge font-mono text-[10px] opacity-75">00</span> Vue d'Ensemble</a>
+            <a href="#triade-definitions" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">01</span> Affect vs Émotion vs Sentiment</a>
+            <a href="#modeles-historiques" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">02</span> Modèles Historiques Comparés</a>
+            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">03</span> Architecture Certifiée &amp; Norme L1</a>
+            <a href="#scholar-drive-docs" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">04</span> Publications &amp; Documents</a>
+            <a href="#bibliographie" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">05</span> Corpus Bibliographique</a>
         </div>
     </nav>
 
@@ -216,20 +202,20 @@
 
                 <!-- Quick Filter Buttons -->
                 <div class="flex flex-wrap gap-2.5 pt-2">
-                    <a href="#triade-definitions" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center gap-1.5">
-                        <span>🧠</span> Triade : Affect, Émotion, Sentiment
+                    <a href="#triade-definitions" class="px-3.5 py-2 rounded-xl font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-900/30 transition-all text-xs flex items-center gap-1.5">
+                        <span>Triade : Affect, Émotion, Sentiment</span>
                     </a>
                     <a href="#modeles-historiques" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>🏛️</span> Modèles Historiques Comparés
+                        <span>Modèles Historiques Comparés</span>
                     </a>
                     <a href="#algorithme-36" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>⚙️</span> Architecture Certifiée &amp; Norme L1
+                        <span>Architecture Certifiée &amp; Norme L1</span>
                     </a>
                     <a href="#scholar-drive-docs" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>📂</span> Publications &amp; Scholar Drive
+                        <span>Publications &amp; Scholar Drive</span>
                     </a>
                     <a href="#bibliographie" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
-                        <span>📚</span> Corpus (49 Références)
+                        <span>Corpus (49 Références)</span>
                     </a>
                 </div>
             </div>
@@ -264,7 +250,9 @@
                             <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-purple-950 text-purple-300 border border-purple-800/60">
                                 Niveau 1 &bull; Infraconscient
                             </span>
-                            <span class="text-2xl">⚡</span>
+                            <span class="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </span>
                         </div>
                         <h3 class="text-xl font-heading font-extrabold text-white">1. L'AFFECT</h3>
                         <div class="text-xs font-semibold text-purple-300">Le Flux Intéroceptif Brut &amp; la Charge Adaptative</div>
@@ -289,7 +277,9 @@
                             <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-sky-950 text-sky-300 border border-sky-800/60">
                                 Niveau 2 &bull; Réactionnel
                             </span>
-                            <span class="text-2xl">🎯</span>
+                            <span class="w-8 h-8 rounded-lg bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </span>
                         </div>
                         <h3 class="text-xl font-heading font-extrabold text-white">2. L'ÉMOTION</h3>
                         <div class="text-xs font-semibold text-sky-300">Le Programme d'Action Sensorimoteur &amp; Heuristique</div>
@@ -297,7 +287,7 @@
                             L'émotion est une réponse dynamique brève à un événement saillant (externe ou interne). C'est un programme d'action heuristique qui réorganise en quelques fractions de seconde l'ensemble du système (attention, posture, décharge hormonale, motricité) pour répondre à l'urgence environnementale.
                         </p>
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
-                            <div class="text-slate-400"><strong class="text-sky-300">Vecteur computationnel :</strong> Sélection d'une politique d'action motrice ($\pi$) à horizon court ($Z=1$ à $Z=3$).</div>
+                            <div class="text-slate-400"><strong class="text-sky-300">Vecteur computationnel :</strong> Sélection d'une politique d'action ($\pi$) autour de la Surprise ($Z=1$), des affects primaires ($Z=2$) et des émotions réactives ($Z=3$).</div>
                             <div class="text-slate-400"><strong class="text-sky-300">Échelle de temps :</strong> Brève (quelques secondes à quelques minutes de décharge physiologique).</div>
                             <div class="text-slate-400"><strong class="text-sky-300">Substrat Psychologique :</strong> Évaluation de pertinence immédiate, survenue d'un objet saillant, tendance à l'action orientée (approche / évitement).</div>
                         </div>
@@ -314,7 +304,9 @@
                             <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-emerald-950 text-emerald-300 border border-emerald-800/60">
                                 Niveau 3 &bull; Phénoménologique
                             </span>
-                            <span class="text-2xl">🌱</span>
+                            <span class="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                            </span>
                         </div>
                         <h3 class="text-xl font-heading font-extrabold text-white">3. LE SENTIMENT</h3>
                         <div class="text-xs font-semibold text-emerald-300">L'Intégration Métacognitive Consciente &amp; Narrative</div>
@@ -337,7 +329,8 @@
             <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <h3 class="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
-                        <span>📊</span> Matrice Comparative Synoptique
+                        <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        <span>Matrice Comparative Synoptique</span>
                     </h3>
                     <span class="text-xs text-purple-400 font-mono">Modélisation en Inférence Active (Friston &amp; Cabelguen)</span>
                 </div>
@@ -361,8 +354,8 @@
                             </tr>
                             <tr>
                                 <td class="py-3 px-4 font-semibold text-white">Horizon Temporel</td>
-                                <td class="py-3 px-4">Flux continu ($Z=0$)</td>
-                                <td class="py-3 px-4">Ponctuel, quelques secondes à minutes ($Z=1$ à $Z=3$)</td>
+                                <td class="py-3 px-4">Veille et flux continu ($Z=0$) jusqu'aux affects primaires ($Z=2$)</td>
+                                <td class="py-3 px-4">Ponctuel, secondes à minutes (Surprise $Z=1$ à Émotions $Z=3$)</td>
                                 <td class="py-3 px-4">Durable, des heures aux années ($Z=4$ à $Z=7$)</td>
                             </tr>
                             <tr>
@@ -412,7 +405,7 @@
             <!-- Epistemological Anchors Link Banner -->
             <div class="p-4 rounded-xl bg-gradient-to-r from-purple-950/40 via-slate-900 to-sky-950/40 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                 <div class="text-slate-300">
-                    <strong class="text-white">🏛️ Les Ancres Épistémologiques Fondatrices :</strong> Retrouvez les citations textuelles de <strong>Baruch Spinoza</strong> (objectivité géométrique, 1677) et de <strong>René Descartes</strong> (les remèdes des passions, Articles 46, 47, 50 &amp; 211, 1649) directement sur la page d'accueil.
+                    <strong class="text-white">Ancres Épistémologiques Fondatrices :</strong> Retrouvez les citations textuelles de <strong>Baruch Spinoza</strong> (objectivité géométrique, 1677) et de <strong>René Descartes</strong> (les remèdes des passions, Articles 46, 47, 50 &amp; 211, 1649) directement sur la page d'accueil.
                 </div>
                 <a href="index.html#ancres-epistemologiques" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-amber-200 bg-amber-950/70 hover:bg-amber-900 border border-amber-500/40 transition-all shrink-0 flex items-center gap-1.5 shadow-sm">
                     <span>Consulter les Citations &rarr;</span>
@@ -425,7 +418,7 @@
                 <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">1980</span>
-                        <span class="text-xl">⭕</span>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-purple-300">Circumplexe</span>
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-white">Le Circumplexe de Russell</h3>
@@ -444,7 +437,7 @@
                 <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-blue-500/50 transition-all space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">1992</span>
-                        <span class="text-xl">🎭</span>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-blue-300">Programmes Discrets</span>
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-white">Émotions de Base d'Ekman</h3>
@@ -463,7 +456,7 @@
                 <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-amber-500/50 transition-all space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">2001</span>
-                        <span class="text-xl">⚙️</span>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-amber-300">Évaluation (CPM)</span>
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-white">Processus Composant (CPM)</h3>
@@ -482,7 +475,7 @@
                 <div class="p-6 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-pink-500/50 transition-all space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300">2017</span>
-                        <span class="text-xl">🧩</span>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-pink-300">Constructivisme</span>
                     </div>
                     <div>
                         <h3 class="text-lg font-heading font-bold text-white">Émotions Construites</h3>
@@ -498,12 +491,12 @@
                 </div>
 
                 <!-- Model 5 : CARTOGRAFFECT SYNTHÈSE (Colspan 2) -->
-                <div class="md:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-purple-950/60 via-cosmic-900 to-indigo-950/50 border-2 border-purple-500/50 hover:border-purple-400 transition-all space-y-4 shadow-xl">
+                <div class="md:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-cosmic-900 to-slate-900 border border-indigo-500/40 hover:border-indigo-400/70 transition-all space-y-4 shadow-xl">
                     <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-purple-600 text-white shadow-sm">
+                        <span class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white shadow-sm">
                             2026 &bull; Synthèse Définitive
                         </span>
-                        <span class="text-xs font-mono text-purple-300">OPIC n° 1233199</span>
+                        <span class="text-xs font-mono text-indigo-300">OPIC n° 1233199</span>
                     </div>
                     <div>
                         <h3 class="text-xl font-heading font-black text-white">La Synthèse Cartograffect : Architecture Fonctionnelle Certifiée</h3>
@@ -513,22 +506,22 @@
                         <strong>Cartograffect unifie ces 50 ans d'histoire</strong> en dotant le constructivisme prédictif d'une géométrie invariante rigoureuse sous contrainte de <strong>norme de Manhattan ($L_1$)</strong> :
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
+                        <div class="p-3 rounded-xl bg-slate-900/90 border border-indigo-800/40">
                             <span class="font-bold text-sky-300 block mb-1">Axe X : Gradient d'Attente</span>
-                            Révisabilité bayésienne du modèle interne face au flux sensoriel (+X : révisable / -X : rigide).
+                            Révisabilité bayésienne du modèle interne face au flux sensoriel ($+X$ : Ajuster / $-X$ : Tenir).
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
+                        <div class="p-3 rounded-xl bg-slate-900/90 border border-indigo-800/40">
                             <span class="font-bold text-purple-300 block mb-1">Axe Y : Gradient de Contrôle</span>
-                            Capacité motrice perçue d'infléchir le monde par l'action pragmatique (+Y : contrôlable / -Y : subi).
+                            Capacité motrice perçue d'infléchir le monde par l'action pragmatique ($+Y$ : Agir / $-Y$ : Laisser).
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-purple-800/40">
+                        <div class="p-3 rounded-xl bg-slate-900/90 border border-indigo-800/40">
                             <span class="font-bold text-emerald-300 block mb-1">Axe Z : Profondeur Inférentielle</span>
-                            Horizon temporel de prédiction et degré de conscience (Z=0 à Z=7).
+                            Horizon temporel de prédiction et épaisseur hiérarchique ($Z=0$ à $Z=7$, distinct de l'intensité).
                         </div>
                     </div>
-                    <div class="p-3.5 rounded-xl bg-purple-950/60 border border-purple-700/60 font-mono text-purple-200 text-xs flex flex-wrap items-center justify-between gap-2">
-                        <span>Loi Attentionnelle L1 : $|X| + |Y| = 2Z - 2$</span>
-                        <span>Antagonisme Symétrique : $\mathcal{A}(X,Y,Z) = (-X,-Y,Z)$</span>
+                    <div class="p-3.5 rounded-xl bg-indigo-950/50 border border-indigo-700/50 font-mono text-indigo-200 text-xs flex flex-wrap items-center justify-between gap-2">
+                        <span>Loi Attentionnelle $L_1$ : $|X| + |Y| = 2Z - 2$ ($Z \ge 2$)</span>
+                        <span>Antagonisme Involutif : $\mathcal{A}(X,Y,Z) = (-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z)$</span>
                     </div>
                 </div>
             </div>
@@ -600,32 +593,31 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-300">
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
                         <div class="font-bold text-white">1. Conservation Budgétaire L1 :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-purple-300 text-sm">
-                            ||(X, Y)||_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 text-purple-300 text-xs overflow-x-auto">
+                            $$\|(X, Y)\|_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2$$
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            À strate Z fixée, la ressource attentionnelle est strictement conservée (théorème <code>z2_budget_conservation</code> et loi des 176 positions).
+                            À strate $Z$ fixée, la ressource attentionnelle est strictement conservée (théorème <code>z2_budget_conservation</code> et loi des 176 positions).
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
                         <div class="font-bold text-white">2. Antagonismes Formels Involutifs :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-indigo-300 text-xs">
-                            \mathcal{A}_{ax,diag} = (-X, -Y, Z) \\
-                            \mathcal{A}_{lat} = \text{réflexion controlatérale}
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 text-indigo-300 text-xs overflow-x-auto">
+                            $$\mathcal{A}(X, Y, Z) = \big(-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z\big)$$
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            Symétrie centrale pour les 24 positions axiales/diagonales et réflexion controlatérale avec permutation d'amplitudes pour les 60 paires latérales (théorème <code>antagonistPoint_involutive</code>).
+                            Formule unifiée équivalente à $(-X, -Y, Z)$ pour les 24 positions axiales/diagonales et à une réflexion controlatérale avec permutation d'amplitudes pour les 60 paires latérales (théorème <code>antagonistPoint_involutive</code>).
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
                         <div class="font-bold text-white">3. Dissipation Allostatique &amp; Lyapunov :</div>
-                        <div class="p-2.5 rounded-lg bg-cosmic-900 font-mono text-emerald-300 text-xs">
-                            V(p) = 2Z + \mathbb{I}_{\text{périf}} \implies \Delta V < 0
+                        <div class="p-2.5 rounded-lg bg-cosmic-900 text-emerald-300 text-xs overflow-x-auto">
+                            $$V(p) = 2Z + \mathbb{I}_{\text{périf}}(p) \implies \Delta V &lt; 0$$
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            $\Delta V$ quantifie exclusivement la décroissance allostatique de la trajectoire vers la veille (0,0,0). L'arbitrage entre Axe X et Axe Y est assuré par l'Interface Attentionnelle.
+                            $\Delta V$ quantifie exclusivement la décroissance allostatique de la trajectoire vers la veille $(0,0,0)$. L'arbitrage entre Axe $X$ et Axe $Y$ est assuré par l'Interface Attentionnelle.
                         </p>
                     </div>
                 </div>
@@ -649,13 +641,13 @@
             </div>
 
             <!-- Featured Research Publication Card -->
-            <div class="rounded-2xl bg-gradient-to-br from-purple-950/60 via-cosmic-900 to-slate-900 border-2 border-purple-500/50 p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div class="rounded-2xl bg-gradient-to-br from-indigo-950/60 via-cosmic-900 to-slate-900 border border-indigo-500/40 p-6 sm:p-8 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                 <div class="space-y-3 max-w-3xl">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-purple-600 text-white shadow-sm">
-                            ⭐ Publication Phare
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-600 text-white shadow-sm">
+                            Publication de Référence &bull; v1.0.1
                         </span>
-                        <span class="text-xs font-mono text-purple-300">
+                        <span class="text-xs font-mono text-indigo-300">
                             Manuel Cabelguen, Ph. D., BCN &bull; OPIC n° 1233199
                         </span>
                     </div>
@@ -667,11 +659,13 @@
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto">
-                    <a href="article.html" class="px-5 py-3 rounded-xl font-bold text-white bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-600/30 transition-all text-xs flex items-center justify-center gap-2">
-                        <span>📖</span> Lire l'Article &amp; Figures
+                    <a href="article.html" class="px-5 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-900/30 transition-all text-xs flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <span>Lire l'Article &amp; Figures</span>
                     </a>
-                    <button onclick="navigator.clipboard.writeText('Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 1.0.1). Zenodo DOI: 10.5281/zenodo.24022795 | OSF: https://osf.io/z89sg | Lean 4: https://doi.org/10.5281/zenodo.23833938'); alert('Citation copiée !');" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all text-xs flex items-center justify-center gap-1.5">
-                        <span>📋</span> Copier Citation
+                    <button onclick="copyScholarCitation(this)" class="px-4 py-2.5 rounded-xl font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-750 border border-slate-700 transition-all text-xs flex items-center justify-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        <span>Copier Citation</span>
                     </button>
                 </div>
             </div>
@@ -681,12 +675,14 @@
                 <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-indigo-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-2xl">💎</span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/40">Lean 4.35 (Certifié)</span>
+                            <span class="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/40">Lean 4 (Certifié)</span>
                         </div>
                         <h3 class="text-base font-bold text-white">Preuves Formelles Mécanisées</h3>
                         <p class="text-xs text-slate-300">
-                            Dépôt officiel certifié sous Lean 4 (DOI: 10.5281/zenodo.23833938) : 17 théorèmes prouvés, 0 sorry, 0 admit, 0 axiome ad hoc. Validation constructive de l'involution antagoniste et de la cohérence globale.
+                            Dépôt officiel certifié sous Lean 4 (DOI : 10.5281/zenodo.23833938) : <strong>68 théorèmes prouvés</strong> (dont 33 théorèmes audités et 38 vérifications d'axiomes, 0 sorry, 0 admit, 0 axiome ad hoc).
                         </p>
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
@@ -705,7 +701,9 @@
                 <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-purple-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-2xl">📄</span>
+                            <span class="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            </span>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Zenodo &bull; OSF</span>
                         </div>
                         <h3 class="text-base font-bold text-white">Manuscrit Théorique v1.0.1</h3>
@@ -729,7 +727,9 @@
                 <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-blue-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-2xl">🧭</span>
+                            <span class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                            </span>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800/40">176 Positions</span>
                         </div>
                         <h3 class="text-base font-bold text-white">Taxonomie &amp; Lexique 176</h3>
@@ -750,7 +750,9 @@
                 <div class="p-5 rounded-2xl bg-cosmic-900 border border-slate-750 hover:border-slate-500/50 transition-all flex flex-col justify-between space-y-4">
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-2xl">💻</span>
+                            <span class="w-9 h-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            </span>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Code Open Source</span>
                         </div>
                         <h3 class="text-base font-bold text-white">Dépôt GitHub du Site Web</h3>
@@ -788,7 +790,8 @@
                                 49 références
                             </span>
                             <button onclick="downloadBibtexFile()" class="px-3.5 py-1.5 rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 shadow-md transition-all flex items-center gap-1.5" title="Télécharger l'intégralité du corpus au format BibTeX">
-                                <span>📥</span> Export BibTeX (.bib)
+                                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>Export BibTeX (.bib)</span>
                             </button>
                         </div>
                     </div>
@@ -801,25 +804,25 @@
                                     Toutes (49)
                                 </button>
                                 <button class="corpus-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all" data-domain="predictive">
-                                    🧠 Inférence Active (15)
+                                    Inférence Active (15)
                                 </button>
                                 <button class="corpus-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all" data-domain="interoception">
-                                    💓 Intéroception &amp; Allostasie (8)
+                                    Intéroception &amp; Allostasie (8)
                                 </button>
                                 <button class="corpus-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all" data-domain="emotions">
-                                    🧭 Théories des Émotions (14)
+                                    Théories des Émotions (14)
                                 </button>
                                 <button class="corpus-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all" data-domain="psychiatry">
-                                    🏥 Psychiatrie Computationnelle (5)
+                                    Psychiatrie Computationnelle (5)
                                 </button>
                                 <button class="corpus-filter-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all" data-domain="affectivism">
-                                    🔬 Affectivisme &amp; Modèles (7)
+                                    Affectivisme &amp; Modèles (7)
                                 </button>
                             </div>
 
                             <div class="relative w-full sm:w-72">
                                 <input type="text" id="corpusSearchInput" placeholder="Auteur, revue, concept (ex: Friston, allostasie)..." class="w-full px-3.5 py-1.5 pl-9 text-xs bg-slate-950 border border-slate-750 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
-                                <span class="absolute left-3 top-2 text-slate-500 text-xs">🔍</span>
+                                <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
                             </div>
                         </div>
                     </div>
@@ -843,10 +846,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('adolphs2019what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('adolphs2019what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -872,10 +875,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('andrews2021the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('andrews2021the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -901,10 +904,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('barrett2017how', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('barrett2017how', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -927,10 +930,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('barrett2016an', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('barrett2016an', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -956,10 +959,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('barrett2015interoceptive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('barrett2015interoceptive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -985,10 +988,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('bottemanne2021cerveau', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('bottemanne2021cerveau', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1014,10 +1017,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('bottemanne2022mise', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('bottemanne2022mise', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1043,10 +1046,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('bottemanne2022lesprit', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('bottemanne2022lesprit', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1072,10 +1075,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('clark2013whatever', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('clark2013whatever', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1101,10 +1104,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('clark2016surfing', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('clark2016surfing', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1127,10 +1130,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('colombo2017explanatory', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('colombo2017explanatory', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1156,10 +1159,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('dacosta2020active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('dacosta2020active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1185,10 +1188,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('damasio1994descartes', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('damasio1994descartes', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1211,10 +1214,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('damasio2013the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('damasio2013the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1240,10 +1243,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('dukes2021the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('dukes2021the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1269,10 +1272,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('ekman1992an', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('ekman1992an', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1298,10 +1301,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('feldman2010attention', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('feldman2010attention', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1327,10 +1330,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('fontaine2007the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('fontaine2007the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1356,10 +1359,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('frijda1986the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('frijda1986the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1382,10 +1385,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('friston2010the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('friston2010the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1411,10 +1414,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('friston2017active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('friston2017active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1440,10 +1443,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('gauld2021les', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('gauld2021les', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1469,10 +1472,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('gross1998the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('gross1998the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1498,10 +1501,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('hesp2021deeply', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('hesp2021deeply', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1527,10 +1530,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('jackson2019emotion', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('jackson2019emotion', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1556,10 +1559,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('james1884what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('james1884what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1585,10 +1588,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('joffily2013emotional', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('joffily2013emotional', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1614,10 +1617,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('kirchhoff2018the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('kirchhoff2018the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1643,10 +1646,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('lazarus1991emotion', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('lazarus1991emotion', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1669,10 +1672,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('ledoux2012rethinking', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('ledoux2012rethinking', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1698,10 +1701,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('lee2021predictive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('lee2021predictive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1727,10 +1730,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('lindquist2012the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('lindquist2012the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1756,10 +1759,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('marr2010vision', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('marr2010vision', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1782,10 +1785,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('mesquita2017doing', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('mesquita2017doing', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1811,10 +1814,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('panksepp1998affective', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('panksepp1998affective', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         <span class="text-[10px] text-slate-500 font-mono">Ouvrage canonique</span>
@@ -1837,10 +1840,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('panksepp2000the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('panksepp2000the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1866,10 +1869,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('pezzulo2015active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('pezzulo2015active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1895,10 +1898,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('rao1999predictive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('rao1999predictive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1924,10 +1927,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('russell1980a', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('russell1980a', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1953,10 +1956,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('russell2003core', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('russell2003core', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -1982,10 +1985,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('russell1999core', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('russell1999core', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2011,10 +2014,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('scherer2005what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('scherer2005what', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2040,10 +2043,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('schiller2024the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('schiller2024the', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2069,10 +2072,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('seth2013interoceptive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('seth2013interoceptive', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2098,10 +2101,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('seth2016active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('seth2016active', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2127,10 +2130,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('smith2019simulating', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('smith2019simulating', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2156,10 +2159,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('stephan2016allostatic', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('stephan2016allostatic', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2185,10 +2188,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('sterling2012allostasis', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('sterling2012allostasis', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2214,10 +2217,10 @@
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                         <div class="flex items-center gap-1.5">
                             <button onclick="copyPaperCitation('tschantz2021simulating', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <span>📋</span> APA
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
                             </button>
                             <button onclick="copyPaperBibtex('tschantz2021simulating', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <span>📄</span> BibTeX
+                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
                             </button>
                         </div>
                         
@@ -2230,7 +2233,9 @@
 
                     <!-- Message d'absence de résultats -->
                     <div id="corpusEmptyState" class="hidden text-center py-12 space-y-3">
-                        <span class="text-4xl">🔍</span>
+                        <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mx-auto">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m20 20-3.5-3.5"/></svg>
+                        </div>
                         <p class="text-sm font-semibold text-slate-300">Aucune publication ne correspond à votre recherche.</p>
                         <button onclick="resetCorpusSearch()" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">
                             Réinitialiser la recherche
@@ -2239,98 +2244,91 @@
                 </section>
 
     </main>
+    <!-- Unified Editorial Footer -->
+    <footer class="border-t border-slate-800/90 bg-cosmic-950 py-12 text-slate-400 text-sm mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <!-- Col 1: Brand & Legal -->
+            <div class="md:col-span-5 space-y-3">
+                <div class="flex items-center gap-2.5">
+                    <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed max-w-md">
+                    Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
+                </p>
+                <div class="text-[11px] text-slate-500">
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 bg-cosmic-900 py-10 mt-16 text-slate-400 text-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto" loading="lazy">
-                <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
+            <!-- Col 2: Navigation -->
+            <div class="md:col-span-4 space-y-2.5">
+                <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Architecture &amp; Navigation</div>
+                <div class="grid grid-cols-2 gap-y-1.5 gap-x-4 text-xs">
+                    <a href="index.html" class="text-slate-300 hover:text-white transition-colors">Accueil</a>
+                    <a href="voyage.html" class="text-slate-300 hover:text-white transition-colors">Le Voyage (2 min)</a>
+                    <a href="moteur-predictif.html" class="text-slate-300 hover:text-white transition-colors">1. Moteur Pr&eacute;dictif</a>
+                    <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
+                    <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
+                    <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (v1.0.1)</a>
+                    <a href="scholar_drive.html" class="text-indigo-300 font-semibold transition-colors">Corpus &amp; Preuves</a>
+                    <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
+                </div>
             </div>
-            <div class="flex flex-wrap justify-center gap-6 text-xs text-slate-300">
-                <a href="index.html" class="hover:text-white transition-colors">Accueil</a>
-                <a href="article.html" class="hover:text-white transition-colors">L'Article</a>
-                <a href="moteur-predictif.html" class="hover:text-white transition-colors">1. Moteur</a>
-                <a href="noyau-affectif.html" class="hover:text-white transition-colors">2. Noyau</a>
-                <a href="matrice-affective.html" class="hover:text-white transition-colors">3. Matrice</a>
-                <a href="taxonomie-affective.html" class="hover:text-white transition-colors">4. Taxonomie (176)</a>
-                <a href="scholar_drive.html" class="text-purple-400 font-semibold">Modèles Théoriques</a>
-                <a href="mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
-                <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-1 text-purple-300">
-                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    <span>GitHub</span>
-                </a>
-            </div>
-            <div class="text-xs text-slate-400 text-center md:text-right">
-                <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Ph. D. en psychologie &bull; Psychologue clinicien</div>
+
+            <!-- Col 3: Research Anchors -->
+            <div class="md:col-span-3 space-y-2.5">
+                <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
+                <div class="space-y-1.5 text-xs">
+                    <div class="text-slate-300">
+                        Article v1.0.1 :
+                        <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
+                    </div>
+                    <div class="text-slate-300">
+                        Lean 4 v1.0.1 (68 th.) :
+                        <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
+                    </div>
+                    <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
+                        <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">OSF: z89sg</a>
+                        <span>&middot;</span>
+                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Lean 4</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
-
-    <!-- Mobile Navigation Toggle Script -->
-    <script>
-        (function() {
-            const mobileBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileClose = document.getElementById('mobileMenuClose');
-            if (mobileBtn && mobileMenu) {
-                mobileBtn.addEventListener('click', () => {
-                    mobileMenu.classList.add('open');
-                    document.body.style.overflow = 'hidden';
-                });
-                const closeMenu = () => {
-                    mobileMenu.classList.remove('open');
-                    document.body.style.overflow = '';
-                };
-                if (mobileClose) mobileClose.addEventListener('click', closeMenu);
-                mobileMenu.addEventListener('click', (e) => {
-                    if (e.target === mobileMenu) closeMenu();
-                });
-            }
-        })();
-
-        // Auto-render KaTeX mathematical formulas
-        document.addEventListener("DOMContentLoaded", () => {
-            if (typeof renderMathInElement === 'function') {
-                renderMathInElement(document.body, {
-                    delimiters: [
-                        {left: '$$', right: '$$', display: true},
-                        {left: '$', right: '$', display: false}
-                    ],
-                    throwOnError: false
-                });
-            } else {
-                window.addEventListener('load', () => {
-                    if (typeof renderMathInElement === 'function') {
-                        renderMathInElement(document.body, {
-                            delimiters: [
-                                {left: '$$', right: '$$', display: true},
-                                {left: '$', right: '$', display: false}
-                            ],
-                            throwOnError: false
-                        });
-                    }
-                });
-            }
-        });
-
-        // Register Service Worker for PWA Offline Capability
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then((reg) => {
-                    console.log('Cartograffect PWA ServiceWorker actif :', reg.scope);
-                }).catch((err) => {
-                    console.log('SW registration error :', err);
-                });
-            });
-        }
-    </script>
     <script src="cartograffect_model.js"></script>
     <script src="cartograffect_theory.js"></script>
     <script src="script.js"></script>
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
     <script src="command_palette.js"></script>
+    <script>
+        function copyScholarCitation(btn) {
+            const text = "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 1.0.1). Zenodo DOI: 10.5281/zenodo.24022795 | OSF: https://osf.io/z89sg | Lean 4: https://doi.org/10.5281/zenodo.23833938";
+            const done = () => {
+                if (!btn) return;
+                const label = btn.querySelector('span');
+                const orig = label ? label.textContent : '';
+                if (label) label.textContent = "Citation copiée !";
+                setTimeout(() => { if (label) label.textContent = orig; }, 2200);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done).catch(() => {});
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: '$$', right: '$$', display: true },
+                        { left: '$', right: '$', display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
 </body>
 </html>

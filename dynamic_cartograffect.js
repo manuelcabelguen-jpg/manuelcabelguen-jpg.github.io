@@ -94,7 +94,7 @@
         "Émoi": "#ec4899",
         "Réserve": "#818cf8",
         "Recul": "#06b6d4",
-        "Saisie": "#10b981",
+        "Saisissement": "#10b981",
         "Suspension": "#f43f5e"
     };
 
@@ -608,12 +608,20 @@
 
     Visualizer.animate = function(timestamp) {
         requestAnimationFrame(this.animate);
-        if (!this.canvas || !this.ctx || !this.isVisible || document.hidden) return;
+        if (!this.canvas || !this.ctx || !this.isVisible || document.hidden) {
+            this._lastTimestamp = timestamp;
+            return;
+        }
 
         if (!this.width || this.width <= 0 || !this.height || this.height <= 0) {
             this.resize();
             if (!this.width || this.width <= 0) return;
         }
+
+        const now = typeof timestamp === 'number' ? timestamp : performance.now();
+        const rawDt = this._lastTimestamp ? (now - this._lastTimestamp) / 1000 : 0.016;
+        this._lastTimestamp = now;
+        const dt = Math.max(0.001, Math.min(0.05, rawDt));
 
         const ctx = this.ctx;
         const w = this.width;
@@ -624,16 +632,18 @@
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, w, h);
 
-        // Smooth camera dampening
+        // Smooth camera dampening (scaled by frame dt relative to 60Hz)
+        const stepFactor = dt * 60;
         const cam = this.camera;
         if (cam.autoRotate && !cam.isDragging) {
-            cam.targetAzimuth += cam.rotateSpeed;
+            cam.targetAzimuth += cam.rotateSpeed * stepFactor;
         }
 
-        cam.azimuth += (cam.targetAzimuth - cam.azimuth) * 0.08;
-        cam.elevation += (cam.targetElevation - cam.elevation) * 0.08;
-        cam.distance += (cam.targetDistance - cam.distance) * 0.08;
-        cam.zFlatten += (cam.targetZFlatten - cam.zFlatten) * 0.08;
+        const lerpAlpha = 1 - Math.pow(1 - 0.08, stepFactor);
+        cam.azimuth += (cam.targetAzimuth - cam.azimuth) * lerpAlpha;
+        cam.elevation += (cam.targetElevation - cam.elevation) * lerpAlpha;
+        cam.distance += (cam.targetDistance - cam.distance) * lerpAlpha;
+        cam.zFlatten += (cam.targetZFlatten - cam.zFlatten) * lerpAlpha;
 
         const cx = w / 2;
         const cy = h / 2 + (cam.mode === '3D' ? 15 : 0);
@@ -641,7 +651,7 @@
         const baseScale = Math.min(w, h) / 32 * (38 / cam.distance);
 
         // Advance Active Inference timer
-        this.updateActiveInference(0.016);
+        this.updateActiveInference(dt);
 
         // 1. Draw Subtle Nebula Gradients for 4 Quadrants
         this.drawQuadrantAmbience(ctx, cx, cy, baseScale);
@@ -1163,7 +1173,13 @@
             }
         }
         if (point.type !== 'operator') {
-            return this.points.find(pt => pt.z === point.z && pt.x === -point.x && pt.y === -point.y) || null;
+            if (window.CartograffectTheory && window.CartograffectTheory.antagonistPoint) {
+                const opp = window.CartograffectTheory.antagonistPoint(point.x, point.y, point.z);
+                return this.points.find(pt => pt.z === opp.z && pt.x === opp.x && pt.y === opp.y) || null;
+            }
+            const oppX = (point.x === 0 || point.y === 0) ? -point.x : -Math.sign(point.x) * Math.abs(point.y);
+            const oppY = (point.x === 0 || point.y === 0) ? -point.y : -Math.sign(point.y) * Math.abs(point.x);
+            return this.points.find(pt => pt.z === point.z && pt.x === oppX && pt.y === oppY) || null;
         }
         return null;
     };

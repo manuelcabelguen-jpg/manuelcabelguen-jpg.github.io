@@ -17,7 +17,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -43,9 +43,10 @@
                         cosmic: {
                             950: '#03050a',
                             900: '#070b14',
-                            850: '#0b111e',
+                            850: '#0b1120',
                             800: '#0e1726',
-                            700: '#152136',
+                            750: '#152136',
+                            700: '#1a2744',
                             600: '#1f2e4a',
                         }
                     },
@@ -138,7 +139,8 @@
         <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
             <span class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>🔓 <strong>Aperçu chercheur actif :</strong> Vous pouvez naviguer sur l'ensemble du site de travail en direct.</span>
+                <svg class="w-4 h-4 text-emerald-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+                <span><strong>Aperçu chercheur actif :</strong> Vous pouvez naviguer sur l'ensemble du site de travail en direct.</span>
             </span>
             <div class="flex items-center gap-2">
                 <a href="index.html" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm">
@@ -226,8 +228,8 @@
             <!-- Carte 1 : Géométrie Octaédrique -->
             <div class="glass-card rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between">
                 <div>
-                    <div class="w-10 h-10 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-xl mb-4 shadow-inner">
-                        🧭
+                    <div class="w-10 h-10 rounded-xl bg-purple-900/40 border border-purple-500/30 flex items-center justify-center text-purple-300 mb-4 shadow-inner">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
                     </div>
                     <h2 class="font-heading font-bold text-white text-base sm:text-lg mb-2">
                         Modèle Octaédrique Z=0 à Z=7
@@ -245,14 +247,14 @@
             <!-- Carte 2 : Preuves Formelles en Lean 4 -->
             <div class="glass-card rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between">
                 <div>
-                    <div class="w-10 h-10 rounded-xl bg-rose-900/40 border border-rose-500/30 flex items-center justify-center text-xl mb-4 shadow-inner">
-                        ⚖️
+                    <div class="w-10 h-10 rounded-xl bg-indigo-900/40 border border-indigo-500/30 flex items-center justify-center text-indigo-300 mb-4 shadow-inner">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
                     <h2 class="font-heading font-bold text-white text-base sm:text-lg mb-2">
                         Preuves Formelles en Lean 4
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                        Vérification formelle mécanisée de l'architecture (0 sorry, 0 axiome ad hoc) : norme L1, 84 paires antagonistes involutives et dissipation allostatique (Zenodo DOI: 10.5281/zenodo.23833938).
+                        Vérification formelle mécanisée de l'architecture (68 théorèmes prouvés dont 33 audités, 0 sorry, 0 axiome ad hoc) : norme L1, 84 paires antagonistes involutives et dissipation allostatique (Zenodo DOI: 10.5281/zenodo.23833938).
                     </p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2 text-xs font-mono text-rose-400">
@@ -264,8 +266,8 @@
             <!-- Carte 3 : Scholar Drive & Prépublication -->
             <div class="glass-card rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between">
                 <div>
-                    <div class="w-10 h-10 rounded-xl bg-sky-900/40 border border-sky-500/30 flex items-center justify-center text-xl mb-4 shadow-inner">
-                        📚
+                    <div class="w-10 h-10 rounded-xl bg-sky-900/40 border border-sky-500/30 flex items-center justify-center text-sky-300 mb-4 shadow-inner">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                     </div>
                     <h2 class="font-heading font-bold text-white text-base sm:text-lg mb-2">
                         Scholar Drive &amp; Prépublication
@@ -286,7 +288,8 @@
             <div class="absolute -right-16 -top-16 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <h2 class="font-heading font-bold text-white text-lg sm:text-xl mb-2 flex items-center justify-center gap-2">
-                <span>✉️</span> Échange scientifique &amp; Renseignements
+                <svg class="w-5 h-5 text-indigo-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                <span>Échange scientifique &amp; Renseignements</span>
             </h2>
             <p class="text-xs sm:text-sm text-slate-300 font-light leading-relaxed mb-6">
                 Pour toute question clinique, collaboration de recherche ou demande relative à la théorie computationnelle des affects :
@@ -299,7 +302,9 @@
                 </a>
 
                 <button id="btnCopyEmail" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 font-mono text-xs transition-all flex items-center justify-center gap-2" title="Copier l'adresse courriel">
-                    <span id="copyIcon">📋</span>
+                    <span id="copyIcon" class="inline-flex items-center">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    </span>
                     <span id="copyText">manuelcabelguen@gmail.com</span>
                 </button>
             </div>
@@ -325,7 +330,7 @@
                 <span class="text-slate-700">•</span>
                 <!-- Bouton d'accès réservé -->
                 <button id="btnOpenUnlockModal" class="flex items-center gap-1.5 text-slate-400 hover:text-purple-300 transition-colors font-mono cursor-pointer" title="Accès réservé pour prévisualiser les travaux en cours">
-                    <span>🔒</span>
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span class="underline decoration-dotted">Accès réservé</span>
                 </button>
             </div>
@@ -341,8 +346,8 @@
             </button>
 
             <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-purple-950/80 border border-purple-500/40 text-purple-300 flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
-                    🔐
+                <div class="w-12 h-12 rounded-2xl bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 flex items-center justify-center mx-auto mb-3 shadow-inner">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
                 <h3 class="font-heading font-bold text-white text-xl">Accès Réservé Chercheur</h3>
                 <p class="text-xs text-slate-400 mt-1 font-light">
@@ -363,8 +368,9 @@
                         autocomplete="current-password"
                         required
                     >
-                    <p id="unlockErrorMsg" class="hidden text-xs text-rose-400 mt-2 font-mono flex items-center gap-1">
-                        <span>⚠️</span> <span>Clé incorrecte. Veuillez réessayer.</span>
+                    <p id="unlockErrorMsg" class="hidden text-xs text-rose-400 mt-2 font-mono flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                        <span>Clé incorrecte. Veuillez réessayer.</span>
                     </p>
                 </div>
 
@@ -442,18 +448,20 @@
         // 2. Gestion de la copie du courriel
         const btnCopyEmail = document.getElementById('btnCopyEmail');
         if (btnCopyEmail) {
+            const copySvg = '<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>';
+            const checkSvg = '<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
             btnCopyEmail.addEventListener('click', function () {
                 const email = 'manuelcabelguen@gmail.com';
                 navigator.clipboard.writeText(email).then(() => {
                     const copyText = document.getElementById('copyText');
                     const copyIcon = document.getElementById('copyIcon');
                     copyText.textContent = 'Adresse copiée !';
-                    copyIcon.textContent = '✓';
+                    copyIcon.innerHTML = checkSvg;
                     btnCopyEmail.classList.add('border-emerald-500', 'text-emerald-300');
 
                     setTimeout(() => {
                         copyText.textContent = email;
-                        copyIcon.textContent = '📋';
+                        copyIcon.innerHTML = copySvg;
                         btnCopyEmail.classList.remove('border-emerald-500', 'text-emerald-300');
                     }, 2500);
                 }).catch(() => {

@@ -37,7 +37,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Outfit:wght@600;700;800&family=EB+Garamond:ital,wght@0,400..600;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="voyage.css">
@@ -45,14 +45,17 @@
 
 <body class="voyage">
 
-    <!-- Barre supérieure : marque + sortie toujours disponible -->
+    <!-- Barre supérieure : marque + passerelle sobre vers le modèle -->
     <header class="v-topbar">
         <a href="index.html" class="v-brand" aria-label="Cartograffect, retour à l'accueil">
             <img src="assets/logo-96.png" width="96" height="96" alt="">
             <span>CARTOGRAFFECT</span>
         </a>
-        <a href="index.html" class="v-skip" id="skip-voyage"><span aria-hidden="true">&larr;</span> Retour à
-            l'accueil</a>
+        <div class="v-topbar__actions">
+            <a href="moteur-predictif.html" class="v-nav-link v-nav-link--desktop">Le Modèle (1–4)</a>
+            <a href="taxonomie-affective.html" class="v-nav-link v-nav-link--desktop">Carte 176</a>
+            <a href="index.html" class="v-skip" id="skip-voyage"><span aria-hidden="true">&larr;</span> Accueil</a>
+        </div>
     </header>
 
     <!-- Halo de respiration (Veille) -->
@@ -179,7 +182,7 @@
                         spontanément&nbsp;: il n'y a pas de bonne réponse.</p>
 
                     <fieldset class="question" id="q-y">
-                        <legend><span class="lever lever--y">1/2 &middot; AGIR OU LAISSER</span>Face à cette page qui
+                        <legend><span class="lever lever--y">1/2 &middot; AGIR OU LAISSER (Contrôle Y)</span>Face à cette page qui
                             vous a surpris·e, que
                             faites-vous&nbsp;?</legend>
                         <div class="choices">
@@ -201,7 +204,7 @@
                     </fieldset>
 
                     <fieldset class="question" id="q-x" hidden>
-                        <legend><span class="lever lever--x">2/2 &middot; AJUSTER OU TENIR</span>Ce que vous vous
+                        <legend><span class="lever lever--x">2/2 &middot; AJUSTER OU TENIR (Attente X)</span>Ce que vous vous
                             attendiez à
                             vivre en arrivant ici&hellip;</legend>
                         <div class="choices">
@@ -274,20 +277,16 @@
 
             <div class="exits">
                 <a id="exit-map" class="exit exit--primary" href="taxonomie-affective.html">
-                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">🧭</span>
-                        <span><strong>Explorer la carte depuis ma position</strong><small>Les 176 états affectifs, en 2D
-                                et
-                                en 3D</small></span></span>
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+                        <span><strong>Explorer la carte depuis ma position</strong><small>Les 176 états affectifs, en 2D et en 3D</small></span></span>
                 </a>
-                <a id="exit-understand" class="exit" href="index.html#partie-moteur-predictif">
-                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">📖</span>
-                        <span><strong>Comprendre ce qui vient de se passer</strong><small>Le modèle expliqué pas à
-                                pas</small></span></span>
+                <a id="exit-understand" class="exit" href="moteur-predictif.html">
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+                        <span><strong>Comprendre ce qui vient de se passer</strong><small>Passer au Moteur Prédictif &amp; aux axes (X, Y, Z)</small></span></span>
                 </a>
                 <button type="button" id="btn-replay" class="exit">
-                    <span class="exit__row"><span class="exit__icon" aria-hidden="true">🔁</span>
-                        <span><strong>Refaire le voyage autrement</strong><small>Voir où mène un autre
-                                choix</small></span></span>
+                    <span class="exit__row"><span class="exit__icon" aria-hidden="true"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
+                        <span><strong>Refaire le voyage autrement</strong><small>Voir où mène un autre choix</small></span></span>
                 </button>
             </div>
 

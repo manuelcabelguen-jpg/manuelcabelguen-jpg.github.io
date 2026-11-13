@@ -1,5 +1,5 @@
 // Cartograffect Service Worker for offline capability & PWA caching
-const CACHE_NAME = 'cartograffect-v3.0-4components';
+const CACHE_NAME = 'cartograffect-v4.0-unified';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -10,19 +10,24 @@ const ASSETS_TO_CACHE = [
   './article.html',
   './scholar_drive.html',
   './voyage.html',
+  './voyage.css',
+  './voyage.js',
   './emotions.html',
   './mentions-legales.html',
   './maintenance.html',
+  './404.html',
   './maintenance_guard.js',
   './cartograffect_model.js',
   './cartograffect_theory.js',
   './corpus_system.js',
+  './command_palette.js',
   './octahedral_navigator.js',
   './dynamic_cartograffect.js',
   './bilingual_modal.js',
   './script.js',
   './manifest.json',
   './style.css',
+  './assets/tailwind.config.js',
   './assets/logo.png',
   './assets/logo-96.png',
   './assets/logo-192.png',

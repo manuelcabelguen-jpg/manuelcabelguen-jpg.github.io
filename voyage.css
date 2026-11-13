@@ -13,17 +13,18 @@
     --ink: #e2e8f0;
     --ink-soft: #cbd5e1;
     --muted: #94a3b8;
-    --violet: #a855f7;
-    --violet-soft: #c4b5fd;
+    --violet: #818cf8;
+    --violet-soft: #c7d2fe;
     --indigo: #6366f1;
     --sky: #38bdf8;
     --amber: #fbbf24;
     --pink: #ec4899;
     --emerald: #34d399;
     --radius: 18px;
-    --font-sans: 'DM Sans', 'Inter', system-ui, sans-serif;
-    --font-head: 'Outfit', 'DM Sans', system-ui, sans-serif;
-    --font-serif: 'EB Garamond', Georgia, serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-head: 'Outfit', 'Inter', system-ui, sans-serif;
+    --font-serif: 'Newsreader', Georgia, serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -76,11 +77,30 @@ h1:focus, h2:focus, .veille-text p:focus { outline: none; }
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 16px 24px 28px;
-    background: linear-gradient(180deg, #0b0d13 80%, rgba(11, 13, 19, 0) 100%);
+    padding: 14px 24px 22px;
+    background: linear-gradient(180deg, rgba(7, 11, 20, 0.94) 76%, rgba(7, 11, 20, 0) 100%);
     pointer-events: none;
 }
 .v-topbar > * { pointer-events: auto; }
+.v-topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+.v-nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding: 0.42rem 0.78rem;
+    border-radius: 999px;
+    transition: color 0.2s, background 0.2s;
+}
+.v-nav-link:hover { color: #fff; background: rgba(148, 163, 184, 0.1); }
+@media (max-width: 680px) {
+    .v-nav-link--desktop { display: none; }
+}
 
 .v-brand {
     display: inline-flex;

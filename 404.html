@@ -17,92 +17,126 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['DM Sans', 'Inter', 'sans-serif'],
-                        heading: ['Outfit', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f5f3ff',
-                            400: '#a78bfa',
-                            500: '#8b5cf6',
-                            600: '#7c3aed',
-                            700: '#6d28d9',
-                            900: '#4c1d95',
-                        },
-                        cosmic: {
-                            900: '#070b14',
-                            800: '#0e1726',
-                            700: '#152136',
-                            600: '#1f2e4a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="/assets/tailwind.config.js"></script>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
-
-    <!-- Top Navigation Bar -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-cosmic-900/80 border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <a href="/index.html" class="flex items-center gap-3 group">
-                <img src="/assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-10 w-auto object-contain transition-transform group-hover:scale-105" loading="eager">
-                <div class="flex flex-col">
-                    <span class="font-heading font-extrabold text-xl tracking-wider text-white">CARTOGRAFFECT<span class="text-xs text-purple-400 font-bold ml-0.5 align-super">&reg;</span></span>
-                    <span class="text-[10px] tracking-widest uppercase text-purple-400 font-semibold">Cartographie des Affects</span>
+    <!-- Unified Navigation Header -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            <!-- Brand -->
+            <a href="/index.html" class="flex items-center gap-2.5 group shrink-0">
+                <img src="/assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
+                <div class="flex flex-col leading-none">
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Lean 4</span>
                 </div>
             </a>
 
-            <!-- Desktop Nav -->
-            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
-                <a href="/index.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Accueil</a>
-                <a href="/article.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-purple-400"></span>L'Article
+            <!-- Desktop Primary Navigation -->
+            <nav aria-label="Navigation principale" class="hidden lg:flex items-center gap-1">
+                <a href="/index.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors">Accueil</a>
+                <a href="/voyage.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors inline-flex items-center gap-1.5" title="Parcours expérientiel guidé (2 min)">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                    <span>Le Voyage</span>
                 </a>
-                <a href="/taxonomie-affective.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-pink-400"></span>Taxonomie (176)
-                </a>
-                <a href="/scholar_drive.html" class="px-3 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors">Modèles Théoriques</a>
+
+                <!-- Le Modèle Dropdown -->
+                <div class="relative" id="modelDropdownWrapper">
+                    <button type="button" id="modelDropdownBtn" aria-expanded="false" aria-haspopup="true" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors inline-flex items-center gap-1">
+                        <span>Le Mod&egrave;le</span>
+                        <svg class="w-3.5 h-3.5 opacity-75" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/98 backdrop-blur-xl border border-slate-700/80 shadow-2xl p-2 z-50">
+                        <a href="/moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-purple-500/20 border border-purple-500/35 text-purple-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
+                            <div>
+                                <div class="text-xs font-semibold text-white">Moteur Pr&eacute;dictif</div>
+                                <div class="text-[11px] text-slate-400">Interfaces, seuils &amp; gradients A/C</div>
+                            </div>
+                        </a>
+                        <a href="/noyau-affectif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-sky-500/20 border border-sky-500/35 text-sky-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">2</span>
+                            <div>
+                                <div class="text-xs font-semibold text-white">Noyau Affectif</div>
+                                <div class="text-[11px] text-slate-400">Espace (X, Y, Z) &amp; norme L&#8321;</div>
+                            </div>
+                        </a>
+                        <a href="/matrice-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-emerald-500/20 border border-emerald-500/35 text-emerald-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">3</span>
+                            <div>
+                                <div class="text-xs font-semibold text-white">Matrice Affective</div>
+                                <div class="text-[11px] text-slate-400">Orientation, valence &amp; prototypes Z=2</div>
+                            </div>
+                        </a>
+                        <a href="/taxonomie-affective.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
+                            <span class="w-6 h-6 rounded-md bg-pink-500/20 border border-pink-500/35 text-pink-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">4</span>
+                            <div>
+                                <div class="text-xs font-semibold text-white">Taxonomie Affective</div>
+                                <div class="text-[11px] text-slate-400">176 &eacute;tats, strates Z=0..7 &amp; carte 2D/3D</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="/article.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors">L'Article</a>
+                <a href="/scholar_drive.html" class="px-3 py-1.5 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.05] transition-colors">Corpus &amp; Preuves</a>
             </nav>
 
-            <div class="hidden md:flex items-center gap-3">
-                <a href="/taxonomie-affective.html" class="px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
-                    Ouvrir la Carte &rarr;
-                </a>
-            </div>
+            <!-- Action Controls -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button type="button" data-command-trigger class="group hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="Rechercher un état affectif, concept ou niveau (Ctrl+K)">
+                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <span>Rechercher</span>
+                    <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">&#8984;K</kbd>
+                </button>
 
-            <!-- Mobile Menu Button -->
-            <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none" aria-label="Ouvrir le menu" aria-controls="mobileMenu" aria-expanded="false">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
+                <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
+                    <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+                    <span>FR | EN</span>
+                </button>
+
+                <a href="/taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
+                    <span>Carte 176</span>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
+                </a>
+
+                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                </button>
+            </div>
         </div>
     </header>
+    <!-- Unified Mobile Navigation Overlay -->
+    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+        <div class="w-full max-w-sm bg-[#0b1120] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-2 relative my-auto">
+            <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
+                <span class="font-heading font-bold text-sm tracking-wider text-white">NAVIGATION</span>
+                <button id="mobileMenuClose" type="button" aria-label="Fermer le menu" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
 
-    <!-- Mobile Fullscreen Menu Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay md:hidden">
-        <button class="close-btn" id="mobileMenuClose" aria-label="Fermer le menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-        <a href="/index.html"><span class="menu-dot bg-purple-400"></span>Accueil</a>
-        <a href="/article.html"><span class="menu-dot bg-purple-400"></span>L'Article Théorique</a>
-        <a href="/moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Le Moteur Prédictif</a>
-        <a href="/noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Le Noyau Affectif</a>
-        <a href="/matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. La Matrice Affective</a>
-        <a href="/taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. La Taxonomie Affective (176)</a>
-        <a href="/scholar_drive.html"><span class="menu-dot bg-indigo-400"></span>Modèles Théoriques</a>
-        <a href="/mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions Légales &amp; PI</a>
+            <button type="button" data-command-trigger class="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 border border-slate-700/80 text-sm font-medium transition-colors">
+                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <span>Recherche rapide</span>
+                <kbd class="ml-auto px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-400 rounded border border-slate-700">&#8984;K</kbd>
+            </button>
+
+            <a href="/voyage.html"><span class="menu-dot bg-amber-400"></span>Le Voyage affectif (2 min)</a>
+            <a href="/index.html"><span class="menu-dot bg-indigo-400"></span>Accueil</a>
+            <a href="/moteur-predictif.html"><span class="menu-dot bg-purple-400"></span>1. Moteur Pr&eacute;dictif</a>
+            <a href="/noyau-affectif.html"><span class="menu-dot bg-sky-400"></span>2. Noyau Affectif (X,Y,Z)</a>
+            <a href="/matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. Matrice Affective</a>
+            <a href="/taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. Taxonomie (176 &eacute;tats)</a>
+            <a href="/article.html"><span class="menu-dot bg-slate-300"></span>L'Article Scientifique</a>
+            <a href="/scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves Lean 4</a>
+            <a href="/mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions L&eacute;gales &amp; PI</a>
+        </div>
     </div>
 
     <!-- Main Content -->
@@ -145,34 +179,64 @@
             </div>
         </div>
     </main>
+    <!-- Unified Editorial Footer -->
+    <footer class="border-t border-slate-800/90 bg-cosmic-950 py-12 text-slate-400 text-sm mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <!-- Col 1: Brand & Legal -->
+            <div class="md:col-span-5 space-y-3">
+                <div class="flex items-center gap-2.5">
+                    <img src="/assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed max-w-md">
+                    Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
+                </p>
+                <div class="text-[11px] text-slate-500">
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                </div>
+            </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-cosmic-900/90 py-8 px-4 text-center text-xs text-slate-400">
-        <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-4 text-slate-300">
-            <a href="/article.html" class="hover:text-white transition-colors">L'Article</a>
-            <a href="/scholar_drive.html" class="hover:text-white transition-colors">Modèles Théoriques</a>
-            <a href="/mentions-legales.html" class="hover:text-white transition-colors">Mentions Légales &amp; PI</a>
+            <!-- Col 2: Navigation -->
+            <div class="md:col-span-4 space-y-2.5">
+                <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">Architecture &amp; Navigation</div>
+                <div class="grid grid-cols-2 gap-y-1.5 gap-x-4 text-xs">
+                    <a href="/index.html" class="text-slate-300 hover:text-white transition-colors">Accueil</a>
+                    <a href="/voyage.html" class="text-slate-300 hover:text-white transition-colors">Le Voyage (2 min)</a>
+                    <a href="/moteur-predictif.html" class="text-slate-300 hover:text-white transition-colors">1. Moteur Pr&eacute;dictif</a>
+                    <a href="/noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
+                    <a href="/matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
+                    <a href="/taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
+                    <a href="/article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (v1.0.1)</a>
+                    <a href="/scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
+                    <a href="/mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
+                </div>
+            </div>
+
+            <!-- Col 3: Research Anchors -->
+            <div class="md:col-span-3 space-y-2.5">
+                <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
+                <div class="space-y-1.5 text-xs">
+                    <div class="text-slate-300">
+                        Article v1.0.1 :
+                        <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
+                    </div>
+                    <div class="text-slate-300">
+                        Lean 4 v1.0.1 (68 th.) :
+                        <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
+                    </div>
+                    <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
+                        <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">OSF: z89sg</a>
+                        <span>&middot;</span>
+                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Lean 4</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>&copy; 2024–2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée) &bull; OPIC n° 1233199</div>
-        <div class="text-[11px] text-slate-500 mt-1">Ph. D. en psychologie &bull; Psychologue clinicien</div>
     </footer>
 
-    <script>
-        (function () {
-            const btn = document.getElementById('mobileMenuBtn');
-            const close = document.getElementById('mobileMenuClose');
-            const menu = document.getElementById('mobileMenu');
-            if (!btn || !menu) return;
-            const setOpen = (open) => {
-                menu.classList.toggle('open', open);
-                btn.setAttribute('aria-expanded', String(open));
-                document.body.style.overflow = open ? 'hidden' : '';
-            };
-            btn.addEventListener('click', () => setOpen(true));
-            if (close) close.addEventListener('click', () => setOpen(false));
-            menu.addEventListener('click', (e) => { if (e.target === menu) setOpen(false); });
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
-        })();
-    </script>
+    <script src="/cartograffect_model.js"></script>
+    <script src="/cartograffect_theory.js"></script>
+    <script src="/bilingual_modal.js"></script>
+    <script src="/command_palette.js"></script>
 </body>
 </html>
