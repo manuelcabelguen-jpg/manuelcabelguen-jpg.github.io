@@ -1,0 +1,289 @@
+/**
+ * CARTOGRAFFECT® — Client Payload Loader (Strate 2)
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * Charge `data/site-payload.json` (contrat déterministe émis par CARTOGRAFFECT)
+ * avec repli synchrone propre sur les métadonnées embarquées lorsque la page
+ * est ouverte hors-ligne ou via `file://`.
+ */
+(function (root) {
+  'use strict';
+
+  /* BEGIN:SITE_PAYLOAD_FALLBACK */
+  const FALLBACK_PAYLOAD = {
+      "schema_version": "1.0",
+      "release": {
+          "version": "2.0.0",
+          "tag": "v2.0.0",
+          "date": "2026-11-21",
+          "changelog_highlights": [
+              {
+                  "section": "Added",
+                  "title": "Stratified Research Compendium governance & Single Source of Truth (`VERSION`, `CHANGELOG.md`, `.zenodo.json`, `manifest.json`, `CITATION.cff`, `docs/CONVERGENCE_MATRIX.md`)",
+                  "summary": "unified release metadata aligning Strate 0 (formal kernel + manuscript) and Strate 1 (exploratory satellites), linking Zenodo software DOI (`10.5281/zenodo.23833938`), Zenodo preprint DOI (`10.5281/zenodo.24022795`), OSF (`https://osf.io/z89sg`), and CIPO/OPIC copyright registration No. `1233199`."
+              },
+              {
+                  "section": "Added",
+                  "title": "Epistemic boundary contracts",
+                  "summary": "explicit subordinate charters in `extensions/lexicon/EPISTEMIC_STATUS.md` and `extensions/in_silico/EPISTEMIC_STATUS.md`."
+              },
+              {
+                  "section": "Added",
+                  "title": "Predictive Monte-Carlo extension for P4 and P5 (`extensions/in_silico/`)",
+                  "summary": "added P4 (lexicographic priority of `sgn(X_t)` over `Δ∇A_t` vs. Joffily & Coricelli, 2013) and P5 (pragmatic controllability mediation `p_hat_ctrl` of `Peur (-2,0,2) -> Colère (-1,1,2)` vs `Dégoût (-1,-1,2)`) in `extensions/in_silico/experiments/01_falsifiable_predictions.py` and `extensions/in_silico/tests/test_recovery_and_experiments.py` using the unmodified `pymdp` generative engine with honestly documented parametric boundaries."
+              },
+              {
+                  "section": "Changed",
+                  "title": "Manuscript unification to `v2.0.0` (`docs/01-Article_Cartograffect.md`)",
+                  "summary": "applied arbitrations **A3** (nuanced distinction in Discussion between formal 2D fixed-radius refutation in `EmotionWheelsChallenge.lean` and preliminary psychometric GRID-24 triangulation without importing 16K interpolation), **A4-Sanctuaire** (kept all `in_silico` quantitative metrics out of theoretical sections, reserving them for a dedicated companion paper referenced in Data Availability), and **A5** (preserved `Z in {0,...,7}` axiomatics matching the 113 theorems, with one cautious opening in Conclusion pointing to the compartmentalized negative-`Z` exploration in `extensions/lexicon/`)."
+              },
+              {
+                  "section": "Changed",
+                  "title": "Lexical downward alignment (`extensions/lexicon/`)",
+                  "summary": "applied arbitration **A1** by restoring Strate 0 canonical names `Langueur` at `(0, -6, 4)` and `Rancœur` at `(-6, 4, 6)` across `01b_prepare_diamond_z_minus.py`, `lean/SchererGRID.lean`, `src/grid_cpm_integration.py`, and derived TSV/JSON artifacts, preserving `Solitude (SADNESS)` and `Irritation (IRRITATION)` strictly in the `grid_anchor_alias` metadata column."
+              },
+              {
+                  "section": "Changed",
+                  "title": "SPDX Dual-Licensing & Hybrid-File Separation Clause (`NOTICE`, `README.md`, `CITATION.cff`, `extensions/in_silico/pyproject.toml`)",
+                  "summary": "unified under `AGPL-3.0-or-later AND CC-BY-NC-SA-4.0`, clarifying that code and formal proof structures fall under GNU AGPLv3 while theoretical architecture, manuscript content, and the 176-state taxonomy fall exclusively under CC BY-NC-SA 4.0."
+              },
+              {
+                  "section": "Changed",
+                  "title": "Portable relative POSIX outputs & zero-leak hygiene",
+                  "summary": "removed machine-specific paths (`figure_path` normalized to `results/fig1_falsifiable_predictions.png`), removed duplicate `extensions/lexicon/CITATION.cff` and unused artifact copies."
+              },
+              {
+                  "section": "Verified",
+                  "title": "Strate 0 Hexa-Prover Core intact",
+                  "summary": "unchanged `Cartograffect/*.lean` (`11/11` `lake build` targets, `113/113` theorems, `0 sorry`, `0` custom axioms) alongside Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT-LIB/Z3 5.3.3, and TLA+/TLC 2.19."
+              }
+          ]
+      },
+      "identifiers": {
+          "zenodo_code_doi": "10.5281/zenodo.23833938",
+          "zenodo_article_doi": "10.5281/zenodo.24022795",
+          "osf_url": "https://osf.io/z89sg",
+          "cipo_registration": "1233199",
+          "github_repo_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT",
+          "github_release_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/releases/tag/v2.0.0"
+      },
+      "strate_0_core": {
+          "theorems_verified": 113,
+          "sorry_count": 0,
+          "custom_axioms_count": 0,
+          "provers": [
+              {
+                  "name": "Lean 4",
+                  "version": "4.35.0",
+                  "entrypoint": "Cartograffect.lean",
+                  "directory": "Cartograffect"
+              },
+              {
+                  "name": "Rocq",
+                  "version": "9.0",
+                  "entrypoint": "rocq/theories/Cartograffect.v",
+                  "directory": "rocq"
+              },
+              {
+                  "name": "Agda",
+                  "version": "2.9.0",
+                  "entrypoint": "agda/src/Cartograffect.agda",
+                  "directory": "agda"
+              },
+              {
+                  "name": "Dafny",
+                  "version": "4.11.0",
+                  "entrypoint": "dafny/src/Cartograffect.dfy",
+                  "directory": "dafny"
+              },
+              {
+                  "name": "SMT/Z3",
+                  "version": "5.3.3",
+                  "entrypoint": "smt/theories/08_AuditTests.smt2",
+                  "directory": "smt"
+              },
+              {
+                  "name": "TLA+/TLC",
+                  "version": "2.19",
+                  "entrypoint": "tla/specs/Cartograffect.tla",
+                  "directory": "tla"
+              }
+          ],
+          "lean_modules_count": 9,
+          "lean_modules": [
+              "Cartograffect.lean",
+              "Cartograffect/PredictiveEngine.lean",
+              "Cartograffect/CoreAffect.lean",
+              "Cartograffect/AffectiveMatrix.lean",
+              "Cartograffect/AffectiveTaxonomy.lean",
+              "Cartograffect/AffectiveDynamics.lean",
+              "Cartograffect/Lexicon176.lean",
+              "Cartograffect/PredictiveCircuit.lean",
+              "Cartograffect/AuditTests.lean"
+          ],
+          "states_count": 176,
+          "predictions_count": 5,
+          "lexicon176_sha256": "e66dbd6b6630e11d72f786b00025dd909f80ad98331083f3c5f80802f1755b65",
+          "author_affiliation": "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada"
+      },
+      "strate_1_extensions": {
+          "lexicon": {
+              "path": "extensions/lexicon",
+              "status": "exploratory_subordinate",
+              "epistemic_status_file": "extensions/lexicon/EPISTEMIC_STATUS.md",
+              "summary": "Triangulation psychométrique préliminaire sur les 24 ancres Scherer GRID / CPM et réfutation formelle des roues émotionnelles 2D à rayon fixe (EmotionWheelsChallenge.lean) ; statut exploratoire subordonné à la Strate 0 ; extension axiologique Z- (« Diamant 303 ») strictement cloisonnée hors de l'axiomatique Z in {0..7}."
+          },
+          "in_silico": {
+              "path": "extensions/in_silico",
+              "status": "exploratory_subordinate",
+              "epistemic_status_file": "extensions/in_silico/EPISTEMIC_STATUS.md",
+              "predictions_tested": [
+                  "P1",
+                  "P2",
+                  "P3",
+                  "P4",
+                  "P5"
+              ],
+              "experiments_count": 5,
+              "a4_sanctuaire_policy": "Respect absolu de l'arbitrage A4-Sanctuaire : aucune métrique quantitative in silico (PXP, min r) n'est injectée dans le corps théorique de l'article canonique ; banc compagnon Exp 1–5 réservé à un second article dédié.",
+              "summary": "Banc compagnon de simulation Active Inference (Exp 1–5 : faisabilité générative P1–P5, phénotypes cliniques, identifiabilité bayésienne et explorations nosologiques DSM-5 / HiTOP), strictement subordonné à la Strate 0 et réservé à un second article méthodologique dédié dans le respect absolu de A4-Sanctuaire."
+          }
+      },
+      "licenses": {
+          "spdx_expression": "AGPL-3.0-or-later AND CC-BY-NC-SA-4.0",
+          "code_license": "GNU AGPLv3",
+          "theory_license": "CC BY-NC-SA 4.0",
+          "hybrid_clause_summary": "For hybrid files containing both executable/formal structures and the theoretical taxonomy/coordinates, the formal/software structure is licensed under AGPL-3.0-or-later while the nomenclature, coordinates, and 176-state/303-pole taxonomic architecture remain exclusively governed by CC BY-NC-SA 4.0 (commercial extraction of the taxonomy is strictly prohibited)."
+      }
+  };
+  /* END:SITE_PAYLOAD_FALLBACK */
+
+  function getByPath(obj, path) {
+    if (!obj || !path) return undefined;
+    const parts = String(path).split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length; i += 1) {
+      if (cur === null || cur === undefined || typeof cur !== 'object') return undefined;
+      cur = cur[parts[i]];
+    }
+    return cur;
+  }
+
+  const SHORT_ALIASES = {
+    version: 'release.version',
+    tag: 'release.tag',
+    date: 'release.date',
+    zenodo_code_doi: 'identifiers.zenodo_code_doi',
+    zenodo_article_doi: 'identifiers.zenodo_article_doi',
+    osf_url: 'identifiers.osf_url',
+    cipo_registration: 'identifiers.cipo_registration',
+    github_repo_url: 'identifiers.github_repo_url',
+    theorems_verified: 'strate_0_core.theorems_verified',
+    sorry_count: 'strate_0_core.sorry_count',
+    provers_count: 'strate_0_core.provers_count',
+    lean_modules_count: 'strate_0_core.lean_modules_count',
+    states_count: 'strate_0_core.states_count',
+    predictions_count: 'strate_0_core.predictions_count',
+    author_affiliation: 'strate_0_core.author_affiliation',
+    spdx_expression: 'licenses.spdx_expression',
+    code_license: 'licenses.code_license',
+    theory_license: 'licenses.theory_license'
+  };
+
+  function resolveValue(payload, path) {
+    if (path === 'version_label') {
+      const ver = getByPath(payload, 'release.version');
+      return ver !== undefined && ver !== null ? ('Version ' + ver) : undefined;
+    }
+    const targetPath = Object.prototype.hasOwnProperty.call(SHORT_ALIASES, path)
+      ? SHORT_ALIASES[path]
+      : path;
+    if (targetPath === 'strate_0_core.provers_count') {
+      const provers = getByPath(payload, 'strate_0_core.provers');
+      return Array.isArray(provers) ? provers.length : undefined;
+    }
+    if (targetPath === 'strate_0_core.provers_names') {
+      const provers = getByPath(payload, 'strate_0_core.provers');
+      return Array.isArray(provers) ? provers.map(p => p.name).join(', ') : undefined;
+    }
+    return getByPath(payload, targetPath);
+  }
+
+  function hydrateDOM(payload) {
+    if (typeof document === 'undefined') return;
+    const nodes = document.querySelectorAll('[data-payload]');
+    nodes.forEach(function (el) {
+      const key = el.getAttribute('data-payload');
+      const val = resolveValue(payload, key);
+      if (val !== undefined && val !== null && typeof val !== 'object') {
+        el.textContent = String(val);
+      }
+    });
+  }
+
+  function resolvePayloadUrl() {
+    if (typeof document !== 'undefined' && document.currentScript && document.currentScript.src) {
+      try {
+        return new URL('../data/site-payload.json', document.currentScript.src).toString();
+      } catch (_err) {
+        // fallback below
+      }
+    }
+    return 'data/site-payload.json';
+  }
+
+  const payloadUrl = resolvePayloadUrl();
+
+  const api = {
+    fallback: FALLBACK_PAYLOAD,
+    current: FALLBACK_PAYLOAD,
+    get: function (path, fallbackValue) {
+      const val = resolveValue(api.current, path);
+      return val !== undefined ? val : fallbackValue;
+    },
+    hydrate: function () {
+      hydrateDOM(api.current);
+    },
+    ready: null
+  };
+
+  if (typeof fetch === 'function' && typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+    api.ready = fetch(payloadUrl, { cache: 'no-cache' })
+      .then(function (resp) {
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        return resp.json();
+      })
+      .then(function (json) {
+        if (json && json.schema_version && json.release && json.strate_0_core) {
+          api.current = json;
+        }
+        hydrateDOM(api.current);
+        if (typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('cartograffect:payload-ready', { detail: api.current }));
+        }
+        return api.current;
+      })
+      .catch(function () {
+        hydrateDOM(api.current);
+        return api.current;
+      });
+  } else {
+    api.ready = Promise.resolve(FALLBACK_PAYLOAD);
+  }
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        hydrateDOM(api.current);
+      });
+    } else {
+      hydrateDOM(api.current);
+    }
+  }
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = api;
+  } else {
+    root.CartograffectPayload = api;
+  }
+})(typeof window !== 'undefined' ? window : this);

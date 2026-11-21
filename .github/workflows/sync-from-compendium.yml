@@ -1,0 +1,127 @@
+name: Sync Website from CARTOGRAFFECT Compendium
+
+on:
+  repository_dispatch:
+    types: [compendium-release]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag de release CARTOGRAFFECT (ex. v2.0.0)"
+        required: true
+        type: string
+        default: "v2.0.0"
+      payload_url:
+        description: "URL directe optionnelle de site-payload.json"
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-from-compendium:
+    name: Fetch site-payload.json & Open Sync PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download and validate site-payload.json
+        id: payload
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_TAG: ${{ github.event.client_payload.tag }}
+          DISPATCH_PAYLOAD_URL: ${{ github.event.client_payload.payload_url }}
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_PAYLOAD_URL: ${{ inputs.payload_url }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          event_name = os.environ["EVENT_NAME"]
+          if event_name == "repository_dispatch":
+              tag = os.environ.get("DISPATCH_TAG", "").strip()
+              url = os.environ.get("DISPATCH_PAYLOAD_URL", "").strip()
+          else:
+              tag = os.environ.get("INPUT_TAG", "").strip()
+              url = os.environ.get("INPUT_PAYLOAD_URL", "").strip()
+
+          if not url:
+              if not tag:
+                  raise SystemExit("Neither payload_url nor tag was provided.")
+              url = f"https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/releases/download/{tag}/site-payload.json"
+
+          req = urllib.request.Request(url, headers={"User-Agent": "cartograffect-web-sync"})
+          with urllib.request.urlopen(req, timeout=30) as resp:
+              raw = resp.read().decode("utf-8")
+
+          data = json.loads(raw)
+          if data.get("schema_version") != "1.0":
+              raise SystemExit(f"Unsupported schema_version: {data.get('schema_version')!r}")
+
+          out_path = Path("data/site-payload.json")
+          out_path.parent.mkdir(parents=True, exist_ok=True)
+          out_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+
+          version = data["release"]["version"]
+          resolved_tag = data["release"]["tag"]
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as gh_out:
+              gh_out.write(f"version={version}\n")
+              gh_out.write(f"tag={resolved_tag}\n")
+              gh_out.write(f"payload_url={url}\n")
+          print(f"Downloaded site-payload.json v{version} ({resolved_tag}) from {url}")
+          PY
+
+      - name: Apply deterministic synchronization
+        run: python scripts/sync_from_payload.py --apply
+
+      - name: Run zero-residue and parity verification (--check)
+        run: python scripts/sync_from_payload.py --check
+
+      - name: Check for changes and open Pull Request on main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SYNC_VERSION: ${{ steps.payload.outputs.version }}
+          SYNC_TAG: ${{ steps.payload.outputs.tag }}
+          SYNC_PAYLOAD_URL: ${{ steps.payload.outputs.payload_url }}
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "Website is already aligned with CARTOGRAFFECT v${SYNC_VERSION}."
+            exit 0
+          fi
+
+          BRANCH="chore/sync-compendium-v${SYNC_VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "${BRANCH}"
+          git add -A
+          git commit -m "chore(sync): align website with CARTOGRAFFECT v${SYNC_VERSION}"
+          git push --force-with-lease origin "${BRANCH}"
+
+          PR_TITLE="chore(sync): align website with CARTOGRAFFECT v${SYNC_VERSION}"
+          PR_BODY=$(cat <<EOF
+          Synchronisation automatisée du site vitrine (Strate 2) depuis le contrat déterministe \`site-payload.json\` de **CARTOGRAFFECT** (${SYNC_TAG}).
+
+          - Source : ${SYNC_PAYLOAD_URL}
+          - Vérification exécutée : \`python scripts/sync_from_payload.py --check\` (0 résidu, conformité Strate 0 / SPDX)
+          EOF
+          )
+
+          EXISTING_PR=$(gh pr list --head "${BRANCH}" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "${EXISTING_PR}" ]; then
+            gh pr edit "${EXISTING_PR}" --title "${PR_TITLE}" --body "${PR_BODY}"
+          else
+            gh pr create --base main --head "${BRANCH}" --title "${PR_TITLE}" --body "${PR_BODY}"
+          fi

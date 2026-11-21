@@ -1,8 +1,17 @@
 /**
- * CARTOGRAFFECT - Modèle Géométrique Officiel (176 entrées certifiées)
- * Algorithme et Taxonomie formelle vérifiée sous Lean 4 (DOI: 10.5281/zenodo.23833938)
- * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
- * 
+ * CARTOGRAFFECT® - Modèle Géométrique Officiel (176 entrées certifiées, parité 176/176 avec Cartograffect/Lexicon176.lean)
+ * SPDX-License-Identifier: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0
+ *
+ * Compendium v2.0.0 — Méta-fondation formelle Hexa-Prover (113 théorèmes constructifs, 0 sorry,
+ * 9 modules .lean, 6 prouveurs : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
+ * Zenodo Compendium DOI : 10.5281/zenodo.23833938 | Article DOI : 10.5281/zenodo.24022795 | OSF : https://osf.io/z89sg
+ * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
+ * Sainte-Agathe-des-Monts, Québec, Canada • OPIC / CIPO n° 1233199
+ *
+ * CLAUSE HYBRIDE : La structure logicielle (exports UMD/CommonJS et accesseurs) est régie par GNU AGPLv3
+ * (AGPL-3.0-or-later). La nomenclature canonique, les coordonnées (X, Y, Z), les 84 paires antagonistes et
+ * la taxonomie des 176 états demeurent exclusivement régies par CC BY-NC-SA 4.0 (extraction commerciale interdite).
+ *
  * 8 Opérateurs Centraux (Z=0 à Z=7) à (0,0,Z)
  * 168 Positions Affectives réparties sur 6 couronnes (Z=2 à Z=7) selon |X| + |Y| = 2Z - 2
  * Typologie : Axiales (X=0 ou Y=0), Diagonales (|X|=|Y|), Latérales (|X|≠|Y|)

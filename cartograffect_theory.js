@@ -1,12 +1,22 @@
 /**
- * CARTOGRAFFECT® — Noyau Computationnel & Formalisation Lean 4 (Module JS)
- * Traduction fidèle des quatre modules mécanisés sous Lean 4.35 :
- *   1. PredictiveEngine.lean  (Moteur prédictif : interfaces, hystérésis, couplages A/C)
- *   2. CoreAffect.lean        (Noyau affectif : coordonnées X/Y/Z, norme L1, typologie)
- *   3. AffectiveMatrix.lean   (Matrice affective : régimes énergétiques, valence lexicographique)
- *   4. AffectiveTaxonomy.lean (Taxonomie affective : 9 groupes, 17 sous-secteurs, dissipation)
+ * CARTOGRAFFECT® — Noyau Computationnel & Formalisation Hexa-Prover v2.0.0 (Module JS)
+ * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
+ * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (113 théorèmes constructifs, 0 sorry,
+ * 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
+ * et ses 9 modules .lean :
+ *   1. Cartograffect.lean            (Intégration racine)
+ *   2. PredictiveEngine.lean         (Moteur prédictif : interfaces, hystérésis, couplages A/C)
+ *   3. CoreAffect.lean               (Noyau affectif : coordonnées X/Y/Z, norme L1, apportionRay)
+ *   4. AffectiveMatrix.lean          (Matrice affective : régimes énergétiques, valence lexicographique)
+ *   5. AffectiveTaxonomy.lean        (Taxonomie affective : 9 groupes, 17 sous-secteurs, dissipation)
+ *   6. AffectiveDynamics.lean        (Dynamique markovienne, résolution active vs extinction passive)
+ *   7. Lexicon176.lean               (176 positions certifiées sans collision)
+ *   8. PredictiveCircuit.lean        (Circuit fermé à deux boucles & identité 4m^6)
+ *   9. AuditTests.lean               (Batterie d'audit formel automatisé)
+ *
+ * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
+ * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
  */
 
 (function (root) {
