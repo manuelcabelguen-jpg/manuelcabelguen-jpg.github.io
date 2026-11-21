@@ -34,6 +34,7 @@ REQUIRED_TOP_KEYS = (
     "identifiers",
     "strate_0_core",
     "strate_1_extensions",
+    "ai_disclosure",
     "licenses",
 )
 
@@ -125,6 +126,13 @@ def load_payload(payload_path: Path) -> tuple[dict[str, Any], list[str]]:
         errors.append("Missing strate_0_core.author_affiliation")
     if lic.get("spdx_expression") != "AGPL-3.0-or-later AND CC-BY-NC-SA-4.0":
         errors.append(f"Unexpected licenses.spdx_expression={lic.get('spdx_expression')!r}")
+    ai = data.get("ai_disclosure", {})
+    ai_verif = str(ai.get("verification_and_audit_status", "")).lower()
+    if not ai.get("author_ownership") or not ai.get("ai_assistance_scope"):
+        errors.append("Missing ai_disclosure.author_ownership or ai_assistance_scope")
+    for marker in ("non mathématicien formel", "ligne par ligne", "tests automatisés", "audit"):
+        if marker not in ai_verif:
+            errors.append(f"Incomplete ai_disclosure.verification_and_audit_status (missing {marker!r})")
 
     return data, errors
 
@@ -196,12 +204,15 @@ def sync_citation_cff(root: Path, payload: dict[str, Any], apply: bool) -> list[
     s0 = payload["strate_0_core"]
 
     updated = text
-    updated = re.sub(r'(?m)^version:\s*".*?"$', f'version: "{rel["version"]}"', updated)
+    updated = re.sub(r'(?m)^(\s*version:\s*)".*?"$', rf'\1"{rel["version"]}"', updated)
     updated = re.sub(r'(?m)^date-released:\s*".*?"$', f'date-released: "{rel["date"]}"', updated)
     updated = re.sub(r'(?m)^license:\s*".*?"$', f'license: "{lic["spdx_expression"]}"', updated)
     updated = re.sub(r'(?m)^(    affiliation:\s*)".*?"$', rf'\1"{s0["author_affiliation"]}"', updated)
     updated = re.sub(r'(?m)^doi:\s*".*?"$', f'doi: "{ids["zenodo_code_doi"]}"', updated)
     updated = re.sub(r'(?m)^repository-code:\s*".*?"$', f'repository-code: "{ids["github_repo_url"]}"', updated)
+    updated = re.sub(r'(description:\s*"Zenodo [^"\n]+ DOI \()v\d+\.\d+\.\d+(\)")', rf'\g<1>{rel["tag"]}\g<2>', updated)
+    updated = re.sub(r'(compendium unifié )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
+    updated = re.sub(r'(CARTOGRAFFECT )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
 
     if updated != text:
         if apply:
@@ -246,15 +257,35 @@ def sync_html_files(root: Path, payload: dict[str, Any], apply: bool) -> list[st
             return m.group(0)
 
         updated = tag_re.sub(repl, text)
-        # Keep inline APA citation strings synchronized with payload version
+        # Keep inline APA citation strings, JSON-LD, meta and notices synchronized with payload version
         updated = re.sub(
-            r"(Cartographie des affects\s*:[^<\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
+            r"(Cartographie des affects\s*:[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
             rf"\g<1>{ver}\g<3>",
             updated,
         )
         updated = re.sub(
-            r"(CARTOGRAFFECT:\s*Architecture[^<\n]*?\(version\s+)(v\d+\.\d+\.\d+)(\))",
+            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(version\s+)(v\d+\.\d+\.\d+)(\))",
             rf"\g<1>{tag}\g<3>",
+            updated,
+        )
+        updated = re.sub(
+            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
+            rf"\g<1>{ver}\g<3>",
+            updated,
+        )
+        updated = re.sub(
+            r'(property="og:description"\s+content="[^"\n]*?\()v\d+\.\d+\.\d+(, compendium Hexa-Prover\))',
+            rf'\g<1>{tag}\g<2>',
+            updated,
+        )
+        updated = re.sub(
+            r'("version":\s*")\d+\.\d+\.\d+(")',
+            rf'\g<1>{ver}\g<2>',
+            updated,
+        )
+        updated = re.sub(
+            r'(Mise à disposition de la prépublication\s+)v\d+\.\d+\.\d+',
+            rf'\g<1>{tag}',
             updated,
         )
 
@@ -324,7 +355,10 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             "tableau-1",
             "tableau-2",
             "Déclaration relative à l’utilisation de l’intelligence artificielle générative",
-            "non mathématicien",
+            "non mathématicien formel",
+            "ligne par ligne",
+            "tests automatisés",
+            "traduction",
             "audit",
         ],
         "scholar_drive.html": [
@@ -344,6 +378,8 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             "Clause de Séparation des Fichiers Hybrides",
             "Statut professionnel et portée scientifique",
             "Ordre des psychologues du Québec",
+            "ni aucun organisme",
+            "révision par les pairs",
             "aucune donnée personnelle",
         ],
         "taxonomie-affective.html": [
@@ -401,6 +437,26 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             errors.append(f"Invalid transparent Tailwind dropdown class bg-[#0b1120]/98 in {hpath.name}")
         if 'id="langToggleBtn"' in htext and "js/i18n.js" not in htext:
             errors.append(f"Missing js/i18n.js inclusion on page with #langToggleBtn: {hpath.name}")
+
+    for fname in ("article.html", "README.md"):
+        fpath = root / fname
+        if fpath.is_file():
+            low = fpath.read_text(encoding="utf-8").lower()
+            if "section 4.1" in low or "§4.1" in low:
+                errors.append(f"Forbidden broken cross-reference (section 4.1 / §4.1) in {fname}")
+
+    css_path = root / "style.css"
+    if css_path.is_file():
+        css_text = css_path.read_text(encoding="utf-8")
+        if "#modelDropdownMenu" not in css_text or "backdrop-filter: blur(12px)" not in css_text or "0.98" not in css_text:
+            errors.append("Missing WCAG 2.1 opaque #modelDropdownMenu styling in style.css")
+
+    sw_path = root / "sw.js"
+    if sw_path.is_file():
+        sw_text = sw_path.read_text(encoding="utf-8")
+        expected_cache = f"cartograffect-{payload['release']['tag']}-"
+        if expected_cache not in sw_text:
+            errors.append(f"sw.js CACHE_NAME should include {expected_cache!r}")
 
     return errors
 

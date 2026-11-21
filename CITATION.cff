@@ -1,7 +1,7 @@
 cff-version: "1.2.0"
 message: "Si vous utilisez CARTOGRAFFECT® (architecture théorique, explorateur interactif, lexique des 176 états ou code source) dans vos travaux, veuillez le citer à l'aide des métadonnées suivantes."
 title: "CARTOGRAFFECT® : Cartographie des affects — Plateforme Web Interactive (Strate 2)"
-version: "2.0.0"
+version: "2.0.1"
 date-released: "2026-11-21"
 doi: "10.5281/zenodo.23833938"
 url: "https://www.cartograffect.com"
@@ -15,10 +15,10 @@ authors:
 identifiers:
   - type: doi
     value: "10.5281/zenodo.24022795"
-    description: "Zenodo theoretical reference manuscript DOI (v2.0.0)"
+    description: "Zenodo theoretical reference manuscript DOI (v2.0.1)"
   - type: doi
     value: "10.5281/zenodo.23833938"
-    description: "Zenodo unified research compendium & Hexa-Prover formal verification DOI (v2.0.0)"
+    description: "Zenodo unified research compendium & Hexa-Prover formal verification DOI (v2.0.1)"
   - type: url
     value: "https://osf.io/z89sg"
     description: "Open Science Framework (OSF) companion project"
@@ -39,7 +39,7 @@ keywords:
   - "Z3"
   - "TLA+"
   - "computational psychology"
-abstract: "Vitrine interactive et monographie Web de CARTOGRAFFECT® (Strate 2), couplée par contrat JSON déterministe (data/site-payload.json) au compendium unifié v2.0.0 : méta-fondation formelle Hexa-Prover (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; 113 théorèmes constructifs, 9 modules .lean, 0 sorry), 176 états affectifs (Z in {0..7}) et 5 prédictions falsifiables P1-P5. Double licence SPDX AGPL-3.0-or-later AND CC-BY-NC-SA-4.0 avec clause de séparation hybride pour cartograffect_model.js."
+abstract: "Vitrine interactive et monographie Web de CARTOGRAFFECT® (Strate 2), couplée par contrat JSON déterministe (data/site-payload.json) au compendium unifié v2.0.1 : méta-fondation formelle Hexa-Prover (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; 113 théorèmes constructifs, 9 modules .lean, 0 sorry), 176 états affectifs (Z in {0..7}) et 5 prédictions falsifiables P1-P5. Double licence SPDX AGPL-3.0-or-later AND CC-BY-NC-SA-4.0 avec clause de séparation hybride pour cartograffect_model.js."
 preferred-citation:
   type: article
   authors:
@@ -49,7 +49,7 @@ preferred-citation:
       affiliation: "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada"
   title: "Cartographie des affects : une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif"
   year: 2026
-  version: "2.0.0"
+  version: "2.0.1"
   doi: "10.5281/zenodo.24022795"
   url: "https://doi.org/10.5281/zenodo.24022795"
-  notes: "Version Web synchronisée avec CARTOGRAFFECT v2.0.0 (113 théorèmes / 6 prouveurs / 9 modules .lean) ; CIPO / OPIC Registration No. 1233199."
+  notes: "Version Web synchronisée avec CARTOGRAFFECT v2.0.1 (113 théorèmes / 6 prouveurs / 9 modules .lean) ; CIPO / OPIC Registration No. 1233199."
