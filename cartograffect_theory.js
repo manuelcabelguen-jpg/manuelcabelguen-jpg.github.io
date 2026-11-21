@@ -455,6 +455,12 @@
             mobileMenu.addEventListener('click', (e) => {
                 if (e.target === mobileMenu) closeMenu();
             });
+            mobileMenu.querySelectorAll('a').forEach((link) => {
+                link.addEventListener('click', closeMenu);
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) closeMenu();
+            });
         }
     };
 

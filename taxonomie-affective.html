@@ -102,7 +102,7 @@
                         <span>Le Mod&egrave;le</span>
                         <svg class="w-3.5 h-3.5 opacity-75" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                     </button>
-                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/98 backdrop-blur-xl border border-slate-700/80 shadow-2xl p-2 z-50">
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/[0.98] backdrop-blur-md border border-slate-600/80 shadow-2xl p-2 z-[999]">
                         <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
                             <span class="w-6 h-6 rounded-md bg-purple-500/20 border border-purple-500/35 text-purple-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
@@ -367,8 +367,13 @@
                                 <button id="fullscreen3DBtn" type="button" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700 cursor-pointer" title="Plein écran 3D">⛶ Agrandir</button>
                             </div>
                             <div id="pyramid-3d" class="relative w-full h-[380px] sm:h-[420px] rounded-2xl bg-cosmic-900 border border-slate-800/80 overflow-hidden cursor-grab active:cursor-grabbing">
-                                <div class="absolute bottom-2 left-3 z-10 pointer-events-none text-[10px] font-mono text-slate-400 bg-cosmic-900/75 px-2 py-0.5 rounded">
-                                    Glisser : orbiter &bull; Molette : zoom &bull; Clic : sélectionner
+                                <div class="absolute bottom-2 left-3 z-10 pointer-events-none text-[10px] font-mono text-slate-400 bg-cosmic-900/80 px-2 py-0.5 rounded">
+                                    Glisser : orbiter &bull; Ctrl+Molette ou +/&minus; : zoom &bull; Clic : sélectionner
+                                </div>
+                                <div class="absolute top-2.5 right-2.5 z-10 flex items-center gap-1">
+                                    <button type="button" id="btnTax3dZoomIn" onclick="window.zoomTaxonomy3D && window.zoomTaxonomy3D(0.84)" title="Zoom avant" aria-label="Zoom avant sur la pyramide 3D" class="w-7 h-7 rounded-md bg-slate-900/90 hover:bg-indigo-600/80 border border-slate-700/80 text-slate-200 text-xs font-bold flex items-center justify-center transition-colors">+</button>
+                                    <button type="button" id="btnTax3dZoomOut" onclick="window.zoomTaxonomy3D && window.zoomTaxonomy3D(1.18)" title="Zoom arrière" aria-label="Zoom arrière sur la pyramide 3D" class="w-7 h-7 rounded-md bg-slate-900/90 hover:bg-indigo-600/80 border border-slate-700/80 text-slate-200 text-xs font-bold flex items-center justify-center transition-colors">&minus;</button>
+                                    <button type="button" id="btnTax3dReset" onclick="window.resetTaxonomy3D && window.resetTaxonomy3D()" title="Réinitialiser la vue 3D" aria-label="Réinitialiser la vue 3D" class="px-2 h-7 rounded-md bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-300 text-[10px] font-mono flex items-center justify-center transition-colors">Reset</button>
                                 </div>
                             </div>
                         </div>
@@ -958,6 +963,30 @@
                     controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
                     controls3D.enableDamping = true;
                     controls3D.dampingFactor = 0.06;
+                    controls3D.enableZoom = false;
+                    controls3D.minDistance = 4;
+                    controls3D.maxDistance = 24;
+                    const initCamPos = camera3D.position.clone();
+                    const initTarget = controls3D.target.clone();
+                    const applyZoomFactor = (factor) => {
+                        const offset = camera3D.position.clone().sub(controls3D.target).multiplyScalar(factor);
+                        const len = offset.length();
+                        if (len < 4) offset.setLength(4);
+                        if (len > 24) offset.setLength(24);
+                        camera3D.position.copy(controls3D.target).add(offset);
+                        controls3D.update();
+                    };
+                    renderer3D.domElement.addEventListener('wheel', (e) => {
+                        if (!e.ctrlKey && !e.metaKey) return;
+                        e.preventDefault();
+                        applyZoomFactor(e.deltaY > 0 ? 1.12 : 0.89);
+                    }, { passive: false });
+                    window.zoomTaxonomy3D = applyZoomFactor;
+                    window.resetTaxonomy3D = () => {
+                        camera3D.position.copy(initCamPos);
+                        controls3D.target.copy(initTarget);
+                        controls3D.update();
+                    };
                 }
 
                 // Lighting
@@ -1469,5 +1498,6 @@
     <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
+    <script src="js/i18n.js"></script>
 </body>
 </html>
