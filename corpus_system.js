@@ -1,7 +1,8 @@
 /**
- * CARTOGRAFFECT - Corpus Scientifique & Moteur Bibliographique
- * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
- * 49 Références Fondamentales (Traitement Prédictif, Inférence Intéroceptive, Émotions, Psychiatrie Computationnelle, Affectivisme)
+ * CARTOGRAFFECT® - Corpus Scientifique & Moteur Bibliographique (SPDX: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0)
+ * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
+ * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
+ * 49 Références du Corpus Interactif (sur 79 références de l'édition v2.0.0 : Traitement Prédictif, Inférence Intéroceptive, Émotions, Psychiatrie Computationnelle, Affectivisme)
  */
 
 const root = (typeof window !== "undefined") ? window : ((typeof global !== "undefined") ? global : this);
@@ -145,10 +146,10 @@ root.SCIENTIFIC_CORPUS = [
     "title": "Explanatory pluralism: An unrewarding prediction error for free energy theorists",
     "ref": "Brain and Cognition, 112, 3–12.",
     "doi": "https://doi.org/10.1016/j.bandc.2016.02.003",
-    "apport": "Alerte épistémologique sur le risque de non-réfutabilité globale du traitement prédictif ; motive les 3 prédictions empiriques falsifiables de l'article (Section 8.2).",
+    "apport": "Alerte épistémologique sur le risque de non-réfutabilité globale du traitement prédictif ; motive les 5 prédictions empiriques falsifiables P1–P5 de l'article (Section 8.2).",
     "theme": "Falsifiabilité",
     "year": 2017,
-    "bibtex": "@article{colombo2017explanatory,\n  author    = {Colombo, M., and Wright, C.},\n  title     = {Explanatory pluralism: An unrewarding prediction error for free energy theorists},\n  journal   = {Brain and Cognition},\n  year      = {2017},\n  doi       = {10.1016/j.bandc.2016.02.003},\n  note      = {Fondement Cartograffect: Alerte épistémologique sur le risque de non-réfutabilité globale du traitement prédictif ; motive les 3 prédictions empiriques falsifiables de l'article (Section 8.2).}\n}"
+    "bibtex": "@article{colombo2017explanatory,\n  author    = {Colombo, M., and Wright, C.},\n  title     = {Explanatory pluralism: An unrewarding prediction error for free energy theorists},\n  journal   = {Brain and Cognition},\n  year      = {2017},\n  doi       = {10.1016/j.bandc.2016.02.003},\n  note      = {Fondement Cartograffect: Alerte épistémologique sur le risque de non-réfutabilité globale du traitement prédictif ; motive les 5 prédictions empiriques falsifiables P1-P5 de l'article (Section 8.2).}\n}"
   },
   {
     "id": "dacosta2020active",
@@ -657,11 +658,11 @@ root.DOMAIN_LABELS = {
 
 root.downloadBibtexFile = function() {
     const header = "% ==============================================================================\n" +
-                   "% CARTOGRAFFECT - Corpus Bibliographique International (49 Références Fondamentales)\n" +
-                   "% Auteur du modèle : Manuel Cabelguen, Ph. D., psychologue clinicien\n" +
+                   "% CARTOGRAFFECT® - Corpus Bibliographique International (49 fiches filtrables — v2.0.0)\n" +
+                   "% Auteur du modèle : Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada\n" +
                    "% Droit d'auteur OPIC n° 1233199 • https://www.cartograffect.com\n" +
                    "% Référence principale : Cabelguen, M. (2026). Cartographie des affects : une architecture\n" +
-                   "% hiérarchique de l'expérience affective fondée sur le traitement prédictif.\n" +
+                   "% hiérarchique de l'expérience affective fondée sur le traitement prédictif (Version 2.0.0).\n" +
                    "% ==============================================================================\n\n";
     const bibContent = header + root.SCIENTIFIC_CORPUS.map(function(p) { return p.bibtex; }).join("\n\n") + "\n";
     const blob = new Blob([bibContent], { type: "text/plain;charset=utf-8" });

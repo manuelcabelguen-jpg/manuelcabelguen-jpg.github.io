@@ -1,11 +1,30 @@
 /**
- * CARTOGRAFFECT - Guide Bilingue & Lexique International (FR <-> EN)
- * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
+ * CARTOGRAFFECT® - Guide Bilingue & Lexique International (FR <-> EN)
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
+ * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
  */
 
 (function() {
-    // Injected Modal HTML
-    const modalHTML = `
+    function getPayloadMeta() {
+        const P = (typeof window !== "undefined" && window.CartograffectPayload) ? window.CartograffectPayload : null;
+        return {
+            version: P ? P.get("release.version", "2.0.0") : "2.0.0",
+            tag: P ? P.get("release.tag", "v2.0.0") : "v2.0.0",
+            theorems: P ? P.get("strate_0_core.theorems_verified", 113) : 113,
+            proversCount: P ? P.get("strate_0_core.provers_count", 6) : 6,
+            leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 9) : 9,
+            statesCount: P ? P.get("strate_0_core.states_count", 176) : 176,
+            cipo: P ? P.get("identifiers.cipo_registration", "1233199") : "1233199",
+            articleDoi: P ? P.get("identifiers.zenodo_article_doi", "10.5281/zenodo.24022795") : "10.5281/zenodo.24022795",
+            codeDoi: P ? P.get("identifiers.zenodo_code_doi", "10.5281/zenodo.23833938") : "10.5281/zenodo.23833938",
+            osfUrl: P ? P.get("identifiers.osf_url", "https://osf.io/z89sg") : "https://osf.io/z89sg",
+            affiliation: P ? P.get("strate_0_core.author_affiliation", "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada") : "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada"
+        };
+    }
+
+    function buildModalHTML(meta) {
+        return `
     <div id="bilingualModal" class="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-200">
         <div class="relative w-full max-w-4xl max-h-[90vh] bg-cosmic-900 border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-200">
             <!-- Modal Header -->
@@ -13,16 +32,16 @@
                 <div>
                     <div class="flex flex-wrap items-center gap-2 mb-1.5">
                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">
-                            Lexique FR ⇄ EN • OPIC n° 1233199
+                            Lexique FR ⇄ EN • OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span>
                         </span>
-                        <span class="text-xs text-slate-400">Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien</span>
+                        <span class="text-xs text-slate-400">Manuel Cabelguen, Ph. D., <span data-payload="strate_0_core.author_affiliation">${meta.affiliation}</span></span>
                     </div>
                     <h3 class="font-heading font-bold text-2xl text-white flex items-center gap-2.5">
                         <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         <span>Lexique Bilingue &amp; Terminologie Internationale</span>
                     </h3>
                     <p class="text-xs text-slate-400 mt-1">
-                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et formalisation Lean 4.
+                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et méta-fondation formelle Hexa-Prover (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
                     </p>
                 </div>
                 <button onclick="closeLangModal()" aria-label="Fermer le lexique" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-xl leading-none cursor-pointer">
@@ -87,7 +106,7 @@
                                 <span class="text-[10px] text-indigo-300 font-mono">|X| + |Y| = 2Z - 2</span>
                             </div>
                             <div class="text-xs text-indigo-300 font-medium">L₁ Crown Law / N(Z) = 8(Z-1)</div>
-                            <p class="text-[11px] text-slate-400">176 entrées certifiées : 8 opérateurs centraux (0,0,Z) et 168 positions sur 6 couronnes (8, 16, 24, 32, 40, 48).</p>
+                            <p class="text-[11px] text-slate-400"><span data-payload="strate_0_core.states_count">${meta.statesCount}</span> entrées certifiées : 8 opérateurs centraux (0,0,Z) et 168 positions sur 6 couronnes (8, 16, 24, 32, 40, 48).</p>
                         </div>
 
                         <div class="term-card p-3.5 rounded-xl bg-cosmic-800/80 border border-slate-800 space-y-1">
@@ -171,15 +190,15 @@
                     </h4>
                     <div class="p-4 rounded-xl bg-cosmic-800/90 border border-slate-800 space-y-4">
                         <div class="term-card space-y-1.5">
-                            <span class="text-[11px] font-bold text-indigo-300 uppercase">1. Article Théorique (v1.0.1) :</span>
+                            <span class="text-[11px] font-bold text-indigo-300 uppercase">1. Article Théorique (<span data-payload="release.tag">${meta.tag}</span>) :</span>
                             <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80" id="apaCitationText">
-                                Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (version v1.0.1, OPIC n° 1233199). Zenodo. https://doi.org/10.5281/zenodo.24022795
+                                Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (version <span data-payload="release.tag">${meta.tag}</span>, OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span>). Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_article_doi">${meta.articleDoi}</span>
                             </p>
                         </div>
                         <div class="term-card space-y-1.5">
-                            <span class="text-[11px] font-bold text-sky-300 uppercase">2. Vérification Formelle Lean 4 (v1.0.1) :</span>
+                            <span class="text-[11px] font-bold text-sky-300 uppercase">2. Compendium &amp; Vérification Formelle Hexa-Prover (<span data-payload="release.tag">${meta.tag}</span>) :</span>
                             <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80">
-                                Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4</em> (version v1.0.1) [Logiciel]. Zenodo. https://doi.org/10.5281/zenodo.23833938
+                                Cabelguen, M. (2026). <em>CARTOGRAFFECT® : Compendium unifié — Vérification formelle Hexa-Prover (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules .lean, 0 sorry)</em> (version <span data-payload="release.tag">${meta.tag}</span>) [Logiciel]. Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_code_doi">${meta.codeDoi}</span>
                             </p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3 pt-1">
@@ -199,7 +218,7 @@
 
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-cosmic-850 flex items-center justify-between text-xs text-slate-400">
-                <span>CARTOGRAFFECT&reg; &bull; OPIC n° 1233199 &bull; &copy; 2024–2026 Manuel Cabelguen</span>
+                <span>CARTOGRAFFECT&reg; &bull; OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span> &bull; &copy; 2024–2026 Manuel Cabelguen</span>
                 <button onclick="closeLangModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors cursor-pointer">
                     Fermer
                 </button>
@@ -207,19 +226,18 @@
         </div>
     </div>
     `;
+    }
 
-    // Inject modal into document body if not already present
     function injectModal() {
         if (!document.getElementById("bilingualModal")) {
             const wrapper = document.createElement("div");
-            wrapper.innerHTML = modalHTML;
+            wrapper.innerHTML = buildModalHTML(getPayloadMeta());
             document.body.appendChild(wrapper.firstElementChild);
             setupModalEvents();
         }
     }
 
     function setupModalEvents() {
-        // Tab buttons
         const tabBtns = document.querySelectorAll(".lang-tab-btn");
         const termGroups = document.querySelectorAll(".term-group");
 
@@ -243,17 +261,14 @@
             });
         });
 
-        // Search Input
         const searchInput = document.getElementById("langSearchInput");
         if (searchInput) {
             searchInput.addEventListener("input", (e) => {
                 const query = e.target.value.toLowerCase().trim();
-                
                 if (!query) {
                     document.querySelectorAll(".term-card, .term-group").forEach(el => el.classList.remove("hidden"));
                     return;
                 }
-
                 document.querySelectorAll(".term-group").forEach(group => {
                     let anyVisible = false;
                     group.querySelectorAll(".term-card").forEach(card => {
@@ -267,7 +282,6 @@
             });
         }
 
-        // Close on background click
         const modal = document.getElementById("bilingualModal");
         if (modal) {
             modal.addEventListener("click", (e) => {
@@ -276,9 +290,11 @@
         }
     }
 
-    // Global Functions
     window.openLangModal = function() {
         injectModal();
+        if (window.CartograffectPayload && typeof window.CartograffectPayload.hydrate === "function") {
+            window.CartograffectPayload.hydrate();
+        }
         const modal = document.getElementById("bilingualModal");
         if (modal) {
             modal.classList.remove("hidden");
@@ -295,7 +311,8 @@
     };
 
     window.copyCitationText = function() {
-        const text = "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (version v1.0.1, OPIC n° 1233199). Zenodo. https://doi.org/10.5281/zenodo.24022795";
+        const meta = getPayloadMeta();
+        const text = `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (version ${meta.tag}, OPIC n° ${meta.cipo}). Zenodo. https://doi.org/${meta.articleDoi}`;
         navigator.clipboard.writeText(text).then(() => {
             const notice = document.getElementById("copySuccessNotice");
             if (notice) {
@@ -305,7 +322,14 @@
         });
     };
 
-    // Auto-init on DOMContentLoaded
+    if (typeof window !== "undefined") {
+        window.addEventListener("cartograffect:payload-ready", function() {
+            if (window.CartograffectPayload && typeof window.CartograffectPayload.hydrate === "function") {
+                window.CartograffectPayload.hydrate();
+            }
+        });
+    }
+
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", injectModal);
     } else {

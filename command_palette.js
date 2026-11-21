@@ -20,54 +20,66 @@
     concept: '<svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>'
   };
 
-  // 1. Données d'indexation initiale (extensible avec cartograffect_model.js)
-  const defaultIndex = [
-    // Expérience immersive
-    { id: 'voyage', title: 'Le Voyage Affectif — Vivre le Circuit d\'une Émotion (2 min)', category: 'Expérience', url: 'voyage.html', icon: ICONS.voyage, badge: 'Interactif' },
+  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.0.0)
+  function buildDefaultIndex() {
+    const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
+    const tag = P ? P.get('release.tag', 'v2.0.0') : 'v2.0.0';
+    const theorems = P ? P.get('strate_0_core.theorems_verified', 113) : 113;
+    const proversCount = P ? P.get('strate_0_core.provers_count', 6) : 6;
+    const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 9) : 9;
+    const statesCount = P ? P.get('strate_0_core.states_count', 176) : 176;
+    const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
+    const cipo = P ? P.get('identifiers.cipo_registration', '1233199') : '1233199';
 
-    // Territoires & Navigation principale
-    { id: 'comp1', title: '1. Le Moteur Prédictif — Interfaces Perceptive, Subjective, Attentionnelle & Gradients A/C', category: 'Modèle', url: 'moteur-predictif.html', icon: ICONS.engine, badge: 'Niveau 1' },
-    { id: 'comp2', title: '2. Le Noyau Affectif — Espace (X, Y, Z), Norme L₁ & Opérateurs Centraux', category: 'Modèle', url: 'noyau-affectif.html', icon: ICONS.core, badge: 'Niveau 2' },
-    { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: 'Niveau 3' },
-    { id: 't1', title: '4. La Taxonomie Affective — Carte Interactive 2D/3D des 176 États (Z=0 à Z=7)', category: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: 'Niveau 4' },
-    { id: 't4', title: 'Article Théorique — Monographie Intégrale v1.0.1 (Dr M. Cabelguen)', category: 'Recherche', url: 'article.html', icon: ICONS.article, badge: 'OPIC 1233199' },
-    { id: 'lean4', title: 'Preuve Formelle Lean 4.35 — 68 Théorèmes & 0 Sorry (DOI: 10.5281/zenodo.23833938)', category: 'Recherche', url: 'https://doi.org/10.5281/zenodo.23833938', icon: ICONS.lean, badge: 'Lean 4' },
-    { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Certification Lean 4', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
-    { id: 't6', title: 'Accueil — Vue d\'ensemble de Cartograffect', category: 'Navigation', url: 'index.html', icon: ICONS.home, badge: 'Accueil' },
+    return [
+      // Expérience immersive
+      { id: 'voyage', title: 'Le Voyage Affectif — Vivre le Circuit d\'une Émotion (2 min)', category: 'Expérience', url: 'voyage.html', icon: ICONS.voyage, badge: 'Interactif' },
 
-    // Strates Z (Norme L1)
-    { id: 'z0', title: 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-0', icon: 'Z0', badge: 'Origine' },
-    { id: 'z1', title: 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-1', icon: 'Z1', badge: 'Saillance' },
-    { id: 'z2', title: 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-2', icon: 'Z2', badge: 'Première Couronne' },
-    { id: 'z3', title: 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-3', icon: 'Z3', badge: 'Émoi' },
-    { id: 'z4', title: 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-4', icon: 'Z4', badge: 'Réserve' },
-    { id: 'z5', title: 'Strate Z = 5 — Orientations Durables & Humeurs (|X|+|Y|=8)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-5', icon: 'Z5', badge: 'Recul' },
-    { id: 'z6', title: 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-6', icon: 'Z6', badge: 'Saisissement' },
-    { id: 'z7', title: 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-7', icon: 'Z7', badge: 'Suspension' },
+      // Territoires & Navigation principale
+      { id: 'comp1', title: '1. Le Moteur Prédictif — Interfaces Perceptive, Subjective, Attentionnelle & Gradients A/C', category: 'Modèle', url: 'moteur-predictif.html', icon: ICONS.engine, badge: 'Niveau 1' },
+      { id: 'comp2', title: '2. Le Noyau Affectif — Espace (X, Y, Z), Norme L₁ & Opérateurs Centraux', category: 'Modèle', url: 'noyau-affectif.html', icon: ICONS.core, badge: 'Niveau 2' },
+      { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: 'Niveau 3' },
+      { id: 't1', title: `4. La Taxonomie Affective — Carte Interactive 2D/3D des ${statesCount} États (Z=0 à Z=7)`, category: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: 'Niveau 4' },
+      { id: 't4', title: `Article Théorique — Monographie Intégrale ${tag} (Dr M. Cabelguen)`, category: 'Recherche', url: 'article.html', icon: ICONS.article, badge: `OPIC ${cipo}` },
+      { id: 'lean4', title: `Méta-Fondation Hexa-Prover (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Hexa-Prover' },
+      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Certification Hexa-Prover', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
+      { id: 't6', title: 'Accueil — Vue d\'ensemble de Cartograffect', category: 'Navigation', url: 'index.html', icon: ICONS.home, badge: 'Accueil' },
 
-    // Prototypes Axiaux et Diagonaux Clés
-    { id: 'p_joie', title: 'Joie — X0 / Y+2 / Z2 (Élan / Mobilisation Y+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Joie', icon: 'Y+', badge: 'Axial' },
-    { id: 'p_tristesse', title: 'Tristesse — X0 / Y-2 / Z2 (Retenue / Apaisement Y−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Tristesse', icon: 'Y−', badge: 'Axial' },
-    { id: 'p_courage', title: 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente X+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Courage', icon: 'X+', badge: 'Axial' },
-    { id: 'p_peur', title: 'Peur — X-2 / Y0 / Z2 (Charge d’Attente X−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Peur', icon: 'X−', badge: 'Axial' },
-    { id: 'p_desir', title: 'Désir — X+1 / Y+1 / Z2 (Synergie Positive +X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Désir', icon: '++', badge: 'Diagonal' },
-    { id: 'p_colere', title: 'Colère — X-1 / Y+1 / Z2 (Compensation Ergotropique −X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Colère', icon: '−+', badge: 'Diagonal' },
-    { id: 'p_calme', title: 'Calme — X+1 / Y-1 / Z2 (Relâchement Trophotropique +X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Calme', icon: '+−', badge: 'Diagonal' },
-    { id: 'p_degout', title: 'Dégoût — X-1 / Y-1 / Z2 (Congruence Aversive −X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Dégoût', icon: '−−', badge: 'Diagonal' },
+      // Strates Z (Norme L1)
+      { id: 'z0', title: 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-0', icon: 'Z0', badge: 'Origine' },
+      { id: 'z1', title: 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-1', icon: 'Z1', badge: 'Saillance' },
+      { id: 'z2', title: 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-2', icon: 'Z2', badge: 'Première Couronne' },
+      { id: 'z3', title: 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-3', icon: 'Z3', badge: 'Émoi' },
+      { id: 'z4', title: 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-4', icon: 'Z4', badge: 'Réserve' },
+      { id: 'z5', title: 'Strate Z = 5 — Orientations Durables & Humeurs (|X|+|Y|=8)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-5', icon: 'Z5', badge: 'Recul' },
+      { id: 'z6', title: 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-6', icon: 'Z6', badge: 'Saisissement' },
+      { id: 'z7', title: 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-7', icon: 'Z7', badge: 'Suspension' },
 
-    // Concepts computationnels & Neurosciences
-    { id: 'c1', title: 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', url: 'article.html#theorie', icon: ICONS.concept, badge: 'Physique' },
-    { id: 'c2', title: 'Inférence Active & Allostasie Intéroceptive', category: 'Concept', url: 'article.html#allostasie', icon: ICONS.concept, badge: 'Biologie' },
-    { id: 'c3', title: 'Norme L₁ des Couronnes : |X| + |Y| = 2Z - 2 (Manhattan)', category: 'Mathématiques', url: 'article.html#theorie', icon: 'L₁', badge: 'Loi L₁' },
-    { id: 'c4', title: 'Inversion Centrale & Réflexion Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)', category: 'Mathématiques', url: 'article.html#theorie', icon: '⇄', badge: 'Géométrie' },
-  ];
+      // Prototypes Axiaux et Diagonaux Clés
+      { id: 'p_joie', title: 'Joie — X0 / Y+2 / Z2 (Élan / Mobilisation Y+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Joie', icon: 'Y+', badge: 'Axial' },
+      { id: 'p_tristesse', title: 'Tristesse — X0 / Y-2 / Z2 (Retenue / Apaisement Y−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Tristesse', icon: 'Y−', badge: 'Axial' },
+      { id: 'p_courage', title: 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente X+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Courage', icon: 'X+', badge: 'Axial' },
+      { id: 'p_peur', title: 'Peur — X-2 / Y0 / Z2 (Charge d’Attente X−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Peur', icon: 'X−', badge: 'Axial' },
+      { id: 'p_desir', title: 'Désir — X+1 / Y+1 / Z2 (Synergie Positive +X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Désir', icon: '++', badge: 'Diagonal' },
+      { id: 'p_colere', title: 'Colère — X-1 / Y+1 / Z2 (Compensation Ergotropique −X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Colère', icon: '−+', badge: 'Diagonal' },
+      { id: 'p_calme', title: 'Calme — X+1 / Y-1 / Z2 (Relâchement Trophotropique +X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Calme', icon: '+−', badge: 'Diagonal' },
+      { id: 'p_degout', title: 'Dégoût — X-1 / Y-1 / Z2 (Congruence Aversive −X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Dégoût', icon: '−−', badge: 'Diagonal' },
 
-  let searchableItems = [...defaultIndex];
+      // Concepts computationnels & Neurosciences
+      { id: 'c1', title: 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', url: 'article.html#theorie', icon: ICONS.concept, badge: 'Physique' },
+      { id: 'c2', title: 'Inférence Active & Allostasie Intéroceptive', category: 'Concept', url: 'article.html#allostasie', icon: ICONS.concept, badge: 'Biologie' },
+      { id: 'c3', title: 'Norme L₁ des Couronnes : |X| + |Y| = 2Z - 2 (Manhattan)', category: 'Mathématiques', url: 'article.html#theorie', icon: 'L₁', badge: 'Loi L₁' },
+      { id: 'c4', title: 'Inversion Centrale & Réflexion Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)', category: 'Mathématiques', url: 'article.html#theorie', icon: '⇄', badge: 'Géométrie' },
+    ];
+  }
+
+  let searchableItems = buildDefaultIndex();
 
   // Si cartograffect_model.js expose ses 176 émotions, enrichissement dynamique complet
   function refreshModelData() {
+    const baseIndex = buildDefaultIndex();
     if (window.CartograffectModel && Array.isArray(window.CartograffectModel.emotions)) {
-      const existingIds = new Set(defaultIndex.map(i => i.id));
+      const existingIds = new Set(baseIndex.map(i => i.id));
       const emotionsFormatted = window.CartograffectModel.emotions
         .filter(e => !existingIds.has(`emo-${e.name}`))
         .map(e => ({
@@ -78,7 +90,9 @@
           icon: e.type === 'operator' ? 'C' : (e.type === 'axial' ? 'Ax' : (e.type === 'diagonal' ? 'Dg' : 'Lt')),
           badge: e.group || `Z=${e.z}`
         }));
-      searchableItems = [...defaultIndex, ...emotionsFormatted];
+      searchableItems = [...baseIndex, ...emotionsFormatted];
+    } else {
+      searchableItems = baseIndex;
     }
   }
 
@@ -299,6 +313,9 @@
   }
 
   // Initialisation dès que le DOM est prêt
+  if (typeof window !== 'undefined') {
+    window.addEventListener('cartograffect:payload-ready', refreshModelData);
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', createPaletteDOM);
   } else {

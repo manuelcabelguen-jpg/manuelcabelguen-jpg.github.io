@@ -84,7 +84,7 @@
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
                     <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
-                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Lean 4</span>
+                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Hexa-Prover</span>
                 </div>
             </a>
 
@@ -185,7 +185,7 @@
             <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. Matrice Affective</a>
             <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. Taxonomie (176 &eacute;tats)</a>
             <a href="article.html"><span class="menu-dot bg-slate-300"></span>L'Article Scientifique</a>
-            <a href="scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves Lean 4</a>
+            <a href="scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves formelles</a>
             <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions L&eacute;gales &amp; PI</a>
         </div>
     </div>
@@ -588,9 +588,9 @@
                         </p>
                     </div>
                     <div class="p-4 rounded-2xl bg-emerald-950/25 border border-emerald-500/25 space-y-1.5">
-                        <div class="font-bold text-white">Certification Formelle Lean 4 &amp; Propriété Intellectuelle</div>
+                        <div class="font-bold text-white">Certification Formelle Hexa-Prover &amp; Propriété Intellectuelle</div>
                         <p class="text-slate-300 leading-relaxed">
-                            L'ensemble des 6 modules (<code>PredictiveEngine</code>, <code>CoreAffect</code>, <code>AffectiveMatrix</code>, <code>AffectiveTaxonomy</code>, <code>Lexicon176</code>, <code>AuditTests</code>) vérifie <strong>68 théorèmes formels (dont 33 théorèmes audités, 0 <code>sorry</code>)</strong> sous Lean 4.35.0 (DOI Zenodo : <code>10.5281/zenodo.23833938</code> &bull; Marque déposée OPIC n° <code>1233199</code>).
+                            L'ensemble des <span data-payload="lean_modules_count">9</span> modules Lean 4 (<code>Cartograffect</code>, <code>PredictiveEngine</code>, <code>CoreAffect</code>, <code>AffectiveMatrix</code>, <code>AffectiveTaxonomy</code>, <code>AffectiveDynamics</code>, <code>Lexicon176</code>, <code>PredictiveCircuit</code>, <code>AuditTests</code>) vérifie <strong data-payload-group="theorems"><span data-payload="theorems_verified">113</span> théorèmes constructifs (<span data-payload="sorry_count">0</span> <code>sorry</code>)</strong> sous <strong>6 prouveurs indépendants</strong> (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; DOI Zenodo : <code>10.5281/zenodo.23833938</code> &bull; Marque déposée OPIC n° <code>1233199</code>).
                         </p>
                     </div>
                 </div>
@@ -639,7 +639,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-indigo-300 font-semibold transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (v1.0.1)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -650,17 +650,17 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article v1.0.1 :
+                        Article <span data-payload="tag">v2.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Lean 4 v1.0.1 (68 th.) :
+                        Hexa-Prover <span data-payload="tag">v2.0.0</span> (<span data-payload="theorems_verified">113</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
                         <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">OSF: z89sg</a>
                         <span>&middot;</span>
-                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Lean 4</a>
+                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Compendium</a>
                     </div>
                 </div>
             </div>
@@ -1467,6 +1467,7 @@
         }
     </script>
     <script src="bilingual_modal.js"></script>
+    <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
 </body>
 </html>

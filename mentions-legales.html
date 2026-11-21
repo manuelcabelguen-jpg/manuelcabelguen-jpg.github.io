@@ -48,7 +48,7 @@
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
                     <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
-                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Lean 4</span>
+                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Hexa-Prover</span>
                 </div>
             </a>
 
@@ -149,7 +149,7 @@
             <a href="matrice-affective.html"><span class="menu-dot bg-emerald-400"></span>3. Matrice Affective</a>
             <a href="taxonomie-affective.html"><span class="menu-dot bg-pink-400"></span>4. Taxonomie (176 &eacute;tats)</a>
             <a href="article.html"><span class="menu-dot bg-slate-300"></span>L'Article Scientifique</a>
-            <a href="scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves Lean 4</a>
+            <a href="scholar_drive.html"><span class="menu-dot bg-slate-400"></span>Corpus &amp; Preuves formelles</a>
             <a href="mentions-legales.html"><span class="menu-dot bg-slate-500"></span>Mentions L&eacute;gales &amp; PI</a>
         </div>
     </div>
@@ -167,7 +167,7 @@
                 Mentions Légales &amp; Régime de Propriété Intellectuelle
             </h1>
             <p class="text-slate-400 text-sm mt-3">
-                Dernière mise à jour légale : 2026 &bull; Dépôt légal OPIC n° 1233199 &bull; Modèle hybride AGPLv3 / CC BY-NC-SA 4.0
+                Dernière mise à jour légale : 21 novembre 2026 (<span data-payload="tag">v2.0.0</span>) &bull; Dépôt légal OPIC n° <span data-payload="cipo_registration">1233199</span> &bull; Expression SPDX : <code class="text-slate-300 font-mono text-xs" data-payload="spdx_expression">AGPL-3.0-or-later AND CC-BY-NC-SA-4.0</code>
             </p>
         </div>
 
@@ -183,9 +183,9 @@
                 </p>
                 <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5 text-xs">
                     <div><strong class="text-white">Auteur, Chercheur et Éditeur :</strong> Manuel Cabelguen</div>
-                    <div><strong class="text-white">Titres &amp; Qualifications :</strong> Ph. D. en psychologie, Psychologue clinicien.</div>
-                    <div><strong class="text-white">Domaine de Recherche :</strong> Modélisation psychologique des affects, géométrie cognitive et outils d'intelligence artificielle clinique.</div>
-                    <div><strong class="text-white">Ressources Officielles Rattachées :</strong> Dépôt officiel Lean 4 (Zenodo DOI: 10.5281/zenodo.23833938) et Prépublication théorique (Zenodo DOI: 10.5281/zenodo.24022795 / OSF: https://osf.io/z89sg).</div>
+                    <div><strong class="text-white">Affiliation &amp; Qualifications :</strong> <span data-payload="author_affiliation">Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada</span> (Ph. D. en psychologie).</div>
+                    <div><strong class="text-white">Domaine de Recherche :</strong> Modélisation psychologique des affects, géométrie cognitive, inférence active et vérification formelle.</div>
+                    <div><strong class="text-white">Ressources Officielles Rattachées :</strong> Compendium unifié CARTOGRAFFECT <span data-payload="tag">v2.0.0</span> (<span data-payload="theorems_verified">113</span> théorèmes constructifs, <span data-payload="provers_count">6</span> prouveurs : Lean 4, Rocq, Agda, Dafny, Z3, TLA+ ; <span data-payload="lean_modules_count">9</span> modules <code>.lean</code>, <span data-payload="sorry_count">0</span> sorry — Zenodo DOI: <code>10.5281/zenodo.23833938</code>) et Article théorique de référence (Zenodo DOI: <code>10.5281/zenodo.24022795</code> / OSF: <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">https://osf.io/z89sg</a>).</div>
                     <div><strong class="text-white">Hébergement Technique :</strong> GitHub Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis (GitHub Pages).</div>
                 </div>
             </div>
@@ -300,10 +300,24 @@
                                 <span>Dépôt GitHub du Site Web</span> <span>&nearr;</span>
                             </a>
                             <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                                <span>Dépôt GitHub Lean 4</span> <span>&nearr;</span>
+                                <span>Dépôt GitHub Compendium</span> <span>&nearr;</span>
                             </a>
                         </div>
                     </div>
+                </div>
+
+                <!-- Clause de séparation des fichiers hybrides -->
+                <div class="mt-4 p-5 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-2 text-xs text-slate-300 leading-relaxed">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <span class="font-heading font-bold text-amber-300 text-sm">Clause de Séparation des Fichiers Hybrides (Code &amp; Taxonomie)</span>
+                        <span class="font-mono text-[11px] text-amber-200 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30" data-payload="spdx_expression">AGPL-3.0-or-later AND CC-BY-NC-SA-4.0</span>
+                    </div>
+                    <p>
+                        Certains fichiers distribués sur cette plateforme contiennent conjointement des structures logicielles exécutables et les données taxonomiques canoniques du compendium — notamment <code class="text-amber-200 font-mono">cartograffect_model.js</code>, dont le miroir JavaScript encode les 176 coordonnées, libellés canoniques et 84 paires antagonistes alignés sur <code class="text-amber-200 font-mono">Cartograffect/Lexicon176.lean</code>.
+                    </p>
+                    <p>
+                        Conformément au fichier <code>LICENSE</code> du dépôt, l’enveloppe logicielle, les algorithmes de calcul et l’interface d’exécution sont placés sous licence <strong class="text-white">GNU AGPLv3</strong> (code source), tandis que les données sémantiques, les libellés des 176 états, les coordonnées géométriques <span class="font-mono">(X, Y, Z)</span> et la taxonomie relèvent de la licence <strong class="text-white">CC BY-NC-SA 4.0</strong> (usage non commercial et partage à l’identique). Les deux licences s’appliquent cumulativement (<code class="font-mono text-amber-200">AGPL-3.0-or-later AND CC-BY-NC-SA-4.0</code>) : la réutilisation du code sous AGPLv3 ne confère aucun droit d’exploitation commerciale sur les données affectives protégées.
+                    </p>
                 </div>
 
             </div>
@@ -321,9 +335,9 @@
                 </p>
                 <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-purple-200 select-all space-y-3">
                     <div><strong>1. Article Théorique de Référence (Format APA 7) :</strong></div>
-                    <div class="text-slate-300">Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 1.0.1) [Manuscrit théorique de référence]. Zenodo. <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">https://doi.org/10.5281/zenodo.24022795</a> | OSF: <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">https://osf.io/z89sg</a></div>
-                    <div class="pt-2"><strong>2. Formalisation Lean 4 &amp; Preuves Mécanisées (68 théorèmes prouvés, 0 sorry) :</strong></div>
-                    <div class="text-slate-300">Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4</em> (Version 1.0.1) [Logiciel sous licence GNU AGPLv3]. Zenodo. <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">https://doi.org/10.5281/zenodo.23833938</a></div>
+                    <div class="text-slate-300">Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 2.0.0) [Manuscrit théorique de référence]. Zenodo. <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">https://doi.org/10.5281/zenodo.24022795</a> | OSF: <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">https://osf.io/z89sg</a></div>
+                    <div class="pt-2"><strong>2. Compendium Formel Hexa-Prover (113 théorèmes constructifs, 6 prouveurs, 9 modules .lean, 0 sorry) :</strong></div>
+                    <div class="text-slate-300">Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (Lean 4, Rocq, Agda, Dafny, Z3, TLA+)</em> (Version 2.0.0) [Logiciel et spécifications sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:underline">https://doi.org/10.5281/zenodo.23833938</a></div>
                 </div>
             </div>
         </section>
@@ -385,7 +399,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (v1.0.1)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-indigo-300 font-semibold transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -396,17 +410,17 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article v1.0.1 :
+                        Article <span data-payload="tag">v2.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Lean 4 v1.0.1 (68 th.) :
+                        Hexa-Prover <span data-payload="tag">v2.0.0</span> (<span data-payload="theorems_verified">113</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
                         <a href="https://osf.io/z89sg" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">OSF: z89sg</a>
                         <span>&middot;</span>
-                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Lean 4</a>
+                        <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">GitHub Compendium</a>
                     </div>
                 </div>
             </div>
@@ -415,6 +429,7 @@
     <script src="cartograffect_model.js"></script>
     <script src="cartograffect_theory.js"></script>
     <script src="bilingual_modal.js"></script>
+    <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
 </body>
 </html>
