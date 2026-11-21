@@ -304,6 +304,17 @@
       });
     });
 
+    // Bind triggers present in headers
+    document.querySelectorAll('[data-command-trigger]').forEach(btn => {
+      if (!btn.dataset.cmdBound) {
+        btn.dataset.cmdBound = '1';
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPalette();
+        });
+      }
+    });
+
     // Exposition API globale
     window.CartograffectCmd = {
       open: openPalette,

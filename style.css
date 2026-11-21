@@ -119,14 +119,19 @@ body {
     position: relative;
     background: radial-gradient(circle at 50% 45%, #0d152c 0%, #060a14 70%, #020408 100%);
     box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85), 0 15px 35px -10px rgba(124, 58, 237, 0.25);
-    /* Mobile-first: allow smooth vertical scrolling of page without capturing finger scroll */
+    /* Allow smooth vertical page scrolling over the canvas on all viewports */
     touch-action: pan-y;
     user-select: none;
 }
-@media (min-width: 1024px) {
-    #heroVisualizerContainer {
-        touch-action: none;
-    }
+
+/* Menu déroulant "Le modèle" : fond opaque lisible et z-index prioritaire */
+#modelDropdownMenu {
+    background-color: rgba(11, 17, 32, 0.98) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(129, 140, 248, 0.16);
+    z-index: 999 !important;
 }
 #heroCartograffectCanvas {
     display: block;

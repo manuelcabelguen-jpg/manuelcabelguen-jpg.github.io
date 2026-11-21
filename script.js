@@ -206,16 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             event.preventDefault();
             const headerOffset = 150;
-            if (window.lenisInstance) {
-                window.lenisInstance.scrollTo(targetEl, { offset: -headerOffset });
-            } else {
-                const elementPosition = targetEl.getBoundingClientRect().top;
-                const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - headerOffset);
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
-            }
+            const elementPosition = targetEl.getBoundingClientRect().top;
+            const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - headerOffset);
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
             history.pushState(null, null, targetId);
         }
 
@@ -308,24 +304,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     initSpotlights();
     window.initSpotlights = initSpotlights;
-
-    // ============================================================
-    // LENIS SMOOTH SCROLL (Si Lenis est disponible sur la page)
-    // ============================================================
-    if (typeof Lenis !== 'undefined' && !window.__lenis_initialized) {
-        window.__lenis_initialized = true;
-        const lenis = new Lenis({
-            duration: 1.15,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smoothWheel: true,
-            smoothTouch: false
-        });
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
-        window.lenisInstance = lenis;
-    }
 });
 

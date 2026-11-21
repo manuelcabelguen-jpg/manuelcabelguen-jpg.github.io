@@ -322,8 +322,9 @@
         window.addEventListener('touchmove', onPointerMove, { passive: true });
         window.addEventListener('touchend', onPointerUp, { passive: true });
 
-        // Wheel zoom (Desktop)
+        // Wheel zoom (Desktop): require Ctrl or Cmd so native page scrolling is never hijacked
         c.addEventListener('wheel', (e) => {
+            if (!e.ctrlKey && !e.metaKey) return;
             e.preventDefault();
             const delta = Math.sign(e.deltaY) * 2.5;
             this.camera.targetDistance = Math.max(22, Math.min(60, this.camera.targetDistance + delta));
@@ -1268,6 +1269,11 @@
 
     // Public export
     root.CartograffectVisualizer = Visualizer;
+    root.heroVisualizerZoom = function(delta) {
+        if (Visualizer && Visualizer.camera) {
+            Visualizer.camera.targetDistance = Math.max(22, Math.min(60, Visualizer.camera.targetDistance + delta));
+        }
+    };
 
     if (typeof document !== 'undefined') {
         const autoInit = () => {

@@ -62,9 +62,6 @@
     
     <!-- D3.js (deferred to prevent render-blocking) -->
     <script defer src="https://d3js.org/d3.v7.min.js"></script>
-
-    <!-- Lenis Smooth Scroll -->
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -108,7 +105,7 @@
                         <span>Le Mod&egrave;le</span>
                         <svg class="w-3.5 h-3.5 opacity-75" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                     </button>
-                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/98 backdrop-blur-xl border border-slate-700/80 shadow-2xl p-2 z-50">
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/[0.98] backdrop-blur-md border border-slate-600/80 shadow-2xl p-2 z-[999]">
                         <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
                             <span class="w-6 h-6 rounded-md bg-purple-500/20 border border-purple-500/35 text-purple-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
@@ -354,9 +351,16 @@
                                     </div>
                                 </div>
 
-                                <!-- Rotation Drag Helper Indicator (fades out after first interaction) -->
-                                <div id="dragHint" class="absolute bottom-3 right-3 pointer-events-none text-[10px] font-mono text-slate-400/80 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 backdrop-blur-sm flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg><span>Glisser pour pivoter 3D</span>
+                                <!-- Zoom Controls + Rotation Drag Helper Indicator -->
+                                <div class="absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                                    <div class="flex items-center rounded-md border border-slate-800 bg-slate-900/90 backdrop-blur-sm overflow-hidden">
+                                        <button type="button" id="btnHeroZoomIn" onclick="window.heroVisualizerZoom && window.heroVisualizerZoom(-4)" title="Zoom avant" aria-label="Zoom avant sur la carte 3D" class="px-2 py-1 text-[11px] font-mono font-bold text-slate-300 hover:text-white hover:bg-indigo-600/60 transition-colors">+</button>
+                                        <span class="w-px h-3.5 bg-slate-800"></span>
+                                        <button type="button" id="btnHeroZoomOut" onclick="window.heroVisualizerZoom && window.heroVisualizerZoom(4)" title="Zoom arrière" aria-label="Zoom arrière sur la carte 3D" class="px-2 py-1 text-[11px] font-mono font-bold text-slate-300 hover:text-white hover:bg-indigo-600/60 transition-colors">&minus;</button>
+                                    </div>
+                                    <div id="dragHint" class="pointer-events-none text-[10px] font-mono text-slate-400/80 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 backdrop-blur-sm flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg><span>Glisser 3D &bull; Ctrl+Molette ou +/&minus;</span>
+                                    </div>
                                 </div>
 
                                 <!-- Orientation Compass / Axes Overlay -->
@@ -1564,6 +1568,7 @@
     <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
+    <script src="js/i18n.js"></script>
 
     <!-- Register Service Worker for PWA Offline Capability -->
     <script>
