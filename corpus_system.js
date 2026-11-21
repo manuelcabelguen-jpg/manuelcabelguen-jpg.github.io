@@ -956,12 +956,15 @@ root.DOMAIN_LABELS = {
 };
 
 root.downloadBibtexFile = function() {
+    const relVer = (typeof window !== 'undefined' && window.CartograffectPayload)
+        ? window.CartograffectPayload.get('release.version', '2.0.1')
+        : '2.0.1';
     const header = "% ==============================================================================\n" +
                    "% CARTOGRAFFECT® - Bibliographie Scientifique Unifiée APA 7 (72 références)\n" +
                    "% Auteur du modèle : Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada\n" +
                    "% Droit d'auteur OPIC n° 1233199 • https://www.cartograffect.com\n" +
                    "% Référence principale : Cabelguen, M. (2026). Cartographie des affects : une architecture\n" +
-                   "% hiérarchique de l'expérience affective fondée sur le traitement prédictif (Version 2.0.0).\n" +
+                   "% hiérarchique de l'expérience affective fondée sur le traitement prédictif (Version " + relVer + ").\n" +
                    "% ==============================================================================\n\n";
     const bibContent = header + root.SCIENTIFIC_CORPUS.map(function(p) { return p.bibtex; }).join("\n\n") + "\n";
     const blob = new Blob([bibContent], { type: "text/plain;charset=utf-8" });

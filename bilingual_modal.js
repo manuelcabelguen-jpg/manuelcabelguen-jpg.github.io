@@ -9,8 +9,8 @@
     function getPayloadMeta() {
         const P = (typeof window !== "undefined" && window.CartograffectPayload) ? window.CartograffectPayload : null;
         return {
-            version: P ? P.get("release.version", "2.0.0") : "2.0.0",
-            tag: P ? P.get("release.tag", "v2.0.0") : "v2.0.0",
+            version: P ? P.get("release.version", "2.0.1") : "2.0.1",
+            tag: P ? P.get("release.tag", "v2.0.1") : "v2.0.1",
             theorems: P ? P.get("strate_0_core.theorems_verified", 113) : 113,
             proversCount: P ? P.get("strate_0_core.provers_count", 6) : 6,
             leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 9) : 9,
