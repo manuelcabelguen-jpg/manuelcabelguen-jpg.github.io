@@ -320,11 +320,12 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             ids["cipo_registration"],
             str(s0["theorems_verified"]),
             s0["author_affiliation"],
-            "section-4-1",
+            "figure-1",
             "tableau-1",
             "tableau-2",
-            "extensions/lexicon/",
-            "extensions/in_silico/",
+            "Déclaration relative à l’utilisation de l’intelligence artificielle générative",
+            "non mathématicien",
+            "audit",
         ],
         "scholar_drive.html": [
             ids["zenodo_article_doi"],
@@ -341,6 +342,9 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             lic["spdx_expression"],
             "cartograffect_model.js",
             "Clause de Séparation des Fichiers Hybrides",
+            "Statut professionnel et portée scientifique",
+            "Ordre des psychologues du Québec",
+            "aucune donnée personnelle",
         ],
         "taxonomie-affective.html": [
             ids["zenodo_code_doi"],
@@ -373,6 +377,30 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
         for needle in needles:
             if needle not in content:
                 errors.append(f"Missing required content {needle!r} in {filename}")
+
+    # Anti-regression & UI/editorial hygiene checks
+    forbidden_bib = ("49+", "49 +", "references-v2-complementaires", "49 Références", "49 références")
+    for fname in ("article.html", "scholar_drive.html", "corpus_system.js"):
+        fpath = root / fname
+        if fpath.is_file():
+            raw_text = fpath.read_text(encoding="utf-8")
+            for bad in forbidden_bib:
+                if bad in raw_text:
+                    errors.append(f"Forbidden legacy reference marker {bad!r} still present in {fname}")
+
+    for fname in ("moteur-predictif.html", "article.html"):
+        fpath = root / fname
+        if fpath.is_file() and "couverture markovienne" in fpath.read_text(encoding="utf-8").lower():
+            errors.append(f"Forbidden 'Couverture Markovienne' terminology on {fname}")
+
+    for hpath in sorted(root.glob("*.html")):
+        htext = hpath.read_text(encoding="utf-8")
+        if "@studio-freight/lenis" in htext:
+            errors.append(f"Forbidden Lenis CDN script still present in {hpath.name}")
+        if "bg-[#0b1120]/98" in htext:
+            errors.append(f"Invalid transparent Tailwind dropdown class bg-[#0b1120]/98 in {hpath.name}")
+        if 'id="langToggleBtn"' in htext and "js/i18n.js" not in htext:
+            errors.append(f"Missing js/i18n.js inclusion on page with #langToggleBtn: {hpath.name}")
 
     return errors
 
