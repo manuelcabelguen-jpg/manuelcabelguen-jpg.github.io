@@ -213,11 +213,11 @@
             <div class="flex items-center gap-2">
                 <span class="text-slate-400 font-semibold uppercase tracking-wider text-[11px]">Mode de lecture :</span>
                 <div class="inline-flex rounded-lg bg-slate-800/90 p-0.5 border border-slate-700/80 shadow-inner">
-                    <button id="btnModeDidactic" onclick="setReadingMode('didactic')" class="px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm">
+                    <button id="btnModeDidactic" type="button" aria-pressed="true" onclick="setReadingMode('didactic')" class="px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                         <strong>Mode Didactique &amp; Pédagogique</strong>
                     </button>
-                    <button id="btnModeAcademic" onclick="setReadingMode('academic')" class="px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
+                    <button id="btnModeAcademic" type="button" aria-pressed="false" onclick="setReadingMode('academic')" class="px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                         <strong>Texte Académique Intégral</strong>
                     </button>
@@ -4045,23 +4045,41 @@
             if (mode === 'academic') {
                 callouts.forEach(c => c.classList.add('hidden'));
                 if (sim) sim.classList.add('hidden');
-                btnAcademic.className = "px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm";
-                btnDidactic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+                if (btnAcademic) {
+                    btnAcademic.className = "px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm";
+                    btnAcademic.setAttribute('aria-pressed', 'true');
+                }
+                if (btnDidactic) {
+                    btnDidactic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+                    btnDidactic.setAttribute('aria-pressed', 'false');
+                }
             } else {
                 callouts.forEach(c => c.classList.remove('hidden'));
                 if (sim) sim.classList.remove('hidden');
-                btnDidactic.className = "px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm";
-                btnAcademic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+                if (btnDidactic) {
+                    btnDidactic.className = "px-3 py-1 rounded-md font-semibold text-white bg-indigo-600 transition-all flex items-center gap-1.5 shadow-sm";
+                    btnDidactic.setAttribute('aria-pressed', 'true');
+                }
+                if (btnAcademic) {
+                    btnAcademic.className = "px-3 py-1 rounded-md font-medium text-slate-300 hover:text-white transition-all flex items-center gap-1.5";
+                    btnAcademic.setAttribute('aria-pressed', 'false');
+                }
             }
         }
 
         function copyArticleCitation(btn) {
-            const text = "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 2.1.0). Zenodo. https://doi.org/10.5281/zenodo.24022795 | Compendium formel: https://doi.org/10.5281/zenodo.23833938 | OSF: https://osf.io/z89sg";
+            const P = window.CartograffectPayload;
+            const ver = P ? P.get('release.version', '2.1.0') : '2.1.0';
+            const artDoi = P ? P.get('identifiers.zenodo_article_doi', '10.5281/zenodo.24022795') : '10.5281/zenodo.24022795';
+            const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
+            const osfUrl = P ? P.get('identifiers.osf_url', 'https://osf.io/z89sg') : 'https://osf.io/z89sg';
+            const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+            const text = `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version ${ver}). Zenodo. https://doi.org/${artDoi} | Compendium formel: https://doi.org/${codeDoi} | OSF: ${osfUrl}`;
             const finish = () => {
                 if (!btn) return;
                 const span = btn.querySelector('span:last-child');
                 const orig = span ? span.textContent : btn.textContent;
-                if (span) span.textContent = "Citation copiée !";
+                if (span) span.textContent = en ? "Citation copied!" : "Citation copiée !";
                 setTimeout(() => { if (span) span.textContent = orig; }, 2200);
             };
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -4105,6 +4123,7 @@
             const theory = window.CartograffectTheory;
             const model = window.CartograffectModel;
             if (!theory || !model) return;
+            const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
 
             const suspChk = document.getElementById('simChkSuspension');
             const underChk = document.getElementById('simChkUnderThreshold');
@@ -4136,30 +4155,31 @@
 
             const name = match ? match.name : res.stageLabel;
             const oppStr = (oppCoords.x === cx && oppCoords.y === cy && oppCoords.z === cz)
-                ? 'Auto-dual (' + cx + ', ' + cy + ', ' + cz + ')'
-                : (oppMatch ? oppMatch.name : 'État') + ' (' + oppCoords.x + ', ' + oppCoords.y + ', ' + oppCoords.z + ')';
+                ? (en ? 'Self-dual (' : 'Auto-dual (') + cx + ', ' + cy + ', ' + cz + ')'
+                : (oppMatch ? oppMatch.name : (en ? 'State' : 'État')) + ' (' + oppCoords.x + ', ' + oppCoords.y + ', ' + oppCoords.z + ')';
 
-            let typeStr = "Opérateur Central";
-            if (cz === 0) typeStr = "Équilibre Homéostatique (Veille)";
-            else if (cz === 1) typeStr = "Opérateur de Rupture (Précision < Seuil)";
-            else if (cx === 0 && cy === 0) typeStr = "Opérateur Central de Suspension (R5)";
-            else if (cx === 0 || cy === 0) typeStr = "Orientation Axiale Pure (Instable)";
+            let typeStr = en ? "Central Operator" : "Opérateur Central";
+            if (cz === 0) typeStr = en ? "Homeostatic Equilibrium (Wake)" : "Équilibre Homéostatique (Veille)";
+            else if (cz === 1) typeStr = en ? "Rupture Operator (Precision < Threshold)" : "Opérateur de Rupture (Précision < Seuil)";
+            else if (cx === 0 && cy === 0) typeStr = en ? "Central Suspension Operator (R5)" : "Opérateur Central de Suspension (R5)";
+            else if (cx === 0 || cy === 0) typeStr = en ? "Pure Axial Orientation (Unstable)" : "Orientation Axiale Pure (Instable)";
             else typeStr = (Math.sign(cx) === Math.sign(cy))
-                ? "Attracteur Combiné (Diagonale Congruente)"
-                : "Attracteur Combiné (Diagonale Compensation)";
+                ? (en ? "Combined Attractor (Congruent Diagonal)" : "Attracteur Combiné (Diagonale Congruente)")
+                : (en ? "Combined Attractor (Compensation Diagonal)" : "Attracteur Combiné (Diagonale Compensation)");
 
             document.getElementById('simResultName').textContent = name;
             document.getElementById('simResultCoords').textContent = `(${cx > 0 ? '+' + cx : cx}, ${cy > 0 ? '+' + cy : cy}, ${cz})`;
             document.getElementById('simResultType').textContent = typeStr;
-            document.getElementById('simResultDesc').textContent = match && match.description ? match.description : res.stageDesc;
-            document.getElementById('simResultOpposite').textContent = "Opposé : " + oppStr;
-            document.getElementById('simResultL1').textContent = `Norme L1 : |X| + |Y| = ${Math.abs(cx) + Math.abs(cy)}`;
+            document.getElementById('simResultDesc').textContent = (!en && match && match.desc) ? match.desc : res.stageDesc;
+            document.getElementById('simResultOpposite').textContent = (en ? "Opposite: " : "Opposé : ") + oppStr;
+            document.getElementById('simResultL1').textContent = `${en ? "L1 Norm:" : "Norme L1 :"} |X| + |Y| = ${Math.abs(cx) + Math.abs(cy)}`;
         }
 
         // KaTeX Math Rendering
         document.addEventListener("DOMContentLoaded", () => {
             updateSimulatorUI();
-            if (typeof renderMathInElement === 'function') {
+            window.addEventListener('cartograffect:lang-change', updateSimulatorUI);
+            if (typeof katex !== 'undefined' && typeof renderMathInElement === 'function') {
                 renderMathInElement(document.body, {
                     delimiters: [
                         {left: '$$', right: '$$', display: true},

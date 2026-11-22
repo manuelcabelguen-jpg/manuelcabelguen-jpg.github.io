@@ -126,7 +126,7 @@
         'Réserve — États Relationnels & Métacognition': 'Reserve — Relational States & Metacognition',
         'Recul — Dispositions Durables & Traits': 'Stepping Back — Enduring Dispositions & Traits',
         'Saisissement — Identités Affectives': 'Awe & Grip — Affective Identities',
-        'Vertige Ontologique — Horizon Existentiel': 'Ontological Vertigo — Existential Horizon',
+        'Suspension — Horizon Existentiel': 'Suspension — Existential Horizon',
         "L'Architecture Complète de CARTOGRAFFECT": 'The Complete CARTOGRAFFECT Architecture',
         'Du Moteur Prédictif aux 176 États': 'From Predictive Engine to 176 States',
         "L'Explorateur Interactif : Voyage au Cœur des 176 Émotions": 'Interactive Explorer: Journey Through the 176 Emotions',
@@ -525,10 +525,158 @@
         // 404 Page
         'Dimension Affective Introuvable': 'Affective Dimension Not Found',
         "Retour à l'Accueil": 'Return Home',
-        'Carte des 176 États': '176-State Map'
+        'Carte des 176 États': '176-State Map',
+        "Retourner à l'Accueil": 'Return Home',
+        'Explorer les 176 États (Taxonomie 2D & 3D)': 'Explore the 176 States (2D & 3D Taxonomy)',
+        "L'état émotionnel ou la page que vous recherchez ne figure sur aucune des quatre composantes ou strates cartographiées. Peut-être s'agit-il d'un sentiment encore inconnu de la science...": 'The emotional state or page you are looking for does not appear on any of the four mapped components or strata. Perhaps it is a feeling not yet known to science...',
+        'COORDONNÉES HORS-CHAMP : [X: ???, Y: ???, Z: ???]': 'OUT-OF-BOUNDS COORDINATES: [X: ???, Y: ???, Z: ???]',
+
+        // Navigation mobile, footer & modales P2-1
+        'NAVIGATION': 'NAVIGATION',
+        'Recherche rapide': 'Quick search',
+        'Le Voyage affectif (2 min)': 'The Affective Journey (2 min)',
+        '2. Noyau Affectif (X,Y,Z)': '2. Affective Core (X,Y,Z)',
+        '4. Taxonomie (176 états)': '4. Taxonomy (176 states)',
+        "L'Article Scientifique": 'The Scientific Paper',
+        'Corpus & Preuves formelles': 'Corpus & Formal Proofs',
+        'Mentions Légales & PI': 'Legal Notice & IP',
+        "L'Article (": 'The Paper (',
+        'th. ·': 'thm. ·',
+        'Lexique Bilingue & Terminologie Internationale': 'Bilingual Lexicon & International Terminology',
+        'Tous les termes': 'All terms',
+        'Mathématiques & Axes': 'Mathematics & Axes',
+        '8 Prototypes Z=2': '8 Prototypes Z=2',
+        'Citations APA': 'APA Citations',
+        "Copier la référence APA de l'Article": "Copy the Paper's APA Reference",
+        "Consulter l'Article en Ligne": 'Read the Paper Online',
+        'Citation copiée dans le presse-papiers.': 'Citation copied to clipboard.',
+        'Fermer': 'Close',
+
+        // Index split headings
+        'La Boussole Intérieure de nos': 'The Inner Compass of Our',
+        'boussole ?': 'compass?',
+        'Les Origines :': 'Origins:',
+        'Pourquoi nos émotions ne sont pas des anomalies': 'Why Our Emotions Are Not Anomalies',
+        '1. Le Point de Départ :': '1. Starting Point:',
+        'Comment naissent nos émotions': 'How Our Emotions Arise',
+        '2. La Boussole :': '2. The Compass:',
+        "Les deux choix face à l'imprévu": 'Two Choices Facing the Unexpected',
+        "3. La Règle d'Équilibre :": '3. The Balance Rule:',
+        'Pourquoi nous ne pouvons pas tout ressentir à la fois': 'Why We Cannot Feel Everything at Once',
+        "4. L'Élévation de la Conscience :": '4. Rising Awareness:',
+        'Du Réflexe Corporel aux Idéaux de Vie': 'From Bodily Reflex to Life Ideals',
+        "L'Architecture Complète de": 'The Complete Architecture of',
+        "L'Explorateur Interactif :": 'Interactive Explorer:',
+        'Voyage au Cœur des 176 Émotions': 'Journey Through the 176 Emotions',
+        "À qui s'adresse cette": 'Who Is This',
+
+        // Noyau, Matrice, Taxonomie & Simulateurs
+        'Le Noyau Affectif :': 'The Affective Core:',
+        'Espace Géométrique (X, Y, Z)': 'Geometric Space (X, Y, Z)',
+        'Strate Z': 'Stratum Z',
+        'Opérateur Central (0,0,Z)': 'Central Operator (0,0,Z)',
+        'Rayon R(Z)': 'Radius R(Z)',
+        'Positions Couronne N(Z)': 'Crown Positions N(Z)',
+        'Typologies présentes': 'Present Typologies',
+        'La Matrice Affective Fondamentale (': 'The Fundamental Affective Matrix (',
+        'État initial :': 'Initial state:',
+        "Voir l'antagoniste :": 'View antagonist:',
+        'Peur (−2,0,2) vs Courage (+2,0,2) : la fausse neutralité': 'Fear (−2,0,2) vs Courage (+2,0,2): false neutrality',
+        'Tristesse (0,−2,2) vs Joie (0,+2,2) : charge motrice vs décharge': 'Sadness (0,−2,2) vs Joy (0,+2,2): motor charge vs discharge',
+        'Colère / Calme': 'Anger / Calm',
+        'Désir / Dégoût': 'Desire / Disgust',
+        'Peur / Courage': 'Fear / Courage',
+        'Joie / Tristesse': 'Joy / Sadness',
+        'Colère (−1, +1, 2)': 'Anger (−1, +1, 2)',
+        'Désespoir (−1, −7, 5)': 'Despair (−1, −7, 5)',
+        'Terreur (−1, +9, 6)': 'Terror (−1, +9, 6)',
+        'Honte (−2, −4, 4)': 'Shame (−2, −4, 4)',
+        'Panique (−3, +1, 3)': 'Panic (−3, +1, 3)',
+        'Extase (+8, +2, 6)': 'Ecstasy (+8, +2, 6)',
+        'Fureur (−4, +6, 6)': 'Fury (−4, +6, 6)',
+        'Chagrin (−1, −3, 3)': 'Grief (−1, −3, 3)',
+        'Courage (+2, 0, 2)': 'Courage (+2, 0, 2)',
+        'Rechercher un état parmi les 176': 'Search among the 176 states',
+        'Groupe / Secteur': 'Group / Sector',
+        'Typologie': 'Typology',
+        'Décrivez une situation ou choisissez un cas clinique ci-dessus :': 'Describe a situation or choose a clinical case above:',
+        'Reset': 'Reset',
+        'Sélectionner →': 'Select →',
+        'Tracer sa dissipation allostatique sur 2D/3D': 'Trace its allostatic dissipation on 2D/3D',
+        'Effacer la trajectoire active': 'Clear active trajectory',
+        'Café gâté (§7.3)': 'Spoiled coffee (§7.3)',
+        'Perte & Résilience': 'Loss & Resilience',
+        'Colère & Retour': 'Anger & Recovery',
+        'Défi & Courage': 'Challenge & Courage',
+        'Analyser & Tracer la Trajectoire sur la Carte 2D/3D': 'Analyze & Plot Trajectory on 2D/3D Map',
+        'Toutes (Z=0..7)': 'All (Z=0..7)',
+        'Z=0 — Veille (1)': 'Z=0 — Wake (1)',
+        'Z=1 — Surprise (1)': 'Z=1 — Surprise (1)',
+        'Z=2 — Prototypes (9)': 'Z=2 — Prototypes (9)',
+        'Z=3 — Émoi (17)': 'Z=3 — Stir (17)',
+        'Z=4 — Réserve (25)': 'Z=4 — Reserve (25)',
+        'Z=5 — Recul (33)': 'Z=5 — Stepping Back (33)',
+        'Z=6 — Saisissement (41)': 'Z=6 — Saisissement (41)',
+        'Z=7 — Suspension (49)': 'Z=7 — Suspension (49)',
+        'Tous les groupes': 'All groups',
+        'Courage (X+)': 'Courage (X+)',
+        'Peur (X−)': 'Fear (X−)',
+        'Joie (Y+)': 'Joy (Y+)',
+        'Tristesse (Y−)': 'Sadness (Y−)',
+        'Désir (X+, Y+)': 'Desire (X+, Y+)',
+        'Dégoût (X−, Y−)': 'Disgust (X−, Y−)',
+        'Colère (X−, Y+)': 'Anger (X−, Y+)',
+        'Calme (X+, Y−)': 'Calm (X+, Y−)',
+        'Opérateurs Centraux': 'Central Operators',
+        'Toutes géométries': 'All geometries',
+        'Opérateurs Centraux (8)': 'Central Operators (8)',
+        'Axiales (24)': 'Axial (24)',
+        'Diagonales (24)': 'Diagonal (24)',
+        'Latérales (120)': 'Lateral (120)',
+
+        // Scholar Drive & Article chrome/tables
+        'Modèles Théoriques :': 'Theoretical Models:',
+        "Comprendre l'Affect, l'Émotion et le Sentiment": 'Understanding Affect, Emotion, and Feeling',
+        "Vue d'Ensemble": 'Overview',
+        'Affect vs Émotion vs Sentiment': 'Affect vs Emotion vs Feeling',
+        'Publications & Documents': 'Publications & Documents',
+        'Corpus Bibliographique': 'Bibliographic Corpus',
+        'Dimension': 'Dimension',
+        'Affect': 'Affect',
+        'Émotion': 'Emotion',
+        'Sentiment': 'Feeling',
+        'Mode de lecture :': 'Reading mode:',
+        'Accès figures :': 'Figures:',
+        'Résumé (Français)': 'Summary (French)',
+        'Abstract (English)': 'Abstract (English)',
+        '+Y : Monde Contrôlable (Agir)': '+Y: Controllable World (Act)',
+        'Y0 : Contrôle Indéterminé': 'Y0: Indeterminate Control',
+        '-Y : Monde Non Contrôlable (Laisser)': '-Y: Uncontrollable World (Let Go)',
+        '+X : Modèle Révisable (Ajuster)': '+X: Revisable Model (Adjust)',
+        'X0 : Attente Indéterminée': 'X0: Indeterminate Expectation',
+        '-X : Modèle Non Révisable (Tenir)': '-X: Non-Revisable Model (Hold)',
+        'Précision sous seuil (π < τ': 'Below-threshold precision (π < τ',
+        '→ Surprise 0,0,1)': '→ Surprise 0,0,1)',
+        'Suspension descendante (R5 → Anticipation 0,0,2)': 'Descending suspension (R5 → Anticipation 0,0,2)',
+        'Théorie & Auteurs': 'Theory & Authors',
+        'Postulat Fondamental': 'Fundamental Postulate',
+        'Limite / Paradoxe Historique': 'Historical Limit / Paradox',
+        'Résolution par CARTOGRAFFECT': 'CARTOGRAFFECT Resolution',
+        'Strate (': 'Stratum (',
+        'Opérateur central': 'Central operator',
+        'Rayon': 'Radius',
+        'Positions': 'Positions',
+        'Registre dominant': 'Dominant register',
+        "Objet principal de l'inférence": 'Primary inference target',
+        'Exemples cliniques': 'Clinical examples',
+        'Postulat testé': 'Tested postulate',
+        'Prédiction falsifiable': 'Falsifiable prediction',
+        'Opérationnalisation': 'Operationalization',
+        'Critère de réfutation': 'Falsification criterion',
+        'Article :': 'Paper:'
     };
 
-    // Normalized attribute dictionary
+    // Normalized attribute & metadata dictionaries
     const TITLE_FR_EN = {
         'Parcours expérientiel guidé (2 min)': 'Guided experiential journey (2 min)',
         'Rechercher un état affectif, concept ou niveau (Ctrl+K)': 'Search an affective state, concept or level (Ctrl+K)',
@@ -537,12 +685,35 @@
         'Zoom arrière': 'Zoom out',
         'Zoom avant sur la carte 3D': 'Zoom in on 3D map',
         'Zoom arrière sur la carte 3D': 'Zoom out on 3D map',
-        'Réinitialiser la vue 3D': 'Reset 3D view'
+        'Réinitialiser la vue 3D': 'Reset 3D view',
+        "Consulter l'article original (DOI)": 'View original paper (DOI)',
+        "Copier l'entrée BibTeX": 'Copy BibTeX entry',
+        'Copier la référence au format APA 7': 'Copy reference in APA 7 format',
+        'Imprimer / Sauvegarder en PDF': 'Print / Save as PDF',
+        "Télécharger l'intégralité du corpus au format BibTeX": 'Download full corpus in BibTeX format',
+        'Basculer la rotation automatique': 'Toggle automatic rotation',
+        "Déclencher un cycle d'inférence active": 'Trigger an active inference cycle',
+        'Perspective 3D Octaédrique': '3D Octahedral Perspective',
+        'Projection 2D Losanges Manhattan': '2D Manhattan Diamonds Projection',
+        '1. Affect vs Émotion vs Sentiment': '1. Affect vs Emotion vs Feeling',
+        '2. Modèles Historiques Comparés': '2. Historical Models Compared',
+        '3. Architecture Certifiée & Norme L1': '3. Certified Architecture & L1 Norm',
+        '4. Documents & Publications': '4. Documents & Publications',
+        '5. Corpus Bibliographique': '5. Bibliographic Corpus',
+        "Vue d'Ensemble": 'Overview',
+        'Plein écran 2D': '2D Fullscreen',
+        'Plein écran 3D': '3D Fullscreen'
     };
 
     const PLACEHOLDER_FR_EN = {
         'Rechercher par auteur, titre, concept ou domaine...': 'Search by author, title, concept or domain...',
-        'Rechercher un état affectif...': 'Search an affective state...'
+        'Rechercher un état affectif...': 'Search an affective state...',
+        'Rechercher un terme, un concept, un état...': 'Search a term, concept, or state...',
+        'Rechercher un état affectif, une strate, un concept ou une section...': 'Search an affective state, stratum, concept, or section...',
+        'Ex : j’ai pris un café avarié, mon projet a échoué, une promotion surprise...': 'E.g., I drank spoiled coffee, my project failed, a surprise promotion...',
+        'Rechercher dans les 176 états (ex : Honte, Courage, Nostalgie)...': 'Search across the 176 states (e.g., Shame, Courage, Nostalgia)...',
+        'Ex : Colère, Haine, Affection, Honte, Joie...': 'E.g.: Anger, Hatred, Affection, Shame, Joy...',
+        "Ex : Je renverse mon café le matin, je me reproche mon imprudence, j'ai honte puis j'ai l'impression de tout rater...": 'E.g.: I spill my coffee in the morning, blame myself for carelessness, feel ashamed, then feel like I fail at everything...'
     };
 
     const ARIA_FR_EN = {
@@ -554,21 +725,108 @@
         "Sommaire de l'article": 'Article table of contents',
         'Rechercher dans le corpus bibliographique par auteur, titre, concept ou domaine': 'Search bibliographic corpus by author, title, concept or domain',
         'Arbitrage ressource entre Contrôle |Y| et Attente |X|': 'Resource trade-off between Control |Y| and Expectation |X|',
-        'Progression de lecture': 'Reading progress'
+        'Progression de lecture': 'Reading progress',
+        'Basculer la rotation automatique': 'Toggle automatic rotation',
+        'Figure 3 : Matrice affective fondamentale Z=2': 'Figure 3: Fundamental affective matrix Z=2',
+        'Courbe de dissipation allostatique par paliers Z': 'Allostatic dissipation curve across Z strata',
+        'Carte 2D D3 des 176 états affectifs Cartograffect': 'D3 2D map of the 176 Cartograffect affective states',
+        'Navigation des Modèles Théoriques': 'Theoretical Models Navigation',
+        "Sommaire rapide de la page d'accueil": 'Quick home page summary',
+        'Fermer le lexique': 'Close lexicon',
+        'Rechercher dans le lexique bilingue': 'Search bilingual lexicon',
+        'Recherche rapide Cartograffect': 'Cartograffect quick search',
+        'Rechercher un affect, une strate ou un concept': 'Search an affect, stratum, or concept',
+        'Zoom avant sur la carte 3D': 'Zoom in on 3D map',
+        'Zoom arrière sur la carte 3D': 'Zoom out on 3D map',
+        'Réinitialiser la vue 3D': 'Reset 3D view',
+        'Zoom avant sur la pyramide 3D': 'Zoom in on 3D pyramid',
+        'Zoom arrière sur la pyramide 3D': 'Zoom out on 3D pyramid',
+        'Zoom avant sur la carte 2D': 'Zoom in on 2D map',
+        'Zoom arrière sur la carte 2D': 'Zoom out on 2D map',
+        'Réinitialiser la vue': 'Reset view',
+        'Réinitialiser le zoom': 'Reset zoom',
+        "Section Vue d'Ensemble": 'Overview section',
+        'Section Modèles Historiques': 'Historical Models section',
+        'Section Affect vs Émotion': 'Affect vs Emotion section',
+        'Section Publications & Documents': 'Publications & Documents section',
+        'Section Taxonomie & Pyramide': 'Taxonomy & Pyramid section',
+        'Section Corpus Bibliographique': 'Bibliographic Corpus section',
+        '1. Affect vs Émotion vs Sentiment': '1. Affect vs Emotion vs Feeling',
+        '2. Modèles Historiques Comparés': '2. Historical Models Compared',
+        '3. Architecture Certifiée & Norme L1': '3. Certified Architecture & L1 Norm',
+        '4. Documents & Publications': '4. Documents & Publications',
+        '5. Corpus Bibliographique': '5. Bibliographic Corpus',
+        "Vue d'Ensemble": 'Overview',
+        'Sélectionner Anticipation (0, 0, 2)': 'Select Anticipation (0, 0, 2)',
+        'Sélectionner Joie (0, +2, 2)': 'Select Joy (0, +2, 2)',
+        'Sélectionner Tristesse (0, -2, 2)': 'Select Sadness (0, -2, 2)',
+        'Sélectionner Tristesse (0, −2, 2)': 'Select Sadness (0, −2, 2)',
+        'Sélectionner Courage (+2, 0, 2)': 'Select Courage (+2, 0, 2)',
+        'Sélectionner Peur (-2, 0, 2)': 'Select Fear (-2, 0, 2)',
+        'Sélectionner Peur (−2, 0, 2)': 'Select Fear (−2, 0, 2)',
+        'Sélectionner Désir (+1, +1, 2)': 'Select Desire (+1, +1, 2)',
+        'Sélectionner Dégoût (-1, -1, 2)': 'Select Disgust (-1, -1, 2)',
+        'Sélectionner Dégoût (−1, −1, 2)': 'Select Disgust (−1, −1, 2)',
+        'Sélectionner Colère (-1, +1, 2)': 'Select Anger (-1, +1, 2)',
+        'Sélectionner Colère (−1, +1, 2)': 'Select Anger (−1, +1, 2)',
+        'Sélectionner Calme (+1, -1, 2)': 'Select Calm (+1, -1, 2)',
+        'Sélectionner Calme (+1, −1, 2)': 'Select Calm (+1, −1, 2)'
+    };
+
+    const ALT_FR_EN = {
+        'Cartograffect': 'Cartograffect',
+        'Astrolabe Cartograffect': 'Cartograffect Astrolabe'
+    };
+
+    const PAGE_TITLE_FR_EN = {
+        'CARTOGRAFFECT | La Boussole Intérieure de nos Émotions': 'CARTOGRAFFECT | The Inner Compass of Our Emotions',
+        '1. Le Moteur Prédictif : Interfaces & Gradients A/C | CARTOGRAFFECT': '1. The Predictive Engine: Interfaces & A/C Gradients | CARTOGRAFFECT',
+        '2. Le Noyau Affectif : Géométrie (X, Y, Z) & Norme L₁ | CARTOGRAFFECT': '2. The Affective Core: (X, Y, Z) Geometry & L₁ Norm | CARTOGRAFFECT',
+        '3. La Matrice Affective : Valence Lexicographique & Prototypes Z=2 | CARTOGRAFFECT': '3. The Affective Matrix: Lexicographic Valence & Prototypes Z=2 | CARTOGRAFFECT',
+        '4. La Taxonomie Affective : Les 176 États & Carte 2D/3D | CARTOGRAFFECT': '4. Affective Taxonomy: The 176 States & 2D/3D Map | CARTOGRAFFECT',
+        "L'Article Théorique | Cartographie des affects : architecture hiérarchique fondée sur le traitement prédictif": 'Theoretical Paper | Affective Mapping: Hierarchical Architecture Grounded in Predictive Processing',
+        'Modèles Théoriques : Affects, Émotions & Sentiments | CARTOGRAFFECT': 'Theoretical Models: Affects, Emotions & Feelings | CARTOGRAFFECT',
+        'Mentions Légales & Propriété Intellectuelle | Cartograffect': 'Legal Notice & Intellectual Property | Cartograffect',
+        '404 - Coordonnées Introuvables | CARTOGRAFFECT': '404 - Coordinates Not Found | CARTOGRAFFECT'
+    };
+
+    const META_DESC_FR_EN = {
+        "La dimension affective demandée n'existe pas ou s'est évanouie dans le néant.": 'The requested affective dimension does not exist or has faded into the void.',
+        "Publication théorique officielle : Cartographie des affects, une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Manuel Cabelguen, Ph. D.": 'Official theoretical paper: Cartographie des affects, a hierarchical architecture of affective experience grounded in predictive processing. Manuel Cabelguen, Ph. D.',
+        'Découvrez Cartograffect, la boussole intérieure de nos émotions. Une cartographie claire et interactive de nos 176 états affectifs fondée sur le traitement prédictif. Modèle scientifique par Manuel Cabelguen (Ph. D.).': 'Discover Cartograffect, the inner compass of our emotions. A clear, interactive mapping of our 176 affective states grounded in predictive processing. Scientific model by Manuel Cabelguen (Ph. D.).',
+        "Composante 3 de Cartograffect : la Matrice Affective (AffectiveMatrix.lean, Fig. 3). Primauté hédonique lexicographique de l'Axe X, 6 régimes énergétiques, 8 prototypes Z=2 (Joie, Tristesse, Peur, Courage, Désir, Colère, Calme, Dégoût) et dissipation allostatique.": 'Component 3 of Cartograffect: the Affective Matrix (AffectiveMatrix.lean, Fig. 3). Lexicographic hedonic primacy of the X-axis, 6 energetic regimes, 8 prototypes Z=2 (Joy, Sadness, Fear, Courage, Desire, Anger, Calm, Disgust) and allostatic dissipation.',
+        'Cadre juridique, propriété intellectuelle, certificat OPIC 1233199, licences GNU AGPLv3 et CC BY-NC-SA 4.0 pour le projet Cartograffect et ses outils computationnels.': 'Legal framework, intellectual property, CIPO certificate 1233199, GNU AGPLv3 and CC BY-NC-SA 4.0 licenses for the Cartograffect project and its computational tools.',
+        "Composante 1 de Cartograffect : le Moteur prédictif (PredictiveEngine.lean). Découvrez comment les Interfaces Perceptive, Subjective et Attentionnelle convertissent un écart de prédiction en gradients d'Attente (A) et de Contrôle (C) pondérés par la précision.": 'Component 1 of Cartograffect: the Predictive Engine (PredictiveEngine.lean). Discover how the Perceptive, Subjective, and Attentional Interfaces convert prediction error into precision-weighted Expectation (A) and Control (C) gradients.',
+        'Composante 2 de Cartograffect : le Noyau affectif (CoreAffect.lean). Espace de coordonnées (X, Y, Z) pré-valencé, loi des couronnes |X|+|Y|=2Z-2, positions axiales instables et attracteurs diagonaux.': 'Component 2 of Cartograffect: the Affective Core (CoreAffect.lean). Pre-valenced (X, Y, Z) coordinate space, crown law |X|+|Y|=2Z-2, unstable axial positions, and diagonal attractors.',
+        'Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés et Algorithme Cartograffect de Manuel Cabelguen (Ph. D.).': 'Theoretical Models & Foundations: conceptual and computational distinction between Affects, Emotions, and Feelings, comparative historical models, and the Cartograffect Algorithm by Manuel Cabelguen (Ph. D.).',
+        'Composante 4 de Cartograffect : la Taxonomie Affective Hiérarchique (AffectiveTaxonomy.lean & Lexicon176.lean). Explorez en 2D (D3) et 3D (Three.js) les 176 états répartis sur 8 strates (Z=0..7), 9 groupes et 84 paires antagonistes.': 'Component 4 of Cartograffect: the Hierarchical Affective Taxonomy (AffectiveTaxonomy.lean & Lexicon176.lean). Explore in 2D (D3) and 3D (Three.js) the 176 states across 8 strata (Z=0..7), 9 groups, and 84 antagonist pairs.'
     };
 
     function normSpace(s) {
-        return s
+        return String(s || '')
             .replace(/[\u00a0\u202f]/g, ' ')
             .replace(/[\u2018\u2019]/g, "'")
             .replace(/\s+/g, ' ')
             .trim();
     }
 
-    const TEXT_LOOKUP = Object.create(null);
-    Object.keys(TEXT_FR_EN).forEach((k) => {
-        TEXT_LOOKUP[normSpace(k)] = TEXT_FR_EN[k];
-    });
+    function buildLookup(dict) {
+        const map = Object.create(null);
+        Object.keys(dict).forEach((k) => {
+            map[normSpace(k)] = dict[k];
+        });
+        return map;
+    }
+
+    const TEXT_LOOKUP = buildLookup(TEXT_FR_EN);
+    const TITLE_LOOKUP = buildLookup(TITLE_FR_EN);
+    const PLACEHOLDER_LOOKUP = buildLookup(PLACEHOLDER_FR_EN);
+    const ARIA_LOOKUP = buildLookup(ARIA_FR_EN);
+    const ALT_LOOKUP = buildLookup(ALT_FR_EN);
+    const PAGE_TITLE_LOOKUP = buildLookup(PAGE_TITLE_FR_EN);
+    const META_DESC_LOOKUP = buildLookup(META_DESC_FR_EN);
+    let origDocTitle = null;
+    let origMetaDesc = null;
 
     function getSavedLang() {
         try {
@@ -638,14 +896,15 @@
     }
 
     function translateAttributes(lang) {
-        const titleEls = document.querySelectorAll('[title], [aria-label]');
-        titleEls.forEach((el) => {
-            if (el.id === 'langToggleBtn') return;
+        const els = document.querySelectorAll('[title], [aria-label], [placeholder], img[alt]');
+        els.forEach((el) => {
+            if (el.id === 'langToggleBtn' || el.hasAttribute('data-lang-toggle')) return;
             if (!attrOrigMap.has(el)) {
                 attrOrigMap.set(el, {
                     title: el.getAttribute('title'),
                     placeholder: el.getAttribute('placeholder'),
-                    ariaLabel: el.getAttribute('aria-label')
+                    ariaLabel: el.getAttribute('aria-label'),
+                    alt: el.getAttribute('alt')
                 });
             }
             const orig = attrOrigMap.get(el);
@@ -653,33 +912,50 @@
                 if (orig.title !== null) el.setAttribute('title', orig.title);
                 if (orig.placeholder !== null) el.setAttribute('placeholder', orig.placeholder);
                 if (orig.ariaLabel !== null) el.setAttribute('aria-label', orig.ariaLabel);
+                if (orig.alt !== null) el.setAttribute('alt', orig.alt);
             } else {
-                if (orig.title && TITLE_FR_EN[orig.title]) {
-                    el.setAttribute('title', TITLE_FR_EN[orig.title]);
+                if (orig.title) {
+                    const tr = TITLE_LOOKUP[normSpace(orig.title)];
+                    if (tr) el.setAttribute('title', tr);
                 }
-                if (orig.placeholder && PLACEHOLDER_FR_EN[orig.placeholder]) {
-                    el.setAttribute('placeholder', PLACEHOLDER_FR_EN[orig.placeholder]);
+                if (orig.placeholder) {
+                    const tr = PLACEHOLDER_LOOKUP[normSpace(orig.placeholder)];
+                    if (tr) el.setAttribute('placeholder', tr);
                 }
-                if (orig.ariaLabel && ARIA_FR_EN[orig.ariaLabel]) {
-                    el.setAttribute('aria-label', ARIA_FR_EN[orig.ariaLabel]);
+                if (orig.ariaLabel) {
+                    const tr = ARIA_LOOKUP[normSpace(orig.ariaLabel)];
+                    if (tr) el.setAttribute('aria-label', tr);
+                }
+                if (orig.alt) {
+                    const tr = ALT_LOOKUP[normSpace(orig.alt)];
+                    if (tr) el.setAttribute('alt', tr);
                 }
             }
         });
-        document.querySelectorAll('input[placeholder]').forEach((input) => {
-            if (!attrOrigMap.has(input)) {
-                attrOrigMap.set(input, {
-                    title: input.getAttribute('title'),
-                    placeholder: input.getAttribute('placeholder'),
-                    ariaLabel: input.getAttribute('aria-label')
-                });
+    }
+
+    function translateDocumentMeta(lang) {
+        if (typeof document === 'undefined') return;
+        if (origDocTitle === null && typeof document.title === 'string') {
+            origDocTitle = document.title;
+        }
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (origMetaDesc === null && metaDesc) {
+            origMetaDesc = metaDesc.getAttribute('content') || '';
+        }
+        if (lang === 'fr') {
+            if (origDocTitle !== null && document.title !== origDocTitle) document.title = origDocTitle;
+            if (metaDesc && origMetaDesc !== null) metaDesc.setAttribute('content', origMetaDesc);
+        } else {
+            if (origDocTitle) {
+                const trTitle = PAGE_TITLE_LOOKUP[normSpace(origDocTitle)];
+                if (trTitle) document.title = trTitle;
             }
-            const orig = attrOrigMap.get(input);
-            if (lang === 'fr') {
-                if (orig.placeholder !== null) input.setAttribute('placeholder', orig.placeholder);
-            } else if (orig.placeholder && PLACEHOLDER_FR_EN[orig.placeholder]) {
-                input.setAttribute('placeholder', PLACEHOLDER_FR_EN[orig.placeholder]);
+            if (metaDesc && origMetaDesc) {
+                const trDesc = META_DESC_LOOKUP[normSpace(origMetaDesc)];
+                if (trDesc) metaDesc.setAttribute('content', trDesc);
             }
-        });
+        }
     }
 
     function updateLangButtonUI(lang) {
@@ -726,6 +1002,7 @@
         document.documentElement.lang = target;
         document.documentElement.setAttribute('data-lang', target);
 
+        translateDocumentMeta(target);
         translateTextNodes(target);
         translateAttributes(target);
         updateLangButtonUI(target);
@@ -787,6 +1064,9 @@
         toggleLang: toggleLang,
         applyLanguage: function (lang) {
             return applyLanguage(lang, false);
+        },
+        t: function (text) {
+            return TEXT_LOOKUP[normSpace(text)] || text;
         }
     };
 })(typeof window !== 'undefined' ? window : this);

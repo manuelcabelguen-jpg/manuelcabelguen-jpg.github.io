@@ -292,21 +292,21 @@
                                 <div class="flex items-center gap-1.5 ml-auto">
                                     <!-- 3D / 2D Mode Switcher -->
                                     <div class="bg-slate-800/90 p-0.5 rounded-lg border border-slate-700/70 flex items-center shadow-inner" id="viewModeGroup">
-                                        <button id="btnView3D" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-1" title="Perspective 3D Octaédrique">
+                                        <button type="button" id="btnView3D" aria-pressed="true" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-1" title="Perspective 3D Octaédrique">
                                             <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span>3D</span>
                                         </button>
-                                        <button id="btnView2D" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center gap-1" title="Projection 2D Losanges Manhattan">
+                                        <button type="button" id="btnView2D" aria-pressed="false" class="px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center gap-1" title="Projection 2D Losanges Manhattan">
                                             <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 22 12 12 22 2 12"/></svg><span>2D</span>
                                         </button>
                                     </div>
 
                                     <!-- Auto Orbit Button -->
-                                    <button id="btnAutoRotate" class="p-1.5 px-2 text-[11px] font-semibold text-indigo-300 bg-indigo-950/60 border border-indigo-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Basculer la rotation automatique">
+                                    <button type="button" id="btnAutoRotate" aria-label="Basculer la rotation automatique" aria-pressed="true" class="p-1.5 px-2 text-[11px] font-semibold text-indigo-300 bg-indigo-950/60 border border-indigo-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Basculer la rotation automatique">
                                         <svg id="rotateIcon" class="w-3.5 h-3.5 inline-block animate-spin shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
                                     </button>
 
                                     <!-- Trigger Pulse Button -->
-                                    <button id="btnPulseWave" class="px-2.5 py-1 text-[11px] font-bold text-amber-200 bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Déclencher un cycle d'inférence active">
+                                    <button type="button" id="btnPulseWave" class="px-2.5 py-1 text-[11px] font-bold text-amber-200 bg-amber-950/60 hover:bg-amber-900 border border-amber-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm" title="Déclencher un cycle d'inférence active">
                                         <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 20 9 4 6 12 2 12"/></svg><span class="hidden xs:inline">Pulsation</span>
                                     </button>
                                 </div>
@@ -411,7 +411,7 @@
             <!-- Sticky Navigation Tabs Bar (Visible immediately under hero and sticks on scroll) -->
             <div id="stickySummaryNav" class="sticky-tabs-container">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="sticky-tabs-track" aria-label="Sommaire rapide de la page d'accueil">
+                    <nav class="sticky-tabs-track" aria-label="Sommaire rapide de la page d'accueil">
                         <a href="#hero-resume" class="sticky-tab-btn active">Boussole</a>
                         <a href="#ancres-epistemologiques" class="sticky-tab-btn">Origines</a>
                         <a href="#partie-moteur-predictif" class="sticky-tab-btn">1. Moteur Pr&eacute;dictif</a>
@@ -421,7 +421,7 @@
                         <a href="#architecture-scientifique" class="sticky-tab-btn">5. Architecture &amp; Preuves</a>
                         <a href="#navigateur-geometrique" class="sticky-tab-btn">6. Explorateur 176</a>
                         <a href="#section-applications-citation" class="sticky-tab-btn">7. Pour Qui &amp; Citation</a>
-                    </div>
+                    </nav>
                 </div>
             </div>
 
@@ -1013,7 +1013,7 @@
                                 <span class="text-xs font-mono font-bold text-cyan-400">STRATE Z=7</span>
                                 <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300">R=12</span>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Vertige Ontologique — Horizon Existentiel</h3>
+                            <h3 class="text-sm font-bold text-white">Suspension — Horizon Existentiel</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
                                 Sérénité totale : sentiment d'unité cosmique, illumination, paix absolue et inconditionnelle.
                             </p>
@@ -1485,6 +1485,12 @@
     <!-- Page UI Helpers (Scroll Reveal & Citations) -->
     <script>
         (function() {
+            const revealEls = document.querySelectorAll('.reveal-on-scroll');
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce || typeof IntersectionObserver === 'undefined') {
+                revealEls.forEach(el => el.classList.add('revealed'));
+                return;
+            }
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1493,13 +1499,19 @@
                     }
                 });
             }, { threshold: 0.1 });
-            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            revealEls.forEach(el => observer.observe(el));
         })();
 
         function copyApaCitations() {
+            const P = window.CartograffectPayload;
+            const ver = P ? P.get('release.version', '2.1.0') : '2.1.0';
+            const tag = P ? P.get('release.tag', 'v2.1.0') : 'v2.1.0';
+            const artDoi = P ? P.get('identifiers.zenodo_article_doi', '10.5281/zenodo.24022795') : '10.5281/zenodo.24022795';
+            const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
+            const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
             const text =
-                "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 2.1.0) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795\n\n" +
-                "Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (version v2.1.0) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938";
+                `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version ${ver}) [Manuscrit théorique]. Zenodo. https://doi.org/${artDoi}\n\n` +
+                `Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (version ${tag}) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/${codeDoi}`;
             const checkSvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
             const copySvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1507,10 +1519,10 @@
                     const copyText = document.getElementById('copyText');
                     const copyIcon = document.getElementById('copyIcon');
                     if (copyText && copyIcon) {
-                        copyText.textContent = "Copié avec succès";
+                        copyText.textContent = en ? "Copied successfully" : "Copié avec succès";
                         copyIcon.innerHTML = checkSvg;
                         setTimeout(() => {
-                            copyText.textContent = "Copier la citation APA";
+                            copyText.textContent = en ? "Copy APA citation" : "Copier la citation APA";
                             copyIcon.innerHTML = copySvg;
                         }, 2500);
                     }
@@ -1532,6 +1544,7 @@
         }
 
         function copyEpistemoQuote(author, btn) {
+            const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
             let quoteText = "";
             if (author === 'spinoza') {
                 quoteText = "« Lorsque j'ai appliqué mon esprit à la politique, je n'ai pas eu en vue d'initier quelque chose de nouveau ou d'inouï, mais seulement de démontrer par des raisons certaines et indubitables, et de déduire de la condition même de la nature humaine, ce qui s'accorde le mieux avec la pratique. Et pour ne pas faire une satire de la vie des hommes, mais pour en comprendre les actions, je me suis appliqué à ne pas rire des actions humaines, à ne pas les déplorer, et à ne pas les détester, mais à les comprendre.\n\n" +
@@ -1548,7 +1561,7 @@
                 navigator.clipboard.writeText(quoteText).then(() => {
                     if (btn) {
                         const originalHtml = btn.innerHTML;
-                        btn.innerHTML = '<span>Copié</span>';
+                        btn.innerHTML = `<span>${en ? 'Copied' : 'Copié'}</span>`;
                         btn.classList.add('!bg-emerald-600', '!text-white', '!border-emerald-400');
                         setTimeout(() => {
                             btn.innerHTML = originalHtml;
@@ -1561,13 +1574,13 @@
     </script>
 
     <!-- Main Logic & Animation Script -->
+    <script src="js/compendium_payload.js"></script>
     <script src="cartograffect_model.js"></script>
     <script src="cartograffect_theory.js"></script>
     <script src="octahedral_navigator.js"></script>
     <script src="dynamic_cartograffect.js"></script>
     <script src="script.js"></script>
     <script src="bilingual_modal.js"></script>
-    <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
 

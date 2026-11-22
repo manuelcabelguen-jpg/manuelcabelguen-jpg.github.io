@@ -35,7 +35,7 @@
     <!-- KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof katex!=='undefined'&&typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="assets/tailwind.config.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -305,63 +305,63 @@
 
                         <!-- Interactive Nodes (9 points) -->
                         <!-- Pivot: Anticipation (0,0,2) -->
-                        <g class="matrix-node" data-emotion="Anticipation" transform="translate(320, 270)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Anticipation (0, 0, 2)" data-emotion="Anticipation" transform="translate(320, 270)">
                             <circle class="node-ring" r="28" fill="#1e1b4b" stroke="#a855f7" stroke-width="2.5"/>
                             <text y="-2" text-anchor="middle" fill="#ffffff" font-size="10.5" font-weight="700">Anticipation</text>
                             <text y="12" text-anchor="middle" fill="#c4b5fd" font-size="9" font-family="Fira Code, monospace">(0, 0, 2)</text>
                         </g>
 
                         <!-- Axial Top: Joie (0,+2,2) -->
-                        <g class="matrix-node" data-emotion="Joie" transform="translate(320, 95)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Joie (0, +2, 2)" data-emotion="Joie" transform="translate(320, 95)">
                             <circle class="node-ring" r="31" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Joie</text>
                             <text y="12" text-anchor="middle" fill="#a7f3d0" font-size="9.5" font-family="Fira Code, monospace">(0, +2, 2)</text>
                         </g>
 
                         <!-- Axial Bottom: Tristesse (0,-2,2) -->
-                        <g class="matrix-node" data-emotion="Tristesse" transform="translate(320, 445)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Tristesse (0, −2, 2)" data-emotion="Tristesse" transform="translate(320, 445)">
                             <circle class="node-ring" r="31" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="11.5" font-weight="700">Tristesse</text>
                             <text y="12" text-anchor="middle" fill="#bfdbfe" font-size="9.5" font-family="Fira Code, monospace">(0, −2, 2)</text>
                         </g>
 
                         <!-- Axial Left: Peur (-2,0,2) -->
-                        <g class="matrix-node" data-emotion="Peur" transform="translate(145, 270)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Peur (−2, 0, 2)" data-emotion="Peur" transform="translate(145, 270)">
                             <circle class="node-ring" r="31" fill="#881337" stroke="#fb7185" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Peur</text>
                             <text y="12" text-anchor="middle" fill="#fecdd3" font-size="9.5" font-family="Fira Code, monospace">(−2, 0, 2)</text>
                         </g>
 
                         <!-- Axial Right: Courage (+2,0,2) -->
-                        <g class="matrix-node" data-emotion="Courage" transform="translate(495, 270)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Courage (+2, 0, 2)" data-emotion="Courage" transform="translate(495, 270)">
                             <circle class="node-ring" r="31" fill="#065f46" stroke="#10b981" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Courage</text>
                             <text y="12" text-anchor="middle" fill="#a7f3d0" font-size="9.5" font-family="Fira Code, monospace">(+2, 0, 2)</text>
                         </g>
 
                         <!-- Diagonal Top-Right: Désir (+1,+1,2) -->
-                        <g class="matrix-node" data-emotion="Désir" transform="translate(407.5, 182.5)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Désir (+1, +1, 2)" data-emotion="Désir" transform="translate(407.5, 182.5)">
                             <circle class="node-ring" r="29" fill="#064e3b" stroke="#fbbf24" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Désir</text>
                             <text y="12" text-anchor="middle" fill="#fde68a" font-size="9.5" font-family="Fira Code, monospace">(+1, +1, 2)</text>
                         </g>
 
                         <!-- Diagonal Top-Left: Colère (-1,+1,2) -->
-                        <g class="matrix-node" data-emotion="Colère" transform="translate(232.5, 182.5)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Colère (−1, +1, 2)" data-emotion="Colère" transform="translate(232.5, 182.5)">
                             <circle class="node-ring" r="29" fill="#7c2d12" stroke="#f97316" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Colère</text>
                             <text y="12" text-anchor="middle" fill="#fed7aa" font-size="9.5" font-family="Fira Code, monospace">(−1, +1, 2)</text>
                         </g>
 
                         <!-- Diagonal Bottom-Left: Dégoût (-1,-1,2) -->
-                        <g class="matrix-node" data-emotion="Dégoût" transform="translate(232.5, 357.5)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Dégoût (−1, −1, 2)" data-emotion="Dégoût" transform="translate(232.5, 357.5)">
                             <circle class="node-ring" r="29" fill="#4c0519" stroke="#f43f5e" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Dégoût</text>
                             <text y="12" text-anchor="middle" fill="#fecdd3" font-size="9.5" font-family="Fira Code, monospace">(−1, −1, 2)</text>
                         </g>
 
                         <!-- Diagonal Bottom-Right: Calme (+1,-1,2) -->
-                        <g class="matrix-node" data-emotion="Calme" transform="translate(407.5, 357.5)">
+                        <g class="matrix-node" tabindex="0" role="button" aria-label="Sélectionner Calme (+1, −1, 2)" data-emotion="Calme" transform="translate(407.5, 357.5)">
                             <circle class="node-ring" r="29" fill="#0c4a6e" stroke="#38bdf8" stroke-width="2"/>
                             <text y="-3" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">Calme</text>
                             <text y="12" text-anchor="middle" fill="#bae6fd" font-size="9.5" font-family="Fira Code, monospace">(+1, −1, 2)</text>
@@ -726,13 +726,11 @@
 
     <script>
         (function() {
-            if (window.CartograffectTheory) {
-                window.CartograffectTheory.initNavMenus();
-            }
-
             const M = window.CartograffectModel;
             const T = window.CartograffectTheory;
             if (!M || !T) return;
+
+            const isEn = () => Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
 
             const nodePositions = {
                 'Anticipation': { x: 320, y: 270 },
@@ -747,11 +745,14 @@
             };
 
             let currentEmotionName = 'Colère';
+            let currentPairKey = 'Colère|Calme';
+            let currentDissipName = 'Désespoir';
 
             function selectZ2Emotion(name) {
                 const em = M.getByName(name) || M.getByName('Colère');
                 if (!em) return;
                 currentEmotionName = em.name;
+                const en = isEn();
 
                 // Highlight SVG nodes
                 document.querySelectorAll('.matrix-node').forEach(node => {
@@ -785,21 +786,25 @@
                 const taxGrp = T.classifyTaxonomicGroup(em.x, em.y);
                 const subsec = T.classifySubsector(em.x, em.y);
 
-                document.getElementById('inspGeomBadge').textContent = geom.label + ' • Z=' + em.z;
+                document.getElementById('inspGeomBadge').textContent = T.geometryLabel(geom) + ' • Z=' + em.z;
                 document.getElementById('inspCoordsBadge').textContent = `(X=${fmtSign(em.x)}, Y=${fmtSign(em.y)}, Z=${em.z})`;
                 document.getElementById('inspName').textContent = em.name;
-                document.getElementById('inspNameEn').textContent = `${em.code || ''} • Budget L₁ = ${Math.abs(em.x) + Math.abs(em.y)}`;
+                document.getElementById('inspNameEn').textContent = `${em.code || ''} • ${en ? 'L₁ Budget' : 'Budget L₁'} = ${Math.abs(em.x) + Math.abs(em.y)}`;
                 document.getElementById('inspDesc').textContent = em.desc || '';
 
                 const gColor = (M.groupColors && M.groupColors[em.group]) ? M.groupColors[em.group] : '#34d399';
                 document.getElementById('inspGroupColor').style.backgroundColor = gColor;
 
                 document.getElementById('inspPoleX').textContent = em.x > 0
-                    ? 'Attente Positive (+) : réduction attendue d\'erreur'
-                    : (em.x < 0 ? 'Attente Négative (−) : menace / aggravation' : 'Neutre sur X (0) : équilibre cognitif');
+                    ? (en ? 'Positive Expectation (+): expected discrepancy reduction' : 'Attente Positive (+) : réduction attendue d\'erreur')
+                    : (em.x < 0
+                        ? (en ? 'Negative Expectation (−): threat / worsening' : 'Attente Négative (−) : menace / aggravation')
+                        : (en ? 'Neutral on X (0): cognitive equilibrium' : 'Neutre sur X (0) : équilibre cognitif'));
                 document.getElementById('inspPoleY').textContent = em.y > 0
-                    ? 'Contrôle en Décharge (+) : mobilisation / expression'
-                    : (em.y < 0 ? 'Contrôle en Charge (−) : rétention / économie' : 'Neutre sur Y (0) : suspension motrice');
+                    ? (en ? 'Control Discharge (+): mobilization / expression' : 'Contrôle en Décharge (+) : mobilisation / expression')
+                    : (em.y < 0
+                        ? (en ? 'Control Charge (−): retention / conservation' : 'Contrôle en Charge (−) : rétention / économie')
+                        : (en ? 'Neutral on Y (0): motor suspension' : 'Neutre sur Y (0) : suspension motrice'));
 
                 const valBox = document.getElementById('inspValenceBox');
                 const valBadge = document.getElementById('inspValenceBadge');
@@ -816,8 +821,9 @@
                 valBadge.textContent = valence.label;
                 document.getElementById('inspValenceRule').textContent = valence.rule;
 
-                document.getElementById('inspRegimeBadge').textContent = regime.label;
-                document.getElementById('inspRegimeBadge').style.color = regime.color;
+                const regBadge = document.getElementById('inspRegimeBadge');
+                regBadge.textContent = regime.label;
+                regBadge.style.color = regime.hexColor || '#34d399';
                 document.getElementById('inspRegimeDesc').textContent = regime.desc;
 
                 document.getElementById('inspTaxGroup').textContent = taxGrp.label;
@@ -833,7 +839,7 @@
                 } else {
                     oppBtn.disabled = true;
                     oppBtn.classList.add('opacity-50');
-                    oppNameEl.textContent = 'Pivot central (auto-dual)';
+                    oppNameEl.textContent = en ? 'Central pivot (self-dual)' : 'Pivot central (auto-dual)';
                     oppBtn.onclick = null;
                 }
 
@@ -842,6 +848,12 @@
 
             document.querySelectorAll('.matrix-node').forEach(node => {
                 node.addEventListener('click', () => selectZ2Emotion(node.dataset.emotion));
+                node.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectZ2Emotion(node.dataset.emotion);
+                    }
+                });
             });
             document.querySelectorAll('.z2-pill').forEach(btn => {
                 btn.addEventListener('click', () => selectZ2Emotion(btn.dataset.em));
@@ -849,15 +861,24 @@
 
             // Lab 2: Pair Comparator
             const pairInsights = {
-                'Colère|Calme': 'Diagonale de compensation allostatique : même budget |X|+|Y|=2, signes strictement inversés. La Colère est une compensation ergotrope coûteuse (−X, +Y), alors que le Calme est un relâchement trophotrope récupérateur (+X, −Y).',
-                'Désir|Dégoût': 'Diagonale de congruence : le Désir converge en synergie positive (+X, +Y), tandis que le Dégoût cumule double charge négative (−X, −Y) par rejet protecteur.',
-                'Peur|Courage': 'Axe pur de l\'Attente (Y = 0) : Peur anticipe le danger subi (−2, 0, 2) ; Courage mobilise l\'attente positive volontaire (+2, 0, 2) sans attendre la décharge.',
-                'Joie|Tristesse': 'Axe pur du Contrôle (X = 0) : comme X=0, la loi lexicographique délègue la valence à Y. Tristesse maintient le contrôle en charge rétentive (0, −2, 2) ; Joie libère la décharge (0, +2, 2).'
+                fr: {
+                    'Colère|Calme': 'Diagonale de compensation allostatique : même budget |X|+|Y|=2, signes strictement inversés. La Colère est une compensation ergotrope coûteuse (−X, +Y), alors que le Calme est un relâchement trophotrope récupérateur (+X, −Y).',
+                    'Désir|Dégoût': 'Diagonale de congruence : le Désir converge en synergie positive (+X, +Y), tandis que le Dégoût cumule double charge négative (−X, −Y) par rejet protecteur.',
+                    'Peur|Courage': 'Axe pur de l\'Attente (Y = 0) : Peur anticipe le danger subi (−2, 0, 2) ; Courage mobilise l\'attente positive volontaire (+2, 0, 2) sans attendre la décharge.',
+                    'Joie|Tristesse': 'Axe pur du Contrôle (X = 0) : comme X=0, la loi lexicographique délègue la valence à Y. Tristesse maintient le contrôle en charge rétentive (0, −2, 2) ; Joie libère la décharge (0, +2, 2).'
+                },
+                en: {
+                    'Colère|Calme': 'Allostatic compensation diagonal: identical budget |X|+|Y|=2 with strictly inverted signs. Anger (Colère) is a costly ergotropic compensation (−X, +Y), whereas Calm (Calme) is a restorative trophotropic release (+X, −Y).',
+                    'Désir|Dégoût': 'Congruence diagonal: Desire (Désir) converges in positive synergy (+X, +Y), whereas Disgust (Dégoût) accumulates dual negative charge (−X, −Y) through protective rejection.',
+                    'Peur|Courage': 'Pure Expectation axis (Y = 0): Fear (Peur) anticipates suffered danger (−2, 0, 2); Courage mobilizes voluntary positive expectation (+2, 0, 2).',
+                    'Joie|Tristesse': 'Pure Control axis (X = 0): since X=0, the lexicographic law delegates valence to Y. Sadness (Tristesse) holds control in retentive charge (0, −2, 2); Joy (Joie) releases discharge (0, +2, 2).'
+                }
             };
 
             function renderPairCard(targetId, em) {
                 const el = document.getElementById(targetId);
                 if (!el || !em) return;
+                const en = isEn();
                 const val = T.computeHedonicPolarity(em.x, em.y);
                 const reg = T.computeEnergyRegime(em.x, em.y);
                 const fmtSign = v => (v > 0 ? '+' + v : String(v));
@@ -869,22 +890,25 @@
                     <p class="text-xs text-slate-300 leading-relaxed">${em.desc || ''}</p>
                     <div class="grid grid-cols-2 gap-2 text-xs pt-2">
                         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <div class="text-[10px] font-mono text-slate-400">Valence</div>
+                            <div class="text-[10px] font-mono text-slate-400">${en ? 'Valence' : 'Valence'}</div>
                             <div class="font-bold text-white mt-0.5">${val.label}</div>
                         </div>
                         <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <div class="text-[10px] font-mono text-slate-400">Régime Énergétique</div>
-                            <div class="font-bold mt-0.5" style="color:${reg.color}">${reg.label}</div>
+                            <div class="text-[10px] font-mono text-slate-400">${en ? 'Energetic Regime' : 'Régime Énergétique'}</div>
+                            <div class="font-bold mt-0.5" style="color:${reg.hexColor || '#34d399'}">${reg.label}</div>
                         </div>
                     </div>
                 `;
             }
 
             function selectPair(pairKey) {
+                currentPairKey = pairKey;
+                const en = isEn();
                 const [nameA, nameB] = pairKey.split('|');
                 renderPairCard('pairCardA', M.getByName(nameA));
                 renderPairCard('pairCardB', M.getByName(nameB));
-                document.getElementById('pairInsightBanner').innerHTML = `<strong class="text-emerald-300">Analyse formelle :</strong> ${pairInsights[pairKey] || ''}`;
+                const insights = en ? pairInsights.en : pairInsights.fr;
+                document.getElementById('pairInsightBanner').innerHTML = `<strong class="text-emerald-300">${en ? 'Formal analysis:' : 'Analyse formelle :'}</strong> ${insights[pairKey] || ''}`;
                 document.querySelectorAll('.pair-btn').forEach(btn => {
                     const active = btn.dataset.pair === pairKey;
                     btn.className = active
@@ -905,6 +929,7 @@
                 const container = document.getElementById('dissipStepsContainer');
                 const curveG = document.getElementById('svgDissipCurve');
                 if (!container || !curveG || !dissipPath.length) return;
+                const en = isEn();
 
                 container.innerHTML = '';
                 dissipPath.forEach((step, idx) => {
@@ -933,7 +958,7 @@
                 const fmtSign = v => (v > 0 ? '+' + v : String(v));
                 document.getElementById('dissipStepTitle').textContent = current.name;
                 document.getElementById('dissipStepCoords').textContent = `(${fmtSign(current.x)}, ${fmtSign(current.y)}, Z=${current.z})`;
-                document.getElementById('dissipStepPhase').textContent = `Étape ${activeStepIdx + 1} / ${dissipPath.length} — ${current.phase}`;
+                document.getElementById('dissipStepPhase').textContent = `${en ? 'Step' : 'Étape'} ${activeStepIdx + 1} / ${dissipPath.length} — ${current.phase}`;
                 document.getElementById('dissipStepNote').textContent = current.note;
 
                 // Render SVG polyline across steps
@@ -955,14 +980,15 @@
                 curveG.innerHTML = svgHtml;
             }
 
-            function loadDissipation(startName) {
+            function loadDissipation(startName, keepStep) {
+                currentDissipName = startName;
                 const em = M.getByName(startName) || M.getByName('Désespoir');
                 dissipPath = T.computeDissipationPath(em);
-                activeStepIdx = 0;
+                activeStepIdx = keepStep ? Math.min(activeStepIdx, Math.max(0, dissipPath.length - 1)) : 0;
                 renderDissipationUI();
             }
 
-            document.getElementById('dissipStartSelect').addEventListener('change', e => loadDissipation(e.target.value));
+            document.getElementById('dissipStartSelect').addEventListener('change', e => loadDissipation(e.target.value, false));
             document.getElementById('dissipPrevBtn').addEventListener('click', () => {
                 if (activeStepIdx > 0) { activeStepIdx--; renderDissipationUI(); }
             });
@@ -975,7 +1001,13 @@
             const initId = params.get('id');
             selectZ2Emotion(initId && nodePositions[initId] ? initId : 'Colère');
             selectPair('Colère|Calme');
-            loadDissipation('Désespoir');
+            loadDissipation('Désespoir', false);
+
+            window.addEventListener('cartograffect:lang-change', () => {
+                selectZ2Emotion(currentEmotionName);
+                selectPair(currentPairKey);
+                loadDissipation(currentDissipName, true);
+            });
         })();
 
         if ('serviceWorker' in navigator) {
@@ -984,8 +1016,8 @@
             });
         }
     </script>
-    <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
+    <script src="bilingual_modal.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
 </body>

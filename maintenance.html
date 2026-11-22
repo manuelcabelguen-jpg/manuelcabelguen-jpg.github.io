@@ -147,6 +147,22 @@
             outline: 3px solid #fbbf24;
             outline-offset: 2px;
         }
+        :focus-visible {
+            outline: 2px solid #818cf8;
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto !important;
+            }
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 <body class="cosmic-radial-bg text-slate-200 min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-purple-600 selection:text-white">
@@ -322,7 +338,7 @@
                     <span>→</span>
                 </a>
 
-                <button id="btnCopyEmail" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 font-mono text-xs transition-all flex items-center justify-center gap-2" title="Copier l'adresse courriel">
+                <button type="button" id="btnCopyEmail" class="w-full sm:w-auto px-4 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 font-mono text-xs transition-all flex items-center justify-center gap-2" title="Copier l'adresse courriel">
                     <span id="copyIcon" class="inline-flex items-center">
                         <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                     </span>
@@ -350,7 +366,7 @@
                 </a>
                 <span class="text-slate-700">•</span>
                 <!-- Bouton d'accès réservé -->
-                <button id="btnOpenUnlockModal" class="flex items-center gap-1.5 text-slate-400 hover:text-purple-300 transition-colors font-mono cursor-pointer" title="Accès réservé pour prévisualiser les travaux en cours">
+                <button type="button" id="btnOpenUnlockModal" class="flex items-center gap-1.5 text-slate-400 hover:text-purple-300 transition-colors font-mono cursor-pointer" title="Accès réservé pour prévisualiser les travaux en cours">
                     <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span class="underline decoration-dotted">Accès réservé</span>
                 </button>
@@ -359,10 +375,10 @@
     </footer>
 
     <!-- MODAL DE DÉVERROUILLAGE SÉCURISÉ POUR MANUEL CABELGUEN -->
-    <div id="unlockModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300">
+    <div id="unlockModal" role="dialog" aria-modal="true" aria-labelledby="unlockModalTitle" aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300">
         <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-md w-full border border-purple-500/40 shadow-2xl relative animate-fadeIn">
             <!-- Bouton fermer -->
-            <button id="btnCloseUnlockModal" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-colors">
+            <button type="button" id="btnCloseUnlockModal" aria-label="Fermer la fenêtre d'accès réservé" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm transition-colors">
                 ✕
             </button>
 
@@ -370,7 +386,7 @@
                 <div class="w-12 h-12 rounded-2xl bg-indigo-950/80 border border-indigo-500/40 text-indigo-300 flex items-center justify-center mx-auto mb-3 shadow-inner">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                 </div>
-                <h3 class="font-heading font-bold text-white text-xl">Accès Réservé Chercheur</h3>
+                <h3 id="unlockModalTitle" class="font-heading font-bold text-white text-xl">Accès Réservé Chercheur</h3>
                 <p class="text-xs text-slate-400 mt-1 font-light">
                     Saisissez la clé d'accès pour prévisualiser le site complet en direct.
                 </p>
@@ -443,17 +459,20 @@
                 });
             }
 
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             function draw() {
                 ctx.clearRect(0, 0, width, height);
                 for (let i = 0; i < particles.length; i++) {
                     const p = particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
+                    if (!reduceMotion) {
+                        p.x += p.vx;
+                        p.y += p.vy;
 
-                    if (p.x < 0) p.x = width;
-                    if (p.x > width) p.x = 0;
-                    if (p.y < 0) p.y = height;
-                    if (p.y > height) p.y = 0;
+                        if (p.x < 0) p.x = width;
+                        if (p.x > width) p.x = 0;
+                        if (p.y < 0) p.y = height;
+                        if (p.y > height) p.y = 0;
+                    }
 
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -461,7 +480,7 @@
                     ctx.globalAlpha = p.alpha;
                     ctx.fill();
                 }
-                requestAnimationFrame(draw);
+                if (!reduceMotion) requestAnimationFrame(draw);
             }
             draw();
         })();
@@ -473,6 +492,10 @@
             const checkSvg = '<svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
             btnCopyEmail.addEventListener('click', function () {
                 const email = 'manuelcabelguen@gmail.com';
+                if (!navigator.clipboard || !navigator.clipboard.writeText) {
+                    window.location.href = 'mailto:' + email;
+                    return;
+                }
                 navigator.clipboard.writeText(email).then(() => {
                     const copyText = document.getElementById('copyText');
                     const copyIcon = document.getElementById('copyIcon');
@@ -498,10 +521,19 @@
         const unlockForm = document.getElementById('unlockForm');
         const passphraseInput = document.getElementById('passphraseInput');
         const unlockErrorMsg = document.getElementById('unlockErrorMsg');
+        let lastFocused = null;
+
+        function getModalFocusables() {
+            return Array.from(
+                unlockModal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+            ).filter(el => el.offsetParent !== null);
+        }
 
         function openModal() {
+            lastFocused = document.activeElement;
             unlockModal.classList.remove('hidden');
             unlockModal.classList.add('flex');
+            unlockModal.setAttribute('aria-hidden', 'false');
             passphraseInput.value = '';
             unlockErrorMsg.classList.add('hidden');
             setTimeout(() => passphraseInput.focus(), 100);
@@ -510,14 +542,41 @@
         function closeModal() {
             unlockModal.classList.add('hidden');
             unlockModal.classList.remove('flex');
+            unlockModal.setAttribute('aria-hidden', 'true');
+            const target = (lastFocused && typeof lastFocused.focus === 'function') ? lastFocused : btnOpenUnlockModal;
+            if (target) target.focus();
         }
 
         if (btnOpenUnlockModal) btnOpenUnlockModal.addEventListener('click', openModal);
         if (btnCloseUnlockModal) btnCloseUnlockModal.addEventListener('click', closeModal);
+        if (unlockModal) {
+            unlockModal.addEventListener('click', (e) => {
+                if (e.target === unlockModal) closeModal();
+            });
+        }
 
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !unlockModal.classList.contains('hidden')) {
-                closeModal();
+            if (unlockModal && !unlockModal.classList.contains('hidden')) {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeModal();
+                    return;
+                }
+                if (e.key === 'Tab') {
+                    const focusables = getModalFocusables();
+                    if (!focusables.length) return;
+                    const first = focusables[0];
+                    const last = focusables[focusables.length - 1];
+                    if (e.shiftKey) {
+                        if (document.activeElement === first || !unlockModal.contains(document.activeElement)) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else if (document.activeElement === last || !unlockModal.contains(document.activeElement)) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
             }
             // Raccourci secret : Alt + P
             if (e.altKey && (e.key === 'p' || e.key === 'P')) {

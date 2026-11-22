@@ -306,19 +306,19 @@
 
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">3. Interface Subjective &rarr; Gradient d'Attente (A)</label>
-                            <div class="grid grid-cols-3 gap-2" id="btnGroupAttente">
-                                <button type="button" data-val="neg" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A− (Charge)</button>
-                                <button type="button" data-val="zero" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A0 (Neutre)</button>
-                                <button type="button" data-val="pos" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-sky-600 border border-sky-400 text-white transition-all">A+ (Décharge)</button>
+                            <div id="lblGroupAttente" class="block text-xs font-bold text-sky-300 uppercase tracking-wider mb-2">3. Interface Subjective &rarr; Gradient d'Attente (A)</div>
+                            <div class="grid grid-cols-3 gap-2" id="btnGroupAttente" role="group" aria-labelledby="lblGroupAttente">
+                                <button type="button" data-val="neg" aria-pressed="false" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A− (Charge)</button>
+                                <button type="button" data-val="zero" aria-pressed="false" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">A0 (Neutre)</button>
+                                <button type="button" data-val="pos" aria-pressed="true" class="a-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-sky-600 border border-sky-400 text-white transition-all">A+ (Décharge)</button>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-purple-300 uppercase tracking-wider mb-2">4. Interface Perceptive &rarr; Gradient de Contrôle (C)</label>
-                            <div class="grid grid-cols-3 gap-2" id="btnGroupControle">
-                                <button type="button" data-val="neg" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C− (Charge)</button>
-                                <button type="button" data-val="zero" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C0 (Neutre)</button>
-                                <button type="button" data-val="pos" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-purple-600 border border-purple-400 text-white transition-all">C+ (Décharge)</button>
+                            <div id="lblGroupControle" class="block text-xs font-bold text-purple-300 uppercase tracking-wider mb-2">4. Interface Perceptive &rarr; Gradient de Contrôle (C)</div>
+                            <div class="grid grid-cols-3 gap-2" id="btnGroupControle" role="group" aria-labelledby="lblGroupControle">
+                                <button type="button" data-val="neg" aria-pressed="false" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C− (Charge)</button>
+                                <button type="button" data-val="zero" aria-pressed="false" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-all">C0 (Neutre)</button>
+                                <button type="button" data-val="pos" aria-pressed="true" class="c-btn py-2 px-2 rounded-xl text-xs font-mono font-bold bg-purple-600 border border-purple-400 text-white transition-all">C+ (Décharge)</button>
                             </div>
                         </div>
                         <div class="pt-2 border-t border-slate-800 space-y-2">
@@ -1078,6 +1078,10 @@
 
     <script>
         (function () {
+            const T = window.CartograffectTheory;
+            if (!T) return;
+            const isEn = () => Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+
             const inpMag = document.getElementById('inpMagnitude');
             const inpSensory = document.getElementById('inpSensory');
             const inpResorption = document.getElementById('inpResorption');
@@ -1096,10 +1100,12 @@
                     const isActive = btn.dataset.val === activeVal;
                     btn.className = btn.className.split(' ')[0] + ' py-2 px-2 rounded-xl text-xs font-mono font-bold transition-all ' +
                         (isActive ? activeClass : 'bg-slate-900 border border-slate-700 text-slate-300 hover:text-white');
+                    btn.setAttribute('aria-pressed', String(isActive));
                 });
             }
 
             function renderEngine() {
+                const en = isEn();
                 // Enforce hysteresis invariant: resorption <= sensory
                 if (Number(inpResorption.value) > Number(inpSensory.value)) {
                     inpResorption.value = inpSensory.value;
@@ -1122,13 +1128,13 @@
                     const lblW = document.getElementById('lblWeightA');
                     if (lblW) {
                         lblW.textContent = (!continuous || (2 + depth) < 3)
-                            ? '50% / 50% (Lean strict)'
+                            ? (en ? '50% / 50% (Strict Lean)' : '50% / 50% (Lean strict)')
                             : `${pctA}% A / ${100 - pctA}% C`;
                     }
                 }
 
                 document.getElementById('lblMag').textContent = `${mag} / 10`;
-                document.getElementById('valMagnitudeBadge').textContent = `Magnitude : ${mag}`;
+                document.getElementById('valMagnitudeBadge').textContent = `${en ? 'Magnitude:' : 'Magnitude :'} ${mag}`;
                 document.getElementById('lblSensory').textContent = sens;
                 document.getElementById('lblResorption').textContent = resorp;
                 document.getElementById('lblPrecision').textContent = prec;
@@ -1137,7 +1143,7 @@
                     document.getElementById('lblDepth').textContent = `d=${depth} (Z=${2 + depth})`;
                 }
 
-                const out = window.CartograffectTheory.evaluateEngine({
+                const out = T.evaluateEngine({
                     magnitude: mag,
                     sensoryThreshold: sens,
                     resorptionThreshold: resorp,
@@ -1151,11 +1157,13 @@
                     weightRatioA: pctA / 100
                 });
 
-                document.getElementById('valPrecisionBadge').textContent = out.isAttentionalEngaged ? 'Engagée (Π ≥ seuil)' : 'Sous seuil';
+                document.getElementById('valPrecisionBadge').textContent = out.isAttentionalEngaged
+                    ? (en ? 'Engaged (Π ≥ threshold)' : 'Engagée (Π ≥ seuil)')
+                    : (en ? 'Below threshold' : 'Sous seuil');
                 document.getElementById('valPrecisionBadge').className = 'font-mono font-bold ' + (out.isAttentionalEngaged ? 'text-emerald-300' : 'text-amber-300');
 
-                const aInfo = window.CartograffectTheory.polarityLabel(stateA, 'A');
-                const cInfo = window.CartograffectTheory.polarityLabel(stateC, 'C');
+                const aInfo = T.polarityLabel(stateA, 'A');
+                const cInfo = T.polarityLabel(stateC, 'C');
 
                 const elAttTxt = document.getElementById('svgAttenteTxt');
                 const elCtrlTxt = document.getElementById('svgControleTxt');
@@ -1167,25 +1175,29 @@
                 const elL1Txt = document.getElementById('svgL1Txt');
                 const elStagePill = document.getElementById('svgStagePill');
 
-                if (elAttTxt) elAttTxt.textContent = `Attente : ${aInfo.code} (${aInfo.regime})`;
-                if (elCtrlTxt) elCtrlTxt.textContent = `Contrôle : ${cInfo.code} (${cInfo.regime})`;
-                if (elMagTxt) elMagTxt.textContent = `Mag = ${mag} | Seuil = ${sens}`;
-                if (elPrecTxt) elPrecTxt.textContent = `Π = ${prec} (${out.isAttentionalEngaged ? 'Engagée' : 'Latente'})`;
-                if (elCouplingTxt) elCouplingTxt.textContent = `Couplage (${aInfo.code}, ${cInfo.code})`;
+                if (elAttTxt) elAttTxt.textContent = `${en ? 'Expectation:' : 'Attente :'} ${aInfo.code} (${aInfo.regime})`;
+                if (elCtrlTxt) elCtrlTxt.textContent = `${en ? 'Control:' : 'Contrôle :'} ${cInfo.code} (${cInfo.regime})`;
+                if (elMagTxt) elMagTxt.textContent = `Mag = ${mag} | ${en ? 'Thresh' : 'Seuil'} = ${sens}`;
+                if (elPrecTxt) elPrecTxt.textContent = `Π = ${prec} (${out.isAttentionalEngaged ? (en ? 'Engaged' : 'Engagée') : (en ? 'Latent' : 'Latente')})`;
+                if (elCouplingTxt) elCouplingTxt.textContent = `${en ? 'Coupling' : 'Couplage'} (${aInfo.code}, ${cInfo.code})`;
 
                 const { x, y, z } = out.coords;
                 const fmtCoord = (v) => (v > 0 ? `+${v}` : `${v}`);
                 const protoName = out.matchedPrototype
                     ? out.matchedPrototype.name
-                    : (z === 0 ? 'Veille (Croisement I)' : (out.stage === 'remanence' ? 'État maintenu' : 'Opérateur / Hors lexique'));
+                    : (z === 0
+                        ? (en ? 'Wake (Crossing I)' : 'Veille (Croisement I)')
+                        : (out.stage === 'remanence'
+                            ? (en ? 'Held state' : 'État maintenu')
+                            : (en ? 'Operator / Non-lexicon' : 'Opérateur / Hors lexique')));
 
                 if (elCoordsTxt) {
                     elCoordsTxt.textContent = z === 0
-                        ? 'Base I : Veille (0,0,0)'
-                        : `Possibles : {${fmtCoord(x)}, ${fmtCoord(y)}, Z=${z}}`;
+                        ? (en ? 'Base I: Wake (0,0,0)' : 'Base I : Veille (0,0,0)')
+                        : `${en ? 'Possibles:' : 'Possibles :'} {${fmtCoord(x)}, ${fmtCoord(y)}, Z=${z}}`;
                 }
-                if (elProtoTxt) elProtoTxt.textContent = `État : ${protoName}`;
-                if (elL1Txt) elL1Txt.textContent = z >= 2 ? `|π_A|+|π_C| = ${out.budgetL1}` : (z === 1 ? 'Surprise [0, 0, 1]' : 'Base I : L₁ = 0');
+                if (elProtoTxt) elProtoTxt.textContent = `${en ? 'State:' : 'État :'} ${protoName}`;
+                if (elL1Txt) elL1Txt.textContent = z >= 2 ? `|π_A|+|π_C| = ${out.budgetL1}` : (z === 1 ? 'Surprise [0, 0, 1]' : (en ? 'Base I: L₁ = 0' : 'Base I : L₁ = 0'));
                 if (elStagePill) elStagePill.textContent = out.stageLabel;
 
                 // Highlight canonical #moteur-svg circuits, Croisement I, Croisement II, badges & attentional halo
@@ -1246,7 +1258,7 @@
                 }
 
                 document.getElementById('engineResultTitle').textContent = out.stageLabel;
-                document.getElementById('engineResultBadge').textContent = `État : ${protoName}`;
+                document.getElementById('engineResultBadge').textContent = `${en ? 'State:' : 'État :'} ${protoName}`;
                 document.getElementById('engineResultDesc').textContent = out.stageDesc;
                 document.getElementById('engineRegimeA').textContent = `${aInfo.title} — ${aInfo.desc}`;
                 document.getElementById('engineRegimeC').textContent = `${cInfo.title} — ${cInfo.desc}`;
@@ -1312,6 +1324,7 @@
             });
 
             renderEngine();
+            window.addEventListener('cartograffect:lang-change', renderEngine);
         })();
 
         if ('serviceWorker' in navigator) {
@@ -1320,8 +1333,8 @@
             });
         }
     </script>
-    <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
+    <script src="bilingual_modal.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
 </body>

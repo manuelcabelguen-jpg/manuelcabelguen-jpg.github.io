@@ -389,7 +389,7 @@
                     <tr><td class="py-2 text-sky-300">Z = 4</td><td class="text-white">Réserve</td><td>6</td><td>24 (+1 op.)</td><td>4 axiales, 4 diagonales, 16 latérales</td></tr>
                     <tr><td class="py-2 text-cyan-300">Z = 5</td><td class="text-white">Recul</td><td>8</td><td>32 (+1 op.)</td><td>4 axiales, 4 diagonales, 24 latérales</td></tr>
                     <tr><td class="py-2 text-emerald-300">Z = 6</td><td class="text-white">Saisissement</td><td>10</td><td>40 (+1 op.)</td><td>4 axiales, 4 diagonales, 32 lat&eacute;rales</td></tr>
-                    <tr><td class="py-2 text-rose-300">Z = 7</td><td class="text-white">Vertige ontologique</td><td>12</td><td>48 (+1 op.)</td><td>4 axiales, 4 diagonales, 40 lat&eacute;rales</td></tr>
+                    <tr><td class="py-2 text-rose-300">Z = 7</td><td class="text-white">Suspension</td><td>12</td><td>48 (+1 op.)</td><td>4 axiales, 4 diagonales, 40 lat&eacute;rales</td></tr>
                 </tbody>
             </table>
 
@@ -487,6 +487,12 @@
     <script>
         (function () {
             const svg = document.getElementById('coreSvg');
+            const M = window.CartograffectModel;
+            const T = window.CartograffectTheory;
+            if (!svg || !M || !T) return;
+
+            const isEn = () => Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+
             let currentZ = 2;
             let selectedPoint = { x: 1, y: 1, z: 2 };
 
@@ -496,23 +502,31 @@
             const qy = params.get('y');
             if (qz !== null && !isNaN(Number(qz)) && Number(qz) >= 0 && Number(qz) <= 7) {
                 currentZ = Number(qz);
-                if (qx !== null && qy !== null && !isNaN(Number(qx)) && !isNaN(Number(qy))) {
-                    selectedPoint = { x: Number(qx), y: Number(qy), z: currentZ };
-                } else {
-                    const firstOnStratum = window.CartograffectModel.getByStrata(currentZ)[0];
-                    if (firstOnStratum) selectedPoint = { x: firstOnStratum.x, y: firstOnStratum.y, z: firstOnStratum.z };
-                }
+            }
+            if (qx !== null && qy !== null && !isNaN(Number(qx)) && !isNaN(Number(qy))) {
+                selectedPoint = { x: Number(qx), y: Number(qy), z: currentZ };
+            } else {
+                const itemsAtZ = M.getByStrata(currentZ);
+                const def = itemsAtZ.find(i => i.type === 'diagonal') || itemsAtZ[0];
+                if (def) selectedPoint = { x: def.x, y: def.y, z: def.z };
             }
 
             function drawCoreCrown(z) {
-                const R = window.CartograffectTheory.crownRadius(z);
-                const count = window.CartograffectTheory.crownCount(z);
-                const items = window.CartograffectModel.getByStrata(z);
+                const en = isEn();
+                const R = T.crownRadius(z);
+                const count = T.crownCount(z);
+                const items = M.getByStrata(z);
 
-                document.getElementById('crownHeaderTitle').textContent =
-                    z < 2
-                        ? `Cône d'Amorçage Z = ${z} • Rayon R = 0 (Opérateur central unique)`
-                        : `Coupe Z = ${z} • |X| + |Y| = ${R} (${count} positions + 1 opérateur)`;
+                const crownTitle = document.getElementById('crownHeaderTitle');
+                if (crownTitle) {
+                    crownTitle.textContent = z < 2
+                        ? (en
+                            ? `Priming Cone Z = ${z} • Radius R = 0 (Unique central operator)`
+                            : `Cône d'Amorçage Z = ${z} • Rayon R = 0 (Opérateur central unique)`)
+                        : (en
+                            ? `Cross-Section Z = ${z} • |X| + |Y| = ${R} (${count} positions + 1 operator)`
+                            : `Coupe Z = ${z} • |X| + |Y| = ${R} (${count} positions + 1 opérateur)`);
+                }
 
                 let html = '';
                 // Grid lines
@@ -523,10 +537,10 @@
                 // Main Axes (SVG Y inverted relative to math Y)
                 html += `<line x1="-13.5" y1="0" x2="13.5" y2="0" stroke="#475569" stroke-width="0.14"/>`;
                 html += `<line x1="0" y1="-13.5" x2="0" y2="13.5" stroke="#475569" stroke-width="0.14"/>`;
-                html += `<text x="0" y="-13.8" fill="#c084fc" font-size="0.8" font-weight="bold" text-anchor="middle">+Y Contrôle (Action)</text>`;
-                html += `<text x="0" y="14.5" fill="#94a3b8" font-size="0.8" font-weight="bold" text-anchor="middle">−Y Contrôle (Repli)</text>`;
-                html += `<text x="13.6" y="0.3" fill="#38bdf8" font-size="0.75" font-weight="bold" text-anchor="end">+X Attente</text>`;
-                html += `<text x="-13.6" y="0.3" fill="#94a3b8" font-size="0.75" font-weight="bold" text-anchor="start">−X Attente</text>`;
+                html += `<text x="0" y="-13.8" fill="#c084fc" font-size="0.8" font-weight="bold" text-anchor="middle">${en ? '+Y Control (Action)' : '+Y Contrôle (Action)'}</text>`;
+                html += `<text x="0" y="14.5" fill="#94a3b8" font-size="0.8" font-weight="bold" text-anchor="middle">${en ? '−Y Control (Withdrawal)' : '−Y Contrôle (Repli)'}</text>`;
+                html += `<text x="13.6" y="0.3" fill="#38bdf8" font-size="0.75" font-weight="bold" text-anchor="end">${en ? '+X Expectation' : '+X Attente'}</text>`;
+                html += `<text x="-13.6" y="0.3" fill="#94a3b8" font-size="0.75" font-weight="bold" text-anchor="start">${en ? '−X Expectation' : '−X Attente'}</text>`;
 
                 // L1 Diamond if Z >= 2
                 if (R > 0) {
@@ -539,15 +553,16 @@
                     const sy = -item.y; // Invert Y for SVG
                     const isSel = selectedPoint && selectedPoint.x === item.x && selectedPoint.y === item.y && selectedPoint.z === item.z;
                     const ring = isSel ? `<circle cx="${sx}" cy="${sy}" r="0.95" fill="none" stroke="#ffffff" stroke-width="0.14" stroke-dasharray="0.25 0.15"/>` : '';
+                    const a11yAttrs = `tabindex="0" role="button" aria-label="${item.name} (${item.x}, ${item.y}, Z=${item.z})"`;
 
                     if (item.type === 'operator') {
-                        html += `${ring}<circle class="core-node cursor-pointer" data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.62" fill="#8b5cf6" stroke="#ffffff" stroke-width="0.12"/>`;
+                        html += `${ring}<circle class="core-node cursor-pointer" ${a11yAttrs} data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.62" fill="#8b5cf6" stroke="#ffffff" stroke-width="0.12"/>`;
                     } else if (item.type === 'axial') {
-                        html += `${ring}<circle class="core-node cursor-pointer" data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.58" fill="#070b14" stroke="#38bdf8" stroke-width="0.18"/>`;
+                        html += `${ring}<circle class="core-node cursor-pointer" ${a11yAttrs} data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.58" fill="#070b14" stroke="#38bdf8" stroke-width="0.18"/>`;
                     } else if (item.type === 'diagonal') {
-                        html += `${ring}<circle class="core-node cursor-pointer" data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.56" fill="#f472b6" stroke="#fdf2f8" stroke-width="0.1"/>`;
+                        html += `${ring}<circle class="core-node cursor-pointer" ${a11yAttrs} data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" cx="${sx}" cy="${sy}" r="0.56" fill="#f472b6" stroke="#fdf2f8" stroke-width="0.1"/>`;
                     } else {
-                        html += `${ring}<rect class="core-node cursor-pointer" data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" x="${sx - 0.36}" y="${sy - 0.36}" width="0.72" height="0.72" transform="rotate(45 ${sx} ${sy})" fill="#34d399" stroke="#064e3b" stroke-width="0.08"/>`;
+                        html += `${ring}<rect class="core-node cursor-pointer" ${a11yAttrs} data-x="${item.x}" data-y="${item.y}" data-z="${item.z}" x="${sx - 0.36}" y="${sy - 0.36}" width="0.72" height="0.72" transform="rotate(45 ${sx} ${sy})" fill="#34d399" stroke="#064e3b" stroke-width="0.08"/>`;
                     }
 
                     // Coordinate label for Z <= 3 or selected
@@ -561,51 +576,55 @@
 
                 svg.innerHTML = html;
 
+                const selectNode = (el) => {
+                    selectedPoint = {
+                        x: Number(el.dataset.x),
+                        y: Number(el.dataset.y),
+                        z: Number(el.dataset.z)
+                    };
+                    updateInspector(selectedPoint);
+                    drawCoreCrown(currentZ);
+                };
+
                 svg.querySelectorAll('.core-node').forEach(el => {
-                    el.addEventListener('click', () => {
-                        selectedPoint = {
-                            x: Number(el.dataset.x),
-                            y: Number(el.dataset.y),
-                            z: Number(el.dataset.z)
-                        };
-                        updateInspector(selectedPoint);
-                        drawCoreCrown(currentZ);
+                    el.addEventListener('click', () => selectNode(el));
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            selectNode(el);
+                        }
                     });
                 });
             }
 
             function updateInspector(pt) {
+                const en = isEn();
                 const { x, y, z } = pt;
-                const R = window.CartograffectTheory.crownRadius(z);
+                const R = T.crownRadius(z);
                 const l1 = Math.abs(x) + Math.abs(y);
-                const typ = window.CartograffectTheory.geometryType(x, y);
+                const typ = T.geometryType(x, y);
 
                 const xSignStr = x > 0 ? '+' + x : String(x);
                 const ySignStr = y > 0 ? '+' + y : String(y);
                 document.getElementById('coreInspCoords').textContent = `(X = ${xSignStr}, Y = ${ySignStr}, Z = ${z})`;
-
-                const typeLabels = {
-                    operator: 'Opérateur Central',
-                    axial: 'Position Axiale',
-                    diagonal: 'Position Diagonale',
-                    lateral: 'Position Latérale'
-                };
-                document.getElementById('coreInspType').textContent = typeLabels[typ] || typ;
+                document.getElementById('coreInspType').textContent = T.geometryLabel(typ);
                 document.getElementById('coreInspL1').textContent = `|X| + |Y| = ${l1}`;
 
                 const stabilityEl = document.getElementById('coreInspStability');
                 if (typ === 'operator') {
-                    stabilityEl.textContent = z === 0 ? 'Équilibre basal stable' : 'Suspension d’orientation';
+                    stabilityEl.textContent = z === 0
+                        ? (en ? 'Stable basal equilibrium' : 'Équilibre basal stable')
+                        : (en ? 'Orientation suspension' : 'Suspension d’orientation');
                 } else if (typ === 'axial') {
-                    stabilityEl.textContent = 'Instable (1 axe actif)';
+                    stabilityEl.textContent = en ? 'Unstable (1 active axis)' : 'Instable (1 axe actif)';
                 } else if (typ === 'diagonal') {
-                    stabilityEl.textContent = 'Attracteur local métastable';
+                    stabilityEl.textContent = en ? 'Metastable local attractor' : 'Attracteur local métastable';
                 } else {
-                    stabilityEl.textContent = 'Dominance asymétrique';
+                    stabilityEl.textContent = en ? 'Asymmetric dominance' : 'Dominance asymétrique';
                 }
 
-                const xReg = x > 0 ? `Décharge (+${x})` : (x < 0 ? `Charge (${x})` : 'Neutre (0)');
-                const yReg = y > 0 ? `Décharge (+${y})` : (y < 0 ? `Charge (${y})` : 'Neutre (0)');
+                const xReg = x > 0 ? (en ? `Discharge (+${x})` : `Décharge (+${x})`) : (x < 0 ? `Charge (${x})` : (en ? 'Neutral (0)' : 'Neutre (0)'));
+                const yReg = y > 0 ? (en ? `Discharge (+${y})` : `Décharge (+${y})`) : (y < 0 ? `Charge (${y})` : (en ? 'Neutral (0)' : 'Neutre (0)'));
                 document.getElementById('coreInspXRegime').textContent = xReg;
                 document.getElementById('coreInspYRegime').textContent = yReg;
 
@@ -616,15 +635,27 @@
                 const noteEl = document.getElementById('coreInspNote');
                 if (typ === 'operator') {
                     noteEl.textContent = z === 0
-                        ? 'Point de Veille (0,0,0) : aucune coordonnée X ou Y n’est encore polarisée. Unique attracteur stable de repos homéostatique.'
-                        : `Opérateur central de la strate Z=${z} : l’attention est engagée sans que l’orientation entre X et Y ne soit encore tranchée sur la couronne.`;
+                        ? (en
+                            ? 'Wake Point (0,0,0): neither X nor Y is polarized yet. Unique stable attractor of basal homeostatic rest.'
+                            : 'Point de Veille (0,0,0) : aucune coordonnée X ou Y n’est encore polarisée. Unique attracteur stable de repos homéostatique.')
+                        : (en
+                            ? `Central operator of stratum Z=${z}: attention is engaged without resolving the orientation between X and Y on the crown yet.`
+                            : `Opérateur central de la strate Z=${z} : l’attention est engagée sans que l’orientation entre X et Y ne soit encore tranchée sur la couronne.`);
                 } else if (typ === 'axial') {
-                    noteEl.textContent = 'Une seule dimension porte toute l’amplitude de la couronne tandis que l’autre demeure sous son seuil de saillance. Dès que la dimension neutre est tranchée, la configuration tend à basculer vers une position adjacente.';
+                    noteEl.textContent = en
+                        ? 'A single dimension carries the full crown amplitude while the other stays below its salience threshold. Once the neutral dimension is resolved, the configuration shifts toward an adjacent position.'
+                        : 'Une seule dimension porte toute l’amplitude de la couronne tandis que l’autre demeure sous son seuil de saillance. Dès que la dimension neutre est tranchée, la configuration tend à basculer vers une position adjacente.';
                 } else if (typ === 'diagonal') {
-                    noteEl.textContent = 'Partage équitable du budget attentionnel entre révisabilité interne (X) et contrôlabilité de la situation (Y). Constitue un attracteur local métastable.';
+                    noteEl.textContent = en
+                        ? 'Equal split of the attentional budget between internal revisability (X) and perceived controllability (Y). Forms a metastable local attractor.'
+                        : 'Partage équitable du budget attentionnel entre révisabilité interne (X) et contrôlabilité de la situation (Y). Constitue un attracteur local métastable.';
                 } else {
-                    const dom = Math.abs(x) > Math.abs(y) ? 'Attente (Axe X)' : 'Contrôle (Axe Y)';
-                    noteEl.textContent = `Position controlatérale asymétrique dominée par ${dom}, où une dimension prédomine sans annuler l’autre (|X|=${Math.abs(x)}, |Y|=${Math.abs(y)}).`;
+                    const dom = Math.abs(x) > Math.abs(y)
+                        ? (en ? 'Expectation (X Axis)' : 'Attente (Axe X)')
+                        : (en ? 'Control (Y Axis)' : 'Contrôle (Axe Y)');
+                    noteEl.textContent = en
+                        ? `Asymmetric contralateral position dominated by ${dom}, where one dimension prevails without cancelling the other (|X|=${Math.abs(x)}, |Y|=${Math.abs(y)}).`
+                        : `Position controlatérale asymétrique dominée par ${dom}, où une dimension prédomine sans annuler l’autre (|X|=${Math.abs(x)}, |Y|=${Math.abs(y)}).`;
                 }
             }
 
@@ -637,23 +668,13 @@
                         b.className = 'z-btn px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-colors ' +
                             (active ? 'bg-sky-600 text-white border border-sky-400' : 'bg-slate-800 text-slate-300 border border-slate-700 hover:text-white');
                     });
-                    const items = window.CartograffectModel.getByStrata(currentZ);
+                    const items = M.getByStrata(currentZ);
                     const def = items.find(i => i.type === 'diagonal') || items[0];
-                    selectedPoint = { x: def.x, y: def.y, z: def.z };
+                    if (def) selectedPoint = { x: def.x, y: def.y, z: def.z };
                     updateInspector(selectedPoint);
                     drawCoreCrown(currentZ);
                 });
             });
-
-            // Initialize selected point from URL if provided
-            const qx = params.get('x'), qy = params.get('y');
-            if (qx !== null && qy !== null && !isNaN(Number(qx)) && !isNaN(Number(qy))) {
-                selectedPoint = { x: Number(qx), y: Number(qy), z: currentZ };
-            } else {
-                const items = window.CartograffectModel.getByStrata(currentZ);
-                const def = items.find(i => i.type === 'diagonal') || items[0];
-                selectedPoint = { x: def.x, y: def.y, z: def.z };
-            }
 
             // Sync active Z button
             document.querySelectorAll('#crownSelector .z-btn').forEach(b => {
@@ -665,13 +686,20 @@
             updateInspector(selectedPoint);
             drawCoreCrown(currentZ);
 
+            window.addEventListener('cartograffect:lang-change', () => {
+                updateInspector(selectedPoint);
+                drawCoreCrown(currentZ);
+            });
+
             // Arbitrage slider
             const arbSlider = document.getElementById('arbitrageSlider');
-            arbSlider.addEventListener('input', () => {
-                const y = Number(arbSlider.value);
-                document.getElementById('arbitrageY').textContent = y;
-                document.getElementById('arbitrageX').textContent = 6 - y;
-            });
+            if (arbSlider) {
+                arbSlider.addEventListener('input', () => {
+                    const y = Number(arbSlider.value);
+                    document.getElementById('arbitrageY').textContent = y;
+                    document.getElementById('arbitrageX').textContent = 6 - y;
+                });
+            }
         })();
 
         if ('serviceWorker' in navigator) {
@@ -680,8 +708,8 @@
             });
         }
     </script>
-    <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
+    <script src="bilingual_modal.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
 </body>

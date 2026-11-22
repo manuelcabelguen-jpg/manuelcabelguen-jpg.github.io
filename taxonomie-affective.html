@@ -30,15 +30,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- D3.js, Three.js, Modèle & Théorie Cartograffect -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script defer src="https://d3js.org/d3.v7.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="cartograffect_model.js"></script>
     <script src="cartograffect_theory.js"></script>
     <!-- KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof katex!=='undefined'&&typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="assets/tailwind.config.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -286,7 +286,7 @@
                             <option value="4">Z=4 — Réserve (25)</option>
                             <option value="5">Z=5 — Recul (33)</option>
                             <option value="6">Z=6 — Saisissement (41)</option>
-                            <option value="7">Z=7 — Vertige ontologique (49)</option>
+                            <option value="7">Z=7 — Suspension (49)</option>
                         </select>
                     </div>
 
@@ -675,773 +675,855 @@
 
     <script>
         (function() {
-            if (window.CartograffectTheory) {
-                window.CartograffectTheory.initNavMenus();
-            }
+            const isEn = () => Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+            const prefersReducedMotion = () => Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-            const M = window.CartograffectModel;
-            const T = window.CartograffectTheory;
-            if (!M || !T) return;
+            function bootTaxonomy() {
+                const M = window.CartograffectModel;
+                const T = window.CartograffectTheory;
+                if (!M || !T) return;
 
-            const allEmotions = M.emotions || [];
-            const fmtSign = v => (v > 0 ? '+' + v : String(v));
+                const allEmotions = M.emotions || [];
+                const fmtSign = v => (v > 0 ? '+' + v : String(v));
 
-            // State
-            let selectedEmotion = M.getByName('Colère') || allEmotions[0];
-            let activePathSteps = [];
-            const filters = { stratum: 'all', group: 'all', geometry: 'all' };
+                // State
+                let selectedEmotion = M.getByName('Colère') || allEmotions[0];
+                let activePathSteps = [];
+                let activeScenarioPresetKey = 'cafe';
+                let isCustomScenarioActive = false;
+                const filters = { stratum: 'all', group: 'all', geometry: 'all' };
 
-            // Populate Datalist
-            const datalist = document.getElementById('emotionDatalist');
-            if (datalist) {
-                allEmotions.forEach(em => {
-                    const opt = document.createElement('option');
-                    opt.value = em.name;
-                    opt.label = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z}) — ${em.group}`;
-                    datalist.appendChild(opt);
-                });
-            }
-
-            // Populate 8 Strata Cards (#strate-0 .. #strate-7)
-            const strataGrid = document.getElementById('strataCardsGrid');
-            if (strataGrid && Array.isArray(M.strata)) {
-                M.strata.forEach(st => {
-                    const totalAtZ = M.getByStrata(st.z).length;
-                    const card = document.createElement('button');
-                    card.type = 'button';
-                    card.id = `strate-${st.z}`;
-                    card.className = 'text-left p-4 rounded-2xl bg-cosmic-850 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 transition-all space-y-2 cursor-pointer';
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-pink-950/70 text-pink-300 border border-pink-500/30">Z = ${st.z}</span>
-                            <span class="text-[11px] font-mono text-slate-400">L₁=${st.budget} &bull; ${totalAtZ} état${totalAtZ > 1 ? 's' : ''}</span>
-                        </div>
-                        <div class="text-sm font-bold text-white">${st.name}</div>
-                        <div class="text-[11px] font-mono text-purple-300">Opérateur : ${st.operator}</div>
-                        <p class="text-xs text-slate-400 leading-relaxed">${st.desc}</p>
-                    `;
-                    card.addEventListener('click', () => {
-                        document.getElementById('filterStratum').value = String(st.z);
-                        filters.stratum = String(st.z);
-                        applyFiltersAndRender();
-                        const op = M.getByName(st.operator);
-                        if (op) handleEmotionSelect(op);
-                        document.getElementById('explorer-176').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Populate Datalist
+                const datalist = document.getElementById('emotionDatalist');
+                if (datalist) {
+                    allEmotions.forEach(em => {
+                        const opt = document.createElement('option');
+                        opt.value = em.name;
+                        opt.label = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z}) — ${em.group}`;
+                        datalist.appendChild(opt);
                     });
-                    strataGrid.appendChild(card);
-                });
-            }
-
-            function matchesFilters(em) {
-                if (filters.stratum !== 'all' && String(em.z) !== filters.stratum) return false;
-                if (filters.group !== 'all') {
-                    if (filters.group === 'Centre') {
-                        if (em.type !== 'operator') return false;
-                    } else if (em.group !== filters.group) {
-                        return false;
-                    }
-                }
-                if (filters.geometry !== 'all' && em.type !== filters.geometry) return false;
-                return true;
-            }
-
-            // ===================== 2D D3 MATRIX =====================
-            const chartHost = document.getElementById('chart-2d');
-            const tooltip = document.getElementById('tooltip2D');
-            const size2D = 720;
-            const margin2D = 48;
-            const maxCoord = 13;
-
-            const svg = d3.select(chartHost)
-                .append('svg')
-                .attr('viewBox', `0 0 ${size2D} ${size2D}`)
-                .attr('role', 'img')
-                .attr('aria-label', 'Carte 2D D3 des 176 états affectifs Cartograffect');
-
-            const defs = svg.append('defs');
-            defs.append('marker')
-                .attr('id', 'path-arrow')
-                .attr('viewBox', '0 0 10 10')
-                .attr('refX', 8)
-                .attr('refY', 5)
-                .attr('markerWidth', 6)
-                .attr('markerHeight', 6)
-                .attr('orient', 'auto-start-reverse')
-                .append('path')
-                .attr('d', 'M 0 1.5 L 9 5 L 0 8.5 z')
-                .attr('fill', '#fbbf24');
-
-            const xScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([margin2D, size2D - margin2D]);
-            const yScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([size2D - margin2D, margin2D]);
-
-            // Subtle dark canvas background
-            svg.append('rect')
-                .attr('width', size2D)
-                .attr('height', size2D)
-                .attr('fill', '#070b14');
-
-            // Manhattan L1 diamonds for Z=2..7 (radii 2,4,6,8,10,12)
-            const gridG = svg.append('g');
-            [2, 4, 6, 8, 10, 12].forEach((r, idx) => {
-                const pts = [
-                    [xScale(0), yScale(r)],
-                    [xScale(r), yScale(0)],
-                    [xScale(0), yScale(-r)],
-                    [xScale(-r), yScale(0)]
-                ].map(p => p.join(',')).join(' ');
-                gridG.append('polygon')
-                    .attr('points', pts)
-                    .attr('fill', 'none')
-                    .attr('stroke', '#1e293b')
-                    .attr('stroke-width', r === 2 ? 1.5 : 1)
-                    .attr('stroke-dasharray', r === 2 ? 'none' : '4,4');
-                gridG.append('text')
-                    .attr('x', xScale(0) + 4)
-                    .attr('y', yScale(r) - 4)
-                    .attr('fill', '#475569')
-                    .attr('font-size', '10px')
-                    .attr('font-family', 'Fira Code, monospace')
-                    .text(`Z=${idx + 2}`);
-            });
-
-            // Diagonal guidelines
-            gridG.append('line')
-                .attr('x1', xScale(-12)).attr('y1', yScale(-12))
-                .attr('x2', xScale(12)).attr('y2', yScale(12))
-                .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
-            gridG.append('line')
-                .attr('x1', xScale(-12)).attr('y1', yScale(12))
-                .attr('x2', xScale(12)).attr('y2', yScale(-12))
-                .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
-
-            // Axes
-            gridG.append('line')
-                .attr('x1', xScale(-maxCoord + 0.5)).attr('y1', yScale(0))
-                .attr('x2', xScale(maxCoord - 0.5)).attr('y2', yScale(0))
-                .attr('stroke', '#475569').attr('stroke-width', 1.5);
-            gridG.append('line')
-                .attr('x1', xScale(0)).attr('y1', yScale(-maxCoord + 0.5))
-                .attr('x2', xScale(0)).attr('y2', yScale(maxCoord - 0.5))
-                .attr('stroke', '#475569').attr('stroke-width', 1.5);
-
-            // Axis Titles
-            gridG.append('text').attr('x', xScale(0)).attr('y', 22).attr('text-anchor', 'middle').attr('fill', '#7dd3fc').attr('font-size', '12px').attr('font-weight', '700').text('Y+ (DÉCHARGE DE CONTRÔLE)');
-            gridG.append('text').attr('x', xScale(0)).attr('y', size2D - 14).attr('text-anchor', 'middle').attr('fill', '#60a5fa').attr('font-size', '12px').attr('font-weight', '700').text('Y− (CHARGE DE CONTRÔLE)');
-            gridG.append('text').attr('x', 16).attr('y', yScale(0) - 8).attr('text-anchor', 'start').attr('fill', '#fb7185').attr('font-size', '11px').attr('font-weight', '700').text('X− Attente');
-            gridG.append('text').attr('x', size2D - 16).attr('y', yScale(0) - 8).attr('text-anchor', 'end').attr('fill', '#34d399').attr('font-size', '11px').attr('font-weight', '700').text('Attente X+');
-
-            const oppVectorG = svg.append('g').attr('class', 'opposite-vector-layer');
-            const pathLayerG = svg.append('g').attr('class', 'emotional-path-layer');
-            const nodesG = svg.append('g').attr('class', 'nodes-layer');
-            const labelsG = svg.append('g').attr('class', 'labels-layer');
-
-            function nodeColor(em) {
-                return (M.groupColors && M.groupColors[em.group]) ? M.groupColors[em.group] : '#c084fc';
-            }
-
-            const circles = nodesG.selectAll('circle.em-node')
-                .data(allEmotions)
-                .enter()
-                .append('circle')
-                .attr('class', 'em-node')
-                .attr('cx', d => xScale(d.x))
-                .attr('cy', d => yScale(d.y))
-                .attr('r', d => d.type === 'operator' ? 4 + d.z * 0.5 : (d.z === 2 ? 7 : 5.2))
-                .attr('fill', d => nodeColor(d))
-                .attr('stroke', '#070b14')
-                .attr('stroke-width', 1.4)
-                .style('cursor', 'pointer')
-                .on('mouseover', function(event, d) {
-                    tooltip.style.opacity = '1';
-                    tooltip.innerHTML = `<div class="font-bold text-white">${d.name}</div><div class="font-mono text-[11px] text-pink-300">(${fmtSign(d.x)}, ${fmtSign(d.y)}, Z=${d.z})</div><div class="text-[11px] text-slate-400">${d.group} &bull; ${T.geometryType(d.x, d.y).label}</div>`;
-                })
-                .on('mousemove', function(event) {
-                    tooltip.style.left = `${event.clientX + 14}px`;
-                    tooltip.style.top = `${event.clientY - 12}px`;
-                })
-                .on('mouseout', function() {
-                    tooltip.style.opacity = '0';
-                })
-                .on('click', function(event, d) {
-                    handleEmotionSelect(d);
-                });
-
-            // Selective readable labels (Z=2 prototypes + selected + path endpoints)
-            function update2DVisuals() {
-                let visibleCount = 0;
-                const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
-
-                circles
-                    .attr('opacity', d => {
-                        const ok = matchesFilters(d);
-                        if (ok) visibleCount++;
-                        if (selectedEmotion && d.id === selectedEmotion.id) return 1;
-                        if (opp && d.id === opp.id) return 0.95;
-                        return ok ? (d.type === 'operator' ? 0.55 : 0.92) : 0.1;
-                    })
-                    .attr('r', d => {
-                        if (selectedEmotion && d.id === selectedEmotion.id) return 9.5;
-                        if (opp && d.id === opp.id) return 8;
-                        return d.type === 'operator' ? 4 + d.z * 0.45 : (d.z === 2 ? 7 : 5.2);
-                    })
-                    .attr('stroke', d => {
-                        if (selectedEmotion && d.id === selectedEmotion.id) return '#ffffff';
-                        if (opp && d.id === opp.id) return '#fbbf24';
-                        return '#070b14';
-                    })
-                    .attr('stroke-width', d => {
-                        if (selectedEmotion && d.id === selectedEmotion.id) return 2.8;
-                        if (opp && d.id === opp.id) return 2.2;
-                        return 1.3;
-                    });
-
-                document.getElementById('visibleCountBadge').textContent = visibleCount;
-
-                // Antagonist link
-                oppVectorG.selectAll('*').remove();
-                if (selectedEmotion && opp && !(selectedEmotion.x === 0 && selectedEmotion.y === 0)) {
-                    oppVectorG.append('line')
-                        .attr('x1', xScale(selectedEmotion.x))
-                        .attr('y1', yScale(selectedEmotion.y))
-                        .attr('x2', xScale(opp.x))
-                        .attr('y2', yScale(opp.y))
-                        .attr('stroke', '#fbbf24')
-                        .attr('stroke-width', 1.8)
-                        .attr('stroke-dasharray', '5,4')
-                        .attr('opacity', 0.85);
                 }
 
-                // Labels for filtered view or selected + opposite + Z=2 prototypes
-                labelsG.selectAll('*').remove();
-                const showSingleStratum = filters.stratum !== 'all';
-                allEmotions.forEach(d => {
-                    const isSel = selectedEmotion && d.id === selectedEmotion.id;
-                    const isOpp = opp && d.id === opp.id;
-                    const shouldLabel = isSel || isOpp || (d.z === 2 && d.type !== 'operator' && matchesFilters(d)) || (showSingleStratum && matchesFilters(d) && d.type !== 'operator');
-                    if (shouldLabel) {
-                        labelsG.append('text')
-                            .attr('x', xScale(d.x))
-                            .attr('y', yScale(d.y) - (isSel ? 13 : 10))
-                            .attr('text-anchor', 'middle')
-                            .attr('fill', isSel ? '#ffffff' : (isOpp ? '#fde68a' : '#cbd5e1'))
-                            .attr('font-size', isSel ? '12px' : '10px')
-                            .attr('font-weight', isSel ? '700' : '500')
-                            .style('pointer-events', 'none')
-                            .text(d.name);
-                    }
-                });
-            }
-
-            // ===================== 3D THREE.JS PYRAMID =====================
-            let scene3D, camera3D, renderer3D, controls3D, clickableSpheres = [], pathLine3D = null, highlightRing3D = null;
-            const sphereMap3D = new Map();
-            const container3D = document.getElementById('pyramid-3d');
-
-            function coordTo3D(em) {
-                const xyScale = 1.65;
-                const zScale = 2.6;
-                return new THREE.Vector3(em.x * xyScale, (em.z - 3.5) * zScale, -em.y * xyScale);
-            }
-
-            function init3DVisualization() {
-                if (!container3D || typeof THREE === 'undefined') return;
-
-                const width = container3D.clientWidth || 480;
-                const height = container3D.clientHeight || 400;
-
-                scene3D = new THREE.Scene();
-                scene3D.background = new THREE.Color(0x070b14);
-
-                camera3D = new THREE.PerspectiveCamera(45, width / height, 0.1, 300);
-                camera3D.position.set(22, 14, 26);
-
-                renderer3D = new THREE.WebGLRenderer({ antialias: true });
-                renderer3D.setSize(width, height);
-                renderer3D.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-                container3D.appendChild(renderer3D.domElement);
-
-                if (THREE.OrbitControls) {
-                    controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
-                    controls3D.enableDamping = true;
-                    controls3D.dampingFactor = 0.06;
-                    controls3D.enableZoom = false;
-                    controls3D.minDistance = 6;
-                    controls3D.maxDistance = 65;
-                    const initCamPos = camera3D.position.clone();
-                    const initTarget = controls3D.target.clone();
-                    const applyZoomFactor = (factor) => {
-                        const offset = camera3D.position.clone().sub(controls3D.target).multiplyScalar(factor);
-                        const len = offset.length();
-                        if (len < 6) offset.setLength(6);
-                        if (len > 65) offset.setLength(65);
-                        camera3D.position.copy(controls3D.target).add(offset);
-                        controls3D.update();
-                    };
-                    renderer3D.domElement.addEventListener('wheel', (e) => {
-                        if (!e.ctrlKey && !e.metaKey) return;
-                        e.preventDefault();
-                        applyZoomFactor(e.deltaY > 0 ? 1.12 : 0.89);
-                    }, { passive: false });
-                    window.zoomTaxonomy3D = applyZoomFactor;
-                    window.resetTaxonomy3D = () => {
-                        camera3D.position.copy(initCamPos);
-                        controls3D.target.copy(initTarget);
-                        controls3D.update();
-                    };
-                }
-
-                // Lighting
-                scene3D.add(new THREE.AmbientLight(0xffffff, 0.72));
-                const dirLight = new THREE.DirectionalLight(0xf9a8d4, 0.9);
-                dirLight.position.set(18, 28, 16);
-                scene3D.add(dirLight);
-
-                // Central vertical Z axis spindle (Z=0..7)
-                const spindleGeo = new THREE.BufferGeometry().setFromPoints([
-                    new THREE.Vector3(0, (0 - 3.5) * 2.6, 0),
-                    new THREE.Vector3(0, (7 - 3.5) * 2.6, 0)
-                ]);
-                scene3D.add(new THREE.Line(spindleGeo, new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.7 })));
-
-                // Manhattan diamond wireframe per Z=2..7
-                for (let z = 2; z <= 7; z++) {
-                    const r = (2 * z - 2) * 1.65;
-                    const yPos = (z - 3.5) * 2.6;
-                    const diamondGeo = new THREE.BufferGeometry().setFromPoints([
-                        new THREE.Vector3(0, yPos, -r),
-                        new THREE.Vector3(r, yPos, 0),
-                        new THREE.Vector3(0, yPos, r),
-                        new THREE.Vector3(-r, yPos, 0),
-                        new THREE.Vector3(0, yPos, -r)
-                    ]);
-                    scene3D.add(new THREE.Line(diamondGeo, new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.65 })));
-                }
-
-                // Create spheres for all 176 emotions
-                const baseGeo = new THREE.SphereGeometry(0.42, 16, 16);
-                allEmotions.forEach(em => {
-                    const mat = new THREE.MeshStandardMaterial({
-                        color: new THREE.Color(nodeColor(em)),
-                        roughness: 0.35,
-                        metalness: 0.15,
-                        transparent: true,
-                        opacity: 0.92
-                    });
-                    const mesh = new THREE.Mesh(baseGeo, mat);
-                    mesh.position.copy(coordTo3D(em));
-                    mesh.userData = { emotion: em };
-                    if (em.type === 'operator') {
-                        mesh.scale.setScalar(1.2);
-                    }
-                    scene3D.add(mesh);
-                    clickableSpheres.push(mesh);
-                    sphereMap3D.set(em.id, mesh);
-                });
-
-                // Highlight halo ring
-                const ringGeo = new THREE.TorusGeometry(0.78, 0.08, 12, 32);
-                const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                highlightRing3D = new THREE.Mesh(ringGeo, ringMat);
-                highlightRing3D.rotation.x = Math.PI / 2;
-                scene3D.add(highlightRing3D);
-
-                // Raycasting click
-                const raycaster = new THREE.Raycaster();
-                const mouse = new THREE.Vector2();
-                let pointerDownPos = null;
-
-                renderer3D.domElement.addEventListener('pointerdown', e => {
-                    pointerDownPos = { x: e.clientX, y: e.clientY };
-                });
-
-                renderer3D.domElement.addEventListener('pointerup', e => {
-                    if (!pointerDownPos) return;
-                    const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
-                    if (dist > 6) return; // Ignore drag orbits
-                    const rect = renderer3D.domElement.getBoundingClientRect();
-                    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-                    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-                    raycaster.setFromCamera(mouse, camera3D);
-                    const hits = raycaster.intersectObjects(clickableSpheres);
-                    if (hits.length > 0 && hits[0].object.userData.emotion) {
-                        handleEmotionSelect(hits[0].object.userData.emotion);
-                    }
-                });
-
-                function resize3D() {
-                    if (!renderer3D || !camera3D || !container3D) return;
-                    const w = container3D.clientWidth;
-                    const h = container3D.clientHeight;
-                    if (w > 0 && h > 0) {
-                        camera3D.aspect = w / h;
-                        camera3D.updateProjectionMatrix();
-                        renderer3D.setSize(w, h);
-                    }
-                }
-                if (typeof ResizeObserver !== 'undefined') {
-                    new ResizeObserver(resize3D).observe(container3D);
-                }
-                window.addEventListener('resize', resize3D);
-
-                function animate() {
-                    requestAnimationFrame(animate);
-                    if (controls3D) controls3D.update();
-                    if (highlightRing3D) highlightRing3D.rotation.z += 0.025;
-                    renderer3D.render(scene3D, camera3D);
-                }
-                animate();
-            }
-
-            function update3DVisuals() {
-                if (!scene3D) return;
-                const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
-                clickableSpheres.forEach(mesh => {
-                    const em = mesh.userData.emotion;
-                    const ok = matchesFilters(em);
-                    const isSel = selectedEmotion && em.id === selectedEmotion.id;
-                    const isOpp = opp && em.id === opp.id;
-                    mesh.material.opacity = (isSel || isOpp) ? 1 : (ok ? 0.9 : 0.14);
-                    const targetScale = isSel ? 1.75 : (isOpp ? 1.45 : (em.type === 'operator' ? 1.15 : 1.0));
-                    mesh.scale.setScalar(targetScale);
-                });
-                if (highlightRing3D && selectedEmotion) {
-                    highlightRing3D.position.copy(coordTo3D(selectedEmotion));
-                }
-            }
-
-            // ===================== PATH DRAWING (2D + 3D) =====================
-            function drawEmotionalPath(steps) {
-                activePathSteps = Array.isArray(steps) ? steps.filter(Boolean) : [];
-                pathLayerG.selectAll('*').remove();
-
-                if (pathLine3D && scene3D) {
-                    scene3D.remove(pathLine3D);
-                    pathLine3D = null;
-                }
-
-                if (activePathSteps.length < 2) return;
-
-                // Draw segment-by-segment on 2D SVG for clean arrows
-                for (let i = 0; i < activePathSteps.length - 1; i++) {
-                    const a = activePathSteps[i];
-                    const b = activePathSteps[i + 1];
-                    pathLayerG.append('line')
-                        .attr('x1', xScale(a.x))
-                        .attr('y1', yScale(a.y))
-                        .attr('x2', xScale(b.x))
-                        .attr('y2', yScale(b.y))
-                        .attr('stroke', '#fbbf24')
-                        .attr('stroke-width', 2.6)
-                        .attr('marker-end', 'url(#path-arrow)')
-                        .attr('opacity', 0.9);
-                }
-
-                // Step badges
-                activePathSteps.forEach((s, idx) => {
-                    const g = pathLayerG.append('g')
-                        .attr('transform', `translate(${xScale(s.x)}, ${yScale(s.y)})`)
-                        .style('cursor', 'pointer')
-                        .on('click', () => {
-                            const match = M.getByName(s.name);
-                            if (match) handleEmotionSelect(match);
-                        });
-                    g.append('circle')
-                        .attr('r', 10)
-                        .attr('fill', '#fbbf24')
-                        .attr('stroke', '#070b14')
-                        .attr('stroke-width', 2);
-                    g.append('text')
-                        .attr('y', 3.5)
-                        .attr('text-anchor', 'middle')
-                        .attr('fill', '#070b14')
-                        .attr('font-size', '10px')
-                        .attr('font-weight', '800')
-                        .text(String(idx + 1));
-                });
-
-                // 3D polyline
-                if (scene3D && typeof THREE !== 'undefined') {
-                    const pts3D = activePathSteps.map(s => coordTo3D(s));
-                    const geo = new THREE.BufferGeometry().setFromPoints(pts3D);
-                    const mat = new THREE.LineBasicMaterial({ color: 0xfbbf24, linewidth: 2 });
-                    pathLine3D = new THREE.Line(geo, mat);
-                    scene3D.add(pathLine3D);
-                }
-            }
-
-            // ===================== IDENTITY CARD RENDERING =====================
-            function renderIdentityCard(em) {
-                if (!em) return;
-                const stratumMeta = M.getStrataMeta(em.z) || { name: `Strate ${em.z}` };
-                const geom = T.geometryType(em.x, em.y);
-                const taxGrp = T.classifyTaxonomicGroup(em.x, em.y);
-                const subsec = T.classifySubsector(em.x, em.y);
-                const regime = T.computeEnergyRegime(em.x, em.y);
-                const valence = T.computeHedonicPolarity(em.x, em.y);
-                const opp = M.getOpposite(em.name);
-
-                document.getElementById('cardStratumBadge').textContent = `Z=${em.z} • ${stratumMeta.name}`;
-                document.getElementById('cardCoordsBadge').textContent = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z})`;
-                document.getElementById('cardName').textContent = em.name;
-                document.getElementById('cardSubMeta').textContent = `${em.code || ''} • ${geom.label} • Budget L₁ = ${Math.abs(em.x) + Math.abs(em.y)}`;
-                document.getElementById('cardColorDot').style.backgroundColor = nodeColor(em);
-                document.getElementById('cardDesc').textContent = em.desc || '';
-
-                document.getElementById('cardTaxGroup').textContent = taxGrp.label;
-                document.getElementById('cardSubsector').textContent = subsec.label;
-                const regEl = document.getElementById('cardRegime');
-                regEl.textContent = regime.label;
-                regEl.style.color = regime.color;
-
-                const valEl = document.getElementById('cardValence');
-                valEl.textContent = valence.label;
-                valEl.className = 'font-bold mt-0.5 ' + (valence.polarity === 'positive' ? 'text-emerald-300' : (valence.polarity === 'negative' ? 'text-rose-300' : 'text-purple-300'));
-                document.getElementById('cardValenceRule').innerHTML = `<strong class="text-white">Loi de valence :</strong> ${valence.rule}`;
-
-                const symTypeEl = document.getElementById('cardSymmetryType');
-                const oppBtn = document.getElementById('cardOppositeBtn');
-                const oppLbl = document.getElementById('cardOppositeLabel');
-                if (opp) {
-                    oppBtn.disabled = false;
-                    oppBtn.classList.remove('opacity-50');
-                    oppLbl.textContent = `${opp.name} (${fmtSign(opp.x)}, ${fmtSign(opp.y)}, ${opp.z})`;
-                    oppBtn.onclick = () => handleEmotionSelect(opp);
-                    symTypeEl.textContent = em.type === 'lateral'
-                        ? 'Réflexion controlatérale : (−sgn(X)|Y|, −sgn(Y)|X|)'
-                        : 'Inversion centrale : (−X, −Y)';
-                } else {
-                    oppBtn.disabled = true;
-                    oppBtn.classList.add('opacity-50');
-                    oppLbl.textContent = 'Opérateur central (auto-dual sur l\'axe Z)';
-                    oppBtn.onclick = null;
-                    symTypeEl.textContent = 'Pivot central (X=0, Y=0)';
-                }
-            }
-
-            function handleEmotionSelect(em) {
-                if (!em) return;
-                selectedEmotion = em;
-                const searchInput = document.getElementById('emotionSearchInput');
-                if (searchInput && document.activeElement !== searchInput) {
-                    searchInput.value = em.name;
-                }
-                renderIdentityCard(em);
-                update2DVisuals();
-                update3DVisuals();
-            }
-
-            function applyFiltersAndRender() {
-                update2DVisuals();
-                update3DVisuals();
-            }
-
-            // ===================== SCENARIO SIMULATOR =====================
-            const scenarioPresets = {
-                cafe: {
-                    title: 'Exemple §7.3 : Le Café Gâté (Escalade Verticale & Récupération)',
-                    badge: 'Z=1 → Z=2 → Z=4 → Z=5 → Z=0',
-                    text: 'Rupture sensorielle par goût altéré (Surprise Z=1) → Rejet protecteur immédiat (Dégoût Z=2) → Auto-attribution culpabilisante sur un modèle fragilisé (Honte Z=4) → Généralisation temporelle défavorable (Désespoir Z=5) → Dissipation graduelle vers le Point de Veille.',
-                    names: ['Surprise', 'Dégoût', 'Honte', 'Désespoir', 'Point de Veille']
-                },
-                deuil: {
-                    title: 'Trajectoire Clinique : Perte, Travail de Deuil & Résilience',
-                    badge: 'Z=1 → Z=2 → Z=3 → Z=5 → Z=4 → Z=0',
-                    text: 'Choc de l\'annonce (Surprise Z=1) → Mise en charge rétentive du contrôle (Tristesse Z=2) → Contextualisation réactive (Chagrin Z=3) → Abattement temporel (Désespoir Z=5) → Intégration apaisée (Sérénité Z=4) → Retour à la disponibilité basale (Point de Veille).',
-                    names: ['Surprise', 'Tristesse', 'Chagrin', 'Désespoir', 'Sérénité', 'Point de Veille']
-                },
-                injustice: {
-                    title: 'Compensation Ergotrope : Frustration → Colère → Apaisement',
-                    badge: 'Z=1 → Z=2 → Z=6 → Z=2 → Z=0',
-                    text: 'Obstacle imprévu (Surprise Z=1) → Compensation motrice sur attente négative (Colère −1,+1,2) → Escalade identitaire si non résorbée (Fureur −4,+6,6) → Bascule trophotrope vers l\'économie d\'effort (Calme +1,−1,2) → Point de Veille.',
-                    names: ['Surprise', 'Colère', 'Fureur', 'Calme', 'Point de Veille']
-                },
-                defi: {
-                    title: 'Réévaluation Épistémique : Peur → Courage → Joie',
-                    badge: 'Z=1 → Z=2 → Z=4 → Z=2 → Z=0',
-                    text: 'Nouveauté menaçante (Surprise Z=1) → Anticipation de risque subi (Peur −2,0,2) → Engagement volontaire de l\'attente (Courage +2,0,2) → Consolidation positive (Fierté +4,+2,4) → Décharge résolutive (Joie 0,+2,2) → Point de Veille.',
-                    names: ['Surprise', 'Peur', 'Courage', 'Fierté', 'Joie', 'Point de Veille']
-                }
-            };
-
-            function activateScenario(title, badge, text, steps) {
-                const validSteps = steps.filter(Boolean);
-                document.getElementById('scenarioResultTitle').textContent = title;
-                document.getElementById('scenarioMetaBadge').textContent = badge;
-                document.getElementById('scenarioResultText').textContent = text;
-
-                const pillsHost = document.getElementById('scenarioPathPills');
-                pillsHost.innerHTML = '';
-                validSteps.forEach((st, idx) => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-pink-900/60 border border-slate-700 hover:border-pink-500/50 text-xs font-semibold text-white cursor-pointer transition-colors flex items-center gap-1.5';
-                    btn.innerHTML = `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold inline-flex items-center justify-center">${idx + 1}</span><span>${st.name}</span><span class="font-mono text-[10px] text-slate-400">(Z=${st.z})</span>`;
-                    btn.onclick = () => handleEmotionSelect(st);
-                    pillsHost.appendChild(btn);
-                    if (idx < validSteps.length - 1) {
-                        const arr = document.createElement('span');
-                        arr.className = 'text-amber-400 self-center text-xs font-bold';
-                        arr.textContent = '→';
-                        pillsHost.appendChild(arr);
-                    }
-                });
-
-                drawEmotionalPath(validSteps);
-                if (validSteps.length > 1) {
-                    handleEmotionSelect(validSteps[1]);
-                }
-            }
-
-            function runScenarioAnalysis(rawText) {
-                const txt = (rawText || '').toLowerCase().trim();
-                if (!txt) {
-                    const p = scenarioPresets.cafe;
-                    activateScenario(p.title, p.badge, p.text, p.names.map(n => M.getByName(n)));
-                    return;
-                }
-
-                // Direct lexicon mention check + lexical gradient scoring
-                const exactMatches = allEmotions.filter(e => e.name.length > 3 && txt.includes(e.name.toLowerCase()));
-                if (exactMatches.length >= 2) {
-                    const steps = [M.getByName('Surprise'), ...exactMatches.slice(0, 4), M.getByName('Point de Veille')];
-                    activateScenario(
-                        'Trajectoire Inférée à partir de votre Récit',
-                        `${steps.filter(Boolean).length} étapes`,
-                        `États détectés directement dans votre situation et reliés depuis l'alerte initiale (Surprise) jusqu'au retour à l'équilibre basal.`,
-                        steps
-                    );
-                    return;
-                }
-
-                let scoreX = 0;
-                let scoreY = 0;
-                let targetZ = 3;
-
-                if (/(menace|danger|peur|angoiss|inquiet|échec|raté|perdu|honte|rejet|injust|trah)/i.test(txt)) scoreX -= 2;
-                if (/(espoir|réussi|confian|opportun|courage|fièr|fier|aim|soutien|solut)/i.test(txt)) scoreX += 2;
-                if (/(agis|action|réagir|combatt|colère|enerv|énerv|fuir|fuit|joie|enthousias|élan)/i.test(txt)) scoreY += 2;
-                if (/(impuissan|bloqu|triste|figé|paralys|fatigue|subi|calme|serein|repos)/i.test(txt)) scoreY -= 2;
-                if (/(toujours|jamais|tout|vie|identité|avenir|profond|désespoir)/i.test(txt)) targetZ = 5;
-                else if (/(honte|culpabil|faute|regard|relation|longtemps)/i.test(txt)) targetZ = 4;
-
-                // Nearest candidate at Z=2 and targetZ
-                const findNearest = (zLevel, tx, ty) => {
-                    const pool = M.getByStrata(zLevel).filter(e => e.type !== 'operator');
-                    if (!pool.length) return null;
-                    return pool.reduce((best, cur) => {
-                        const dCur = Math.abs(cur.x - tx) + Math.abs(cur.y - ty);
-                        const dBest = Math.abs(best.x - tx) + Math.abs(best.y - ty);
-                        return dCur < dBest ? cur : best;
-                    }, pool[0]);
+                const strataEn = {
+                    0: { name: 'Wake Point', operator: 'Point de Veille', desc: 'Structural origin and basal homeostatic equilibrium attractor.' },
+                    1: { name: 'Surprise', operator: 'Surprise', desc: 'Ascending rupture and perceptual salience operator without spatial deployment.' },
+                    2: { name: 'Primary Affects', operator: 'Anticipation', desc: 'Descending orientation operator Anticipation (0,0,2) and 8 prototypes (4 axial, 4 diagonal).' },
+                    3: { name: 'Reactive Emotions', operator: 'Émoi', desc: 'Central Stir (0,0,3). Emotions tied to an inferred cause and its immediate context.' },
+                    4: { name: 'Reflexive Feelings', operator: 'Réserve', desc: 'Central Reserve (0,0,4). Second-order self/other generative models and relational regulation.' },
+                    5: { name: 'Enduring Dispositions', operator: 'Recul', desc: 'Central Stepping Back (0,0,5). Slow parameters organizing inference across extended horizons.' },
+                    6: { name: 'Affective Identities', operator: 'Saisissement', desc: 'Central Awe & Grip (0,0,6). Revisability of the self-model held invariant across situations.' },
+                    7: { name: 'Transcendental Feelings', operator: 'Suspension', desc: 'Central Suspension (0,0,7). Ultimate frame of meaning from which every appraisal is conducted.' }
                 };
 
-                const protoZ2 = exactMatches[0] || findNearest(2, scoreX, scoreY);
-                const scaleFactor = (2 * targetZ - 2) / 2;
-                const deepTarget = findNearest(targetZ, scoreX * scaleFactor, scoreY * scaleFactor);
-                const oppRecovery = protoZ2 ? M.getOpposite(protoZ2.name) : M.getByName('Calme');
-
-                const steps = [M.getByName('Surprise'), protoZ2, deepTarget, oppRecovery, M.getByName('Point de Veille')];
-                activateScenario(
-                    'Modélisation Inférentielle de Votre Situation',
-                    `Attente ${scoreX >= 0 ? '≥0' : '<0'} • Contrôle ${scoreY >= 0 ? '≥0' : '<0'} • Z=${targetZ}`,
-                    `L'analyse évalue les gradients implicites du récit : amorce par Surprise (Z=1), cristallisation sur ${protoZ2 ? protoZ2.name : 'Z=2'}, approfondissement vers ${deepTarget ? deepTarget.name : 'Z=' + targetZ}, puis résorption allostatique.`,
-                    steps
-                );
-            }
-
-            // ===================== EVENT LISTENERS =====================
-            document.getElementById('filterStratum').addEventListener('change', e => {
-                filters.stratum = e.target.value;
-                applyFiltersAndRender();
-            });
-            document.getElementById('filterGroup').addEventListener('change', e => {
-                filters.group = e.target.value;
-                applyFiltersAndRender();
-            });
-            document.getElementById('filterGeometry').addEventListener('change', e => {
-                filters.geometry = e.target.value;
-                applyFiltersAndRender();
-            });
-            document.getElementById('resetFiltersBtn').addEventListener('click', () => {
-                filters.stratum = 'all';
-                filters.group = 'all';
-                filters.geometry = 'all';
-                document.getElementById('filterStratum').value = 'all';
-                document.getElementById('filterGroup').value = 'all';
-                document.getElementById('filterGeometry').value = 'all';
-                applyFiltersAndRender();
-            });
-
-            document.getElementById('emotionSearchInput').addEventListener('input', e => {
-                const val = e.target.value.trim();
-                const found = M.getByName(val) || allEmotions.find(em => em.name.toLowerCase() === val.toLowerCase());
-                if (found) handleEmotionSelect(found);
-            });
-
-            document.getElementById('traceDissipationBtn').addEventListener('click', () => {
-                if (!selectedEmotion) return;
-                const path = T.computeDissipationPath(selectedEmotion);
-                drawEmotionalPath(path);
-            });
-
-            document.getElementById('clearPathBtn').addEventListener('click', () => {
-                drawEmotionalPath([]);
-            });
-
-            // View Mode toggle (Split / 2D / 3D)
-            document.querySelectorAll('.view-mode-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const mode = btn.dataset.mode;
-                    const p2 = document.getElementById('panel2D');
-                    const p3 = document.getElementById('panel3D');
-                    const inner = document.getElementById('vizPanelsInner');
-                    document.querySelectorAll('.view-mode-btn').forEach(b => {
-                        const active = b.dataset.mode === mode;
-                        b.className = active
-                            ? 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer'
-                            : 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white cursor-pointer';
+                // Populate 8 Strata Cards (#strate-0 .. #strate-7)
+                function renderStrataCards() {
+                    const strataGrid = document.getElementById('strataCardsGrid');
+                    if (!strataGrid || !Array.isArray(M.strata)) return;
+                    const en = isEn();
+                    strataGrid.innerHTML = '';
+                    M.strata.forEach(st => {
+                        const totalAtZ = M.getByStrata(st.z).length;
+                        const loc = (en && strataEn[st.z]) ? strataEn[st.z] : st;
+                        const stateWord = en ? `state${totalAtZ > 1 ? 's' : ''}` : `état${totalAtZ > 1 ? 's' : ''}`;
+                        const card = document.createElement('button');
+                        card.type = 'button';
+                        card.id = `strate-${st.z}`;
+                        card.className = 'text-left p-4 rounded-2xl bg-cosmic-850 hover:bg-slate-800/80 border border-slate-800 hover:border-pink-500/40 transition-all space-y-2 cursor-pointer';
+                        card.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-pink-950/70 text-pink-300 border border-pink-500/30">Z = ${st.z}</span>
+                                <span class="text-[11px] font-mono text-slate-400">L₁=${st.budget} &bull; ${totalAtZ} ${stateWord}</span>
+                            </div>
+                            <div class="text-sm font-bold text-white">${loc.name}</div>
+                            <div class="text-[11px] font-mono text-purple-300">${en ? 'Operator:' : 'Opérateur :'} ${loc.operator}</div>
+                            <p class="text-xs text-slate-400 leading-relaxed">${loc.desc}</p>
+                        `;
+                        card.addEventListener('click', () => {
+                            document.getElementById('filterStratum').value = String(st.z);
+                            filters.stratum = String(st.z);
+                            applyFiltersAndRender();
+                            const op = M.getByName(st.operator);
+                            if (op) handleEmotionSelect(op);
+                            document.getElementById('explorer-176').scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+                        });
+                        strataGrid.appendChild(card);
                     });
-                    if (mode === 'split') {
-                        p2.classList.remove('hidden');
-                        p3.classList.remove('hidden');
-                        inner.className = 'grid grid-cols-1 xl:grid-cols-2 gap-5';
-                    } else if (mode === '2d') {
-                        p2.classList.remove('hidden');
-                        p3.classList.add('hidden');
-                        inner.className = 'grid grid-cols-1 gap-5';
-                    } else {
-                        p2.classList.add('hidden');
-                        p3.classList.remove('hidden');
-                        inner.className = 'grid grid-cols-1 gap-5';
+                }
+                renderStrataCards();
+
+                function matchesFilters(em) {
+                    if (filters.stratum !== 'all' && String(em.z) !== filters.stratum) return false;
+                    if (filters.group !== 'all') {
+                        if (filters.group === 'Centre') {
+                            if (em.type !== 'operator') return false;
+                        } else if (em.group !== filters.group) {
+                            return false;
+                        }
                     }
+                    if (filters.geometry !== 'all' && em.type !== filters.geometry) return false;
+                    return true;
+                }
+
+                // ===================== 2D D3 MATRIX =====================
+                const chartHost = document.getElementById('chart-2d');
+                const tooltip = document.getElementById('tooltip2D');
+                const size2D = 720;
+                const margin2D = 48;
+                const maxCoord = 13;
+
+                let svg = null, xScale = null, yScale = null;
+                let oppVectorG = null, pathLayerG = null, nodesG = null, labelsG = null, circles = null;
+                let axisLabelTop = null, axisLabelBottom = null, axisLabelLeft = null, axisLabelRight = null;
+
+                function update2DAxisLabels() {
+                    const en = isEn();
+                    if (axisLabelTop) axisLabelTop.text(en ? 'Y+ (CONTROL DISCHARGE)' : 'Y+ (DÉCHARGE DE CONTRÔLE)');
+                    if (axisLabelBottom) axisLabelBottom.text(en ? 'Y− (CONTROL CHARGE)' : 'Y− (CHARGE DE CONTRÔLE)');
+                    if (axisLabelLeft) axisLabelLeft.text(en ? 'X− Expectation' : 'X− Attente');
+                    if (axisLabelRight) axisLabelRight.text(en ? 'Expectation X+' : 'Attente X+');
+                    if (svg) svg.attr('aria-label', en ? 'D3 2D Map of the 176 Cartograffect Affective States' : 'Carte 2D D3 des 176 états affectifs Cartograffect');
+                }
+
+                function nodeColor(em) {
+                    return (M.groupColors && M.groupColors[em.group]) ? M.groupColors[em.group] : '#c084fc';
+                }
+
+                if (window.d3 && chartHost) {
+                    const d3 = window.d3;
+                    svg = d3.select(chartHost)
+                        .append('svg')
+                        .attr('viewBox', `0 0 ${size2D} ${size2D}`)
+                        .attr('role', 'img')
+                        .attr('aria-label', 'Carte 2D D3 des 176 états affectifs Cartograffect');
+
+                    const defs = svg.append('defs');
+                    defs.append('marker')
+                        .attr('id', 'path-arrow')
+                        .attr('viewBox', '0 0 10 10')
+                        .attr('refX', 8)
+                        .attr('refY', 5)
+                        .attr('markerWidth', 6)
+                        .attr('markerHeight', 6)
+                        .attr('orient', 'auto-start-reverse')
+                        .append('path')
+                        .attr('d', 'M 0 1.5 L 9 5 L 0 8.5 z')
+                        .attr('fill', '#fbbf24');
+
+                    xScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([margin2D, size2D - margin2D]);
+                    yScale = d3.scaleLinear().domain([-maxCoord, maxCoord]).range([size2D - margin2D, margin2D]);
+
+                    svg.append('rect')
+                        .attr('width', size2D)
+                        .attr('height', size2D)
+                        .attr('fill', '#070b14');
+
+                    const gridG = svg.append('g');
+                    [2, 4, 6, 8, 10, 12].forEach((r, idx) => {
+                        const pts = [
+                            [xScale(0), yScale(r)],
+                            [xScale(r), yScale(0)],
+                            [xScale(0), yScale(-r)],
+                            [xScale(-r), yScale(0)]
+                        ].map(p => p.join(',')).join(' ');
+                        gridG.append('polygon')
+                            .attr('points', pts)
+                            .attr('fill', 'none')
+                            .attr('stroke', '#1e293b')
+                            .attr('stroke-width', r === 2 ? 1.5 : 1)
+                            .attr('stroke-dasharray', r === 2 ? 'none' : '4,4');
+                        gridG.append('text')
+                            .attr('x', xScale(0) + 4)
+                            .attr('y', yScale(r) - 4)
+                            .attr('fill', '#475569')
+                            .attr('font-size', '10px')
+                            .attr('font-family', 'Fira Code, monospace')
+                            .text(`Z=${idx + 2}`);
+                    });
+
+                    gridG.append('line')
+                        .attr('x1', xScale(-12)).attr('y1', yScale(-12))
+                        .attr('x2', xScale(12)).attr('y2', yScale(12))
+                        .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
+                    gridG.append('line')
+                        .attr('x1', xScale(-12)).attr('y1', yScale(12))
+                        .attr('x2', xScale(12)).attr('y2', yScale(-12))
+                        .attr('stroke', '#1e293b').attr('stroke-width', 1).attr('stroke-dasharray', '3,5');
+
+                    gridG.append('line')
+                        .attr('x1', xScale(-maxCoord + 0.5)).attr('y1', yScale(0))
+                        .attr('x2', xScale(maxCoord - 0.5)).attr('y2', yScale(0))
+                        .attr('stroke', '#475569').attr('stroke-width', 1.5);
+                    gridG.append('line')
+                        .attr('x1', xScale(0)).attr('y1', yScale(-maxCoord + 0.5))
+                        .attr('x2', xScale(0)).attr('y2', yScale(maxCoord - 0.5))
+                        .attr('stroke', '#475569').attr('stroke-width', 1.5);
+
+                    axisLabelTop = gridG.append('text').attr('x', xScale(0)).attr('y', 22).attr('text-anchor', 'middle').attr('fill', '#7dd3fc').attr('font-size', '12px').attr('font-weight', '700');
+                    axisLabelBottom = gridG.append('text').attr('x', xScale(0)).attr('y', size2D - 14).attr('text-anchor', 'middle').attr('fill', '#60a5fa').attr('font-size', '12px').attr('font-weight', '700');
+                    axisLabelLeft = gridG.append('text').attr('x', 16).attr('y', yScale(0) - 8).attr('text-anchor', 'start').attr('fill', '#fb7185').attr('font-size', '11px').attr('font-weight', '700');
+                    axisLabelRight = gridG.append('text').attr('x', size2D - 16).attr('y', yScale(0) - 8).attr('text-anchor', 'end').attr('fill', '#34d399').attr('font-size', '11px').attr('font-weight', '700');
+                    update2DAxisLabels();
+
+                    oppVectorG = svg.append('g').attr('class', 'opposite-vector-layer');
+                    pathLayerG = svg.append('g').attr('class', 'emotional-path-layer');
+                    nodesG = svg.append('g').attr('class', 'nodes-layer');
+                    labelsG = svg.append('g').attr('class', 'labels-layer');
+
+                    circles = nodesG.selectAll('circle.em-node')
+                        .data(allEmotions)
+                        .enter()
+                        .append('circle')
+                        .attr('class', 'em-node')
+                        .attr('cx', d => xScale(d.x))
+                        .attr('cy', d => yScale(d.y))
+                        .attr('r', d => d.type === 'operator' ? 4 + d.z * 0.5 : (d.z === 2 ? 7 : 5.2))
+                        .attr('fill', d => nodeColor(d))
+                        .attr('stroke', '#070b14')
+                        .attr('stroke-width', 1.4)
+                        .style('cursor', 'pointer')
+                        .on('mouseover', function(event, d) {
+                            if (!tooltip) return;
+                            tooltip.style.opacity = '1';
+                            tooltip.innerHTML = `<div class="font-bold text-white">${d.name}</div><div class="font-mono text-[11px] text-pink-300">(${fmtSign(d.x)}, ${fmtSign(d.y)}, Z=${d.z})</div><div class="text-[11px] text-slate-400">${d.group} &bull; ${T.geometryLabel(d.x, d.y)}</div>`;
+                        })
+                        .on('mousemove', function(event) {
+                            if (!tooltip) return;
+                            tooltip.style.left = `${event.clientX + 14}px`;
+                            tooltip.style.top = `${event.clientY - 12}px`;
+                        })
+                        .on('mouseout', function() {
+                            if (tooltip) tooltip.style.opacity = '0';
+                        })
+                        .on('click', function(event, d) {
+                            handleEmotionSelect(d);
+                        });
+                } else if (chartHost) {
+                    chartHost.innerHTML = `<div class="p-6 text-center text-xs text-slate-400 font-mono">${isEn() ? '2D map rendering requires D3.js (offline fallback active). Use filters and identity card.' : 'Le rendu 2D requiert D3.js (mode dégradé actif). Utilisez les filtres et la fiche d’identité.'}</div>`;
+                }
+
+                // Selective readable labels (Z=2 prototypes + selected + path endpoints)
+                function update2DVisuals() {
+                    const visibleCount = allEmotions.filter(matchesFilters).length;
+                    const badgeEl = document.getElementById('visibleCountBadge');
+                    if (badgeEl) badgeEl.textContent = visibleCount;
+
+                    if (!circles || !oppVectorG || !labelsG) return;
+                    const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
+
+                    circles
+                        .attr('opacity', d => {
+                            const ok = matchesFilters(d);
+                            if (selectedEmotion && d.id === selectedEmotion.id) return 1;
+                            if (opp && d.id === opp.id) return 0.95;
+                            return ok ? (d.type === 'operator' ? 0.55 : 0.92) : 0.1;
+                        })
+                        .attr('r', d => {
+                            if (selectedEmotion && d.id === selectedEmotion.id) return 9.5;
+                            if (opp && d.id === opp.id) return 8;
+                            return d.type === 'operator' ? 4 + d.z * 0.45 : (d.z === 2 ? 7 : 5.2);
+                        })
+                        .attr('stroke', d => {
+                            if (selectedEmotion && d.id === selectedEmotion.id) return '#ffffff';
+                            if (opp && d.id === opp.id) return '#fbbf24';
+                            return '#070b14';
+                        })
+                        .attr('stroke-width', d => {
+                            if (selectedEmotion && d.id === selectedEmotion.id) return 2.8;
+                            if (opp && d.id === opp.id) return 2.2;
+                            return 1.3;
+                        });
+
+                    oppVectorG.selectAll('*').remove();
+                    if (selectedEmotion && opp && !(selectedEmotion.x === 0 && selectedEmotion.y === 0)) {
+                        oppVectorG.append('line')
+                            .attr('x1', xScale(selectedEmotion.x))
+                            .attr('y1', yScale(selectedEmotion.y))
+                            .attr('x2', xScale(opp.x))
+                            .attr('y2', yScale(opp.y))
+                            .attr('stroke', '#fbbf24')
+                            .attr('stroke-width', 1.8)
+                            .attr('stroke-dasharray', '5,4')
+                            .attr('opacity', 0.85);
+                    }
+
+                    labelsG.selectAll('*').remove();
+                    const showSingleStratum = filters.stratum !== 'all';
+                    allEmotions.forEach(d => {
+                        const isSel = selectedEmotion && d.id === selectedEmotion.id;
+                        const isOpp = opp && d.id === opp.id;
+                        const shouldLabel = isSel || isOpp || (d.z === 2 && d.type !== 'operator' && matchesFilters(d)) || (showSingleStratum && matchesFilters(d) && d.type !== 'operator');
+                        if (shouldLabel) {
+                            labelsG.append('text')
+                                .attr('x', xScale(d.x))
+                                .attr('y', yScale(d.y) - (isSel ? 13 : 10))
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', isSel ? '#ffffff' : (isOpp ? '#fde68a' : '#cbd5e1'))
+                                .attr('font-size', isSel ? '12px' : '10px')
+                                .attr('font-weight', isSel ? '700' : '500')
+                                .style('pointer-events', 'none')
+                                .text(d.name);
+                        }
+                    });
+                }
+
+                // ===================== 3D THREE.JS PYRAMID =====================
+                let scene3D, camera3D, renderer3D, controls3D, clickableSpheres = [], pathLine3D = null, highlightRing3D = null;
+                const sphereMap3D = new Map();
+                const container3D = document.getElementById('pyramid-3d');
+
+                function coordTo3D(em) {
+                    const xyScale = 1.65;
+                    const zScale = 2.6;
+                    return new THREE.Vector3(em.x * xyScale, (em.z - 3.5) * zScale, -em.y * xyScale);
+                }
+
+                function init3DVisualization() {
+                    if (!container3D) return;
+                    if (typeof THREE === 'undefined') {
+                        const msg = document.createElement('div');
+                        msg.className = 'absolute inset-0 flex items-center justify-center p-6 text-center text-xs text-slate-400 font-mono';
+                        msg.textContent = isEn() ? '3D pyramid unavailable (Three.js offline).' : 'Pyramide 3D indisponible (Three.js hors ligne).';
+                        container3D.appendChild(msg);
+                        return;
+                    }
+
+                    try {
+                        const width = container3D.clientWidth || 480;
+                        const height = container3D.clientHeight || 400;
+
+                        scene3D = new THREE.Scene();
+                        scene3D.background = new THREE.Color(0x070b14);
+
+                        camera3D = new THREE.PerspectiveCamera(45, width / height, 0.1, 300);
+                        camera3D.position.set(22, 14, 26);
+
+                        renderer3D = new THREE.WebGLRenderer({ antialias: true });
+                        renderer3D.setSize(width, height);
+                        renderer3D.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                        container3D.appendChild(renderer3D.domElement);
+
+                        if (THREE.OrbitControls) {
+                            controls3D = new THREE.OrbitControls(camera3D, renderer3D.domElement);
+                            controls3D.enableDamping = true;
+                            controls3D.dampingFactor = 0.06;
+                            controls3D.enableZoom = false;
+                            controls3D.minDistance = 6;
+                            controls3D.maxDistance = 65;
+                            const initCamPos = camera3D.position.clone();
+                            const initTarget = controls3D.target.clone();
+                            const applyZoomFactor = (factor) => {
+                                const offset = camera3D.position.clone().sub(controls3D.target).multiplyScalar(factor);
+                                const len = offset.length();
+                                if (len < 6) offset.setLength(6);
+                                if (len > 65) offset.setLength(65);
+                                camera3D.position.copy(controls3D.target).add(offset);
+                                controls3D.update();
+                            };
+                            renderer3D.domElement.addEventListener('wheel', (e) => {
+                                if (!e.ctrlKey && !e.metaKey) return;
+                                e.preventDefault();
+                                applyZoomFactor(e.deltaY > 0 ? 1.12 : 0.89);
+                            }, { passive: false });
+                            window.zoomTaxonomy3D = applyZoomFactor;
+                            window.resetTaxonomy3D = () => {
+                                camera3D.position.copy(initCamPos);
+                                controls3D.target.copy(initTarget);
+                                controls3D.update();
+                            };
+                        }
+
+                        scene3D.add(new THREE.AmbientLight(0xffffff, 0.72));
+                        const dirLight = new THREE.DirectionalLight(0xf9a8d4, 0.9);
+                        dirLight.position.set(18, 28, 16);
+                        scene3D.add(dirLight);
+
+                        const spindleGeo = new THREE.BufferGeometry().setFromPoints([
+                            new THREE.Vector3(0, (0 - 3.5) * 2.6, 0),
+                            new THREE.Vector3(0, (7 - 3.5) * 2.6, 0)
+                        ]);
+                        scene3D.add(new THREE.Line(spindleGeo, new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.7 })));
+
+                        for (let z = 2; z <= 7; z++) {
+                            const r = (2 * z - 2) * 1.65;
+                            const yPos = (z - 3.5) * 2.6;
+                            const diamondGeo = new THREE.BufferGeometry().setFromPoints([
+                                new THREE.Vector3(0, yPos, -r),
+                                new THREE.Vector3(r, yPos, 0),
+                                new THREE.Vector3(0, yPos, r),
+                                new THREE.Vector3(-r, yPos, 0),
+                                new THREE.Vector3(0, yPos, -r)
+                            ]);
+                            scene3D.add(new THREE.Line(diamondGeo, new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.65 })));
+                        }
+
+                        const baseGeo = new THREE.SphereGeometry(0.42, 16, 16);
+                        allEmotions.forEach(em => {
+                            const mat = new THREE.MeshStandardMaterial({
+                                color: new THREE.Color(nodeColor(em)),
+                                roughness: 0.35,
+                                metalness: 0.15,
+                                transparent: true,
+                                opacity: 0.92
+                            });
+                            const mesh = new THREE.Mesh(baseGeo, mat);
+                            mesh.position.copy(coordTo3D(em));
+                            mesh.userData = { emotion: em };
+                            if (em.type === 'operator') {
+                                mesh.scale.setScalar(1.2);
+                            }
+                            scene3D.add(mesh);
+                            clickableSpheres.push(mesh);
+                            sphereMap3D.set(em.id, mesh);
+                        });
+
+                        const ringGeo = new THREE.TorusGeometry(0.78, 0.08, 12, 32);
+                        const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                        highlightRing3D = new THREE.Mesh(ringGeo, ringMat);
+                        highlightRing3D.rotation.x = Math.PI / 2;
+                        scene3D.add(highlightRing3D);
+
+                        const raycaster = new THREE.Raycaster();
+                        const mouse = new THREE.Vector2();
+                        let pointerDownPos = null;
+
+                        renderer3D.domElement.addEventListener('pointerdown', e => {
+                            pointerDownPos = { x: e.clientX, y: e.clientY };
+                        });
+
+                        renderer3D.domElement.addEventListener('pointerup', e => {
+                            if (!pointerDownPos) return;
+                            const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+                            if (dist > 6) return;
+                            const rect = renderer3D.domElement.getBoundingClientRect();
+                            mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                            mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                            raycaster.setFromCamera(mouse, camera3D);
+                            const hits = raycaster.intersectObjects(clickableSpheres);
+                            if (hits.length > 0 && hits[0].object.userData.emotion) {
+                                handleEmotionSelect(hits[0].object.userData.emotion);
+                            }
+                        });
+
+                        function resize3D() {
+                            if (!renderer3D || !camera3D || !container3D) return;
+                            const w = container3D.clientWidth;
+                            const h = container3D.clientHeight;
+                            if (w > 0 && h > 0) {
+                                camera3D.aspect = w / h;
+                                camera3D.updateProjectionMatrix();
+                                renderer3D.setSize(w, h);
+                            }
+                        }
+                        if (typeof ResizeObserver !== 'undefined') {
+                            new ResizeObserver(resize3D).observe(container3D);
+                        }
+                        window.addEventListener('resize', resize3D);
+
+                        function animate() {
+                            requestAnimationFrame(animate);
+                            if (document.hidden) return;
+                            if (controls3D) controls3D.update();
+                            if (highlightRing3D && !prefersReducedMotion()) highlightRing3D.rotation.z += 0.025;
+                            renderer3D.render(scene3D, camera3D);
+                        }
+                        animate();
+                    } catch (err) {
+                        scene3D = null;
+                        const msg = document.createElement('div');
+                        msg.className = 'absolute inset-0 flex items-center justify-center p-6 text-center text-xs text-slate-400 font-mono';
+                        msg.textContent = isEn() ? 'WebGL 3D view unavailable on this device. Use the 2D map.' : 'Vue 3D WebGL indisponible sur cet appareil. Utilisez la carte 2D.';
+                        container3D.appendChild(msg);
+                    }
+                }
+
+                function update3DVisuals() {
+                    if (!scene3D) return;
+                    const opp = selectedEmotion ? M.getOpposite(selectedEmotion.name) : null;
+                    clickableSpheres.forEach(mesh => {
+                        const em = mesh.userData.emotion;
+                        const ok = matchesFilters(em);
+                        const isSel = selectedEmotion && em.id === selectedEmotion.id;
+                        const isOpp = opp && em.id === opp.id;
+                        mesh.material.opacity = (isSel || isOpp) ? 1 : (ok ? 0.9 : 0.14);
+                        const targetScale = isSel ? 1.75 : (isOpp ? 1.45 : (em.type === 'operator' ? 1.15 : 1.0));
+                        mesh.scale.setScalar(targetScale);
+                    });
+                    if (highlightRing3D && selectedEmotion) {
+                        highlightRing3D.position.copy(coordTo3D(selectedEmotion));
+                    }
+                }
+
+                // ===================== PATH DRAWING (2D + 3D) =====================
+                function drawEmotionalPath(steps) {
+                    activePathSteps = Array.isArray(steps) ? steps.filter(Boolean) : [];
+                    if (pathLayerG) pathLayerG.selectAll('*').remove();
+
+                    if (pathLine3D && scene3D) {
+                        scene3D.remove(pathLine3D);
+                        pathLine3D = null;
+                    }
+
+                    if (activePathSteps.length < 2) return;
+
+                    if (pathLayerG && xScale && yScale) {
+                        for (let i = 0; i < activePathSteps.length - 1; i++) {
+                            const a = activePathSteps[i];
+                            const b = activePathSteps[i + 1];
+                            pathLayerG.append('line')
+                                .attr('x1', xScale(a.x))
+                                .attr('y1', yScale(a.y))
+                                .attr('x2', xScale(b.x))
+                                .attr('y2', yScale(b.y))
+                                .attr('stroke', '#fbbf24')
+                                .attr('stroke-width', 2.6)
+                                .attr('marker-end', 'url(#path-arrow)')
+                                .attr('opacity', 0.9);
+                        }
+
+                        activePathSteps.forEach((s, idx) => {
+                            const g = pathLayerG.append('g')
+                                .attr('transform', `translate(${xScale(s.x)}, ${yScale(s.y)})`)
+                                .style('cursor', 'pointer')
+                                .on('click', () => {
+                                    const match = M.getByName(s.name);
+                                    if (match) handleEmotionSelect(match);
+                                });
+                            g.append('circle')
+                                .attr('r', 10)
+                                .attr('fill', '#fbbf24')
+                                .attr('stroke', '#070b14')
+                                .attr('stroke-width', 2);
+                            g.append('text')
+                                .attr('y', 3.5)
+                                .attr('text-anchor', 'middle')
+                                .attr('fill', '#070b14')
+                                .attr('font-size', '10px')
+                                .attr('font-weight', '800')
+                                .text(String(idx + 1));
+                        });
+                    }
+
+                    if (scene3D && typeof THREE !== 'undefined') {
+                        const pts3D = activePathSteps.map(s => coordTo3D(s));
+                        const geo = new THREE.BufferGeometry().setFromPoints(pts3D);
+                        const mat = new THREE.LineBasicMaterial({ color: 0xfbbf24, linewidth: 2 });
+                        pathLine3D = new THREE.Line(geo, mat);
+                        scene3D.add(pathLine3D);
+                    }
+                }
+
+                // ===================== IDENTITY CARD RENDERING =====================
+                function renderIdentityCard(em) {
+                    if (!em) return;
+                    const en = isEn();
+                    const stratumMeta = (en && strataEn[em.z]) ? strataEn[em.z] : (M.getStrataMeta(em.z) || { name: `Strate ${em.z}` });
+                    const geom = T.geometryType(em.x, em.y);
+                    const taxGrp = T.classifyTaxonomicGroup(em.x, em.y);
+                    const subsec = T.classifySubsector(em.x, em.y);
+                    const regime = T.computeEnergyRegime(em.x, em.y);
+                    const valence = T.computeHedonicPolarity(em.x, em.y);
+                    const opp = M.getOpposite(em.name);
+
+                    document.getElementById('cardStratumBadge').textContent = `Z=${em.z} • ${stratumMeta.name}`;
+                    document.getElementById('cardCoordsBadge').textContent = `(${fmtSign(em.x)}, ${fmtSign(em.y)}, Z=${em.z})`;
+                    document.getElementById('cardName').textContent = em.name;
+                    document.getElementById('cardSubMeta').textContent = `${em.code || ''} • ${T.geometryLabel(geom)} • ${en ? 'L₁ Budget' : 'Budget L₁'} = ${Math.abs(em.x) + Math.abs(em.y)}`;
+                    document.getElementById('cardColorDot').style.backgroundColor = nodeColor(em);
+                    document.getElementById('cardDesc').textContent = em.desc || '';
+
+                    document.getElementById('cardTaxGroup').textContent = taxGrp.label;
+                    document.getElementById('cardSubsector').textContent = subsec.label;
+                    const regEl = document.getElementById('cardRegime');
+                    regEl.textContent = regime.label;
+                    regEl.style.color = regime.hexColor || '#f472b6';
+
+                    const valEl = document.getElementById('cardValence');
+                    valEl.textContent = valence.label;
+                    valEl.className = 'font-bold mt-0.5 ' + (valence.polarity === 'positive' ? 'text-emerald-300' : (valence.polarity === 'negative' ? 'text-rose-300' : 'text-purple-300'));
+                    document.getElementById('cardValenceRule').innerHTML = `<strong class="text-white">${en ? 'Valence law:' : 'Loi de valence :'}</strong> ${valence.rule}`;
+
+                    const symTypeEl = document.getElementById('cardSymmetryType');
+                    const oppBtn = document.getElementById('cardOppositeBtn');
+                    const oppLbl = document.getElementById('cardOppositeLabel');
+                    if (opp) {
+                        oppBtn.disabled = false;
+                        oppBtn.classList.remove('opacity-50');
+                        oppLbl.textContent = `${opp.name} (${fmtSign(opp.x)}, ${fmtSign(opp.y)}, ${opp.z})`;
+                        oppBtn.onclick = () => handleEmotionSelect(opp);
+                        symTypeEl.textContent = em.type === 'lateral'
+                            ? (en ? 'Contralateral reflection: (−sgn(X)|Y|, −sgn(Y)|X|)' : 'Réflexion controlatérale : (−sgn(X)|Y|, −sgn(Y)|X|)')
+                            : (en ? 'Central inversion: (−X, −Y)' : 'Inversion centrale : (−X, −Y)');
+                    } else {
+                        oppBtn.disabled = true;
+                        oppBtn.classList.add('opacity-50');
+                        oppLbl.textContent = en ? 'Central operator (self-dual on Z axis)' : 'Opérateur central (auto-dual sur l\'axe Z)';
+                        oppBtn.onclick = null;
+                        symTypeEl.textContent = en ? 'Central pivot (X=0, Y=0)' : 'Pivot central (X=0, Y=0)';
+                    }
+                }
+
+                function handleEmotionSelect(em) {
+                    if (!em) return;
+                    selectedEmotion = em;
+                    const searchInput = document.getElementById('emotionSearchInput');
+                    if (searchInput && document.activeElement !== searchInput) {
+                        searchInput.value = em.name;
+                    }
+                    renderIdentityCard(em);
+                    update2DVisuals();
+                    update3DVisuals();
+                }
+
+                function applyFiltersAndRender() {
+                    update2DVisuals();
+                    update3DVisuals();
+                }
+
+                // ===================== SCENARIO SIMULATOR =====================
+                const scenarioPresets = {
+                    cafe: {
+                        title: 'Exemple §7.3 : Le Café Gâté (Escalade Verticale & Récupération)',
+                        titleEn: 'Example §7.3: The Spoiled Coffee (Vertical Escalation & Recovery)',
+                        badge: 'Z=1 → Z=2 → Z=4 → Z=5 → Z=0',
+                        text: 'Rupture sensorielle par goût altéré (Surprise Z=1) → Rejet protecteur immédiat (Dégoût Z=2) → Auto-attribution culpabilisante sur un modèle fragilisé (Honte Z=4) → Généralisation temporelle défavorable (Désespoir Z=5) → Dissipation graduelle vers le Point de Veille.',
+                        textEn: 'Sensory rupture from spoiled taste (Surprise Z=1) → Immediate protective rejection (Disgust Z=2) → Self-blaming attribution on a weakened model (Shame Z=4) → Unfavorable temporal generalization (Despair Z=5) → Gradual dissipation back to Wake Point.',
+                        names: ['Surprise', 'Dégoût', 'Honte', 'Désespoir', 'Point de Veille']
+                    },
+                    deuil: {
+                        title: 'Trajectoire Clinique : Perte, Travail de Deuil & Résilience',
+                        titleEn: 'Clinical Trajectory: Loss, Grief Work & Resilience',
+                        badge: 'Z=1 → Z=2 → Z=3 → Z=5 → Z=4 → Z=0',
+                        text: 'Choc de l\'annonce (Surprise Z=1) → Mise en charge rétentive du contrôle (Tristesse Z=2) → Contextualisation réactive (Chagrin Z=3) → Abattement temporel (Désespoir Z=5) → Intégration apaisée (Sérénité Z=4) → Retour à la disponibilité basale (Point de Veille).',
+                        textEn: 'Shock of the news (Surprise Z=1) → Retentive control charge (Sadness Z=2) → Reactive contextualization (Grief Z=3) → Temporal depletion (Despair Z=5) → Calmed integration (Serenity Z=4) → Return to basal availability (Wake Point).',
+                        names: ['Surprise', 'Tristesse', 'Chagrin', 'Désespoir', 'Sérénité', 'Point de Veille']
+                    },
+                    injustice: {
+                        title: 'Compensation Ergotrope : Frustration → Colère → Apaisement',
+                        titleEn: 'Ergotropic Compensation: Frustration → Anger → Appeasement',
+                        badge: 'Z=1 → Z=2 → Z=6 → Z=2 → Z=0',
+                        text: 'Obstacle imprévu (Surprise Z=1) → Compensation motrice sur attente négative (Colère −1,+1,2) → Escalade identitaire si non résorbée (Fureur −4,+6,6) → Bascule trophotrope vers l\'économie d\'effort (Calme +1,−1,2) → Point de Veille.',
+                        textEn: 'Unexpected obstacle (Surprise Z=1) → Motor compensation on negative expectation (Anger −1,+1,2) → Identity escalation if unresolved (Fury −4,+6,6) → Trophotropic shift toward effort economy (Calm +1,−1,2) → Wake Point.',
+                        names: ['Surprise', 'Colère', 'Fureur', 'Calme', 'Point de Veille']
+                    },
+                    defi: {
+                        title: 'Réévaluation Épistémique : Peur → Courage → Joie',
+                        titleEn: 'Epistemic Reappraisal: Fear → Courage → Joy',
+                        badge: 'Z=1 → Z=2 → Z=4 → Z=2 → Z=0',
+                        text: 'Nouveauté menaçante (Surprise Z=1) → Anticipation de risque subi (Peur −2,0,2) → Engagement volontaire de l\'attente (Courage +2,0,2) → Consolidation positive (Fierté +4,+2,4) → Décharge résolutive (Joie 0,+2,2) → Point de Veille.',
+                        textEn: 'Threatening novelty (Surprise Z=1) → Suffered risk anticipation (Fear −2,0,2) → Voluntary expectation engagement (Courage +2,0,2) → Positive consolidation (Pride +4,+2,4) → Resolving discharge (Joy 0,+2,2) → Wake Point.',
+                        names: ['Surprise', 'Peur', 'Courage', 'Fierté', 'Joie', 'Point de Veille']
+                    }
+                };
+
+                function activateScenario(title, badge, text, steps, selectFirst = true) {
+                    const validSteps = steps.filter(Boolean);
+                    document.getElementById('scenarioResultTitle').textContent = title;
+                    document.getElementById('scenarioMetaBadge').textContent = badge;
+                    document.getElementById('scenarioResultText').textContent = text;
+
+                    const pillsHost = document.getElementById('scenarioPathPills');
+                    pillsHost.innerHTML = '';
+                    validSteps.forEach((st, idx) => {
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-pink-900/60 border border-slate-700 hover:border-pink-500/50 text-xs font-semibold text-white cursor-pointer transition-colors flex items-center gap-1.5';
+                        btn.innerHTML = `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold inline-flex items-center justify-center">${idx + 1}</span><span>${st.name}</span><span class="font-mono text-[10px] text-slate-400">(Z=${st.z})</span>`;
+                        btn.onclick = () => {
+                            drawEmotionalPath(validSteps);
+                            handleEmotionSelect(st);
+                        };
+                        pillsHost.appendChild(btn);
+                        if (idx < validSteps.length - 1) {
+                            const arr = document.createElement('span');
+                            arr.className = 'text-amber-400 self-center text-xs font-bold';
+                            arr.textContent = '→';
+                            pillsHost.appendChild(arr);
+                        }
+                    });
+
+                    if (selectFirst) {
+                        drawEmotionalPath(validSteps);
+                        if (validSteps.length > 1) {
+                            handleEmotionSelect(validSteps[1]);
+                        }
+                    }
+                }
+
+                function runScenarioAnalysis(rawText) {
+                    const en = isEn();
+                    const txt = (rawText || '').toLowerCase().trim();
+                    if (!txt) {
+                        isCustomScenarioActive = false;
+                        activeScenarioPresetKey = 'cafe';
+                        const p = scenarioPresets.cafe;
+                        activateScenario(en ? p.titleEn : p.title, p.badge, en ? p.textEn : p.text, p.names.map(n => M.getByName(n)));
+                        return;
+                    }
+
+                    isCustomScenarioActive = true;
+                    const exactMatches = allEmotions.filter(e => e.name.length > 3 && txt.includes(e.name.toLowerCase()));
+                    if (exactMatches.length >= 2) {
+                        const steps = [M.getByName('Surprise'), ...exactMatches.slice(0, 4), M.getByName('Point de Veille')];
+                        const cnt = steps.filter(Boolean).length;
+                        activateScenario(
+                            en ? 'Trajectory Inferred from Your Narrative' : 'Trajectoire Inférée à partir de votre Récit',
+                            en ? `${cnt} steps` : `${cnt} étapes`,
+                            en
+                                ? 'States detected directly in your narrative and linked from the initial alert (Surprise) back to basal equilibrium.'
+                                : 'États détectés directement dans votre situation et reliés depuis l\'alerte initiale (Surprise) jusqu\'au retour à l\'équilibre basal.',
+                            steps
+                        );
+                        return;
+                    }
+
+                    let scoreX = 0;
+                    let scoreY = 0;
+                    let targetZ = 3;
+
+                    if (/(menace|danger|peur|angoiss|inquiet|échec|raté|perdu|honte|rejet|injust|trah|threat|fear|anxi|fail|shame|reject)/i.test(txt)) scoreX -= 2;
+                    if (/(espoir|réussi|confian|opportun|courage|fièr|fier|aim|soutien|solut|hope|trust|proud|love|support)/i.test(txt)) scoreX += 2;
+                    if (/(agis|action|réagir|combatt|colère|enerv|énerv|fuir|fuit|joie|enthousias|élan|act|fight|anger|flee|joy)/i.test(txt)) scoreY += 2;
+                    if (/(impuissan|bloqu|triste|figé|paralys|fatigue|subi|calme|serein|repos|helpless|sad|froze|calm|rest)/i.test(txt)) scoreY -= 2;
+                    if (/(toujours|jamais|tout|vie|identité|avenir|profond|désespoir|always|never|identity|despair)/i.test(txt)) targetZ = 5;
+                    else if (/(honte|culpabil|faute|regard|relation|longtemps|shame|guilt|fault)/i.test(txt)) targetZ = 4;
+
+                    const findNearest = (zLevel, tx, ty) => {
+                        const pool = M.getByStrata(zLevel).filter(e => e.type !== 'operator');
+                        if (!pool.length) return null;
+                        return pool.reduce((best, cur) => {
+                            const dCur = Math.abs(cur.x - tx) + Math.abs(cur.y - ty);
+                            const dBest = Math.abs(best.x - tx) + Math.abs(best.y - ty);
+                            return dCur < dBest ? cur : best;
+                        }, pool[0]);
+                    };
+
+                    const protoZ2 = exactMatches[0] || findNearest(2, scoreX, scoreY);
+                    const scaleFactor = (2 * targetZ - 2) / 2;
+                    const deepTarget = findNearest(targetZ, scoreX * scaleFactor, scoreY * scaleFactor);
+                    const oppRecovery = protoZ2 ? M.getOpposite(protoZ2.name) : M.getByName('Calme');
+
+                    const steps = [M.getByName('Surprise'), protoZ2, deepTarget, oppRecovery, M.getByName('Point de Veille')];
+                    activateScenario(
+                        en ? 'Inferential Modeling of Your Situation' : 'Modélisation Inférentielle de Votre Situation',
+                        `${en ? 'Expectation' : 'Attente'} ${scoreX >= 0 ? '≥0' : '<0'} • ${en ? 'Control' : 'Contrôle'} ${scoreY >= 0 ? '≥0' : '<0'} • Z=${targetZ}`,
+                        en
+                            ? `Analysis estimates the narrative's implicit gradients: Surprise onset (Z=1), crystallization on ${protoZ2 ? protoZ2.name : 'Z=2'}, deepening to ${deepTarget ? deepTarget.name : 'Z=' + targetZ}, then allostatic resorption.`
+                            : `L'analyse évalue les gradients implicites du récit : amorce par Surprise (Z=1), cristallisation sur ${protoZ2 ? protoZ2.name : 'Z=2'}, approfondissement vers ${deepTarget ? deepTarget.name : 'Z=' + targetZ}, puis résorption allostatique.`,
+                        steps
+                    );
+                }
+
+                // ===================== EVENT LISTENERS =====================
+                document.getElementById('filterStratum').addEventListener('change', e => {
+                    filters.stratum = e.target.value;
+                    applyFiltersAndRender();
                 });
-            });
-
-            // Fullscreen toggles
-            function togglePanelFullscreen(panelId, btnId) {
-                const panel = document.getElementById(panelId);
-                const btn = document.getElementById(btnId);
-                if (!panel || !btn) return;
-                const isFs = panel.classList.toggle('fullscreen-panel');
-                btn.textContent = isFs ? '✕ Quitter' : '⛶ Agrandir';
-            }
-            document.getElementById('fullscreen2DBtn').addEventListener('click', () => togglePanelFullscreen('panel2D', 'fullscreen2DBtn'));
-            document.getElementById('fullscreen3DBtn').addEventListener('click', () => togglePanelFullscreen('panel3D', 'fullscreen3DBtn'));
-
-            // Scenarios
-            document.querySelectorAll('.scenario-preset-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const p = scenarioPresets[btn.dataset.preset];
-                    if (!p) return;
-                    activateScenario(p.title, p.badge, p.text, p.names.map(n => M.getByName(n)));
+                document.getElementById('filterGroup').addEventListener('change', e => {
+                    filters.group = e.target.value;
+                    applyFiltersAndRender();
                 });
-            });
-            document.getElementById('analyzeScenarioBtn').addEventListener('click', () => {
-                runScenarioAnalysis(document.getElementById('scenarioInput').value);
-            });
+                document.getElementById('filterGeometry').addEventListener('change', e => {
+                    filters.geometry = e.target.value;
+                    applyFiltersAndRender();
+                });
+                document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+                    filters.stratum = 'all';
+                    filters.group = 'all';
+                    filters.geometry = 'all';
+                    document.getElementById('filterStratum').value = 'all';
+                    document.getElementById('filterGroup').value = 'all';
+                    document.getElementById('filterGeometry').value = 'all';
+                    applyFiltersAndRender();
+                });
 
-            // Initialize 3D + handle URL params (?id=, ?highlight=, ?z=) & hash (#strate-0..7)
-            window.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('emotionSearchInput').addEventListener('input', e => {
+                    const val = e.target.value.trim();
+                    const found = M.getByName(val) || allEmotions.find(em => em.name.toLowerCase() === val.toLowerCase());
+                    if (found) handleEmotionSelect(found);
+                });
+
+                document.getElementById('traceDissipationBtn').addEventListener('click', () => {
+                    if (!selectedEmotion) return;
+                    const path = T.computeDissipationPath(selectedEmotion);
+                    drawEmotionalPath(path);
+                });
+
+                document.getElementById('clearPathBtn').addEventListener('click', () => {
+                    drawEmotionalPath([]);
+                });
+
+                document.querySelectorAll('.view-mode-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const mode = btn.dataset.mode;
+                        const p2 = document.getElementById('panel2D');
+                        const p3 = document.getElementById('panel3D');
+                        const inner = document.getElementById('vizPanelsInner');
+                        document.querySelectorAll('.view-mode-btn').forEach(b => {
+                            const active = b.dataset.mode === mode;
+                            b.className = active
+                                ? 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer'
+                                : 'view-mode-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white cursor-pointer';
+                        });
+                        if (mode === 'split') {
+                            p2.classList.remove('hidden');
+                            p3.classList.remove('hidden');
+                            inner.className = 'grid grid-cols-1 xl:grid-cols-2 gap-5';
+                        } else if (mode === '2d') {
+                            p2.classList.remove('hidden');
+                            p3.classList.add('hidden');
+                            inner.className = 'grid grid-cols-1 gap-5';
+                        } else {
+                            p2.classList.add('hidden');
+                            p3.classList.remove('hidden');
+                            inner.className = 'grid grid-cols-1 gap-5';
+                        }
+                    });
+                });
+
+                function updateFullscreenBtnText(panel, btn) {
+                    if (!panel || !btn) return;
+                    const en = isEn();
+                    const isFs = panel.classList.contains('fullscreen-panel');
+                    btn.textContent = isFs ? (en ? '✕ Exit' : '✕ Quitter') : (en ? '⛶ Expand' : '⛶ Agrandir');
+                }
+
+                function togglePanelFullscreen(panelId, btnId) {
+                    const panel = document.getElementById(panelId);
+                    const btn = document.getElementById(btnId);
+                    if (!panel || !btn) return;
+                    panel.classList.toggle('fullscreen-panel');
+                    updateFullscreenBtnText(panel, btn);
+                }
+                document.getElementById('fullscreen2DBtn').addEventListener('click', () => togglePanelFullscreen('panel2D', 'fullscreen2DBtn'));
+                document.getElementById('fullscreen3DBtn').addEventListener('click', () => togglePanelFullscreen('panel3D', 'fullscreen3DBtn'));
+                document.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Escape') return;
+                    [['panel2D', 'fullscreen2DBtn'], ['panel3D', 'fullscreen3DBtn']].forEach(([pid, bid]) => {
+                        const panel = document.getElementById(pid);
+                        const btn = document.getElementById(bid);
+                        if (panel && panel.classList.contains('fullscreen-panel')) {
+                            panel.classList.remove('fullscreen-panel');
+                            updateFullscreenBtnText(panel, btn);
+                            if (btn) btn.focus();
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.scenario-preset-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const key = btn.dataset.preset;
+                        const p = scenarioPresets[key];
+                        if (!p) return;
+                        isCustomScenarioActive = false;
+                        activeScenarioPresetKey = key;
+                        const en = isEn();
+                        activateScenario(en ? p.titleEn : p.title, p.badge, en ? p.textEn : p.text, p.names.map(n => M.getByName(n)));
+                    });
+                });
+                document.getElementById('analyzeScenarioBtn').addEventListener('click', () => {
+                    runScenarioAnalysis(document.getElementById('scenarioInput').value);
+                });
+
                 init3DVisualization();
 
                 const params = new URLSearchParams(window.location.search);
@@ -1467,27 +1549,33 @@
 
                 handleEmotionSelect(initEm);
 
-                // Load default §7.3 example path without overriding selection unless desired
+                // Load default §7.3 example path pills without overriding URL selection
+                const enInit = isEn();
                 const cafe = scenarioPresets.cafe;
                 const cafeSteps = cafe.names.map(n => M.getByName(n)).filter(Boolean);
-                const pillsHost = document.getElementById('scenarioPathPills');
-                if (pillsHost) {
-                    cafeSteps.forEach((st, idx) => {
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.className = 'px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-pink-900/60 border border-slate-700 hover:border-pink-500/50 text-xs font-semibold text-white cursor-pointer transition-colors flex items-center gap-1.5';
-                        btn.innerHTML = `<span class="w-4 h-4 rounded-full bg-amber-400 text-slate-950 font-mono text-[10px] font-bold inline-flex items-center justify-center">${idx + 1}</span><span>${st.name}</span><span class="font-mono text-[10px] text-slate-400">(Z=${st.z})</span>`;
-                        btn.onclick = () => { drawEmotionalPath(cafeSteps); handleEmotionSelect(st); };
-                        pillsHost.appendChild(btn);
-                        if (idx < cafeSteps.length - 1) {
-                            const arr = document.createElement('span');
-                            arr.className = 'text-amber-400 self-center text-xs font-bold';
-                            arr.textContent = '→';
-                            pillsHost.appendChild(arr);
-                        }
-                    });
-                }
-            });
+                activateScenario(enInit ? cafe.titleEn : cafe.title, cafe.badge, enInit ? cafe.textEn : cafe.text, cafeSteps, false);
+
+                window.addEventListener('cartograffect:lang-change', () => {
+                    renderStrataCards();
+                    update2DAxisLabels();
+                    renderIdentityCard(selectedEmotion);
+                    updateFullscreenBtnText(document.getElementById('panel2D'), document.getElementById('fullscreen2DBtn'));
+                    updateFullscreenBtnText(document.getElementById('panel3D'), document.getElementById('fullscreen3DBtn'));
+                    if (isCustomScenarioActive) {
+                        runScenarioAnalysis(document.getElementById('scenarioInput').value);
+                    } else if (scenarioPresets[activeScenarioPresetKey]) {
+                        const en = isEn();
+                        const p = scenarioPresets[activeScenarioPresetKey];
+                        activateScenario(en ? p.titleEn : p.title, p.badge, en ? p.textEn : p.text, p.names.map(n => M.getByName(n)), false);
+                    }
+                });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', bootTaxonomy);
+            } else {
+                bootTaxonomy();
+            }
         })();
 
         if ('serviceWorker' in navigator) {
@@ -1496,8 +1584,8 @@
             });
         }
     </script>
-    <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
+    <script src="bilingual_modal.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
 </body>

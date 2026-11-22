@@ -43,14 +43,14 @@
     <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
 
     <!-- Floating Lateral Dots Indicator -->
-    <div class="floating-dots-nav hidden xl:flex" aria-label="Progression de lecture">
-        <div class="floating-dot active" data-target="#hero-theorie-resume" title="Vue d'Ensemble"></div>
-        <div class="floating-dot" data-target="#triade-definitions" title="1. Affect vs Émotion vs Sentiment"></div>
-        <div class="floating-dot" data-target="#modeles-historiques" title="2. Modèles Historiques Comparés"></div>
-        <div class="floating-dot" data-target="#algorithme-36" title="3. Architecture Certifiée & Norme L1"></div>
-        <div class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications"></div>
-        <div class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique"></div>
-    </div>
+    <nav class="floating-dots-nav hidden xl:flex" aria-label="Progression de lecture">
+        <button type="button" class="floating-dot active" data-target="#hero-theorie-resume" title="Vue d'Ensemble" aria-label="Vue d'Ensemble"></button>
+        <button type="button" class="floating-dot" data-target="#triade-definitions" title="1. Affect vs Émotion vs Sentiment" aria-label="1. Affect vs Émotion vs Sentiment"></button>
+        <button type="button" class="floating-dot" data-target="#modeles-historiques" title="2. Modèles Historiques Comparés" aria-label="2. Modèles Historiques Comparés"></button>
+        <button type="button" class="floating-dot" data-target="#algorithme-36" title="3. Architecture Certifiée & Norme L1" aria-label="3. Architecture Certifiée & Norme L1"></button>
+        <button type="button" class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications" aria-label="4. Documents & Publications"></button>
+        <button type="button" class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique" aria-label="5. Corpus Bibliographique"></button>
+    </nav>
     <!-- Unified Navigation Header -->
     <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
@@ -2879,19 +2879,27 @@
     <script src="cartograffect_model.js"></script>
     <script src="cartograffect_theory.js"></script>
     <script src="script.js"></script>
+    <script src="js/compendium_payload.js"></script>
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
-    <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
     <script src="js/i18n.js"></script>
     <script>
         function copyScholarCitation(btn) {
-            const text = "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 2.1.0). Zenodo DOI: 10.5281/zenodo.24022795 | OSF: https://osf.io/z89sg | Compendium formel (120 théorèmes, 6 prouveurs): https://doi.org/10.5281/zenodo.23833938";
+            const P = window.CartograffectPayload;
+            const ver = P ? P.get('release.version', '2.1.0') : '2.1.0';
+            const artDoi = P ? P.get('identifiers.zenodo_article_doi', '10.5281/zenodo.24022795') : '10.5281/zenodo.24022795';
+            const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
+            const osfUrl = P ? P.get('identifiers.osf_url', 'https://osf.io/z89sg') : 'https://osf.io/z89sg';
+            const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
+            const provers = P ? P.get('strate_0_core.provers_count', 6) : 6;
+            const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+            const text = `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version ${ver}). Zenodo DOI: ${artDoi} | OSF: ${osfUrl} | Compendium formel (${theorems} théorèmes, ${provers} prouveurs): https://doi.org/${codeDoi}`;
             const done = () => {
                 if (!btn) return;
                 const label = btn.querySelector('span');
                 const orig = label ? label.textContent : '';
-                if (label) label.textContent = "Citation copiée !";
+                if (label) label.textContent = en ? "Citation copied!" : "Citation copiée !";
                 setTimeout(() => { if (label) label.textContent = orig; }, 2200);
             };
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2899,7 +2907,7 @@
             }
         }
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof renderMathInElement === 'function') {
+            if (typeof katex !== 'undefined' && typeof renderMathInElement === 'function') {
                 renderMathInElement(document.body, {
                     delimiters: [
                         { left: '$$', right: '$$', display: true },

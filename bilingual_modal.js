@@ -25,7 +25,7 @@
 
     function buildModalHTML(meta) {
         return `
-    <div id="bilingualModal" class="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-200">
+    <div id="bilingualModal" role="dialog" aria-modal="true" aria-labelledby="bilingualModalTitle" aria-hidden="true" class="fixed inset-0 z-[90] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-opacity duration-200">
         <div class="relative w-full max-w-4xl max-h-[90vh] bg-cosmic-900 border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden text-slate-200">
             <!-- Modal Header -->
             <div class="p-6 border-b border-slate-800 bg-cosmic-800/80 flex items-start justify-between gap-4">
@@ -36,7 +36,7 @@
                         </span>
                         <span class="text-xs text-slate-400">Manuel Cabelguen, Ph. D., <span data-payload="strate_0_core.author_affiliation">${meta.affiliation}</span></span>
                     </div>
-                    <h3 class="font-heading font-bold text-2xl text-white flex items-center gap-2.5">
+                    <h3 id="bilingualModalTitle" class="font-heading font-bold text-2xl text-white flex items-center gap-2.5">
                         <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         <span>Lexique Bilingue &amp; Terminologie Internationale</span>
                     </h3>
@@ -44,7 +44,7 @@
                         Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et vérification formelle (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
                     </p>
                 </div>
-                <button onclick="closeLangModal()" aria-label="Fermer le lexique" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-xl leading-none cursor-pointer">
+                <button type="button" onclick="closeLangModal()" aria-label="Fermer le lexique" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-xl leading-none cursor-pointer">
                     &times;
                 </button>
             </div>
@@ -52,13 +52,13 @@
             <!-- Filter Tabs & Live Search -->
             <div class="p-4 border-b border-slate-800/80 bg-cosmic-850 flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-1.5 overflow-x-auto text-xs font-semibold">
-                    <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition-colors cursor-pointer" data-filter="all">Tous les termes</button>
-                    <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="math">Mathématiques &amp; Axes</button>
-                    <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="affects">8 Prototypes Z=2</button>
-                    <button class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="citation">Citations APA</button>
+                    <button type="button" class="lang-tab-btn px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition-colors cursor-pointer" data-filter="all">Tous les termes</button>
+                    <button type="button" class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="math">Mathématiques &amp; Axes</button>
+                    <button type="button" class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="affects">8 Prototypes Z=2</button>
+                    <button type="button" class="lang-tab-btn px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer" data-filter="citation">Citations APA</button>
                 </div>
                 <div class="relative w-full sm:w-64">
-                    <input type="text" id="langSearchInput" placeholder="Rechercher (ex: agency, PEUR, L1)..." class="w-full px-3 py-1.5 pl-8 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-indigo-400">
+                    <input type="text" id="langSearchInput" aria-label="Rechercher dans le lexique bilingue" placeholder="Rechercher (ex: agency, PEUR, L1)..." class="w-full px-3 py-1.5 pl-8 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-indigo-400">
                     <svg class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                             </p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3 pt-1">
-                            <button onclick="copyCitationText()" id="copyCitationBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer">
+                            <button type="button" onclick="copyCitationText()" id="copyCitationBtn" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 <span>Copier la référence APA de l'Article</span>
                             </button>
@@ -219,7 +219,7 @@
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-cosmic-850 flex items-center justify-between text-xs text-slate-400">
                 <span>CARTOGRAFFECT&reg; &bull; OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span> &bull; &copy; 2024–2026 Manuel Cabelguen</span>
-                <button onclick="closeLangModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors cursor-pointer">
+                <button type="button" onclick="closeLangModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors cursor-pointer">
                     Fermer
                 </button>
             </div>
@@ -282,28 +282,71 @@
             });
         }
 
-        const modal = document.getElementById("bilingualModal");
+        let lastFocusedEl = null;
+
+        const getFocusable = () => {
+            if (!modal) return [];
+            return Array.from(
+                modal.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+            ).filter(el => el.offsetParent !== null);
+        };
+
         if (modal) {
             modal.addEventListener("click", (e) => {
                 if (e.target === modal) closeLangModal();
             });
             document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                if (modal.classList.contains("hidden")) return;
+                if (e.key === "Escape") {
+                    e.preventDefault();
                     closeLangModal();
+                    return;
+                }
+                if (e.key === "Tab") {
+                    const focusables = getFocusable();
+                    if (!focusables.length) return;
+                    const first = focusables[0];
+                    const last = focusables[focusables.length - 1];
+                    if (e.shiftKey) {
+                        if (document.activeElement === first || !modal.contains(document.activeElement)) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else if (document.activeElement === last || !modal.contains(document.activeElement)) {
+                        e.preventDefault();
+                        first.focus();
+                    }
                 }
             });
         }
+
+        window._bilingualSetLastFocused = function(el) {
+            lastFocusedEl = el;
+        };
+        window._bilingualGetLastFocused = function() {
+            return lastFocusedEl;
+        };
     }
 
     window.openLangModal = function() {
+        const trigger = document.activeElement;
         injectModal();
+        if (window._bilingualSetLastFocused) window._bilingualSetLastFocused(trigger);
         if (window.CartograffectPayload && typeof window.CartograffectPayload.hydrate === "function") {
             window.CartograffectPayload.hydrate();
+        }
+        if (window.CartograffectI18n && window.CartograffectI18n.getLang() === "en") {
+            window.CartograffectI18n.applyLanguage("en");
         }
         const modal = document.getElementById("bilingualModal");
         if (modal) {
             modal.classList.remove("hidden");
+            modal.setAttribute("aria-hidden", "false");
             document.body.style.overflow = "hidden";
+            const searchInput = document.getElementById("langSearchInput");
+            const firstBtn = modal.querySelector('button:not([disabled])');
+            const target = searchInput || firstBtn;
+            if (target) requestAnimationFrame(() => target.focus());
         }
     };
 
@@ -311,20 +354,26 @@
         const modal = document.getElementById("bilingualModal");
         if (modal) {
             modal.classList.add("hidden");
+            modal.setAttribute("aria-hidden", "true");
             document.body.style.overflow = "";
+            const prev = window._bilingualGetLastFocused && window._bilingualGetLastFocused();
+            if (prev && typeof prev.focus === "function" && document.contains(prev)) {
+                prev.focus();
+            }
         }
     };
 
     window.copyCitationText = function() {
         const meta = getPayloadMeta();
         const text = `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (version ${meta.tag}, OPIC n° ${meta.cipo}). Zenodo. https://doi.org/${meta.articleDoi}`;
+        if (!navigator.clipboard || !navigator.clipboard.writeText) return;
         navigator.clipboard.writeText(text).then(() => {
             const notice = document.getElementById("copySuccessNotice");
             if (notice) {
                 notice.classList.remove("hidden");
                 setTimeout(() => notice.classList.add("hidden"), 3000);
             }
-        });
+        }).catch(() => {});
     };
 
     if (typeof window !== "undefined") {

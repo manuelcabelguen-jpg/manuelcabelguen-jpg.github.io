@@ -978,29 +978,33 @@ root.downloadBibtexFile = function() {
     URL.revokeObjectURL(url);
 };
 
+function corpusIsEn() {
+    return Boolean(typeof window !== "undefined" && window.CartograffectI18n && window.CartograffectI18n.getLang() === "en");
+}
+
 root.copyPaperCitation = function(paperId, btnElement) {
     const paper = root.SCIENTIFIC_CORPUS.find(function(p) { return p.id === paperId; });
-    if (!paper) return;
+    if (!paper || !navigator.clipboard || !navigator.clipboard.writeText) return;
     const text = (paper.author + ". " + paper.title + ". " + paper.ref + " " + (paper.doi ? paper.doi : "")).trim();
     navigator.clipboard.writeText(text).then(function() {
         if (btnElement) {
             const orig = btnElement.innerHTML;
-            btnElement.innerHTML = '<span class="text-emerald-400 font-semibold">✓ APA copié</span>';
+            btnElement.innerHTML = `<span class="text-emerald-400 font-semibold">${corpusIsEn() ? "✓ APA copied" : "✓ APA copié"}</span>`;
             setTimeout(function() { btnElement.innerHTML = orig; }, 2000);
         }
-    });
+    }).catch(function() {});
 };
 
 root.copyPaperBibtex = function(paperId, btnElement) {
     const paper = root.SCIENTIFIC_CORPUS.find(function(p) { return p.id === paperId; });
-    if (!paper) return;
+    if (!paper || !navigator.clipboard || !navigator.clipboard.writeText) return;
     navigator.clipboard.writeText(paper.bibtex).then(function() {
         if (btnElement) {
             const orig = btnElement.innerHTML;
-            btnElement.innerHTML = '<span class="text-emerald-400 font-semibold">✓ BibTeX copié</span>';
+            btnElement.innerHTML = `<span class="text-emerald-400 font-semibold">${corpusIsEn() ? "✓ BibTeX copied" : "✓ BibTeX copié"}</span>`;
             setTimeout(function() { btnElement.innerHTML = orig; }, 2000);
         }
-    });
+    }).catch(function() {});
 };
 
 root.initCorpusEngine = function(config) {
@@ -1042,11 +1046,14 @@ root.initCorpusEngine = function(config) {
         });
 
         const totalCards = cards.length;
+        const en = corpusIsEn();
         if (countBadge) {
             if (visibleCount === totalCards) {
-                countBadge.textContent = totalCards + " références";
+                countBadge.textContent = totalCards + (en ? " references" : " références");
             } else {
-                countBadge.textContent = visibleCount + " référence" + (visibleCount > 1 ? "s" : "") + " affichée" + (visibleCount > 1 ? "s" : "");
+                countBadge.textContent = en
+                    ? visibleCount + " reference" + (visibleCount > 1 ? "s" : "") + " shown"
+                    : visibleCount + " référence" + (visibleCount > 1 ? "s" : "") + " affichée" + (visibleCount > 1 ? "s" : "");
             }
         }
 
@@ -1099,6 +1106,9 @@ root.initCorpusEngine = function(config) {
     };
 
     updateView();
+    if (typeof window !== "undefined") {
+        window.addEventListener("cartograffect:lang-change", updateView);
+    }
 };
 
 if (typeof module !== "undefined" && module.exports) {

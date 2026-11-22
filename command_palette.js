@@ -20,8 +20,13 @@
     concept: '<svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>'
   };
 
+  function isEn() {
+    return Boolean(typeof window !== 'undefined' && window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
+  }
+
   // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.1.0)
   function buildDefaultIndex() {
+    const en = isEn();
     const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
     const tag = P ? P.get('release.tag', 'v2.1.0') : 'v2.1.0';
     const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
@@ -33,43 +38,43 @@
 
     return [
       // Expérience immersive
-      { id: 'voyage', title: 'Le Voyage Affectif — Vivre le Circuit d\'une Émotion (2 min)', category: 'Expérience', url: 'voyage.html', icon: ICONS.voyage, badge: 'Interactif' },
+      { id: 'voyage', title: en ? "The Affective Journey — Live an Emotion's Circuit (2 min)" : "Le Voyage Affectif — Vivre le Circuit d'une Émotion (2 min)", category: en ? 'Experience' : 'Expérience', filterKey: 'Expérience', url: 'voyage.html', icon: ICONS.voyage, badge: en ? 'Interactive' : 'Interactif' },
 
       // Territoires & Navigation principale
-      { id: 'comp1', title: '1. Le Moteur Prédictif — Interfaces Perceptive, Subjective, Attentionnelle & Gradients A/C', category: 'Modèle', url: 'moteur-predictif.html', icon: ICONS.engine, badge: 'Niveau 1' },
-      { id: 'comp2', title: '2. Le Noyau Affectif — Espace (X, Y, Z), Norme L₁ & Opérateurs Centraux', category: 'Modèle', url: 'noyau-affectif.html', icon: ICONS.core, badge: 'Niveau 2' },
-      { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: 'Niveau 3' },
-      { id: 't1', title: `4. La Taxonomie Affective — Carte Interactive 2D/3D des ${statesCount} États (Z=0 à Z=7)`, category: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: 'Niveau 4' },
-      { id: 't4', title: `Article Théorique — Monographie Intégrale ${tag} (Dr M. Cabelguen)`, category: 'Recherche', url: 'article.html', icon: ICONS.article, badge: `OPIC ${cipo}` },
-      { id: 'lean4', title: `Vérification Formelle (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Formel' },
-      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Vérification Formelle', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
-      { id: 't6', title: 'Accueil — Vue d\'ensemble de Cartograffect', category: 'Navigation', url: 'index.html', icon: ICONS.home, badge: 'Accueil' },
+      { id: 'comp1', title: en ? '1. The Predictive Engine — Perceptual, Subjective, Attentional Interfaces & A/C Gradients' : '1. Le Moteur Prédictif — Interfaces Perceptive, Subjective, Attentionnelle & Gradients A/C', category: en ? 'Model' : 'Modèle', filterKey: 'Modèle', url: 'moteur-predictif.html', icon: ICONS.engine, badge: en ? 'Level 1' : 'Niveau 1' },
+      { id: 'comp2', title: en ? '2. The Affective Core — (X, Y, Z) Space, L₁ Norm & Central Operators' : '2. Le Noyau Affectif — Espace (X, Y, Z), Norme L₁ & Opérateurs Centraux', category: en ? 'Model' : 'Modèle', filterKey: 'Modèle', url: 'noyau-affectif.html', icon: ICONS.core, badge: en ? 'Level 2' : 'Niveau 2' },
+      { id: 'comp3', title: en ? '3. The Affective Matrix — Lexicographic Valence, Z=2 Prototypes & Dissipation' : '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: en ? 'Model' : 'Modèle', filterKey: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: en ? 'Level 3' : 'Niveau 3' },
+      { id: 't1', title: en ? `4. Affective Taxonomy — Interactive 2D/3D Map of ${statesCount} States (Z=0 to Z=7)` : `4. La Taxonomie Affective — Carte Interactive 2D/3D des ${statesCount} États (Z=0 à Z=7)`, category: 'Exploration', filterKey: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: en ? 'Level 4' : 'Niveau 4' },
+      { id: 't4', title: en ? `Theoretical Paper — Full Monograph ${tag} (Dr. M. Cabelguen)` : `Article Théorique — Monographie Intégrale ${tag} (Dr M. Cabelguen)`, category: en ? 'Research' : 'Recherche', filterKey: 'Recherche', url: 'article.html', icon: ICONS.article, badge: `${en ? 'CIPO' : 'OPIC'} ${cipo}` },
+      { id: 'lean4', title: en ? `Formal Verification (${proversCount} Provers) — ${theorems} Theorems, ${leanModulesCount} .lean Modules & 0 Sorry (DOI: ${codeDoi})` : `Vérification Formelle (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: en ? 'Research' : 'Recherche', filterKey: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: en ? 'Formal' : 'Formel' },
+      { id: 't5', title: en ? 'Corpus & Proofs — Historical Models & Formal Verification' : 'Corpus & Preuves — Modèles Historiques & Vérification Formelle', category: en ? 'Research' : 'Recherche', filterKey: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
+      { id: 't6', title: en ? 'Home — Cartograffect Overview' : "Accueil — Vue d'ensemble de Cartograffect", category: 'Navigation', filterKey: 'Navigation', url: 'index.html', icon: ICONS.home, badge: en ? 'Home' : 'Accueil' },
 
       // Strates Z (Norme L1)
-      { id: 'z0', title: 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-0', icon: 'Z0', badge: 'Origine' },
-      { id: 'z1', title: 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: 'Strate Z', url: 'taxonomie-affective.html#strate-1', icon: 'Z1', badge: 'Saillance' },
-      { id: 'z2', title: 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-2', icon: 'Z2', badge: 'Première Couronne' },
-      { id: 'z3', title: 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-3', icon: 'Z3', badge: 'Émoi' },
-      { id: 'z4', title: 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-4', icon: 'Z4', badge: 'Réserve' },
-      { id: 'z5', title: 'Strate Z = 5 — Orientations Durables & Humeurs (|X|+|Y|=8)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-5', icon: 'Z5', badge: 'Recul' },
-      { id: 'z6', title: 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-6', icon: 'Z6', badge: 'Saisissement' },
-      { id: 'z7', title: 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12)', category: 'Strate Z', url: 'taxonomie-affective.html#strate-7', icon: 'Z7', badge: 'Suspension' },
+      { id: 'z0', title: en ? 'Stratum Z = 0 — Wake Point (0,0,0) [Origin & Rest]' : 'Strate Z = 0 — Point de Veille (0,0,0) [Origine & Repos]', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-0', icon: 'Z0', badge: en ? 'Origin' : 'Origine' },
+      { id: 'z1', title: en ? 'Stratum Z = 1 — Surprise Operator (0,0,1) [Rest Rupture]' : 'Strate Z = 1 — Opérateur Surprise (0,0,1) [Rupture de Repos]', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-1', icon: 'Z1', badge: en ? 'Salience' : 'Saillance' },
+      { id: 'z2', title: en ? 'Stratum Z = 2 — Fundamental Prototypes (|X|+|Y|=2, 8 affects)' : 'Strate Z = 2 — Prototypes Fondamentaux (|X|+|Y|=2, 8 affects)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-2', icon: 'Z2', badge: en ? 'First Crown' : 'Première Couronne' },
+      { id: 'z3', title: en ? 'Stratum Z = 3 — Reactive Emotions (|X|+|Y|=4, 16 affects)' : 'Strate Z = 3 — Émotions Réactives (|X|+|Y|=4, 16 affects)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-3', icon: 'Z3', badge: 'Émoi' },
+      { id: 'z4', title: en ? 'Stratum Z = 4 — Reflexive & Relational Feelings (|X|+|Y|=6)' : 'Strate Z = 4 — Sentiments Réflexifs & Relationnels (|X|+|Y|=6)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-4', icon: 'Z4', badge: 'Réserve' },
+      { id: 'z5', title: en ? 'Stratum Z = 5 — Enduring Dispositions & Moods (|X|+|Y|=8)' : 'Strate Z = 5 — Orientations Durables & Humeurs (|X|+|Y|=8)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-5', icon: 'Z5', badge: 'Recul' },
+      { id: 'z6', title: en ? 'Stratum Z = 6 — Affective Identities (|X|+|Y|=10, Saisissement)' : 'Strate Z = 6 — Identités Affectives (|X|+|Y|=10, Saisissement)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-6', icon: 'Z6', badge: 'Saisissement' },
+      { id: 'z7', title: en ? 'Stratum Z = 7 — Transcendental Feelings (|X|+|Y|=12, Suspension)' : 'Strate Z = 7 — Sentiments Transcendantaux (|X|+|Y|=12, Suspension)', category: en ? 'Stratum Z' : 'Strate Z', filterKey: 'Strate Z', url: 'taxonomie-affective.html#strate-7', icon: 'Z7', badge: 'Suspension' },
 
       // Prototypes Axiaux et Diagonaux Clés
-      { id: 'p_joie', title: 'Joie — X0 / Y+2 / Z2 (Élan / Mobilisation Y+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Joie', icon: 'Y+', badge: 'Axial' },
-      { id: 'p_tristesse', title: 'Tristesse — X0 / Y-2 / Z2 (Retenue / Apaisement Y−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Tristesse', icon: 'Y−', badge: 'Axial' },
-      { id: 'p_courage', title: 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente X+)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Courage', icon: 'X+', badge: 'Axial' },
-      { id: 'p_peur', title: 'Peur — X-2 / Y0 / Z2 (Charge d’Attente X−)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Peur', icon: 'X−', badge: 'Axial' },
-      { id: 'p_desir', title: 'Désir — X+1 / Y+1 / Z2 (Synergie Positive +X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Désir', icon: '++', badge: 'Diagonal' },
-      { id: 'p_colere', title: 'Colère — X-1 / Y+1 / Z2 (Compensation Ergotropique −X/+Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Colère', icon: '−+', badge: 'Diagonal' },
-      { id: 'p_calme', title: 'Calme — X+1 / Y-1 / Z2 (Relâchement Trophotropique +X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Calme', icon: '+−', badge: 'Diagonal' },
-      { id: 'p_degout', title: 'Dégoût — X-1 / Y-1 / Z2 (Congruence Aversive −X/−Y)', category: 'Affect Clé', url: 'taxonomie-affective.html?id=Dégoût', icon: '−−', badge: 'Diagonal' },
+      { id: 'p_joie', title: en ? 'Joie (Joy) — X0 / Y+2 / Z2 (Drive / Mobilization Y+)' : 'Joie — X0 / Y+2 / Z2 (Élan / Mobilisation Y+)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Joie', icon: 'Y+', badge: 'Axial' },
+      { id: 'p_tristesse', title: en ? 'Tristesse (Sadness) — X0 / Y-2 / Z2 (Restraint Y−)' : 'Tristesse — X0 / Y-2 / Z2 (Retenue / Apaisement Y−)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Tristesse', icon: 'Y−', badge: 'Axial' },
+      { id: 'p_courage', title: en ? 'Courage — X+2 / Y0 / Z2 (Expectation Discharge X+)' : 'Courage — X+2 / Y0 / Z2 (Décharge d’Attente X+)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Courage', icon: 'X+', badge: 'Axial' },
+      { id: 'p_peur', title: en ? 'Peur (Fear) — X-2 / Y0 / Z2 (Expectation Charge X−)' : 'Peur — X-2 / Y0 / Z2 (Charge d’Attente X−)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Peur', icon: 'X−', badge: 'Axial' },
+      { id: 'p_desir', title: en ? 'Désir (Desire) — X+1 / Y+1 / Z2 (Positive Synergy +X/+Y)' : 'Désir — X+1 / Y+1 / Z2 (Synergie Positive +X/+Y)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Désir', icon: '++', badge: 'Diagonal' },
+      { id: 'p_colere', title: en ? 'Colère (Anger) — X-1 / Y+1 / Z2 (Ergotropic Compensation −X/+Y)' : 'Colère — X-1 / Y+1 / Z2 (Compensation Ergotropique −X/+Y)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Colère', icon: '−+', badge: 'Diagonal' },
+      { id: 'p_calme', title: en ? 'Calme (Calm) — X+1 / Y-1 / Z2 (Trophotropic Release +X/−Y)' : 'Calme — X+1 / Y-1 / Z2 (Relâchement Trophotropique +X/−Y)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Calme', icon: '+−', badge: 'Diagonal' },
+      { id: 'p_degout', title: en ? 'Dégoût (Disgust) — X-1 / Y-1 / Z2 (Aversive Congruence −X/−Y)' : 'Dégoût — X-1 / Y-1 / Z2 (Congruence Aversive −X/−Y)', category: en ? 'Key Affect' : 'Affect Clé', filterKey: 'Affect', url: 'taxonomie-affective.html?id=Dégoût', icon: '−−', badge: 'Diagonal' },
 
       // Concepts computationnels & Neurosciences
-      { id: 'c1', title: 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', url: 'article.html#theorie', icon: ICONS.concept, badge: 'Physique' },
-      { id: 'c2', title: 'Inférence Active & Allostasie Intéroceptive', category: 'Concept', url: 'article.html#allostasie', icon: ICONS.concept, badge: 'Biologie' },
-      { id: 'c3', title: 'Norme L₁ des Couronnes : |X| + |Y| = 2Z - 2 (Manhattan)', category: 'Mathématiques', url: 'article.html#theorie', icon: 'L₁', badge: 'Loi L₁' },
-      { id: 'c4', title: 'Inversion Centrale & Réflexion Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)', category: 'Mathématiques', url: 'article.html#theorie', icon: '⇄', badge: 'Géométrie' },
+      { id: 'c1', title: en ? 'Variational Free Energy & Minimization (Friston)' : 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', filterKey: 'Concept', url: 'article.html#section-3', icon: ICONS.concept, badge: en ? 'Physics' : 'Physique' },
+      { id: 'c2', title: en ? 'Active Inference & Interoceptive Allostasis' : 'Inférence Active & Allostasie Intéroceptive', category: 'Concept', filterKey: 'Concept', url: 'article.html#section-3', icon: ICONS.concept, badge: en ? 'Biology' : 'Biologie' },
+      { id: 'c3', title: en ? 'L₁ Crown Law: |X| + |Y| = 2Z - 2 (Manhattan)' : 'Norme L₁ des Couronnes : |X| + |Y| = 2Z - 2 (Manhattan)', category: en ? 'Mathematics' : 'Mathématiques', filterKey: 'Concept', url: 'article.html#section-5', icon: 'L₁', badge: en ? 'L₁ Law' : 'Loi L₁' },
+      { id: 'c4', title: en ? 'Central Inversion & Contralateral Reflection (-sgn(X)|Y|, -sgn(Y)|X|)' : 'Inversion Centrale & Réflexion Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)', category: en ? 'Mathematics' : 'Mathématiques', filterKey: 'Concept', url: 'article.html#section-6', icon: '⇄', badge: en ? 'Geometry' : 'Géométrie' },
     ];
   }
 
@@ -84,8 +89,9 @@
         .filter(e => !existingIds.has(`emo-${e.name}`))
         .map(e => ({
           id: `emo-${e.id !== undefined ? e.id : e.name}`,
-          title: `${e.name} — ${e.code || `X${e.x}/Y${e.y}/Z${e.z}`} (${e.desc || 'Affect du modèle'})`,
+          title: `${e.name} — ${e.code || `X${e.x}/Y${e.y}/Z${e.z}`} (${e.desc || 'Affect'})`,
           category: `Affect • Z=${e.z}`,
+          filterKey: 'Affect',
           url: `taxonomie-affective.html?id=${encodeURIComponent(e.name)}`,
           icon: e.type === 'operator' ? 'C' : (e.type === 'axial' ? 'Ax' : (e.type === 'diagonal' ? 'Dg' : 'Lt')),
           badge: e.group || `Z=${e.z}`
@@ -101,23 +107,23 @@
     if (document.getElementById('cmd-palette-backdrop')) return;
 
     const modalHTML = `
-      <div id="cmd-palette-backdrop" class="hidden fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
+      <div id="cmd-palette-backdrop" role="dialog" aria-modal="true" aria-label="Recherche rapide Cartograffect" aria-hidden="true" class="hidden fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
         <div id="cmd-palette-container" class="w-full max-w-2xl bg-cosmic-850/95 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-200 backdrop-blur-xl">
           
           <!-- Barre de saisie -->
           <div class="flex items-center px-4 py-3.5 border-b border-slate-800/80 bg-slate-900/50">
             <svg class="w-4 h-4 text-indigo-400 mr-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input id="cmd-input" type="text" placeholder="Rechercher un affect, une strate Z, un concept (ex: Colère, Z=3, Friston, L1)..." 
+            <input id="cmd-input" type="text" aria-label="Rechercher un affect, une strate ou un concept" placeholder="Rechercher un affect, une strate Z, un concept (ex: Colère, Z=3, Friston, L1)..." 
                    autocomplete="off" spellcheck="false"
                    class="w-full bg-transparent text-white placeholder-slate-400 text-sm focus:outline-none font-sans">
             <div class="flex items-center gap-1.5 ml-2">
-              <kbd class="px-2 py-0.5 text-[11px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700/80 rounded shadow-sm">Échap</kbd>
+              <kbd id="cmd-esc-kbd" class="px-2 py-0.5 text-[11px] font-mono text-slate-400 bg-slate-800/80 border border-slate-700/80 rounded shadow-sm">Échap</kbd>
             </div>
           </div>
 
           <!-- Filtres rapides par catégories -->
           <div class="flex items-center gap-1 px-4 py-2 border-b border-slate-800/50 bg-slate-950/40 text-[11px] font-mono overflow-x-auto no-scrollbar">
-            <span class="text-slate-400 mr-1 shrink-0">Filtres :</span>
+            <span id="cmd-filters-label" class="text-slate-400 mr-1 shrink-0">Filtres :</span>
             <button type="button" class="cmd-filter-pill px-2 py-0.5 rounded-md bg-indigo-950/70 text-indigo-200 border border-indigo-500/40 font-semibold" data-filter="">Tous</button>
             <button type="button" class="cmd-filter-pill px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 hover:text-white" data-filter="Exploration">Exploration</button>
             <button type="button" class="cmd-filter-pill px-2 py-0.5 rounded-md bg-slate-900 text-slate-400 border border-slate-800 hover:text-white" data-filter="Strate Z">Strates Z</button>
@@ -126,13 +132,13 @@
           </div>
 
           <!-- Liste des résultats -->
-          <ul id="cmd-results" class="max-h-84 overflow-y-auto p-2 space-y-1 divide-y divide-slate-800/40 font-sans"></ul>
+          <ul id="cmd-results" role="listbox" class="max-h-84 overflow-y-auto p-2 space-y-1 divide-y divide-slate-800/40 font-sans"></ul>
 
           <!-- Pied de la palette -->
           <div class="px-4 py-2.5 bg-slate-950/80 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
             <div class="flex items-center gap-3 font-mono text-[11px]">
-              <span><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↑</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↓</kbd> Naviguer</span>
-              <span><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↵ Entrée</kbd> Ouvrir</span>
+              <span id="cmd-nav-hint"><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↑</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↓</kbd> Naviguer</span>
+              <span id="cmd-open-hint"><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↵ Entrée</kbd> Ouvrir</span>
             </div>
             <div class="flex items-center gap-1.5 text-indigo-300 font-semibold text-[11px]">
               <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
@@ -153,10 +159,44 @@
     let activeIndex = 0;
     let currentMatches = [];
     let currentCategoryFilter = '';
+    let lastFocusedEl = null;
+
+    function syncPaletteChrome() {
+      const en = isEn();
+      backdrop.setAttribute('aria-label', en ? 'Cartograffect Quick Search' : 'Recherche rapide Cartograffect');
+      input.setAttribute('aria-label', en ? 'Search an affective state, stratum or concept' : 'Rechercher un affect, une strate ou un concept');
+      input.setAttribute('placeholder', en
+        ? 'Search an affective state, stratum Z, or concept (e.g. Colère, Z=3, Friston, L1)...'
+        : 'Rechercher un affect, une strate Z, un concept (ex: Colère, Z=3, Friston, L1)...');
+      const escKbd = document.getElementById('cmd-esc-kbd');
+      if (escKbd) escKbd.textContent = en ? 'Esc' : 'Échap';
+      const filtersLbl = document.getElementById('cmd-filters-label');
+      if (filtersLbl) filtersLbl.textContent = en ? 'Filters:' : 'Filtres :';
+      const pillLabels = en
+        ? { '': 'All', 'Exploration': 'Exploration', 'Strate Z': 'Strata Z', 'Affect': 'Affects', 'Concept': 'Concepts' }
+        : { '': 'Tous', 'Exploration': 'Exploration', 'Strate Z': 'Strates Z', 'Affect': 'Affects', 'Concept': 'Concepts' };
+      document.querySelectorAll('.cmd-filter-pill').forEach(btn => {
+        const fk = btn.getAttribute('data-filter') || '';
+        if (pillLabels[fk]) btn.textContent = pillLabels[fk];
+      });
+      const navHint = document.getElementById('cmd-nav-hint');
+      if (navHint) navHint.innerHTML = `<kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↑</kbd> <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">↓</kbd> ${en ? 'Navigate' : 'Naviguer'}`;
+      const openHint = document.getElementById('cmd-open-hint');
+      if (openHint) openHint.innerHTML = `<kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">${en ? '↵ Enter' : '↵ Entrée'}</kbd> ${en ? 'Open' : 'Ouvrir'}`;
+    }
+
+    function getFocusable() {
+      return Array.from(
+        container.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+      ).filter(el => el.offsetParent !== null);
+    }
 
     function openPalette() {
+      lastFocusedEl = document.activeElement;
       refreshModelData();
+      syncPaletteChrome();
       backdrop.classList.remove('hidden');
+      backdrop.setAttribute('aria-hidden', 'false');
       requestAnimationFrame(() => {
         backdrop.classList.remove('opacity-0', 'pointer-events-none');
         container.classList.remove('scale-95');
@@ -170,12 +210,17 @@
     }
 
     function closePalette() {
+      if (backdrop.classList.contains('hidden')) return;
       backdrop.classList.add('opacity-0', 'pointer-events-none');
+      backdrop.setAttribute('aria-hidden', 'true');
       container.classList.remove('scale-100');
       container.classList.add('scale-95');
       setTimeout(() => {
         backdrop.classList.add('hidden');
       }, 200);
+      if (lastFocusedEl && typeof lastFocusedEl.focus === 'function' && document.contains(lastFocusedEl)) {
+        lastFocusedEl.focus();
+      }
     }
 
     function updatePills() {
@@ -194,7 +239,10 @@
       let pool = searchableItems;
 
       if (currentCategoryFilter) {
-        pool = pool.filter(item => item.category.toLowerCase().includes(currentCategoryFilter.toLowerCase()));
+        pool = pool.filter(item =>
+          (item.filterKey && item.filterKey.toLowerCase().includes(currentCategoryFilter.toLowerCase())) ||
+          item.category.toLowerCase().includes(currentCategoryFilter.toLowerCase())
+        );
       }
 
       if (!q) {
@@ -211,11 +259,12 @@
     }
 
     function renderResults() {
+      const en = isEn();
       if (currentMatches.length === 0) {
         resultsList.innerHTML = `
           <li class="px-4 py-8 text-center text-sm text-slate-400 flex flex-col items-center gap-2">
             <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span>Aucun résultat correspondant dans le modèle CARTOGRAFFECT®.</span>
+            <span>${en ? 'No matching results in the CARTOGRAFFECT® model.' : 'Aucun résultat correspondant dans le modèle CARTOGRAFFECT®.'}</span>
           </li>`;
         return;
       }
@@ -223,7 +272,7 @@
       resultsList.innerHTML = currentMatches.map((item, index) => {
         const isSelected = index === activeIndex;
         return `
-          <li data-index="${index}" class="cmd-item flex items-center justify-between px-3.5 py-2.5 rounded-xl cursor-pointer text-sm transition-all ${
+          <li data-index="${index}" role="option" aria-selected="${isSelected}" class="cmd-item flex items-center justify-between px-3.5 py-2.5 rounded-xl cursor-pointer text-sm transition-all ${
             isSelected ? 'bg-indigo-600/20 border border-indigo-500/40 text-white' : 'text-slate-200 hover:bg-slate-800/60 hover:text-white border border-transparent'
           }">
             <div class="flex items-center space-x-3 overflow-hidden">
@@ -256,15 +305,31 @@
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        if (backdrop.classList.contains('pointer-events-none')) {
+        if (backdrop.classList.contains('hidden')) {
           openPalette();
         } else {
           closePalette();
         }
-      } else if (e.key === 'Escape' && !backdrop.classList.contains('pointer-events-none')) {
+      } else if (e.key === 'Escape' && !backdrop.classList.contains('hidden')) {
+        e.preventDefault();
         closePalette();
-      } else if (!backdrop.classList.contains('pointer-events-none')) {
-        if (e.key === 'ArrowDown') {
+      } else if (!backdrop.classList.contains('hidden')) {
+        if (e.key === 'Tab') {
+          const focusables = getFocusable();
+          if (focusables.length) {
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            if (e.shiftKey) {
+              if (document.activeElement === first || !container.contains(document.activeElement)) {
+                e.preventDefault();
+                last.focus();
+              }
+            } else if (document.activeElement === last || !container.contains(document.activeElement)) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        } else if (e.key === 'ArrowDown') {
           e.preventDefault();
           if (currentMatches.length > 0) {
             activeIndex = (activeIndex + 1) % currentMatches.length;
@@ -312,6 +377,15 @@
           e.preventDefault();
           openPalette();
         });
+      }
+    });
+
+    syncPaletteChrome();
+    window.addEventListener('cartograffect:lang-change', () => {
+      refreshModelData();
+      syncPaletteChrome();
+      if (!backdrop.classList.contains('hidden')) {
+        filterItems(input.value);
       }
     });
 

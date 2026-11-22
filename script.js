@@ -148,9 +148,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const prefersReducedMotion = () => Boolean(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
     // Function to replay intro animation anytime
     window.replayIntroAnimation = function() {
         if (!titleScreen) return;
+        if (prefersReducedMotion()) {
+            transitionToMainContent(true);
+            return;
+        }
         hasTransitioned = false;
         titleScreen.style.display = 'flex';
         requestAnimationFrame(() => {
@@ -213,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const offsetPosition = Math.max(0, elementPosition + window.pageYOffset - headerOffset);
             window.scrollTo({
                 top: offsetPosition,
-                behavior: "smooth"
+                behavior: prefersReducedMotion() ? "auto" : "smooth"
             });
             history.pushState(null, null, targetId);
         }
@@ -263,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 const trackWidth = tabsTrack.offsetWidth;
                                 tabsTrack.scrollTo({
                                     left: tabLeft - (trackWidth / 2) + (tabWidth / 2),
-                                    behavior: 'smooth'
+                                    behavior: prefersReducedMotion() ? 'auto' : 'smooth'
                                 });
                             }
                         } else {

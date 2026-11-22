@@ -25,6 +25,10 @@
 
     const CartograffectTheory = {};
 
+    function isEn() {
+        return Boolean(root.CartograffectI18n && typeof root.CartograffectI18n.getLang === 'function' && root.CartograffectI18n.getLang() === 'en');
+    }
+
     // =========================================================================
     // 1. PREDICTIVE ENGINE (PredictiveEngine.lean)
     // =========================================================================
@@ -42,14 +46,35 @@
     };
 
     CartograffectTheory.polarityLabel = function (pol, axis) {
+        const en = isEn();
         if (axis === 'A') {
-            if (pol === 'pos') return { code: 'A+', title: 'Attente Certaine', regime: 'Décharge épistémique', desc: 'Modèle interne révisable : mise à jour des croyances possible.' };
-            if (pol === 'neg') return { code: 'A−', title: 'Attente Incertaine', regime: 'Charge épistémique', desc: 'Modèle interne non révisable : maintien / coût d’accommodation élevé.' };
-            return { code: 'A0', title: 'Attente Neutre', regime: 'Neutre (sous seuil)', desc: 'Flux conformes aux croyances d’arrière-plan, aucune saillance épistémique.' };
+            if (pol === 'pos') {
+                return en
+                    ? { code: 'A+', title: 'Certain Expectation', regime: 'Epistemic discharge', desc: 'Revisable internal model: belief updating is possible.' }
+                    : { code: 'A+', title: 'Attente Certaine', regime: 'Décharge épistémique', desc: 'Modèle interne révisable : mise à jour des croyances possible.' };
+            }
+            if (pol === 'neg') {
+                return en
+                    ? { code: 'A−', title: 'Uncertain Expectation', regime: 'Epistemic charge', desc: 'Non-revisable internal model: retention / high accommodation cost.' }
+                    : { code: 'A−', title: 'Attente Incertaine', regime: 'Charge épistémique', desc: 'Modèle interne non révisable : maintien / coût d’accommodation élevé.' };
+            }
+            return en
+                ? { code: 'A0', title: 'Neutral Expectation', regime: 'Neutral (below threshold)', desc: 'Streams consistent with background beliefs, no epistemic salience.' }
+                : { code: 'A0', title: 'Attente Neutre', regime: 'Neutre (sous seuil)', desc: 'Flux conformes aux croyances d’arrière-plan, aucune saillance épistémique.' };
         }
-        if (pol === 'pos') return { code: 'C+', title: 'Contrôle Certain', regime: 'Décharge pragmatique', desc: 'Situation contrôlable : action motrice contributive possible.' };
-        if (pol === 'neg') return { code: 'C−', title: 'Contrôle Incertain', regime: 'Charge pragmatique', desc: 'Situation non contrôlable : réduction ou suspension de l’effort.' };
-        return { code: 'C0', title: 'Contrôle Neutre', regime: 'Neutre (sous seuil)', desc: 'Régime de contrôle de routine sous le seuil de saillance.' };
+        if (pol === 'pos') {
+            return en
+                ? { code: 'C+', title: 'Certain Control', regime: 'Pragmatic discharge', desc: 'Controllable situation: contributory motor action is possible.' }
+                : { code: 'C+', title: 'Contrôle Certain', regime: 'Décharge pragmatique', desc: 'Situation contrôlable : action motrice contributive possible.' };
+        }
+        if (pol === 'neg') {
+            return en
+                ? { code: 'C−', title: 'Uncertain Control', regime: 'Pragmatic charge', desc: 'Uncontrollable situation: reduction or suspension of effort.' }
+                : { code: 'C−', title: 'Contrôle Incertain', regime: 'Charge pragmatique', desc: 'Situation non contrôlable : réduction ou suspension de l’effort.' };
+        }
+        return en
+            ? { code: 'C0', title: 'Neutral Control', regime: 'Neutral (below threshold)', desc: 'Routine control regime below the salience threshold.' }
+            : { code: 'C0', title: 'Contrôle Neutre', regime: 'Neutre (sous seuil)', desc: 'Régime de contrôle de routine sous le seuil de saillance.' };
     };
 
     /**
@@ -60,6 +85,7 @@
      *   - extension pédagogique optionnelle `weightRatioA` (0..1) pour l'asymétrie (π_A, π_C)
      */
     CartograffectTheory.evaluateEngine = function (params) {
+        const en = isEn();
         const magnitude = Number(params.magnitude || 0);
         const sensoryThreshold = Number(params.sensoryThreshold || 4);
         const resorptionThreshold = Math.min(Number(params.resorptionThreshold || 2), sensoryThreshold);
@@ -99,45 +125,59 @@
         };
 
         let stage = 'veille';
-        let stageLabel = 'Point de Veille (0, 0, 0)';
-        let stageDesc = 'Régime homéostatique basal : l’écart demeure sous le seuil de tolérance ou en neutralité globale (A0, C0).';
+        let stageLabel = en ? 'Wake Point (0, 0, 0)' : 'Point de Veille (0, 0, 0)';
+        let stageDesc = en
+            ? 'Basal homeostatic regime: discrepancy remains below tolerance threshold or in global neutrality (A0, C0).'
+            : 'Régime homéostatique basal : l’écart demeure sous le seuil de tolérance ou en neutralité globale (A0, C0).';
         let x = 0, y = 0, z = 0;
 
         if (isBelowResorption) {
             stage = 'veille';
-            stageLabel = 'Point de Veille (0, 0, 0)';
-            stageDesc = 'Écart inférieur au seuil de résorption homéostatique : retour ou maintien au Point de Veille (0, 0, 0).';
+            stageLabel = en ? 'Wake Point (0, 0, 0)' : 'Point de Veille (0, 0, 0)';
+            stageDesc = en
+                ? 'Discrepancy below homeostatic resorption threshold: return to or stay at Wake Point (0, 0, 0).'
+                : 'Écart inférieur au seuil de résorption homéostatique : retour ou maintien au Point de Veille (0, 0, 0).';
             x = 0; y = 0; z = 0;
         } else if (isInRemanenceWindow) {
             if (aEngaged || cEngaged) {
                 const held = computeCrownCoords();
                 x = held.x; y = held.y; z = targetZ;
                 stage = 'remanence';
-                stageLabel = 'Rémanence Allostatique (' + x + ', ' + y + ', ' + z + ')';
-                stageDesc = 'Hystérésis (remanence_preserves_state) : l’écart (' + magnitude + ') est repassé sous le seuil sensoriel (' + sensoryThreshold + ') mais reste ≥ résorption (' + resorptionThreshold + '), maintenant l’état actif.';
+                stageLabel = (en ? 'Allostatic Remanence (' : 'Rémanence Allostatique (') + x + ', ' + y + ', ' + z + ')';
+                stageDesc = en
+                    ? 'Hysteresis (remanence_preserves_state): discrepancy (' + magnitude + ') dropped below sensory threshold (' + sensoryThreshold + ') while remaining ≥ resorption (' + resorptionThreshold + '), preserving the active state.'
+                    : 'Hystérésis (remanence_preserves_state) : l’écart (' + magnitude + ') est repassé sous le seuil sensoriel (' + sensoryThreshold + ') mais reste ≥ résorption (' + resorptionThreshold + '), maintenant l’état actif.';
             } else {
                 stage = 'remanence_neutral';
-                stageLabel = 'Point de Veille (0, 0, 0) — Zone d’hystérésis';
-                stageDesc = 'La magnitude est dans la fenêtre d’hystérésis [' + resorptionThreshold + ', ' + sensoryThreshold + '[ mais le couplage est neutre (A0, C0) : aucun état périphérique à maintenir.';
+                stageLabel = en ? 'Wake Point (0, 0, 0) — Hysteresis Zone' : 'Point de Veille (0, 0, 0) — Zone d’hystérésis';
+                stageDesc = en
+                    ? 'Magnitude lies in the hysteresis window [' + resorptionThreshold + ', ' + sensoryThreshold + '[ while coupling is neutral (A0, C0): no peripheral state to sustain.'
+                    : 'La magnitude est dans la fenêtre d’hystérésis [' + resorptionThreshold + ', ' + sensoryThreshold + '[ mais le couplage est neutre (A0, C0) : aucun état périphérique à maintenir.';
                 x = 0; y = 0; z = 0;
             }
         } else if (isSensorilySalient && !aEngaged && !cEngaged) {
             // CoreAffect.lean L264: !isSensorilySalient || c.isGlobalNeutrality => Point de Veille (0,0,0)
             stage = 'veille';
-            stageLabel = 'Point de Veille (0, 0, 0)';
-            stageDesc = 'Couplage globalement neutre (A0, C0) : selon CoreAffect.lean, la neutralité globale conjointe n’active pas la couronne et reste au Point de Veille (0, 0, 0). Choisissez une polarité A ou C pour rompre la veille.';
+            stageLabel = en ? 'Wake Point (0, 0, 0)' : 'Point de Veille (0, 0, 0)';
+            stageDesc = en
+                ? 'Globally neutral coupling (A0, C0): per CoreAffect.lean, joint global neutrality does not activate the crown and remains at Wake Point (0, 0, 0). Select an A or C polarity to break wakefulness.'
+                : 'Couplage globalement neutre (A0, C0) : selon CoreAffect.lean, la neutralité globale conjointe n’active pas la couronne et reste au Point de Veille (0, 0, 0). Choisissez une polarité A ou C pour rompre la veille.';
             x = 0; y = 0; z = 0;
         } else if (isSensorilySalient && !isAttentionalEngaged) {
             if (descendingSuspension) {
                 x = 0; y = 0; z = targetZ;
                 stage = 'anticipation';
-                stageLabel = (targetZ === 2 ? 'Anticipation' : 'Opérateur Central Z=' + z) + ' (0, 0, ' + z + ')';
-                stageDesc = 'Suspension descendante (CoreAffect.lean L267) : l’Interface Subjective retient le déploiement avant l’engagement attentionnel et place le système sur l’opérateur central d’orientation (0, 0, ' + z + ').';
+                stageLabel = (targetZ === 2 ? 'Anticipation' : (en ? 'Central Operator Z=' : 'Opérateur Central Z=') + z) + ' (0, 0, ' + z + ')';
+                stageDesc = en
+                    ? 'Descending suspension (CoreAffect.lean L267): the Subjective Interface holds deployment before attentional engagement and places the system on the central orientation operator (0, 0, ' + z + ').'
+                    : 'Suspension descendante (CoreAffect.lean L267) : l’Interface Subjective retient le déploiement avant l’engagement attentionnel et place le système sur l’opérateur central d’orientation (0, 0, ' + z + ').';
             } else {
                 x = 0; y = 0; z = 1;
                 stage = 'surprise';
                 stageLabel = 'Surprise (0, 0, 1)';
-                stageDesc = 'Rupture ascendante : l’écart franchit le seuil sensoriel (' + sensoryThreshold + '), mais la précision attentionnelle (' + allocatedPrecision + ' < ' + engagementThreshold + ') reste sous le seuil d’engagement sans suspension descendante.';
+                stageDesc = en
+                    ? 'Ascending rupture: discrepancy crosses sensory threshold (' + sensoryThreshold + '), while allocated precision (' + allocatedPrecision + ' < ' + engagementThreshold + ') stays below engagement threshold without descending suspension.'
+                    : 'Rupture ascendante : l’écart franchit le seuil sensoriel (' + sensoryThreshold + '), mais la précision attentionnelle (' + allocatedPrecision + ' < ' + engagementThreshold + ') reste sous le seuil d’engagement sans suspension descendante.';
             }
         } else if (isSensorilySalient && isAttentionalEngaged) {
             const pt = computeCrownCoords();
@@ -145,16 +185,22 @@
             const gType = this.geometryType(x, y);
             if (gType === 'axial') {
                 stage = 'deployed_axial';
-                stageLabel = 'Déploiement Axial Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
-                stageDesc = (aEngaged ? 'Seule Attente (A)' : 'Seul Contrôle (C)') + ' est tranché : il capte tout le budget attentionnel L₁ = ' + radius + '.';
+                stageLabel = (en ? 'Axial Deployment Z=' : 'Déploiement Axial Z=') + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = en
+                    ? (aEngaged ? 'Only Expectation (A)' : 'Only Control (C)') + ' is resolved: it captures the entire L₁ attentional budget = ' + radius + '.'
+                    : (aEngaged ? 'Seule Attente (A)' : 'Seul Contrôle (C)') + ' est tranché : il capte tout le budget attentionnel L₁ = ' + radius + '.';
             } else if (gType === 'diagonal') {
                 stage = 'deployed_diagonal';
-                stageLabel = 'Déploiement Diagonal Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
-                stageDesc = 'Les deux dimensions (A et C) sont tranchées à parts égales : |X| = |Y| = ' + (radius / 2) + '.';
+                stageLabel = (en ? 'Diagonal Deployment Z=' : 'Déploiement Diagonal Z=') + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = en
+                    ? 'Both dimensions (A and C) are equally resolved: |X| = |Y| = ' + (radius / 2) + '.'
+                    : 'Les deux dimensions (A et C) sont tranchées à parts égales : |X| = |Y| = ' + (radius / 2) + '.';
             } else {
                 stage = 'deployed_lateral';
-                stageLabel = 'Déploiement Latéral Z=' + z + ' (' + x + ', ' + y + ', ' + z + ')';
-                stageDesc = 'Extension par asymétrie de précision (π_A / π_C) : répartition inégale sur la couronne |X|+|Y| = ' + radius + '.';
+                stageLabel = (en ? 'Lateral Deployment Z=' : 'Déploiement Latéral Z=') + z + ' (' + x + ', ' + y + ', ' + z + ')';
+                stageDesc = en
+                    ? 'Precision-asymmetry extension (π_A / π_C): unequal distribution on the crown |X|+|Y| = ' + radius + '.'
+                    : 'Extension par asymétrie de précision (π_A / π_C) : répartition inégale sur la couronne |X|+|Y| = ' + radius + '.';
             }
         }
 
@@ -207,6 +253,27 @@
         return 'lateral';
     };
 
+    CartograffectTheory.geometryLabel = function (typeOrX, y, lang) {
+        const typ = typeof typeOrX === 'string'
+            ? typeOrX
+            : this.geometryType(Number(typeOrX), Number(y));
+        const useEn = lang ? lang === 'en' : isEn();
+        const labels = useEn
+            ? {
+                operator: 'Central Operator',
+                axial: 'Axial Position',
+                diagonal: 'Diagonal Position',
+                lateral: 'Lateral Position'
+            }
+            : {
+                operator: 'Opérateur Central',
+                axial: 'Position Axiale',
+                diagonal: 'Position Diagonale',
+                lateral: 'Position Latérale'
+            };
+        return labels[typ] || typ;
+    };
+
     // =========================================================================
     // 3. AFFECTIVE MATRIX (AffectiveMatrix.lean)
     // =========================================================================
@@ -229,51 +296,70 @@
     };
 
     CartograffectTheory.computeEnergyRegime = function (x, y) {
+        const en = isEn();
         if (x === 0 && y === 0) {
             return {
                 id: 'neutralBasal',
-                label: 'Régime Basal / Suspens Central',
+                label: en ? 'Basal Regime / Central Suspension' : 'Régime Basal / Suspens Central',
                 color: 'slate',
-                desc: 'Aucune polarisation périphérique (X=0, Y=0) : maintien homéostatique ou opérateur de suspension.'
+                hexColor: '#94a3b8',
+                desc: en
+                    ? 'No peripheral polarization (X=0, Y=0): homeostatic baseline or central suspension operator.'
+                    : 'Aucune polarisation périphérique (X=0, Y=0) : maintien homéostatique ou opérateur de suspension.'
             };
         }
         if (x === 0 || y === 0) {
             return {
                 id: 'axialPure',
-                label: 'Régime Axial Pur (Instable)',
+                label: en ? 'Pure Axial Regime (Unstable)' : 'Régime Axial Pur (Instable)',
                 color: 'sky',
-                desc: 'Une seule dimension est tranchée ; toute la ressource L₁ porte sur un seul axe, rendant la position dynamiquement instable.'
+                hexColor: '#38bdf8',
+                desc: en
+                    ? 'A single dimension is resolved; the entire L₁ budget sits on one axis, making the position dynamically unstable.'
+                    : 'Une seule dimension est tranchée ; toute la ressource L₁ porte sur un seul axe, rendant la position dynamiquement instable.'
             };
         }
         if (x > 0 && y > 0) {
             return {
                 id: 'positiveSynergy',
-                label: 'Synergie Positive (Congruence +X/+Y)',
+                label: en ? 'Positive Synergy (Congruence +X/+Y)' : 'Synergie Positive (Congruence +X/+Y)',
                 color: 'pink',
-                desc: 'Double décharge épistémique et pragmatique : modèle révisable et situation contrôlable.'
+                hexColor: '#f472b6',
+                desc: en
+                    ? 'Dual epistemic and pragmatic discharge: revisable model and controllable situation.'
+                    : 'Double décharge épistémique et pragmatique : modèle révisable et situation contrôlable.'
             };
         }
         if (x < 0 && y < 0) {
             return {
                 id: 'negativeSynergy',
-                label: 'Synergie Négative (Congruence −X/−Y)',
+                label: en ? 'Negative Synergy (Congruence −X/−Y)' : 'Synergie Négative (Congruence −X/−Y)',
                 color: 'amber',
-                desc: 'Double charge non résorbée : modèle non révisable et situation non contrôlable (repli / rejet).'
+                hexColor: '#fbbf24',
+                desc: en
+                    ? 'Dual unresolved charge: non-revisable model and uncontrollable situation (withdrawal / rejection).'
+                    : 'Double charge non résorbée : modèle non révisable et situation non contrôlable (repli / rejet).'
             };
         }
         if (x < 0 && y > 0) {
             return {
                 id: 'ergotropicCompensation',
-                label: 'Compensation Ergotropique (−X / +Y)',
+                label: en ? 'Ergotropic Compensation (−X / +Y)' : 'Compensation Ergotropique (−X / +Y)',
                 color: 'rose',
-                desc: 'Modèle mis en échec et tenu pour non révisable (−X), compensé par une mobilisation motrice d’urgence (+Y).'
+                hexColor: '#fb7185',
+                desc: en
+                    ? 'Challenged model held non-revisable (−X), compensated by urgent motor mobilization (+Y).'
+                    : 'Modèle mis en échec et tenu pour non révisable (−X), compensé par une mobilisation motrice d’urgence (+Y).'
             };
         }
         return {
             id: 'trophotropicRelease',
-            label: 'Relâchement Trophotropique (+X / −Y)',
+            label: en ? 'Trophotropic Release (+X / −Y)' : 'Relâchement Trophotropique (+X / −Y)',
             color: 'emerald',
-            desc: 'Situation non contrôlable (−Y) compensée par une révision souple du modèle interne (+X) et un apaisement de l’effort.'
+            hexColor: '#34d399',
+            desc: en
+                ? 'Uncontrollable situation (−Y) compensated by flexible internal model revision (+X) and effort release.'
+                : 'Situation non contrôlable (−Y) compensée par une révision souple du modèle interne (+X) et un apaisement de l’effort.'
         };
     };
 
@@ -282,38 +368,49 @@
      * Le signe de X gouverne la valence au premier rang ; Y n'intervient que si X = 0.
      */
     CartograffectTheory.computeHedonicPolarity = function (x, y) {
+        const en = isEn();
         if (x > 0) {
             return {
                 polarity: 'positive',
-                label: 'Valence Positive (+)',
-                rule: 'Primauté de l’Axe X (X > 0) : résorption épistémique assurant une valence agréable quel que soit Y.'
+                label: en ? 'Positive Valence (+)' : 'Valence Positive (+)',
+                rule: en
+                    ? 'X-Axis Primacy (X > 0): epistemic resorption secures a pleasant valence regardless of Y.'
+                    : 'Primauté de l’Axe X (X > 0) : résorption épistémique assurant une valence agréable quel que soit Y.'
             };
         }
         if (x < 0) {
             return {
                 polarity: 'negative',
-                label: 'Valence Négative (−)',
-                rule: 'Primauté de l’Axe X (X < 0) : charge épistémique non résorbée imposant une valence aversive quel que soit Y.'
+                label: en ? 'Negative Valence (−)' : 'Valence Négative (−)',
+                rule: en
+                    ? 'X-Axis Primacy (X < 0): unresolved epistemic charge enforces an aversive valence regardless of Y.'
+                    : 'Primauté de l’Axe X (X < 0) : charge épistémique non résorbée imposant une valence aversive quel que soit Y.'
             };
         }
         if (y > 0) {
             return {
                 polarity: 'positive',
-                label: 'Valence Positive (+)',
-                rule: 'X = 0 : l’Axe Y départage la valence en positif (décharge pragmatique Y > 0).'
+                label: en ? 'Positive Valence (+)' : 'Valence Positive (+)',
+                rule: en
+                    ? 'X = 0: Y-Axis breaks valence positively (pragmatic discharge Y > 0).'
+                    : 'X = 0 : l’Axe Y départage la valence en positif (décharge pragmatique Y > 0).'
             };
         }
         if (y < 0) {
             return {
                 polarity: 'negative',
-                label: 'Valence Négative (−)',
-                rule: 'X = 0 : l’Axe Y départage la valence en négatif (charge pragmatique Y < 0).'
+                label: en ? 'Negative Valence (−)' : 'Valence Négative (−)',
+                rule: en
+                    ? 'X = 0: Y-Axis breaks valence negatively (pragmatic charge Y < 0).'
+                    : 'X = 0 : l’Axe Y départage la valence en négatif (charge pragmatique Y < 0).'
             };
         }
         return {
             polarity: 'neutral',
-            label: 'Suspens Pré-Valencé (0)',
-            rule: 'X = 0 et Y = 0 : aucune valence hédonique encore déployée.'
+            label: en ? 'Pre-Valence Suspension (0)' : 'Suspens Pré-Valencé (0)',
+            rule: en
+                ? 'X = 0 and Y = 0: no hedonic valence deployed yet.'
+                : 'X = 0 et Y = 0 : aucune valence hédonique encore déployée.'
         };
     };
 
@@ -322,46 +419,86 @@
     // =========================================================================
 
     CartograffectTheory.classifyTaxonomicGroup = function (x, y) {
-        if (x === 0 && y === 0) return { id: 'operateurCentral', label: 'Opérateur Central (0, 0, Z)', orientationLabel: 'Opérateur de Suspension Centrale' };
+        const en = isEn();
+        if (x === 0 && y === 0) {
+            return {
+                id: 'operateurCentral',
+                label: en ? 'Central Operator (0, 0, Z)' : 'Opérateur Central (0, 0, Z)',
+                orientationLabel: en ? 'Central Suspension Operator' : 'Opérateur de Suspension Centrale'
+            };
+        }
         if (Math.abs(y) > Math.abs(x)) {
             return y > 0
-                ? { id: 'groupeJoie', label: 'Secteur Joie (Y+ dominant)', orientationLabel: 'Élan / Mobilisation (Secteur Joie, Y+)' }
-                : { id: 'groupeTristesse', label: 'Secteur Tristesse (Y− dominant)', orientationLabel: 'Retenue / Apaisement (Secteur Tristesse, Y−)' };
+                ? {
+                    id: 'groupeJoie',
+                    label: en ? 'Joy Sector (Y+ dominant)' : 'Secteur Joie (Y+ dominant)',
+                    orientationLabel: en ? 'Drive / Mobilization (Joy Sector, Y+)' : 'Élan / Mobilisation (Secteur Joie, Y+)'
+                }
+                : {
+                    id: 'groupeTristesse',
+                    label: en ? 'Sadness Sector (Y− dominant)' : 'Secteur Tristesse (Y− dominant)',
+                    orientationLabel: en ? 'Restraint / Withdrawal (Sadness Sector, Y−)' : 'Retenue / Apaisement (Secteur Tristesse, Y−)'
+                };
         }
         if (Math.abs(x) > Math.abs(y)) {
             return x < 0
-                ? { id: 'groupePeur', label: 'Secteur Peur (X− dominant)', orientationLabel: 'Maintien / Alerte Épistémique (Secteur Peur, X−)' }
-                : { id: 'groupeCourage', label: 'Secteur Courage (X+ dominant)', orientationLabel: 'Révision / Ouverture Épistémique (Secteur Courage, X+)' };
+                ? {
+                    id: 'groupePeur',
+                    label: en ? 'Fear Sector (X− dominant)' : 'Secteur Peur (X− dominant)',
+                    orientationLabel: en ? 'Retention / Epistemic Alert (Fear Sector, X−)' : 'Maintien / Alerte Épistémique (Secteur Peur, X−)'
+                }
+                : {
+                    id: 'groupeCourage',
+                    label: en ? 'Courage Sector (X+ dominant)' : 'Secteur Courage (X+ dominant)',
+                    orientationLabel: en ? 'Revision / Epistemic Opening (Courage Sector, X+)' : 'Révision / Ouverture Épistémique (Secteur Courage, X+)'
+                };
         }
         if (x > 0) {
             return y > 0
-                ? { id: 'groupeDesir', label: 'Filière Diagonale Désir (+X, +Y)', orientationLabel: 'Synergie d’Approche (Filière Désir)' }
-                : { id: 'groupeCalme', label: 'Filière Diagonale Calme (+X, −Y)', orientationLabel: 'Relâchement Trophotropique (Filière Calme)' };
+                ? {
+                    id: 'groupeDesir',
+                    label: en ? 'Desire Diagonal Lineage (+X, +Y)' : 'Filière Diagonale Désir (+X, +Y)',
+                    orientationLabel: en ? 'Approach Synergy (Desire Lineage)' : 'Synergie d’Approche (Filière Désir)'
+                }
+                : {
+                    id: 'groupeCalme',
+                    label: en ? 'Calm Diagonal Lineage (+X, −Y)' : 'Filière Diagonale Calme (+X, −Y)',
+                    orientationLabel: en ? 'Trophotropic Release (Calm Lineage)' : 'Relâchement Trophotropique (Filière Calme)'
+                };
         }
         return y > 0
-            ? { id: 'groupeColere', label: 'Filière Diagonale Colère (−X, +Y)', orientationLabel: 'Compensation Ergotropique (Filière Colère)' }
-            : { id: 'groupeDegout', label: 'Filière Diagonale Dégoût (−X, −Y)', orientationLabel: 'Congruence Aversive (Filière Dégoût)' };
+            ? {
+                id: 'groupeColere',
+                label: en ? 'Anger Diagonal Lineage (−X, +Y)' : 'Filière Diagonale Colère (−X, +Y)',
+                orientationLabel: en ? 'Ergotropic Compensation (Anger Lineage)' : 'Compensation Ergotropique (Filière Colère)'
+            }
+            : {
+                id: 'groupeDegout',
+                label: en ? 'Disgust Diagonal Lineage (−X, −Y)' : 'Filière Diagonale Dégoût (−X, −Y)',
+                orientationLabel: en ? 'Aversive Congruence (Disgust Lineage)' : 'Congruence Aversive (Filière Dégoût)'
+            };
     };
 
     CartograffectTheory.classifySubsector = function (x, y) {
+        const en = isEn();
         const ax = Math.abs(x), ay = Math.abs(y);
-        if (x === 0 && y === 0) return { id: 'centralOperator', label: 'Opérateur de suspens central' };
-        if (x === 0 && y > 0) return { id: 'axialElan', label: 'Axial Élan (X=0, Y>0)' };
-        if (x === 0 && y < 0) return { id: 'axialWithdrawal', label: 'Axial Repli (X=0, Y<0)' };
-        if (x > 0 && y === 0) return { id: 'axialOpening', label: 'Axial Ouverture (X>0, Y=0)' };
-        if (x < 0 && y === 0) return { id: 'axialThreat', label: 'Axial Menace (X<0, Y=0)' };
-        if (x === y && x > 0) return { id: 'diagonalDesire', label: 'Diagonal Congruence Positive (X=Y>0)' };
-        if (x === y && x < 0) return { id: 'diagonalDisgust', label: 'Diagonal Congruence Négative (X=Y<0)' };
-        if (x === -y && x < 0) return { id: 'diagonalAnger', label: 'Diagonal Compensation Ergotropique (X=−Y<0)' };
-        if (x === -y && x > 0) return { id: 'diagonalCalm', label: 'Diagonal Relâchement Trophotropique (X=−Y>0)' };
-        if (y > ax && x > 0) return { id: 'lateralApproachSynergy', label: 'Latéral Synergie d’Approche (Y>|X|, X>0)' };
-        if (y > ax && x < 0) return { id: 'lateralDefensiveUrgency', label: 'Latéral Urgence Défensive (Y>|X|, X<0)' };
-        if (y < -ax && x > 0) return { id: 'lateralTrophotropicPeace', label: 'Latéral Paix Trophotropique (Y<−|X|, X>0)' };
-        if (y < -ax && x < 0) return { id: 'lateralAversiveDistress', label: 'Latéral Détresse Aversive (Y<−|X|, X<0)' };
-        if (x > ay && y > 0) return { id: 'lateralEpistemicMastery', label: 'Latéral Maîtrise Épistémique (X>|Y|, Y>0)' };
-        if (x > ay && y < 0) return { id: 'lateralContemplativeOpen', label: 'Latéral Ouverture Contemplative (X>|Y|, Y<0)' };
-        if (x < -ay && y > 0) return { id: 'lateralVigilantAlert', label: 'Latéral Alerte Vigilante (X<−|Y|, Y>0)' };
-        return { id: 'lateralEpistemicClosure', label: 'Latéral Fermeture Épistémique (X<−|Y|, Y<0)' };
+        if (x === 0 && y === 0) return { id: 'centralOperator', label: en ? 'Central suspension operator' : 'Opérateur de suspens central' };
+        if (x === 0 && y > 0) return { id: 'axialElan', label: en ? 'Axial Drive (X=0, Y>0)' : 'Axial Élan (X=0, Y>0)' };
+        if (x === 0 && y < 0) return { id: 'axialWithdrawal', label: en ? 'Axial Withdrawal (X=0, Y<0)' : 'Axial Repli (X=0, Y<0)' };
+        if (x > 0 && y === 0) return { id: 'axialOpening', label: en ? 'Axial Opening (X>0, Y=0)' : 'Axial Ouverture (X>0, Y=0)' };
+        if (x < 0 && y === 0) return { id: 'axialThreat', label: en ? 'Axial Threat (X<0, Y=0)' : 'Axial Menace (X<0, Y=0)' };
+        if (x === y && x > 0) return { id: 'diagonalDesire', label: en ? 'Diagonal Positive Congruence (X=Y>0)' : 'Diagonal Congruence Positive (X=Y>0)' };
+        if (x === y && x < 0) return { id: 'diagonalDisgust', label: en ? 'Diagonal Negative Congruence (X=Y<0)' : 'Diagonal Congruence Négative (X=Y<0)' };
+        if (x === -y && x < 0) return { id: 'diagonalAnger', label: en ? 'Diagonal Ergotropic Compensation (X=−Y<0)' : 'Diagonal Compensation Ergotropique (X=−Y<0)' };
+        if (x === -y && x > 0) return { id: 'diagonalCalm', label: en ? 'Diagonal Trophotropic Release (X=−Y>0)' : 'Diagonal Relâchement Trophotropique (X=−Y>0)' };
+        if (y > ax && x > 0) return { id: 'lateralApproachSynergy', label: en ? 'Lateral Approach Synergy (Y>|X|, X>0)' : 'Latéral Synergie d’Approche (Y>|X|, X>0)' };
+        if (y > ax && x < 0) return { id: 'lateralDefensiveUrgency', label: en ? 'Lateral Defensive Urgency (Y>|X|, X<0)' : 'Latéral Urgence Défensive (Y>|X|, X<0)' };
+        if (y < -ax && x > 0) return { id: 'lateralTrophotropicPeace', label: en ? 'Lateral Trophotropic Peace (Y<−|X|, X>0)' : 'Latéral Paix Trophotropique (Y<−|X|, X>0)' };
+        if (y < -ax && x < 0) return { id: 'lateralAversiveDistress', label: en ? 'Lateral Aversive Distress (Y<−|X|, X<0)' : 'Latéral Détresse Aversive (Y<−|X|, X<0)' };
+        if (x > ay && y > 0) return { id: 'lateralEpistemicMastery', label: en ? 'Lateral Epistemic Mastery (X>|Y|, Y>0)' : 'Latéral Maîtrise Épistémique (X>|Y|, Y>0)' };
+        if (x > ay && y < 0) return { id: 'lateralContemplativeOpen', label: en ? 'Lateral Contemplative Opening (X>|Y|, Y<0)' : 'Latéral Ouverture Contemplative (X>|Y|, Y<0)' };
+        if (x < -ay && y > 0) return { id: 'lateralVigilantAlert', label: en ? 'Lateral Vigilant Alert (X<−|Y|, Y>0)' : 'Latéral Alerte Vigilante (X<−|Y|, Y>0)' };
+        return { id: 'lateralEpistemicClosure', label: en ? 'Lateral Epistemic Closure (X<−|Y|, Y<0)' : 'Latéral Fermeture Épistémique (X<−|Y|, Y<0)' };
     };
 
     /**
@@ -371,6 +508,7 @@
      */
     CartograffectTheory.computeDissipationPath = function (startEmotion) {
         if (!startEmotion) return [];
+        const en = isEn();
         const steps = [];
         const emotions = (root.CartograffectModel && root.CartograffectModel.emotions) || [];
         const findByCoord = (cx, cy, cz) => emotions.find(e => e.x === cx && e.y === cy && e.z === cz);
@@ -380,20 +518,24 @@
         let cz = startEmotion.z;
 
         steps.push({
-            phase: 'État initial saillant',
+            phase: en ? 'Initial salient state' : 'État initial saillant',
             x: cx, y: cy, z: cz,
             name: startEmotion.name,
-            note: 'Position initiale engagée sous tension allostatique.'
+            note: en
+                ? 'Initial position engaged under allostatic tension.'
+                : 'Position initiale engagée sous tension allostatique.'
         });
 
         // Contraction vers l'opérateur central de la strate Z (si périphérique)
         if (cz >= 2 && (cx !== 0 || cy !== 0)) {
             const centerOp = findByCoord(0, 0, cz);
             steps.push({
-                phase: 'Contraction vers le centre opérateur (Z=' + cz + ')',
+                phase: en ? 'Contraction to central operator (Z=' + cz + ')' : 'Contraction vers le centre opérateur (Z=' + cz + ')',
                 x: 0, y: 0, z: cz,
-                name: centerOp ? centerOp.name : 'Opérateur Z=' + cz,
-                note: 'L’écart passe sous le seuil de résorption : les gradients se résorbent vers la suspension centrale de la strate.'
+                name: centerOp ? centerOp.name : (en ? 'Operator Z=' : 'Opérateur Z=') + cz,
+                note: en
+                    ? 'Discrepancy falls below the resorption threshold: gradients dissipate toward the stratum’s central suspension.'
+                    : 'L’écart passe sous le seuil de résorption : les gradients se résorbent vers la suspension centrale de la strate.'
             });
         }
 
@@ -401,12 +543,14 @@
         for (let z = cz - 1; z >= 0; z--) {
             const op = findByCoord(0, 0, z);
             steps.push({
-                phase: z === 0 ? 'Retour à l’équilibre basal' : 'Descente de strate (Z=' + z + ')',
+                phase: z === 0
+                    ? (en ? 'Return to basal equilibrium' : 'Retour à l’équilibre basal')
+                    : (en ? 'Stratum descent (Z=' + z + ')' : 'Descente de strate (Z=' + z + ')'),
                 x: 0, y: 0, z: z,
-                name: op ? op.name : (z === 0 ? 'Point de Veille' : 'Opérateur Z=' + z),
+                name: op ? op.name : (z === 0 ? 'Point de Veille' : (en ? 'Operator Z=' : 'Opérateur Z=') + z),
                 note: z === 0
-                    ? 'Point de Veille (0,0,0) : unique attracteur stable d’équilibre homéostatique basal.'
-                    : 'Dissipation graduelle de la profondeur inférentielle.'
+                    ? (en ? 'Wake Point (0,0,0): unique stable attractor of basal homeostatic equilibrium.' : 'Point de Veille (0,0,0) : unique attracteur stable d’équilibre homéostatique basal.')
+                    : (en ? 'Gradual dissipation of inferential depth.' : 'Dissipation graduelle de la profondeur inférentielle.')
             });
         }
 
@@ -419,7 +563,8 @@
     CartograffectTheory.initNavMenus = function () {
         const dropdownBtn = document.getElementById('modelDropdownBtn');
         const dropdownMenu = document.getElementById('modelDropdownMenu');
-        if (dropdownBtn && dropdownMenu) {
+        if (dropdownBtn && dropdownMenu && !dropdownBtn.dataset.boundTheory) {
+            dropdownBtn.dataset.boundTheory = '1';
             const toggle = (show) => {
                 const open = show !== undefined ? show : dropdownMenu.classList.contains('hidden');
                 dropdownMenu.classList.toggle('hidden', !open);
@@ -435,7 +580,10 @@
                 }
             });
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') toggle(false);
+                if (e.key === 'Escape' && !dropdownMenu.classList.contains('hidden')) {
+                    toggle(false);
+                    dropdownBtn.focus();
+                }
             });
         }
 
@@ -512,4 +660,3 @@
 
     root.CartograffectTheory = CartograffectTheory;
 })(typeof window !== 'undefined' ? window : this);
-

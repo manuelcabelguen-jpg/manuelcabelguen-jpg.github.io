@@ -115,6 +115,14 @@
         "Patience", "Espoir", "Émerveillement", "Transcendance"
     ];
 
+    function isEn() {
+        return Boolean(root.CartograffectI18n && typeof root.CartograffectI18n.getLang === 'function' && root.CartograffectI18n.getLang() === 'en');
+    }
+
+    function prefersReducedMotion() {
+        return Boolean(typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
     Visualizer.init = function() {
         this.canvas = document.getElementById('heroCartograffectCanvas');
         this.container = document.getElementById('heroVisualizerContainer');
@@ -122,6 +130,10 @@
 
         this.ctx = this.canvas.getContext('2d');
         this.cacheDOMElements();
+        if (prefersReducedMotion()) {
+            this.camera.autoRotate = false;
+        }
+        this.updateRotateBtnState();
         this.loadModelData();
         this.setupEventListeners();
         this.resize();
@@ -387,6 +399,12 @@
                 });
             });
         }
+
+        window.addEventListener('cartograffect:lang-change', () => {
+            this.lastTelemetryPhase = null;
+            this.updateTelemetryDOM(this.inference.phase, this.inference.targetAffect || this.selectedPoint);
+            this.updateHud(this.hoveredPoint || this.selectedPoint);
+        });
     };
 
     Visualizer.setMode = function(mode) {
@@ -394,12 +412,14 @@
         if (mode === '3D') {
             this.camera.targetElevation = 1.05;
             this.camera.targetZFlatten = 1.0;
-            this.camera.autoRotate = true;
+            this.camera.autoRotate = !prefersReducedMotion();
             if (this.dom.btn3D) {
                 this.dom.btn3D.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all bg-purple-600 text-white shadow-sm flex items-center gap-1";
+                this.dom.btn3D.setAttribute('aria-pressed', 'true');
             }
             if (this.dom.btn2D) {
                 this.dom.btn2D.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center gap-1";
+                this.dom.btn2D.setAttribute('aria-pressed', 'false');
             }
         } else {
             // 2D Top-Down View
@@ -409,9 +429,11 @@
             this.camera.autoRotate = false;
             if (this.dom.btn2D) {
                 this.dom.btn2D.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all bg-purple-600 text-white shadow-sm flex items-center gap-1";
+                this.dom.btn2D.setAttribute('aria-pressed', 'true');
             }
             if (this.dom.btn3D) {
                 this.dom.btn3D.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md transition-all text-slate-300 hover:text-white hover:bg-slate-700/60 flex items-center gap-1";
+                this.dom.btn3D.setAttribute('aria-pressed', 'false');
             }
         }
         this.updateRotateBtnState();
@@ -432,12 +454,13 @@
 
     Visualizer.updateRotateBtnState = function() {
         if (!this.dom.btnRotate) return;
+        this.dom.btnRotate.setAttribute('aria-pressed', String(Boolean(this.camera.autoRotate)));
         if (this.camera.autoRotate) {
             this.dom.btnRotate.className = "p-1.5 px-2 text-[11px] font-semibold text-purple-300 bg-purple-900/50 border border-purple-500/40 rounded-lg transition-all flex items-center gap-1 shadow-sm";
-            if (this.dom.rotateIcon) this.dom.rotateIcon.className = "inline-block animate-spin";
+            if (this.dom.rotateIcon) this.dom.rotateIcon.className = prefersReducedMotion() ? "w-3.5 h-3.5 inline-block shrink-0" : "w-3.5 h-3.5 inline-block animate-spin shrink-0";
         } else {
             this.dom.btnRotate.className = "p-1.5 px-2 text-[11px] font-semibold text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 border border-slate-700/70 rounded-lg transition-all flex items-center gap-1";
-            if (this.dom.rotateIcon) this.dom.rotateIcon.className = "inline-block";
+            if (this.dom.rotateIcon) this.dom.rotateIcon.className = "w-3.5 h-3.5 inline-block shrink-0";
         }
     };
 
@@ -512,6 +535,7 @@
     Visualizer.updateHud = function(point) {
         const d = this.dom;
         if (!point || !d.hud) return;
+        const en = isEn();
 
         const color = GROUP_COLORS[point.group] || "#8b5cf6";
         if (d.hudDot) {
@@ -523,20 +547,20 @@
 
         if (d.hudType) {
             let typeLabel = "Affect";
-            if (point.type === "operator") typeLabel = "Opérateur Central";
-            else if (point.type === "axial") typeLabel = "Axiale (Gradient pur)";
-            else if (point.type === "diagonal") typeLabel = "Diagonale (Congruence)";
-            else if (point.type === "lateral") typeLabel = "Latérale";
+            if (point.type === "operator") typeLabel = en ? "Central Operator" : "Opérateur Central";
+            else if (point.type === "axial") typeLabel = en ? "Axial (Pure gradient)" : "Axiale (Gradient pur)";
+            else if (point.type === "diagonal") typeLabel = en ? "Diagonal (Congruence)" : "Diagonale (Congruence)";
+            else if (point.type === "lateral") typeLabel = en ? "Lateral" : "Latérale";
             d.hudType.textContent = typeLabel;
         }
 
         if (d.hudDesc) {
-            d.hudDesc.textContent = point.desc || `Position affective à (X=${point.x}, Y=${point.y}, Z=${point.z}).`;
+            d.hudDesc.textContent = point.desc || `${en ? 'Affective position at' : 'Position affective à'} (X=${point.x}, Y=${point.y}, Z=${point.z}).`;
         }
 
         if (d.hudFormula) {
-            if (point.z === 0) d.hudFormula.textContent = "Origine (0,0,0)";
-            else if (point.z === 1) d.hudFormula.textContent = "Saillance (0,0,1)";
+            if (point.z === 0) d.hudFormula.textContent = en ? "Origin (0,0,0)" : "Origine (0,0,0)";
+            else if (point.z === 1) d.hudFormula.textContent = en ? "Salience (0,0,1)" : "Saillance (0,0,1)";
             else {
                 const r = 2 * point.z - 2;
                 d.hudFormula.textContent = `|X|+|Y| = ${r} (Z=${point.z})`;
@@ -548,7 +572,9 @@
             if (window.CartograffectModel && window.CartograffectModel.getSymmetryPair) {
                 sym = window.CartograffectModel.getSymmetryPair(point.name);
             }
-            d.hudSym.textContent = sym ? `Opposé : ${sym}` : `Groupe ${point.group}`;
+            d.hudSym.textContent = sym
+                ? `${en ? 'Opposite:' : 'Opposé :'} ${sym}`
+                : `${en ? 'Group' : 'Groupe'} ${point.group}`;
         }
     };
 
@@ -1005,21 +1031,23 @@
         const activeClass = (bg, border, text) =>
             `p-1.5 rounded-lg ${bg} ${border} ${text} font-bold shadow-md transition-all scale-[1.02]`;
 
+        const en = isEn();
         if (phase === 1) {
-            d.statusText.textContent = "1. Éveil Homéostatique de Fond (0,0,0)";
+            d.statusText.textContent = en ? "1. Background Homeostatic Wakefulness (0,0,0)" : "1. Éveil Homéostatique de Fond (0,0,0)";
             d.statusText.className = "text-sky-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepVeille) d.stepVeille.className = activeClass("bg-sky-950/80", "border-sky-500", "text-sky-200");
         } else if (phase === 2) {
-            d.statusText.textContent = "2. Écart de Prédiction / Rupture de Saillance (0,0,1)";
+            d.statusText.textContent = en ? "2. Prediction Error / Salience Rupture (0,0,1)" : "2. Écart de Prédiction / Rupture de Saillance (0,0,1)";
             d.statusText.className = "text-amber-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepSurprise) d.stepSurprise.className = activeClass("bg-amber-950/80", "border-amber-500", "text-amber-200");
         } else if (phase === 3) {
-            d.statusText.textContent = "3. Orientation Épistémique / Anticipation (0,0,2)";
+            d.statusText.textContent = en ? "3. Epistemic Orientation / Anticipation (0,0,2)" : "3. Orientation Épistémique / Anticipation (0,0,2)";
             d.statusText.className = "text-purple-300 font-bold animate-pulse truncate min-w-0";
             if (d.stepAnticipation) d.stepAnticipation.className = activeClass("bg-purple-950/80", "border-purple-500", "text-purple-200");
         } else if (phase >= 4) {
             const targetName = target ? target.name : "Affect";
-            d.statusText.textContent = `4. Résolution d'Inférence : ${targetName} (${target.x}, ${target.y}, ${target.z})`;
+            const coordsStr = target ? ` (${target.x}, ${target.y}, ${target.z})` : "";
+            d.statusText.textContent = `${en ? '4. Inference Resolution:' : "4. Résolution d'Inférence :"} ${targetName}${coordsStr}`;
             d.statusText.className = "text-emerald-300 font-bold truncate min-w-0";
             if (d.stepResolution) d.stepResolution.className = activeClass("bg-emerald-950/80", "border-emerald-500", "text-emerald-200");
         }
