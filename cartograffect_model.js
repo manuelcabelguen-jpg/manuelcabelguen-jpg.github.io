@@ -2,8 +2,8 @@
  * CARTOGRAFFECT® - Modèle Géométrique Officiel (176 entrées certifiées, parité 176/176 avec Cartograffect/Lexicon176.lean)
  * SPDX-License-Identifier: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0
  *
- * Compendium v2.0.0 — Méta-fondation formelle Hexa-Prover (113 théorèmes constructifs, 0 sorry,
- * 9 modules .lean, 6 prouveurs : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
+ * Compendium v2.0.1 — Vérification formelle multi-prouveurs (120 théorèmes constructifs, 0 sorry,
+ * 10 modules .lean, 6 prouveurs : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
  * Zenodo Compendium DOI : 10.5281/zenodo.23833938 | Article DOI : 10.5281/zenodo.24022795 | OSF : https://osf.io/z89sg
  * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
  * Sainte-Agathe-des-Monts, Québec, Canada • OPIC / CIPO n° 1233199

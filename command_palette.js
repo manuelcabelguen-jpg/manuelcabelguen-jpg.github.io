@@ -20,13 +20,13 @@
     concept: '<svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>'
   };
 
-  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.0.0)
+  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.0.1)
   function buildDefaultIndex() {
     const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
-    const tag = P ? P.get('release.tag', 'v2.0.0') : 'v2.0.0';
-    const theorems = P ? P.get('strate_0_core.theorems_verified', 113) : 113;
+    const tag = P ? P.get('release.tag', 'v2.0.1') : 'v2.0.1';
+    const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
     const proversCount = P ? P.get('strate_0_core.provers_count', 6) : 6;
-    const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 9) : 9;
+    const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 10) : 10;
     const statesCount = P ? P.get('strate_0_core.states_count', 176) : 176;
     const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
     const cipo = P ? P.get('identifiers.cipo_registration', '1233199') : '1233199';
@@ -41,8 +41,8 @@
       { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: 'Niveau 3' },
       { id: 't1', title: `4. La Taxonomie Affective — Carte Interactive 2D/3D des ${statesCount} États (Z=0 à Z=7)`, category: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: 'Niveau 4' },
       { id: 't4', title: `Article Théorique — Monographie Intégrale ${tag} (Dr M. Cabelguen)`, category: 'Recherche', url: 'article.html', icon: ICONS.article, badge: `OPIC ${cipo}` },
-      { id: 'lean4', title: `Méta-Fondation Hexa-Prover (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Hexa-Prover' },
-      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Certification Hexa-Prover', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
+      { id: 'lean4', title: `Vérification Formelle (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Formel' },
+      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Vérification Formelle', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
       { id: 't6', title: 'Accueil — Vue d\'ensemble de Cartograffect', category: 'Navigation', url: 'index.html', icon: ICONS.home, badge: 'Accueil' },
 
       // Strates Z (Norme L1)
@@ -302,6 +302,17 @@
         filterItems(input.value);
         input.focus();
       });
+    });
+
+    // Bind triggers present in headers
+    document.querySelectorAll('[data-command-trigger]').forEach(btn => {
+      if (!btn.dataset.cmdBound) {
+        btn.dataset.cmdBound = '1';
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPalette();
+        });
+      }
     });
 
     // Exposition API globale

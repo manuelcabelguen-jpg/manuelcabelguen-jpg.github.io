@@ -9,11 +9,11 @@
     function getPayloadMeta() {
         const P = (typeof window !== "undefined" && window.CartograffectPayload) ? window.CartograffectPayload : null;
         return {
-            version: P ? P.get("release.version", "2.0.0") : "2.0.0",
-            tag: P ? P.get("release.tag", "v2.0.0") : "v2.0.0",
-            theorems: P ? P.get("strate_0_core.theorems_verified", 113) : 113,
+            version: P ? P.get("release.version", "2.0.1") : "2.0.1",
+            tag: P ? P.get("release.tag", "v2.0.1") : "v2.0.1",
+            theorems: P ? P.get("strate_0_core.theorems_verified", 120) : 120,
             proversCount: P ? P.get("strate_0_core.provers_count", 6) : 6,
-            leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 9) : 9,
+            leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 10) : 10,
             statesCount: P ? P.get("strate_0_core.states_count", 176) : 176,
             cipo: P ? P.get("identifiers.cipo_registration", "1233199") : "1233199",
             articleDoi: P ? P.get("identifiers.zenodo_article_doi", "10.5281/zenodo.24022795") : "10.5281/zenodo.24022795",
@@ -41,7 +41,7 @@
                         <span>Lexique Bilingue &amp; Terminologie Internationale</span>
                     </h3>
                     <p class="text-xs text-slate-400 mt-1">
-                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et méta-fondation formelle Hexa-Prover (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
+                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et vérification formelle (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
                     </p>
                 </div>
                 <button onclick="closeLangModal()" aria-label="Fermer le lexique" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-xl leading-none cursor-pointer">
@@ -196,9 +196,9 @@
                             </p>
                         </div>
                         <div class="term-card space-y-1.5">
-                            <span class="text-[11px] font-bold text-sky-300 uppercase">2. Compendium &amp; Vérification Formelle Hexa-Prover (<span data-payload="release.tag">${meta.tag}</span>) :</span>
+                            <span class="text-[11px] font-bold text-sky-300 uppercase">2. Compendium &amp; Vérification Formelle (<span data-payload="release.tag">${meta.tag}</span>) :</span>
                             <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80">
-                                Cabelguen, M. (2026). <em>CARTOGRAFFECT® : Compendium unifié — Vérification formelle Hexa-Prover (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules .lean, 0 sorry)</em> (version <span data-payload="release.tag">${meta.tag}</span>) [Logiciel]. Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_code_doi">${meta.codeDoi}</span>
+                                Cabelguen, M. (2026). <em>CARTOGRAFFECT® : Compendium unifié — Vérification formelle (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules .lean, 0 sorry)</em> (version <span data-payload="release.tag">${meta.tag}</span>) [Logiciel]. Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_code_doi">${meta.codeDoi}</span>
                             </p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3 pt-1">
@@ -286,6 +286,11 @@
         if (modal) {
             modal.addEventListener("click", (e) => {
                 if (e.target === modal) closeLangModal();
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+                    closeLangModal();
+                }
             });
         }
     }

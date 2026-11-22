@@ -44,12 +44,12 @@ Conditions impératives :
   fins non commerciales doit être partagée sous licence CC BY-NC-SA 4.0.
 
 --------------------------------------------------------------------------------
-3. CODE SOURCE, ALGORITHMES & PREUVES FORMELLES HEXA-PROVER — GNU AGPLv3
+3. CODE SOURCE, ALGORITHMES & PREUVES FORMELLES — GNU AGPLv3
 --------------------------------------------------------------------------------
 Le code source applicatif (HTML, CSS, JavaScript, Python de synchronisation),
 les algorithmes de calcul et de visualisation ainsi que les preuves formelles
-mécanisées du compendium CARTOGRAFFECT v2.0.0 (113 théorèmes constructifs,
-0 sorry, 9 modules .lean, 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0,
+mécanisées du compendium CARTOGRAFFECT v2.0.1 (120 théorèmes constructifs,
+0 sorry, 10 modules .lean, 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0,
 Agda 2.9.0, Dafny 4.11.0, SMT-LIB/Z3 5.3.3, TLA+/TLC 2.19 ; DOI compendium :
 10.5281/zenodo.23833938) sont distribués sous les termes de la licence :
 

@@ -62,9 +62,6 @@
     
     <!-- D3.js (deferred to prevent render-blocking) -->
     <script defer src="https://d3js.org/d3.v7.min.js"></script>
-
-    <!-- Lenis Smooth Scroll -->
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
@@ -90,7 +87,7 @@
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
                     <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
-                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique &middot; Hexa-Prover</span>
+                    <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique affective</span>
                 </div>
             </a>
 
@@ -108,7 +105,7 @@
                         <span>Le Mod&egrave;le</span>
                         <svg class="w-3.5 h-3.5 opacity-75" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
                     </button>
-                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/98 backdrop-blur-xl border border-slate-700/80 shadow-2xl p-2 z-50">
+                    <div id="modelDropdownMenu" class="hidden absolute left-0 mt-2 w-80 rounded-2xl bg-[#0b1120]/[0.98] backdrop-blur-md border border-slate-600/80 shadow-2xl p-2 z-[999]">
                         <a href="moteur-predictif.html" class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/[0.05] transition-colors">
                             <span class="w-6 h-6 rounded-md bg-purple-500/20 border border-purple-500/35 text-purple-300 font-mono font-bold text-[11px] flex items-center justify-center shrink-0 mt-0.5">1</span>
                             <div>
@@ -354,9 +351,16 @@
                                     </div>
                                 </div>
 
-                                <!-- Rotation Drag Helper Indicator (fades out after first interaction) -->
-                                <div id="dragHint" class="absolute bottom-3 right-3 pointer-events-none text-[10px] font-mono text-slate-400/80 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 backdrop-blur-sm flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg><span>Glisser pour pivoter 3D</span>
+                                <!-- Zoom Controls + Rotation Drag Helper Indicator -->
+                                <div class="absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                                    <div class="flex items-center rounded-md border border-slate-800 bg-slate-900/90 backdrop-blur-sm overflow-hidden">
+                                        <button type="button" id="btnHeroZoomIn" onclick="window.heroVisualizerZoom && window.heroVisualizerZoom(-4)" title="Zoom avant" aria-label="Zoom avant sur la carte 3D" class="px-2 py-1 text-[11px] font-mono font-bold text-slate-300 hover:text-white hover:bg-indigo-600/60 transition-colors">+</button>
+                                        <span class="w-px h-3.5 bg-slate-800"></span>
+                                        <button type="button" id="btnHeroZoomOut" onclick="window.heroVisualizerZoom && window.heroVisualizerZoom(4)" title="Zoom arrière" aria-label="Zoom arrière sur la carte 3D" class="px-2 py-1 text-[11px] font-mono font-bold text-slate-300 hover:text-white hover:bg-indigo-600/60 transition-colors">&minus;</button>
+                                    </div>
+                                    <div id="dragHint" class="pointer-events-none text-[10px] font-mono text-slate-400/80 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-800 backdrop-blur-sm flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg><span>Glisser 3D &bull; Ctrl+Molette ou +/&minus;</span>
+                                    </div>
                                 </div>
 
                                 <!-- Orientation Compass / Axes Overlay -->
@@ -1089,7 +1093,7 @@
                                 <h3 class="text-lg font-heading font-bold text-white mt-1">L'Article Théorique</h3>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Manuscrit intégral (<span data-payload="version_label">Version 2.0.0</span>) unifiant émotions de base, approches dimensionnelles, CPM et constructionnisme dans l'inférence active, doté de <span data-payload="predictions_count">5</span> prédictions falsifiables P1–P5.
+                                Manuscrit intégral (<span data-payload="version_label">Version 2.0.1</span>) unifiant émotions de base, approches dimensionnelles, CPM et constructionnisme dans l'inférence active, doté de <span data-payload="predictions_count">5</span> prédictions falsifiables P1–P5.
                             </p>
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Zenodo DOI: 10.5281/zenodo.24022795</li>
@@ -1113,10 +1117,10 @@
                             </div>
                             <div>
                                 <span class="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-bold block">Preuve Mécanisée</span>
-                                <h3 class="text-lg font-heading font-bold text-white mt-1">Compendium Hexa-Prover</h3>
+                                <h3 class="text-lg font-heading font-bold text-white mt-1">Compendium Formel</h3>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Formalisation math&eacute;matique certifi&eacute;e : <strong data-payload-group="theorems"><span data-payload="theorems_verified">113</span> th&eacute;or&egrave;mes constructifs</strong> v&eacute;rifi&eacute;s sous <strong data-payload="provers_count">6</strong> prouveurs ind&eacute;pendants (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19), <span data-payload="lean_modules_count">9</span> modules <code>.lean</code>, <code data-payload="sorry_count">0</code> sorry, th&eacute;or&egrave;me ma&icirc;tre <code>end_to_end_coherence</code>.
+                                Formalisation math&eacute;matique certifi&eacute;e : <strong data-payload-group="theorems"><span data-payload="theorems_verified">120</span> th&eacute;or&egrave;mes constructifs</strong> v&eacute;rifi&eacute;s sous <strong data-payload="provers_count">6</strong> prouveurs ind&eacute;pendants (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19), <span data-payload="lean_modules_count">10</span> modules <code>.lean</code>, <code data-payload="sorry_count">0</code> sorry, th&eacute;or&egrave;me ma&icirc;tre <code>end_to_end_coherence</code>.
                             </p>
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-indigo-400">✓</span> Zenodo DOI: 10.5281/zenodo.23833938</li>
@@ -1390,12 +1394,12 @@
                         <div class="relative bg-slate-950/90 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto select-all space-y-3" id="citationBox">
                             <div>
                                 <div class="text-purple-300 font-semibold mb-1">Article théorique :</div>
-                                <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 2.0.0) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795</div>
+                                <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 2.0.1) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795</div>
                                 <div class="text-slate-400 mt-1">OSF : https://osf.io/z89sg</div>
                             </div>
                             <div>
-                                <div class="text-indigo-300 font-semibold mb-1">Compendium Formel Hexa-Prover (113 théorèmes, 6 prouveurs) :</div>
-                                <div>Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture math&eacute;matique et taxonomique v&eacute;rifi&eacute;e sous 6 prouveurs ind&eacute;pendants</em> (version v2.0.0) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938</div>
+                                <div class="text-indigo-300 font-semibold mb-1">Compendium Formel (120 théorèmes, 6 prouveurs) :</div>
+                                <div>Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture math&eacute;matique et taxonomique v&eacute;rifi&eacute;e sous 6 prouveurs ind&eacute;pendants</em> (version v2.0.1) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938</div>
                             </div>
                         </div>
                     </div>
@@ -1447,7 +1451,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.0.0</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.0.1</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -1458,11 +1462,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.0.0</span> :
+                        Article <span data-payload="tag">v2.0.1</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Hexa-Prover <span data-payload="tag">v2.0.0</span> (<span data-payload="theorems_verified">113</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v2.0.1</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
@@ -1493,8 +1497,8 @@
 
         function copyApaCitations() {
             const text =
-                "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 2.0.0) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795\n\n" +
-                "Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (version v2.0.0) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938";
+                "Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version 2.0.1) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795\n\n" +
+                "Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (version v2.0.1) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938";
             const checkSvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
             const copySvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1564,6 +1568,7 @@
     <script src="bilingual_modal.js"></script>
     <script src="js/compendium_payload.js"></script>
     <script src="command_palette.js"></script>
+    <script src="js/i18n.js"></script>
 
     <!-- Register Service Worker for PWA Offline Capability -->
     <script>

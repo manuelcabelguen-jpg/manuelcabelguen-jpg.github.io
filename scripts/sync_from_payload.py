@@ -34,6 +34,7 @@ REQUIRED_TOP_KEYS = (
     "identifiers",
     "strate_0_core",
     "strate_1_extensions",
+    "ai_disclosure",
     "licenses",
 )
 
@@ -49,11 +50,13 @@ FORBIDDEN_PATTERNS: list[tuple[str, str]] = [
     (r"\b38\s*vérifications?\s*d['’]axiomes\b", "obsolete axiom count (38)"),
     (r"(?<![0-9.])v?1\.0\.1(?![0-9.])", "obsolete current version v1.0.1"),
     (r"(?:\b3|trois)\s+prédictions?\b", "obsolete prediction count (3 instead of 5)"),
-    (r"\b(?:6|six)\s+modules?\s+(?:lean|\.lean)\b|\bl'ensemble des\s+6\s+modules\b", "obsolete module count (6 instead of 9)"),
+    (r"\b(?:6|six)\s+modules?\s+(?:lean|\.lean)\b|\bl'ensemble des\s+6\s+modules\b", "obsolete module count (6 instead of 10)"),
     (r"la\s+macaza", "obsolete institutional affiliation (La Macaza)"),
     (r"service\s+correctionnel", "obsolete institutional affiliation (SCC)"),
     (r"ph\.?\s*d\.?,\s*bcn\b", "obsolete BCN suffix"),
     (r"\bdrcab\b|c:\\\\users\\\\|c:/users/", "local workstation path leak"),
+    (r"\bop" + r"q\b", "removed institutional mention"),
+    (r"ordre\s+des\s+psycho" + r"logues\s+du\s+qu[eé]bec", "removed institutional mention"),
 ]
 
 # Guard A4-Sanctuaire: experimental PXP / min_r metrics must not leak into
@@ -109,14 +112,14 @@ def load_payload(payload_path: Path) -> tuple[dict[str, Any], list[str]]:
         if not ids.get(k):
             errors.append(f"Missing identifiers.{k}")
 
-    if not isinstance(s0.get("theorems_verified"), int) or s0.get("theorems_verified", 0) < 113:
+    if not isinstance(s0.get("theorems_verified"), int) or s0.get("theorems_verified", 0) < 120:
         errors.append(f"Invalid strate_0_core.theorems_verified={s0.get('theorems_verified')!r}")
     if s0.get("sorry_count") != 0:
         errors.append(f"Invalid strate_0_core.sorry_count={s0.get('sorry_count')!r} (expected 0)")
     if not isinstance(s0.get("provers"), list) or len(s0.get("provers", [])) != 6:
         errors.append(f"Expected 6 provers in strate_0_core.provers, got {len(s0.get('provers', []))}")
-    if s0.get("lean_modules_count") != 9:
-        errors.append(f"Expected lean_modules_count=9, got {s0.get('lean_modules_count')!r}")
+    if s0.get("lean_modules_count") != 10:
+        errors.append(f"Expected lean_modules_count=10, got {s0.get('lean_modules_count')!r}")
     if s0.get("states_count") != 176:
         errors.append(f"Expected states_count=176, got {s0.get('states_count')!r}")
     if s0.get("predictions_count") != 5:
@@ -125,6 +128,13 @@ def load_payload(payload_path: Path) -> tuple[dict[str, Any], list[str]]:
         errors.append("Missing strate_0_core.author_affiliation")
     if lic.get("spdx_expression") != "AGPL-3.0-or-later AND CC-BY-NC-SA-4.0":
         errors.append(f"Unexpected licenses.spdx_expression={lic.get('spdx_expression')!r}")
+    ai = data.get("ai_disclosure", {})
+    ai_verif = str(ai.get("verification_and_audit_status", "")).lower()
+    if not ai.get("author_ownership") or not ai.get("ai_assistance_scope"):
+        errors.append("Missing ai_disclosure.author_ownership or ai_assistance_scope")
+    for marker in ("non mathématicien formel", "ligne par ligne", "tests automatisés", "audit"):
+        if marker not in ai_verif:
+            errors.append(f"Incomplete ai_disclosure.verification_and_audit_status (missing {marker!r})")
 
     return data, errors
 
@@ -196,12 +206,15 @@ def sync_citation_cff(root: Path, payload: dict[str, Any], apply: bool) -> list[
     s0 = payload["strate_0_core"]
 
     updated = text
-    updated = re.sub(r'(?m)^version:\s*".*?"$', f'version: "{rel["version"]}"', updated)
+    updated = re.sub(r'(?m)^(\s*version:\s*)".*?"$', rf'\1"{rel["version"]}"', updated)
     updated = re.sub(r'(?m)^date-released:\s*".*?"$', f'date-released: "{rel["date"]}"', updated)
     updated = re.sub(r'(?m)^license:\s*".*?"$', f'license: "{lic["spdx_expression"]}"', updated)
     updated = re.sub(r'(?m)^(    affiliation:\s*)".*?"$', rf'\1"{s0["author_affiliation"]}"', updated)
     updated = re.sub(r'(?m)^doi:\s*".*?"$', f'doi: "{ids["zenodo_code_doi"]}"', updated)
     updated = re.sub(r'(?m)^repository-code:\s*".*?"$', f'repository-code: "{ids["github_repo_url"]}"', updated)
+    updated = re.sub(r'(description:\s*"Zenodo [^"\n]+ DOI \()v\d+\.\d+\.\d+(\)")', rf'\g<1>{rel["tag"]}\g<2>', updated)
+    updated = re.sub(r'(compendium unifié )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
+    updated = re.sub(r'(CARTOGRAFFECT )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
 
     if updated != text:
         if apply:
@@ -246,15 +259,35 @@ def sync_html_files(root: Path, payload: dict[str, Any], apply: bool) -> list[st
             return m.group(0)
 
         updated = tag_re.sub(repl, text)
-        # Keep inline APA citation strings synchronized with payload version
+        # Keep inline APA citation strings, JSON-LD, meta and notices synchronized with payload version
         updated = re.sub(
-            r"(Cartographie des affects\s*:[^<\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
+            r"(Cartographie des affects\s*:[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
             rf"\g<1>{ver}\g<3>",
             updated,
         )
         updated = re.sub(
-            r"(CARTOGRAFFECT:\s*Architecture[^<\n]*?\(version\s+)(v\d+\.\d+\.\d+)(\))",
+            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(version\s+)(v\d+\.\d+\.\d+)(\))",
             rf"\g<1>{tag}\g<3>",
+            updated,
+        )
+        updated = re.sub(
+            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
+            rf"\g<1>{ver}\g<3>",
+            updated,
+        )
+        updated = re.sub(
+            r'(property="og:description"\s+content="[^"\n]*?\()v\d+\.\d+\.\d+(, compendium formel\))',
+            rf'\g<1>{tag}\g<2>',
+            updated,
+        )
+        updated = re.sub(
+            r'("version":\s*")\d+\.\d+\.\d+(")',
+            rf'\g<1>{ver}\g<2>',
+            updated,
+        )
+        updated = re.sub(
+            r'(Mise à disposition de la prépublication\s+)v\d+\.\d+\.\d+',
+            rf'\g<1>{tag}',
             updated,
         )
 
@@ -320,11 +353,15 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             ids["cipo_registration"],
             str(s0["theorems_verified"]),
             s0["author_affiliation"],
-            "section-4-1",
+            "figure-1",
             "tableau-1",
             "tableau-2",
-            "extensions/lexicon/",
-            "extensions/in_silico/",
+            "Déclaration relative à l’utilisation de l’intelligence artificielle générative",
+            "non mathématicien formel",
+            "ligne par ligne",
+            "tests automatisés",
+            "traduction",
+            "audit",
         ],
         "scholar_drive.html": [
             ids["zenodo_article_doi"],
@@ -338,15 +375,25 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             ids["zenodo_article_doi"],
             ids["zenodo_code_doi"],
             ids["cipo_registration"],
+            "Office de la propriété intellectuelle du Canada",
             lic["spdx_expression"],
             "cartograffect_model.js",
             "Clause de Séparation des Fichiers Hybrides",
+            "Indépendance intellectuelle et portée scientifique",
+            "recherche théorique indépendante menée à titre personnel",
+            "indépendance intellectuelle totale",
+            "aucun organisme",
+            "approbation officielle",
+            "service psychologique",
+            "recommandation thérapeutique",
+            "révision par les pairs",
+            "aucune donnée personnelle",
         ],
         "taxonomie-affective.html": [
             ids["zenodo_code_doi"],
             ids["cipo_registration"],
             str(s0["theorems_verified"]),
-            "9",
+            str(s0["lean_modules_count"]),
         ],
         "LICENSE": [
             "GNU Affero General Public License",
@@ -373,6 +420,69 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
         for needle in needles:
             if needle not in content:
                 errors.append(f"Missing required content {needle!r} in {filename}")
+
+    # Anti-regression & UI/editorial hygiene checks
+    forbidden_bib = ("49+", "49 +", "references-v2-complementaires", "49 Références", "49 références")
+    for fname in ("article.html", "scholar_drive.html", "corpus_system.js"):
+        fpath = root / fname
+        if fpath.is_file():
+            raw_text = fpath.read_text(encoding="utf-8")
+            for bad in forbidden_bib:
+                if bad in raw_text:
+                    errors.append(f"Forbidden legacy reference marker {bad!r} still present in {fname}")
+
+    for fname in ("moteur-predictif.html", "article.html"):
+        fpath = root / fname
+        if fpath.is_file() and "couverture markovienne" in fpath.read_text(encoding="utf-8").lower():
+            errors.append(f"Forbidden 'Couverture Markovienne' terminology on {fname}")
+
+    forbidden_brand_re = re.compile(r"hexa[- ]?" + r"prover", re.IGNORECASE)
+    for hpath in sorted(root.glob("*.html")):
+        htext = hpath.read_text(encoding="utf-8")
+        if "@studio-freight/lenis" in htext:
+            errors.append(f"Forbidden Lenis CDN script still present in {hpath.name}")
+        if "bg-[#0b1120]/98" in htext:
+            errors.append(f"Invalid transparent Tailwind dropdown class bg-[#0b1120]/98 in {hpath.name}")
+        if 'id="langToggleBtn"' in htext and "js/i18n.js" not in htext:
+            errors.append(f"Missing js/i18n.js inclusion on page with #langToggleBtn: {hpath.name}")
+        if forbidden_brand_re.search(htext):
+            errors.append(f"Forbidden removed label in {hpath.name}")
+        if 'id="modelDropdownBtn"' in htext and "Architecture hiérarchique affective" not in html.unescape(htext):
+            errors.append(f"Missing 'Architecture hiérarchique affective' header subtitle in {hpath.name}")
+
+    for sfname in (
+        "bilingual_modal.js",
+        "command_palette.js",
+        "js/i18n.js",
+        "cartograffect_model.js",
+        "cartograffect_theory.js",
+        "README.md",
+        "CITATION.cff",
+        "LICENSE",
+    ):
+        spath = root / sfname
+        if spath.is_file() and forbidden_brand_re.search(spath.read_text(encoding="utf-8")):
+            errors.append(f"Forbidden removed label in {sfname}")
+
+    for fname in ("article.html", "README.md"):
+        fpath = root / fname
+        if fpath.is_file():
+            low = fpath.read_text(encoding="utf-8").lower()
+            if "section 4.1" in low or "§4.1" in low:
+                errors.append(f"Forbidden broken cross-reference (section 4.1 / §4.1) in {fname}")
+
+    css_path = root / "style.css"
+    if css_path.is_file():
+        css_text = css_path.read_text(encoding="utf-8")
+        if "#modelDropdownMenu" not in css_text or "backdrop-filter: blur(12px)" not in css_text or "0.98" not in css_text:
+            errors.append("Missing WCAG 2.1 opaque #modelDropdownMenu styling in style.css")
+
+    sw_path = root / "sw.js"
+    if sw_path.is_file():
+        sw_text = sw_path.read_text(encoding="utf-8")
+        expected_cache = f"cartograffect-{payload['release']['tag']}-"
+        if expected_cache not in sw_text:
+            errors.append(f"sw.js CACHE_NAME should include {expected_cache!r}")
 
     return errors
 
