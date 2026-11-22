@@ -39,7 +39,7 @@ keywords:
   - "Z3"
   - "TLA+"
   - "computational psychology"
-abstract: "Vitrine interactive et monographie Web de CARTOGRAFFECT® (Strate 2), couplée par contrat JSON déterministe (data/site-payload.json) au compendium unifié v2.0.1 : vérification formelle multi-prouveurs (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; 113 théorèmes constructifs, 9 modules .lean, 0 sorry), 176 états affectifs (Z in {0..7}) et 5 prédictions falsifiables P1-P5. Double licence SPDX AGPL-3.0-or-later AND CC-BY-NC-SA-4.0 avec clause de séparation hybride pour cartograffect_model.js."
+abstract: "Vitrine interactive et monographie Web de CARTOGRAFFECT® (Strate 2), couplée par contrat JSON déterministe (data/site-payload.json) au compendium unifié v2.0.1 : vérification formelle multi-prouveurs (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; 120 théorèmes constructifs, 10 modules .lean, 0 sorry), 176 états affectifs (Z in {0..7}) et 5 prédictions falsifiables P1-P5. Double licence SPDX AGPL-3.0-or-later AND CC-BY-NC-SA-4.0 avec clause de séparation hybride pour cartograffect_model.js."
 preferred-citation:
   type: article
   authors:
@@ -52,4 +52,4 @@ preferred-citation:
   version: "2.0.1"
   doi: "10.5281/zenodo.24022795"
   url: "https://doi.org/10.5281/zenodo.24022795"
-  notes: "Version Web synchronisée avec CARTOGRAFFECT v2.0.1 (113 théorèmes / 6 prouveurs / 9 modules .lean) ; CIPO / OPIC Registration No. 1233199."
+  notes: "Version Web synchronisée avec CARTOGRAFFECT v2.0.1 (120 théorèmes / 6 prouveurs / 10 modules .lean) ; CIPO / OPIC Registration No. 1233199."

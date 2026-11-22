@@ -50,7 +50,7 @@ FORBIDDEN_PATTERNS: list[tuple[str, str]] = [
     (r"\b38\s*vérifications?\s*d['’]axiomes\b", "obsolete axiom count (38)"),
     (r"(?<![0-9.])v?1\.0\.1(?![0-9.])", "obsolete current version v1.0.1"),
     (r"(?:\b3|trois)\s+prédictions?\b", "obsolete prediction count (3 instead of 5)"),
-    (r"\b(?:6|six)\s+modules?\s+(?:lean|\.lean)\b|\bl'ensemble des\s+6\s+modules\b", "obsolete module count (6 instead of 9)"),
+    (r"\b(?:6|six)\s+modules?\s+(?:lean|\.lean)\b|\bl'ensemble des\s+6\s+modules\b", "obsolete module count (6 instead of 10)"),
     (r"la\s+macaza", "obsolete institutional affiliation (La Macaza)"),
     (r"service\s+correctionnel", "obsolete institutional affiliation (SCC)"),
     (r"ph\.?\s*d\.?,\s*bcn\b", "obsolete BCN suffix"),
@@ -112,14 +112,14 @@ def load_payload(payload_path: Path) -> tuple[dict[str, Any], list[str]]:
         if not ids.get(k):
             errors.append(f"Missing identifiers.{k}")
 
-    if not isinstance(s0.get("theorems_verified"), int) or s0.get("theorems_verified", 0) < 113:
+    if not isinstance(s0.get("theorems_verified"), int) or s0.get("theorems_verified", 0) < 120:
         errors.append(f"Invalid strate_0_core.theorems_verified={s0.get('theorems_verified')!r}")
     if s0.get("sorry_count") != 0:
         errors.append(f"Invalid strate_0_core.sorry_count={s0.get('sorry_count')!r} (expected 0)")
     if not isinstance(s0.get("provers"), list) or len(s0.get("provers", [])) != 6:
         errors.append(f"Expected 6 provers in strate_0_core.provers, got {len(s0.get('provers', []))}")
-    if s0.get("lean_modules_count") != 9:
-        errors.append(f"Expected lean_modules_count=9, got {s0.get('lean_modules_count')!r}")
+    if s0.get("lean_modules_count") != 10:
+        errors.append(f"Expected lean_modules_count=10, got {s0.get('lean_modules_count')!r}")
     if s0.get("states_count") != 176:
         errors.append(f"Expected states_count=176, got {s0.get('states_count')!r}")
     if s0.get("predictions_count") != 5:
@@ -393,7 +393,7 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             ids["zenodo_code_doi"],
             ids["cipo_registration"],
             str(s0["theorems_verified"]),
-            "9",
+            str(s0["lean_modules_count"]),
         ],
         "LICENSE": [
             "GNU Affero General Public License",

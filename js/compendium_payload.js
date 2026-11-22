@@ -33,9 +33,14 @@
                   "summary": "restored 100% native wheel scrolling across all pages (including 3D taxonomy camera zoom bounds), repaired `FR/EN` i18n switching with complete translation coverage and `sw.js` `2.0.1` cache invalidation, verified WCAG 2.1 opaque dropdown styling, aligned Figure 1 cross-references, and clarified total intellectual independence & non-clinical research scope notice in `mentions-legales.html`."
               },
               {
+                  "section": "Added",
+                  "title": "Derived `OperantFactorization` parity across all 6 provers (`10` Lean modules / `12` Lake targets, `120/120` verified theorems, `0 sorry`)",
+                  "summary": "ported `Cartograffect/OperantFactorization.lean` (7 theorems factoring the four `Z = 2` diagonal prototypes over `{R+, R-, P+, P-}` and bridging axial poles via `L1` distance) symmetrically across Rocq 9.1 (`rocq/theories/OperantFactorization.v`), Agda 2.9 (`agda/src/Cartograffect/OperantFactorization.agda`), Dafny 4.11 (`dafny/src/OperantFactorization.dfy`), SMT-LIB 2.6 / Z3 5.3.3 (`smt/theories/09_OperantFactorization.smt2`), and TLA+ / TLC 2.19 (`tla/specs/OperantFactorization.tla`, `Model_OperantFactorization.tla`) while keeping all existing Strate 0 core proof modules intact."
+              },
+              {
                   "section": "Verified",
-                  "title": "Strate 0 Hexa-Prover Core untouched",
-                  "summary": "zero modifications inside `Cartograffect/`, `rocq/`, `agda/`, `dafny/`, `smt/`, or `tla/` relative to `v2.0.0`."
+                  "title": "Strate 0 Hexa-Prover Core intact",
+                  "summary": "zero modifications to any existing Strate 0 proof modules (`PredictiveEngine`, `CoreAffect`, `AffectiveMatrix`, `AffectiveTaxonomy`, `AffectiveDynamics`, `Lexicon176`, `PredictiveCircuit`, `AuditTests`, `Prelude.agda`) across all 6 formal suites relative to `v2.0.0`."
               }
           ]
       },
@@ -48,7 +53,7 @@
           "github_release_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/releases/tag/v2.0.1"
       },
       "strate_0_core": {
-          "theorems_verified": 113,
+          "theorems_verified": 120,
           "sorry_count": 0,
           "custom_axioms_count": 0,
           "provers": [
@@ -89,7 +94,7 @@
                   "directory": "tla"
               }
           ],
-          "lean_modules_count": 9,
+          "lean_modules_count": 10,
           "lean_modules": [
               "Cartograffect.lean",
               "Cartograffect/PredictiveEngine.lean",
@@ -99,7 +104,8 @@
               "Cartograffect/AffectiveDynamics.lean",
               "Cartograffect/Lexicon176.lean",
               "Cartograffect/PredictiveCircuit.lean",
-              "Cartograffect/AuditTests.lean"
+              "Cartograffect/AuditTests.lean",
+              "Cartograffect/OperantFactorization.lean"
           ],
           "states_count": 176,
           "predictions_count": 5,

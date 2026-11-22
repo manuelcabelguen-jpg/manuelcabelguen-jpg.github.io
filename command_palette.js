@@ -24,9 +24,9 @@
   function buildDefaultIndex() {
     const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
     const tag = P ? P.get('release.tag', 'v2.0.1') : 'v2.0.1';
-    const theorems = P ? P.get('strate_0_core.theorems_verified', 113) : 113;
+    const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
     const proversCount = P ? P.get('strate_0_core.provers_count', 6) : 6;
-    const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 9) : 9;
+    const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 10) : 10;
     const statesCount = P ? P.get('strate_0_core.states_count', 176) : 176;
     const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
     const cipo = P ? P.get('identifiers.cipo_registration', '1233199') : '1233199';

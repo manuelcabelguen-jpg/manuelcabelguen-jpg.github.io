@@ -29,10 +29,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Frustration theory: An analysis of dispositional learning and memory",
         "ref": "Cambridge University Press.",
         "doi": "https://doi.org/10.1017/CBO9780511665561",
-        "apport": "Formalise les contingences de frustration par non-renforcement attendu (R-), éclairant le quadrant Colère/Dégoût lors d'un blocage pragmatique.",
+        "apport": "Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.",
         "theme": "Théories des Émotions",
         "year": 1992,
-        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les contingences de frustration par non-renforcement attendu (R-), éclairant le quadrant Colère/Dégoût lors d'un blocage pragmatique.}\n}"
+        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.}\n}"
     },
     {
         "id": "andrews2021the",

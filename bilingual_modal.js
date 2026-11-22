@@ -11,9 +11,9 @@
         return {
             version: P ? P.get("release.version", "2.0.1") : "2.0.1",
             tag: P ? P.get("release.tag", "v2.0.1") : "v2.0.1",
-            theorems: P ? P.get("strate_0_core.theorems_verified", 113) : 113,
+            theorems: P ? P.get("strate_0_core.theorems_verified", 120) : 120,
             proversCount: P ? P.get("strate_0_core.provers_count", 6) : 6,
-            leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 9) : 9,
+            leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 10) : 10,
             statesCount: P ? P.get("strate_0_core.states_count", 176) : 176,
             cipo: P ? P.get("identifiers.cipo_registration", "1233199") : "1233199",
             articleDoi: P ? P.get("identifiers.zenodo_article_doi", "10.5281/zenodo.24022795") : "10.5281/zenodo.24022795",

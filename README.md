@@ -3,7 +3,7 @@
 > **Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif**  
 > *Manuel Cabelguen, Ph. D. — Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada*  
 > Prépublication scientifique : **Version 2.0.1** (`2026-11-21`) — **Zenodo DOI** : [10.5281/zenodo.24022795](https://doi.org/10.5281/zenodo.24022795) | **OSF** : [osf.io/z89sg](https://osf.io/z89sg)  
-> Vérification formelle multi-prouveurs : **Version 2.0.1** (`113` théorèmes constructifs, `0 sorry`, `0` axiome personnalisé, `6` prouveurs indépendants, `9` modules `.lean`) — **Zenodo DOI** : [10.5281/zenodo.23833938](https://doi.org/10.5281/zenodo.23833938)  
+> Vérification formelle multi-prouveurs : **Version 2.0.1** (`120` théorèmes constructifs, `0 sorry`, `0` axiome personnalisé, `6` prouveurs indépendants, `10` modules `.lean`) — **Zenodo DOI** : [10.5281/zenodo.23833938](https://doi.org/10.5281/zenodo.23833938)  
 > Droit d'auteur enregistré auprès de l'OPIC / CIPO n° `1233199` • Site officiel : [www.cartograffect.com](https://www.cartograffect.com)  
 > Double licence SPDX : `AGPL-3.0-or-later AND CC-BY-NC-SA-4.0`
 
@@ -13,7 +13,7 @@
 
 Ce dépôt constitue la **Strate 2 (vitrine web scientifique et explorateurs interactifs)** adossée au compendium unifié [`CARTOGRAFFECT`](https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT) (`v2.0.1`), selon une stricte hiérarchie épistémique :
 
-- **Strate 0 (Noyau normatif faisant autorité) :** vérification formelle **multi-prouveurs** (`113` théorèmes constructifs sur `6` prouveurs, `9` modules `.lean`, `0 sorry`), moteur entier exact (`python/cartograffect_predictive_engine.py`) et article théorique canonique (`docs/01-Article_Cartograffect.md` `v2.0.1`, 176 états sur $Z \in \{0, \dots, 7\}$, **5 prédictions empiriques falsifiables P1–P5**). Le matériel formel généré avec assistance IA est publié sur GitHub avec compilation mécanique et tests automatisés pour inviter l'audit indépendant de spécialistes.
+- **Strate 0 (Noyau normatif faisant autorité) :** vérification formelle **multi-prouveurs** (`120` théorèmes constructifs sur `6` prouveurs, `10` modules `.lean`, `0 sorry`), moteur entier exact (`python/cartograffect_predictive_engine.py`) et article théorique canonique (`docs/01-Article_Cartograffect.md` `v2.0.1`, 176 états sur $Z \in \{0, \dots, 7\}$, **5 prédictions empiriques falsifiables P1–P5**). Le matériel formel généré avec assistance IA est publié sur GitHub avec compilation mécanique et tests automatisés pour inviter l'audit indépendant de spécialistes.
 - **Strate 1 (Satellites exploratoires subordonnés dans le compendium) :** triangulation psychométrique préliminaire Scherer GRID-24 / réfutation formelle des roues 2D et extension axiologique $Z^-$ cloisonnée (`extensions/lexicon/`), ainsi que le banc compagnon *in silico* Exp 1–5 (`extensions/in_silico/`, réservé à un second article méthodologique dédié dans le respect absolu de l'arbitrage A4-Sanctuaire).
 - **Strate 2 (Présent dépôt web) :** synchronisé de manière déterministe depuis le contrat [`data/site-payload.json`](data/site-payload.json) émis lors des releases de `CARTOGRAFFECT` via [`scripts/sync_from_payload.py`](scripts/sync_from_payload.py), [`js/compendium_payload.js`](js/compendium_payload.js) et [`.github/workflows/sync-from-compendium.yml`](.github/workflows/sync-from-compendium.yml).
 
@@ -30,11 +30,11 @@ L'étude scientifique des affects demeure historiquement fragmentée entre les t
 
 ---
 
-## Vérification Formelle Multi-Prouveurs (113 théorèmes · 6 prouveurs · 9 modules `.lean`)
+## Vérification Formelle Multi-Prouveurs (120 théorèmes · 6 prouveurs · 10 modules `.lean`)
 
-L'architecture complète est certifiée sans contradiction interne (**113 théorèmes purement constructifs**, `0 sorry`, `0 Admitted`, `0 postulate`, `0 {:axiom}`, `0` axiome personnalisé) sur **6 environnements de preuve formelle indépendants** :
+L'architecture complète est certifiée sans contradiction interne (**120 théorèmes purement constructifs**, `0 sorry`, `0 Admitted`, `0 postulate`, `0 {:axiom}`, `0` axiome personnalisé) sur **6 environnements de preuve formelle indépendants** :
 
-1. **Lean 4** (`4.35.0`) — **9 modules `.lean`** (`11` cibles Lake avec `warningAsError := true`) :
+1. **Lean 4** (`4.35.0`) — **10 modules `.lean`** (`12` cibles Lake avec `warningAsError := true`) :
    - `Cartograffect.lean` (module racine d'intégration)
    - `Cartograffect/PredictiveEngine.lean`
    - `Cartograffect/CoreAffect.lean`
@@ -44,6 +44,7 @@ L'architecture complète est certifiée sans contradiction interne (**113 théor
    - `Cartograffect/Lexicon176.lean` (répertoire canonique certifié des 176 états)
    - `Cartograffect/PredictiveCircuit.lean` (circuit fermé à 6 opérateurs & identité $4m^6$)
    - `Cartograffect/AuditTests.lean` (batterie d'audit formel automatisé)
+   - `Cartograffect/OperantFactorization.lean` (factorisation structurale des contingences opérantes $R^+, R^-, P^+, P^-$ sur $Z = 2$)
 2. **The Rocq Prover** (`9.0`, 100 % `Closed under the global context`, `Axioms: <none>`)
 3. **Agda** (`2.9.0`, `--safe --without-K`)
 4. **Dafny** (`4.11.0`, obligations de preuve + parité d'exécution)

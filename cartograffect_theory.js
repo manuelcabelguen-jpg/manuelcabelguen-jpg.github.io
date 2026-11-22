@@ -2,9 +2,9 @@
  * CARTOGRAFFECT® — Noyau Computationnel & Vérification Formelle v2.0.1 (Module JS)
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (113 théorèmes constructifs, 0 sorry,
+ * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (120 théorèmes constructifs, 0 sorry,
  * 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
- * et ses 9 modules .lean :
+ * et ses 10 modules .lean :
  *   1. Cartograffect.lean            (Intégration racine)
  *   2. PredictiveEngine.lean         (Moteur prédictif : interfaces, hystérésis, couplages A/C)
  *   3. CoreAffect.lean               (Noyau affectif : coordonnées X/Y/Z, norme L1, apportionRay)
@@ -14,6 +14,7 @@
  *   7. Lexicon176.lean               (176 positions certifiées sans collision)
  *   8. PredictiveCircuit.lean        (Circuit fermé à deux boucles & identité 4m^6)
  *   9. AuditTests.lean               (Batterie d'audit formel automatisé)
+ *  10. OperantFactorization.lean     (Factorisation structurale des contingences opérantes Z = 2)
  *
  * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
  * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
