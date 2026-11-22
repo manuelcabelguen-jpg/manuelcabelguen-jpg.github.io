@@ -673,7 +673,42 @@
         'Prédiction falsifiable': 'Falsifiable prediction',
         'Opérationnalisation': 'Operationalization',
         'Critère de réfutation': 'Falsification criterion',
-        'Article :': 'Paper:'
+        'Article :': 'Paper:',
+        'Figure 2 • Schéma Géométrique': 'Figure 2 • Geometric Diagram',
+        'Norme L1 (|X|+|Y|=2)': 'L1 Norm (|X|+|Y|=2)',
+        'Figure 3 • Matrice Sémantique': 'Figure 3 • Semantic Matrix',
+        '8 Prototypes & Inversion Centrale': '8 Prototypes & Central Inversion',
+        'Figure 4 • Taxonomie Hiérarchique Complète': 'Figure 4 • Complete Hierarchical Taxonomy',
+        'Arbre des 5 Couches': '5-Layer Tree',
+        '↑ Écarts de prédiction ascendants (sensations)': '↑ Ascending prediction errors (sensations)',
+        '↓ Prédictions descendantes (croyances & culture)': '↓ Descending predictions (beliefs & culture)',
+        'Z=5 • Recul (0,0,5) [Humeurs & Orientations Stables] :': 'Z=5 • Stepping Back (0,0,5) [Moods & Enduring Orientations]:',
+        'Z=4 • Réserve (0,0,4) [Sentiments Réflexifs & Modèles de Soi] :': 'Z=4 • Reserve (0,0,4) [Reflexive Feelings & Self-Models]:',
+        'Z=3 • Émoi (0,0,3) [Émotions Réactives & Histoire Immédiate] :': 'Z=3 • Stir (0,0,3) [Reactive Emotions & Immediate History]:',
+        'Z=2 • Anticipation (0,0,2) [Première Couronne Prototypique] :': 'Z=2 • Anticipation (0,0,2) [First Prototypical Crown]:',
+        'Rupture de veille • Écart non orienté': 'Wake disruption • Unoriented discrepancy',
+        'Maintien homéostatique de fond': 'Baseline homeostatic maintenance'
+    };
+
+    // Scoped SVG-only dictionary (avoids altering French academic prose outside data-i18n-svg SVGs)
+    const SVG_TEXT_FR_EN = {
+        'Axe Y — Contrôle': 'Y Axis — Control',
+        'Axe X': 'X Axis',
+        'Attente': 'Expectation',
+        'strate Z = 2': 'stratum Z = 2',
+        'Surprise (0,0,1) en sous-strate': 'Surprise (0,0,1) in sub-stratum',
+        'monde contrôlable (+Y)': 'controllable world (+Y)',
+        'monde non contrôlable (-Y)': 'uncontrollable world (-Y)',
+        'modèle révisable': 'revisable model',
+        'modèle non révisable': 'non-revisable model',
+        'Joie': 'Joy',
+        'Tristesse': 'Sadness',
+        'Peur': 'Fear',
+        'Courage': 'Courage',
+        'Colère': 'Anger',
+        'Désir': 'Desire',
+        'Dégoût': 'Disgust',
+        'Calme': 'Calm'
     };
 
     // Normalized attribute & metadata dictionaries
@@ -770,7 +805,10 @@
         'Sélectionner Colère (-1, +1, 2)': 'Select Anger (-1, +1, 2)',
         'Sélectionner Colère (−1, +1, 2)': 'Select Anger (−1, +1, 2)',
         'Sélectionner Calme (+1, -1, 2)': 'Select Calm (+1, -1, 2)',
-        'Sélectionner Calme (+1, −1, 2)': 'Select Calm (+1, −1, 2)'
+        'Sélectionner Calme (+1, −1, 2)': 'Select Calm (+1, −1, 2)',
+        'Figure 1 : Le Moteur prédictif canonique': 'Figure 1: The Canonical Predictive Engine',
+        'Figure 2 : Schéma du Noyau affectif en coupe à la strate Z = 2': 'Figure 2: Cross-section of the Affective Core at stratum Z = 2',
+        'Figure 3 : Matrice affective en coupe à la strate Z = 2': 'Figure 3: Cross-section of the Affective Matrix at stratum Z = 2'
     };
 
     const ALT_FR_EN = {
@@ -819,6 +857,7 @@
     }
 
     const TEXT_LOOKUP = buildLookup(TEXT_FR_EN);
+    const SVG_TEXT_LOOKUP = buildLookup(SVG_TEXT_FR_EN);
     const TITLE_LOOKUP = buildLookup(TITLE_FR_EN);
     const PLACEHOLDER_LOOKUP = buildLookup(PLACEHOLDER_FR_EN);
     const ARIA_LOOKUP = buildLookup(ARIA_FR_EN);
@@ -864,6 +903,17 @@
         return false;
     }
 
+    function isInsideI18nSvg(node) {
+        let el = node.parentElement;
+        while (el) {
+            if ((el.tagName || '').toUpperCase() === 'SVG') {
+                return el.getAttribute('data-i18n-svg') === 'true';
+            }
+            el = el.parentElement;
+        }
+        return false;
+    }
+
     function translateTextNodes(lang) {
         if (!document.body) return;
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -884,7 +934,7 @@
             }
             const trimmed = normSpace(orig);
             if (!trimmed) continue;
-            const translated = TEXT_LOOKUP[trimmed];
+            const translated = (isInsideI18nSvg(node) && SVG_TEXT_LOOKUP[trimmed]) || TEXT_LOOKUP[trimmed];
             if (translated) {
                 const leadMatch = orig.match(/^\s*/);
                 const trailMatch = orig.match(/\s*$/);

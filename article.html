@@ -745,17 +745,17 @@
 
                     <!-- FIGURE 1 SVG CARD (Canonical Source of Truth - Arbitrages A1-A4) -->
                     <div id="figure-1" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                             <div>
                                 <span class="text-xs font-mono uppercase text-purple-400 font-bold">Figure 1 &bull; Schéma Conceptuel</span>
                                 <h3 class="text-lg font-heading font-bold text-white">Le Moteur prédictif canonique (Arbitrages A1–A4)</h3>
                             </div>
-                            <span class="badge-op px-2.5 py-1 rounded text-xs">Interfaces &amp; Couplages (A / C)</span>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs shrink-0">Interfaces &amp; Couplages (A / C)</span>
                         </div>
 
                         <!-- Vectorial Diagram SVG aligned on v1.0.2 Figure 1 -->
                         <div class="w-full max-w-5xl mx-auto moteur-canonique-web bg-[#080d1a] rounded-2xl border border-slate-800 overflow-hidden">
-                            <svg id="moteur-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 1085" data-i18n-svg="true">
+                            <svg id="moteur-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 1085" role="img" aria-label="Figure 1 : Le Moteur prédictif canonique" data-i18n-svg="true">
                                   <defs>
                                     <!-- Pointes profilées (stealth arrowheads) pour les 3 macro-voies -->
                                     <marker id="arr-asc" viewBox="0 0 14 14" refX="10" refY="7" markerWidth="4.6" markerHeight="4.6" orient="auto">
@@ -1133,7 +1133,7 @@
                                   <path class="macro-casing" d="M 195,553 L 195,252" stroke="var(--macro-asc)" />
                                   <path class="macro-line" d="M 195,553 L 195,242" stroke="var(--macro-asc)"
                                         stroke-dasharray="9 6" marker-end="url(#arr-asc)" />
-                                  <rect x="204" y="499" width="176" height="40" rx="6" fill="var(--bg-svg)" opacity="0.95" />
+                                  <rect x="204" y="499" width="188" height="40" rx="6" fill="var(--bg-svg)" opacity="0.95" />
                                   <text class="t-lbl" x="212" y="515">Voie ascendante réflexive :</text>
                                   <text class="t-meta" x="212" y="531">possibilités d'action (révision)</text>
                             
@@ -1279,66 +1279,76 @@
 
                     <!-- FIGURE 2 INTERACTIVE SVG CARD -->
                     <div id="figure-2" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                             <div>
                                 <span class="text-xs font-mono uppercase text-sky-400 font-bold">Figure 2 &bull; Schéma Géométrique</span>
                                 <h3 class="text-lg font-heading font-bold text-white">Schéma du Noyau affectif en coupe à la strate Z = 2</h3>
                             </div>
-                            <span class="badge-op px-2.5 py-1 rounded text-xs">Norme L1 (|X|+|Y|=2)</span>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs shrink-0">Norme L1 (|X|+|Y|=2)</span>
                         </div>
 
                         <!-- SVG Losange Manhattan L1 -->
-                        <div class="w-full max-w-xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center">
-                            <svg viewBox="0 0 500 500" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                        <div class="w-full max-w-2xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-3 sm:p-6 flex flex-col items-center">
+                            <svg viewBox="0 0 680 520" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 2 : Schéma du Noyau affectif en coupe à la strate Z = 2" data-i18n-svg="true">
+                                <defs>
+                                    <style>
+                                        .fig2-halo { paint-order: stroke fill; stroke: #03060a; stroke-width: 8px; stroke-linejoin: round; }
+                                    </style>
+                                </defs>
+                                <rect x="0" y="0" width="680" height="520" rx="14" fill="#03060a"/>
+
                                 <!-- Axes -->
-                                <line x1="250" y1="30" x2="250" y2="470" stroke="#475569" stroke-width="1.5"/>
-                                <line x1="30" y1="250" x2="470" y2="250" stroke="#475569" stroke-width="1.5"/>
-                                <text x="250" y="20" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">Axe Y — Contrôle</text>
-                                <text x="480" y="254" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold">Axe X</text>
+                                <line x1="340" y1="48" x2="340" y2="472" stroke="#475569" stroke-width="1.5"/>
+                                <line x1="86" y1="260" x2="574" y2="260" stroke="#475569" stroke-width="1.5"/>
+                                <text x="340" y="28" fill="#94a3b8" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">Axe Y — Contrôle</text>
+                                <text x="584" y="255" fill="#94a3b8" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12" font-weight="700" text-anchor="start">
+                                    <tspan x="584" dy="0">Axe X</tspan>
+                                    <tspan x="584" dy="15" font-size="11">Attente</tspan>
+                                </text>
 
                                 <!-- L1 Diamond (Manhattan Contour) -->
-                                <polygon points="250,90 410,250 250,410 90,250" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6 4"/>
-                                <text x="360" y="150" fill="#c084fc" font-family="Fira Code" font-size="11">strate Z = 2</text>
-                                <text x="360" y="165" fill="#94a3b8" font-family="Fira Code" font-size="10">|X| + |Y| = 2</text>
+                                <polygon points="340,100 500,260 340,420 180,260" fill="rgba(139, 92, 246, 0.05)" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6 4"/>
+                                <text x="515" y="108" fill="#c084fc" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11.5" font-weight="600">strate Z = 2</text>
+                                <text x="515" y="124" fill="#94a3b8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5">|X| + |Y| = 2</text>
 
                                 <!-- Center : Anticipation (0,0,2) -->
-                                <circle cx="250" cy="250" r="7" fill="#8b5cf6"/>
-                                <text x="265" y="245" fill="#e2e8f0" font-family="Fira Code" font-size="11" font-weight="bold">(0, 0, 2) Anticipation</text>
-                                <text x="265" y="260" fill="#94a3b8" font-family="Fira Code" font-size="9">Surprise (0,0,1) en sous-strate</text>
+                                <circle cx="340" cy="260" r="7" fill="#8b5cf6"/>
+                                <text x="340" y="241" class="fig2-halo" fill="#e2e8f0" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="middle">(0, 0, 2) Anticipation</text>
+                                <text x="340" y="284" class="fig2-halo" fill="#cbd5e1" font-family="JetBrains Mono, ui-monospace, monospace" font-size="9.5" text-anchor="middle">Surprise (0,0,1) en sous-strate</text>
 
                                 <!-- 4 Axial Configurations (hollow circles = instables) -->
                                 <!-- Joie (0, +2) -->
-                                <circle cx="250" cy="90" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
-                                <text x="250" y="75" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="middle">(0, +2)</text>
-                                
+                                <circle cx="340" cy="100" r="8" fill="#03060a" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="340" y="80" class="fig2-halo" fill="#38bdf8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="middle">(0, +2)</text>
+
                                 <!-- Tristesse (0, -2) -->
-                                <circle cx="250" cy="410" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
-                                <text x="250" y="430" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="middle">(0, -2)</text>
-                                
+                                <circle cx="340" cy="420" r="8" fill="#03060a" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="340" y="446" class="fig2-halo" fill="#38bdf8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="middle">(0, -2)</text>
+
                                 <!-- Courage (+2, 0) -->
-                                <circle cx="410" cy="250" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
-                                <text x="425" y="254" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold">(+2, 0)</text>
+                                <circle cx="500" cy="260" r="8" fill="#03060a" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="514" y="244" class="fig2-halo" fill="#38bdf8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="start">(+2, 0)</text>
 
                                 <!-- Peur (-2, 0) -->
-                                <circle cx="90" cy="250" r="8" fill="#070c18" stroke="#38bdf8" stroke-width="3"/>
-                                <text x="75" y="254" fill="#38bdf8" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-2, 0)</text>
+                                <circle cx="180" cy="260" r="8" fill="#03060a" stroke="#38bdf8" stroke-width="3"/>
+                                <text x="166" y="244" class="fig2-halo" fill="#38bdf8" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="end">(-2, 0)</text>
 
                                 <!-- 4 Combined Configurations (filled discs = attracteurs stables) -->
                                 <!-- Désir (+1, +1) -->
-                                <circle cx="330" cy="170" r="8" fill="#10b981"/>
-                                <text x="345" y="165" fill="#34d399" font-family="Fira Code" font-size="11" font-weight="bold">(+1, +1)</text>
+                                <circle cx="420" cy="180" r="8" fill="#10b981"/>
+                                <text x="434" y="174" class="fig2-halo" fill="#34d399" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="start">(+1, +1)</text>
 
                                 <!-- Colère (-1, +1) -->
-                                <circle cx="170" cy="170" r="8" fill="#ef4444"/>
-                                <text x="155" y="165" fill="#f87171" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-1, +1)</text>
+                                <circle cx="260" cy="180" r="8" fill="#ef4444"/>
+                                <text x="246" y="174" class="fig2-halo" fill="#f87171" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="end">(-1, +1)</text>
 
                                 <!-- Calme (+1, -1) -->
-                                <circle cx="330" cy="330" r="8" fill="#06b6d4"/>
-                                <text x="345" y="340" fill="#22d3ee" font-family="Fira Code" font-size="11" font-weight="bold">(+1, -1)</text>
+                                <circle cx="420" cy="340" r="8" fill="#06b6d4"/>
+                                <text x="434" y="352" class="fig2-halo" fill="#22d3ee" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="start">(+1, -1)</text>
 
                                 <!-- Dégoût (-1, -1) -->
-                                <circle cx="170" cy="330" r="8" fill="#a855f7"/>
-                                <text x="155" y="340" fill="#c084fc" font-family="Fira Code" font-size="11" font-weight="bold" text-anchor="end">(-1, -1)</text>
+                                <circle cx="260" cy="340" r="8" fill="#a855f7"/>
+                                <text x="246" y="352" class="fig2-halo" fill="#c084fc" font-family="JetBrains Mono, ui-monospace, monospace" font-size="11" font-weight="700" text-anchor="end">(-1, -1)</text>
                             </svg>
                         </div>
 
@@ -1415,51 +1425,65 @@
 
                     <!-- FIGURE 3 INTERACTIVE SVG CARD -->
                     <div id="figure-3" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                             <div>
                                 <span class="text-xs font-mono uppercase text-emerald-400 font-bold">Figure 3 &bull; Matrice Sémantique</span>
                                 <h3 class="text-lg font-heading font-bold text-white">Matrice affective en coupe à la strate Z = 2</h3>
                             </div>
-                            <span class="badge-op px-2.5 py-1 rounded text-xs">8 Prototypes &amp; Inversion Centrale</span>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs shrink-0">8 Prototypes &amp; Inversion Centrale</span>
                         </div>
 
                         <!-- SVG Matrice -->
-                        <div class="w-full max-w-xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-6 flex flex-col items-center">
-                            <svg viewBox="0 0 500 500" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg">
+                        <div class="w-full max-w-2xl mx-auto bg-cosmic-950 rounded-2xl border border-slate-800 p-3 sm:p-6 flex flex-col items-center">
+                            <svg viewBox="0 0 700 480" class="w-full h-auto select-none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figure 3 : Matrice affective en coupe à la strate Z = 2" data-i18n-svg="true">
+                                <defs>
+                                    <style>
+                                        .fig3-halo { paint-order: stroke fill; stroke: #03060a; stroke-width: 10px; stroke-linejoin: round; }
+                                        .fig3-halo-sm { paint-order: stroke fill; stroke: #03060a; stroke-width: 8px; stroke-linejoin: round; }
+                                    </style>
+                                </defs>
+                                <rect x="0" y="0" width="700" height="480" rx="14" fill="#03060a"/>
+
                                 <!-- Axes -->
-                                <line x1="250" y1="40" x2="250" y2="460" stroke="#475569" stroke-width="2"/>
-                                <line x1="40" y1="250" x2="460" y2="250" stroke="#475569" stroke-width="2"/>
-                                <text x="250" y="30" fill="#e2e8f0" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">monde contrôlable (+Y)</text>
-                                <text x="250" y="480" fill="#94a3b8" font-family="Outfit" font-size="12" font-weight="bold" text-anchor="middle">monde non contrôlable (-Y)</text>
-                                <text x="470" y="254" fill="#38bdf8" font-family="Outfit" font-size="11" font-weight="bold">modèle révisable (+X)</text>
-                                <text x="30" y="254" fill="#f87171" font-family="Outfit" font-size="11" font-weight="bold" text-anchor="end">modèle non révisable (-X)</text>
+                                <line x1="350" y1="48" x2="350" y2="432" stroke="#475569" stroke-width="2"/>
+                                <line x1="176" y1="240" x2="524" y2="240" stroke="#475569" stroke-width="2"/>
+                                <text x="350" y="28" fill="#e2e8f0" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">monde contrôlable (+Y)</text>
+                                <text x="350" y="460" fill="#94a3b8" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle">monde non contrôlable (-Y)</text>
+                                <text x="534" y="236" fill="#38bdf8" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12" font-weight="700" text-anchor="start">
+                                    <tspan x="534" dy="0">modèle révisable</tspan>
+                                    <tspan x="534" dy="16">(+X)</tspan>
+                                </text>
+                                <text x="166" y="236" fill="#f87171" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12" font-weight="700" text-anchor="end">
+                                    <tspan x="166" dy="0">modèle non révisable</tspan>
+                                    <tspan x="166" dy="16">(-X)</tspan>
+                                </text>
 
                                 <!-- Central Inversion Diagonal Lines -->
-                                <line x1="160" y1="160" x2="340" y2="340" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4 4"/>
-                                <line x1="340" y1="160" x2="160" y2="340" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 4"/>
+                                <line x1="258" y1="148" x2="442" y2="332" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4 4"/>
+                                <line x1="442" y1="148" x2="258" y2="332" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 4"/>
 
                                 <!-- Center : Anticipation -->
-                                <circle cx="250" cy="250" r="5" fill="#94a3b8"/>
-                                <text x="250" y="240" fill="#94a3b8" font-family="Outfit" font-size="11" text-anchor="middle">Anticipation (0,0,2)</text>
+                                <circle cx="350" cy="240" r="5" fill="#cbd5e1"/>
+                                <text x="350" y="220" class="fig3-halo-sm" fill="#e2e8f0" font-family="Outfit, Inter, system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">Anticipation (0,0,2)</text>
 
                                 <!-- Prototypes Labels -->
                                 <!-- Joie -->
-                                <text x="250" y="100" fill="#facc15" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Joie</text>
+                                <text x="350" y="96" class="fig3-halo" fill="#facc15" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Joie</text>
                                 <!-- Tristesse -->
-                                <text x="250" y="410" fill="#38bdf8" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Tristesse</text>
+                                <text x="350" y="394" class="fig3-halo" fill="#38bdf8" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Tristesse</text>
                                 <!-- Peur -->
-                                <text x="110" y="245" fill="#f87171" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Peur</text>
+                                <text x="228" y="245" class="fig3-halo" fill="#f87171" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Peur</text>
                                 <!-- Courage -->
-                                <text x="390" y="245" fill="#34d399" font-family="Outfit" font-size="15" font-weight="900" text-anchor="middle">Courage</text>
+                                <text x="472" y="245" class="fig3-halo" fill="#34d399" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Courage</text>
 
                                 <!-- Colère -->
-                                <text x="140" y="140" fill="#ef4444" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Colère</text>
+                                <text x="244" y="138" class="fig3-halo" fill="#ef4444" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Colère</text>
                                 <!-- Désir -->
-                                <text x="360" y="140" fill="#ec4899" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Désir</text>
+                                <text x="456" y="138" class="fig3-halo" fill="#ec4899" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Désir</text>
                                 <!-- Dégoût -->
-                                <text x="140" y="370" fill="#a855f7" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Dégoût</text>
+                                <text x="244" y="354" class="fig3-halo" fill="#a855f7" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Dégoût</text>
                                 <!-- Calme -->
-                                <text x="360" y="370" fill="#06b6d4" font-family="Outfit" font-size="16" font-weight="900" text-anchor="middle">Calme</text>
+                                <text x="456" y="354" class="fig3-halo" fill="#06b6d4" font-family="Outfit, Inter, system-ui, sans-serif" font-size="16" font-weight="800" text-anchor="middle">Calme</text>
                             </svg>
                         </div>
 
@@ -1634,17 +1658,17 @@
 
                     <!-- FIGURE 4 HIERARCHY TREE CARD -->
                     <div id="figure-4" class="figure-card rounded-3xl p-6 sm:p-8 space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
                             <div>
                                 <span class="text-xs font-mono uppercase text-pink-400 font-bold">Figure 4 &bull; Taxonomie Hiérarchique Complète</span>
                                 <h3 class="text-lg font-heading font-bold text-white">Synthèse de la Taxonomie Hiérarchique des Affects</h3>
                             </div>
-                            <span class="badge-op px-2.5 py-1 rounded text-xs">Arbre des 5 Couches</span>
+                            <span class="badge-op px-2.5 py-1 rounded text-xs shrink-0">Arbre des 5 Couches</span>
                         </div>
 
                         <!-- Visual Hierarchy Tree Schema -->
-                        <div class="w-full bg-cosmic-950 rounded-2xl border border-slate-800 p-6 space-y-4 text-xs font-mono">
-                            <div class="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2">
+                        <div class="w-full bg-cosmic-950 rounded-2xl border border-slate-800 p-4 sm:p-6 space-y-4 text-xs font-mono">
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-slate-400 border-b border-slate-800 pb-2">
                                 <span>&uarr; Écarts de prédiction ascendants (sensations)</span>
                                 <span>&darr; Prédictions descendantes (croyances &amp; culture)</span>
                             </div>
