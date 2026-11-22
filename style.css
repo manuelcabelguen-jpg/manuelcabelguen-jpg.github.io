@@ -644,3 +644,81 @@ header.site-header {
     }
 }
 
+/* ============================================================
+   Canonical Predictive Engine SVG (theme-web verbatim tokens)
+   ============================================================ */
+.moteur-canonique-web {
+    --font-sans: "Segoe UI", "Inter", system-ui, -apple-system, Arial, sans-serif;
+    --font-mono: "Consolas", "JetBrains Mono", "Courier New", monospace;
+    --bg-page: #050811;
+    --bg-svg: #080d1a;
+    --box-fill: #0e1628;
+    --box-inner-fill: #132038;
+    --box-stroke: #475569;
+    --box-subj-stroke: #38bdf8;
+    --box-perc-stroke: #c084fc;
+    --box-att-stroke: #34d399;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-accent: #34d399;
+    --corps-fill: #111827;
+    --corps-stroke: #64748b;
+    --dot-fill: #f8fafc;
+    --dot-stroke: #080d1a;
+    --halo-fill: #064e3b;
+    --halo-stroke: #34d399;
+    --ray-stroke: #94a3b8;
+    --pill-ac-fill: #1e293b;
+    --pill-ac-text: #e2e8f0;
+    --pill-ant-fill: #064e3b;
+    --pill-ant-stroke: #34d399;
+    --pill-ant-text: #a7f3d0;
+    --pill-surp-fill: #451a03;
+    --pill-surp-stroke: #f59e0b;
+    --pill-surp-text: #fde68a;
+    --a0: #7dd3fc;
+    --am: #38bdf8;
+    --ap: #2563eb;
+    --c0: #facc15;
+    --cm: #e879f9;
+    --cp: #f43f5e;
+    --macro-asc: #f87171;
+    --macro-desc: #34d399;
+    --macro-aff: #c084fc;
+}
+.moteur-canonique-web svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.moteur-canonique-web .moteur-wire-dim {
+    opacity: 0.25;
+    transition: opacity 0.2s ease;
+}
+.moteur-canonique-web .moteur-wire-active {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(248, 250, 252, 0.35));
+}
+.moteur-canonique-web .moteur-ci-active {
+    fill: #34d399 !important;
+    stroke: #ffffff !important;
+    stroke-width: 2.6 !important;
+    filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.85));
+}
+.moteur-canonique-web .moteur-cii-pill-active {
+    fill: #312e81 !important;
+    stroke: #34d399 !important;
+    stroke-width: 2 !important;
+}
+.moteur-canonique-web .moteur-att-halo-active {
+    fill: #10b981 !important;
+    fill-opacity: 0.42 !important;
+    stroke: #6ee7b7 !important;
+    stroke-width: 2.6 !important;
+    stroke-dasharray: none !important;
+}
+.moteur-canonique-web .moteur-badge-active {
+    stroke-width: 3 !important;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+}
+

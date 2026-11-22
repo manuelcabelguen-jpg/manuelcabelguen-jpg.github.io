@@ -341,154 +341,474 @@
 
                 <!-- Visual Diagram + Telemetry Output (7 cols) -->
                 <div class="lg:col-span-7 space-y-5">
-                    <!-- Interactive Figure 1 SVG (réalignée sur l'article v1.0.2) -->
+                    <!-- Interactive Canonical Figure 1 SVG (Arbitrages A1-A4) -->
                     <div class="rounded-2xl bg-cosmic-850 border border-slate-700/70 p-5 shadow-xl space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800 text-xs">
-                            <span class="font-mono font-bold text-purple-300">Figure 1 Interactive • Le Moteur prédictif (architecture fonctionnelle)</span>
+                            <span class="font-mono font-bold text-purple-300">Figure 1 Interactive • Le Moteur prédictif canonique (Arbitrages A1–A4)</span>
                             <span id="svgStagePill" class="px-2.5 py-0.5 rounded-full bg-purple-900/60 border border-purple-500/40 font-mono text-[11px] text-purple-200">Déploiement Z=2</span>
                         </div>
-                        <svg id="engineDiagramSvg" viewBox="0 0 820 510" class="w-full h-auto select-none rounded-xl bg-cosmic-900 border border-slate-800/80" xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <marker id="arrSky" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
-                                </marker>
-                                <marker id="arrViolet" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
-                                </marker>
-                                <marker id="arrEmerald" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
-                                </marker>
-                                <marker id="arrAmber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
-                                </marker>
-                            </defs>
-
-                            <!-- INTERFACE SUBJECTIVE (Top Left) -->
-                            <g id="boxSubjective">
-                                <rect x="20" y="20" width="335" height="122" rx="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
-                                <text x="36" y="43" fill="#38bdf8" font-family="Outfit, sans-serif" font-size="12" font-weight="bold">INTERFACE SUBJECTIVE : modèle révisable ? (&minus;X / +X / 0)</text>
-                                <rect x="36" y="55" width="128" height="38" rx="8" fill="#082f49" stroke="#0284c7" stroke-width="1"/>
-                                <text x="100" y="78" fill="#bae6fd" font-family="Outfit, sans-serif" font-size="11" font-weight="600" text-anchor="middle">États cachés</text>
-                                <text x="176" y="70" fill="#94a3b8" font-size="10">Modèles génératifs &amp; a priori</text>
-                                <text x="176" y="86" fill="#94a3b8" font-size="10">Rétroaction épistémique (op. A)</text>
-                                <text id="svgAttenteTxt" x="36" y="122" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="11" font-weight="bold">Gradient Attente : A+ (Décharge)</text>
-                            </g>
-
-                            <!-- COUPLAGES A / C (Top Right 3x3) -->
-                            <g id="fig1CouplingsBox">
-                                <rect x="520" y="20" width="280" height="145" rx="14" fill="#0b1222" stroke="#334155" stroke-width="1.5"/>
-                                <text x="660" y="40" fill="#cbd5e1" font-family="Outfit, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">Croisements des gradients (A / C)</text>
-                                <!-- Row labels -->
-                                <text x="528" y="65" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="9">A+ Déch.</text>
-                                <text x="528" y="95" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="9">A&minus; Chg.</text>
-                                <text x="528" y="125" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="9">A0 Neutre</text>
-                                <!-- 3x3 cells -->
-                                <rect id="acCell_pos_pos" x="605" y="50" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="634" y="65" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A+/C+</text>
-                                <rect id="acCell_pos_neg" x="669" y="50" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="698" y="65" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A+/C&minus;</text>
-                                <rect id="acCell_pos_zero" x="733" y="50" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="762" y="65" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A+/C0</text>
-
-                                <rect id="acCell_neg_pos" x="605" y="80" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="634" y="95" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A&minus;/C+</text>
-                                <rect id="acCell_neg_neg" x="669" y="80" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="698" y="95" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A&minus;/C&minus;</text>
-                                <rect id="acCell_neg_zero" x="733" y="80" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="762" y="95" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A&minus;/C0</text>
-
-                                <rect id="acCell_zero_pos" x="605" y="110" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="634" y="125" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A0/C+</text>
-                                <rect id="acCell_zero_neg" x="669" y="110" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="698" y="125" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A0/C&minus;</text>
-                                <rect id="acCell_zero_zero" x="733" y="110" width="58" height="22" rx="5" fill="#1e293b" stroke="#475569"/><text x="762" y="125" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">A0/C0</text>
-
-                                <text x="634" y="152" fill="#d8b4fe" font-family="Fira Code, monospace" font-size="8.5" text-anchor="middle">C+ Déch.</text>
-                                <text x="698" y="152" fill="#d8b4fe" font-family="Fira Code, monospace" font-size="8.5" text-anchor="middle">C&minus; Chg.</text>
-                                <text x="762" y="152" fill="#d8b4fe" font-family="Fira Code, monospace" font-size="8.5" text-anchor="middle">C0 Neutre</text>
-                            </g>
-
-                            <!-- Feedback Subjective <-> Couplings -->
-                            <path d="M 355 68 L 516 68" fill="none" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrSky)"/>
-                            <path d="M 516 96 L 359 96" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrSky)"/>
-                            <text x="436" y="60" fill="#7dd3fc" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">Rétroaction A (0, &minus;, +)</text>
-
-                            <!-- ANTICIPATION (0,0,2) Gate -->
-                            <rect id="boxAnticipation" x="120" y="176" width="166" height="32" rx="16" fill="#064e3b" stroke="#34d399" stroke-width="1.8"/>
-                            <text x="203" y="196" fill="#a7f3d0" font-family="Fira Code, monospace" font-size="10.5" font-weight="bold" text-anchor="middle">ANTICIPATION (0, 0, 2)</text>
-                            <path d="M 203 142 L 203 173" fill="none" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrSky)"/>
-                            <text x="212" y="162" fill="#7dd3fc" font-size="9" font-family="Fira Code, monospace">Attente (+X, &minus;X, 0)</text>
-                            <path d="M 286 192 L 326 218" fill="none" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrEmerald)"/>
-
-                            <!-- CENTER: PREMIERE COURONNE (Z=2) & VEILLE (0,0,0) -->
-                            <g id="boxOutput">
-                                <rect x="315" y="182" width="235" height="162" rx="14" fill="#13192f" stroke="#818cf8" stroke-width="1.8"/>
-                                <text x="432" y="201" fill="#c7d2fe" font-family="Outfit, sans-serif" font-size="11" font-weight="bold" text-anchor="middle">Première couronne (Z = 2) &amp; Veille</text>
-                                <!-- Grid cells matching v1.0.2 Figure 1 -->
-                                <rect id="coreCell_0_p2" x="328" y="210" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="361" y="226" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(0, +2, 2)</text>
-                                <rect id="coreCell_0_m2" x="400" y="210" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="433" y="226" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(0, &minus;2, 2)</text>
-                                <rect id="coreCell_0_0" x="472" y="210" width="66" height="24" rx="5" fill="#0f172a" stroke="#64748b"/><text x="505" y="226" fill="#94a3b8" font-family="Fira Code, monospace" font-size="8.5" text-anchor="middle">Veille (0,0,0)</text>
-
-                                <rect id="coreCell_m1_p1" x="328" y="240" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="361" y="256" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(&minus;1, +1, 2)</text>
-                                <rect id="coreCell_m1_m1" x="400" y="240" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="433" y="256" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(&minus;1, &minus;1, 2)</text>
-                                <rect id="coreCell_m2_0" x="472" y="240" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="505" y="256" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(&minus;2, 0, 2)</text>
-
-                                <rect id="coreCell_p1_p1" x="328" y="270" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="361" y="286" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(+1, +1, 2)</text>
-                                <rect id="coreCell_p1_m1" x="400" y="270" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="433" y="286" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(+1, &minus;1, 2)</text>
-                                <rect id="coreCell_p2_0" x="472" y="270" width="66" height="24" rx="5" fill="#1e293b" stroke="#475569"/><text x="505" y="286" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">(+2, 0, 2)</text>
-
-                                <text id="svgCoordsTxt" x="328" y="315" fill="#ffffff" font-family="Fira Code, monospace" font-size="11" font-weight="bold">(X=+1, Y=+1, Z=2)</text>
-                                <text id="svgProtoTxt" x="328" y="332" fill="#f472b6" font-family="Outfit, sans-serif" font-size="11" font-weight="bold">État : Désir</text>
-                                <text id="svgL1Txt" x="538" y="332" fill="#94a3b8" font-family="Fira Code, monospace" font-size="9.5" text-anchor="end">L₁ = 2</text>
-                            </g>
-
-                            <!-- SURPRISE (0,0,1) Gate -->
-                            <rect id="boxDiscrepancy" x="562" y="294" width="152" height="44" rx="16" fill="#451a03" stroke="#f59e0b" stroke-width="1.8"/>
-                            <text x="638" y="313" fill="#fcd34d" font-family="Fira Code, monospace" font-size="10.5" font-weight="bold" text-anchor="middle">SURPRISE (0, 0, 1)</text>
-                            <text id="svgMagTxt" x="638" y="329" fill="#fde68a" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">Mag = 6 | Seuil = 4</text>
-                            <path d="M 622 294 L 552 260" fill="none" stroke="#fbbf24" stroke-width="1.8" marker-end="url(#arrAmber)"/>
-
-                            <!-- INTERFACE ATTENTIONNELLE (Bottom Left) -->
-                            <g id="boxAttentional">
-                                <rect x="20" y="280" width="265" height="122" rx="14" fill="#0b1528" stroke="#10b981" stroke-width="2"/>
-                                <text x="36" y="303" fill="#34d399" font-family="Outfit, sans-serif" font-size="12" font-weight="bold">INTERFACE ATTENTIONNELLE</text>
-                                <text x="36" y="321" fill="#94a3b8" font-size="10">Pondération de précision (&plusmn;&pi;_A, &plusmn;&pi;_C, Z)</text>
-                                <text x="36" y="337" fill="#6ee7b7" font-family="Fira Code, monospace" font-size="9.5">Règle : &pi;_A + &pi;_C = 2Z &minus; 2 (Z &ge; 2)</text>
-                                <text id="svgPrecTxt" x="36" y="362" fill="#6ee7b7" font-family="Fira Code, monospace" font-size="10.5" font-weight="bold">&Pi; = 6 (&ge; 4 : Engagée)</text>
-                                <text id="svgCouplingTxt" x="36" y="382" fill="#e2e8f0" font-family="Fira Code, monospace" font-size="10">Couplage (A+, C+)</text>
-                            </g>
-
-                            <!-- Projection dashed lines Center -> Attentionnelle -->
-                            <path d="M 315 305 L 288 330" fill="none" stroke="#34d399" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#arrEmerald)"/>
-                            <!-- Voie ascendante réflexive Attentionnelle -> Subjective -->
-                            <path d="M 78 278 L 78 145" fill="none" stroke="#34d399" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#arrEmerald)"/>
-                            <text x="86" y="220" fill="#6ee7b7" font-size="9.5" font-family="Fira Code, monospace">Voie ascendante réflexive :</text>
-                            <text x="86" y="233" fill="#94a3b8" font-size="9" font-family="Fira Code, monospace">possibilités d'action</text>
-
-                            <!-- INTERFACE PERCEPTIVE (Bottom Right) -->
-                            <g id="boxPerceptive">
-                                <rect x="520" y="364" width="280" height="122" rx="14" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
-                                <text x="536" y="387" fill="#c084fc" font-family="Outfit, sans-serif" font-size="12" font-weight="bold">INTERFACE PERCEPTIVE</text>
-                                <text x="536" y="405" fill="#cbd5e1" font-size="10">Monde contrôlable ? (+Y / &minus;Y / 0)</text>
-                                <rect x="536" y="416" width="128" height="32" rx="8" fill="#2e1065" stroke="#9333ea" stroke-width="1"/>
-                                <text x="600" y="436" fill="#e9d5ff" font-family="Outfit, sans-serif" font-size="11" font-weight="600" text-anchor="middle">États cachés</text>
-                                <text id="svgControleTxt" x="536" y="472" fill="#d8b4fe" font-family="Fira Code, monospace" font-size="11" font-weight="bold">Gradient Contrôle : C+ (Décharge)</text>
-                            </g>
-
-                            <!-- Perceptive <-> Couplings / Surprise -->
-                            <path d="M 650 364 L 650 341" fill="none" stroke="#c084fc" stroke-width="1.8" marker-end="url(#arrViolet)"/>
-                            <text x="658" y="356" fill="#d8b4fe" font-size="9" font-family="Fira Code, monospace">Contrôle (+Y, &minus;Y, 0)</text>
-                            <path d="M 738 165 L 738 360" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrViolet)"/>
-                            <text x="745" y="255" fill="#d8b4fe" font-size="9" font-family="Fira Code, monospace">C (0, &minus;, +)</text>
-
-                            <!-- CORPS et ENVIRONNEMENT (Bottom Center) -->
-                            <rect x="315" y="436" width="175" height="50" rx="12" fill="#1e293b" stroke="#64748b" stroke-width="1.8"/>
-                            <text x="402" y="458" fill="#f8fafc" font-family="Outfit, sans-serif" font-size="11.5" font-weight="bold" text-anchor="middle">CORPS et ENVIRONNEMENT</text>
-                            <text x="402" y="474" fill="#94a3b8" font-family="Fira Code, monospace" font-size="9" text-anchor="middle">Signaux efférents / afférents</text>
-
-                            <!-- Voie descendante comportementale Attentionnelle -> Corps -->
-                            <path d="M 155 402 Q 210 460 312 460" fill="none" stroke="#34d399" stroke-width="1.8" marker-end="url(#arrEmerald)"/>
-                            <text x="148" y="445" fill="#6ee7b7" font-size="9" font-family="Fira Code, monospace">Voie descendante comportementale</text>
-                            <text x="165" y="458" fill="#94a3b8" font-size="8.5" font-family="Fira Code, monospace">(politiques d'action)</text>
-
-                            <!-- Signaux afférents Corps -> Perceptive -->
-                            <path d="M 490 460 Q 505 460 518 442" fill="none" stroke="#c084fc" stroke-width="1.8" marker-end="url(#arrViolet)"/>
-                            <text x="440" y="422" fill="#d8b4fe" font-size="9" font-family="Fira Code, monospace" text-anchor="middle">Signaux afférents</text>
-                        </svg>
+                        <div class="moteur-canonique-web w-full rounded-xl bg-[#080d1a] border border-slate-800/80 overflow-hidden">
+                            <svg id="moteur-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 1085" data-i18n-svg="true">
+                                  <defs>
+                                    <!-- Pointes profilées (stealth arrowheads) pour les 3 macro-voies -->
+                                    <marker id="arr-asc" viewBox="0 0 14 14" refX="10" refY="7" markerWidth="4.6" markerHeight="4.6" orient="auto">
+                                      <path d="M 1,1.5 L 13,7 L 1,12.5 L 4.2,7 Z" fill="var(--macro-asc)" />
+                                    </marker>
+                                    <marker id="arr-desc" viewBox="0 0 14 14" refX="10" refY="7" markerWidth="4.6" markerHeight="4.6" orient="auto">
+                                      <path d="M 1,1.5 L 13,7 L 1,12.5 L 4.2,7 Z" fill="var(--macro-desc)" />
+                                    </marker>
+                                    <marker id="arr-aff" viewBox="0 0 14 14" refX="10" refY="7" markerWidth="4.6" markerHeight="4.6" orient="auto">
+                                      <path d="M 1,1.5 L 13,7 L 1,12.5 L 4.2,7 Z" fill="var(--macro-aff)" />
+                                    </marker>
+                            
+                                    <!-- Masque interne pour prolonger les 9 rayons en opacité atténuée dans l'Interface Attentionnelle -->
+                                    <clipPath id="clip-att-box">
+                                      <rect x="65" y="555" width="445" height="316" rx="10" />
+                                    </clipPath>
+                            
+                                    <style>
+                                      .t-title     { font-family: var(--font-sans); font-weight: 700; font-size: 13px; fill: var(--text-main); letter-spacing: 0.3px; }
+                                      .t-sub       { font-family: var(--font-sans); font-weight: 600; font-size: 11px; fill: var(--text-muted); }
+                                      .t-hidden    { font-family: var(--font-sans); font-weight: 700; font-size: 13px; fill: var(--text-main); }
+                                      .t-meta      { font-family: var(--font-sans); font-weight: 500; font-size: 10.5px; fill: var(--text-muted); }
+                                      .t-micro     { font-family: var(--font-sans); font-weight: 600; font-size: 9.5px; fill: var(--text-muted); }
+                                      .t-accent    { font-family: var(--font-mono); font-weight: 700; font-size: 11px; fill: var(--text-accent); }
+                                      .t-mono      { font-family: var(--font-mono); font-weight: 600; font-size: 10.5px; fill: var(--text-main); }
+                                      .t-coord     { font-family: var(--font-mono); font-weight: 700; font-size: 10.5px; fill: var(--text-main); }
+                                      .t-coord-s   { font-family: var(--font-mono); font-weight: 600; font-size: 9.5px; fill: var(--text-main); }
+                                      .t-demux     { font-family: var(--font-mono); font-weight: 600; font-size: 9.5px; fill: var(--text-main); }
+                                      .t-axis      { font-family: var(--font-mono); font-weight: 700; font-size: 12px; fill: var(--text-main); }
+                                      .t-lbl       { font-family: var(--font-sans); font-weight: 700; font-size: 11.5px; fill: var(--text-main); }
+                                      .t-leg       { font-family: var(--font-sans); font-weight: 700; font-size: 9.5px; fill: var(--text-main); }
+                                      .t-pill-ac   { font-family: var(--font-mono); font-weight: 700; font-size: 9.5px; fill: var(--pill-ac-text); }
+                                      .t-ant       { font-family: var(--font-sans); font-weight: 700; font-size: 10.5px; fill: var(--pill-ant-text); }
+                                      .t-ant-m     { font-family: var(--font-mono); font-weight: 700; font-size: 10.5px; fill: var(--pill-ant-text); }
+                                      .t-surp      { font-family: var(--font-sans); font-weight: 700; font-size: 10px; fill: var(--pill-surp-text); }
+                                      .t-surp-m    { font-family: var(--font-mono); font-weight: 700; font-size: 10px; fill: var(--pill-surp-text); }
+                                      .wire-a0     { fill: none; stroke: var(--a0); stroke-width: 2.2; stroke-linejoin: round; }
+                                      .wire-am     { fill: none; stroke: var(--am); stroke-width: 3.4; stroke-linejoin: round; }
+                                      .wire-ap     { fill: none; stroke: var(--ap); stroke-width: 4.8; stroke-linejoin: round; }
+                                      .wire-c0     { fill: none; stroke: var(--c0); stroke-width: 2.2; stroke-linejoin: round; }
+                                      .wire-cm     { fill: none; stroke: var(--cm); stroke-width: 3.4; stroke-linejoin: round; }
+                                      .wire-cp     { fill: none; stroke: var(--cp); stroke-width: 4.8; stroke-linejoin: round; }
+                                      .demux-ln    { fill: none; stroke: var(--box-stroke); stroke-width: 1.2; }
+                                      .ray-outer   { fill: none; stroke: var(--ray-stroke); stroke-width: 1.1; stroke-dasharray: 4 3; opacity: 0.70; }
+                                      .ray-inner   { fill: none; stroke: var(--ray-stroke); stroke-width: 1.1; stroke-dasharray: 4 3; opacity: 0.26; }
+                                      .dot-node    { fill: var(--dot-fill); stroke: var(--dot-stroke); stroke-width: 1.8; }
+                                      .poss-halo   { fill: var(--halo-fill); fill-opacity: 0.65; stroke: var(--halo-stroke); stroke-width: 1.3; stroke-dasharray: 3 2; }
+                                      .poss-core   { fill: var(--dot-fill); }
+                                      .macro-casing { fill: none; stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; opacity: 0.14; }
+                                      .macro-line   { fill: none; stroke-width: 4.2; stroke-linecap: round; stroke-linejoin: round; }
+                                    </style>
+                                  </defs>
+                            
+                                  <!-- FOND -->
+                                  <rect width="1360" height="1085" fill="var(--bg-svg)" />
+                            
+                                  <!-- =================================================================
+                                       1. LES 6 CIRCUITS CONTINUS CONTRA-ROTATIFS (BOUCLES A ET C)
+                                       ================================================================= -->
+                                  <!-- BOUCLE D'ATTENTE (SENS ANTI-HORAIRE) -->
+                                  <polyline class="wire-ap" points="280,232 280,490 1019,490 1019,62 615,62" />
+                                  <polyline class="wire-am" points="335,232 335,420 923,420 923,122 615,122" />
+                                  <polyline class="wire-a0" points="390,232 390,350 827,350 827,182 615,182" />
+                            
+                                  <!-- BOUCLE DE CONTRÔLE (SENS HORAIRE) -->
+                                  <polyline class="wire-cp" points="965,806 635,806 635,220 1265,220 1265,570" />
+                                  <polyline class="wire-cm" points="965,758 731,758 731,285 1180,285 1180,570" />
+                                  <polyline class="wire-c0" points="965,710 827,710 827,350 1095,350 1095,570" />
+                            
+                                  <!-- =================================================================
+                                       2. TRIANGLES DIRECTIONNELS (NEUTRE / CHARGE / DÉCHARGE)
+                                       ================================================================= -->
+                                  <!-- Retour vers INTERFACE SUBJECTIVE -->
+                                  <polygon points="642,62 664,51 664,73" fill="var(--ap)" />
+                                  <text class="t-lbl" x="674" y="53">Décharge</text>
+                            
+                                  <polygon points="642,122 664,111 664,133" fill="var(--bg-svg)" stroke="var(--am)" stroke-width="2.5" />
+                                  <text class="t-lbl" x="674" y="113">Charge</text>
+                            
+                                  <polygon points="642,182 664,172 664,192" fill="var(--bg-svg)" stroke="var(--a0)" stroke-width="2.2" />
+                                  <text class="t-lbl" x="674" y="173">Neutre</text>
+                            
+                                  <!-- Traversée d'ANTICIPATION [0, 0, Z] -->
+                                  <polygon points="576,350 556,340 556,360" fill="var(--bg-svg)" stroke="var(--a0)" stroke-width="2.2" />
+                                  <polygon points="576,420 556,409 556,431" fill="var(--bg-svg)" stroke="var(--am)" stroke-width="2.5" />
+                                  <polygon points="576,490 556,479 556,501" fill="var(--ap)" />
+                            
+                                  <!-- Traversée de SURPRISE [0, 0, 1] -->
+                                  <polygon points="635,556 624,576 646,576" fill="var(--cp)" />
+                                  <polygon points="731,556 720,576 742,576" fill="var(--bg-svg)" stroke="var(--cm)" stroke-width="2.5" />
+                                  <polygon points="827,556 817,576 837,576" fill="var(--bg-svg)" stroke="var(--c0)" stroke-width="2.2" />
+                            
+                                  <!-- Retour vers INTERFACE PERCEPTIVE -->
+                                  <text class="t-lbl" x="1095" y="520" text-anchor="middle">Neutre</text>
+                                  <polygon points="1095,556 1084,536 1106,536" fill="var(--bg-svg)" stroke="var(--c0)" stroke-width="2.2" />
+                            
+                                  <text class="t-lbl" x="1180" y="520" text-anchor="middle">Charge</text>
+                                  <polygon points="1180,556 1169,536 1191,536" fill="var(--bg-svg)" stroke="var(--cm)" stroke-width="2.5" />
+                            
+                                  <text class="t-lbl" x="1265" y="520" text-anchor="middle">Décharge</text>
+                                  <polygon points="1265,556 1254,536 1276,536" fill="var(--cp)" />
+                            
+                                  <!-- =================================================================
+                                       3. DÉMULTIPLEXAGE DES 9 ENTRÉES PAR INTERFACE CACHÉE & AXES
+                                       ================================================================= -->
+                                  <!-- 9 entrées côté droit INTERFACE SUBJECTIVE -->
+                                  <path class="demux-ln" d="M615,62 L598,46 L520,46 M615,62 L520,62 M615,62 L598,78 L520,78" />
+                                  <rect x="532" y="39" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="49" text-anchor="middle">A+/C+</text>
+                                  <rect x="532" y="55" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="65" text-anchor="middle">A+/C-</text>
+                                  <rect x="532" y="71" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="81" text-anchor="middle">A+/C0</text>
+                            
+                                  <path class="demux-ln" d="M615,122 L598,106 L520,106 M615,122 L520,122 M615,122 L598,138 L520,138" />
+                                  <rect x="532" y="99" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="109" text-anchor="middle">A-/C+</text>
+                                  <rect x="532" y="115" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="125" text-anchor="middle">A-/C-</text>
+                                  <rect x="532" y="131" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="141" text-anchor="middle">A-/C0</text>
+                            
+                                  <path class="demux-ln" d="M615,182 L598,166 L520,166 M615,182 L520,182 M615,182 L598,198 L520,198" />
+                                  <rect x="532" y="159" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="169" text-anchor="middle">A0/C+</text>
+                                  <rect x="532" y="175" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="185" text-anchor="middle">A0/C-</text>
+                                  <rect x="532" y="191" width="54" height="14" rx="3" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="559" y="201" text-anchor="middle">A0/C0</text>
+                            
+                                  <!-- 9 entrées côté haut INTERFACE PERCEPTIVE -->
+                                  <path class="demux-ln" d="M1095,570 L1081,584 L1081,655 M1095,570 L1095,655 M1095,570 L1109,584 L1109,655" />
+                                  <rect x="1066" y="588" width="58" height="50" rx="4" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="1095" y="601" text-anchor="middle">C0/A+</text>
+                                  <text class="t-demux" x="1095" y="616" text-anchor="middle">C0/A-</text>
+                                  <text class="t-demux" x="1095" y="631" text-anchor="middle">C0/A0</text>
+                            
+                                  <path class="demux-ln" d="M1180,570 L1166,584 L1166,655 M1180,570 L1180,655 M1180,570 L1194,584 L1194,655" />
+                                  <rect x="1151" y="588" width="58" height="50" rx="4" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="1180" y="601" text-anchor="middle">C-/A+</text>
+                                  <text class="t-demux" x="1180" y="616" text-anchor="middle">C-/A-</text>
+                                  <text class="t-demux" x="1180" y="631" text-anchor="middle">C-/A0</text>
+                            
+                                  <path class="demux-ln" d="M1265,570 L1251,584 L1251,655 M1265,570 L1265,655 M1265,570 L1279,584 L1279,655" />
+                                  <rect x="1236" y="588" width="58" height="50" rx="4" fill="var(--bg-svg)" />
+                                  <text class="t-demux" x="1265" y="601" text-anchor="middle">C+/A+</text>
+                                  <text class="t-demux" x="1265" y="616" text-anchor="middle">C+/A-</text>
+                                  <text class="t-demux" x="1265" y="631" text-anchor="middle">C+/A0</text>
+                            
+                                  <!-- Étiquettes d'axes -->
+                                  <text class="t-axis" x="288" y="252">+X</text>
+                                  <text class="t-axis" x="343" y="252">-X</text>
+                                  <text class="t-axis" x="398" y="252">0</text>
+                            
+                                  <text class="t-axis" x="954" y="704" text-anchor="end">0</text>
+                                  <text class="t-axis" x="954" y="752" text-anchor="end">-Y</text>
+                                  <text class="t-axis" x="954" y="800" text-anchor="end">+Y</text>
+                                  <text class="t-lbl" x="800" y="828" text-anchor="middle">Signaux efférents (copie d'efférence)</text>
+                            
+                                  <!-- =================================================================
+                                       4. LES 9 RAYONS POINTILLÉS (COUCHE EXTERNE, SOUS LES BADGES)
+                                       ================================================================= -->
+                                  <g id="rays-outer-layer">
+                                    <line class="ray-outer" x1="635" y1="350" x2="152" y2="598" />
+                                    <line class="ray-outer" x1="731" y1="350" x2="287.5" y2="598" />
+                                    <line class="ray-outer" x1="827" y1="350" x2="423" y2="598" />
+                                    <line class="ray-outer" x1="635" y1="420" x2="152" y2="646" />
+                                    <line class="ray-outer" x1="731" y1="420" x2="287.5" y2="646" />
+                                    <line class="ray-outer" x1="827" y1="420" x2="423" y2="646" />
+                                    <line class="ray-outer" x1="635" y1="490" x2="152" y2="694" />
+                                    <line class="ray-outer" x1="731" y1="490" x2="287.5" y2="694" />
+                                    <line class="ray-outer" x1="827" y1="490" x2="423" y2="694" />
+                                  </g>
+                            
+                                  <!-- =================================================================
+                                       5. BADGES ANTICIPATION & SURPRISE (Z-ORDER AU-DESSUS DES RAYONS)
+                                       ================================================================= -->
+                                  <g>
+                                    <rect x="412" y="434" width="126" height="42" rx="7"
+                                          fill="var(--pill-ant-fill)" stroke="var(--pill-ant-stroke)" stroke-width="1.6" />
+                                    <text class="t-ant" x="475" y="451" text-anchor="middle">ANTICIPATION</text>
+                                    <text class="t-ant-m" x="475" y="467" text-anchor="middle">[0, 0, Z]</text>
+                            
+                                    <rect x="641" y="605" width="84" height="42" rx="7"
+                                          fill="var(--pill-surp-fill)" stroke="var(--pill-surp-stroke)" stroke-width="1.6" />
+                                    <text class="t-surp" x="683" y="622" text-anchor="middle">SURPRISE</text>
+                                    <text class="t-surp-m" x="683" y="638" text-anchor="middle">[0, 0, 1]</text>
+                                  </g>
+                            
+                                  <!-- =================================================================
+                                       6. CROISEMENT I : BASE PROJECTIVE DIRECTIONNELLE (X, Y, 0) & VEILLE
+                                       ================================================================= -->
+                                  <g>
+                                    <circle class="dot-node" cx="635" cy="350" r="6" />
+                                    <text class="t-coord" x="644" y="368">(0,2,0)</text>
+                            
+                                    <circle class="dot-node" cx="731" cy="350" r="6" />
+                                    <text class="t-coord" x="740" y="368">(0,-2,0)</text>
+                            
+                                    <!-- Veille (0,0,0) située EXCLUSIVEMENT au Croisement I -->
+                                    <circle cx="827" cy="350" r="9.5" fill="none" stroke="var(--text-accent)" stroke-width="2" />
+                                    <circle class="dot-node" cx="827" cy="350" r="6" />
+                                    <text class="t-coord" x="838" y="367">Veille</text>
+                                    <text class="t-coord" x="838" y="380">(0,0,0)</text>
+                            
+                                    <circle class="dot-node" cx="635" cy="420" r="6" />
+                                    <text class="t-coord" x="644" y="438">(-1,1,0)</text>
+                            
+                                    <circle class="dot-node" cx="731" cy="420" r="6" />
+                                    <text class="t-coord" x="740" y="438">(-1,-1,0)</text>
+                            
+                                    <circle class="dot-node" cx="827" cy="420" r="6" />
+                                    <text class="t-coord" x="838" y="438">(-2,0,0)</text>
+                            
+                                    <circle class="dot-node" cx="635" cy="490" r="6" />
+                                    <text class="t-coord" x="644" y="508">(1,1,0)</text>
+                            
+                                    <circle class="dot-node" cx="731" cy="490" r="6" />
+                                    <text class="t-coord" x="740" y="508">(1,-1,0)</text>
+                            
+                                    <circle class="dot-node" cx="827" cy="490" r="6" />
+                                    <text class="t-coord" x="838" y="508">(2,0,0)</text>
+                                  </g>
+                            
+                                  <!-- =================================================================
+                                       7. CROISEMENT II : GRILLE COMBINATOIRE EXTERNE [A / C]
+                                       ================================================================= -->
+                                  <g>
+                                    <circle class="dot-node" cx="827" cy="220" r="5.5" />
+                                    <rect x="795" y="191" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="827" y="204" text-anchor="middle">[A0/C+]</text>
+                            
+                                    <circle class="dot-node" cx="923" cy="220" r="5.5" />
+                                    <rect x="891" y="191" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="923" y="204" text-anchor="middle">[A-/C+]</text>
+                            
+                                    <circle class="dot-node" cx="1019" cy="220" r="5.5" />
+                                    <rect x="987" y="191" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="1019" y="204" text-anchor="middle">[A+/C+]</text>
+                            
+                                    <circle class="dot-node" cx="827" cy="285" r="5.5" />
+                                    <rect x="795" y="256" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="827" y="269" text-anchor="middle">[A0/C-]</text>
+                            
+                                    <circle class="dot-node" cx="923" cy="285" r="5.5" />
+                                    <rect x="891" y="256" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="923" y="269" text-anchor="middle">[A-/C-]</text>
+                            
+                                    <circle class="dot-node" cx="1019" cy="285" r="5.5" />
+                                    <rect x="987" y="256" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="1019" y="269" text-anchor="middle">[A+/C-]</text>
+                            
+                                    <rect x="795" y="320" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="827" y="333" text-anchor="middle">[A0/C0]</text>
+                            
+                                    <circle class="dot-node" cx="923" cy="350" r="5.5" />
+                                    <rect x="891" y="320" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="923" y="333" text-anchor="middle">[A-/C0]</text>
+                            
+                                    <circle class="dot-node" cx="1019" cy="350" r="5.5" />
+                                    <rect x="987" y="320" width="64" height="20" rx="4" fill="var(--pill-ac-fill)" />
+                                    <text class="t-pill-ac" x="1019" y="333" text-anchor="middle">[A+/C0]</text>
+                                  </g>
+                            
+                                  <!-- =================================================================
+                                       8. LES 3 INTERFACES PRINCIPALES
+                                       ================================================================= -->
+                            
+                                  <!-- BOÎTE 1 : INTERFACE SUBJECTIVE -->
+                                  <g>
+                                    <rect x="170" y="28" width="350" height="204" rx="10"
+                                          fill="var(--box-fill)" stroke="var(--box-subj-stroke)" stroke-width="2.4" />
+                                    <text class="t-title" x="188" y="52">INTERFACE SUBJECTIVE</text>
+                                    <text class="t-sub" x="188" y="71">Modèle révisable ? (-X / +X / 0)</text>
+                                    <rect x="188" y="84" width="314" height="132" rx="7"
+                                          fill="var(--box-inner-fill)" stroke="var(--box-subj-stroke)" stroke-width="1.2" stroke-dasharray="5 3" />
+                                    <text class="t-hidden" x="345" y="107" text-anchor="middle">[États cachés]</text>
+                                    <text class="t-meta" x="345" y="130" text-anchor="middle">Modèles génératifs &amp; a priori</text>
+                                    <text class="t-accent" x="345" y="153" text-anchor="middle">Opérateur A : révisabilité (ρ)</text>
+                                    <text class="t-meta" x="345" y="176" text-anchor="middle">Réponse isolée sur 3 circuits (A0, A-, A+)</text>
+                                    <text class="t-meta" x="345" y="197" text-anchor="middle">Projection directe du niveau d'opérabilité Z</text>
+                                  </g>
+                            
+                                  <!-- BOÎTE 2 : INTERFACE PERCEPTIVE -->
+                                  <g>
+                                    <rect x="965" y="655" width="365" height="204" rx="10"
+                                          fill="var(--box-fill)" stroke="var(--box-perc-stroke)" stroke-width="2.4" />
+                                    <text class="t-title" x="983" y="679">INTERFACE PERCEPTIVE</text>
+                                    <text class="t-sub" x="983" y="698">Monde contrôlable ? (+Y / -Y / 0)</text>
+                                    <rect x="983" y="711" width="329" height="132" rx="7"
+                                          fill="var(--box-inner-fill)" stroke="var(--box-perc-stroke)" stroke-width="1.2" stroke-dasharray="5 3" />
+                                    <text class="t-hidden" x="1147.5" y="734" text-anchor="middle">[États cachés]</text>
+                                    <text class="t-meta" x="1147.5" y="757" text-anchor="middle">Comparateur efférence / afférence</text>
+                                    <text class="t-accent" x="1147.5" y="780" text-anchor="middle">Opérateur C : contrôlabilité (κ)</text>
+                                    <text class="t-meta" x="1147.5" y="803" text-anchor="middle">Réponse isolée sur 3 circuits (C0, C-, C+)</text>
+                                    <text class="t-meta" x="1147.5" y="824" text-anchor="middle">Projection directe du niveau d'opérabilité Z</text>
+                                  </g>
+                            
+                                  <!-- BOÎTE 3 : INTERFACE ATTENTIONNELLE -->
+                                  <g>
+                                    <!-- Fonds des cadres -->
+                                    <rect x="65" y="555" width="445" height="316" rx="10"
+                                          fill="var(--box-fill)" stroke="var(--box-att-stroke)" stroke-width="2.4" />
+                                    <rect x="83" y="571" width="409" height="178" rx="7"
+                                          fill="var(--box-inner-fill)" stroke="var(--box-stroke)" stroke-width="1" />
+                            
+                                    <!-- Prolongement atténué des 9 rayons jusqu'aux halos (au-dessus du fond, sous les halos) -->
+                                    <g clip-path="url(#clip-att-box)">
+                                      <line class="ray-inner" x1="635" y1="350" x2="152" y2="598" />
+                                      <line class="ray-inner" x1="731" y1="350" x2="287.5" y2="598" />
+                                      <line class="ray-inner" x1="827" y1="350" x2="423" y2="598" />
+                                      <line class="ray-inner" x1="635" y1="420" x2="152" y2="646" />
+                                      <line class="ray-inner" x1="731" y1="420" x2="287.5" y2="646" />
+                                      <line class="ray-inner" x1="827" y1="420" x2="423" y2="646" />
+                                      <line class="ray-inner" x1="635" y1="490" x2="152" y2="694" />
+                                      <line class="ray-inner" x1="731" y1="490" x2="287.5" y2="694" />
+                                      <line class="ray-inner" x1="827" y1="490" x2="423" y2="694" />
+                                    </g>
+                            
+                                    <!-- Grille structurelle 3x3 -->
+                                    <line x1="152" y1="598" x2="423" y2="598" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                                    <line x1="152" y1="646" x2="423" y2="646" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                                    <line x1="152" y1="694" x2="423" y2="694" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                                    <line x1="152" y1="598" x2="152" y2="694" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                                    <line x1="287.5" y1="598" x2="287.5" y2="694" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                                    <line x1="423" y1="598" x2="423" y2="694" stroke="var(--box-stroke)" stroke-width="0.9" opacity="0.45" />
+                            
+                                    <!-- 9 domaines de possibles (halo = possibles, noyau = réduction d'information) -->
+                                    <circle class="poss-halo" cx="152" cy="598" r="10.5" /><circle class="poss-core" cx="152" cy="598" r="3.2" />
+                                    <text class="t-coord-s" x="152" y="621" text-anchor="middle">{0, +Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="287.5" cy="598" r="10.5" /><circle class="poss-core" cx="287.5" cy="598" r="3.2" />
+                                    <text class="t-coord-s" x="287.5" y="621" text-anchor="middle">{0, -Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="423" cy="598" r="10.5" /><circle class="poss-core" cx="423" cy="598" r="3.2" />
+                                    <text class="t-coord-s" x="423" y="621" text-anchor="middle">{0, 0, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="152" cy="646" r="10.5" /><circle class="poss-core" cx="152" cy="646" r="3.2" />
+                                    <text class="t-coord-s" x="152" y="669" text-anchor="middle">{-X, +Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="287.5" cy="646" r="10.5" /><circle class="poss-core" cx="287.5" cy="646" r="3.2" />
+                                    <text class="t-coord-s" x="287.5" y="669" text-anchor="middle">{-X, -Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="423" cy="646" r="10.5" /><circle class="poss-core" cx="423" cy="646" r="3.2" />
+                                    <text class="t-coord-s" x="423" y="669" text-anchor="middle">{-X, 0, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="152" cy="694" r="10.5" /><circle class="poss-core" cx="152" cy="694" r="3.2" />
+                                    <text class="t-coord-s" x="152" y="717" text-anchor="middle">{+X, +Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="287.5" cy="694" r="10.5" /><circle class="poss-core" cx="287.5" cy="694" r="3.2" />
+                                    <text class="t-coord-s" x="287.5" y="717" text-anchor="middle">{+X, -Y, Z}</text>
+                            
+                                    <circle class="poss-halo" cx="423" cy="694" r="10.5" /><circle class="poss-core" cx="423" cy="694" r="3.2" />
+                                    <text class="t-coord-s" x="423" y="717" text-anchor="middle">{+X, 0, Z}</text>
+                            
+                                    <!-- Micro-légende visuelle interne -->
+                                    <line x1="103" y1="726" x2="472" y2="726" stroke="var(--box-stroke)" stroke-width="0.7" opacity="0.3" />
+                                    <circle class="poss-halo" cx="122" cy="738" r="5.5" />
+                                    <text class="t-micro" x="134" y="741">Ensemble des possibles</text>
+                                    <circle class="poss-core" cx="294" cy="738" r="3.0" />
+                                    <text class="t-micro" x="304" y="741">Réduction d'information</text>
+                            
+                                    <!-- Bloc Double Notation A2 & Réduction d'information -->
+                                    <text class="t-title" x="83" y="770">INTERFACE ATTENTIONNELLE</text>
+                                    <text class="t-sub" x="83" y="789">Ensemble des possibles : affect, émotion, sentiment</text>
+                                    <text class="t-mono" x="83" y="811">Champs : {±X, ±Y, Z}  ⟷  (±π_A, ±π_C, Z)</text>
+                                    <text class="t-accent" x="83" y="832">Couronne : |π_A| + |π_C| = 2Z − 2  (Z ≥ 2)</text>
+                                    <text class="t-meta" x="83" y="853">Réduction de l'information : compression vers l'action</text>
+                                  </g>
+                            
+                                  <!-- =================================================================
+                                       9. VOIES MACROSCOPIQUES & CORPS ET ENVIRONNEMENT (COUV. MARKOV)
+                                       ================================================================= -->
+                                  <!-- Voie ascendante réflexive -->
+                                  <path class="macro-casing" d="M 195,553 L 195,252" stroke="var(--macro-asc)" />
+                                  <path class="macro-line" d="M 195,553 L 195,242" stroke="var(--macro-asc)"
+                                        stroke-dasharray="9 6" marker-end="url(#arr-asc)" />
+                                  <rect x="204" y="499" width="176" height="40" rx="6" fill="var(--bg-svg)" opacity="0.95" />
+                                  <text class="t-lbl" x="212" y="515">Voie ascendante réflexive :</text>
+                                  <text class="t-meta" x="212" y="531">possibilités d'action (révision)</text>
+                            
+                                  <!-- Pôle CORPS et ENVIRONNEMENT (centré à y=975) -->
+                                  <g>
+                                    <circle cx="720" cy="975" r="80" fill="none" stroke="var(--corps-stroke)" stroke-width="1.8" stroke-dasharray="6 4" />
+                                    <circle cx="720" cy="975" r="72" fill="var(--corps-fill)" stroke="var(--corps-stroke)" stroke-width="3.2" />
+                                    <text class="t-title" x="720" y="961" text-anchor="middle">CORPS et</text>
+                                    <text class="t-title" x="720" y="979" text-anchor="middle">ENVIRONNEMENT</text>
+                                    <text class="t-meta" x="720" y="999" text-anchor="middle">(Couverture de Markov)</text>
+                                  </g>
+                            
+                                  <!-- Voie descendante comportementale (coude arrondi R=54, aucun chevauchement) -->
+                                  <path class="macro-casing" d="M 287.5,873 L 287.5,921 Q 287.5,975 341.5,975 L 622,975"
+                                        stroke="var(--macro-desc)" />
+                                  <path class="macro-line" d="M 287.5,873 L 287.5,921 Q 287.5,975 341.5,975 L 632,975"
+                                        stroke="var(--macro-desc)" marker-end="url(#arr-desc)" />
+                                  <text class="t-lbl" x="478" y="933" text-anchor="middle">Voie descendante comportementale :</text>
+                                  <text class="t-meta" x="478" y="950" text-anchor="middle">politiques d'action sur le milieu</text>
+                            
+                                  <!-- Signaux afférents (coude arrondi symétrique R=54, aucun chevauchement) -->
+                                  <path class="macro-casing" d="M 804,975 L 1093.5,975 Q 1147.5,975 1147.5,921 L 1147.5,879"
+                                        stroke="var(--macro-aff)" />
+                                  <path class="macro-line" d="M 804,975 L 1093.5,975 Q 1147.5,975 1147.5,921 L 1147.5,869"
+                                        stroke="var(--macro-aff)" marker-end="url(#arr-aff)" />
+                                  <text class="t-lbl" x="955" y="933" text-anchor="middle">Signaux afférents</text>
+                                  <text class="t-meta" x="955" y="950" text-anchor="middle">(retour sensoriel &amp; intéroceptif)</text>
+                            
+                                  <!-- =================================================================
+                                       10. LÉGENDE NORMALISÉE DES 6 CIRCUITS (CADRE DÉDIÉ À GAUCHE)
+                                       ================================================================= -->
+                                  <g>
+                                    <rect x="14" y="258" width="164" height="238" rx="8"
+                                          fill="var(--box-fill)" stroke="var(--box-stroke)" stroke-width="1.2" />
+                            
+                                    <line class="wire-a0" x1="26" y1="283" x2="54" y2="283" />
+                                    <text class="t-leg" x="62" y="279">ATTENTE</text>
+                                    <text class="t-leg" x="62" y="292">NEUTRE (A0)</text>
+                            
+                                    <line class="wire-am" x1="26" y1="321" x2="54" y2="321" />
+                                    <text class="t-leg" x="62" y="317">ATTENTE</text>
+                                    <text class="t-leg" x="62" y="330">INCERTAINE (A-)</text>
+                            
+                                    <line class="wire-ap" x1="26" y1="359" x2="54" y2="359" />
+                                    <text class="t-leg" x="62" y="355">ATTENTE</text>
+                                    <text class="t-leg" x="62" y="368">CERTAINE (A+)</text>
+                            
+                                    <line class="wire-c0" x1="26" y1="397" x2="54" y2="397" />
+                                    <text class="t-leg" x="62" y="393">CONTRÔLE</text>
+                                    <text class="t-leg" x="62" y="406">NEUTRE (C0)</text>
+                            
+                                    <line class="wire-cm" x1="26" y1="435" x2="54" y2="435" />
+                                    <text class="t-leg" x="62" y="431">CONTRÔLE</text>
+                                    <text class="t-leg" x="62" y="444">INCERTAIN (C-)</text>
+                            
+                                    <line class="wire-cp" x1="26" y1="473" x2="54" y2="473" />
+                                    <text class="t-leg" x="62" y="469">CONTRÔLE</text>
+                                    <text class="t-leg" x="62" y="482">CERTAIN (C+)</text>
+                                  </g>
+                                </svg>
+                        </div>
+                        <!-- Live telemetry strip below canonical SVG (zero geometry change inside #moteur-svg) -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-mono">
+                            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                                <div id="svgAttenteTxt" class="text-sky-300 font-semibold truncate">Attente : A+</div>
+                                <div id="svgControleTxt" class="text-purple-300 font-semibold truncate">Contrôle : C+</div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                                <div id="svgMagTxt" class="text-amber-300 truncate">Mag = 6 | Seuil = 4</div>
+                                <div id="svgPrecTxt" class="text-emerald-300 truncate">Π = 6 (Engagée)</div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                                <div id="svgCouplingTxt" class="text-slate-200 truncate">Couplage (A+, C+)</div>
+                                <div id="svgCoordsTxt" class="text-indigo-300 font-bold truncate">(+1, +1, 2)</div>
+                            </div>
+                            <div class="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+                                <div id="svgProtoTxt" class="text-white font-semibold truncate">État : Désir</div>
+                                <div id="svgL1Txt" class="text-slate-400 truncate">|π_A|+|π_C| = 2</div>
+                            </div>
+                        </div>
                         <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-[11px] text-slate-400">
-                            <span>Schéma aligné sur la Figure 1 conceptuelle de l'article.</span>
+                            <span>Schéma vectoriel canonique à 2 boucles contra-rotatives et 6 circuits continus (source unique de vérité).</span>
                             <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:text-indigo-200 underline underline-offset-2 font-mono transition-colors">
                                 Consulter la spécification formelle sur GitHub &#8599;
                             </a>
@@ -557,16 +877,16 @@
                 <div class="rounded-2xl bg-cosmic-850 border border-purple-500/30 p-6 space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg bg-purple-900/50 text-purple-300 font-mono text-xs font-bold">Axe Y • Contrôle (C)</span>
-                        <span class="text-xs font-mono text-slate-400">Versant sensoriel &amp; actif</span>
+                        <span class="text-xs font-mono text-slate-400">Comparateur efférence / afférence</span>
                     </div>
                     <h3 class="text-xl font-heading font-bold text-white">1. Interface Perceptive</h3>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Réactive, elle traite les afférences intéroceptives, proprioceptives et extéroceptives, et organise les ajustements sensorimoteurs. C'est la source de la <strong>Surprise (0, 0, 1)</strong> lorsqu'un écart franchit le seuil de saillance sensorielle. Elle confronte les retours afférents aux effets attendus de l'action.
+                        <em>Monde contrôlable ? (+Y / −Y / 0)</em> : réactive, elle confronte les signaux afférents (depuis <code>CORPS et ENVIRONNEMENT</code>) aux signaux efférents (copie d'efférence). Par l'<strong>opérateur C : contrôlabilité (&kappa;)</strong>, elle émet une <strong>réponse isolée sur 3 circuits (C0, C−, C+)</strong> sur la boucle horaire via <code>SURPRISE [0, 0, 1]</code> et opère une <strong>projection directe du niveau d'opérabilité Z</strong> depuis ses <code>[États cachés]</code>.
                     </p>
                     <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li><strong class="text-slate-200 font-mono">C0 (Contrôle Neutre) :</strong> régime de routine ; micro-écarts sous le seuil de saillance.</li>
-                        <li><strong class="text-rose-300 font-mono">C− (Contrôle Incertain) :</strong> l'événement excède les capacités d'action estimées &rarr; charge pragmatique (réduction / suspension de l'effort).</li>
-                        <li><strong class="text-emerald-300 font-mono">C+ (Contrôle Certain) :</strong> situation jugée modifiable par l'action &rarr; décharge pragmatique (mobilisation).</li>
+                        <li><strong class="text-slate-200 font-mono">C0 (Neutre) :</strong> régime de routine ; micro-écarts sous le seuil de saillance.</li>
+                        <li><strong class="text-rose-300 font-mono">C− (Incertain / Charge) :</strong> faible contrôlabilité estimée ; résorption par <em>résolution active</em> (<code>Charge &rarr; Décharge &rarr; Neutre</code> via &kappa; &rarr; &gamma;<sub>C</sub>) ou <em>extinction passive</em> (<code>Charge &rarr; Neutre</code> via &delta;<sub>C</sub>).</li>
+                        <li><strong class="text-emerald-300 font-mono">C+ (Certain / Décharge) :</strong> situation jugée modifiable ; mobilisation de l'action puis retour homéostatique.</li>
                     </ul>
                 </div>
 
@@ -574,33 +894,33 @@
                 <div class="rounded-2xl bg-cosmic-850 border border-sky-500/30 p-6 space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="px-2.5 py-1 rounded-lg bg-sky-900/50 text-sky-300 font-mono text-xs font-bold">Axe X • Attente (A)</span>
-                        <span class="text-xs font-mono text-slate-400">Versant prédictif interne</span>
+                        <span class="text-xs font-mono text-slate-400">Modèles génératifs &amp; a priori</span>
                     </div>
                     <h3 class="text-xl font-heading font-bold text-white">2. Interface Subjective</h3>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Prédictive, elle intègre les sensations aux représentations issues de la mémoire, des apprentissages et du contexte socioculturel. Elle génère l'<strong>Anticipation (0, 0, 2)</strong>, projection proactive descendante qui suspend la décharge immédiate pour orienter la résolution vers la première couronne.
+                        <em>Modèle révisable ? (−X / +X / 0)</em> : prédictive, elle confronte les sensations aux a priori contextuels et historiques. Par l'<strong>opérateur A : révisabilité (&rho;)</strong>, elle émet une <strong>réponse isolée sur 3 circuits (A0, A−, A+)</strong> sur la boucle anti-horaire via <code>ANTICIPATION [0, 0, Z]</code> et assure une <strong>projection directe du niveau d'opérabilité Z</strong> depuis ses <code>[États cachés]</code>.
                     </p>
                     <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li><strong class="text-slate-200 font-mono">A0 (Attente Neutre) :</strong> flux conformes aux croyances d'arrière-plan, aucune saillance épistémique.</li>
-                        <li><strong class="text-rose-300 font-mono">A− (Attente Incertaine) :</strong> l'écart contredit le modèle ou présente une ambiguïté non résolue &rarr; charge épistémique (modèle maintenu non révisable).</li>
-                        <li><strong class="text-emerald-300 font-mono">A+ (Attente Certaine) :</strong> intégration possible par mise à jour des croyances &rarr; décharge épistémique (modèle révisable).</li>
+                        <li><strong class="text-slate-200 font-mono">A0 (Neutre) :</strong> flux conformes aux croyances d'arrière-plan, aucune saillance épistémique.</li>
+                        <li><strong class="text-rose-300 font-mono">A− (Incertain / Charge) :</strong> modèle maintenu non révisable ; la <em>résolution active</em> (via &rho; &rarr; &gamma;<sub>A</sub>) actualise les états cachés, à la différence de l'<em>extinction passive</em> (&delta;<sub>A</sub>).</li>
+                        <li><strong class="text-emerald-300 font-mono">A+ (Certain / Décharge) :</strong> mise à jour possible des croyances ; intégration de l'écart dans le modèle génératif.</li>
                     </ul>
                 </div>
 
                 <!-- Interface Attentionnelle -->
                 <div class="rounded-2xl bg-cosmic-850 border border-emerald-500/30 p-6 space-y-4">
                     <div class="flex items-center justify-between">
-                        <span class="px-2.5 py-1 rounded-lg bg-emerald-900/50 text-emerald-300 font-mono text-xs font-bold">Axe Z • Précision (&Pi;)</span>
-                        <span class="text-xs font-mono text-slate-400">Pondération &amp; Profondeur</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-900/50 text-emerald-300 font-mono text-xs font-bold">Axe Z • Opérabilité</span>
+                        <span class="text-xs font-mono text-slate-400">Possibles &amp; Réduction &Delta;H</span>
                     </div>
                     <h3 class="text-xl font-heading font-bold text-white">3. Interface Attentionnelle</h3>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Mécanisme d'action mentale (Smith et al., 2019 ; Feldman &amp; Friston, 2010), elle <strong>n'évalue aucun contenu propre</strong> et ne produit aucun gradient polarisé. Elle module la précision accordée aux signaux et projette (A, C) en coordonnées (X, Y, Z).
+                        Sans évaluer de contenu propre, elle rassemble les <strong>9 ensembles de possibles</strong> <code>{&plusmn;X, &plusmn;Y, Z}</code> (incluant <code>{0, 0, Z}</code> pour <code>Z &ge; 1</code> ; <strong><code>Veille (0,0,0)</code> siège exclusivement au Croisement I</strong>) tout en opérant une <strong>réduction de l'information</strong> (&Delta;H = H(P) &minus; H(R(P)) &ge; 0) vers la voie ascendante réflexive et la voie descendante comportementale.
                     </p>
                     <ul class="space-y-2 text-xs text-slate-300 pt-2 border-t border-slate-800">
-                        <li><strong class="text-emerald-300">Règle de transition :</strong> persistance d'un écart non résolu + précision suffisante font passer Z de 0 &rarr; 1 &rarr; 2.</li>
-                        <li><strong class="text-emerald-300">Conservation à Z=2 :</strong> une seule dimension engagée capte tout le poids (&plusmn;2, 0) ou (0, &plusmn;2) ; les deux engagées se le partagent (&plusmn;1, &plusmn;1).</li>
-                        <li><strong class="text-slate-200">Note :</strong> précision et profondeur Z demeurent deux paramètres distincts reliés par cette règle.</li>
+                        <li><strong class="text-emerald-300">Projection directe de Z :</strong> court-circuitage ascendant et descendant depuis les <code>[États cachés]</code> sans incrémentation forcée.</li>
+                        <li><strong class="text-emerald-300">Double notation (A2) :</strong> base projective <code>(X<sub>0</sub>, Y<sub>0</sub>, 0)</code> avec <code>|X<sub>0</sub>|+|Y<sub>0</sub>|=2</code> &harr; plan <code>(&plusmn;&pi;<sub>A</sub>, &plusmn;&pi;<sub>C</sub>, Z)</code> (<code>|&pi;<sub>A</sub>|+|&pi;<sub>C</sub>| = 2Z &minus; 2</code>).</li>
+                        <li><strong class="text-slate-200">Indépendance P1 / P2 :</strong> conservation L<sub>1</sub> (P1) et couplage croisé &chi; inter-boucles (P2) sont logiquement indépendants.</li>
                     </ul>
                 </div>
             </div>
@@ -635,56 +955,56 @@
             </div>
 
             <div class="lg:col-span-6 rounded-2xl bg-cosmic-850 border border-slate-800 p-6 space-y-4">
-                <span class="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">allCouplings • 9 Combinaisons</span>
+                <span class="text-xs font-mono uppercase tracking-widest text-sky-400 font-bold">Croisement I &amp; Croisement II • 9 Ensembles</span>
                 <h3 class="text-xl font-heading font-bold text-white">Les 9 Couplages (A, C) : Voies Réflexive &amp; Comportementale</h3>
                 <p class="text-xs text-slate-300 leading-relaxed">
-                    Les trois états de chaque gradient définissent exactement <strong>9 couplages</strong> : 9 possibilités d'action sur la voie ascendante réflexive (vers l'Interface Subjective) et 9 politiques d'action sur la voie descendante comportementale (vers le corps et le monde) :
+                    Chaque croisement relie la base projective directionnelle <code>(X<sub>0</sub>, Y<sub>0</sub>, 0)</code> au Croisement I (où siège exclusivement <code>Veille (0,0,0)</code> pour <code>Z=0</code>) aux <strong>9 ensembles de possibles</strong> <code>{&plusmn;X, &plusmn;Y, Z}</code> dans l'<code>INTERFACE ATTENTIONNELLE</code> (<code>Z &ge; 1</code>), réduits en possibilités d'action (voie réflexive) et politiques d'action (voie comportementale) :
                 </p>
                 <div class="grid grid-cols-3 gap-2 text-[11px] font-mono text-center">
                     <div class="p-2.5 rounded-xl bg-rose-950/30 border border-rose-500/30">
                         <div class="font-bold text-rose-300">(A−, C+)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Charge X / Décharge Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (−1, +1, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (−1, +1, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {−X, +Y, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-purple-950/30 border border-purple-500/30">
                         <div class="font-bold text-purple-300">(A0, C+)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Neutre X / Décharge Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (0, +2, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (0, +2, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {0, +Y, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-pink-950/30 border border-pink-500/30">
                         <div class="font-bold text-pink-300">(A+, C+)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Double Décharge</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (+1, +1, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (+1, +1, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {+X, +Y, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30">
                         <div class="font-bold text-amber-300">(A−, C0)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Charge X / Neutre Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (−2, 0, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (−2, 0, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {−X, 0, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-600/60">
                         <div class="font-bold text-white">(A0, C0)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Neutralité globale</div>
-                        <div class="text-[10px] text-slate-400">&rarr; Veille (0,0,0)</div>
+                        <div class="text-[10px] text-emerald-300 mt-0.5">Base I : Veille (0,0,0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. (Z&ge;1) : {0, 0, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30">
                         <div class="font-bold text-cyan-300">(A+, C0)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Décharge X / Neutre Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (+2, 0, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (+2, 0, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {+X, 0, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-orange-950/30 border border-orange-500/30">
                         <div class="font-bold text-orange-300">(A−, C−)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Double Charge</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (−1, −1, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (−1, −1, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {−X, −Y, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-blue-950/30 border border-blue-500/30">
                         <div class="font-bold text-blue-300">(A0, C−)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Neutre X / Charge Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (0, −2, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (0, −2, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {0, −Y, Z}</div>
                     </div>
                     <div class="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30">
                         <div class="font-bold text-emerald-300">(A+, C−)</div>
-                        <div class="text-[10px] text-slate-300 mt-0.5">Décharge X / Charge Y</div>
-                        <div class="text-[10px] text-slate-400">&rarr; (+1, −1, 2)</div>
+                        <div class="text-[10px] text-slate-300 mt-0.5">Base I : (+1, −1, 0)</div>
+                        <div class="text-[10px] text-slate-400">Poss. : {+X, −Y, Z}</div>
                     </div>
                 </div>
             </div>
@@ -727,7 +1047,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.0.1</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.1.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -738,11 +1058,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.0.1</span> :
+                        Article <span data-payload="tag">v2.1.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Compendium formel <span data-payload="tag">v2.0.1</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v2.1.0</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
@@ -836,61 +1156,92 @@
                 const aInfo = window.CartograffectTheory.polarityLabel(stateA, 'A');
                 const cInfo = window.CartograffectTheory.polarityLabel(stateC, 'C');
 
-                document.getElementById('svgAttenteTxt').textContent = `Gradient Attente : ${aInfo.code} (${aInfo.regime})`;
-                document.getElementById('svgControleTxt').textContent = `Gradient Contrôle : ${cInfo.code} (${cInfo.regime})`;
-                document.getElementById('svgMagTxt').textContent = `Mag = ${mag} | Seuil = ${sens}`;
-                document.getElementById('svgPrecTxt').textContent = `Π = ${prec} (${out.isAttentionalEngaged ? '≥' : '<'} ${eng} : ${out.isAttentionalEngaged ? 'Engagée' : 'Latente'})`;
-                document.getElementById('svgCouplingTxt').textContent = `Couplage (${aInfo.code}, ${cInfo.code})`;
+                const elAttTxt = document.getElementById('svgAttenteTxt');
+                const elCtrlTxt = document.getElementById('svgControleTxt');
+                const elMagTxt = document.getElementById('svgMagTxt');
+                const elPrecTxt = document.getElementById('svgPrecTxt');
+                const elCouplingTxt = document.getElementById('svgCouplingTxt');
+                const elCoordsTxt = document.getElementById('svgCoordsTxt');
+                const elProtoTxt = document.getElementById('svgProtoTxt');
+                const elL1Txt = document.getElementById('svgL1Txt');
+                const elStagePill = document.getElementById('svgStagePill');
+
+                if (elAttTxt) elAttTxt.textContent = `Attente : ${aInfo.code} (${aInfo.regime})`;
+                if (elCtrlTxt) elCtrlTxt.textContent = `Contrôle : ${cInfo.code} (${cInfo.regime})`;
+                if (elMagTxt) elMagTxt.textContent = `Mag = ${mag} | Seuil = ${sens}`;
+                if (elPrecTxt) elPrecTxt.textContent = `Π = ${prec} (${out.isAttentionalEngaged ? 'Engagée' : 'Latente'})`;
+                if (elCouplingTxt) elCouplingTxt.textContent = `Couplage (${aInfo.code}, ${cInfo.code})`;
 
                 const { x, y, z } = out.coords;
-                document.getElementById('svgCoordsTxt').textContent = `(X=${x > 0 ? '+' + x : x}, Y=${y > 0 ? '+' + y : y}, Z=${z})`;
-                const protoName = out.matchedPrototype ? out.matchedPrototype.name : (out.stage === 'remanence' ? 'État maintenu' : 'Opérateur / Hors lexique');
-                document.getElementById('svgProtoTxt').textContent = `État : ${protoName}`;
-                document.getElementById('svgL1Txt').textContent = `Budget L₁ : |X|+|Y| = ${out.budgetL1}`;
-                document.getElementById('svgStagePill').textContent = out.stageLabel;
+                const fmtCoord = (v) => (v > 0 ? `+${v}` : `${v}`);
+                const protoName = out.matchedPrototype
+                    ? out.matchedPrototype.name
+                    : (z === 0 ? 'Veille (Croisement I)' : (out.stage === 'remanence' ? 'État maintenu' : 'Opérateur / Hors lexique'));
 
-                // Highlight active (A, C) crossing and core Z=2 / Veille cell in Figure 1 SVG
-                document.querySelectorAll('[id^="acCell_"]').forEach((rect) => {
-                    rect.setAttribute('fill', '#1e293b');
-                    rect.setAttribute('stroke', '#475569');
-                    rect.setAttribute('stroke-width', '1');
-                });
-                const activeAc = document.getElementById(`acCell_${stateA}_${stateC}`);
-                if (activeAc) {
-                    activeAc.setAttribute('fill', '#312e81');
-                    activeAc.setAttribute('stroke', '#818cf8');
-                    activeAc.setAttribute('stroke-width', '2');
+                if (elCoordsTxt) {
+                    elCoordsTxt.textContent = z === 0
+                        ? 'Base I : Veille (0,0,0)'
+                        : `Possibles : {${fmtCoord(x)}, ${fmtCoord(y)}, Z=${z}}`;
                 }
-                document.querySelectorAll('[id^="coreCell_"]').forEach((rect) => {
-                    rect.setAttribute('fill', rect.id === 'coreCell_0_0' ? '#0f172a' : '#1e293b');
-                    rect.setAttribute('stroke', rect.id === 'coreCell_0_0' ? '#64748b' : '#475569');
-                    rect.setAttribute('stroke-width', '1');
-                });
-                const sx = Math.sign(x);
-                const sy = Math.sign(y);
-                let activeCoreId = null;
-                if (x === 0 && y === 0) activeCoreId = 'coreCell_0_0';
-                else if (sx === 0 && sy > 0) activeCoreId = 'coreCell_0_p2';
-                else if (sx === 0 && sy < 0) activeCoreId = 'coreCell_0_m2';
-                else if (sx < 0 && sy === 0) activeCoreId = 'coreCell_m2_0';
-                else if (sx > 0 && sy === 0) activeCoreId = 'coreCell_p2_0';
-                else if (sx < 0 && sy > 0) activeCoreId = 'coreCell_m1_p1';
-                else if (sx < 0 && sy < 0) activeCoreId = 'coreCell_m1_m1';
-                else if (sx > 0 && sy > 0) activeCoreId = 'coreCell_p1_p1';
-                else if (sx > 0 && sy < 0) activeCoreId = 'coreCell_p1_m1';
-                const activeCore = activeCoreId ? document.getElementById(activeCoreId) : null;
-                if (activeCore) {
-                    activeCore.setAttribute('fill', '#4c1d95');
-                    activeCore.setAttribute('stroke', '#f472b6');
-                    activeCore.setAttribute('stroke-width', '2');
-                }
-                const boxSurprise = document.getElementById('boxDiscrepancy');
-                if (boxSurprise) {
-                    boxSurprise.setAttribute('stroke-width', out.stage === 'surprise' ? '3' : '1.8');
-                }
-                const boxAnticip = document.getElementById('boxAnticipation');
-                if (boxAnticip) {
-                    boxAnticip.setAttribute('stroke-width', out.stage === 'anticipation' ? '3' : '1.8');
+                if (elProtoTxt) elProtoTxt.textContent = `État : ${protoName}`;
+                if (elL1Txt) elL1Txt.textContent = z >= 2 ? `|π_A|+|π_C| = ${out.budgetL1}` : (z === 1 ? 'Surprise [0, 0, 1]' : 'Base I : L₁ = 0');
+                if (elStagePill) elStagePill.textContent = out.stageLabel;
+
+                // Highlight canonical #moteur-svg circuits, Croisement I, Croisement II, badges & attentional halo
+                const moteurSvg = document.getElementById('moteur-svg');
+                if (moteurSvg) {
+                    const wireMapA = { zero: 'wire-a0', neg: 'wire-am', pos: 'wire-ap' };
+                    const wireMapC = { zero: 'wire-c0', neg: 'wire-cm', pos: 'wire-cp' };
+                    const ciXMap = { pos: '635', neg: '731', zero: '827' };
+                    const ciYMap = { zero: '350', neg: '420', pos: '490' };
+                    const ciiXMap = { zero: '795', neg: '891', pos: '987' };
+                    const ciiYMap = { pos: '191', neg: '256', zero: '320' };
+                    const haloXMap = { pos: '152', neg: '287.5', zero: '423' };
+                    const haloYMap = { zero: '598', neg: '646', pos: '694' };
+
+                    const effA = z === 0 ? 'zero' : stateA;
+                    const effC = z === 0 ? 'zero' : stateC;
+
+                    moteurSvg.querySelectorAll('polyline[class^="wire-"]').forEach((wire) => {
+                        const isActive = wire.classList.contains(wireMapA[effA]) || wire.classList.contains(wireMapC[effC]);
+                        wire.classList.toggle('moteur-wire-active', isActive);
+                        wire.classList.toggle('moteur-wire-dim', !isActive);
+                    });
+
+                    const targetCiX = ciXMap[effC];
+                    const targetCiY = ciYMap[effA];
+                    moteurSvg.querySelectorAll('circle.dot-node').forEach((dot) => {
+                        const hit = dot.getAttribute('cx') === targetCiX && dot.getAttribute('cy') === targetCiY;
+                        dot.classList.toggle('moteur-ci-active', hit);
+                    });
+
+                    const targetPillX = ciiXMap[effA];
+                    const targetPillY = ciiYMap[effC];
+                    moteurSvg.querySelectorAll('rect[width="64"][height="20"]').forEach((pill) => {
+                        const hit = pill.getAttribute('x') === targetPillX && pill.getAttribute('y') === targetPillY;
+                        pill.classList.toggle('moteur-cii-pill-active', hit);
+                    });
+
+                    // Strictly NEVER highlight an attentional halo when z === 0 (Veille stays strictly in Croisement I)
+                    let targetHaloX = null;
+                    let targetHaloY = null;
+                    if (z >= 1) {
+                        const attA = x === 0 && y === 0 ? 'zero' : (x > 0 ? 'pos' : (x < 0 ? 'neg' : 'zero'));
+                        const attC = x === 0 && y === 0 ? 'zero' : (y > 0 ? 'pos' : (y < 0 ? 'neg' : 'zero'));
+                        targetHaloX = haloXMap[attC];
+                        targetHaloY = haloYMap[attA];
+                    }
+                    moteurSvg.querySelectorAll('circle.poss-halo[r="10.5"]').forEach((halo) => {
+                        const hit = targetHaloX !== null &&
+                            halo.getAttribute('cx') === targetHaloX &&
+                            halo.getAttribute('cy') === targetHaloY;
+                        halo.classList.toggle('moteur-att-halo-active', hit);
+                    });
+
+                    const badgeAnt = moteurSvg.querySelector('rect[x="412"][y="434"]');
+                    const badgeSurp = moteurSvg.querySelector('rect[x="641"][y="605"]');
+                    if (badgeSurp) badgeSurp.classList.toggle('moteur-badge-active', out.stage === 'surprise' || z === 1);
+                    if (badgeAnt) badgeAnt.classList.toggle('moteur-badge-active', out.stage === 'anticipation' || z >= 2);
                 }
 
                 document.getElementById('engineResultTitle').textContent = out.stageLabel;

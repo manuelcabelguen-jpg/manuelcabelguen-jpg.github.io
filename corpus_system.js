@@ -957,8 +957,8 @@ root.DOMAIN_LABELS = {
 
 root.downloadBibtexFile = function() {
     const relVer = (typeof window !== 'undefined' && window.CartograffectPayload)
-        ? window.CartograffectPayload.get('release.version', '2.0.1')
-        : '2.0.1';
+        ? window.CartograffectPayload.get('release.version', '2.1.0')
+        : '2.1.0';
     const header = "% ==============================================================================\n" +
                    "% CARTOGRAFFECT® - Bibliographie Scientifique Unifiée APA 7 (72 références)\n" +
                    "% Auteur du modèle : Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada\n" +

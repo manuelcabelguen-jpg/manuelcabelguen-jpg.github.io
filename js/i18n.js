@@ -44,7 +44,7 @@
         'Architecture & Navigation': 'Architecture & Navigation',
         'Références & Preuves': 'References & Proofs',
         'Article': 'Paper',
-        "L'Article (v2.0.1)": 'The Paper (v2.0.1)',
+        "L'Article (v2.1.0)": 'The Paper (v2.1.0)',
         'Compendium formel': 'Formal Compendium',
         'prouveurs) :': 'provers):',
         'prouveurs ·': 'provers ·',
@@ -206,7 +206,54 @@
         "Le Moteur Prédictif : Gérer l'Incertitude": 'The Predictive Engine: Managing Uncertainty',
         'Simulateur du Moteur Prédictif & Boucle d\'Inférence': 'Predictive Engine Simulator & Inference Loop',
         'Figure 1 Interactive • Le Moteur prédictif (architecture fonctionnelle)': 'Interactive Figure 1 • The Predictive Engine (Functional Architecture)',
+        'Figure 1 Interactive • Le Moteur prédictif canonique (Arbitrages A1–A4)': 'Interactive Figure 1 • The Canonical Predictive Engine (Arbitrations A1–A4)',
+        'Figure 1 • Schéma Conceptuel': 'Figure 1 • Conceptual Diagram',
+        'Le Moteur prédictif canonique (Arbitrages A1–A4)': 'The Canonical Predictive Engine (Arbitrations A1–A4)',
+        'Interfaces & Couplages (A / C)': 'Interfaces & Couplings (A / C)',
+        'Schéma vectoriel canonique à 2 boucles contra-rotatives et 6 circuits continus (source unique de vérité).':
+            'Canonical vector diagram with 2 counter-rotating loops and 6 continuous circuits (single source of truth).',
         'Consulter la spécification formelle sur GitHub': 'View formal specification on GitHub',
+        // Canonical Predictive Engine SVG (#moteur-svg)
+        'Décharge': 'Discharge',
+        'Charge': 'Charge',
+        'Neutre': 'Neutral',
+        "Signaux efférents (copie d'efférence)": 'Efferent signals (efference copy)',
+        'INTERFACE SUBJECTIVE': 'SUBJECTIVE INTERFACE',
+        'Modèle révisable ? (-X / +X / 0)': 'Revisable model? (-X / +X / 0)',
+        '[États cachés]': '[Hidden states]',
+        'Modèles génératifs & a priori': 'Generative models & priors',
+        'Opérateur A : révisabilité (ρ)': 'Operator A: revisability (ρ)',
+        'Réponse isolée sur 3 circuits (A0, A-, A+)': 'Isolated 3-circuit response (A0, A-, A+)',
+        "Projection directe du niveau d'opérabilité Z": 'Direct projection of operability level Z',
+        'INTERFACE PERCEPTIVE': 'PERCEPTUAL INTERFACE',
+        'Monde contrôlable ? (+Y / -Y / 0)': 'Controllable world? (+Y / -Y / 0)',
+        'Comparateur efférence / afférence': 'Efference / afference comparator',
+        'Opérateur C : contrôlabilité (κ)': 'Operator C: controllability (κ)',
+        'Réponse isolée sur 3 circuits (C0, C-, C+)': 'Isolated 3-circuit response (C0, C-, C+)',
+        'Ensemble des possibles': 'Set of possibilities',
+        "Réduction d'information": 'Information reduction',
+        'INTERFACE ATTENTIONNELLE': 'ATTENTIONAL INTERFACE',
+        'Ensemble des possibles : affect, émotion, sentiment': 'Set of possibilities: affect, emotion, feeling',
+        'Champs : {±X, ±Y, Z} ⟷ (±π_A, ±π_C, Z)': 'Fields: {±X, ±Y, Z} ⟷ (±π_A, ±π_C, Z)',
+        'Couronne : |π_A| + |π_C| = 2Z − 2 (Z ≥ 2)': 'Crown: |π_A| + |π_C| = 2Z − 2 (Z ≥ 2)',
+        "Réduction de l'information : compression vers l'action": 'Information reduction: compression toward action',
+        'Voie ascendante réflexive :': 'Reflexive upward path:',
+        "possibilités d'action (révision)": 'action possibilities (revision)',
+        'CORPS et': 'BODY and',
+        'ENVIRONNEMENT': 'ENVIRONMENT',
+        '(Couverture de Markov)': '(Markov Blanket)',
+        'Voie descendante comportementale :': 'Behavioral downward pathway:',
+        "politiques d'action sur le milieu": 'action policies on the environment',
+        'Signaux afférents': 'Afferent signals',
+        '(retour sensoriel & intéroceptif)': '(sensory & interoceptive feedback)',
+        'ATTENTE': 'EXPECTATION',
+        'NEUTRE (A0)': 'NEUTRAL (A0)',
+        'INCERTAINE (A-)': 'UNCERTAIN (A-)',
+        'CERTAINE (A+)': 'CERTAIN (A+)',
+        'CONTRÔLE': 'CONTROL',
+        'NEUTRE (C0)': 'NEUTRAL (C0)',
+        'INCERTAIN (C-)': 'UNCERTAIN (C-)',
+        'CERTAIN (C+)': 'CERTAIN (C+)',
         'Inférence Active, Allostasie Intéroceptive & Frontière Sensorielle-Active': 'Active Inference, Interoceptive Allostasis & Sensory-Active Boundary',
         'Les Trois Interfaces du Moteur Prédictif': 'The Three Interfaces of the Predictive Engine',
         '1. Interface Perceptive': '1. Perceptual Interface',
@@ -414,7 +461,8 @@
             const tag = (el.tagName || '').toUpperCase();
             if (
                 tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE' || tag === 'PRE' ||
-                tag === 'SVG' || tag === 'KBD' ||
+                tag === 'KBD' ||
+                (tag === 'SVG' && el.getAttribute('data-i18n-svg') !== 'true') ||
                 el.classList.contains('katex') ||
                 el.classList.contains('no-i18n') ||
                 el.hasAttribute('data-payload')

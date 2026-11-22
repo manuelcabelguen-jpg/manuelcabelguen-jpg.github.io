@@ -20,10 +20,10 @@
     concept: '<svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/></svg>'
   };
 
-  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.0.1)
+  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.1.0)
   function buildDefaultIndex() {
     const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
-    const tag = P ? P.get('release.tag', 'v2.0.1') : 'v2.0.1';
+    const tag = P ? P.get('release.tag', 'v2.1.0') : 'v2.1.0';
     const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
     const proversCount = P ? P.get('strate_0_core.provers_count', 6) : 6;
     const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 10) : 10;
