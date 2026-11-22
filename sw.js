@@ -1,5 +1,5 @@
 // Cartograffect Service Worker for offline capability & PWA caching
-const CACHE_NAME = 'cartograffect-v2.0.1-ux-i18n';
+const CACHE_NAME = 'cartograffect-v2.0.1-editorial';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

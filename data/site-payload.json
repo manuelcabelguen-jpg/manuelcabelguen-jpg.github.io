@@ -17,8 +17,8 @@
       },
       {
         "section": "Changed",
-        "title": "Showcase Web & OPQ Deontological Patch (`manuelcabelguen-jpg.github.io`)",
-        "summary": "restored 100% native wheel scrolling across all pages (including 3D taxonomy camera zoom bounds), repaired `FR/EN` i18n switching with complete translation coverage and `sw.js` `2.0.1` cache invalidation, verified WCAG 2.1 opaque dropdown styling, aligned Figure 1 cross-references, and clarified independent researcher status & OPQ deontological notice in `mentions-legales.html`."
+        "title": "Showcase Web & Independent Research Notice Patch (`manuelcabelguen-jpg.github.io`)",
+        "summary": "restored 100% native wheel scrolling across all pages (including 3D taxonomy camera zoom bounds), repaired `FR/EN` i18n switching with complete translation coverage and `sw.js` `2.0.1` cache invalidation, verified WCAG 2.1 opaque dropdown styling, aligned Figure 1 cross-references, and clarified total intellectual independence & non-clinical research scope notice in `mentions-legales.html`."
       },
       {
         "section": "Verified",
