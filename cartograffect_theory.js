@@ -1,5 +1,5 @@
 /**
- * CARTOGRAFFECT® — Noyau Computationnel & Formalisation Hexa-Prover v2.0.1 (Module JS)
+ * CARTOGRAFFECT® — Noyau Computationnel & Vérification Formelle v2.0.1 (Module JS)
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
  * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (113 théorèmes constructifs, 0 sorry,

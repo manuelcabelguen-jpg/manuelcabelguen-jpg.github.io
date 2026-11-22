@@ -41,8 +41,8 @@
       { id: 'comp3', title: '3. La Matrice Affective — Valence Lexicographique, Prototypes Z=2 & Dissipation', category: 'Modèle', url: 'matrice-affective.html', icon: ICONS.matrix, badge: 'Niveau 3' },
       { id: 't1', title: `4. La Taxonomie Affective — Carte Interactive 2D/3D des ${statesCount} États (Z=0 à Z=7)`, category: 'Exploration', url: 'taxonomie-affective.html', icon: ICONS.taxonomy, badge: 'Niveau 4' },
       { id: 't4', title: `Article Théorique — Monographie Intégrale ${tag} (Dr M. Cabelguen)`, category: 'Recherche', url: 'article.html', icon: ICONS.article, badge: `OPIC ${cipo}` },
-      { id: 'lean4', title: `Méta-Fondation Hexa-Prover (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Hexa-Prover' },
-      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Certification Hexa-Prover', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
+      { id: 'lean4', title: `Vérification Formelle (${proversCount} Prouveurs) — ${theorems} Théorèmes, ${leanModulesCount} Modules .lean & 0 Sorry (DOI: ${codeDoi})`, category: 'Recherche', url: `https://doi.org/${codeDoi}`, icon: ICONS.lean, badge: 'Formel' },
+      { id: 't5', title: 'Corpus & Preuves — Modèles Historiques & Vérification Formelle', category: 'Recherche', url: 'scholar_drive.html', icon: ICONS.corpus, badge: 'Corpus' },
       { id: 't6', title: 'Accueil — Vue d\'ensemble de Cartograffect', category: 'Navigation', url: 'index.html', icon: ICONS.home, badge: 'Accueil' },
 
       // Strates Z (Norme L1)

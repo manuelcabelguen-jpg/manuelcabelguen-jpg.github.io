@@ -14,7 +14,7 @@
     // Exact trimmed text-node dictionary (FR -> EN)
     const TEXT_FR_EN = {
         // Brand & Header
-        'Architecture hiérarchique · Hexa-Prover': 'Hierarchical Architecture · Hexa-Prover',
+        'Architecture hiérarchique affective': 'Hierarchical Affective Architecture',
         'Accueil': 'Home',
         'Le Voyage': 'The Journey',
         'Le Modèle': 'The Model',
@@ -45,6 +45,7 @@
         'Références & Preuves': 'References & Proofs',
         'Article': 'Paper',
         "L'Article (v2.0.1)": 'The Paper (v2.0.1)',
+        'Compendium formel': 'Formal Compendium',
         'prouveurs) :': 'provers):',
         'prouveurs ·': 'provers ·',
         'GitHub Compendium': 'GitHub Compendium',
@@ -129,7 +130,7 @@
         'Du Moteur Prédictif aux 176 États': 'From Predictive Engine to 176 States',
         "L'Explorateur Interactif : Voyage au Cœur des 176 Émotions": 'Interactive Explorer: Journey Through the 176 Emotions',
         "L'Article Théorique": 'The Theoretical Paper',
-        'Compendium Hexa-Prover': 'Hexa-Prover Compendium',
+        'Compendium Formel': 'Formal Compendium',
 
         // Article Page
         'Article Scientifique Fondateur': 'Foundational Scientific Paper',
@@ -264,7 +265,7 @@
         'Processus Composant (CPM)': 'Component Process Model (CPM)',
         'Émotions Construites': 'Constructed Emotions',
         'La Synthèse Cartograffect : Architecture Fonctionnelle Certifiée': 'The Cartograffect Synthesis: Certified Functional Architecture',
-        "La Formulation Mathématique de l'Architecture Fonctionnelle (Hexa-Prover)": 'Mathematical Formulation of the Functional Architecture (Hexa-Prover)',
+        "La Formulation Mathématique de l'Architecture Fonctionnelle (Vérification Formelle)": 'Mathematical Formulation of the Functional Architecture (Formal Verification)',
         'Gradient de Contrôle (Axe Y)': 'Control Gradient (Y Axis)',
         "Gradient d'Attente (Axe X)": 'Expectation Gradient (X Axis)',
         'Profondeur Inférentielle (Axe Z)': 'Inferential Depth (Z Axis)',

@@ -276,7 +276,7 @@ def sync_html_files(root: Path, payload: dict[str, Any], apply: bool) -> list[st
             updated,
         )
         updated = re.sub(
-            r'(property="og:description"\s+content="[^"\n]*?\()v\d+\.\d+\.\d+(, compendium Hexa-Prover\))',
+            r'(property="og:description"\s+content="[^"\n]*?\()v\d+\.\d+\.\d+(, compendium formel\))',
             rf'\g<1>{tag}\g<2>',
             updated,
         )
@@ -436,6 +436,7 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
         if fpath.is_file() and "couverture markovienne" in fpath.read_text(encoding="utf-8").lower():
             errors.append(f"Forbidden 'Couverture Markovienne' terminology on {fname}")
 
+    forbidden_brand_re = re.compile(r"hexa[- ]?" + r"prover", re.IGNORECASE)
     for hpath in sorted(root.glob("*.html")):
         htext = hpath.read_text(encoding="utf-8")
         if "@studio-freight/lenis" in htext:
@@ -444,6 +445,24 @@ def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
             errors.append(f"Invalid transparent Tailwind dropdown class bg-[#0b1120]/98 in {hpath.name}")
         if 'id="langToggleBtn"' in htext and "js/i18n.js" not in htext:
             errors.append(f"Missing js/i18n.js inclusion on page with #langToggleBtn: {hpath.name}")
+        if forbidden_brand_re.search(htext):
+            errors.append(f"Forbidden removed label in {hpath.name}")
+        if 'id="modelDropdownBtn"' in htext and "Architecture hiérarchique affective" not in html.unescape(htext):
+            errors.append(f"Missing 'Architecture hiérarchique affective' header subtitle in {hpath.name}")
+
+    for sfname in (
+        "bilingual_modal.js",
+        "command_palette.js",
+        "js/i18n.js",
+        "cartograffect_model.js",
+        "cartograffect_theory.js",
+        "README.md",
+        "CITATION.cff",
+        "LICENSE",
+    ):
+        spath = root / sfname
+        if spath.is_file() and forbidden_brand_re.search(spath.read_text(encoding="utf-8")):
+            errors.append(f"Forbidden removed label in {sfname}")
 
     for fname in ("article.html", "README.md"):
         fpath = root / fname
