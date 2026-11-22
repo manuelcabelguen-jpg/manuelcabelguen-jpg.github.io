@@ -127,9 +127,30 @@
             pointer-events: none;
             z-index: 1;
         }
+        .skip-link {
+            position: fixed;
+            top: -120px;
+            left: 1rem;
+            z-index: 10000;
+            padding: 0.65rem 1.15rem;
+            border-radius: 0.65rem;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: 2px solid #c7d2fe;
+        }
+        .skip-link:focus,
+        .skip-link:focus-visible {
+            top: 1rem;
+            outline: 3px solid #fbbf24;
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body class="cosmic-radial-bg text-slate-200 min-h-screen flex flex-col justify-between relative overflow-x-hidden selection:bg-purple-600 selection:text-white">
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
 
     <!-- Canvas de particules stellaires -->
     <canvas id="particleCanvas"></canvas>
@@ -178,7 +199,7 @@
     </header>
 
     <!-- Contenu Principal -->
-    <main class="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-16 max-w-5xl mx-auto w-full text-center">
+    <main id="contenu-principal" class="relative z-20 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-16 max-w-5xl mx-auto w-full text-center">
 
         <!-- Animation géométrique de l'Astrolabe Octaédrique -->
         <div class="relative w-36 h-36 sm:w-44 sm:h-44 mb-8 flex items-center justify-center animate-float">
@@ -529,11 +550,17 @@
             });
         }
 
-        // 5. Si déjà déverrouillé ou en environnement local
+        // 5. Si la maintenance est désactivée, rediriger vers l'accueil ; sinon afficher l'état local/déverrouillé
         document.addEventListener('DOMContentLoaded', () => {
             if (window.CARTOGRAFFECT_MAINTENANCE) {
+                if (!window.CARTOGRAFFECT_MAINTENANCE.active) {
+                    window.location.replace('index.html');
+                    return;
+                }
                 const isUnlocked = window.CARTOGRAFFECT_MAINTENANCE.isUnlocked();
-                const isLocal = window.CARTOGRAFFECT_MAINTENANCE.isLocal();
+                const isLocal = typeof window.CARTOGRAFFECT_MAINTENANCE.isLocal === 'function'
+                    ? window.CARTOGRAFFECT_MAINTENANCE.isLocal()
+                    : false;
                 if (isUnlocked || isLocal) {
                     const notif = document.getElementById('unlockedNotification');
                     if (notif) notif.classList.remove('hidden');

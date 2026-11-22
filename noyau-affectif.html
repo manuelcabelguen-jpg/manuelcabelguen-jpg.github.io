@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-sky-600 selection:text-white">
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
     <!-- Unified Navigation Header -->
     <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
@@ -119,14 +120,14 @@
                     <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
                 </a>
 
-                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
+                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
                 </button>
             </div>
         </div>
     </header>
     <!-- Unified Mobile Navigation Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+    <div id="mobileMenu" class="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Menu de navigation" aria-hidden="true">
         <div class="w-full max-w-sm bg-[#0b1120] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-2 relative my-auto">
             <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
                 <span class="font-heading font-bold text-sm tracking-wider text-white">NAVIGATION</span>
@@ -154,7 +155,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
+    <main id="contenu-principal" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
 
         <!-- 4-Step Architectural Stepper -->
         <nav aria-label="Les 4 composantes emboîtées de Cartograffect" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
@@ -318,7 +319,7 @@
                                 <span>Contrôle |Y| = <strong id="arbitrageY" class="text-purple-300">3</strong></span>
                                 <span>Attente |X| = 6 &minus; |Y| = <strong id="arbitrageX" class="text-sky-300">3</strong></span>
                             </div>
-                            <input id="arbitrageSlider" type="range" min="0" max="6" value="3" class="w-full accent-sky-400 cursor-pointer">
+                            <input id="arbitrageSlider" type="range" min="0" max="6" value="3" aria-label="Arbitrage ressource entre Contrôle |Y| et Attente |X|" class="w-full accent-sky-400 cursor-pointer">
                         </div>
                         <p class="text-[11px] text-slate-400 italic">
                             Cas limite (§5.2) : si une action informative accroît simultanément contrôlabilité et révisabilité, les deux voies <em>coopèrent</em> à Z constant — ce qui constitue le modèle concurrent testable empiriquement.

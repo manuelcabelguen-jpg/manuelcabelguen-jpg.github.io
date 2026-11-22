@@ -1,5 +1,5 @@
 // Cartograffect Service Worker for offline capability & PWA caching
-const CACHE_NAME = 'cartograffect-v2.1.0-moteur-canonique-r1';
+const CACHE_NAME = 'cartograffect-v2.1.0-public-launch-r2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -14,12 +14,10 @@ const ASSETS_TO_CACHE = [
   './voyage.js',
   './emotions.html',
   './mentions-legales.html',
-  './maintenance.html',
   './404.html',
   './data/site-payload.json',
   './js/compendium_payload.js',
   './js/i18n.js',
-  './maintenance_guard.js',
   './cartograffect_model.js',
   './cartograffect_theory.js',
   './corpus_system.js',
@@ -76,6 +74,12 @@ self.addEventListener('fetch', (event) => {
   // On localhost, bypass cache entirely so development edits are always 100% fresh
   if (isLocalhost) {
     event.respondWith(fetch(event.request));
+    return;
+  }
+
+  // Never serve stale maintenance gate scripts/pages from SW cache
+  if (url.pathname.endsWith('/maintenance_guard.js') || url.pathname.endsWith('/maintenance.html')) {
+    event.respondWith(fetch(event.request, { cache: 'no-store' }).catch(() => fetch(event.request)));
     return;
   }
 

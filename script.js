@@ -2,8 +2,6 @@
  * CARTOGRAFFECT • Système de modélisation géométrique des affects
  * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199
  */
-const d3 = window.d3;
-
 document.addEventListener("DOMContentLoaded", () => {
     const titleScreen = document.getElementById('title-screen');
     const mainContent = document.getElementById('main-content');
@@ -11,6 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let safetyTimeout = null;
 
     function runTitleAnimation(callback) {
+        const d3 = window.d3;
+        if (!d3) {
+            callback();
+            return;
+        }
         const svg = d3.select("#title-animation");
         if (!svg.node()) {
             callback();

@@ -1,18 +1,15 @@
 /**
  * CARTOGRAFFECT - Système de Mode Maintenance & Verrouillage Temporaire
- * 
- * Permet de basculer le site en mode "En construction" tant qu'il n'est pas déverrouillé :
- * - Accessible à Manuel Cabelguen via la clé d'accès ou le lien direct ?preview=cartograffect2026
- * - Verrouillé par défaut pour tout visiteur public sur www.cartograffect.com
- * 
- * Pour réouvrir définitivement le site au grand public :
- * Régler `active: false` ci-dessous et publier.
+ *
+ * Permet de basculer le site entre mode "En construction" et mode public :
+ * - active: false = Site 100% public et ouvert sur www.cartograffect.com
+ * - active: true  = Redirection vers maintenance.html tant que non déverrouillé
  */
 
 (function () {
     'use strict';
 
-    // URL absolue de maintenance.html, résolue par rapport à ce script
+    // URLs absolues résolues par rapport à ce script
     // (robuste même lorsque 404.html est servi sur un chemin imbriqué).
     var MAINTENANCE_URL = (function () {
         try {
@@ -23,20 +20,42 @@
         }
     })();
 
+    var INDEX_URL = (function () {
+        try {
+            var src = document.currentScript && document.currentScript.src;
+            return src ? new URL('index.html', src).href : 'index.html';
+        } catch (e) {
+            return 'index.html';
+        }
+    })();
+
     window.CARTOGRAFFECT_MAINTENANCE = {
         // === INTERRUPTEUR GÉNÉRAL ===
         // true  = Site en construction (verrouillé par défaut)
         // false = Site 100% public et ouvert pour tout le monde
-        active: true,
+        active: false,
 
-        // Clé / Mot de passe d'accès réservé (insensible à la casse)
-        passphrase: "cartograffect2026",
+        // Clé d'accès désactivée en production (à renseigner temporairement uniquement si active === true)
+        passphrase: null,
 
-        // Paramètre d'URL pour déverrouiller en 1 clic (ex: ?preview=cartograffect2026)
+        // Paramètre d'URL éventuel lorsque le mode maintenance est actif
         previewParam: "preview",
 
         // Clé de stockage local
         storageKey: "cartograffect_preview_unlocked",
+
+        // Détecter un environnement local de prévisualisation
+        isLocal: function () {
+            try {
+                var host = window.location.hostname;
+                return window.location.protocol === 'file:' ||
+                       host === 'localhost' ||
+                       host === '127.0.0.1' ||
+                       host === '[::1]';
+            } catch (e) {
+                return false;
+            }
+        },
 
         // Vérifier si l'accès réservé est déverrouillé pour ce navigateur
         isUnlocked: function () {
@@ -47,14 +66,11 @@
             }
         },
 
-        // Déverrouiller l'accès
+        // Déverrouiller l'accès (uniquement lorsque la maintenance et une clé sont configurées)
         unlock: function (key) {
-            if (!key) return false;
-            const cleanKey = key.trim().toLowerCase();
-            const valid = cleanKey === this.passphrase.toLowerCase() ||
-                          cleanKey === 'cartograffect' ||
-                          cleanKey === 'dev' ||
-                          cleanKey === 'manuel';
+            if (!this.active || !this.passphrase || !key) return false;
+            var cleanKey = key.trim().toLowerCase();
+            var valid = cleanKey === String(this.passphrase).trim().toLowerCase();
             if (valid) {
                 try {
                     localStorage.setItem(this.storageKey, 'true');
@@ -69,19 +85,18 @@
             try {
                 localStorage.removeItem(this.storageKey);
             } catch (e) { }
-            window.location.replace(MAINTENANCE_URL);
+            window.location.replace(this.active ? MAINTENANCE_URL : INDEX_URL);
         },
 
         // Afficher le badge discret dans le footer indiquant que l'aperçu privé est actif
         injectPreviewBanner: function () {
             if (document.getElementById('cartograffect-preview-banner')) return;
 
-            const footer = document.querySelector('footer');
+            var footer = document.querySelector('footer');
             if (!footer) return;
 
-            // Injection des styles de la pastille dans le footer (aucun chevauchement avec le Hero)
             if (!document.getElementById('ctg-preview-banner-style')) {
-                const style = document.createElement('style');
+                var style = document.createElement('style');
                 style.id = 'ctg-preview-banner-style';
                 style.textContent = `
                     #cartograffect-preview-banner-wrap {
@@ -124,10 +139,10 @@
                 document.head.appendChild(style);
             }
 
-            const wrap = document.createElement('div');
+            var wrap = document.createElement('div');
             wrap.id = 'cartograffect-preview-banner-wrap';
 
-            const banner = document.createElement('div');
+            var banner = document.createElement('div');
             banner.id = 'cartograffect-preview-banner';
             banner.setAttribute('title', 'Aperçu Privé Actif');
 
@@ -155,7 +170,7 @@
             wrap.appendChild(banner);
             footer.appendChild(wrap);
 
-            const btnRelock = document.getElementById('ctg-btn-relock');
+            var btnRelock = document.getElementById('ctg-btn-relock');
             if (btnRelock) {
                 btnRelock.addEventListener('click', function (e) {
                     e.stopPropagation();
@@ -166,24 +181,33 @@
 
         // Exécution du garde-fou
         check: function () {
+            var isPageMaintenance = false;
+            try {
+                isPageMaintenance = window.location.pathname.endsWith('maintenance.html');
+            } catch (e) { }
+
             // Si la maintenance est désactivée globalement, tout le site est public
             if (!this.active) {
+                try {
+                    localStorage.removeItem(this.storageKey);
+                } catch (e) { }
+                if (isPageMaintenance) {
+                    window.location.replace(INDEX_URL);
+                }
                 return;
             }
 
             // Détection automatique du paramètre URL ?preview=...
-            const urlParams = new URLSearchParams(window.location.search);
-            const paramVal = urlParams.get(this.previewParam);
+            var urlParams = new URLSearchParams(window.location.search);
+            var paramVal = urlParams.get(this.previewParam);
             if (paramVal) {
                 if (this.unlock(paramVal)) {
-                    // Nettoyer l'URL
-                    const cleanUrl = window.location.pathname + window.location.hash;
+                    var cleanUrl = window.location.pathname + window.location.hash;
                     window.history.replaceState({}, document.title, cleanUrl);
                 }
             }
 
-            const isPageMaintenance = window.location.pathname.endsWith('maintenance.html');
-            const unlocked = this.isUnlocked();
+            var unlocked = this.isUnlocked();
 
             // CAS 1 : Non déverrouillé -> Rediriger vers la page maintenance
             if (!unlocked) {
@@ -195,9 +219,10 @@
 
             // CAS 2 : Déverrouillé naviguant sur le site complet -> Afficher le badge témoin
             if (unlocked && !isPageMaintenance) {
+                var self = this;
                 if (document.readyState === 'loading') {
-                    window.addEventListener('DOMContentLoaded', () => {
-                        this.injectPreviewBanner();
+                    window.addEventListener('DOMContentLoaded', function () {
+                        self.injectPreviewBanner();
                     });
                 } else {
                     this.injectPreviewBanner();

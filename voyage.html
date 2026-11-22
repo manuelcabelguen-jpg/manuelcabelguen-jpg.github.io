@@ -44,6 +44,7 @@
 </head>
 
 <body class="voyage">
+    <a href="#voyage" class="skip-link">Aller au contenu principal</a>
 
     <!-- Barre supérieure : marque + passerelle sobre vers le modèle -->
     <header class="v-topbar">
@@ -316,6 +317,13 @@
 
     <script src="cartograffect_model.js"></script>
     <script src="voyage.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 
 </html>

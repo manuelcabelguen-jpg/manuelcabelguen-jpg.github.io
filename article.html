@@ -88,6 +88,7 @@
 
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
     <!-- Unified Navigation Header -->
     <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
@@ -172,14 +173,14 @@
                     <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
                 </a>
 
-                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
+                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
                 </button>
             </div>
         </div>
     </header>
     <!-- Unified Mobile Navigation Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+    <div id="mobileMenu" class="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Menu de navigation" aria-hidden="true">
         <div class="w-full max-w-sm bg-[#0b1120] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-2 relative my-auto">
             <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
                 <span class="font-heading font-bold text-sm tracking-wider text-white">NAVIGATION</span>
@@ -249,7 +250,7 @@
                         <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Sommaire de l'article</span>
                         <span class="text-[10px] font-mono text-slate-400">9 Sections</span>
                     </div>
-                    <nav class="space-y-1.5 text-xs text-slate-300 font-medium">
+                    <nav aria-label="Sommaire de l'article" class="space-y-1.5 text-xs text-slate-300 font-medium">
                         <a href="#resume" class="block py-1 hover:text-purple-300 transition-colors toc-link">0. Résumé &amp; Abstract</a>
                         <a href="#section-1" class="block py-1 hover:text-purple-300 transition-colors toc-link">1. Introduction &amp; Clivages</a>
                         <a href="#section-2" class="block py-1 hover:text-purple-300 transition-colors toc-link">2. Position Épistémologique</a>
@@ -279,7 +280,7 @@
             </aside>
 
             <!-- Main Article Document -->
-            <main class="lg:col-span-9 space-y-12">
+            <main id="contenu-principal" class="lg:col-span-9 space-y-12">
 
                 <!-- Article Header / Front Matter -->
                 <section class="rounded-3xl bg-gradient-to-br from-purple-950/40 via-cosmic-850 to-slate-900 border border-purple-800/40 p-6 sm:p-12 shadow-2xl relative overflow-hidden">
@@ -361,7 +362,7 @@
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             </span>
                             <div>
-                                <h3 class="text-lg font-heading font-black text-white">Simulateur Didactique de l'Affect Prédictif</h3>
+                                <h2 class="text-lg font-heading font-black text-white">Simulateur Didactique de l'Affect Prédictif</h2>
                                 <p class="text-xs text-slate-400">Expérimentez la genèse d'un affect via <code>CartograffectTheory.evaluateEngine()</code> (couche Z = 2 et opérateurs centraux)</p>
                             </div>
                         </div>
@@ -1970,7 +1971,7 @@
                             </div>
 
                             <div class="relative w-full sm:w-72">
-                                <input type="text" id="corpusSearchInput" placeholder="Rechercher par auteur, titre, concept ou domaine..." class="w-full px-3.5 py-1.5 pl-9 text-xs bg-slate-950 border border-slate-750 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
+                                <input type="text" id="corpusSearchInput" aria-label="Rechercher dans le corpus bibliographique par auteur, titre, concept ou domaine" placeholder="Rechercher par auteur, titre, concept ou domaine..." class="w-full px-3.5 py-1.5 pl-9 text-xs bg-slate-950 border border-slate-750 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors">
                                 <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/></svg>
                             </div>
                         </div>
@@ -4176,5 +4177,12 @@
     <script src="bilingual_modal.js"></script>
     <script src="corpus_system.js"></script>
     <script src="js/i18n.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>

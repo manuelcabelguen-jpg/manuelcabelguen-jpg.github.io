@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
     <!-- Unified Navigation Header -->
     <header class="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/[0.08] bg-[#070b14]/90">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
@@ -119,14 +120,14 @@
                     <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>
                 </a>
 
-                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
+                <button id="mobileMenuBtn" type="button" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mobileMenu" class="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 border border-slate-700/70 transition-colors">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
                 </button>
             </div>
         </div>
     </header>
     <!-- Unified Mobile Navigation Overlay -->
-    <div id="mobileMenu" class="mobile-menu-overlay" aria-hidden="true">
+    <div id="mobileMenu" class="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Menu de navigation" aria-hidden="true">
         <div class="w-full max-w-sm bg-[#0b1120] border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-2 relative my-auto">
             <div class="flex items-center justify-between pb-3 mb-2 border-b border-slate-800">
                 <span class="font-heading font-bold text-sm tracking-wider text-white">NAVIGATION</span>
@@ -154,7 +155,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
+    <main id="contenu-principal" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12 pb-20">
 
         <!-- 4-Step Architectural Stepper -->
         <nav aria-label="Les 4 composantes emboîtées de Cartograffect" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
@@ -241,7 +242,7 @@
                         </div>
                         <div>
                             <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                <span>Amplitude de l'écart montant</span>
+                                <label for="inpMagnitude">Amplitude de l'écart montant</label>
                                 <span id="lblMag" class="font-mono text-white">6 / 10</span>
                             </div>
                             <input id="inpMagnitude" type="range" min="0" max="10" value="6" class="w-full accent-amber-400 cursor-pointer">
@@ -249,14 +250,14 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                    <span>Seuil sensoriel</span>
+                                    <label for="inpSensory">Seuil sensoriel</label>
                                     <span id="lblSensory" class="font-mono text-amber-300">4</span>
                                 </div>
                                 <input id="inpSensory" type="range" min="1" max="9" value="4" class="w-full accent-purple-500 cursor-pointer">
                             </div>
                             <div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                    <span>Seuil de résorption (&le; sens.)</span>
+                                    <label for="inpResorption">Seuil de résorption (&le; sens.)</label>
                                     <span id="lblResorption" class="font-mono text-sky-300">2</span>
                                 </div>
                                 <input id="inpResorption" type="range" min="1" max="9" value="2" class="w-full accent-sky-400 cursor-pointer">
@@ -275,14 +276,14 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                    <span>Précision allouée (&Pi;)</span>
+                                    <label for="inpPrecision">Précision allouée (&Pi;)</label>
                                     <span id="lblPrecision" class="font-mono text-emerald-300">6</span>
                                 </div>
                                 <input id="inpPrecision" type="range" min="0" max="10" value="6" class="w-full accent-emerald-400 cursor-pointer">
                             </div>
                             <div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                    <span>Seuil d'engagement</span>
+                                    <label for="inpEngagement">Seuil d'engagement</label>
                                     <span id="lblEngagement" class="font-mono text-slate-300">4</span>
                                 </div>
                                 <input id="inpEngagement" type="range" min="1" max="9" value="4" class="w-full accent-slate-400 cursor-pointer">
@@ -291,7 +292,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                             <div>
                                 <div class="flex justify-between text-[11px] text-slate-400 mb-1">
-                                    <span>Profondeur d (Z = 2 + d)</span>
+                                    <label for="inpDepth">Profondeur d (Z = 2 + d)</label>
                                     <span id="lblDepth" class="font-mono text-indigo-300">d=0 (Z=2)</span>
                                 </div>
                                 <input id="inpDepth" type="range" min="0" max="5" value="0" class="w-full accent-indigo-400 cursor-pointer">
@@ -327,7 +328,7 @@
                             </label>
                             <div id="continuousWeightWrap" class="opacity-50 transition-opacity">
                                 <div class="flex justify-between text-[11px] font-mono text-slate-400 mb-1">
-                                    <span>Part &eacute;pist&eacute;mique &pi;<sub>A</sub> / &pi;<sub>C</sub></span>
+                                    <label for="inpWeightA">Part &eacute;pist&eacute;mique &pi;<sub>A</sub> / &pi;<sub>C</sub></label>
                                     <span id="lblWeightA" class="text-pink-300">50% / 50% (Lean strict)</span>
                                 </div>
                                 <input id="inpWeightA" type="range" min="10" max="90" step="5" value="50" disabled class="w-full accent-pink-400 cursor-pointer">

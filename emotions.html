@@ -38,10 +38,31 @@
         ul { padding-left: 1.2rem; }
         a { color: #f472b6; font-weight: 600; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .skip-link {
+            position: fixed;
+            top: -120px;
+            left: 1rem;
+            z-index: 10000;
+            padding: 0.65rem 1.15rem;
+            border-radius: 0.65rem;
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: 2px solid #c7d2fe;
+        }
+        .skip-link:focus,
+        .skip-link:focus-visible {
+            top: 1rem;
+            outline: 3px solid #fbbf24;
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body>
-    <main class="card">
+    <a href="#contenu-principal" class="skip-link">Aller au contenu principal</a>
+    <main id="contenu-principal" class="card">
         <h1>L'architecture Cartograffect a été déployée en 4 pages dédiées</h1>
         <p>Vous allez être redirigé automatiquement vers <strong>4. La Taxonomie Affective (Carte 2D/3D des 176 États)</strong>.</p>
         <ul>
