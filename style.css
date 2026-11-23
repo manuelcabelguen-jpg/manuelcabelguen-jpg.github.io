@@ -31,6 +31,67 @@ body {
     padding: 0.4rem 0;
 }
 
+/* KaTeX typography, Tailwind Preflight isolation & MathML deduplication */
+.katex {
+    font-size: 1.02em;
+    line-height: 1.2;
+    text-indent: 0;
+}
+.katex .katex-mathml,
+.katex-mathml {
+    position: absolute !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    clip-path: inset(50%) !important;
+    padding: 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+.katex .katex-mathml annotation {
+    display: none !important;
+}
+.katex .katex-html {
+    display: inline-block;
+}
+.katex .vlist-t,
+.katex .vlist-r,
+.katex .vlist,
+.katex .vlist-s,
+.katex .msupsub {
+    border: 0 !important;
+    border-style: none !important;
+    background: transparent !important;
+}
+
+/* Reading mode visibility (article.html) */
+@media screen {
+    body[data-reading-mode="didactic"] [data-view="academic"] {
+        display: none !important;
+    }
+    body[data-reading-mode="academic"] [data-view="didactic"] {
+        display: none !important;
+    }
+}
+
+/* Collapsible technical specification box (Section 4) */
+.tech-spec-details summary {
+    list-style: none;
+    cursor: pointer;
+}
+.tech-spec-details summary::-webkit-details-marker {
+    display: none;
+}
+.tech-spec-details .tech-spec-chevron {
+    transition: transform 0.2s ease;
+}
+.tech-spec-details[open] .tech-spec-chevron {
+    transform: rotate(180deg);
+}
+
 /* Editorial surfaces */
 .surface-panel {
     background-color: rgba(14, 23, 38, 0.72);
@@ -361,6 +422,11 @@ header .header-action-btn button {
         color: #111827 !important;
     }
     header, footer, nav, #mobileMenu, #viewModeBar, #didacticSimulator, #tocSidebar, .no-print, button, .close-btn {
+        display: none !important;
+    }
+    .katex .katex-mathml,
+    .katex-mathml,
+    [data-view="didactic"] {
         display: none !important;
     }
     .academic-text {

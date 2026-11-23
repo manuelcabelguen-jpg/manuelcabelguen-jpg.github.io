@@ -202,6 +202,42 @@
         'Théories des Émotions (23)': 'Emotion Theories (23)',
         'Psychiatrie Computationnelle (6)': 'Computational Psychiatry (6)',
         'Affectivisme & Modèles (12)': 'Affectivism & Models (12)',
+        'Mode de lecture :': 'Reading mode:',
+        'Accès figures :': 'Figures jump:',
+        'Idée Clé Didactique': 'Didactic Key Insight',
+        'Vue synthétique : synthèses, schémas, tableaux & simulateur': 'Synthetic view: summaries, diagrams, tables & simulator',
+        'Vue intégrale : manuscrit académique complet': 'Full view: complete academic manuscript',
+        'Strate hiérarchique (Axe Z)': 'Hierarchical Stratum (Z Axis)',
+        'Répartition du budget L₁': 'L₁ Budget Split',
+        'Scénarios cliniques & écologiques (1 clic)': 'Clinical & Ecological Scenarios (1-click)',
+        'Réinitialiser (0, 0, 0)': 'Reset (0, 0, 0)',
+        'Anticipation (R=2)': 'Anticipation (R=2)',
+        'Émoi (R=4)': 'Stir (R=4)',
+        'Réserve (R=6)': 'Reserve (R=6)',
+        'Recul (R=8)': 'Stepping Back (R=8)',
+        'Renforcement positif': 'Positive reinforcement',
+        'Désir (+1, +1, 2)': 'Desire (+1, +1, 2)',
+        'Renforcement négatif / Sécurité': 'Negative reinforcement / Safety',
+        'Calme (+1, -1, 2)': 'Calm (+1, -1, 2)',
+        'Punition négative / Obstacle': 'Negative punishment / Obstacle',
+        'Colère (-1, +1, 2)': 'Anger (-1, +1, 2)',
+        'Punition positive / Rejet': 'Positive punishment / Rejection',
+        'Dégoût (-1, -1, 2)': 'Disgust (-1, -1, 2)',
+        'Verrouillage dépressif': 'Depressive lock-in',
+        'Désespoir (-1, -7, 5)': 'Despair (-1, -7, 5)',
+        'Règle lexicographique de valence (X > Y)': 'Lexicographic Valence Rule (X > Y)',
+        'Spécification Technique': 'Technical Specification',
+        'Spécification formelle du routage sub-personnel et des ruptures d’ergodicité': 'Formal specification of sub-personal routing and ergodicity breaks',
+        'Synthèse Didactique : Le Moteur Prédictif': 'Didactic Summary: The Predictive Engine',
+        'Synthèse Didactique : Le Noyau Affectif (X, Y, Z)': 'Didactic Summary: The Affective Core (X, Y, Z)',
+        'Synthèse Didactique : La Matrice & la Règle Lexicographique': 'Didactic Summary: The Matrix & Lexicographic Rule',
+        'Synthèse Didactique : La Taxonomie Hiérarchique (176 États)': 'Didactic Summary: The Hierarchical Taxonomy (176 States)',
+        'Synthèse Didactique : Unification, Clinique & Réfutabilité': 'Didactic Summary: Unification, Clinical Practice & Falsifiability',
+        'Synthèse Didactique : L’Affect comme Opérateur Adaptatif': 'Didactic Summary: Affect as an Adaptive Operator',
+        'Illustration Clinique • Trajectoire & Leviers Thérapeutiques': 'Clinical Illustration • Trajectory & Therapeutic Levers',
+        'Usage heuristique non diagnostique': 'Heuristic non-diagnostic use',
+        'Encadré Méthodologique • Opérationnalisation de la Prédiction 5': 'Methodological Box • Operationalization of Prediction 5',
+        'Peur vs Colère vs Dégoût': 'Fear vs Anger vs Disgust',
 
         // Moteur Prédictif Page
         'Interfaces & Gradients A/C': 'Interfaces & A/C Gradients',
@@ -890,9 +926,11 @@
             const tag = (el.tagName || '').toUpperCase();
             if (
                 tag === 'SCRIPT' || tag === 'STYLE' || tag === 'CODE' || tag === 'PRE' ||
-                tag === 'KBD' ||
+                tag === 'KBD' || tag === 'MATH' ||
                 (tag === 'SVG' && el.getAttribute('data-i18n-svg') !== 'true') ||
                 el.classList.contains('katex') ||
+                el.classList.contains('katex-html') ||
+                el.classList.contains('katex-mathml') ||
                 el.classList.contains('no-i18n') ||
                 el.hasAttribute('data-payload')
             ) {
