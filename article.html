@@ -526,7 +526,7 @@
                                     <span id="simResultOpposite" class="text-indigo-300 font-semibold">Opposé : Auto-dual</span>
                                 </div>
                                 <div id="simResultInvolutionFormula" class="text-[10px] text-slate-400 leading-snug">
-                                    Involution : f(x, y) = (−sgn(x)|y|, −sgn(y)|x|) &rarr; point fixe central (0, 0, 0)
+                                    Involution par morceaux : (−X, −Y, Z) si XY = 0 ; (−sgn(X)|Y|, −sgn(Y)|X|, Z) si XY ≠ 0 &rarr; point fixe central (0, 0, 0)
                                 </div>
                             </div>
                         </div>
@@ -1688,7 +1688,7 @@
                             <span>Synthèse Didactique : La Taxonomie Hiérarchique (176 États)</span>
                         </span>
                         <p class="text-xs text-slate-300 leading-relaxed">
-                            La boucle d’inférence active à 5 temps se déploie récursivement sur l’Axe $Z$ : un <strong>noyau clinique opérationnel à 5 couches ($Z = 1 \dots 5$)</strong> issu du Point de Veille ($Z = 0$), prolongé par <strong>2 strates d’extension asymptotique ($Z = 6$ Saisissement, $Z = 7$ Suspension)</strong> pour un total certifié de <strong>176 états</strong>. Chaque configuration possède un antagoniste formel par inversion des signes et échange de priorité entre $X$ et $Y$ ($f(x, y) = (-\operatorname{sgn}(x)|y|, -\operatorname{sgn}(y)|x|)$).
+                            La boucle d’inférence active à 5 temps se déploie récursivement sur l’Axe $Z$ : un <strong>noyau clinique opérationnel à 5 couches ($Z = 1 \dots 5$)</strong> issu du Point de Veille ($Z = 0$), prolongé par <strong>2 strates d’extension asymptotique ($Z = 6$ Saisissement, $Z = 7$ Suspension)</strong> pour un total certifié de <strong>176 états</strong>. Chaque configuration possède un antagoniste formel par morceaux : $\mathcal{A}(X, Y, Z) = (-X, -Y, Z)$ si $XY = 0$, et $\mathcal{A}(X, Y, Z) = (-\operatorname{sgn}(X)|Y|, -\operatorname{sgn}(Y)|X|, Z)$ si $XY \neq 0$.
                         </p>
                     </div>
 
@@ -1726,8 +1726,8 @@
                             Enfin, à chaque niveau, toute configuration se voit correspondre un antagoniste géométrique situé dans le secteur ou le quadrant opposé, qui en inverse les polarités et décrit la stratégie régulatrice opposée. Deux cas disjoints définissent ainsi cet antagoniste :
                         </p>
                         <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                            <li><strong>Positions axiales ($X = 0$ ou $Y = 0$) :</strong> s’obtient par inversion du signe sur l’axe actif, associant par exemple la Joie $(0, 2, 2)$ à la Tristesse $(0, -2, 2)$ ou le Courage $(2, 0, 2)$ à la Peur $(-2, 0, 2)$.</li>
-                            <li><strong>Positions non axiales ($X \ne 0$ et $Y \ne 0$, diagonales et latérales) :</strong> la recherche de l’antagoniste s’unifie sous une seule règle : inverser les signes des deux axes tout en échangeant la dimension dominante entre l’Attente et le Contrôle, ce qui s’écrit de manière compacte $f(x, y) = (-\operatorname{sgn}(x)|y|,\ -\operatorname{sgn}(y)|x|)$ (certifiée par <code>antagonistPoint_involutive</code>). Sur les diagonales, cet échange redonne l’opposé symétrique (Colère face à Calme). Sur les positions latérales, cette correspondance controlatérale inverse non seulement la charge et la décharge, mais aussi le biais d’allocation de l’attention — par exemple la Haine $(-1, +5, 4)$ face à l’Affection $(+5, -1, 4)$, là où un simple opposé central comme la Plénitude $(+1, -5, 4)$ maintiendrait le même déséquilibre attentionnel sur l’Axe Y.</li>
+                            <li><strong>Positions axiales et centre ($XY = 0$, soit $X = 0$ ou $Y = 0$) :</strong> $\mathcal{A}(X, Y, Z) = (-X, -Y, Z)$, inversant le signe sur l’axe actif — associant par exemple la Joie $(0, 2, 2)$ à la Tristesse $(0, -2, 2)$ ou le Courage $(2, 0, 2)$ à la Peur $(-2, 0, 2)$.</li>
+                            <li><strong>Positions non axiales ($XY \ne 0$, soit $X \ne 0$ et $Y \ne 0$, diagonales et latérales) :</strong> $\mathcal{A}(X, Y, Z) = (-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z)$ (certifiée par <code>antagonistPoint_piecewise</code> et <code>antagonistPoint_involutive</code>), inversant les signes des deux axes tout en échangeant la dimension dominante entre l’Attente et le Contrôle. Sur les diagonales ($|X| = |Y|$), cet échange redonne $(-X, -Y, Z)$ (Colère face à Calme). Sur les positions latérales ($|X| \ne |Y|$), cette correspondance controlatérale inverse non seulement la charge et la décharge, mais aussi le biais d’allocation de l’attention — par exemple la Haine $(-1, +5, 4)$ face à l’Affection $(+5, -1, 4)$, là où un simple opposé central comme la Plénitude $(+1, -5, 4)$ maintiendrait le même déséquilibre attentionnel sur l’Axe Y.</li>
                         </ul>
 
                         <h3 class="text-lg font-heading font-bold text-sky-300 mt-4 mb-2">7.2. Les cinq couches de l’inférence affective</h3>
@@ -4758,16 +4758,16 @@
             if (invEl) {
                 if (cx !== 0 && cy !== 0) {
                     const oppLabel = oppMatch ? ` → ${oppMatch.name}` : '';
-                    invEl.textContent = `Involution : f(${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}) = (−sgn(${fmtCoordNum(cx)})·|${cy}|, −sgn(${fmtCoordNum(cy)})·|${cx}|) = (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`;
+                    invEl.textContent = `Involution (XY ≠ 0) : A(${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}, ${cz}) = (−sgn(${fmtCoordNum(cx)})·|${cy}|, −sgn(${fmtCoordNum(cy)})·|${cx}|, ${cz}) = (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`;
                 } else if (cx !== 0 || cy !== 0) {
                     const oppLabel = oppMatch ? ` → ${oppMatch.name}` : '';
                     invEl.textContent = en
-                        ? `Axial inversion: (${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}, ${cz}) → (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`
-                        : `Inversion axiale : (${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}, ${cz}) → (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`;
+                        ? `Axial inversion (XY = 0): A(${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}, ${cz}) = (−X, −Y, Z) = (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`
+                        : `Inversion axiale (XY = 0) : A(${fmtCoordNum(cx)}, ${fmtCoordNum(cy)}, ${cz}) = (−X, −Y, Z) = (${fmtCoordNum(oppCoords.x)}, ${fmtCoordNum(oppCoords.y)}, ${cz})${oppLabel}`;
                 } else {
                     invEl.textContent = en
-                        ? `Central fixed point: f(0, 0, ${cz}) = (0, 0, ${cz}) (self-dual)`
-                        : `Point fixe central : f(0, 0, ${cz}) = (0, 0, ${cz}) (auto-dual)`;
+                        ? `Central fixed point (XY = 0): A(0, 0, ${cz}) = (−0, −0, ${cz}) = (0, 0, ${cz}) (self-dual)`
+                        : `Point fixe central (XY = 0) : A(0, 0, ${cz}) = (−0, −0, ${cz}) = (0, 0, ${cz}) (auto-dual)`;
                 }
             }
         }

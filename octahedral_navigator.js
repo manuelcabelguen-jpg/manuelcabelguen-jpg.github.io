@@ -439,9 +439,9 @@
 
         let correspondenceSection = '';
         if (partner) {
-            let corrLabel = en ? "Axial Correspondence (-X,-Y)" : "Correspondance Axiale (-X,-Y)";
-            if (partner.relation === 'diagonal') corrLabel = en ? "Diagonal Correspondence (-X,-Y)" : "Correspondance Diagonale (-X,-Y)";
-            else if (partner.relation === 'controlateral') corrLabel = en ? "Contralateral Correspondence (-sgn(X)|Y|, -sgn(Y)|X|)" : "Correspondance Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)";
+            let corrLabel = en ? "Axial Correspondence (-X, -Y, Z) [XY = 0]" : "Correspondance Axiale (-X, -Y, Z) [XY = 0]";
+            if (partner.relation === 'diagonal') corrLabel = en ? "Diagonal Correspondence (-X, -Y, Z) [XY ≠ 0, |X| = |Y|]" : "Correspondance Diagonale (-X, -Y, Z) [XY ≠ 0, |X| = |Y|]";
+            else if (partner.relation === 'controlateral') corrLabel = en ? "Contralateral Correspondence (-sgn(X)|Y|, -sgn(Y)|X|, Z) [XY ≠ 0]" : "Correspondance Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|, Z) [XY ≠ 0]";
 
             correspondenceSection = `
                 <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">

@@ -74,7 +74,7 @@
       { id: 'c1', title: en ? 'Variational Free Energy & Minimization (Friston)' : 'Énergie Libre Variationnelle & Minimisation (Friston)', category: 'Concept', filterKey: 'Concept', url: 'article.html#section-3', icon: ICONS.concept, badge: en ? 'Physics' : 'Physique' },
       { id: 'c2', title: en ? 'Active Inference & Interoceptive Allostasis' : 'Inférence Active & Allostasie Intéroceptive', category: 'Concept', filterKey: 'Concept', url: 'article.html#section-3', icon: ICONS.concept, badge: en ? 'Biology' : 'Biologie' },
       { id: 'c3', title: en ? 'L₁ Crown Law: |X| + |Y| = 2Z - 2 (Manhattan)' : 'Norme L₁ des Couronnes : |X| + |Y| = 2Z - 2 (Manhattan)', category: en ? 'Mathematics' : 'Mathématiques', filterKey: 'Concept', url: 'article.html#section-5', icon: 'L₁', badge: en ? 'L₁ Law' : 'Loi L₁' },
-      { id: 'c4', title: en ? 'Central Inversion & Contralateral Reflection (-sgn(X)|Y|, -sgn(Y)|X|)' : 'Inversion Centrale & Réflexion Controlatérale (-sgn(X)|Y|, -sgn(Y)|X|)', category: en ? 'Mathematics' : 'Mathématiques', filterKey: 'Concept', url: 'article.html#section-6', icon: '⇄', badge: en ? 'Geometry' : 'Géométrie' },
+      { id: 'c4', title: en ? 'Piecewise Antagonist: (-X,-Y,Z) if XY=0; (-sgn(X)|Y|,-sgn(Y)|X|,Z) if XY≠0' : 'Antagoniste par morceaux : (-X,-Y,Z) si XY=0 ; (-sgn(X)|Y|,-sgn(Y)|X|,Z) si XY≠0', category: en ? 'Mathematics' : 'Mathématiques', filterKey: 'Concept', url: 'article.html#section-6', icon: '⇄', badge: en ? 'Geometry' : 'Géométrie' },
     ];
   }
 

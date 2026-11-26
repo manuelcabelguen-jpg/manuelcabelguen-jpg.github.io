@@ -541,9 +541,9 @@
                     <span class="text-xs font-mono uppercase text-pink-400">§7.4 — Symétrie Controlatérale</span>
                     <h3 class="text-xl font-bold text-white">Pourquoi Haine et Affection s'opposent (et non Plénitude) ?</h3>
                     <p class="text-sm text-slate-300 leading-relaxed">
-                        Pour les états axiaux et diagonaux ($X=0$, $Y=0$ ou $|X|=|Y|$), l'antagoniste est donné par <strong>inversion centrale</strong> $(X, Y) \mapsto (-X, -Y)$. Pour les 120 états <strong>latéraux</strong> ($|X| \neq |Y|$, $XY \neq 0$), l'axe dominant bascule sous la loi unifiée :
-                        $$(X, Y, Z) \longmapsto \bigl(-\operatorname{sgn}(X)|Y|,\; -\operatorname{sgn}(Y)|X|,\; Z\bigr)$$
-                        <em>Règle visuelle en 2 secondes :</em> inversez les signes de $X$ et $Y$, puis échangez leurs amplitudes absolues $|X| \leftrightarrow |Y|$. À $Z=4$, <strong>Haine (−1, +5, 4)</strong> devient donc <strong>Affection (+5, −1, 4)</strong>, tandis que <strong>Plénitude (+1, −5, 4)</strong> s'oppose à <strong>Manque (−5, +1, 4)</strong>.
+                        L'antagoniste régulateur est défini de manière exacte <strong>par morceaux</strong> selon que $XY = 0$ ou $XY \neq 0$ :
+                        $$\mathcal{A}(X, Y, Z) = \begin{cases} (-X,\; -Y,\; Z) & \text{si } XY = 0 \\[4pt] \bigl(-\operatorname{sgn}(X)|Y|,\; -\operatorname{sgn}(Y)|X|,\; Z\bigr) & \text{si } XY \neq 0 \end{cases}$$
+                        Sur les axes et au centre ($XY = 0$), l'inversion est simplement $(-X, -Y, Z)$. Sur les diagonales ($XY \neq 0$, $|X| = |Y|$), la seconde branche redonne $(-X, -Y, Z)$. Pour les 120 états <strong>latéraux</strong> ($XY \neq 0$, $|X| \neq |Y|$), <em>règle visuelle en 2 secondes :</em> inversez les signes de $X$ et $Y$, puis échangez leurs amplitudes absolues $|X| \leftrightarrow |Y|$. À $Z=4$, <strong>Haine (−1, +5, 4)</strong> devient donc <strong>Affection (+5, −1, 4)</strong>, tandis que <strong>Plénitude (+1, −5, 4)</strong> s'oppose à <strong>Manque (−5, +1, 4)</strong>.
                     </p>
                 </article>
             </div>
@@ -1251,8 +1251,8 @@
                         oppLbl.textContent = `${opp.name} (${fmtSign(opp.x)}, ${fmtSign(opp.y)}, ${opp.z})`;
                         oppBtn.onclick = () => handleEmotionSelect(opp);
                         symTypeEl.textContent = em.type === 'lateral'
-                            ? (en ? 'Contralateral reflection: (−sgn(X)|Y|, −sgn(Y)|X|)' : 'Réflexion controlatérale : (−sgn(X)|Y|, −sgn(Y)|X|)')
-                            : (en ? 'Central inversion: (−X, −Y)' : 'Inversion centrale : (−X, −Y)');
+                            ? (en ? 'Contralateral reflection (XY ≠ 0): (−sgn(X)|Y|, −sgn(Y)|X|, Z)' : 'Réflexion controlatérale (XY ≠ 0) : (−sgn(X)|Y|, −sgn(Y)|X|, Z)')
+                            : (en ? 'Central inversion (XY = 0 or |X| = |Y|): (−X, −Y, Z)' : 'Inversion centrale (XY = 0 ou |X| = |Y|) : (−X, −Y, Z)');
                     } else {
                         oppBtn.disabled = true;
                         oppBtn.classList.add('opacity-50');
