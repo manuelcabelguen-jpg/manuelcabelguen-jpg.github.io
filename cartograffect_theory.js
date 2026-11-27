@@ -1,23 +1,22 @@
 /**
- * CARTOGRAFFECT® — Noyau Computationnel & Vérification Formelle v2.1.0 (Module JS)
+ * CARTOGRAFFECT — Noyau Computationnel & Vérification Formelle v3.0.0 (Module JS)
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *
- * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (120 théorèmes constructifs, 0 sorry,
- * 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
- * et ses 10 modules .lean :
- *   1. Cartograffect.lean            (Intégration racine)
- *   2. PredictiveEngine.lean         (Moteur prédictif : interfaces, hystérésis, couplages A/C)
- *   3. CoreAffect.lean               (Noyau affectif : coordonnées X/Y/Z, norme L1, apportionRay)
- *   4. AffectiveMatrix.lean          (Matrice affective : régimes énergétiques, valence lexicographique)
- *   5. AffectiveTaxonomy.lean        (Taxonomie affective : 9 groupes, 17 sous-secteurs, dissipation)
- *   6. AffectiveDynamics.lean        (Dynamique markovienne, résolution active vs extinction passive)
- *   7. Lexicon176.lean               (176 positions certifiées sans collision)
- *   8. PredictiveCircuit.lean        (Circuit fermé à deux boucles & identité 4m^6)
- *   9. AuditTests.lean               (Batterie d'audit formel automatisé)
- *  10. OperantFactorization.lean     (Factorisation structurale des contingences opérantes Z = 2)
+ * Aligné sur le noyau Strate 0 du compendium CARTOGRAFFECT (148 théorèmes substantiels / 169 déclarations, 0 sorry,
+ * prouveur de référence unique Lean 4.35.0 ; 5 archives historiques v2.1 figées hors cœur actif)
+ * et ses 8 modules normatifs .lean + extension PredictiveEngineCanonical.lean (16+5=21) :
+ *   1. PredictiveEngine.lean         (Priors, erreur de prédiction, mise à jour causale, précision)
+ *   2. CoreAffect.lean               (Contrôlabilité instrumentale stricte Y, canal autonome A>=0, budget L1)
+ *   3. AffectiveMatrix.lean          (Couronnes fermées Z >= 2, norme L1, symétrie par morceaux)
+ *   4. AffectiveTaxonomy.lean        (9 groupes fonctionnels Option 1A, 17 sous-secteurs, dissipation Option 2a)
+ *   5. AffectiveDynamics.lean        (Asymétrie Charge/Décharge Option 3b, P2 restreint aux pôles négatifs)
+ *   6. PredictiveCircuit.lean        (Boucle perception-mise à jour-action)
+ *   7. OperantFactorization.lean     (Articulation mixte opérante-pavlovienne sur Z = 2)
+ *   8. EndToEndBridge.lean           (Chaîne complète et cohérence end_to_end_coherence)
+ * Annexe exploratoire (hors cœur normatif) : Cartograffect/Lexicon176.lean (176 états Z = 0..7).
  *
  * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
- * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
+ * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199 (expression littéraire et graphique)
  */
 
 (function (root) {
@@ -309,14 +308,26 @@
             };
         }
         if (x === 0 || y === 0) {
+            const isCharge = (x < 0 && y === 0) || (x === 0 && y < 0);
+            if (isCharge) {
+                return {
+                    id: 'axialChargeUnstable',
+                    label: en ? 'Pure Axial Charge Regime (Unstable under P2)' : 'Régime Axial de Charge (Instable sous P2)',
+                    color: 'purple',
+                    hexColor: '#c084fc',
+                    desc: en
+                        ? 'Option 3b asymmetry: axial negative Charge pole (Fear/Sadness) concentrates L₁ on one axis and exhibits non-zero P2 transition instability.'
+                        : 'Asymétrie Option 3b : ce pôle axial négatif en Charge (Peur ou Tristesse) concentre tout le budget L₁ sur un axe et présente une instabilité sous P2 (χ > 0).'
+                };
+            }
             return {
-                id: 'axialPure',
-                label: en ? 'Pure Axial Regime (Unstable)' : 'Régime Axial Pur (Instable)',
+                id: 'axialDischargeStable',
+                label: en ? 'Pure Axial Discharge Regime (Direct Relaxation)' : 'Régime Axial de Décharge (Relaxation directe)',
                 color: 'sky',
                 hexColor: '#38bdf8',
                 desc: en
-                    ? 'A single dimension is resolved; the entire L₁ budget sits on one axis, making the position dynamically unstable.'
-                    : 'Une seule dimension est tranchée ; toute la ressource L₁ porte sur un seul axe, rendant la position dynamiquement instable.'
+                    ? 'Option 3b asymmetry: axial positive Discharge pole (Joy/Courage) relaxes directly toward Wake without spontaneous diagonal destabilization.'
+                    : 'Asymétrie Option 3b : ce pôle axial positif en Décharge (Joie ou Courage) relaxe directement vers le Point de Veille sans déstabilisation diagonale spontanée.'
             };
         }
         if (x > 0 && y > 0) {
@@ -430,52 +441,52 @@
         if (Math.abs(y) > Math.abs(x)) {
             return y > 0
                 ? {
-                    id: 'groupeJoie',
-                    label: en ? 'Joy Sector (Y+ dominant)' : 'Secteur Joie (Y+ dominant)',
-                    orientationLabel: en ? 'Drive / Mobilization (Joy Sector, Y+)' : 'Élan / Mobilisation (Secteur Joie, Y+)'
+                    id: 'sectorControlPos',
+                    label: en ? 'Control + Sector (|Y| > |X|, Y+)' : 'Secteur Contrôle + (|Y| > |X|, Y+)',
+                    orientationLabel: en ? 'Control + / Instrumental Mobilization (Y+)' : 'Contrôle + / Mobilisation instrumentale (Y+)'
                 }
                 : {
-                    id: 'groupeTristesse',
-                    label: en ? 'Sadness Sector (Y− dominant)' : 'Secteur Tristesse (Y− dominant)',
-                    orientationLabel: en ? 'Restraint / Withdrawal (Sadness Sector, Y−)' : 'Retenue / Apaisement (Secteur Tristesse, Y−)'
+                    id: 'sectorControlNeg',
+                    label: en ? 'Control − Sector (|Y| > |X|, Y−)' : 'Secteur Contrôle − (|Y| > |X|, Y−)',
+                    orientationLabel: en ? 'Control − / Instrumental Withdrawal (Y−)' : 'Contrôle − / Retrait instrumental (Y−)'
                 };
         }
         if (Math.abs(x) > Math.abs(y)) {
             return x < 0
                 ? {
-                    id: 'groupePeur',
-                    label: en ? 'Fear Sector (X− dominant)' : 'Secteur Peur (X− dominant)',
-                    orientationLabel: en ? 'Retention / Epistemic Alert (Fear Sector, X−)' : 'Maintien / Alerte Épistémique (Secteur Peur, X−)'
+                    id: 'sectorExpectationNeg',
+                    label: en ? 'Expectation − Sector (|X| > |Y|, X−)' : 'Secteur Attente − (|X| > |Y|, X−)',
+                    orientationLabel: en ? 'Retention / Epistemic Vigilance (Expectation −, X−)' : 'Maintien / Alerte Épistémique (Secteur Attente −, X−)'
                 }
                 : {
-                    id: 'groupeCourage',
-                    label: en ? 'Courage Sector (X+ dominant)' : 'Secteur Courage (X+ dominant)',
-                    orientationLabel: en ? 'Revision / Epistemic Opening (Courage Sector, X+)' : 'Révision / Ouverture Épistémique (Secteur Courage, X+)'
+                    id: 'sectorExpectationPos',
+                    label: en ? 'Expectation + Sector (|X| > |Y|, X+)' : 'Secteur Attente + (|X| > |Y|, X+)',
+                    orientationLabel: en ? 'Revision / Epistemic Opening (Expectation +, X+)' : 'Révision / Ouverture Épistémique (Secteur Attente +, X+)'
                 };
         }
         if (x > 0) {
             return y > 0
                 ? {
-                    id: 'groupeDesir',
-                    label: en ? 'Desire Diagonal Lineage (+X, +Y)' : 'Filière Diagonale Désir (+X, +Y)',
-                    orientationLabel: en ? 'Approach Synergy (Desire Lineage)' : 'Synergie d’Approche (Filière Désir)'
+                    id: 'diagonalSynergyPos',
+                    label: en ? 'Diagonal Positive Synergy (+X, +Y)' : 'Diagonale Synergie Positive (+X, +Y)',
+                    orientationLabel: en ? 'Positive Synergy (Desire Prototype)' : 'Synergie d’Approche (Prototype Désir)'
                 }
                 : {
-                    id: 'groupeCalme',
-                    label: en ? 'Calm Diagonal Lineage (+X, −Y)' : 'Filière Diagonale Calme (+X, −Y)',
-                    orientationLabel: en ? 'Trophotropic Release (Calm Lineage)' : 'Relâchement Trophotropique (Filière Calme)'
+                    id: 'diagonalAccommodation',
+                    label: en ? 'Diagonal Accommodation (+X, −Y)' : 'Diagonale Accommodation (+X, −Y)',
+                    orientationLabel: en ? 'Trophotropic Accommodation (Calm Prototype)' : 'Accommodation Trophotropique (Prototype Calme)'
                 };
         }
         return y > 0
             ? {
-                id: 'groupeColere',
-                label: en ? 'Anger Diagonal Lineage (−X, +Y)' : 'Filière Diagonale Colère (−X, +Y)',
-                orientationLabel: en ? 'Ergotropic Compensation (Anger Lineage)' : 'Compensation Ergotropique (Filière Colère)'
+                id: 'diagonalAgenticConfront',
+                label: en ? 'Diagonal Confrontation (−X, +Y)' : 'Diagonale Affrontement (−X, +Y)',
+                orientationLabel: en ? 'Ergotropic Confrontation (Anger Prototype)' : 'Affrontement Ergotropique (Prototype Colère)'
             }
             : {
-                id: 'groupeDegout',
-                label: en ? 'Disgust Diagonal Lineage (−X, −Y)' : 'Filière Diagonale Dégoût (−X, −Y)',
-                orientationLabel: en ? 'Aversive Congruence (Disgust Lineage)' : 'Congruence Aversive (Filière Dégoût)'
+                id: 'diagonalSynergyNeg',
+                label: en ? 'Diagonal Negative Synergy (−X, −Y)' : 'Diagonale Synergie Négative (−X, −Y)',
+                orientationLabel: en ? 'Aversive Synergy (Disgust Prototype)' : 'Synergie Aversive (Prototype Dégoût)'
             };
     };
 
@@ -539,8 +550,9 @@
             });
         }
 
-        // Descente séquentielle strate par strate jusqu'au Point de Veille (0,0,0)
+        // Option 2a : Descente séquentielle pas-à-pas (ΔZ ∈ {-1, 0, +1}) avec seul court-circuit 2 → 0 court-circuitant Surprise (Z=1)
         for (let z = cz - 1; z >= 0; z--) {
+            if (z === 1 && cz >= 2) continue;
             const op = findByCoord(0, 0, z);
             steps.push({
                 phase: z === 0

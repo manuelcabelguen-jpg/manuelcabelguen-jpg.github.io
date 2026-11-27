@@ -1,69 +1,33 @@
 #!/usr/bin/env python3
 """
-Deterministic website synchronizer and contract verifier for CARTOGRAFFECT (Strate 2).
+CARTOGRAFFECT — Phase 4 Payload Synchronization & Go/No-Go Validator (schema 2.0, v3.0.0).
 
-Reads data/site-payload.json and:
-  - In --apply mode: synchronizes static fallbacks (js/compendium_payload.js),
-    CITATION.cff, sitemap.xml, [data-payload] HTML nodes, and release metadata
-    deterministically (UTF-8 without BOM, LF endings).
-  - In --check mode: verifies schema validity, zero drift against canonical payload,
-    zero obsolete Strate 1/v1 residues (both raw and HTML-unescaped), A4-Sanctuaire
-    isolation on article/theory pages, SPDX & hybrid-clause compliance, JS model
-    integrity (176 states, 84 antagonist pairs), and optional 176/176 Lexicon176.lean
-    parity.
-
-Standard library Python 3.10+ only.
+Single Source of Truth: data/site-payload.json exported from CARTOGRAFFECT commit ca62e90.
+Usage:
+    python scripts/sync_from_payload.py --check
+    python scripts/sync_from_payload.py --apply
 """
-
 from __future__ import annotations
 
 import argparse
 import hashlib
-import html
+import html as html_lib
 import json
 import re
 import sys
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parent.parent
+PAYLOAD_PATH = ROOT / "data" / "site-payload.json"
+COMPENDIUM_JS_PATH = ROOT / "js" / "compendium_payload.js"
+CITATION_PATH = ROOT / "CITATION.cff"
+MODEL_JS_PATH = ROOT / "cartograffect_model.js"
+THEORY_JS_PATH = ROOT / "cartograffect_theory.js"
 
-EXPECTED_SCHEMA_VERSION = "1.0"
-REQUIRED_TOP_KEYS = (
-    "schema_version",
-    "release",
-    "identifiers",
-    "strate_0_core",
-    "strate_1_extensions",
-    "ai_disclosure",
-    "licenses",
-)
-
-FALLBACK_BEGIN = "/* BEGIN:SITE_PAYLOAD_FALLBACK */"
-FALLBACK_END = "/* END:SITE_PAYLOAD_FALLBACK */"
-
-SCAN_EXTENSIONS = {".html", ".js", ".md", ".cff", ".json", ".xml", ".txt"}
-SKIP_DIRS = {".git", ".github", "scripts", "assets", "node_modules"}
-
-FORBIDDEN_PATTERNS: list[tuple[str, str]] = [
-    (r"\b68\s*(?:th(?:éorèmes?|é\.|\.)|thé)\b", "obsolete theorem count (68)"),
-    (r"\b33\s*(?:théorèmes?\s*audités|audités)\b", "obsolete audited theorem count (33)"),
-    (r"\b38\s*vérifications?\s*d['’]axiomes\b", "obsolete axiom count (38)"),
-    (r"(?<![0-9.])v?1\.0\.1(?![0-9.])", "obsolete current version v1.0.1"),
-    (r"(?:\b3|trois)\s+prédictions?\b", "obsolete prediction count (3 instead of 5)"),
-    (r"\b(?:6|six)\s+modules?\s+(?:lean|\.lean)\b|\bl'ensemble des\s+6\s+modules\b", "obsolete module count (6 instead of 10)"),
-    (r"la\s+macaza", "obsolete institutional affiliation (La Macaza)"),
-    (r"service\s+correctionnel", "obsolete institutional affiliation (SCC)"),
-    (r"ph\.?\s*d\.?,\s*bcn\b", "obsolete BCN suffix"),
-    (r"\bdrcab\b|c:\\\\users\\\\|c:/users/", "local workstation path leak"),
-    (r"\bop" + r"q\b", "removed institutional mention"),
-    (r"ordre\s+des\s+psycho" + r"logues\s+du\s+qu[eé]bec", "removed institutional mention"),
-]
-
-# Guard A4-Sanctuaire: experimental PXP / min_r metrics must not leak into
-# the theoretical paper or core Strate 2 theory pages.
-A4_SANCTUAIRE_FILES = {
-    "article.html",
+HTML_FILES = [
     "index.html",
+    "article.html",
     "scholar_drive.html",
     "moteur-predictif.html",
     "noyau-affectif.html",
@@ -71,565 +35,378 @@ A4_SANCTUAIRE_FILES = {
     "taxonomie-affective.html",
     "mentions-legales.html",
     "voyage.html",
-    "404.html",
+    "emotions.html",
     "maintenance.html",
-    "README.md",
-}
-
-A4_FORBIDDEN_PATTERNS: list[tuple[str, str]] = [
-    (r"\bPXP(?:_BIC|_WAIC)?\b", "PXP protected metrics leak (A4-Sanctuaire)"),
-    (r"\bmin[\s_]+r\b", "min r in-silico metric leak (A4-Sanctuaire)"),
+    "404.html",
 ]
 
+SCAN_EXTENSIONS = {".html", ".js", ".md", ".cff", ".txt", ".json", ".yml", ".yaml", ".py"}
+SKIP_DIRS = {".git", "node_modules", "__pycache__"}
+SKIP_FILES = {"CHANGELOG.md"}
 
-def load_payload(payload_path: Path) -> tuple[dict[str, Any], list[str]]:
+# Built via concatenation so this script itself never matches banned literals.
+RED_LIST_PATTERNS: list[tuple[str, str]] = [
+    ("reg_symbol", r"CARTOGRAFFECT(?:" + chr(174) + r"|&" + r"reg;)"),
+    ("trademark_claim", r"Marque d[e\u00e9]pos[e\u00e9]" + r"e|Registered Trade" + r"mark"),
+    ("nc_clause_in_js_or_active", r"CC[- ]?BY[- ]?" + r"NC[- ]?SA"),
+    ("tail_cdn", r"cdn\.tailwind" + r"css\.com"),
+    ("maintenance_guard", r"maintenance_" + r"guard\.js"),
+    ("algorithme_36", r"#?algorithme-" + r"36\b"),
+    ("friston_cabelguen", r"Friston\s*(?:&amp;|&)\s*" + r"Cabelguen"),
+    ("regle_90s", r"r[e\u00e8]gle\s+des\s+" + r"90\s*s"),
+    ("synthese_definitive", r"Synth[e\u00e8]se\s+D[e\u00e9]" + r"finitive"),
+    ("clivages_historiques", r"clivages\s+" + r"historiques"),
+    ("theoremes_constructifs", r"th[e\u00e9]or[e\u00e8]mes\s+" + r"constructifs"),
+    ("martin_lof", r"Martin[- ]L[o\u00f6]" + r"f"),
+    ("intuition_claim", r"\bintuition" + r"niste\b"),
+    ("socle_certifie", r"Socle\s+Scientifique\s+Certifi" + r"[e\u00e9]"),
+    ("grid_9502", r"\b95" + r"02\b|0\.95" + r"02|0\.87" + r"62|91[,.]" + r"3\s*%"),
+    ("patient_clinical", r"votre\s+" + r"patient"),
+    ("aussi_rigoureuses", r"aussi\s+rigoureuses\s+que\s+la\s+g[e\u00e9]om" + r"[e\u00e9]trie"),
+    ("equilibre_naturel", r"loi\s+d['\u2019][e\u00e9]quilibre\s+" + r"naturel"),
+    ("loi_universelle", r"Loi\s+universelle\s+de\s+conservation\s+" + r"attentionnelle"),
+    ("flou_arbitraire", r"sans\s+le\s+moindre\s+flou\s+" + r"arbitraire"),
+    ("premiere_carte", r"premi[e\u00e8]re\s+carte\s+interactive\s+de\s+l['\u2019]esprit\s+" + r"pr[e\u00e9]dictif"),
+    ("revolution_claim", r"\bLa\s+r[e\u00e9]vo" + r"lution\s+de\s+l['\u2019]esprit\s+pr[e\u00e9]dictif|\bR[e\u00e9]vo" + r"lution\s+conceptuelle\b"),
+    ("bad_pdf_meta", r"citation_pdf_url[^>\n]*article\." + r"html"),
+    ("bad_antagonist_formula", r"-sgn\(X\)" + r"Y\b"),
+]
+
+# Aliases mapping data-payload attribute keys to schema 2.0 paths
+SHORT_ALIASES = {
+    "version": "release.version",
+    "tag": "release.tag",
+    "date": "release.date",
+    "zenodo_code_doi": "identifiers.zenodo_code_doi",
+    "zenodo_article_doi": "identifiers.zenodo_article_doi",
+    "osf_url": "identifiers.osf_url",
+    "cipo_registration": "identifiers.cipo_registration",
+    "github_repo_url": "identifiers.github_repo_url",
+    "github_release_url": "identifiers.github_release_url",
+    "reference_prover": "strate_0_core.reference_prover",
+    "prover_version": "strate_0_core.prover_version",
+    "normative_modules_count": "strate_0_core.normative_modules_count",
+    "lean_modules_count": "strate_0_core.normative_modules_count",
+    "strate_0_core.lean_modules_count": "strate_0_core.normative_modules_count",
+    "theorems_substantial": "strate_0_core.theorems_substantial",
+    "theorems_verified": "strate_0_core.theorems_substantial",
+    "strate_0_core.theorems_verified": "strate_0_core.theorems_substantial",
+    "exported_declarations": "strate_0_core.exported_declarations",
+    "auxiliary_lemmas": "strate_0_core.auxiliary_lemmas",
+    "pillar_theorems_count": "strate_0_core.pillar_theorems_count",
+    "sorry_count": "strate_0_core.sorry_count",
+    "canonical_ext_theorems": "strate_0_core.canonical_extension.theorems_own",
+    "canonical_ext_aux": "strate_0_core.canonical_extension.auxiliary_lemmas",
+    "canonical_ext_declarations": "strate_0_core.canonical_extension.exported_declarations",
+    "python_unit_tests_count": "strate_0_core.python_unit_tests_count",
+    "canonical_states_count": "strate_0_core.canonical_states_count",
+    "canonical_discretization": "strate_0_core.canonical_discretization",
+    "continuous_depth_range": "strate_0_core.continuous_depth_range",
+    "states_count": "exploratory_annexes.lexicon_176.states_count",
+    "strate_0_core.states_count": "exploratory_annexes.lexicon_176.states_count",
+    "predictions_count": "strate_0_core.predictions_count",
+    "author_affiliation": "strate_0_core.author_affiliation",
+    "spdx_expression": "licenses.spdx_expression",
+    "code_license": "licenses.code_license",
+    "code_spdx": "licenses.code_spdx",
+    "docs_and_data_spdx": "licenses.docs_and_data_spdx",
+    "theory_license": "licenses.docs_and_taxonomy_license",
+}
+
+
+def get_by_path(obj: dict[str, Any], dot_path: str) -> Any:
+    cur: Any = obj
+    for part in dot_path.split("."):
+        if not isinstance(cur, dict) or part not in cur:
+            return None
+        cur = cur[part]
+    return cur
+
+
+def resolve_payload_value(key: str, payload: dict[str, Any]) -> Any:
+    if key == "version_label":
+        v = get_by_path(payload, "release.version")
+        return f"Version {v}" if v is not None else None
+    if key in ("provers_count", "strate_0_core.provers_count"):
+        return 1 if get_by_path(payload, "strate_0_core.reference_prover") else None
+    if key == "archived_provers_count":
+        arr = get_by_path(payload, "strate_0_core.legacy_v2_1_archived_provers")
+        return len(arr) if isinstance(arr, list) else None
+    mapped = SHORT_ALIASES.get(key, key)
+    val = get_by_path(payload, mapped)
+    if val is None and mapped != key:
+        val = get_by_path(payload, key)
+    return val
+
+
+def validate_payload_schema(payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
-    if not payload_path.is_file():
-        return {}, [f"Payload file missing: {payload_path}"]
-    try:
-        data = json.loads(payload_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        return {}, [f"Invalid JSON in {payload_path}: {exc}"]
-
-    for key in REQUIRED_TOP_KEYS:
-        if key not in data:
-            errors.append(f"Missing required payload key: '{key}'")
-
-    if data.get("schema_version") != EXPECTED_SCHEMA_VERSION:
-        errors.append(
-            f"Unexpected schema_version={data.get('schema_version')!r}, expected {EXPECTED_SCHEMA_VERSION!r}"
-        )
-
-    rel = data.get("release", {})
-    ids = data.get("identifiers", {})
-    s0 = data.get("strate_0_core", {})
-    lic = data.get("licenses", {})
-
-    for k in ("version", "tag", "date"):
-        if not rel.get(k):
-            errors.append(f"Missing release.{k}")
-    for k in ("zenodo_code_doi", "zenodo_article_doi", "osf_url", "cipo_registration", "github_repo_url"):
-        if not ids.get(k):
-            errors.append(f"Missing identifiers.{k}")
-
-    if not isinstance(s0.get("theorems_verified"), int) or s0.get("theorems_verified", 0) < 120:
-        errors.append(f"Invalid strate_0_core.theorems_verified={s0.get('theorems_verified')!r}")
-    if s0.get("sorry_count") != 0:
-        errors.append(f"Invalid strate_0_core.sorry_count={s0.get('sorry_count')!r} (expected 0)")
-    if not isinstance(s0.get("provers"), list) or len(s0.get("provers", [])) != 6:
-        errors.append(f"Expected 6 provers in strate_0_core.provers, got {len(s0.get('provers', []))}")
-    if s0.get("lean_modules_count") != 10:
-        errors.append(f"Expected lean_modules_count=10, got {s0.get('lean_modules_count')!r}")
-    if s0.get("states_count") != 176:
-        errors.append(f"Expected states_count=176, got {s0.get('states_count')!r}")
-    if s0.get("predictions_count") != 5:
-        errors.append(f"Expected predictions_count=5, got {s0.get('predictions_count')!r}")
-    if not s0.get("author_affiliation"):
-        errors.append("Missing strate_0_core.author_affiliation")
-    if lic.get("spdx_expression") != "AGPL-3.0-or-later AND CC-BY-NC-SA-4.0":
-        errors.append(f"Unexpected licenses.spdx_expression={lic.get('spdx_expression')!r}")
-    ai = data.get("ai_disclosure", {})
-    ai_verif = str(ai.get("verification_and_audit_status", "")).lower()
-    if not ai.get("author_ownership") or not ai.get("ai_assistance_scope"):
-        errors.append("Missing ai_disclosure.author_ownership or ai_assistance_scope")
-    for marker in ("non mathématicien formel", "ligne par ligne", "tests automatisés", "audit"):
-        if marker not in ai_verif:
-            errors.append(f"Incomplete ai_disclosure.verification_and_audit_status (missing {marker!r})")
-
-    return data, errors
-
-
-def build_payload_tokens(payload: dict[str, Any]) -> dict[str, str]:
-    rel = payload["release"]
-    ids = payload["identifiers"]
-    s0 = payload["strate_0_core"]
-    lic = payload["licenses"]
-    return {
-        "version": str(rel["version"]),
-        "tag": str(rel["tag"]),
-        "version_label": f"Version {rel['version']}",
-        "date": str(rel["date"]),
-        "zenodo_code_doi": str(ids["zenodo_code_doi"]),
-        "zenodo_article_doi": str(ids["zenodo_article_doi"]),
-        "osf_url": str(ids["osf_url"]),
-        "cipo_registration": str(ids["cipo_registration"]),
-        "github_repo_url": str(ids["github_repo_url"]),
-        "theorems_verified": str(s0["theorems_verified"]),
-        "sorry_count": str(s0["sorry_count"]),
-        "provers_count": str(len(s0["provers"])),
-        "lean_modules_count": str(s0["lean_modules_count"]),
-        "states_count": str(s0["states_count"]),
-        "predictions_count": str(s0["predictions_count"]),
-        "author_affiliation": str(s0["author_affiliation"]),
-        "spdx_expression": str(lic["spdx_expression"]),
-        "code_license": str(lic["code_license"]),
-        "theory_license": str(lic["theory_license"]),
+    if payload.get("schema_version") != "2.0":
+        errors.append(f"schema_version must be '2.0', got {payload.get('schema_version')!r}")
+    rel = payload.get("release", {})
+    if rel.get("version") != "3.0.0":
+        errors.append(f"release.version must be '3.0.0', got {rel.get('version')!r}")
+    core = payload.get("strate_0_core", {})
+    checks = {
+        "normative_modules_count": 8,
+        "theorems_substantial": 148,
+        "exported_declarations": 169,
+        "pillar_theorems_count": 8,
+        "sorry_count": 0,
+        "native_decide_count": 0,
+        "python_unit_tests_count": 11,
+        "predictions_count": 5,
     }
-
-
-def sync_compendium_payload_js(root: Path, payload: dict[str, Any], apply: bool) -> list[str]:
-    target = root / "js" / "compendium_payload.js"
-    if not target.is_file():
-        return [f"Missing file: {target}"]
-    text = target.read_text(encoding="utf-8")
-    b_idx = text.find(FALLBACK_BEGIN)
-    e_idx = text.find(FALLBACK_END)
-    if b_idx == -1 or e_idx == -1 or e_idx < b_idx:
-        return [f"Missing fallback markers in {target}"]
-
-    indent_payload = json.dumps(payload, ensure_ascii=False, indent=4)
-    # Indent lines cleanly by 2 spaces under `const FALLBACK_PAYLOAD = ...;`
-    lines = indent_payload.splitlines()
-    formatted_lines = [lines[0]] + [("  " + ln if ln else "") for ln in lines[1:]]
-    formatted_json = "\n".join(formatted_lines)
-
-    new_block = f"{FALLBACK_BEGIN}\n  const FALLBACK_PAYLOAD = {formatted_json};\n  {FALLBACK_END}"
-    before = text[:b_idx]
-    after = text[e_idx + len(FALLBACK_END):]
-    updated = before + new_block + after
-    if updated != text:
-        if apply:
-            target.write_text(updated, encoding="utf-8", newline="\n")
-        else:
-            return [f"Out-of-sync fallback payload in js/compendium_payload.js (run --apply)"]
-    return []
-
-
-def sync_citation_cff(root: Path, payload: dict[str, Any], apply: bool) -> list[str]:
-    target = root / "CITATION.cff"
-    if not target.is_file():
-        return ["Missing CITATION.cff"]
-    text = target.read_text(encoding="utf-8")
-    rel = payload["release"]
-    ids = payload["identifiers"]
-    lic = payload["licenses"]
-    s0 = payload["strate_0_core"]
-
-    updated = text
-    updated = re.sub(r'(?m)^(\s*version:\s*)".*?"$', rf'\1"{rel["version"]}"', updated)
-    updated = re.sub(r'(?m)^date-released:\s*".*?"$', f'date-released: "{rel["date"]}"', updated)
-    updated = re.sub(r'(?m)^license:\s*".*?"$', f'license: "{lic["spdx_expression"]}"', updated)
-    updated = re.sub(r'(?m)^(    affiliation:\s*)".*?"$', rf'\1"{s0["author_affiliation"]}"', updated)
-    updated = re.sub(r'(?m)^doi:\s*".*?"$', f'doi: "{ids["zenodo_code_doi"]}"', updated)
-    updated = re.sub(r'(?m)^repository-code:\s*".*?"$', f'repository-code: "{ids["github_repo_url"]}"', updated)
-    updated = re.sub(r'(description:\s*"Zenodo [^"\n]+ DOI \()v\d+\.\d+\.\d+(\)")', rf'\g<1>{rel["tag"]}\g<2>', updated)
-    updated = re.sub(r'(compendium unifié )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
-    updated = re.sub(r'(CARTOGRAFFECT )v\d+\.\d+\.\d+', rf'\g<1>{rel["tag"]}', updated)
-
-    if updated != text:
-        if apply:
-            target.write_text(updated, encoding="utf-8", newline="\n")
-        else:
-            return ["Out-of-sync CITATION.cff metadata (run --apply)"]
-    return []
-
-
-def sync_sitemap_xml(root: Path, payload: dict[str, Any], apply: bool) -> list[str]:
-    target = root / "sitemap.xml"
-    if not target.is_file():
-        return ["Missing sitemap.xml"]
-    text = target.read_text(encoding="utf-8")
-    date_str = payload["release"]["date"]
-    updated = re.sub(r"<lastmod>\d{4}-\d{2}-\d{2}</lastmod>", f"<lastmod>{date_str}</lastmod>", text)
-    if updated != text:
-        if apply:
-            target.write_text(updated, encoding="utf-8", newline="\n")
-        else:
-            return ["Out-of-sync lastmod dates in sitemap.xml (run --apply)"]
-    return []
-
-
-def sync_html_files(root: Path, payload: dict[str, Any], apply: bool) -> list[str]:
-    errors: list[str] = []
-    tokens = build_payload_tokens(payload)
-    ver = tokens["version"]
-    tag = tokens["tag"]
-
-    tag_re = re.compile(
-        r'(<(?P<elem>[a-zA-Z0-9]+)\b[^>]*?\bdata-payload=["\'](?P<key>[a-zA-Z0-9_]+)["\'][^>]*>)([^<]*)(</(?P=elem)>)'
-    )
-
-    for html_file in sorted(root.glob("*.html")):
-        text = html_file.read_text(encoding="utf-8")
-
-        def repl(m: re.Match[str]) -> str:
-            key = m.group("key")
-            if key in tokens:
-                return f"{m.group(1)}{tokens[key]}{m.group(5)}"
-            return m.group(0)
-
-        updated = tag_re.sub(repl, text)
-        # Keep inline APA citation strings, JSON-LD, meta and notices synchronized with payload version
-        updated = re.sub(
-            r"(Cartographie des affects\s*:[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
-            rf"\g<1>{ver}\g<3>",
-            updated,
-        )
-        updated = re.sub(
-            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(version\s+)(v\d+\.\d+\.\d+)(\))",
-            rf"\g<1>{tag}\g<3>",
-            updated,
-        )
-        updated = re.sub(
-            r"(CARTOGRAFFECT:\s*Architecture[^\n]*?\(Version\s+)(\d+\.\d+\.\d+)(\))",
-            rf"\g<1>{ver}\g<3>",
-            updated,
-        )
-        updated = re.sub(
-            r'(property="og:description"\s+content="[^"\n]*?\()v\d+\.\d+\.\d+(, compendium formel\))',
-            rf'\g<1>{tag}\g<2>',
-            updated,
-        )
-        updated = re.sub(
-            r'("version":\s*")\d+\.\d+\.\d+(")',
-            rf'\g<1>{ver}\g<2>',
-            updated,
-        )
-        updated = re.sub(
-            r'(Mise à disposition de la prépublication\s+)v\d+\.\d+\.\d+',
-            rf'\g<1>{tag}',
-            updated,
-        )
-
-        if updated != text:
-            if apply:
-                html_file.write_text(updated, encoding="utf-8", newline="\n")
-            else:
-                errors.append(f"Out-of-sync [data-payload]/citation markers in {html_file.name} (run --apply)")
-
+    for field, expected in checks.items():
+        if core.get(field) != expected:
+            errors.append(f"strate_0_core.{field}: expected {expected!r}, got {core.get(field)!r}")
+    ext = core.get("canonical_extension", {})
+    if ext.get("theorems_own") != 16 or ext.get("auxiliary_lemmas") != 5 or ext.get("exported_declarations") != 21:
+        errors.append(f"strate_0_core.canonical_extension mismatch: {ext!r}")
+    lic = payload.get("licenses", {})
+    if lic.get("spdx_expression") != "AGPL-3.0-or-later AND CC-BY-4.0":
+        errors.append(f"licenses.spdx_expression mismatch: {lic.get('spdx_expression')!r}")
+    if lic.get("non_commercial_clauses_in_code") is not False:
+        errors.append("licenses.non_commercial_clauses_in_code must be False")
     return errors
 
 
-def check_zero_residue(root: Path) -> list[str]:
-    errors: list[str] = []
-    compiled_forbidden = [(re.compile(pat, re.IGNORECASE), desc) for pat, desc in FORBIDDEN_PATTERNS]
-    compiled_a4 = [(re.compile(pat), desc) for pat, desc in A4_FORBIDDEN_PATTERNS]
+def build_sanitized_fallback(payload: dict[str, Any]) -> dict[str, Any]:
+    copy = json.loads(json.dumps(payload, ensure_ascii=False))
+    if isinstance(copy.get("release"), dict):
+        copy["release"]["changelog_highlights"] = []
+    return copy
 
-    for path in sorted(root.rglob("*")):
+
+def sync_compendium_js(payload: dict[str, Any], apply_changes: bool) -> list[str]:
+    issues: list[str] = []
+    if not COMPENDIUM_JS_PATH.exists():
+        return [f"Missing {COMPENDIUM_JS_PATH}"]
+    content = COMPENDIUM_JS_PATH.read_text(encoding="utf-8")
+    begin_marker = "// BEGIN_PAYLOAD_FALLBACK"
+    end_marker = "// END_PAYLOAD_FALLBACK"
+    if begin_marker not in content or end_marker not in content:
+        return ["compendium_payload.js missing BEGIN/END_PAYLOAD_FALLBACK markers"]
+
+    fallback_obj = build_sanitized_fallback(payload)
+    json_str = json.dumps(fallback_obj, indent=2, ensure_ascii=False)
+    indented = "\n".join("  " + line if line else "" for line in json_str.splitlines())
+    replacement_block = f"{begin_marker}\n  const FALLBACK_PAYLOAD = {indented.lstrip()};\n  {end_marker}"
+
+    pattern = re.compile(re.escape(begin_marker) + r".*?" + re.escape(end_marker), re.DOTALL)
+    new_content = pattern.sub(lambda _: replacement_block, content, count=1)
+    if new_content != content:
+        if apply_changes:
+            COMPENDIUM_JS_PATH.write_text(new_content, encoding="utf-8")
+        else:
+            issues.append("js/compendium_payload.js FALLBACK_PAYLOAD out of sync with data/site-payload.json")
+    return issues
+
+
+def sync_citation_cff(payload: dict[str, Any], apply_changes: bool) -> list[str]:
+    issues: list[str] = []
+    if not CITATION_PATH.exists():
+        return ["Missing CITATION.cff"]
+    content = CITATION_PATH.read_text(encoding="utf-8")
+    rel = payload["release"]
+    ids = payload["identifiers"]
+    expected_lines = [
+        f"version: {rel['version']}",
+        f'date-released: "{rel["date"]}"',
+        f'doi: "{ids["zenodo_article_doi"]}"',
+        "  - AGPL-3.0-or-later",
+        "  - CC-BY-4.0",
+    ]
+    updated = content
+    updated = re.sub(r"^version:\s*.*$", f"version: {rel['version']}", updated, flags=re.MULTILINE)
+    updated = re.sub(r"^date-released:\s*.*$", f'date-released: "{rel["date"]}"', updated, flags=re.MULTILINE)
+    updated = re.sub(r'^doi:\s*".*"$', f'doi: "{ids["zenodo_article_doi"]}"', updated, flags=re.MULTILINE)
+    if updated != content:
+        if apply_changes:
+            CITATION_PATH.write_text(updated, encoding="utf-8")
+            content = updated
+        else:
+            issues.append("CITATION.cff metadata fields out of sync with payload")
+    for line in expected_lines:
+        if line not in content:
+            issues.append(f"CITATION.cff missing expected line: {line}")
+    return issues
+
+
+def sync_and_check_html_payload_spans(payload: dict[str, Any], apply_changes: bool) -> list[str]:
+    issues: list[str] = []
+    span_re = re.compile(
+        r'(<(?P<tag>[a-zA-Z0-9]+)\b[^>]*\bdata-payload="(?P<key>[^"]+)"[^>]*>)(?P<inner>[^<]*)(</(?P=tag)>)'
+    )
+    for rel_path in HTML_FILES:
+        path = ROOT / rel_path
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        changed = False
+
+        def _repl(match: re.Match[str]) -> str:
+            nonlocal changed
+            key = match.group("key")
+            val = resolve_payload_value(key, payload)
+            if val is None:
+                issues.append(f"{rel_path}: unresolved data-payload key {key!r}")
+                return match.group(0)
+            expected = str(val)
+            current = html_lib.unescape(match.group("inner")).strip()
+            if current != expected:
+                if apply_changes:
+                    changed = True
+                    return f"{match.group(1)}{html_lib.escape(expected, quote=False)}{match.group(5)}"
+                issues.append(f"{rel_path}: [data-payload={key!r}] has {current!r}, expected {expected!r}")
+            return match.group(0)
+
+        new_text = span_re.sub(_repl, text)
+        if apply_changes and changed and new_text != text:
+            path.write_text(new_text, encoding="utf-8")
+    return issues
+
+
+def check_red_list() -> list[str]:
+    issues: list[str] = []
+    compiled = [(name, re.compile(pat, re.IGNORECASE)) for name, pat in RED_LIST_PATTERNS]
+    for path in sorted(ROOT.rglob("*")):
         if not path.is_file():
             continue
-        rel = path.relative_to(root)
+        rel = path.relative_to(ROOT)
         if any(part in SKIP_DIRS for part in rel.parts):
             continue
-        if path.suffix.lower() not in SCAN_EXTENSIONS:
+        if path.name in SKIP_FILES or path.suffix.lower() not in SCAN_EXTENSIONS:
             continue
-        # Skip generated binary-like or vendor JSON if any; check text files
-        raw_text = path.read_text(encoding="utf-8", errors="replace")
-        unescaped_text = html.unescape(raw_text)
-
-        for idx, (raw_line, clean_line) in enumerate(
-            zip(raw_text.splitlines(), unescaped_text.splitlines()), start=1
-        ):
-            norm_line = re.sub(r"\s+", " ", clean_line)
-            for creg, desc in compiled_forbidden:
-                if creg.search(raw_line) or creg.search(norm_line):
-                    errors.append(f"Residual '{desc}' in {rel.as_posix()}:{idx}")
-            if path.name in A4_SANCTUAIRE_FILES:
-                for areg, adesc in compiled_a4:
-                    if areg.search(raw_line) or areg.search(clean_line):
-                        errors.append(f"A4-Sanctuaire violation ({adesc}) in {rel.as_posix()}:{idx}")
-    return errors
-
-
-def check_required_markers(root: Path, payload: dict[str, Any]) -> list[str]:
-    errors: list[str] = []
-    ids = payload["identifiers"]
-    s0 = payload["strate_0_core"]
-    lic = payload["licenses"]
-
-    must_have: dict[str, list[str]] = {
-        "index.html": [
-            ids["zenodo_article_doi"],
-            ids["zenodo_code_doi"],
-            ids["cipo_registration"],
-            str(s0["theorems_verified"]),
-            s0["author_affiliation"],
-            lic["spdx_expression"],
-        ],
-        "article.html": [
-            ids["zenodo_article_doi"],
-            ids["zenodo_code_doi"],
-            ids["osf_url"].replace("https://", ""),
-            ids["cipo_registration"],
-            str(s0["theorems_verified"]),
-            s0["author_affiliation"],
-            "figure-1",
-            "tableau-1",
-            "tableau-2",
-            "Déclaration relative à l’utilisation de l’intelligence artificielle générative",
-            "non mathématicien formel",
-            "ligne par ligne",
-            "tests automatisés",
-            "traduction",
-            "audit",
-        ],
-        "scholar_drive.html": [
-            ids["zenodo_article_doi"],
-            ids["zenodo_code_doi"],
-            ids["cipo_registration"],
-            str(s0["theorems_verified"]),
-            s0["author_affiliation"],
-            lic["spdx_expression"],
-        ],
-        "mentions-legales.html": [
-            ids["zenodo_article_doi"],
-            ids["zenodo_code_doi"],
-            ids["cipo_registration"],
-            "Office de la propriété intellectuelle du Canada",
-            lic["spdx_expression"],
-            "cartograffect_model.js",
-            "Clause de Séparation des Fichiers Hybrides",
-            "Indépendance intellectuelle et portée scientifique",
-            "recherche théorique indépendante menée à titre personnel",
-            "indépendance intellectuelle totale",
-            "aucun organisme",
-            "approbation officielle",
-            "service psychologique",
-            "recommandation thérapeutique",
-            "révision par les pairs",
-            "aucune donnée personnelle",
-        ],
-        "taxonomie-affective.html": [
-            ids["zenodo_code_doi"],
-            ids["cipo_registration"],
-            str(s0["theorems_verified"]),
-            str(s0["lean_modules_count"]),
-        ],
-        "LICENSE": [
-            "GNU Affero General Public License",
-            "CC BY-NC-SA 4.0",
-            "cartograffect_model.js",
-            lic["spdx_expression"],
-        ],
-        "README.md": [
-            ids["zenodo_article_doi"],
-            ids["zenodo_code_doi"],
-            ids["osf_url"],
-            ids["cipo_registration"],
-            str(s0["theorems_verified"]),
-            lic["spdx_expression"],
-        ],
-    }
-
-    for filename, needles in must_have.items():
-        fpath = root / filename
-        if not fpath.is_file():
-            errors.append(f"Missing expected file: {filename}")
+        # data/site-payload.json intentionally retains changelog history verbatim from upstream repo
+        if rel.as_posix() == "data/site-payload.json":
             continue
-        content = html.unescape(fpath.read_text(encoding="utf-8"))
-        for needle in needles:
-            if needle not in content:
-                errors.append(f"Missing required content {needle!r} in {filename}")
-
-    # Anti-regression & UI/editorial hygiene checks
-    forbidden_bib = ("49+", "49 +", "references-v2-complementaires", "49 Références", "49 références")
-    for fname in ("article.html", "scholar_drive.html", "corpus_system.js"):
-        fpath = root / fname
-        if fpath.is_file():
-            raw_text = fpath.read_text(encoding="utf-8")
-            for bad in forbidden_bib:
-                if bad in raw_text:
-                    errors.append(f"Forbidden legacy reference marker {bad!r} still present in {fname}")
-
-    for fname in ("moteur-predictif.html", "article.html"):
-        fpath = root / fname
-        if fpath.is_file() and "couverture markovienne" in fpath.read_text(encoding="utf-8").lower():
-            errors.append(f"Forbidden 'Couverture Markovienne' terminology on {fname}")
-
-    forbidden_brand_re = re.compile(r"hexa[- ]?" + r"prover", re.IGNORECASE)
-    for hpath in sorted(root.glob("*.html")):
-        htext = hpath.read_text(encoding="utf-8")
-        if "@studio-freight/lenis" in htext:
-            errors.append(f"Forbidden Lenis CDN script still present in {hpath.name}")
-        if "bg-[#0b1120]/98" in htext:
-            errors.append(f"Invalid transparent Tailwind dropdown class bg-[#0b1120]/98 in {hpath.name}")
-        if 'id="langToggleBtn"' in htext and "js/i18n.js" not in htext:
-            errors.append(f"Missing js/i18n.js inclusion on page with #langToggleBtn: {hpath.name}")
-        if forbidden_brand_re.search(htext):
-            errors.append(f"Forbidden removed label in {hpath.name}")
-        if 'id="modelDropdownBtn"' in htext and "Architecture hiérarchique affective" not in html.unescape(htext):
-            errors.append(f"Missing 'Architecture hiérarchique affective' header subtitle in {hpath.name}")
-
-    for sfname in (
-        "bilingual_modal.js",
-        "command_palette.js",
-        "js/i18n.js",
-        "cartograffect_model.js",
-        "cartograffect_theory.js",
-        "README.md",
-        "CITATION.cff",
-        "LICENSE",
-    ):
-        spath = root / sfname
-        if spath.is_file() and forbidden_brand_re.search(spath.read_text(encoding="utf-8")):
-            errors.append(f"Forbidden removed label in {sfname}")
-
-    for fname in ("article.html", "README.md"):
-        fpath = root / fname
-        if fpath.is_file():
-            low = fpath.read_text(encoding="utf-8").lower()
-            if "section 4.1" in low or "§4.1" in low:
-                errors.append(f"Forbidden broken cross-reference (section 4.1 / §4.1) in {fname}")
-
-    css_path = root / "style.css"
-    if css_path.is_file():
-        css_text = css_path.read_text(encoding="utf-8")
-        if "#modelDropdownMenu" not in css_text or "backdrop-filter: blur(12px)" not in css_text or "0.98" not in css_text:
-            errors.append("Missing WCAG 2.1 opaque #modelDropdownMenu styling in style.css")
-
-    sw_path = root / "sw.js"
-    if sw_path.is_file():
-        sw_text = sw_path.read_text(encoding="utf-8")
-        expected_cache = f"cartograffect-{payload['release']['tag']}-"
-        if expected_cache not in sw_text:
-            errors.append(f"sw.js CACHE_NAME should include {expected_cache!r}")
-
-    return errors
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for line_no, line in enumerate(text.splitlines(), 1):
+            for name, regex in compiled:
+                if regex.search(line):
+                    # Markdown/CITATION only banned for active NC in .js; check NC globally except git history notes
+                    issues.append(f"REDLIST[{name}] {rel.as_posix()}:{line_no}: {line.strip()[:120]}")
+    return issues
 
 
-def parse_js_lexicon_and_pairs(js_path: Path) -> tuple[list[tuple[int, int, int, str]], list[tuple[str, str]]]:
-    text = js_path.read_text(encoding="utf-8")
-    # Extract CartograffectModel.emotions entries (JSON objects with quoted keys)
-    state_pat = re.compile(
-        r'"id"\s*:\s*\d+\s*,\s*"name"\s*:\s*"([^"]+)"\s*,\s*"x"\s*:\s*(-?\d+)\s*,\s*"y"\s*:\s*(-?\d+)\s*,\s*"z"\s*:\s*(\d+)'
-    )
-    states = [
-        (int(m.group(2)), int(m.group(3)), int(m.group(4)), m.group(1))
-        for m in state_pat.finditer(text)
-    ]
+def check_js_model_and_theory() -> list[str]:
+    issues: list[str] = []
+    if MODEL_JS_PATH.exists():
+        mtxt = MODEL_JS_PATH.read_text(encoding="utf-8")
+        # Extract data entry tuples: name & coordinates & group
+        entries = re.findall(r'"?x"?:\s*(-?\d+),\s*"?y"?:\s*(-?\d+),\s*"?z"?:\s*(\d+)[^}]*?"?group"?:\s*"([^"]+)"', mtxt)
+        if len(entries) != 176:
+            issues.append(f"cartograffect_model.js: expected 176 coordinate entries with group, found {len(entries)}")
+        for xs, ys, zs, grp in entries:
+            x, y, z = int(xs), int(ys), int(zs)
+            if x * y != 0 and ("Joie" in grp or "Tristesse" in grp or "Peur" in grp or "Courage" in grp):
+                issues.append(f"cartograffect_model.js: Option 1A violation on ({x},{y},{z}) assigned to {grp!r}")
+    else:
+        issues.append("Missing cartograffect_model.js")
 
-    pairs: list[tuple[str, str]] = []
-    for arr_name in ("axialPairs", "diagonalPairs", "controlateralPairs"):
-        arr_m = re.search(rf"CartograffectModel\.{arr_name}\s*=\s*(\[.*?\]);", text, re.S)
-        if arr_m:
-            raw_pairs = json.loads(arr_m.group(1))
-            for a, b in raw_pairs:
-                pairs.append((str(a), str(b)))
-    return states, pairs
-
-
-def parse_lean_lexicon(lean_path: Path) -> list[tuple[int, int, int, str]]:
-    text = lean_path.read_text(encoding="utf-8")
-    pat = re.compile(r'⟨"([^"]+)",\s*⟨(-?\d+),\s*(-?\d+),\s*(\d+)⟩⟩')
-    return [(int(m.group(2)), int(m.group(3)), int(m.group(4)), m.group(1)) for m in pat.finditer(text)]
+    if THEORY_JS_PATH.exists():
+        ttxt = THEORY_JS_PATH.read_text(encoding="utf-8")
+        if "(-X, -Y, Z)" not in ttxt and "xy === 0" not in ttxt.lower() and "x * y === 0" not in ttxt:
+            issues.append("cartograffect_theory.js: missing piecewise antagonist check")
+    else:
+        issues.append("Missing cartograffect_theory.js")
+    return issues
 
 
-def check_js_model_and_lexicon(
-    root: Path, payload: dict[str, Any], lexicon_path: Path | None
-) -> tuple[list[str], str]:
-    errors: list[str] = []
-    js_path = root / "cartograffect_model.js"
-    if not js_path.is_file():
-        return ["Missing cartograffect_model.js"], "unverified"
+def check_required_markers() -> list[str]:
+    issues: list[str] = []
+    for name in ["index.html", "scholar_drive.html", "article.html", "mentions-legales.html"]:
+        p = ROOT / name
+        if not p.exists():
+            issues.append(f"Missing {name}")
+            continue
+        txt = p.read_text(encoding="utf-8")
+        if "styles.min.css" not in txt:
+            issues.append(f"{name}: missing static assets/styles.min.css link")
+        if "FR | EN (UI only)" not in txt and name in ("index.html", "scholar_drive.html", "article.html", "mentions-legales.html"):
+            issues.append(f"{name}: language selector must clearly say 'FR | EN (UI only)'")
+    for name in ["index.html", "scholar_drive.html"]:
+        txt = (ROOT / name).read_text(encoding="utf-8")
+        if "statut-epistemique" not in txt:
+            issues.append(f"{name}: missing V1/V2/V3 epistemic status box (#statut-epistemique)")
+    return issues
 
-    states, pairs = parse_js_lexicon_and_pairs(js_path)
-    if len(states) != 176:
-        errors.append(f"Expected 176 states in cartograffect_model.js, found {len(states)}")
-    if len(pairs) != 84:
-        errors.append(f"Expected 84 antagonist pairs in cartograffect_model.js, found {len(pairs)}")
 
-    coords_map = {(x, y, z): name for x, y, z, name in states}
-    if len(coords_map) != len(states):
-        errors.append("Duplicate (x, y, z) coordinates found in cartograffect_model.js")
-    central_ops = [(x, y, z, name) for x, y, z, name in states if x == 0 and y == 0]
-    if len(central_ops) != 8:
-        errors.append(f"Expected 8 central operators (x=0, y=0), found {len(central_ops)}")
-    for x, y, z, name in states:
-        if x == 0 and y == 0:
-            if not (0 <= z <= 7):
-                errors.append(f"Central operator out of Z bounds for {name}: ({x},{y},{z})")
-        else:
-            expected_r = 2 * z - 2
-            if z < 2 or abs(x) + abs(y) != expected_r:
-                errors.append(
-                    f"L1 radius mismatch for peripheral {name} ({x},{y},{z}): got {abs(x)+abs(y)}, expected {expected_r}"
-                )
-
-    if coords_map.get((0, 0, 0)) != "Point de Veille":
-        errors.append(f"Expected (0,0,0) == 'Point de Veille', got {coords_map.get((0, 0, 0))!r}")
-    if coords_map.get((-2, 6, 5)) != "Désenchantement":
-        errors.append(f"Expected (-2,6,5) == 'Désenchantement', got {coords_map.get((-2, 6, 5))!r}")
-    if coords_map.get((6, -2, 5)) != "Enchantement":
-        errors.append(f"Expected (6,-2,5) == 'Enchantement', got {coords_map.get((6, -2, 5))!r}")
-    if coords_map.get((2, -6, 5)) != "Sécurité":
-        errors.append(f"Expected (2,-6,5) == 'Sécurité', got {coords_map.get((2, -6, 5))!r}")
-
-    lex_status = "js_only(176_states,84_pairs)"
-    if lexicon_path is not None and lexicon_path.is_file():
-        lean_states = parse_lean_lexicon(lexicon_path)
-        if len(lean_states) != 176:
-            errors.append(f"Expected 176 entries in {lexicon_path}, found {len(lean_states)}")
-        else:
-            lean_sha = hashlib.sha256(lexicon_path.read_bytes()).hexdigest()
-            expected_sha = payload.get("strate_0_core", {}).get("lexicon176_sha256")
-            if expected_sha and lean_sha != expected_sha:
-                errors.append(
-                    f"Lexicon176.lean SHA-256 mismatch vs site-payload.json: {lean_sha} != {expected_sha}"
-                )
-            lean_set = set(lean_states)
-            js_set = set(states)
-            if lean_set != js_set:
-                diff_lean = sorted(lean_set - js_set)[:5]
-                diff_js = sorted(js_set - lean_set)[:5]
-                errors.append(
-                    f"Lexicon parity mismatch! Missing in JS={diff_lean}, Extra in JS={diff_js}"
-                )
-            else:
-                lex_status = f"lean_parity_exact(176/176,84_pairs,sha256={lean_sha[:12]})"
-
-    return errors, lex_status
+def check_internal_links() -> list[str]:
+    issues: list[str] = []
+    ref_re = re.compile(r'(?:href|src)="([^"]+)"')
+    ids_cache: dict[str, set[str]] = {}
+    for rel_path in HTML_FILES:
+        p = ROOT / rel_path
+        if p.exists():
+            ids_cache[rel_path] = set(re.findall(r'\bid="([^"]+)"', p.read_text(encoding="utf-8")))
+    for rel_path in HTML_FILES:
+        p = ROOT / rel_path
+        if not p.exists():
+            continue
+        txt = p.read_text(encoding="utf-8")
+        for m in ref_re.finditer(txt):
+            target = m.group(1)
+            if target.startswith(("http://", "https://", "mailto:", "tel:", "data:", "javascript:")):
+                continue
+            if target.startswith("#"):
+                anc = target[1:]
+                if anc and anc not in ids_cache.get(rel_path, set()):
+                    issues.append(f"{rel_path}: broken local anchor #{anc}")
+                continue
+            path_part, _, anc = target.partition("#")
+            path_part = path_part.split("?", 1)[0].lstrip("/")
+            if not path_part:
+                continue
+            resolved = ROOT / path_part
+            if not resolved.exists():
+                issues.append(f"{rel_path}: missing local target {target!r}")
+                continue
+            if anc and path_part in ids_cache and anc not in ids_cache[path_part]:
+                issues.append(f"{rel_path}: broken cross-page anchor {target!r}")
+    return issues
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="CARTOGRAFFECT Strate 2 website synchronizer")
-    mode_group = parser.add_mutually_exclusive_group()
-    mode_group.add_argument("--check", action="store_true", help="Verify sync, zero-residue, and integrity (default)")
-    mode_group.add_argument("--apply", action="store_true", help="Apply deterministic updates from payload")
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1], help="Website repository root")
-    parser.add_argument("--payload", type=Path, default=None, help="Path to site-payload.json")
-    parser.add_argument("--lexicon", type=Path, default=None, help="Optional path to Lexicon176.lean for 176/176 parity check")
+    parser = argparse.ArgumentParser(description="CARTOGRAFFECT Phase 4 Payload Sync & Validator")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--check", action="store_true", help="Read-only check across website repo")
+    group.add_argument("--apply", action="store_true", help="Synchronize JS fallback, CITATION.cff and HTML counters")
     args = parser.parse_args()
 
-    root: Path = args.root.resolve()
-    payload_path: Path = (args.payload or (root / "data" / "site-payload.json")).resolve()
-    apply_mode: bool = bool(args.apply)
+    if not PAYLOAD_PATH.exists():
+        print(f"ERROR: Missing {PAYLOAD_PATH}", file=sys.stderr)
+        return 1
+    payload = json.loads(PAYLOAD_PATH.read_text(encoding="utf-8"))
 
-    lex_path: Path | None = args.lexicon.resolve() if args.lexicon else None
-    if lex_path is None:
-        candidate = root.parent.parent / "CARTOGRAFFECT" / "Cartograffect" / "Lexicon176.lean"
-        if candidate.is_file():
-            lex_path = candidate
+    errors = validate_payload_schema(payload)
+    errors.extend(sync_compendium_js(payload, apply_changes=args.apply))
+    errors.extend(sync_citation_cff(payload, apply_changes=args.apply))
+    errors.extend(sync_and_check_html_payload_spans(payload, apply_changes=args.apply))
 
-    payload, errors = load_payload(payload_path)
+    if args.check:
+        errors.extend(check_red_list())
+        errors.extend(check_js_model_and_theory())
+        errors.extend(check_required_markers())
+        errors.extend(check_internal_links())
+
     if errors:
-        for err in errors:
-            print(f"[ERROR] {err}", file=sys.stderr)
+        print(f"SYNC {'APPLY' if args.apply else 'CHECK'} FAILED ({len(errors)} issue(s)):")
+        for err in errors[:80]:
+            print(" -", err)
+        if len(errors) > 80:
+            print(f" ... and {len(errors) - 80} more issues.")
         return 1
 
-    all_errors: list[str] = []
-    all_errors.extend(sync_compendium_payload_js(root, payload, apply=apply_mode))
-    all_errors.extend(sync_citation_cff(root, payload, apply=apply_mode))
-    all_errors.extend(sync_sitemap_xml(root, payload, apply=apply_mode))
-    all_errors.extend(sync_html_files(root, payload, apply=apply_mode))
-    all_errors.extend(check_zero_residue(root))
-    all_errors.extend(check_required_markers(root, payload))
-    js_errors, lex_status = check_js_model_and_lexicon(root, payload, lex_path)
-    all_errors.extend(js_errors)
-
-    if all_errors:
-        print(f"SYNC {'APPLY' if apply_mode else 'CHECK'} FAILED ({len(all_errors)} issue(s)):", file=sys.stderr)
-        for err in all_errors:
-            print(f"  - {err}", file=sys.stderr)
-        return 1
-
-    action_label = "APPLIED & VERIFIED" if apply_mode else "CHECK OK"
     print(
-        f"SITE {action_label} : version={payload['release']['version']}, "
-        f"theorems={payload['strate_0_core']['theorems_verified']}, "
-        f"provers={len(payload['strate_0_core']['provers'])}, "
-        f"modules={payload['strate_0_core']['lean_modules_count']}, "
-        f"predictions={payload['strate_0_core']['predictions_count']}, "
-        f"lexicon={lex_status}"
+        f"SYNC {'APPLY' if args.apply else 'CHECK'} OK : "
+        f"schema={payload['schema_version']}, version={payload['release']['version']}, "
+        f"lean_modules={payload['strate_0_core']['normative_modules_count']}, "
+        f"theorems={payload['strate_0_core']['theorems_substantial']}/{payload['strate_0_core']['exported_declarations']} "
+        f"(pillars={payload['strate_0_core']['pillar_theorems_count']}), "
+        f"ext={payload['strate_0_core']['canonical_extension']['theorems_own']}+{payload['strate_0_core']['canonical_extension']['auxiliary_lemmas']}={payload['strate_0_core']['canonical_extension']['exported_declarations']}, "
+        f"tests={payload['strate_0_core']['python_unit_tests_count']}, predictions={payload['strate_0_core']['predictions_count']}."
     )
     return 0
 

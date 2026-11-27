@@ -1,5 +1,5 @@
 /**
- * CARTOGRAFFECT® — Native Bilingual UI Switcher (FR <-> EN)
+ * CARTOGRAFFECT — Native Bilingual UI Switcher (FR <-> EN)
  * Zero-dependency DOM translator that preserves [data-payload], SVG icons, and KaTeX nodes.
  */
 (function (root) {
@@ -45,15 +45,24 @@
         'Architecture & Navigation': 'Architecture & Navigation',
         'Références & Preuves': 'References & Proofs',
         'Article': 'Paper',
-        "L'Article (v2.1.0)": 'The Paper (v2.1.0)',
+        "L'Article (v3.0.0)": 'The Paper (v3.0.0)',
+    "Statut épistémique (V1 / V2 / V3) & Déclaration transparente d'usage de l'IA": 'Epistemic Status (V1 / V2 / V3) & Transparent AI Disclosure',
+    'V1 — Cohérence formelle': 'V1 — Formal Internal Consistency',
+    'V2 — Cadre théorique': 'V2 — Theoretical Framework',
+    'V3 — Corroboration empirique': 'V3 — Empirical Corroboration',
+    "Déclaration transparente d'usage de l'IA": 'Transparent AI Usage Disclosure',
+    'Noyau formel vérifié V1': 'Formal Core Verified V1',
+    'Postulat de conservation attentionnelle (Norme L₁) & discrétisation des positions': 'Heuristic Attentional Conservation Postulate (L₁ Norm) & State Discretization',
+    'Statut V1/V2/V3': 'Epistemic Status V1/V2/V3',
+    'Déclaration IA': 'AI Disclosure',
         'Compendium formel': 'Formal Compendium',
         'prouveurs) :': 'provers):',
         'prouveurs ·': 'provers ·',
         'GitHub Compendium': 'GitHub Compendium',
         "Architecture computationnelle et taxonomique des affects fondée sur le traitement prédictif, l'inférence active et la régulation allostatique.":
             'Computational and taxonomic architecture of affect grounded in predictive processing, active inference, and allostatic regulation.',
-        '© 2024–2026 Manuel Cabelguen, Ph. D. • Marque déposée • OPIC n° 1233199':
-            '© 2024–2026 Manuel Cabelguen, Ph. D. • Registered Trademark • CIPO #1233199',
+        '© 2024–2026 Manuel Cabelguen, Ph. D. • OPIC n° 1233199 (expression littéraire et graphique)':
+            '© 2024–2026 Manuel Cabelguen, Ph. D. • Original Literary & Graphic Copyright (CIPO #1233199)',
         '© 2024–2026 Manuel Cabelguen, Ph. D.': '© 2024–2026 Manuel Cabelguen, Ph. D.',
 
         // Index Hero, Nav, Bento & Visualizer Controls
@@ -217,7 +226,7 @@
         'Recul (R=8)': 'Stepping Back (R=8)',
         'Renforcement positif': 'Positive reinforcement',
         'Désir (+1, +1, 2)': 'Desire (+1, +1, 2)',
-        'Renforcement négatif / Sécurité': 'Negative reinforcement / Safety',
+        'Signal de sécurité / Accommodation': 'Safety cue / Accommodation',
         'Calme (+1, -1, 2)': 'Calm (+1, -1, 2)',
         'Punition négative / Obstacle': 'Negative punishment / Obstacle',
         'Colère (-1, +1, 2)': 'Anger (-1, +1, 2)',
@@ -315,9 +324,9 @@
         'Régime Pragmatique (C)': 'Pragmatic Regime (C)',
         'Transmettre ces coordonnées au niveau suivant :': 'Forward these coordinates to the next level:',
         'Figure 1 Interactive • Le Moteur prédictif (architecture fonctionnelle)': 'Interactive Figure 1 • The Predictive Engine (Functional Architecture)',
-        'Figure 1 Interactive • Le Moteur prédictif canonique (Arbitrages A1–A4)': 'Interactive Figure 1 • The Canonical Predictive Engine (Arbitrations A1–A4)',
+        'Figure 1 Interactive • Le Moteur prédictif canonique (v3.0 — Option 1A / 2a)': 'Interactive Figure 1 • The Canonical Predictive Engine (v3.0 — Option 1A / 2a)',
         'Figure 1 • Schéma Conceptuel': 'Figure 1 • Conceptual Diagram',
-        'Le Moteur prédictif canonique (Arbitrages A1–A4)': 'The Canonical Predictive Engine (Arbitrations A1–A4)',
+        'Le Moteur prédictif canonique (v3.0 — Option 1A / 2a)': 'The Canonical Predictive Engine (v3.0 — Option 1A / 2a)',
         'Interfaces & Couplages (A / C)': 'Interfaces & Couplings (A / C)',
         'Schéma vectoriel canonique à 2 boucles contra-rotatives et 6 circuits continus (source unique de vérité).':
             'Canonical vector diagram with 2 counter-rotating loops and 6 continuous circuits (single source of truth).',
@@ -333,7 +342,7 @@
         'Modèles génératifs & a priori': 'Generative models & priors',
         'Opérateur A : révisabilité (ρ)': 'Operator A: revisability (ρ)',
         'Réponse isolée sur 3 circuits (A0, A-, A+)': 'Isolated 3-circuit response (A0, A-, A+)',
-        "Projection directe du niveau d'opérabilité Z": 'Direct projection of operability level Z',
+        "Dynamique verticale pas-à-pas (Option 2a)": 'Stepwise vertical dynamics (Option 2a)',
         'INTERFACE PERCEPTIVE': 'PERCEPTUAL INTERFACE',
         'Monde contrôlable ? (+Y / -Y / 0)': 'Controllable world? (+Y / -Y / 0)',
         'Comparateur efférence / afférence': 'Efference / afference comparator',
@@ -399,7 +408,7 @@
         "mise à jour possible des croyances ; intégration de l'écart dans le modèle génératif.": 'possible belief updating; integration of discrepancy into the generative model.',
         'A+ (Certain / Décharge) :': 'A+ (Certain / Discharge):',
         '3. Interface Attentionnelle': '3. Attentional Interface',
-        'Projection directe de Z :': 'Direct Z projection:',
+        'Dynamique verticale pas-à-pas (Option 2a) :': 'Stepwise vertical dynamics (Option 2a):',
         'sans incrémentation forcée.': 'without forced step incrementation.',
         'Double notation (A2) :': 'Dual notation (A2):',
         'Indépendance P1 / P2 :': 'P1 / P2 Independence:',
@@ -488,8 +497,8 @@
         'Indépendance intellectuelle totale et démarche personnelle': 'Total Intellectual Independence & Personal Research Initiative',
         'Recherche théorique fondamentale : aucun service psychologique ni usage diagnostique': 'Fundamental Theoretical Research: No Psychological Service or Diagnostic Use',
         'Absence de collecte de données personnelles ou cliniques': 'No Collection of Personal or Clinical Data',
-        'Marque Déposée & Propriété Intellectuelle Fondamentale': 'Registered Trademark & Core Intellectual Property',
-        '3 Marque Déposée & Propriété Intellectuelle Fondamentale': '3 Registered Trademark & Core Intellectual Property',
+        'Droit d\'auteur sur l\'expression originale (OPIC n° 1233199)': 'Original Literary & Graphic Copyright (CIPO/OPIC No. 1233199)',
+        '3 Droit d\'auteur sur l\'expression originale (OPIC n° 1233199)': '3 Original Literary & Graphic Copyright (CIPO/OPIC No. 1233199)',
         'Directives de Protection Intellectuelle (Modèle Hybride)': 'Intellectual Property Guidelines (Hybrid Model)',
         '4 Directives de Protection Intellectuelle (Modèle Hybride)': '4 Intellectual Property Guidelines (Hybrid Model)',
         'Théorie, Ontologie & Textes': 'Theory, Ontology & Texts',
@@ -869,7 +878,7 @@
         "Publication théorique officielle : Cartographie des affects, une architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif. Manuel Cabelguen, Ph. D.": 'Official theoretical paper: Cartographie des affects, a hierarchical architecture of affective experience grounded in predictive processing. Manuel Cabelguen, Ph. D.',
         'Découvrez Cartograffect, la boussole intérieure de nos émotions. Une cartographie claire et interactive de nos 176 états affectifs fondée sur le traitement prédictif. Modèle scientifique par Manuel Cabelguen (Ph. D.).': 'Discover Cartograffect, the inner compass of our emotions. A clear, interactive mapping of our 176 affective states grounded in predictive processing. Scientific model by Manuel Cabelguen (Ph. D.).',
         "Composante 3 de Cartograffect : la Matrice Affective (AffectiveMatrix.lean, Fig. 3). Primauté hédonique lexicographique de l'Axe X, 6 régimes énergétiques, 8 prototypes Z=2 (Joie, Tristesse, Peur, Courage, Désir, Colère, Calme, Dégoût) et dissipation allostatique.": 'Component 3 of Cartograffect: the Affective Matrix (AffectiveMatrix.lean, Fig. 3). Lexicographic hedonic primacy of the X-axis, 6 energetic regimes, 8 prototypes Z=2 (Joy, Sadness, Fear, Courage, Desire, Anger, Calm, Disgust) and allostatic dissipation.',
-        'Cadre juridique, propriété intellectuelle, certificat OPIC 1233199, licences GNU AGPLv3 et CC BY-NC-SA 4.0 pour le projet Cartograffect et ses outils computationnels.': 'Legal framework, intellectual property, CIPO certificate 1233199, GNU AGPLv3 and CC BY-NC-SA 4.0 licenses for the Cartograffect project and its computational tools.',
+        'Cadre juridique, propriété intellectuelle, certificat OPIC 1233199, licences GNU AGPLv3 (AGPL-3.0-or-later) et CC BY 4.0 pour le projet Cartograffect et ses outils computationnels.': 'Legal framework, intellectual property, CIPO certificate 1233199, GNU AGPLv3 and CC BY 4.0 licenses for the Cartograffect project and its computational tools.',
         "Composante 1 de Cartograffect : le Moteur prédictif (PredictiveEngine.lean). Découvrez comment les Interfaces Perceptive, Subjective et Attentionnelle convertissent un écart de prédiction en gradients d'Attente (A) et de Contrôle (C) pondérés par la précision.": 'Component 1 of Cartograffect: the Predictive Engine (PredictiveEngine.lean). Discover how the Perceptive, Subjective, and Attentional Interfaces convert prediction error into precision-weighted Expectation (A) and Control (C) gradients.',
         'Composante 2 de Cartograffect : le Noyau affectif (CoreAffect.lean). Espace de coordonnées (X, Y, Z) pré-valencé, loi des couronnes |X|+|Y|=2Z-2, positions axiales instables et attracteurs diagonaux.': 'Component 2 of Cartograffect: the Affective Core (CoreAffect.lean). Pre-valenced (X, Y, Z) coordinate space, crown law |X|+|Y|=2Z-2, unstable axial positions, and diagonal attractors.',
         'Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés et Algorithme Cartograffect de Manuel Cabelguen (Ph. D.).': 'Theoretical Models & Foundations: conceptual and computational distinction between Affects, Emotions, and Feelings, comparative historical models, and the Cartograffect Algorithm by Manuel Cabelguen (Ph. D.).',
@@ -1047,41 +1056,36 @@
     }
 
     function updateLangButtonUI(lang) {
-        document.querySelectorAll('#langToggleBtn, [data-lang-toggle]').forEach((btn) => {
-            const directSpans = Array.from(btn.children || []).filter((el) => el.tagName === 'SPAN');
-            const labelSpan = (directSpans.length ? directSpans[directSpans.length - 1] : null) || btn.querySelector('span:last-of-type');
+        const isEn = lang === 'en';
+        document.querySelectorAll('#langToggleBtn, [data-lang-toggle]').forEach(function (btn) {
+            btn.setAttribute('aria-pressed', isEn ? 'true' : 'false');
+            const labelSpan = btn.querySelector('span:last-child') || btn.querySelector('span');
             if (labelSpan) {
-                labelSpan.innerHTML = lang === 'en'
-                    ? '<span class="text-slate-400">FR</span> <span class="text-slate-600">|</span> <strong class="text-indigo-300 font-bold">EN</strong>'
-                    : '<strong class="text-white font-bold">FR</strong> <span class="text-slate-500">|</span> <span class="text-slate-400">EN</span>';
+                labelSpan.textContent = isEn ? 'EN (UI only) | FR' : 'FR | EN (UI only)';
             }
-            btn.setAttribute('data-active-lang', lang);
-            btn.setAttribute('aria-pressed', String(lang === 'en'));
-            btn.setAttribute('title', lang === 'en' ? 'Passer l’interface en français' : 'Switch interface to English');
         });
     }
 
     function updateReferenceNoticeBanner(lang) {
+        if (typeof document === 'undefined') return;
         const existing = document.getElementById('i18nEnNoticeBanner');
-        const path = (window.location && window.location.pathname) ? window.location.pathname.toLowerCase() : '';
-        const isLongDoc = path.endsWith('article.html') || path.endsWith('mentions-legales.html');
-        if (lang !== 'en' || !isLongDoc) {
+        if (lang !== 'en') {
             if (existing) existing.remove();
             return;
         }
+        const targetParent = document.querySelector('main') || document.querySelector('.max-w-7xl') || document.body;
+        if (!targetParent) return;
         if (existing) return;
-        const main = document.querySelector('main') || document.body;
         const banner = document.createElement('div');
         banner.id = 'i18nEnNoticeBanner';
-        banner.className = 'no-i18n max-w-5xl mx-auto mt-4 mb-2 px-4 sm:px-6';
-        banner.innerHTML =
-            '<div class="rounded-xl border border-indigo-500/40 bg-indigo-950/70 px-4 py-3 text-xs sm:text-sm text-indigo-100 flex flex-wrap items-center justify-between gap-3 shadow-lg">' +
-            '<div><strong class="text-white">English Interface Active.</strong> Navigation, headings and controls are displayed in English. The full academic manuscript and legal notice remain in their authoritative French version.</div>' +
-            '<div class="flex items-center gap-2 shrink-0">' +
-            '<button type="button" onclick="window.openLangModal && window.openLangModal()" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-colors">EN Abstract &amp; Lexicon</button>' +
-            '<button type="button" onclick="window.CartograffectI18n && window.CartograffectI18n.setLang(\'fr\')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-600 transition-colors">Version FR</button>' +
-            '</div></div>';
-        main.insertBefore(banner, main.firstChild);
+        banner.setAttribute('role', 'status');
+        banner.className = 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4';
+        banner.innerHTML = '<div class="rounded-xl bg-indigo-950/80 border border-indigo-500/40 px-4 py-2.5 text-xs text-indigo-100 flex flex-wrap items-center justify-between gap-2 shadow-md"><div><strong class="font-mono text-indigo-300 uppercase tracking-wider mr-1.5">EN (UI only)</strong> Navigation menus, buttons, and interactive simulator controls are displayed in English. The scientific body text on this page remains in French (v3.0.0 canonical edition) pending the full English translation for international submission.</div><a href="article.html#resume" class="shrink-0 font-mono text-[11px] text-sky-300 hover:underline">English Abstract &rarr;</a></div>';
+        if (targetParent.firstChild) {
+            targetParent.insertBefore(banner, targetParent.firstChild);
+        } else {
+            targetParent.appendChild(banner);
+        }
     }
 
     function applyLanguage(lang, persist) {

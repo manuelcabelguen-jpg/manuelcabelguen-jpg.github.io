@@ -1,20 +1,10 @@
 /**
- * CARTOGRAFFECT® - Modèle Géométrique Officiel (176 entrées certifiées, parité 176/176 avec Cartograffect/Lexicon176.lean)
- * SPDX-License-Identifier: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0
- *
- * Compendium v2.1.0 — Vérification formelle multi-prouveurs (120 théorèmes constructifs, 0 sorry,
- * 10 modules .lean, 6 prouveurs : Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19)
- * Zenodo Compendium DOI : 10.5281/zenodo.23833938 | Article DOI : 10.5281/zenodo.24022795 | OSF : https://osf.io/z89sg
- * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
- * Sainte-Agathe-des-Monts, Québec, Canada • OPIC / CIPO n° 1233199
- *
- * CLAUSE HYBRIDE : La structure logicielle (exports UMD/CommonJS et accesseurs) est régie par GNU AGPLv3
- * (AGPL-3.0-or-later). La nomenclature canonique, les coordonnées (X, Y, Z), les 84 paires antagonistes et
- * la taxonomie des 176 états demeurent exclusivement régies par CC BY-NC-SA 4.0 (extraction commerciale interdite).
- *
- * 8 Opérateurs Centraux (Z=0 à Z=7) à (0,0,Z)
- * 168 Positions Affectives réparties sur 6 couronnes (Z=2 à Z=7) selon |X| + |Y| = 2Z - 2
- * Typologie : Axiales (X=0 ou Y=0), Diagonales (|X|=|Y|), Latérales (|X|≠|Y|)
+ * CARTOGRAFFECT - Modèle Géométrique Officiel (Annexe exploratoire 176 états, parité 176/176 avec Cartograffect/Lexicon176.lean)
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ * Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien • OPIC n° 1233199 (expression littéraire et graphique)
+ * Compendium v3.0.0 — Noyau formel vérifié V1 sous Lean 4.35.0 (8 modules normatifs, 148 théorèmes substantiels / 169 déclarations, 0 sorry)
+ * Discrétisation canonique : Z ∈ {0, 1, 2} (11 états) ; profondeur continue : Z ∈ [0, 5] ; pavage 176 (Z=0..7) = annexe exploratoire.
+ * Arbitrage Option 1A : groupes fonctionnels neutres (sans rattachement de (-X, +Y) à Joie ni de (+X, -Y) à Tristesse).
  */
 
 (function(root) {
@@ -41,7 +31,7 @@
                 "y": 0,
                 "z": 0,
                 "category": 0,
-                "group": "Veille",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z0",
                 "type": "operator",
                 "desc": "Origine structurale du modèle (0,0,0). Bassin attracteur de repos homéostatique de fond."
@@ -53,7 +43,7 @@
                 "y": 0,
                 "z": 1,
                 "category": 1,
-                "group": "Surprise",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z1",
                 "type": "operator",
                 "desc": "Opérateur ascendant de rupture et de saillance (0,0,1). Amorce la trajectoire des huit prototypes sans constituer de couronne."
@@ -65,7 +55,7 @@
                 "y": 0,
                 "z": 2,
                 "category": 2,
-                "group": "Anticipation",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z2",
                 "type": "operator",
                 "desc": "Opérateur central descendant d'orientation (0,0,2). Les huit prototypes fondamentaux sont ses satellites sur la première couronne."
@@ -77,7 +67,7 @@
                 "y": 2,
                 "z": 2,
                 "category": 2,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+2/Z2",
                 "type": "axial",
                 "desc": "Orientation géométrique axiale Y+2 (contrôlabilité pragmatique maximale, modèle interne stable sans besoin de révision épistémique, X=0)."
@@ -89,7 +79,7 @@
                 "y": -2,
                 "z": 2,
                 "category": 2,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-2/Z2",
                 "type": "axial",
                 "desc": "Orientation géométrique axiale Y-2 (incontrôlabilité pragmatique constatée, modèle interne stable sans besoin de révision épistémique, X=0)."
@@ -101,7 +91,7 @@
                 "y": 0,
                 "z": 2,
                 "category": 2,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-2/Y0/Z2",
                 "type": "axial",
                 "desc": "Orientation géométrique axiale X-2 (modèle interne rigide/non-révisable face à la menace)."
@@ -113,7 +103,7 @@
                 "y": 0,
                 "z": 2,
                 "category": 2,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+2/Y0/Z2",
                 "type": "axial",
                 "desc": "Orientation géométrique axiale X+2 (modèle interne révisable, engagement de mise à jour)."
@@ -125,7 +115,7 @@
                 "y": 1,
                 "z": 2,
                 "category": 2,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-1/Y+1/Z2",
                 "type": "diagonal",
                 "desc": "Position diagonale : modèle non révisable (X-1) et tentative de contrôle sur le monde (Y+1)."
@@ -137,7 +127,7 @@
                 "y": -1,
                 "z": 2,
                 "category": 2,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+1/Y-1/Z2",
                 "type": "diagonal",
                 "desc": "Position diagonale : modèle révisable (X+1) et acceptation de non-contrôle sur le monde (Y-1)."
@@ -149,7 +139,7 @@
                 "y": 1,
                 "z": 2,
                 "category": 2,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+1/Y+1/Z2",
                 "type": "diagonal",
                 "desc": "Position diagonale : modèle révisable (X+1) et contrôlabilité positive du monde (Y+1)."
@@ -161,7 +151,7 @@
                 "y": -1,
                 "z": 2,
                 "category": 2,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-1/Y-1/Z2",
                 "type": "diagonal",
                 "desc": "Position diagonale : modèle non révisable (X-1) et rejet d'un monde non contrôlable (Y-1)."
@@ -173,7 +163,7 @@
                 "y": 0,
                 "z": 3,
                 "category": 3,
-                "group": "Émoi",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z3",
                 "type": "operator",
                 "desc": "Opérateur central de la strate Z=3 (0,0,3). Suspension précédant l'allocation attentionnelle réactive."
@@ -185,7 +175,7 @@
                 "y": 4,
                 "z": 3,
                 "category": 3,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+4/Z3",
                 "type": "axial",
                 "desc": "Groupe Joie (axial) : projection vive d'énergie motrice sur le monde."
@@ -197,7 +187,7 @@
                 "y": -4,
                 "z": 3,
                 "category": 3,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-4/Z3",
                 "type": "axial",
                 "desc": "Groupe Tristesse (axial) : absence de relief et retrait du contrôle sensorimoteur."
@@ -209,7 +199,7 @@
                 "y": 0,
                 "z": 3,
                 "category": 3,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-4/Y0/Z3",
                 "type": "axial",
                 "desc": "Groupe Peur (axial) : attente fermée sur la potentialité d'un coût adaptatif."
@@ -221,7 +211,7 @@
                 "y": 0,
                 "z": 3,
                 "category": 3,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+4/Y0/Z3",
                 "type": "axial",
                 "desc": "Groupe Courage (axial) : ouverture épistémique maximale, recherche active d'information."
@@ -233,7 +223,7 @@
                 "y": 3,
                 "z": 3,
                 "category": 3,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-1/Y+3/Z3",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : choc de contrôle face à un modèle temporairement heurté."
@@ -245,7 +235,7 @@
                 "y": 3,
                 "z": 3,
                 "category": 3,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+1/Y+3/Z3",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : emballement positif conjoignant contrôle et révision fluide."
@@ -257,7 +247,7 @@
                 "y": -3,
                 "z": 3,
                 "category": 3,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+1/Y-3/Z3",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : relâchement consécutif à l'évitement d'une issue défavorable."
@@ -269,7 +259,7 @@
                 "y": -3,
                 "z": 3,
                 "category": 3,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-1/Y-3/Z3",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : douleur de la perte inscrite dans un modèle réticent."
@@ -281,7 +271,7 @@
                 "y": 1,
                 "z": 3,
                 "category": 3,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-3/Y+1/Z3",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : désorganisation réactive avec sursaut d'action motrice."
@@ -293,7 +283,7 @@
                 "y": -1,
                 "z": 3,
                 "category": 3,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-3/Y-1/Z3",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : sidération apeurée avec inhibition du contrôle."
@@ -305,7 +295,7 @@
                 "y": -1,
                 "z": 3,
                 "category": 3,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+3/Y-1/Z3",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : saisissement contemplatif face à une grandeur non modifiable."
@@ -317,7 +307,7 @@
                 "y": 1,
                 "z": 3,
                 "category": 3,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+3/Y+1/Z3",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : assurance motrice et calme épistémique en situation vive."
@@ -329,7 +319,7 @@
                 "y": 2,
                 "z": 3,
                 "category": 3,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-2/Y+2/Z3",
                 "type": "diagonal",
                 "desc": "Groupe Colère (diagonal) : amplification de l'effort correctif contre un obstacle irritant."
@@ -341,7 +331,7 @@
                 "y": -2,
                 "z": 3,
                 "category": 3,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+2/Y-2/Z3",
                 "type": "diagonal",
                 "desc": "Groupe Calme (diagonal) : dissolution des tensions somatiques et flexibilité interne."
@@ -353,7 +343,7 @@
                 "y": 2,
                 "z": 3,
                 "category": 3,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+2/Y+2/Z3",
                 "type": "diagonal",
                 "desc": "Groupe Désir (diagonal) : traction positive guidée par une promesse de renforcement."
@@ -365,7 +355,7 @@
                 "y": -2,
                 "z": 3,
                 "category": 3,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-2/Y-2/Z3",
                 "type": "diagonal",
                 "desc": "Groupe Dégoût (diagonal) : mouvement d'écartement physique et refus d'assimilation."
@@ -377,7 +367,7 @@
                 "y": 0,
                 "z": 4,
                 "category": 4,
-                "group": "Réserve",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z4",
                 "type": "operator",
                 "desc": "Opérateur central de la strate Z=4 (0,0,4). Suspension réflexive précédant l'évaluation relationnelle et sociale."
@@ -389,7 +379,7 @@
                 "y": 6,
                 "z": 4,
                 "category": 4,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+6/Z4",
                 "type": "axial",
                 "desc": "Groupe Joie (axial) : haute intensité de contrôle partagé ou célébré."
@@ -401,7 +391,7 @@
                 "y": -6,
                 "z": 4,
                 "category": 4,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-6/Z4",
                 "type": "axial",
                 "desc": "Strate Z=4 : Langueur (X0/Y-6/Z4). Position certifiée conforme au référentiel Lean 4."
@@ -413,7 +403,7 @@
                 "y": 0,
                 "z": 4,
                 "category": 4,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-6/Y0/Z4",
                 "type": "axial",
                 "desc": "Groupe Peur (axial) : oscillation paralysante des hypothèses d'action."
@@ -425,7 +415,7 @@
                 "y": 0,
                 "z": 4,
                 "category": 4,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+6/Y0/Z4",
                 "type": "axial",
                 "desc": "Groupe Courage (axial) : solidité affirmée des priors épistémiques."
@@ -437,7 +427,7 @@
                 "y": 4,
                 "z": 4,
                 "category": 4,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-2/Y+4/Z4",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : comparaison sociale avec désir d'appropriation du bien d'autrui."
@@ -449,7 +439,7 @@
                 "y": 5,
                 "z": 4,
                 "category": 4,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-1/Y+5/Z4",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : focalisation destructrice sur l'objet haï avec fort levier de contrôle."
@@ -461,7 +451,7 @@
                 "y": 5,
                 "z": 4,
                 "category": 4,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+1/Y+5/Z4",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : don relationnel bienveillant et adhésion féconde à l'autre."
@@ -473,7 +463,7 @@
                 "y": 4,
                 "z": 4,
                 "category": 4,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+2/Y+4/Z4",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : élan passionné et dévouement ardent."
@@ -485,7 +475,7 @@
                 "y": -4,
                 "z": 4,
                 "category": 4,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+2/Y-4/Z4",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : paix intérieure acquise par le renoncement au contrôle forcé."
@@ -497,7 +487,7 @@
                 "y": -5,
                 "z": 4,
                 "category": 4,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+1/Y-5/Z4",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : sentiment de complétude paisible sans revendication motrice."
@@ -509,7 +499,7 @@
                 "y": -4,
                 "z": 4,
                 "category": 4,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-2/Y-4/Z4",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : effondrement du modèle de soi sous le regard d'autrui."
@@ -521,7 +511,7 @@
                 "y": -5,
                 "z": 4,
                 "category": 4,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-1/Y-5/Z4",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : perte de sens et creux existentiel dénué de ressource."
@@ -533,7 +523,7 @@
                 "y": 2,
                 "z": 4,
                 "category": 4,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-4/Y+2/Z4",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : anticipation craintive diffuse couplée à une hyperactivation de contrôle."
@@ -545,7 +535,7 @@
                 "y": 1,
                 "z": 4,
                 "category": 4,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-5/Y+1/Z4",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : tension douloureuse de la privation d'un lien essentiel."
@@ -557,7 +547,7 @@
                 "y": -1,
                 "z": 4,
                 "category": 4,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-5/Y-1/Z4",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : dévalorisation d'autrui servant de bouclier défensif."
@@ -569,7 +559,7 @@
                 "y": -2,
                 "z": 4,
                 "category": 4,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-4/Y-2/Z4",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : suspicion vigilante limitant l'engagement dans la relation."
@@ -581,7 +571,7 @@
                 "y": 2,
                 "z": 4,
                 "category": 4,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+4/Y+2/Z4",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : valorisation légitime de la valeur de soi et des accomplissements."
@@ -593,7 +583,7 @@
                 "y": 1,
                 "z": 4,
                 "category": 4,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+5/Y+1/Z4",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : expansion harmonieuse des compétences et des liens."
@@ -605,7 +595,7 @@
                 "y": -1,
                 "z": 4,
                 "category": 4,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+5/Y-1/Z4",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : chaleur relationnelle désintéressée sans visée de maîtrise."
@@ -617,7 +607,7 @@
                 "y": -2,
                 "z": 4,
                 "category": 4,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+4/Y-2/Z4",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : reconnaissance joyeuse de l'excellence chez autrui."
@@ -629,7 +619,7 @@
                 "y": 3,
                 "z": 4,
                 "category": 4,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-3/Y+3/Z4",
                 "type": "diagonal",
                 "desc": "Groupe Colère (diagonal) : contrariété issue d'une attente contrariée persistante."
@@ -641,7 +631,7 @@
                 "y": -3,
                 "z": 4,
                 "category": 4,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+3/Y-3/Z4",
                 "type": "diagonal",
                 "desc": "Groupe Calme (diagonal) : accord volontaire avec ce qui est, sans résistance stérile."
@@ -653,7 +643,7 @@
                 "y": 3,
                 "z": 4,
                 "category": 4,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+3/Y+3/Z4",
                 "type": "diagonal",
                 "desc": "Groupe Désir (diagonal) : appréciation positive élevée consolidant le lien."
@@ -665,7 +655,7 @@
                 "y": -3,
                 "z": 4,
                 "category": 4,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-3/Y-3/Z4",
                 "type": "diagonal",
                 "desc": "Groupe Dégoût (diagonal) : exclusion catégorique d'un élément jugé inacceptable."
@@ -677,7 +667,7 @@
                 "y": 0,
                 "z": 5,
                 "category": 5,
-                "group": "Recul",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z5",
                 "type": "operator",
                 "desc": "Opérateur central de la strate Z=5 (0,0,5). Suspension intégratrice précédant l'ancrage des humeurs et dispositions durables."
@@ -689,7 +679,7 @@
                 "y": 8,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+8/Z5",
                 "type": "axial",
                 "desc": "Groupe Joie (axial) : sentiment souverain de capacité motrice et d'efficience globale."
@@ -701,7 +691,7 @@
                 "y": -8,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-8/Z5",
                 "type": "axial",
                 "desc": "Groupe Tristesse (axial) : conviction profonde d'incapacité d'action face au réel."
@@ -713,7 +703,7 @@
                 "y": 0,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-8/Y0/Z5",
                 "type": "axial",
                 "desc": "Groupe Peur (axial) : posture durable de suspicion et de fermeture des priors."
@@ -725,7 +715,7 @@
                 "y": 0,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+8/Y0/Z5",
                 "type": "axial",
                 "desc": "Groupe Courage (axial) : solidité sereine accordée à la fiabilité des prédictions."
@@ -737,7 +727,7 @@
                 "y": 7,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+1/Y+7/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : croyance inébranlable en son immunité face aux heurts du monde."
@@ -749,7 +739,7 @@
                 "y": 6,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+2/Y+6/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : lien stable et nourricier envers des figures d'ancrage."
@@ -761,7 +751,7 @@
                 "y": 5,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+3/Y+5/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : dévouement actif et structuré envers un projet ou un être."
@@ -773,7 +763,7 @@
                 "y": 6,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-2/Y+6/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : lucidité amère consécutive à l'effondrement d'une illusion."
@@ -785,7 +775,7 @@
                 "y": 5,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-3/Y+5/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : rejet actif de ce qui ne s'aligne pas avec le cadre rigide."
@@ -797,7 +787,7 @@
                 "y": 7,
                 "z": 5,
                 "category": 5,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-1/Y+7/Z5",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral) : révolte contre l'iniquité perçue du monde."
@@ -809,7 +799,7 @@
                 "y": -5,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+3/Y-5/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : tranquillité d'âme profonde affranchie des soucis immédiats."
@@ -821,7 +811,7 @@
                 "y": -6,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+2/Y-6/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : sentiment stabilisé d'abri et de protection éprouvée."
@@ -833,7 +823,7 @@
                 "y": -7,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+1/Y-7/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : acceptation calme de la temporalité sans forçage."
@@ -845,7 +835,7 @@
                 "y": -6,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-2/Y-6/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : prévision systématique d'issues défavorables."
@@ -857,7 +847,7 @@
                 "y": -5,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-3/Y-5/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : hermétisme protecteur bloquant les échanges extérieurs."
@@ -869,7 +859,7 @@
                 "y": -7,
                 "z": 5,
                 "category": 5,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-1/Y-7/Z5",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral) : effondrement de toute perspective d'issue positive."
@@ -881,7 +871,7 @@
                 "y": 2,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-6/Y+2/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : vulnérabilité permanente avec hypervigilance motrice."
@@ -893,7 +883,7 @@
                 "y": 3,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-5/Y+3/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : souci persistant anticipant des dérèglements futurs."
@@ -905,7 +895,7 @@
                 "y": 1,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y+1/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : intolérance à l'attente avec agitation fébrile."
@@ -917,7 +907,7 @@
                 "y": -1,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y-1/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : conscience aiguë de sa fragilité somatique ou affective."
@@ -929,7 +919,7 @@
                 "y": -2,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-6/Y-2/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : désinvestissement affectif protecteur face aux menaces."
@@ -941,7 +931,7 @@
                 "y": -3,
                 "z": 5,
                 "category": 5,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-5/Y-3/Z5",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral) : retrait concerté des politiques d'action partagées."
@@ -953,7 +943,7 @@
                 "y": 2,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+6/Y+2/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : anticipation confiante de dynamiques favorables."
@@ -965,7 +955,7 @@
                 "y": 3,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+5/Y+3/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : réceptivité bienveillante aux nouveautés du monde."
@@ -977,7 +967,7 @@
                 "y": 1,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y+1/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : aspiration active et nourrie vers un avenir désirable."
@@ -989,7 +979,7 @@
                 "y": -2,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+6/Y-2/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : ravissement contemplatif stabilisé face à la beauté."
@@ -1001,7 +991,7 @@
                 "y": -3,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+5/Y-3/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : bienveillance patiente accueillant la divergence."
@@ -1013,7 +1003,7 @@
                 "y": -1,
                 "z": 5,
                 "category": 5,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y-1/Z5",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral) : adhésion rigoureuse aux équilibres éthiques équitables."
@@ -1025,7 +1015,7 @@
                 "y": 4,
                 "z": 5,
                 "category": 5,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-4/Y+4/Z5",
                 "type": "diagonal",
                 "desc": "Groupe Colère (diagonal) : discordance durable entre attente exigeante et réalité."
@@ -1037,7 +1027,7 @@
                 "y": -4,
                 "z": 5,
                 "category": 5,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+4/Y-4/Z5",
                 "type": "diagonal",
                 "desc": "Groupe Calme (diagonal) : contentement éprouvé d'un ajustement réussi."
@@ -1049,7 +1039,7 @@
                 "y": 4,
                 "z": 5,
                 "category": 5,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+4/Y+4/Z5",
                 "type": "diagonal",
                 "desc": "Groupe Désir (diagonal) : attention captivée durablement par un domaine ou un être."
@@ -1061,7 +1051,7 @@
                 "y": -4,
                 "z": 5,
                 "category": 5,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-4/Y-4/Z5",
                 "type": "diagonal",
                 "desc": "Groupe Dégoût (diagonal) : atonie et délaissement complet sans animosité."
@@ -1073,7 +1063,7 @@
                 "y": 0,
                 "z": 6,
                 "category": 6,
-                "group": "Saisissement",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z6",
                 "type": "operator",
                 "desc": "Strate Z=6 : Saisissement (X0/Y0/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1085,7 +1075,7 @@
                 "y": 10,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+10/Z6",
                 "type": "axial",
                 "desc": "Groupe Joie (axial)"
@@ -1097,7 +1087,7 @@
                 "y": -10,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-10/Z6",
                 "type": "axial",
                 "desc": "Groupe Tristesse (axial)"
@@ -1109,7 +1099,7 @@
                 "y": 0,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-10/Y0/Z6",
                 "type": "axial",
                 "desc": "Groupe Peur (axial)"
@@ -1121,7 +1111,7 @@
                 "y": 0,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+10/Y0/Z6",
                 "type": "axial",
                 "desc": "Groupe Courage (axial)"
@@ -1133,7 +1123,7 @@
                 "y": 7,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+3/Y+7/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1145,7 +1135,7 @@
                 "y": 7,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-3/Y+7/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1157,7 +1147,7 @@
                 "y": 6,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+4/Y+6/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1169,7 +1159,7 @@
                 "y": 6,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-4/Y+6/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1181,7 +1171,7 @@
                 "y": 8,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+2/Y+8/Z6",
                 "type": "lateral",
                 "desc": "Strate Z=6 : Fougue (X+2/Y+8/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1193,7 +1183,7 @@
                 "y": 8,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-2/Y+8/Z6",
                 "type": "lateral",
                 "desc": "Strate Z=6 : Frénésie (X-2/Y+8/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1205,7 +1195,7 @@
                 "y": 9,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+1/Y+9/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1217,7 +1207,7 @@
                 "y": 9,
                 "z": 6,
                 "category": 6,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-1/Y+9/Z6",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1229,7 +1219,7 @@
                 "y": -7,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+3/Y-7/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1241,7 +1231,7 @@
                 "y": -7,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-3/Y-7/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1253,7 +1243,7 @@
                 "y": -6,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+4/Y-6/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1265,7 +1255,7 @@
                 "y": -6,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-4/Y-6/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1277,7 +1267,7 @@
                 "y": -8,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+2/Y-8/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1289,7 +1279,7 @@
                 "y": -8,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-2/Y-8/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1301,7 +1291,7 @@
                 "y": -9,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+1/Y-9/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1313,7 +1303,7 @@
                 "y": -9,
                 "z": 6,
                 "category": 6,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-1/Y-9/Z6",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1325,7 +1315,7 @@
                 "y": 4,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-6/Y+4/Z6",
                 "type": "lateral",
                 "desc": "Strate Z=6 : Rancœur (X-6/Y+4/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1337,7 +1327,7 @@
                 "y": -4,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-6/Y-4/Z6",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1349,7 +1339,7 @@
                 "y": 3,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y+3/Z6",
                 "type": "lateral",
                 "desc": "Strate Z=6 : Affolement (X-7/Y+3/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1361,7 +1351,7 @@
                 "y": -3,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y-3/Z6",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1373,7 +1363,7 @@
                 "y": 2,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-8/Y+2/Z6",
                 "type": "lateral",
                 "desc": "Strate Z=6 : Fébrilité (X-8/Y+2/Z6). Position certifiée conforme au référentiel Lean 4."
@@ -1385,7 +1375,7 @@
                 "y": -2,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-8/Y-2/Z6",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1397,7 +1387,7 @@
                 "y": 1,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-9/Y+1/Z6",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1409,7 +1399,7 @@
                 "y": -1,
                 "z": 6,
                 "category": 6,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-9/Y-1/Z6",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1421,7 +1411,7 @@
                 "y": 4,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+6/Y+4/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1433,7 +1423,7 @@
                 "y": -4,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+6/Y-4/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1445,7 +1435,7 @@
                 "y": 3,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y+3/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1457,7 +1447,7 @@
                 "y": -3,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y-3/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1469,7 +1459,7 @@
                 "y": 2,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+8/Y+2/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1481,7 +1471,7 @@
                 "y": -2,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+8/Y-2/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1493,7 +1483,7 @@
                 "y": 1,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+9/Y+1/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1505,7 +1495,7 @@
                 "y": -1,
                 "z": 6,
                 "category": 6,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+9/Y-1/Z6",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1517,7 +1507,7 @@
                 "y": 5,
                 "z": 6,
                 "category": 6,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-5/Y+5/Z6",
                 "type": "diagonal",
                 "desc": "Groupe Colère (diagonal)"
@@ -1529,7 +1519,7 @@
                 "y": -5,
                 "z": 6,
                 "category": 6,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+5/Y-5/Z6",
                 "type": "diagonal",
                 "desc": "Groupe Calme (diagonal)"
@@ -1541,7 +1531,7 @@
                 "y": 5,
                 "z": 6,
                 "category": 6,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+5/Y+5/Z6",
                 "type": "diagonal",
                 "desc": "Groupe Désir (diagonal)"
@@ -1553,7 +1543,7 @@
                 "y": -5,
                 "z": 6,
                 "category": 6,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-5/Y-5/Z6",
                 "type": "diagonal",
                 "desc": "Groupe Dégoût (diagonal)"
@@ -1565,7 +1555,7 @@
                 "y": 0,
                 "z": 7,
                 "category": 7,
-                "group": "Suspension",
+                "group": "Opérateur central",
                 "code": "X0/Y0/Z7",
                 "type": "operator",
                 "desc": "Opérateur central de la strate Z=7 (0,0,7)."
@@ -1577,7 +1567,7 @@
                 "y": 12,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X0/Y+12/Z7",
                 "type": "axial",
                 "desc": "Groupe Joie (axial)"
@@ -1589,7 +1579,7 @@
                 "y": -12,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X0/Y-12/Z7",
                 "type": "axial",
                 "desc": "Groupe Tristesse (axial)"
@@ -1601,7 +1591,7 @@
                 "y": 0,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-12/Y0/Z7",
                 "type": "axial",
                 "desc": "Groupe Peur (axial)"
@@ -1613,7 +1603,7 @@
                 "y": 0,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+12/Y0/Z7",
                 "type": "axial",
                 "desc": "Groupe Courage (axial)"
@@ -1625,7 +1615,7 @@
                 "y": 10,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+2/Y+10/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1637,7 +1627,7 @@
                 "y": 10,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-2/Y+10/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1649,7 +1639,7 @@
                 "y": 8,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+4/Y+8/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1661,7 +1651,7 @@
                 "y": 8,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-4/Y+8/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1673,7 +1663,7 @@
                 "y": 11,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+1/Y+11/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Renaissance (X+1/Y+11/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1685,7 +1675,7 @@
                 "y": 11,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-1/Y+11/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Vertige (X-1/Y+11/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1697,7 +1687,7 @@
                 "y": 9,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+3/Y+9/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1709,7 +1699,7 @@
                 "y": 9,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-3/Y+9/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1721,7 +1711,7 @@
                 "y": 7,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X+5/Y+7/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1733,7 +1723,7 @@
                 "y": 7,
                 "z": 7,
                 "category": 7,
-                "group": "Joie",
+                "group": "Contrôle +",
                 "code": "X-5/Y+7/Z7",
                 "type": "lateral",
                 "desc": "Groupe Joie (latéral)"
@@ -1745,7 +1735,7 @@
                 "y": -10,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+2/Y-10/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1757,7 +1747,7 @@
                 "y": -10,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-2/Y-10/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1769,7 +1759,7 @@
                 "y": -8,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+4/Y-8/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1781,7 +1771,7 @@
                 "y": -8,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-4/Y-8/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1793,7 +1783,7 @@
                 "y": -11,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+1/Y-11/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Pérennité (X+1/Y-11/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1805,7 +1795,7 @@
                 "y": -11,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-1/Y-11/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1817,7 +1807,7 @@
                 "y": -9,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+3/Y-9/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1829,7 +1819,7 @@
                 "y": -9,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-3/Y-9/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1841,7 +1831,7 @@
                 "y": -7,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X+5/Y-7/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1853,7 +1843,7 @@
                 "y": -7,
                 "z": 7,
                 "category": 7,
-                "group": "Tristesse",
+                "group": "Contrôle −",
                 "code": "X-5/Y-7/Z7",
                 "type": "lateral",
                 "desc": "Groupe Tristesse (latéral)"
@@ -1865,7 +1855,7 @@
                 "y": 2,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-10/Y+2/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Hantise (X-10/Y+2/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1877,7 +1867,7 @@
                 "y": -2,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-10/Y-2/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1889,7 +1879,7 @@
                 "y": 4,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-8/Y+4/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1901,7 +1891,7 @@
                 "y": -4,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-8/Y-4/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1913,7 +1903,7 @@
                 "y": 1,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-11/Y+1/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Précarité (X-11/Y+1/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1925,7 +1915,7 @@
                 "y": -1,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-11/Y-1/Z7",
                 "type": "lateral",
                 "desc": "Strate Z=7 : Déchéance (X-11/Y-1/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -1937,7 +1927,7 @@
                 "y": 3,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-9/Y+3/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1949,7 +1939,7 @@
                 "y": -3,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-9/Y-3/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1961,7 +1951,7 @@
                 "y": 5,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y+5/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1973,7 +1963,7 @@
                 "y": -5,
                 "z": 7,
                 "category": 7,
-                "group": "Peur",
+                "group": "Attente −",
                 "code": "X-7/Y-5/Z7",
                 "type": "lateral",
                 "desc": "Groupe Peur (latéral)"
@@ -1985,7 +1975,7 @@
                 "y": 2,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+10/Y+2/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -1997,7 +1987,7 @@
                 "y": -2,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+10/Y-2/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2009,7 +1999,7 @@
                 "y": 4,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+8/Y+4/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2021,7 +2011,7 @@
                 "y": -4,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+8/Y-4/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2033,7 +2023,7 @@
                 "y": 1,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+11/Y+1/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2045,7 +2035,7 @@
                 "y": -1,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+11/Y-1/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2057,7 +2047,7 @@
                 "y": 3,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+9/Y+3/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2069,7 +2059,7 @@
                 "y": -3,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+9/Y-3/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2081,7 +2071,7 @@
                 "y": 5,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y+5/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2093,7 +2083,7 @@
                 "y": -5,
                 "z": 7,
                 "category": 7,
-                "group": "Courage",
+                "group": "Attente +",
                 "code": "X+7/Y-5/Z7",
                 "type": "lateral",
                 "desc": "Groupe Courage (latéral)"
@@ -2105,7 +2095,7 @@
                 "y": 6,
                 "z": 7,
                 "category": 7,
-                "group": "Colère",
+                "group": "Affrontement",
                 "code": "X-6/Y+6/Z7",
                 "type": "diagonal",
                 "desc": "Strate Z=7 : Rage (X-6/Y+6/Z7). Position certifiée conforme au référentiel Lean 4."
@@ -2117,7 +2107,7 @@
                 "y": -6,
                 "z": 7,
                 "category": 7,
-                "group": "Calme",
+                "group": "Accommodation",
                 "code": "X+6/Y-6/Z7",
                 "type": "diagonal",
                 "desc": "Groupe Calme (diagonal)"
@@ -2129,7 +2119,7 @@
                 "y": 6,
                 "z": 7,
                 "category": 7,
-                "group": "Désir",
+                "group": "Synergie +",
                 "code": "X+6/Y+6/Z7",
                 "type": "diagonal",
                 "desc": "Groupe Désir (diagonal)"
@@ -2141,7 +2131,7 @@
                 "y": -6,
                 "z": 7,
                 "category": 7,
-                "group": "Dégoût",
+                "group": "Synergie −",
                 "code": "X-6/Y-6/Z7",
                 "type": "diagonal",
                 "desc": "Groupe Dégoût (diagonal)"

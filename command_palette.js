@@ -1,7 +1,7 @@
 /**
- * CARTOGRAFFECT® - Quick Command & Search Palette (Cmd+K / Ctrl+K)
+ * CARTOGRAFFECT - Quick Command & Search Palette (Cmd+K / Ctrl+K)
  * Compatible Tailwind CDN / Vanilla JS - Thème Cosmic Glass
- * Développé pour la plateforme scientifique CARTOGRAFFECT®
+ * Développé pour la plateforme scientifique CARTOGRAFFECT
  */
 (function () {
   'use strict';
@@ -24,12 +24,12 @@
     return Boolean(typeof window !== 'undefined' && window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
   }
 
-  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v2.1.0)
+  // 1. Données d'indexation initiale (synchronisée via data/site-payload.json avec repli statique v3.0.0)
   function buildDefaultIndex() {
     const en = isEn();
     const P = (typeof window !== 'undefined' && window.CartograffectPayload) ? window.CartograffectPayload : null;
-    const tag = P ? P.get('release.tag', 'v2.1.0') : 'v2.1.0';
-    const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
+    const tag = P ? P.get('release.tag', 'v3.0.0') : 'v3.0.0';
+    const theorems = P ? P.get('strate_0_core.theorems_substantial', 148) : 148;
     const proversCount = P ? P.get('strate_0_core.provers_count', 6) : 6;
     const leanModulesCount = P ? P.get('strate_0_core.lean_modules_count', 10) : 10;
     const statesCount = P ? P.get('strate_0_core.states_count', 176) : 176;
@@ -142,7 +142,7 @@
             </div>
             <div class="flex items-center gap-1.5 text-indigo-300 font-semibold text-[11px]">
               <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
-              <span>CARTOGRAFFECT® Index</span>
+              <span>CARTOGRAFFECT Index</span>
             </div>
           </div>
         </div>
@@ -264,7 +264,7 @@
         resultsList.innerHTML = `
           <li class="px-4 py-8 text-center text-sm text-slate-400 flex flex-col items-center gap-2">
             <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span>${en ? 'No matching results in the CARTOGRAFFECT® model.' : 'Aucun résultat correspondant dans le modèle CARTOGRAFFECT®.'}</span>
+            <span>${en ? 'No matching results in the CARTOGRAFFECT model.' : 'Aucun résultat correspondant dans le modèle CARTOGRAFFECT.'}</span>
           </li>`;
         return;
       }

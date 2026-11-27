@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
-    <script src="maintenance_guard.js"></script>
     <title>CARTOGRAFFECT | La Boussole Intérieure de nos Émotions</title>
     <meta name="description" content="Découvrez Cartograffect, la boussole intérieure de nos émotions. Une cartographie claire et interactive de nos 176 états affectifs fondée sur le traitement prédictif. Modèle scientifique par Manuel Cabelguen (Ph. D.).">
     
@@ -57,8 +56,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="assets/tailwind.config.js"></script>
+    <link rel="stylesheet" href="assets/styles.min.css">
     
     <!-- D3.js (deferred to prevent render-blocking) -->
     <script defer src="https://d3js.org/d3.v7.min.js"></script>
@@ -87,7 +85,7 @@
             <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
-                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique affective</span>
                 </div>
             </a>
@@ -152,7 +150,7 @@
 
                 <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
                     <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                    <span>FR | EN</span>
+                    <span>FR | EN (UI only)</span>
                 </button>
 
                 <a href="taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
@@ -210,14 +208,14 @@
                                 La Boussole Intérieure de nos <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">Émotions</span>
                             </h1>
                             <p class="text-sm sm:text-base font-semibold text-purple-200 mt-2">
-                                Comprendre, cartographier et réguler ce que nous ressentons : la première carte interactive de l'esprit prédictif
+                                Comprendre, cartographier et modéliser ce que nous ressentons : une architecture théorique formalisée des processus affectifs en inférence active
                             </p>
                             <div class="inline-flex flex-wrap items-center gap-2 mt-3 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-purple-500/20 text-xs text-slate-300">
                                 <span class="font-bold text-white">Manuel Cabelguen</span>
                                 <span class="text-slate-500">&bull;</span>
                                 <span>Ph. D. en psychologie, <span data-payload="author_affiliation">Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada</span></span>
                                 <span class="text-slate-500">&bull;</span>
-                                <span class="text-purple-300 font-mono font-medium">CARTOGRAFFECT&reg; (Marque déposée) &bull; OPIC n° 1233199</span>
+                                <span class="text-purple-300 font-mono font-medium">CARTOGRAFFECT &bull; OPIC n° 1233199 (expression littéraire et graphique) &bull; V3 = 0 (non diagnostique)</span>
                             </div>
                         </div>
 
@@ -246,7 +244,7 @@
                         <!-- Synthèse vulgarisée -->
                         <div class="space-y-3 text-slate-300 text-sm leading-relaxed">
                             <p>
-                                <strong>La révolution de l'esprit prédictif :</strong> Notre cerveau ne subit pas passivement le monde. Il anticipe en permanence ce qui devrait se produire. Dès qu'un événement imprévu survient, une <em>surprise</em> (énergie libre) jaillit.
+                                <strong>L'hypothèse du cerveau prédictif :</strong> Notre cerveau ne subit pas passivement le monde. Il anticipe en permanence ce qui devrait se produire. Dès qu'un événement imprévu survient, une <em>surprise</em> (énergie libre) jaillit.
                             </p>
                             <p class="text-slate-300 text-xs sm:text-sm">
                                 Pour rétablir son équilibre, notre esprit évalue instantanément deux leviers universels : 
@@ -469,7 +467,7 @@
                                     «&nbsp;Je me suis appliqué à ne pas rire des actions humaines, à ne pas les déplorer, ni à les détester, mais à les <strong>comprendre</strong>. J'ai considéré les affects non comme des vices, mais comme des propriétés qui appartiennent à la nature humaine.&nbsp;»
                                 </blockquote>
                                 <p class="text-xs text-slate-400">
-                                    <strong class="text-purple-300">L'apport Cartograffect&nbsp;:</strong> L'émotion n'est pas une faute morale. Elle obéit à des lois d'équilibre aussi rigoureuses que la géométrie.
+                                    <strong class="text-purple-300">L'apport Cartograffect&nbsp;:</strong> L'émotion n'est pas une faute morale : le modèle la formalise comme un <em>postulat géométrique heuristique</em> d'allocation attentionnelle (en attente de corroboration empirique V3).
                                 </p>
                             </div>
                             <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400">
@@ -796,7 +794,7 @@
                             3. La Règle d'Équilibre : <span class="text-emerald-400">Pourquoi nous ne pouvons pas tout ressentir à la fois</span>
                         </h2>
                         <p class="text-base text-slate-300 leading-relaxed font-light">
-                            Pourquoi ne peut-on pas être simultanément en rage totale et en contemplation sereine ? Parce que notre esprit dispose d'une énergie attentionnelle finie régie par une loi d'équilibre naturel :
+                            Comment le modèle représente-t-il l'incompatibilité entre états affectifs contrastés ? Par un postulat géométrique heuristique d'énergie attentionnelle finie bornée en norme L₁ :
                         </p>
 
                         <div class="p-4 rounded-2xl bg-cosmic-900 border border-emerald-500/40 font-mono text-center space-y-2">
@@ -810,7 +808,7 @@
                                 </span>
                             </div>
                             <div class="text-xs text-slate-400">
-                                Loi universelle de conservation attentionnelle (Norme L₁) &amp; dénombrement des positions
+                                Postulat de conservation attentionnelle (Norme L₁) &amp; discrétisation des positions
                             </div>
                         </div>
 
@@ -822,7 +820,7 @@
                                 Sur le plan psychologique, c'est identique : si vous concentrez toute votre énergie dans l'action sur la situation (|Y| = 2), il ne reste plus de ressource pour réviser votre attente (|X| = 0). C'est l'axe axial de la <strong>Joie</strong> (monde conquis) ou de la <strong>Tristesse</strong> (monde perdu).
                             </p>
                             <p class="text-slate-400 text-xs">
-                                Cette loi déploie exactement <strong>176 entrées</strong> (8 opérateurs centraux et 168 positions) réparties en couronnes fermées sans le moindre flou arbitraire.
+                                Le cœur normatif v3.0 se limite à la discrétisation canonique <strong>Z &isin; {0, 1, 2}</strong> (<strong>11 états</strong> : 3 opérateurs centraux et 8 prototypes primaires) dans une profondeur continue <strong>Z &isin; [0, 5]</strong>. Le pavage de <strong>176 entrées</strong> (8 opérateurs et 168 positions sur Z=0..7) relève d'une <strong>annexe géométrique exploratoire</strong>.
                             </p>
                         </div>
                     </div>
@@ -965,9 +963,9 @@
                                 <span class="text-xs font-mono font-bold text-pink-400">STRATE Z=3</span>
                                 <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-pink-300">R=4</span>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Émoi — Émotions Réactives &amp; Sociales</h3>
+                            <h3 class="text-sm font-bold text-white">Émoi — Réactions différenciées (Z &isin; [0, 5], illustratif)</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
-                                L'autre entre dans le calcul : honte, fierté, empathie, culpabilité, reconnaissance.
+                                Au-delà de Z = 2, les positions relèvent de la profondeur continue Z &isin; [0, 5] avec repères illustratifs non normatifs (ex. euphorie, effroi, découragement, détermination).
                             </p>
                         </div>
 
@@ -998,24 +996,24 @@
                         <!-- Z=6 -->
                         <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-mono font-bold text-rose-400">STRATE Z=6</span>
+                                <span class="text-xs font-mono font-bold text-rose-400">STRATE Z=6 (ANNEXE 176)</span>
                                 <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-rose-300">R=10</span>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Saisissement — Identités Affectives</h3>
+                            <h3 class="text-sm font-bold text-white">Saisissement — Annexe exploratoire 176</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
-                                Dépassement de soi : sens de la justice, engagement altruiste, dévouement à un idéal.
+                                Hors cœur normatif v3.0 (<code>Lexicon176</code>, paires symétriques contrastées positives et négatives).
                             </p>
                         </div>
 
                         <!-- Z=7 -->
                         <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-750 hover:border-purple-500/50 transition-all space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-mono font-bold text-cyan-400">STRATE Z=7</span>
+                                <span class="text-xs font-mono font-bold text-cyan-400">STRATE Z=7 (ANNEXE 176)</span>
                                 <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-cyan-300">R=12</span>
                             </div>
-                            <h3 class="text-sm font-bold text-white">Suspension — Horizon Existentiel</h3>
+                            <h3 class="text-sm font-bold text-white">Suspension — Annexe exploratoire 176</h3>
                             <p class="text-[11px] text-slate-400 leading-relaxed">
-                                Sérénité totale : sentiment d'unité cosmique, illumination, paix absolue et inconditionnelle.
+                                Hors cœur normatif v3.0 (<code>Lexicon176</code>, pôles extrêmes symétriques incluant apaisement et détresse existentielle).
                             </p>
                         </div>
                     </div>
@@ -1046,7 +1044,7 @@
             <!-- ======================================================== -->
             <section id="architecture-scientifique" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
                 <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/20">Socle Scientifique Certifié</span>
+                    <span class="text-xs uppercase font-bold tracking-widest text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full border border-purple-500/20">Noyau formel vérifié V1</span>
                     <h2 class="text-3xl sm:text-4xl font-heading font-black text-white mt-3">
                         L'Architecture Complète de <span class="bg-gradient-to-r from-purple-400 via-indigo-300 to-sky-400 bg-clip-text text-transparent">CARTOGRAFFECT</span>
                     </h2>
@@ -1094,12 +1092,12 @@
                                 <h3 class="text-lg font-heading font-bold text-white mt-1">L'Article Théorique</h3>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Manuscrit intégral (<span data-payload="version_label">Version 2.1.0</span>) unifiant émotions de base, approches dimensionnelles, CPM et constructionnisme dans l'inférence active, doté de <span data-payload="predictions_count">5</span> prédictions falsifiables P1–P5.
+                                Manuscrit intégral (<span data-payload="version_label">Version 3.0.0</span>) unifiant émotions de base, approches dimensionnelles, CPM et constructionnisme dans l'inférence active, doté de <span data-payload="predictions_count">5</span> prédictions falsifiables P1–P5.
                             </p>
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Zenodo DOI: 10.5281/zenodo.24022795</li>
                                 <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Dépôt OSF: osf.io/z89sg</li>
-                                <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Architecture sous CC BY-NC-SA 4.0</li>
+                                <li class="flex items-center gap-1.5"><span class="text-purple-400">✓</span> Code AGPL-3.0-or-later &bull; Textes CC-BY-4.0</li>
                             </ul>
                         </div>
                         <div class="pt-5 mt-4 border-t border-slate-800">
@@ -1121,7 +1119,7 @@
                                 <h3 class="text-lg font-heading font-bold text-white mt-1">Compendium Formel</h3>
                             </div>
                             <p class="text-xs text-slate-300 leading-relaxed">
-                                Formalisation math&eacute;matique certifi&eacute;e : <strong data-payload-group="theorems"><span data-payload="theorems_verified">120</span> th&eacute;or&egrave;mes constructifs</strong> v&eacute;rifi&eacute;s sous <strong data-payload="provers_count">6</strong> prouveurs ind&eacute;pendants (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19), <span data-payload="lean_modules_count">10</span> modules <code>.lean</code>, <code data-payload="sorry_count">0</code> sorry, th&eacute;or&egrave;me ma&icirc;tre <code>end_to_end_coherence</code>.
+                                Noyau formel vérifié V1 : <strong data-payload-group="theorems"><span data-payload="theorems_substantial">148</span> théorèmes substantiels</strong> (<span data-payload="exported_declarations">169</span> déclarations exportées, <span data-payload="pillar_theorems_count">8</span> piliers prioritaires) vérifiés sous <strong data-payload="reference_prover">Lean 4</strong> (<span data-payload="prover_version">4.35.0</span>), <span data-payload="normative_modules_count">8</span> modules normatifs <code>.lean</code>, <code data-payload="sorry_count">0</code> sorry (utilise <code>Classical.choice</code>) ; extension canonique <span data-payload="canonical_ext_theorems">16</span>+<span data-payload="canonical_ext_aux">5</span>=<span data-payload="canonical_ext_declarations">21</span> ; 5 prouveurs historiques v2.1 archivés.
                             </p>
                             <ul class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-800">
                                 <li class="flex items-center gap-1.5"><span class="text-indigo-400">✓</span> Zenodo DOI: 10.5281/zenodo.23833938</li>
@@ -1295,7 +1293,57 @@
                 </div>
             </section>
             <!-- ======================================================== -->
-            <!-- SECTION : APPLICATIONS, PUBLIC CIBLE & CITATION SCIENTIFIQUE -->
+            
+<!-- Encadré global : Statut épistémique (V1 / V2 / V3) & Déclaration transparente d'usage de l'IA -->
+<section id="statut-epistemique" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="rounded-2xl bg-slate-900/90 border border-indigo-500/30 p-6 sm:p-8 shadow-xl space-y-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <h2 class="text-lg sm:text-xl font-heading font-bold text-white flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+        <span>Statut épistémique (V1 / V2 / V3) &amp; Déclaration transparente d'usage de l'IA</span>
+      </h2>
+      <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-indigo-950/80 text-indigo-200 border border-indigo-500/30" data-payload="tag">v3.0.0</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+      <div class="rounded-xl bg-slate-950/70 border border-emerald-500/25 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-emerald-300 uppercase tracking-wider text-xs">V1 — Cohérence formelle</div>
+        <p class="text-slate-300 leading-relaxed">
+          Noyau <strong class="text-white" data-payload="reference_prover">Lean 4</strong> (<span data-payload="prover_version">4.35.0</span>) minimal vérifié (<span data-payload="normative_modules_count">8</span> modules normatifs,
+          <strong class="text-white" data-payload="theorems_substantial">148</strong> théorèmes substantiels /
+          <span data-payload="exported_declarations">169</span> déclarations,
+          <span data-payload="pillar_theorems_count">8</span> piliers prioritaires,
+          <code class="text-emerald-300" data-payload="sorry_count">0</code> sorry ; utilise <code>Classical.choice</code>).
+          Extension canonique : <span data-payload="canonical_ext_theorems">16</span>+<span data-payload="canonical_ext_aux">5</span>=<span data-payload="canonical_ext_declarations">21</span> décl.,
+          <span data-payload="python_unit_tests_count">11</span> tests Python. Les 5 autres prouveurs v2.1 (Rocq, Agda, Dafny, Z3, TLA+/TLC en <em>bounded model checking</em> fini) sont archivés hors cœur actif.
+        </p>
+      </div>
+      <div class="rounded-xl bg-slate-950/70 border border-indigo-500/25 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-indigo-300 uppercase tracking-wider text-xs">V2 — Cadre théorique</div>
+        <p class="text-slate-300 leading-relaxed">
+          Architecture v3.0 (Options 1A, 2a, 3b) : contrôlabilité instrumentale stricte <span class="font-mono text-white">Y</span> découplée du canal autonome <span class="font-mono text-white">A &ge; 0</span>,
+          discrétisation canonique <span class="font-mono">Z &isin; {0, 1, 2}</span> (<span data-payload="canonical_states_count">11</span> états), profondeur continue <span class="font-mono">Z &isin; [0, 5]</span>,
+          annexe exploratoire <span data-payload="states_count">176</span> états hors cœur normatif, et <strong class="text-white" data-payload="predictions_count">5</strong> prédictions durcies (<span class="font-mono">P1–P5</span>).
+        </p>
+      </div>
+      <div class="rounded-xl bg-slate-950/70 border border-amber-500/30 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-amber-300 uppercase tracking-wider text-xs">V3 — Corroboration empirique</div>
+        <p class="text-slate-300 leading-relaxed">
+          <strong class="text-amber-200">0 donnée humaine ou clinique à ce stade</strong> (architecture théorique non diagnostique ; la preuve Lean 4 garantit uniquement la cohérence interne, jamais la validité psychologique ou neurobiologique).
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 pt-1 text-xs">
+      <a href="article.html#declaration-ia" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-800 text-indigo-200 border border-indigo-500/30 transition-colors">
+        <span>Déclaration transparente d'usage de l'IA</span> &rarr;
+      </a>
+      <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/blob/main/FORMAL_AUDIT_PACK.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-800 text-emerald-200 border border-emerald-500/30 transition-colors">
+        <span>FORMAL_AUDIT_PACK.md (parcours relecteur 30 min)</span> &nearr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION : APPLICATIONS, PUBLIC CIBLE & CITATION SCIENTIFIQUE -->
             <!-- ======================================================== -->
             <section id="section-applications-citation" class="page-section max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
                 <div class="space-y-12">
@@ -1324,7 +1372,7 @@
                                 </div>
                                 <h3 class="text-lg font-heading font-bold text-white">Psychologues &amp; Cliniciens</h3>
                                 <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                                    Repérez avec précision la position affective de votre patient au sein des 8 strates (Z=0 à Z=7), distinguez la charge corporelle brute du sentiment conscient et orientez l'intervention sur la révision du modèle interne (Axe X) ou l'action pragmatique (Axe Y).
+                                    Explorez de manière heuristique la topologie théorique des affects sur la discrétisation canonique (Z &isin; {0, 1, 2}) et la profondeur continue (Z &isin; [0, 5]), en distinguant la contrôlabilité instrumentale stricte (Axe Y), la révision d'attente (Axe X) et le canal autonome (A &ge; 0). Architecture formalisée en attente de corroboration empirique (V3 = 0, usage strictement non clinique et non diagnostique).
                                 </p>
                             </div>
                             <div class="pt-4 mt-4 border-t border-slate-800/80">
@@ -1383,7 +1431,7 @@
                                     Comment citer les travaux Cartograffect ?
                                 </h3>
                                 <p class="text-xs text-slate-300 mt-0.5">
-                                    <strong>CARTOGRAFFECT&reg;</strong> est une marque déposée de Manuel Cabelguen &bull; Droit d'auteur enregistré à l'OPIC n° 1233199.
+                                    Expression littéraire et graphique originale enregistrée à l'OPIC n° 1233199 (ne porte pas sur les idées scientifiques ni sur les équations ; la mention du numéro OPIC n'est pas requise pour les citations académiques).
                                 </p>
                             </div>
                             <button id="btnCopyCitation" onclick="copyApaCitations()" class="self-start sm:self-center px-4 py-2.5 rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-lg transition-all flex items-center gap-2 shrink-0">
@@ -1395,12 +1443,12 @@
                         <div class="relative bg-slate-950/90 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto select-all space-y-3" id="citationBox">
                             <div>
                                 <div class="text-purple-300 font-semibold mb-1">Article théorique :</div>
-                                <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 2.1.0) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795</div>
+                                <div>Cabelguen, M. (2026). <em>Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif</em> (Version 3.0.0) [Manuscrit théorique]. Zenodo. https://doi.org/10.5281/zenodo.24022795</div>
                                 <div class="text-slate-400 mt-1">OSF : https://osf.io/z89sg</div>
                             </div>
                             <div>
-                                <div class="text-indigo-300 font-semibold mb-1">Compendium Formel (120 théorèmes, 6 prouveurs) :</div>
-                                <div>Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture math&eacute;matique et taxonomique v&eacute;rifi&eacute;e sous 6 prouveurs ind&eacute;pendants</em> (version v2.1.0) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/10.5281/zenodo.23833938</div>
+                                <div class="text-indigo-300 font-semibold mb-1">Compendium Formel (<span data-payload="theorems_substantial">148</span> théorèmes substantiels / <span data-payload="exported_declarations">169</span> déclarations, Lean <span data-payload="prover_version">4.35.0</span>) :</div>
+                            <div>Cabelguen, M. (2026). <em>CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4</em> (version <span data-payload="tag">v3.0.0</span>) [Logiciel et preuves formelles]. Zenodo. https://doi.org/10.5281/zenodo.23833938</div>
                             </div>
                         </div>
                     </div>
@@ -1432,13 +1480,13 @@
             <div class="md:col-span-5 space-y-3">
                 <div class="flex items-center gap-2.5">
                     <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
-                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed max-w-md">
                     Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
                 </p>
                 <div class="text-[11px] text-slate-500">
-                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; OPIC n&deg; 1233199 (expression littéraire et graphique)
                 </div>
             </div>
 
@@ -1452,7 +1500,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.1.0</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v3.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -1463,11 +1511,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.1.0</span> :
+                        Article <span data-payload="tag">v3.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Compendium formel <span data-payload="tag">v2.1.0</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v3.0.0</span> (<span data-payload="theorems_substantial">148</span> th. / <span data-payload="exported_declarations">169</span> décl. &middot; Lean <span data-payload="prover_version">4.35.0</span> &middot; <span data-payload="normative_modules_count">8</span> modules) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
@@ -1504,14 +1552,14 @@
 
         function copyApaCitations() {
             const P = window.CartograffectPayload;
-            const ver = P ? P.get('release.version', '2.1.0') : '2.1.0';
-            const tag = P ? P.get('release.tag', 'v2.1.0') : 'v2.1.0';
+            const ver = P ? P.get('release.version', '3.0.0') : '3.0.0';
+            const tag = P ? P.get('release.tag', 'v3.0.0') : 'v3.0.0';
             const artDoi = P ? P.get('identifiers.zenodo_article_doi', '10.5281/zenodo.24022795') : '10.5281/zenodo.24022795';
             const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
             const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
             const text =
                 `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version ${ver}) [Manuscrit théorique]. Zenodo. https://doi.org/${artDoi}\n\n` +
-                `Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous six prouveurs indépendants (version ${tag}) [Logiciel et corpus sous AGPL-3.0-or-later AND CC-BY-NC-SA-4.0]. Zenodo. https://doi.org/${codeDoi}`;
+                `Cabelguen, M. (2026). CARTOGRAFFECT: Architecture mathématique et taxonomique vérifiée sous Lean 4 (version ${tag}) [Logiciel et preuves formelles sous AGPL-3.0-or-later ; textes sous CC-BY-4.0]. Zenodo. https://doi.org/${codeDoi}`;
             const checkSvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
             const copySvg = '<svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
             if (navigator.clipboard && navigator.clipboard.writeText) {

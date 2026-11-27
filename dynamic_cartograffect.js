@@ -80,6 +80,15 @@
 
     // Color definitions
     const GROUP_COLORS = {
+        "Contrôle +": "#facc15",
+        "Contrôle −": "#38bdf8",
+        "Attente −": "#c084fc",
+        "Attente +": "#4ade80",
+        "Affrontement": "#f87171",
+        "Accommodation": "#22d3ee",
+        "Synergie +": "#f472b6",
+        "Synergie −": "#94a3b8",
+        "Opérateur central": "#a78bfa",
         "Joie": "#facc15",
         "Tristesse": "#38bdf8",
         "Peur": "#c084fc",
@@ -178,17 +187,17 @@
         if (!window.CartograffectModel || !window.CartograffectModel.emotions) {
             // Fallback points if model file not yet loaded
             this.points = [
-                { id: 0, name: "Point de Veille", x: 0, y: 0, z: 0, group: "Veille", type: "operator", code: "X0/Y0/Z0", desc: "Origine structurale (0,0,0) - Bassin attracteur homéostatique de fond." },
-                { id: 1, name: "Surprise", x: 0, y: 0, z: 1, group: "Surprise", type: "operator", code: "X0/Y0/Z1", desc: "Opérateur ascendant de saillance et de rupture d'attente." },
-                { id: 2, name: "Anticipation", x: 0, y: 0, z: 2, group: "Anticipation", type: "operator", code: "X0/Y0/Z2", desc: "Opérateur descendant d'orientation épistémique vers l'action." },
-                { id: 8, name: "Joie", x: 0, y: 2, z: 2, group: "Joie", type: "axial", code: "X0/Y+2/Z2", desc: "Orientation axiale Y+2 (contrôlabilité maximale)." },
-                { id: 9, name: "Tristesse", x: 0, y: -2, z: 2, group: "Tristesse", type: "axial", code: "X0/Y-2/Z2", desc: "Orientation axiale Y-2 (incontrôlabilité constatée)." },
-                { id: 10, name: "Peur", x: -2, y: 0, z: 2, group: "Peur", type: "axial", code: "X-2/Y0/Z2", desc: "Orientation axiale X-2 (modèle interne rigide face à la menace)." },
-                { id: 11, name: "Courage", x: 2, y: 0, z: 2, group: "Courage", type: "axial", code: "X+2/Y0/Z2", desc: "Orientation axiale X+2 (modèle révisable, engagement de mise à jour)." },
-                { id: 12, name: "Colère", x: -1, y: 1, z: 2, group: "Colère", type: "diagonal", code: "X-1/Y+1/Z2", desc: "Modèle non révisable (X-1) et tentative de contrôle sur le monde (Y+1)." },
-                { id: 13, name: "Calme", x: 1, y: -1, z: 2, group: "Calme", type: "diagonal", code: "X+1/Y-1/Z2", desc: "Modèle révisable (X+1) et acceptation du non-contrôle (Y-1)." },
-                { id: 14, name: "Désir", x: 1, y: 1, z: 2, group: "Désir", type: "diagonal", code: "X+1/Y+1/Z2", desc: "Modèle révisable (X+1) et monde contrôlable (Y+1) : congruence." },
-                { id: 15, name: "Dégoût", x: -1, y: -1, z: 2, group: "Dégoût", type: "diagonal", code: "X-1/Y-1/Z2", desc: "Modèle non révisable (X-1) et rejet d'un monde non contrôlable (Y-1)." }
+                { id: 0, name: "Point de Veille", x: 0, y: 0, z: 0, group: "Opérateur central", type: "operator", code: "X0/Y0/Z0", desc: "Origine structurale (0,0,0) - Bassin attracteur homéostatique de fond." },
+                { id: 1, name: "Surprise", x: 0, y: 0, z: 1, group: "Opérateur central", type: "operator", code: "X0/Y0/Z1", desc: "Opérateur ascendant de saillance et de rupture d'attente." },
+                { id: 2, name: "Anticipation", x: 0, y: 0, z: 2, group: "Opérateur central", type: "operator", code: "X0/Y0/Z2", desc: "Opérateur descendant d'orientation épistémique vers l'action." },
+                { id: 8, name: "Joie", x: 0, y: 2, z: 2, group: "Contrôle +", type: "axial", code: "X0/Y+2/Z2", desc: "Orientation axiale Y+2 (contrôlabilité instrumentale élevée, Décharge)." },
+                { id: 9, name: "Tristesse", x: 0, y: -2, z: 2, group: "Contrôle −", type: "axial", code: "X0/Y-2/Z2", desc: "Orientation axiale Y-2 (incontrôlabilité instrumentale constatée, Charge)." },
+                { id: 10, name: "Peur", x: -2, y: 0, z: 2, group: "Attente −", type: "axial", code: "X-2/Y0/Z2", desc: "Orientation axiale X-2 (modèle interne non révisé, Charge épistémique)." },
+                { id: 11, name: "Courage", x: 2, y: 0, z: 2, group: "Attente +", type: "axial", code: "X+2/Y0/Z2", desc: "Orientation axiale X+2 (modèle révisable, Décharge épistémique)." },
+                { id: 12, name: "Colère", x: -1, y: 1, z: 2, group: "Affrontement", type: "diagonal", code: "X-1/Y+1/Z2", desc: "Modèle non révisable (X-1) et mobilisation instrumentale sur le monde (Y+1)." },
+                { id: 13, name: "Calme", x: 1, y: -1, z: 2, group: "Accommodation", type: "diagonal", code: "X+1/Y-1/Z2", desc: "Modèle révisable (X+1) et accommodation au non-contrôle (Y-1)." },
+                { id: 14, name: "Désir", x: 1, y: 1, z: 2, group: "Synergie +", type: "diagonal", code: "X+1/Y+1/Z2", desc: "Modèle révisable (X+1) et monde contrôlable (Y+1) : synergie positive." },
+                { id: 15, name: "Dégoût", x: -1, y: -1, z: 2, group: "Synergie −", type: "diagonal", code: "X-1/Y-1/Z2", desc: "Modèle non révisable (X-1) et monde non contrôlable (Y-1) : synergie négative." }
             ];
             return;
         }
