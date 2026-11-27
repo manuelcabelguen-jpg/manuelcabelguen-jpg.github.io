@@ -99,6 +99,11 @@
         "section": "Changed (Phase 3)",
         "title": "Consistency Scripts, Metadata & Documentation Realigned",
         "summary": "updated `scripts/sync_metadata.py`, `scripts/export_site_payload.py`, `scripts/check_consistency.py`, `scripts/test_check_consistency.py`, `.zenodo.json`, `CITATION.cff`, `manifest.json`, `NOTICE`, `README.md`, `VALIDATION.md`, `docs/CONVERGENCE_MATRIX.md`, `docs/02-Inventaire_176.md`, and all `EPISTEMIC_STATUS.md` files to v3.0.0 counters, AI transparency disclosures, Top 8 pillar theorem links (`FORMAL_AUDIT_PACK.md`), corrected invalid `gemini-3.8-flash` reference, and removed unregistered `®` symbols across active files (retaining CIPO / OPIC copyright registration No. `1233199`)."
+      },
+      {
+        "section": "Changed (Phase 3)",
+        "title": "Pre-Release v3.0.0 Consolidation (Filled-Surface Geometry, Rolls Bijection & 17-Subsector Taxonomy)",
+        "summary": "standardized the planar filled-surface geometry $|x| + |y| \\le R(Z)$ with capacity boundary at $A = 1$, finalized the Rolls (2014) $2 \\times 2$ bijection (`Rew+`, `Rew−`, `Pun+`, `Pun−`) and **Calme** prototype bounded strictly to $Z = 2$, and restructured Table 1b in `docs/01-Article_Cartograffect.md` into **17 functional subsectors** (fixed center `(0, 0, Z)` plus 8 conjugate antagonist pairs `A1, A2, D1, D2` and `L1, L2, L3, L4` matching Lean 4 `FunctionalSubsector` and `contralateral_swaps_amplitudes`), aligned with `DECISIONS_V3.md`, `README.md`, `FORMAL_AUDIT_PACK.md`, `VALIDATION.md`, and `docs/CONVERGENCE_MATRIX.md`."
       }
     ]
   },
