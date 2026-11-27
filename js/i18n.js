@@ -47,6 +47,7 @@
         'Article': 'Paper',
         "L'Article (v3.0.0)": 'The Paper (v3.0.0)',
     "Statut épistémique (V1 / V2 / V3) & Déclaration transparente d'usage de l'IA": 'Epistemic Status (V1 / V2 / V3) & Transparent AI Disclosure',
+    "Archive exploratoire v2 (coordonnées antérieures à l'Option 1A — hors cœur normatif v3.0)": "Exploratory v2 Archive (Pre-Option 1A Coordinates — Outside Normative v3.0 Core)",
     'V1 — Cohérence formelle': 'V1 — Formal Internal Consistency',
     'V2 — Cadre théorique': 'V2 — Theoretical Framework',
     'V3 — Corroboration empirique': 'V3 — Empirical Corroboration',

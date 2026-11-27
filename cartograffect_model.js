@@ -178,7 +178,7 @@
                 "group": "Contrôle +",
                 "code": "X0/Y+4/Z3",
                 "type": "axial",
-                "desc": "Groupe Joie (axial) : projection vive d'énergie motrice sur le monde."
+                "desc": "Secteur Contrôle + (axial) : projection vive d'énergie motrice sur le monde."
         },
         {
                 "id": 17,
@@ -190,7 +190,7 @@
                 "group": "Contrôle −",
                 "code": "X0/Y-4/Z3",
                 "type": "axial",
-                "desc": "Groupe Tristesse (axial) : absence de relief et retrait du contrôle sensorimoteur."
+                "desc": "Secteur Contrôle − (axial) : absence de relief et retrait du contrôle sensorimoteur."
         },
         {
                 "id": 18,
@@ -202,7 +202,7 @@
                 "group": "Attente −",
                 "code": "X-4/Y0/Z3",
                 "type": "axial",
-                "desc": "Groupe Peur (axial) : attente fermée sur la potentialité d'un coût adaptatif."
+                "desc": "Secteur Attente − (axial) : attente fermée sur la potentialité d'un coût adaptatif."
         },
         {
                 "id": 19,
@@ -214,7 +214,7 @@
                 "group": "Attente +",
                 "code": "X+4/Y0/Z3",
                 "type": "axial",
-                "desc": "Groupe Courage (axial) : ouverture épistémique maximale, recherche active d'information."
+                "desc": "Secteur Attente + (axial) : ouverture épistémique maximale, recherche active d'information."
         },
         {
                 "id": 20,
@@ -226,7 +226,7 @@
                 "group": "Contrôle +",
                 "code": "X-1/Y+3/Z3",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : choc de contrôle face à un modèle temporairement heurté."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : choc de contrôle face à un modèle temporairement heurté."
         },
         {
                 "id": 21,
@@ -238,7 +238,7 @@
                 "group": "Contrôle +",
                 "code": "X+1/Y+3/Z3",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : emballement positif conjoignant contrôle et révision fluide."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : emballement positif conjoignant contrôle et révision fluide."
         },
         {
                 "id": 22,
@@ -250,7 +250,7 @@
                 "group": "Contrôle −",
                 "code": "X+1/Y-3/Z3",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : relâchement consécutif à l'évitement d'une issue défavorable."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : relâchement consécutif à l'évitement d'une issue défavorable."
         },
         {
                 "id": 23,
@@ -262,7 +262,7 @@
                 "group": "Contrôle −",
                 "code": "X-1/Y-3/Z3",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : douleur de la perte inscrite dans un modèle réticent."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : douleur de la perte inscrite dans un modèle réticent."
         },
         {
                 "id": 24,
@@ -274,7 +274,7 @@
                 "group": "Attente −",
                 "code": "X-3/Y+1/Z3",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : désorganisation réactive avec sursaut d'action motrice."
+                "desc": "Secteur Attente − (latéral, archive v2) : désorganisation réactive avec sursaut d'action motrice."
         },
         {
                 "id": 25,
@@ -286,7 +286,7 @@
                 "group": "Attente −",
                 "code": "X-3/Y-1/Z3",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : sidération apeurée avec inhibition du contrôle."
+                "desc": "Secteur Attente − (latéral, archive v2) : sidération apeurée avec inhibition du contrôle."
         },
         {
                 "id": 26,
@@ -298,7 +298,7 @@
                 "group": "Attente +",
                 "code": "X+3/Y-1/Z3",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : saisissement contemplatif face à une grandeur non modifiable."
+                "desc": "Secteur Attente + (latéral, archive v2) : saisissement contemplatif face à une grandeur non modifiable."
         },
         {
                 "id": 27,
@@ -310,7 +310,7 @@
                 "group": "Attente +",
                 "code": "X+3/Y+1/Z3",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : assurance motrice et calme épistémique en situation vive."
+                "desc": "Secteur Attente + (latéral, archive v2) : assurance motrice et calme épistémique en situation vive."
         },
         {
                 "id": 28,
@@ -382,7 +382,7 @@
                 "group": "Contrôle +",
                 "code": "X0/Y+6/Z4",
                 "type": "axial",
-                "desc": "Groupe Joie (axial) : haute intensité de contrôle partagé ou célébré."
+                "desc": "Secteur Contrôle + (axial) : haute intensité de contrôle partagé ou célébré."
         },
         {
                 "id": 33,
@@ -406,7 +406,7 @@
                 "group": "Attente −",
                 "code": "X-6/Y0/Z4",
                 "type": "axial",
-                "desc": "Groupe Peur (axial) : oscillation paralysante des hypothèses d'action."
+                "desc": "Secteur Attente − (axial) : oscillation paralysante des hypothèses d'action."
         },
         {
                 "id": 35,
@@ -418,7 +418,7 @@
                 "group": "Attente +",
                 "code": "X+6/Y0/Z4",
                 "type": "axial",
-                "desc": "Groupe Courage (axial) : solidité affirmée des priors épistémiques."
+                "desc": "Secteur Attente + (axial) : solidité affirmée des priors épistémiques."
         },
         {
                 "id": 36,
@@ -430,7 +430,7 @@
                 "group": "Contrôle +",
                 "code": "X-2/Y+4/Z4",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : comparaison sociale avec désir d'appropriation du bien d'autrui."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : comparaison sociale avec désir d'appropriation du bien d'autrui."
         },
         {
                 "id": 37,
@@ -442,7 +442,7 @@
                 "group": "Contrôle +",
                 "code": "X-1/Y+5/Z4",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : focalisation destructrice sur l'objet haï avec fort levier de contrôle."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : focalisation destructrice sur l'objet haï avec fort levier de contrôle."
         },
         {
                 "id": 38,
@@ -454,7 +454,7 @@
                 "group": "Contrôle +",
                 "code": "X+1/Y+5/Z4",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : don relationnel bienveillant et adhésion féconde à l'autre."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : don relationnel bienveillant et adhésion féconde à l'autre."
         },
         {
                 "id": 39,
@@ -466,7 +466,7 @@
                 "group": "Contrôle +",
                 "code": "X+2/Y+4/Z4",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : élan passionné et dévouement ardent."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : élan passionné et dévouement ardent."
         },
         {
                 "id": 40,
@@ -478,7 +478,7 @@
                 "group": "Contrôle −",
                 "code": "X+2/Y-4/Z4",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : paix intérieure acquise par le renoncement au contrôle forcé."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : paix intérieure acquise par le renoncement au contrôle forcé."
         },
         {
                 "id": 41,
@@ -490,7 +490,7 @@
                 "group": "Contrôle −",
                 "code": "X+1/Y-5/Z4",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : sentiment de complétude paisible sans revendication motrice."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : sentiment de complétude paisible sans revendication motrice."
         },
         {
                 "id": 42,
@@ -502,7 +502,7 @@
                 "group": "Contrôle −",
                 "code": "X-2/Y-4/Z4",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : effondrement du modèle de soi sous le regard d'autrui."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : effondrement du modèle de soi sous le regard d'autrui."
         },
         {
                 "id": 43,
@@ -514,7 +514,7 @@
                 "group": "Contrôle −",
                 "code": "X-1/Y-5/Z4",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : perte de sens et creux existentiel dénué de ressource."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : perte de sens et creux existentiel dénué de ressource."
         },
         {
                 "id": 44,
@@ -526,7 +526,7 @@
                 "group": "Attente −",
                 "code": "X-4/Y+2/Z4",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : anticipation craintive diffuse couplée à une hyperactivation de contrôle."
+                "desc": "Secteur Attente − (latéral, archive v2) : anticipation craintive diffuse couplée à une hyperactivation de contrôle."
         },
         {
                 "id": 45,
@@ -538,7 +538,7 @@
                 "group": "Attente −",
                 "code": "X-5/Y+1/Z4",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : tension douloureuse de la privation d'un lien essentiel."
+                "desc": "Secteur Attente − (latéral, archive v2) : tension douloureuse de la privation d'un lien essentiel."
         },
         {
                 "id": 46,
@@ -550,7 +550,7 @@
                 "group": "Attente −",
                 "code": "X-5/Y-1/Z4",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : dévalorisation d'autrui servant de bouclier défensif."
+                "desc": "Secteur Attente − (latéral, archive v2) : dévalorisation d'autrui servant de bouclier défensif."
         },
         {
                 "id": 47,
@@ -562,7 +562,7 @@
                 "group": "Attente −",
                 "code": "X-4/Y-2/Z4",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : suspicion vigilante limitant l'engagement dans la relation."
+                "desc": "Secteur Attente − (latéral, archive v2) : suspicion vigilante limitant l'engagement dans la relation."
         },
         {
                 "id": 48,
@@ -574,7 +574,7 @@
                 "group": "Attente +",
                 "code": "X+4/Y+2/Z4",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : valorisation légitime de la valeur de soi et des accomplissements."
+                "desc": "Secteur Attente + (latéral, archive v2) : valorisation légitime de la valeur de soi et des accomplissements."
         },
         {
                 "id": 49,
@@ -586,7 +586,7 @@
                 "group": "Attente +",
                 "code": "X+5/Y+1/Z4",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : expansion harmonieuse des compétences et des liens."
+                "desc": "Secteur Attente + (latéral, archive v2) : expansion harmonieuse des compétences et des liens."
         },
         {
                 "id": 50,
@@ -598,7 +598,7 @@
                 "group": "Attente +",
                 "code": "X+5/Y-1/Z4",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : chaleur relationnelle désintéressée sans visée de maîtrise."
+                "desc": "Secteur Attente + (latéral, archive v2) : chaleur relationnelle désintéressée sans visée de maîtrise."
         },
         {
                 "id": 51,
@@ -610,7 +610,7 @@
                 "group": "Attente +",
                 "code": "X+4/Y-2/Z4",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : reconnaissance joyeuse de l'excellence chez autrui."
+                "desc": "Secteur Attente + (latéral, archive v2) : reconnaissance joyeuse de l'excellence chez autrui."
         },
         {
                 "id": 52,
@@ -682,7 +682,7 @@
                 "group": "Contrôle +",
                 "code": "X0/Y+8/Z5",
                 "type": "axial",
-                "desc": "Groupe Joie (axial) : sentiment souverain de capacité motrice et d'efficience globale."
+                "desc": "Secteur Contrôle + (axial) : sentiment souverain de capacité motrice et d'efficience globale."
         },
         {
                 "id": 57,
@@ -694,7 +694,7 @@
                 "group": "Contrôle −",
                 "code": "X0/Y-8/Z5",
                 "type": "axial",
-                "desc": "Groupe Tristesse (axial) : conviction profonde d'incapacité d'action face au réel."
+                "desc": "Secteur Contrôle − (axial) : conviction profonde d'incapacité d'action face au réel."
         },
         {
                 "id": 58,
@@ -706,7 +706,7 @@
                 "group": "Attente −",
                 "code": "X-8/Y0/Z5",
                 "type": "axial",
-                "desc": "Groupe Peur (axial) : posture durable de suspicion et de fermeture des priors."
+                "desc": "Secteur Attente − (axial) : posture durable de suspicion et de fermeture des priors."
         },
         {
                 "id": 59,
@@ -718,7 +718,7 @@
                 "group": "Attente +",
                 "code": "X+8/Y0/Z5",
                 "type": "axial",
-                "desc": "Groupe Courage (axial) : solidité sereine accordée à la fiabilité des prédictions."
+                "desc": "Secteur Attente + (axial) : solidité sereine accordée à la fiabilité des prédictions."
         },
         {
                 "id": 60,
@@ -730,7 +730,7 @@
                 "group": "Contrôle +",
                 "code": "X+1/Y+7/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : croyance inébranlable en son immunité face aux heurts du monde."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : croyance inébranlable en son immunité face aux heurts du monde."
         },
         {
                 "id": 61,
@@ -742,7 +742,7 @@
                 "group": "Contrôle +",
                 "code": "X+2/Y+6/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : lien stable et nourricier envers des figures d'ancrage."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : lien stable et nourricier envers des figures d'ancrage."
         },
         {
                 "id": 62,
@@ -754,7 +754,7 @@
                 "group": "Contrôle +",
                 "code": "X+3/Y+5/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : dévouement actif et structuré envers un projet ou un être."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : dévouement actif et structuré envers un projet ou un être."
         },
         {
                 "id": 63,
@@ -766,7 +766,7 @@
                 "group": "Contrôle +",
                 "code": "X-2/Y+6/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : lucidité amère consécutive à l'effondrement d'une illusion."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : lucidité amère consécutive à l'effondrement d'une illusion."
         },
         {
                 "id": 64,
@@ -778,7 +778,7 @@
                 "group": "Contrôle +",
                 "code": "X-3/Y+5/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : rejet actif de ce qui ne s'aligne pas avec le cadre rigide."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : rejet actif de ce qui ne s'aligne pas avec le cadre rigide."
         },
         {
                 "id": 65,
@@ -790,7 +790,7 @@
                 "group": "Contrôle +",
                 "code": "X-1/Y+7/Z5",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral) : révolte contre l'iniquité perçue du monde."
+                "desc": "Secteur Contrôle + (latéral, archive v2) : révolte contre l'iniquité perçue du monde."
         },
         {
                 "id": 66,
@@ -802,7 +802,7 @@
                 "group": "Contrôle −",
                 "code": "X+3/Y-5/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : tranquillité d'âme profonde affranchie des soucis immédiats."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : tranquillité d'âme profonde affranchie des soucis immédiats."
         },
         {
                 "id": 67,
@@ -814,7 +814,7 @@
                 "group": "Contrôle −",
                 "code": "X+2/Y-6/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : sentiment stabilisé d'abri et de protection éprouvée."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : sentiment stabilisé d'abri et de protection éprouvée."
         },
         {
                 "id": 68,
@@ -826,7 +826,7 @@
                 "group": "Contrôle −",
                 "code": "X+1/Y-7/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : acceptation calme de la temporalité sans forçage."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : acceptation calme de la temporalité sans forçage."
         },
         {
                 "id": 69,
@@ -838,7 +838,7 @@
                 "group": "Contrôle −",
                 "code": "X-2/Y-6/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : prévision systématique d'issues défavorables."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : prévision systématique d'issues défavorables."
         },
         {
                 "id": 70,
@@ -850,7 +850,7 @@
                 "group": "Contrôle −",
                 "code": "X-3/Y-5/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : hermétisme protecteur bloquant les échanges extérieurs."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : hermétisme protecteur bloquant les échanges extérieurs."
         },
         {
                 "id": 71,
@@ -862,7 +862,7 @@
                 "group": "Contrôle −",
                 "code": "X-1/Y-7/Z5",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral) : effondrement de toute perspective d'issue positive."
+                "desc": "Secteur Contrôle − (latéral, archive v2) : effondrement de toute perspective d'issue positive."
         },
         {
                 "id": 72,
@@ -874,7 +874,7 @@
                 "group": "Attente −",
                 "code": "X-6/Y+2/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : vulnérabilité permanente avec hypervigilance motrice."
+                "desc": "Secteur Attente − (latéral, archive v2) : vulnérabilité permanente avec hypervigilance motrice."
         },
         {
                 "id": 73,
@@ -886,7 +886,7 @@
                 "group": "Attente −",
                 "code": "X-5/Y+3/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : souci persistant anticipant des dérèglements futurs."
+                "desc": "Secteur Attente − (latéral, archive v2) : souci persistant anticipant des dérèglements futurs."
         },
         {
                 "id": 74,
@@ -898,7 +898,7 @@
                 "group": "Attente −",
                 "code": "X-7/Y+1/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : intolérance à l'attente avec agitation fébrile."
+                "desc": "Secteur Attente − (latéral, archive v2) : intolérance à l'attente avec agitation fébrile."
         },
         {
                 "id": 75,
@@ -910,7 +910,7 @@
                 "group": "Attente −",
                 "code": "X-7/Y-1/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : conscience aiguë de sa fragilité somatique ou affective."
+                "desc": "Secteur Attente − (latéral, archive v2) : conscience aiguë de sa fragilité somatique ou affective."
         },
         {
                 "id": 76,
@@ -922,7 +922,7 @@
                 "group": "Attente −",
                 "code": "X-6/Y-2/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : désinvestissement affectif protecteur face aux menaces."
+                "desc": "Secteur Attente − (latéral, archive v2) : désinvestissement affectif protecteur face aux menaces."
         },
         {
                 "id": 77,
@@ -934,7 +934,7 @@
                 "group": "Attente −",
                 "code": "X-5/Y-3/Z5",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral) : retrait concerté des politiques d'action partagées."
+                "desc": "Secteur Attente − (latéral, archive v2) : retrait concerté des politiques d'action partagées."
         },
         {
                 "id": 78,
@@ -946,7 +946,7 @@
                 "group": "Attente +",
                 "code": "X+6/Y+2/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : anticipation confiante de dynamiques favorables."
+                "desc": "Secteur Attente + (latéral, archive v2) : anticipation confiante de dynamiques favorables."
         },
         {
                 "id": 79,
@@ -958,7 +958,7 @@
                 "group": "Attente +",
                 "code": "X+5/Y+3/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : réceptivité bienveillante aux nouveautés du monde."
+                "desc": "Secteur Attente + (latéral, archive v2) : réceptivité bienveillante aux nouveautés du monde."
         },
         {
                 "id": 80,
@@ -970,7 +970,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y+1/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : aspiration active et nourrie vers un avenir désirable."
+                "desc": "Secteur Attente + (latéral, archive v2) : aspiration active et nourrie vers un avenir désirable."
         },
         {
                 "id": 81,
@@ -982,7 +982,7 @@
                 "group": "Attente +",
                 "code": "X+6/Y-2/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : ravissement contemplatif stabilisé face à la beauté."
+                "desc": "Secteur Attente + (latéral, archive v2) : ravissement contemplatif stabilisé face à la beauté."
         },
         {
                 "id": 82,
@@ -994,7 +994,7 @@
                 "group": "Attente +",
                 "code": "X+5/Y-3/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : bienveillance patiente accueillant la divergence."
+                "desc": "Secteur Attente + (latéral, archive v2) : bienveillance patiente accueillant la divergence."
         },
         {
                 "id": 83,
@@ -1006,7 +1006,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y-1/Z5",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral) : adhésion rigoureuse aux équilibres éthiques équitables."
+                "desc": "Secteur Attente + (latéral, archive v2) : adhésion rigoureuse aux équilibres éthiques équitables."
         },
         {
                 "id": 84,
@@ -1078,7 +1078,7 @@
                 "group": "Contrôle +",
                 "code": "X0/Y+10/Z6",
                 "type": "axial",
-                "desc": "Groupe Joie (axial)"
+                "desc": "Secteur Contrôle + (axial)"
         },
         {
                 "id": 89,
@@ -1090,7 +1090,7 @@
                 "group": "Contrôle −",
                 "code": "X0/Y-10/Z6",
                 "type": "axial",
-                "desc": "Groupe Tristesse (axial)"
+                "desc": "Secteur Contrôle − (axial)"
         },
         {
                 "id": 90,
@@ -1102,7 +1102,7 @@
                 "group": "Attente −",
                 "code": "X-10/Y0/Z6",
                 "type": "axial",
-                "desc": "Groupe Peur (axial)"
+                "desc": "Secteur Attente − (axial)"
         },
         {
                 "id": 91,
@@ -1114,7 +1114,7 @@
                 "group": "Attente +",
                 "code": "X+10/Y0/Z6",
                 "type": "axial",
-                "desc": "Groupe Courage (axial)"
+                "desc": "Secteur Attente + (axial)"
         },
         {
                 "id": 92,
@@ -1126,7 +1126,7 @@
                 "group": "Contrôle +",
                 "code": "X+3/Y+7/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 93,
@@ -1138,7 +1138,7 @@
                 "group": "Contrôle +",
                 "code": "X-3/Y+7/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 94,
@@ -1150,7 +1150,7 @@
                 "group": "Contrôle +",
                 "code": "X+4/Y+6/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 95,
@@ -1162,7 +1162,7 @@
                 "group": "Contrôle +",
                 "code": "X-4/Y+6/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 96,
@@ -1198,7 +1198,7 @@
                 "group": "Contrôle +",
                 "code": "X+1/Y+9/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 99,
@@ -1210,7 +1210,7 @@
                 "group": "Contrôle +",
                 "code": "X-1/Y+9/Z6",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 100,
@@ -1222,7 +1222,7 @@
                 "group": "Contrôle −",
                 "code": "X+3/Y-7/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 101,
@@ -1234,7 +1234,7 @@
                 "group": "Contrôle −",
                 "code": "X-3/Y-7/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 102,
@@ -1246,7 +1246,7 @@
                 "group": "Contrôle −",
                 "code": "X+4/Y-6/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 103,
@@ -1258,7 +1258,7 @@
                 "group": "Contrôle −",
                 "code": "X-4/Y-6/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 104,
@@ -1270,7 +1270,7 @@
                 "group": "Contrôle −",
                 "code": "X+2/Y-8/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 105,
@@ -1282,7 +1282,7 @@
                 "group": "Contrôle −",
                 "code": "X-2/Y-8/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 106,
@@ -1294,7 +1294,7 @@
                 "group": "Contrôle −",
                 "code": "X+1/Y-9/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 107,
@@ -1306,7 +1306,7 @@
                 "group": "Contrôle −",
                 "code": "X-1/Y-9/Z6",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 108,
@@ -1330,7 +1330,7 @@
                 "group": "Attente −",
                 "code": "X-6/Y-4/Z6",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 110,
@@ -1354,7 +1354,7 @@
                 "group": "Attente −",
                 "code": "X-7/Y-3/Z6",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 112,
@@ -1378,7 +1378,7 @@
                 "group": "Attente −",
                 "code": "X-8/Y-2/Z6",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 114,
@@ -1390,7 +1390,7 @@
                 "group": "Attente −",
                 "code": "X-9/Y+1/Z6",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 115,
@@ -1402,7 +1402,7 @@
                 "group": "Attente −",
                 "code": "X-9/Y-1/Z6",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 116,
@@ -1414,7 +1414,7 @@
                 "group": "Attente +",
                 "code": "X+6/Y+4/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 117,
@@ -1426,7 +1426,7 @@
                 "group": "Attente +",
                 "code": "X+6/Y-4/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 118,
@@ -1438,7 +1438,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y+3/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 119,
@@ -1450,7 +1450,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y-3/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 120,
@@ -1462,7 +1462,7 @@
                 "group": "Attente +",
                 "code": "X+8/Y+2/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 121,
@@ -1474,7 +1474,7 @@
                 "group": "Attente +",
                 "code": "X+8/Y-2/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 122,
@@ -1486,7 +1486,7 @@
                 "group": "Attente +",
                 "code": "X+9/Y+1/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 123,
@@ -1498,7 +1498,7 @@
                 "group": "Attente +",
                 "code": "X+9/Y-1/Z6",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 124,
@@ -1570,7 +1570,7 @@
                 "group": "Contrôle +",
                 "code": "X0/Y+12/Z7",
                 "type": "axial",
-                "desc": "Groupe Joie (axial)"
+                "desc": "Secteur Contrôle + (axial)"
         },
         {
                 "id": 129,
@@ -1582,7 +1582,7 @@
                 "group": "Contrôle −",
                 "code": "X0/Y-12/Z7",
                 "type": "axial",
-                "desc": "Groupe Tristesse (axial)"
+                "desc": "Secteur Contrôle − (axial)"
         },
         {
                 "id": 130,
@@ -1594,7 +1594,7 @@
                 "group": "Attente −",
                 "code": "X-12/Y0/Z7",
                 "type": "axial",
-                "desc": "Groupe Peur (axial)"
+                "desc": "Secteur Attente − (axial)"
         },
         {
                 "id": 131,
@@ -1606,7 +1606,7 @@
                 "group": "Attente +",
                 "code": "X+12/Y0/Z7",
                 "type": "axial",
-                "desc": "Groupe Courage (axial)"
+                "desc": "Secteur Attente + (axial)"
         },
         {
                 "id": 132,
@@ -1618,7 +1618,7 @@
                 "group": "Contrôle +",
                 "code": "X+2/Y+10/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 133,
@@ -1630,7 +1630,7 @@
                 "group": "Contrôle +",
                 "code": "X-2/Y+10/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 134,
@@ -1642,7 +1642,7 @@
                 "group": "Contrôle +",
                 "code": "X+4/Y+8/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 135,
@@ -1654,7 +1654,7 @@
                 "group": "Contrôle +",
                 "code": "X-4/Y+8/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 136,
@@ -1690,7 +1690,7 @@
                 "group": "Contrôle +",
                 "code": "X+3/Y+9/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 139,
@@ -1702,7 +1702,7 @@
                 "group": "Contrôle +",
                 "code": "X-3/Y+9/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 140,
@@ -1714,7 +1714,7 @@
                 "group": "Contrôle +",
                 "code": "X+5/Y+7/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 141,
@@ -1726,7 +1726,7 @@
                 "group": "Contrôle +",
                 "code": "X-5/Y+7/Z7",
                 "type": "lateral",
-                "desc": "Groupe Joie (latéral)"
+                "desc": "Secteur Contrôle + (latéral, archive v2)"
         },
         {
                 "id": 142,
@@ -1738,7 +1738,7 @@
                 "group": "Contrôle −",
                 "code": "X+2/Y-10/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 143,
@@ -1750,7 +1750,7 @@
                 "group": "Contrôle −",
                 "code": "X-2/Y-10/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 144,
@@ -1762,7 +1762,7 @@
                 "group": "Contrôle −",
                 "code": "X+4/Y-8/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 145,
@@ -1774,7 +1774,7 @@
                 "group": "Contrôle −",
                 "code": "X-4/Y-8/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 146,
@@ -1798,7 +1798,7 @@
                 "group": "Contrôle −",
                 "code": "X-1/Y-11/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 148,
@@ -1810,7 +1810,7 @@
                 "group": "Contrôle −",
                 "code": "X+3/Y-9/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 149,
@@ -1822,7 +1822,7 @@
                 "group": "Contrôle −",
                 "code": "X-3/Y-9/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 150,
@@ -1834,7 +1834,7 @@
                 "group": "Contrôle −",
                 "code": "X+5/Y-7/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 151,
@@ -1846,7 +1846,7 @@
                 "group": "Contrôle −",
                 "code": "X-5/Y-7/Z7",
                 "type": "lateral",
-                "desc": "Groupe Tristesse (latéral)"
+                "desc": "Secteur Contrôle − (latéral, archive v2)"
         },
         {
                 "id": 152,
@@ -1870,7 +1870,7 @@
                 "group": "Attente −",
                 "code": "X-10/Y-2/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 154,
@@ -1882,7 +1882,7 @@
                 "group": "Attente −",
                 "code": "X-8/Y+4/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 155,
@@ -1894,7 +1894,7 @@
                 "group": "Attente −",
                 "code": "X-8/Y-4/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 156,
@@ -1930,7 +1930,7 @@
                 "group": "Attente −",
                 "code": "X-9/Y+3/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 159,
@@ -1942,7 +1942,7 @@
                 "group": "Attente −",
                 "code": "X-9/Y-3/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 160,
@@ -1954,7 +1954,7 @@
                 "group": "Attente −",
                 "code": "X-7/Y+5/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 161,
@@ -1966,7 +1966,7 @@
                 "group": "Attente −",
                 "code": "X-7/Y-5/Z7",
                 "type": "lateral",
-                "desc": "Groupe Peur (latéral)"
+                "desc": "Secteur Attente − (latéral, archive v2)"
         },
         {
                 "id": 162,
@@ -1978,7 +1978,7 @@
                 "group": "Attente +",
                 "code": "X+10/Y+2/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 163,
@@ -1990,7 +1990,7 @@
                 "group": "Attente +",
                 "code": "X+10/Y-2/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 164,
@@ -2002,7 +2002,7 @@
                 "group": "Attente +",
                 "code": "X+8/Y+4/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 165,
@@ -2014,7 +2014,7 @@
                 "group": "Attente +",
                 "code": "X+8/Y-4/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 166,
@@ -2026,7 +2026,7 @@
                 "group": "Attente +",
                 "code": "X+11/Y+1/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 167,
@@ -2038,7 +2038,7 @@
                 "group": "Attente +",
                 "code": "X+11/Y-1/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 168,
@@ -2050,7 +2050,7 @@
                 "group": "Attente +",
                 "code": "X+9/Y+3/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 169,
@@ -2062,7 +2062,7 @@
                 "group": "Attente +",
                 "code": "X+9/Y-3/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 170,
@@ -2074,7 +2074,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y+5/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 171,
@@ -2086,7 +2086,7 @@
                 "group": "Attente +",
                 "code": "X+7/Y-5/Z7",
                 "type": "lateral",
-                "desc": "Groupe Courage (latéral)"
+                "desc": "Secteur Attente + (latéral, archive v2)"
         },
         {
                 "id": 172,
