@@ -11,7 +11,7 @@
  *   4. AffectiveTaxonomy.lean        (9 groupes fonctionnels Option 1A, 17 sous-secteurs, dissipation Option 2a)
  *   5. AffectiveDynamics.lean        (Asymétrie Charge/Décharge Option 3b, P2 restreint aux pôles négatifs)
  *   6. PredictiveCircuit.lean        (Boucle perception-mise à jour-action)
- *   7. OperantFactorization.lean     (Articulation mixte opérante-pavlovienne sur Z = 2)
+ *   7. OperantFactorization.lean     (Bijection 2×2 de Rolls Rew±/Pun± bornée à Z = 2)
  *   8. EndToEndBridge.lean           (Chaîne complète et cohérence end_to_end_coherence)
  * Annexe exploratoire (hors cœur normatif) : Cartograffect/Lexicon176.lean (176 états Z = 0..7).
  *

@@ -29,10 +29,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Frustration theory: An analysis of dispositional learning and memory",
         "ref": "Cambridge University Press.",
         "doi": "https://doi.org/10.1017/CBO9780511665561",
-        "apport": "Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.",
+        "apport": "Formalise les mécanismes de frustration par omission ou retrait d'une récompense attendue (Rew−, Rolls 2014), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.",
         "theme": "Théories des Émotions",
         "year": 1992,
-        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.}\n}"
+        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les mécanismes de frustration par omission ou retrait d'une récompense attendue (Rew−, Rolls 2014), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.}\n}"
     },
     {
         "id": "andrews2021the",
@@ -744,10 +744,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Emotion explained",
         "ref": "Oxford University Press.",
         "doi": "",
-        "apport": "Analyse les émotions comme états déclenchés par des renforcements instrumentaux et des punitions (R+, R-, P+, P-) en appui des quadrants Z=2.",
+        "apport": "Analyse les émotions comme états déclenchés par les contingences de récompense et de punition (Rew+, Rew−, Pun+, Pun−) en bijection exacte 2×2 sur les diagonales Z=2.",
         "theme": "Théories des Émotions",
         "year": 2005,
-        "bibtex": "@book{rolls2005emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion explained},\n  publisher = {Oxford University Press},\n  year      = {2005},\n  note      = {Fondement Cartograffect: Analyse les émotions comme états déclenchés par des renforcements instrumentaux et des punitions (R+, R-, P+, P-) en appui des quadrants Z=2.}\n}"
+        "bibtex": "@book{rolls2005emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion explained},\n  publisher = {Oxford University Press},\n  year      = {2005},\n  note      = {Fondement Cartograffect: Analyse les émotions comme états déclenchés par les contingences de récompense et de punition (Rew+, Rew−, Pun+, Pun−) en bijection exacte 2x2 sur les diagonales Z=2.}\n}"
     },
     {
         "id": "rolls2014emotion",
@@ -757,10 +757,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Emotion and decision-making explained",
         "ref": "Oxford University Press.",
         "doi": "",
-        "apport": "Relie l'évaluation des contingences de renforcement aux processus décisionnels et à l'orientation comportementale d'approche ou de retrait.",
+        "apport": "Fonde la matrice 2×2 des contingences de stimuli (Rew+, Rew−, Pun+, Pun−) bornée à Z=2 et la symétrie d'antagonisme (Rew+ ↔ Pun+, Rew− ↔ Pun−).",
         "theme": "Théories des Émotions",
         "year": 2014,
-        "bibtex": "@book{rolls2014emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion and decision-making explained},\n  publisher = {Oxford University Press},\n  year      = {2014},\n  note      = {Fondement Cartograffect: Relie l'évaluation des contingences de renforcement aux processus décisionnels et à l'orientation comportementale d'approche ou de retrait.}\n}"
+        "bibtex": "@book{rolls2014emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion and decision-making explained},\n  publisher = {Oxford University Press},\n  year      = {2014},\n  note      = {Fondement Cartograffect: Fonde la matrice 2x2 des contingences de stimuli (Rew+, Rew-, Pun+, Pun-) bornée à Z=2 et la symétrie d'antagonisme (Rew+ <-> Pun+, Rew- <-> Pun-).}\n}"
     },
     {
         "id": "rothbaum1982changing",
@@ -874,10 +874,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Science and human behavior",
         "ref": "Macmillan.",
         "doi": "",
-        "apport": "Définit les quatre opérateurs du conditionnement opérant (renforcement et punition positifs/négatifs) arrimés aux quatre prototypes combinés Z=2.",
+        "apport": "Analyse du comportement opérant d'après la fréquence de réponse (R− actif d'échappement en Y>0), explicitement dissociée au §6.2 de la matrice de stimuli Rew±/Pun± de Rolls (2014).",
         "theme": "Théories des Émotions",
         "year": 1953,
-        "bibtex": "@book{skinner1953science,\n  author    = {Skinner, B. F.},\n  title     = {Science and human behavior},\n  publisher = {Macmillan},\n  year      = {1953},\n  note      = {Fondement Cartograffect: Définit les quatre opérateurs du conditionnement opérant (renforcement et punition positifs/négatifs) arrimés aux quatre prototypes combinés Z=2.}\n}"
+        "bibtex": "@book{skinner1953science,\n  author    = {Skinner, B. F.},\n  title     = {Science and human behavior},\n  publisher = {Macmillan},\n  year      = {1953},\n  note      = {Fondement Cartograffect: Analyse du comportement opérant d'après la fréquence de réponse (R- actif d'échappement en Y>0), explicitement dissociée au §6.2 de la matrice de stimuli Rew±/Pun± de Rolls (2014).}\n}"
     },
     {
         "id": "smith2019simulating",

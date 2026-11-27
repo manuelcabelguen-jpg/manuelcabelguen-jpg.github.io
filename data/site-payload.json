@@ -28,7 +28,7 @@
       {
         "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
         "title": "Arbitration 4 (Publishable Scope `Z ∈ [0, 5]`, Canonical Discretization `Z ∈ {0, 1, 2}`)",
-        "summary": "bounded the normative discretization to `Z ∈ {0, 1, 2}` (11 canonical positions: `Point de Veille`, `Surprise`, `Anticipation`, and the 8 primary crown prototypes) and `Z = 2` operant/Pavlovian contingencies (`active_r_minus_vs_pavlovian_safety_and_z2_bound`), separating `Cartograffect/Lexicon176.lean` and `docs/02-Inventaire_176.md` (`Z = 0..7`) strictly as exploratory annexes outside the normative core."
+        "summary": "bounded the normative discretization to `Z ∈ {0, 1, 2}` (11 canonical positions: `Point de Veille`, `Surprise`, `Anticipation`, and the 8 primary crown prototypes) and `Z = 2` Rolls (2014) reward/punishment bijection (`Rew+`, `Rew−`, `Pun+`, `Pun−`, `rolls_contingencies_z2_bound`, `z2_rolls_bijection_2x2`), separating `Cartograffect/Lexicon176.lean` and `docs/02-Inventaire_176.md` (`Z = 0..7`) strictly as exploratory annexes outside the normative core."
       },
       {
         "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",

@@ -426,20 +426,22 @@ header .header-action-btn button {
 }
 
 /* ============================================================
-   Clinical Regulation Sheet Print Mode (@media print)
+   Clinical Regulation Sheet & Academic Preprint Print Mode
    ============================================================ */
 @media print {
     @page {
         size: A4 portrait;
-        margin: 15mm 13mm;
+        margin: 1.5cm 1.6cm;
     }
-    body {
+    html, body {
         background: #ffffff !important;
         color: #0f172a !important;
+        font-size: 10pt !important;
+        line-height: 1.38 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-    header, footer, nav, #mobileMenu, #viewModeBar, #didacticSimulator, #tocSidebar, #corpusFilters, .no-print, button, .close-btn, .skip-link {
+    header, footer, nav, #mobileMenu, #viewModeBar, #didacticSimulator, #tocSidebar, #corpusFilters, #corpusEmptyState, #i18nEnNoticeBanner, .no-print, button, .close-btn, .skip-link {
         display: none !important;
     }
     .katex .katex-mathml,
@@ -447,10 +449,90 @@ header .header-action-btn button {
     [data-view="didactic"] {
         display: none !important;
     }
+    body > div.max-w-7xl {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    body > div.max-w-7xl > div.grid {
+        display: block !important;
+    }
     main#contenu-principal {
+        display: block !important;
         grid-column: 1 / -1 !important;
         width: 100% !important;
         max-width: 100% !important;
+    }
+    main#contenu-principal.space-y-12 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0.7rem !important;
+    }
+    main#contenu-principal .space-y-6 > :not([hidden]) ~ :not([hidden]),
+    main#contenu-principal .space-y-5 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0.45rem !important;
+    }
+    main#contenu-principal .space-y-4 > :not([hidden]) ~ :not([hidden]),
+    main#contenu-principal .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: 0.3rem !important;
+    }
+    main#contenu-principal section {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+    main#contenu-principal > section:first-child {
+        padding: 0.65rem 0.85rem !important;
+        border-radius: 0.4rem !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+    main#contenu-principal > section:first-child h1 {
+        font-size: 15.5pt !important;
+        line-height: 1.2 !important;
+        margin: 0.25rem 0 !important;
+    }
+    main#contenu-principal h1,
+    main#contenu-principal h2,
+    main#contenu-principal h3,
+    main#contenu-principal h4,
+    main#contenu-principal h5 {
+        color: #0f172a !important;
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+    main#contenu-principal h2 {
+        font-size: 12.2pt !important;
+        line-height: 1.25 !important;
+        margin: 0.35rem 0 0.15rem !important;
+    }
+    main#contenu-principal h3 {
+        font-size: 10.6pt !important;
+        line-height: 1.28 !important;
+        margin: 0.45rem 0 0.18rem !important;
+    }
+    main#contenu-principal h4,
+    main#contenu-principal h5 {
+        font-size: 9.8pt !important;
+        line-height: 1.25 !important;
+        margin: 0.2rem 0 !important;
+    }
+    main#contenu-principal .p-6,
+    main#contenu-principal .p-5,
+    main#contenu-principal .p-4,
+    main#contenu-principal .sm\:p-8,
+    main#contenu-principal .sm\:p-7,
+    main#contenu-principal .sm\:p-6,
+    main#contenu-principal .p-3\.5 {
+        padding: 0.42rem 0.6rem !important;
+        border-radius: 0.35rem !important;
+    }
+    main#contenu-principal #resume .grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.45rem !important;
+        font-size: 8.5pt !important;
+        line-height: 1.32 !important;
+    }
+    main#contenu-principal #resume p {
+        margin-bottom: 0.25rem !important;
     }
     figure {
         display: block !important;
@@ -458,13 +540,18 @@ header .header-action-btn button {
         opacity: 1 !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
-        margin: 1.2rem auto !important;
+        margin: 0.5rem auto !important;
         background: #ffffff !important;
         background-image: none !important;
         border: 1px solid #cbd5e1 !important;
         box-shadow: none !important;
         color: #0f172a !important;
-        padding: 0.9rem !important;
+        padding: 0.38rem 0.5rem !important;
+        border-radius: 0.35rem !important;
+    }
+    figure > div.border-b {
+        padding-bottom: 0.18rem !important;
+        margin-bottom: 0.18rem !important;
     }
     figure svg {
         display: block !important;
@@ -472,17 +559,23 @@ header .header-action-btn button {
         opacity: 1 !important;
         width: 100% !important;
         height: auto !important;
-        max-height: 22cm !important;
+        max-height: 11.2cm !important;
     }
     figcaption {
         display: block !important;
         color: #1e293b !important;
+        font-size: 7.8pt !important;
+        line-height: 1.26 !important;
+        padding-top: 0.18rem !important;
+    }
+    figcaption p {
+        margin-bottom: 0.18rem !important;
     }
     .figure-svg-plate {
         background: #ffffff !important;
         border: 1px solid #cbd5e1 !important;
-        padding: 0.25rem !important;
-        border-radius: 0.35rem !important;
+        padding: 0.15rem !important;
+        border-radius: 0.25rem !important;
     }
     main#contenu-principal .moteur-canonique-web {
         --bg-page: #f1f5f9;
@@ -523,15 +616,6 @@ header .header-action-btn button {
         background: #ffffff !important;
         border-color: #cbd5e1 !important;
     }
-    main#contenu-principal h1,
-    main#contenu-principal h2,
-    main#contenu-principal h3,
-    main#contenu-principal h4,
-    main#contenu-principal h5 {
-        color: #0f172a !important;
-        break-after: avoid;
-        page-break-after: avoid;
-    }
     main#contenu-principal section,
     main#contenu-principal .bg-slate-900,
     main#contenu-principal .bg-cosmic-900,
@@ -542,7 +626,8 @@ header .header-action-btn button {
     main#contenu-principal [class*="bg-purple-950/"],
     main#contenu-principal [class*="bg-emerald-950/"],
     main#contenu-principal [class*="bg-blue-950/"],
-    main#contenu-principal [class*="bg-rose-950/"] {
+    main#contenu-principal [class*="bg-rose-950/"],
+    main#contenu-principal [class*="bg-amber-950/"] {
         background: #ffffff !important;
         background-image: none !important;
         border-color: #cbd5e1 !important;
@@ -564,7 +649,8 @@ header .header-action-btn button {
     main#contenu-principal [class*="text-emerald-"],
     main#contenu-principal [class*="text-rose-"],
     main#contenu-principal [class*="text-pink-"],
-    main#contenu-principal [class*="text-blue-"] {
+    main#contenu-principal [class*="text-blue-"],
+    main#contenu-principal [class*="text-amber-"] {
         color: #1e293b !important;
     }
     main#contenu-principal strong,
@@ -583,6 +669,13 @@ header .header-action-btn button {
         background: #f1f5f9 !important;
         color: #0f172a !important;
         border: 1px solid #cbd5e1 !important;
+        padding: 0 0.2rem !important;
+        font-size: 8.5pt !important;
+    }
+    main#contenu-principal table {
+        font-size: 7.5pt !important;
+        line-height: 1.24 !important;
+        border-collapse: collapse !important;
     }
     main#contenu-principal table,
     main#contenu-principal th,
@@ -590,8 +683,16 @@ header .header-action-btn button {
         border-color: #cbd5e1 !important;
         color: #0f172a !important;
     }
+    main#contenu-principal th,
+    main#contenu-principal td {
+        padding: 0.16rem 0.25rem !important;
+    }
     main#contenu-principal th {
         background: #eef2ff !important;
+        font-size: 7.2pt !important;
+    }
+    main#contenu-principal thead {
+        display: table-header-group;
     }
     main#contenu-principal tr {
         break-inside: avoid;
@@ -601,10 +702,68 @@ header .header-action-btn button {
         background: #f1f5f9 !important;
         color: #0f172a !important;
         border-color: #94a3b8 !important;
+        font-size: 7.5pt !important;
+        padding: 0.1rem 0.35rem !important;
     }
     .academic-text {
         color: #111827 !important;
-        font-size: 11pt !important;
+        font-size: 10pt !important;
+        line-height: 1.38 !important;
+    }
+    .academic-text p {
+        margin-bottom: 0.42rem !important;
+        text-align: justify;
+        hyphens: auto;
+        orphans: 3;
+        widows: 3;
+    }
+    .academic-text ul,
+    .academic-text ol {
+        margin: 0.2rem 0 0.42rem !important;
+        padding-left: 1.2rem !important;
+    }
+    .academic-text li {
+        margin-bottom: 0.18rem !important;
+        line-height: 1.36 !important;
+    }
+    .academic-text blockquote {
+        padding: 0.35rem 0.55rem !important;
+        margin: 0.35rem 0 !important;
+        border-left: 3px solid #475569 !important;
+        background: #f8fafc !important;
+        font-size: 9.1pt !important;
+        line-height: 1.34 !important;
+    }
+    #vignette-clinique,
+    #protocole-p5,
+    #tableau-1,
+    #tableau-1b,
+    #tableau-2,
+    #disponibilite,
+    #declaration-ia {
+        font-size: 8.8pt !important;
+        line-height: 1.3 !important;
+    }
+    #corpusCardsContainer {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 0.25rem 0.42rem !important;
+        font-size: 7.3pt !important;
+        line-height: 1.22 !important;
+    }
+    .corpus-card {
+        padding: 0.22rem 0.32rem !important;
+        border-radius: 0.25rem !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+    .corpus-card * {
+        font-size: 7.2pt !important;
+        line-height: 1.22 !important;
+    }
+    .corpus-card .pt-2.border-t {
+        padding-top: 0.1rem !important;
+        margin-top: 0.08rem !important;
     }
     .print-sheet-container {
         display: block !important;
