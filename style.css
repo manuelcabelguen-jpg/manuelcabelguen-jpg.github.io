@@ -116,6 +116,18 @@ body {
     border: 1px solid rgba(148, 163, 184, 0.18);
     box-shadow: 0 18px 36px -16px rgba(0, 0, 0, 0.65);
 }
+.figure-svg-plate {
+    background: #ffffff;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 1rem;
+    padding: 0.75rem;
+    overflow: hidden;
+}
+.figure-svg-plate svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
 .badge-op {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
     background: rgba(129, 140, 248, 0.12);
@@ -417,17 +429,178 @@ header .header-action-btn button {
    Clinical Regulation Sheet Print Mode (@media print)
    ============================================================ */
 @media print {
+    @page {
+        size: A4 portrait;
+        margin: 15mm 13mm;
+    }
     body {
         background: #ffffff !important;
-        color: #111827 !important;
+        color: #0f172a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
-    header, footer, nav, #mobileMenu, #viewModeBar, #didacticSimulator, #tocSidebar, .no-print, button, .close-btn {
+    header, footer, nav, #mobileMenu, #viewModeBar, #didacticSimulator, #tocSidebar, #corpusFilters, .no-print, button, .close-btn, .skip-link {
         display: none !important;
     }
     .katex .katex-mathml,
     .katex-mathml,
     [data-view="didactic"] {
         display: none !important;
+    }
+    main#contenu-principal {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    figure {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin: 1.2rem auto !important;
+        background: #ffffff !important;
+        background-image: none !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        color: #0f172a !important;
+        padding: 0.9rem !important;
+    }
+    figure svg {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 22cm !important;
+    }
+    figcaption {
+        display: block !important;
+        color: #1e293b !important;
+    }
+    .figure-svg-plate {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 0.25rem !important;
+        border-radius: 0.35rem !important;
+    }
+    main#contenu-principal .moteur-canonique-web {
+        --bg-page: #f1f5f9;
+        --bg-svg: #ffffff;
+        --box-fill: #f8fafc;
+        --box-inner-fill: #eef2f7;
+        --box-stroke: #334155;
+        --box-subj-stroke: #1e3a5f;
+        --box-perc-stroke: #6d28d9;
+        --box-att-stroke: #0f766e;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --text-accent: #0f766e;
+        --corps-fill: #ffffff;
+        --corps-stroke: #475569;
+        --dot-fill: #0f172a;
+        --dot-stroke: #ffffff;
+        --halo-fill: #ccfbf1;
+        --halo-stroke: #0f766e;
+        --ray-stroke: #475569;
+        --pill-ac-fill: #1e293b;
+        --pill-ac-text: #ffffff;
+        --pill-ant-fill: #ccfbf1;
+        --pill-ant-stroke: #0f766e;
+        --pill-ant-text: #115e59;
+        --pill-surp-fill: #fef08a;
+        --pill-surp-stroke: #ca8a04;
+        --pill-surp-text: #713f12;
+        --a0: #56b4e9;
+        --am: #0072b2;
+        --ap: #08306b;
+        --c0: #e69f00;
+        --cm: #b91c80;
+        --cp: #cc0c00;
+        --macro-asc: #dc2626;
+        --macro-desc: #0f766e;
+        --macro-aff: #6d28d9;
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+    }
+    main#contenu-principal h1,
+    main#contenu-principal h2,
+    main#contenu-principal h3,
+    main#contenu-principal h4,
+    main#contenu-principal h5 {
+        color: #0f172a !important;
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+    main#contenu-principal section,
+    main#contenu-principal .bg-slate-900,
+    main#contenu-principal .bg-cosmic-900,
+    main#contenu-principal .bg-cosmic-950,
+    main#contenu-principal [class*="bg-slate-900/"],
+    main#contenu-principal [class*="bg-cosmic-950/"],
+    main#contenu-principal [class*="bg-indigo-950/"],
+    main#contenu-principal [class*="bg-purple-950/"],
+    main#contenu-principal [class*="bg-emerald-950/"],
+    main#contenu-principal [class*="bg-blue-950/"],
+    main#contenu-principal [class*="bg-rose-950/"] {
+        background: #ffffff !important;
+        background-image: none !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: none !important;
+    }
+    main#contenu-principal :not(svg):not(svg *) {
+        text-shadow: none !important;
+    }
+    main#contenu-principal p,
+    main#contenu-principal li,
+    main#contenu-principal figcaption,
+    main#contenu-principal .text-white,
+    main#contenu-principal .text-slate-200,
+    main#contenu-principal .text-slate-300,
+    main#contenu-principal .text-slate-400,
+    main#contenu-principal [class*="text-purple-"],
+    main#contenu-principal [class*="text-indigo-"],
+    main#contenu-principal [class*="text-sky-"],
+    main#contenu-principal [class*="text-emerald-"],
+    main#contenu-principal [class*="text-rose-"],
+    main#contenu-principal [class*="text-pink-"],
+    main#contenu-principal [class*="text-blue-"] {
+        color: #1e293b !important;
+    }
+    main#contenu-principal strong,
+    main#contenu-principal h1,
+    main#contenu-principal h2,
+    main#contenu-principal h3,
+    main#contenu-principal h4,
+    main#contenu-principal h5 {
+        color: #0f172a !important;
+    }
+    main#contenu-principal a {
+        color: #1e3a8a !important;
+        text-decoration: underline;
+    }
+    main#contenu-principal code {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+    main#contenu-principal table,
+    main#contenu-principal th,
+    main#contenu-principal td {
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+    }
+    main#contenu-principal th {
+        background: #eef2ff !important;
+    }
+    main#contenu-principal tr {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    .badge-op {
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-color: #94a3b8 !important;
     }
     .academic-text {
         color: #111827 !important;
