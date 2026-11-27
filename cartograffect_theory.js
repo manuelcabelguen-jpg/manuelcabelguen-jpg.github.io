@@ -279,10 +279,10 @@
     // =========================================================================
 
     /**
-     * Calcule l'antagoniste exact selon AffectiveMatrix.lean :
-     *   - Central (0,0,Z) : fixe (0,0,Z)
-     *   - Axial (X=0 ou Y=0) : inversion centrale (-X, -Y, Z)
-     *   - Non-axial (X≠0, Y≠0, incl. diagonales et latérales) : loi unifiée
+     * Calcule l'antagoniste exact par morceaux selon AffectiveMatrix.lean :
+     *   - Si XY = 0 (centre (0,0,Z) et positions axiales X=0 ou Y=0) :
+     *     (-X, -Y, Z)
+     *   - Si XY ≠ 0 (positions diagonales et latérales, X≠0 et Y≠0) :
      *     (-sgn(X)*|Y|, -sgn(Y)*|X|, Z)
      */
     CartograffectTheory.antagonistPoint = function (x, y, z) {

@@ -124,7 +124,7 @@
                                 <span class="text-[10px] text-indigo-300 font-mono">Centrale / Controlatérale</span>
                             </div>
                             <div class="text-xs text-indigo-300 font-medium">Central &amp; Contralateral Inversion</div>
-                            <p class="text-[11px] text-slate-400">Axes : (-X, -Y). Non-axial (diagonales &amp; latérales) : loi unifiée (-sgn(X)|Y|, -sgn(Y)|X|), permutant X et Y sur les latérales.</p>
+                            <p class="text-[11px] text-slate-400">Par morceaux : (-X, -Y, Z) si XY = 0 (axes et centre) ; (-sgn(X)|Y|, -sgn(Y)|X|, Z) si XY ≠ 0 (diagonales et latérales, permutant |X| et |Y|).</p>
                         </div>
                     </div>
                 </div>

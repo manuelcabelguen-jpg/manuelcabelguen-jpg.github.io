@@ -519,7 +519,7 @@
                     </div>
                     <div class="p-3.5 rounded-xl bg-indigo-950/50 border border-indigo-700/50 font-mono text-indigo-200 text-xs flex flex-wrap items-center justify-between gap-2">
                         <span>Loi Attentionnelle $L_1$ : $|X| + |Y| = 2Z - 2$ ($Z \ge 2$)</span>
-                        <span>Antagonisme Involutif : $\mathcal{A}(X,Y,Z) = (-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z)$</span>
+                        <span>Antagonisme Involutif : $\mathcal{A}(X,Y,Z) = (-X,-Y,Z)$ si $XY=0$, $(-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z)$ si $XY\neq 0$</span>
                     </div>
                 </div>
             </div>
@@ -602,10 +602,10 @@
                     <div class="p-4 rounded-xl bg-slate-850 border border-slate-750 space-y-2">
                         <div class="font-bold text-white">2. Antagonismes Formels Involutifs :</div>
                         <div class="p-2.5 rounded-lg bg-cosmic-900 text-indigo-300 text-xs overflow-x-auto">
-                            $$\mathcal{A}(X, Y, Z) = \big(-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z\big)$$
+                            $$\mathcal{A}(X, Y, Z) = \begin{cases} (-X,\ -Y,\ Z) & \text{si } XY = 0 \\ \big(-\operatorname{sgn}(X)|Y|,\ -\operatorname{sgn}(Y)|X|,\ Z\big) & \text{si } XY \neq 0 \end{cases}$$
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            Formule unifiée équivalente à $(-X, -Y, Z)$ pour les 24 positions axiales/diagonales et à une réflexion controlatérale avec permutation d'amplitudes pour les 60 paires latérales (théorème <code>antagonistPoint_involutive</code>).
+                            Définition exacte par morceaux équivalente à $(-X, -Y, Z)$ pour les 48 positions / 24 paires axiales et diagonales (et les 8 pivots centraux) et à une réflexion controlatérale avec permutation d'amplitudes pour les 60 paires latérales (théorème <code>antagonistPoint_involutive</code>).
                         </p>
                     </div>
 
