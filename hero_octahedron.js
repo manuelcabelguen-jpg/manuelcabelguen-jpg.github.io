@@ -1,5 +1,5 @@
 /**
- * CARTOGRAFFECT® - Hero 3D Octahedron & Free Energy Particles
+ * CARTOGRAFFECT - Hero 3D Octahedron & Free Energy Particles
  * Intégration sur index.html et pages de présentation via Three.js (r128)
  * Conçu pour respecter l'architecture Zero-Build et la performance 60 FPS
  */

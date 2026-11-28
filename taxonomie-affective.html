@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
-    <script src="maintenance_guard.js"></script>
     <title>4. La Taxonomie Affective : Les 176 États &amp; Carte 2D/3D | CARTOGRAFFECT</title>
     <meta name="description" content="Composante 4 de Cartograffect : la Taxonomie Affective Hiérarchique (AffectiveTaxonomy.lean &amp; Lexicon176.lean). Explorez en 2D (D3) et 3D (Three.js) les 176 états répartis sur 8 strates (Z=0..7), 9 groupes et 84 paires antagonistes.">
     <link rel="canonical" href="https://www.cartograffect.com/taxonomie-affective.html">
@@ -39,8 +38,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof katex!=='undefined'&&typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="assets/tailwind.config.js"></script>
+    <link rel="stylesheet" href="assets/styles.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
         .tooltip-2d {
@@ -84,7 +82,7 @@
             <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
-                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique affective</span>
                 </div>
             </a>
@@ -149,7 +147,7 @@
 
                 <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
                     <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                    <span>FR | EN</span>
+                    <span>FR | EN (UI only)</span>
                 </button>
 
                 <a href="taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
@@ -235,7 +233,7 @@
                 <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-pink-500/15 border border-pink-400/30 text-pink-300 text-xs font-mono">
                     <span>COMPOSANTE 4 / 4</span>
                     <span class="text-pink-500">&bull;</span>
-                    <span>AffectiveTaxonomy.lean &amp; Lexicon176.lean</span>
+                    <span>AffectiveTaxonomy.lean (v3.0) &bull; Annexe exploratoire Lexicon176</span>
                     <span class="text-pink-500">&bull;</span>
                     <span>Article §7–8 &amp; Fig. 4</span>
                 </div>
@@ -262,6 +260,15 @@
         <!-- SECTION 1: INTERACTIVE 2D/3D MAP + IDENTITY CARD -->
         <div id="carte-interactive" class="scroll-mt-24"></div>
         <section id="explorer-176" class="space-y-6">
+            <!-- Avertissement Archive Exploratoire v2 (Option 1A / DECISIONS_V3.md) -->
+            <div class="rounded-2xl bg-amber-950/60 border border-amber-500/40 p-4 sm:p-5 text-xs space-y-1.5 shadow-lg">
+                <div class="font-mono font-bold text-amber-200 uppercase tracking-wider">
+                    Archive exploratoire v2 (coordonnées antérieures à l'Option 1A — hors cœur normatif v3.0)
+                </div>
+                <p class="text-slate-300 leading-relaxed">
+                    Le cœur normatif v3.0 (<code>DECISIONS_V3.md</code>) borne la discrétisation à <code>Z &isin; {0, 1, 2}</code> (11 états) et sépare strictement la contrôlabilité instrumentale <code>Y</code> du canal d'activation autonome <code>A &ge; 0</code>. Les coordonnées <code>Z &ge; 3</code> ci-dessous (ex.&nbsp;<em>Terreur</em> <code>X&minus;1/Y+9/Z6</code>, <em>Angoisse</em> <code>X&minus;3/Y+7/Z6</code>, <em>Sérénité</em> <code>X+2/Y&minus;4/Z4</code>) reflètent le pavage exploratoire v2 hérité de <code>Lexicon176.lean</code> (axe <code>Y</code> hybride antérieur à l'Option 1A) et ne doivent pas être interprétées comme normatives en v3.0.
+                </p>
+            </div>
             <!-- Filter & Search Controls -->
             <div class="rounded-3xl bg-cosmic-850 border border-slate-800 p-4 sm:p-5 shadow-xl space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 items-end">
@@ -285,26 +292,26 @@
                             <option value="3">Z=3 — Émoi (17)</option>
                             <option value="4">Z=4 — Réserve (25)</option>
                             <option value="5">Z=5 — Recul (33)</option>
-                            <option value="6">Z=6 — Saisissement (41)</option>
-                            <option value="7">Z=7 — Suspension (49)</option>
+                            <option value="6">Z=6 — Saisissement (41, Annexe 176)</option>
+                            <option value="7">Z=7 — Suspension (49, Annexe 176)</option>
                         </select>
                     </div>
 
                     <!-- Filter Group -->
                     <div class="lg:col-span-2 space-y-1">
                         <label for="filterGroup" class="text-[11px] font-mono uppercase text-slate-400">Groupe / Secteur</label>
-                        <select id="filterGroup" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-pink-500">
-                            <option value="all">Tous les groupes</option>
-                            <option value="Courage">Courage (X+)</option>
-                            <option value="Peur">Peur (X−)</option>
-                            <option value="Joie">Joie (Y+)</option>
-                            <option value="Tristesse">Tristesse (Y−)</option>
-                            <option value="Désir">Désir (X+, Y+)</option>
-                            <option value="Dégoût">Dégoût (X−, Y−)</option>
-                            <option value="Colère">Colère (X−, Y+)</option>
-                            <option value="Calme">Calme (X+, Y−)</option>
-                            <option value="Centre">Opérateurs Centraux</option>
-                        </select>
+                        <select id="filterGroup" aria-label="Filtrer par groupe fonctionnel Option 1A" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                    <option value="all">Tous les groupes (Option 1A)</option>
+                    <option value="Contrôle +">Secteur Contrôle + (|Y|&gt;|X|, Y+ — proto. Joie)</option>
+                    <option value="Contrôle −">Secteur Contrôle − (|Y|&gt;|X|, Y− — proto. Tristesse)</option>
+                    <option value="Attente +">Secteur Attente + (|X|&gt;|Y|, X+ — proto. Courage)</option>
+                    <option value="Attente −">Secteur Attente − (|X|&gt;|Y|, X− — proto. Peur)</option>
+                    <option value="Synergie +">Diagonale Synergie + (+X, +Y — proto. Désir)</option>
+                    <option value="Synergie −">Diagonale Synergie − (−X, −Y — proto. Dégoût)</option>
+                    <option value="Affrontement">Diagonale Affrontement (−X, +Y — proto. Colère)</option>
+                    <option value="Accommodation">Diagonale Accommodation (+X, −Y — proto. Calme)</option>
+                    <option value="Opérateur central">Opérateurs Centraux (X=0, Y=0)</option>
+                </select>
                     </div>
 
                     <!-- Filter Geometry -->
@@ -512,8 +519,8 @@
                         <p class="text-slate-300 leading-relaxed">Si l'écart résiste, il recrute sentiments réflexifs (Z=4), humeurs durables (Z=5) et identité (Z=6).</p>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-                        <div class="font-mono font-bold text-purple-300">5. Cadre (Z=7) &amp; Retour</div>
-                        <p class="text-slate-300 leading-relaxed">Réévaluation du cadre ultime (Z=7) ou dissipation graduelle par paliers vers le <strong>Point de Veille</strong>.</p>
+                        <div class="font-mono font-bold text-purple-300">5. Horizon Z &isin; [0, 5] &amp; Retour Option 2a</div>
+                        <p class="text-slate-300 leading-relaxed">Dissipation pas-à-pas (&Delta;Z &isin; {&minus;1, 0, +1}) ou court-circuit unique <code>2 &rarr; 0</code> vers le <strong>Point de Veille</strong>.</p>
                     </div>
                 </div>
             </div>
@@ -573,7 +580,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
                     <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-                        <div class="font-mono text-xs font-bold text-sky-300">Prédiction 1 — Arbitrage L₁ (X vs Y)</div>
+                        <div class="font-mono text-xs font-bold text-sky-300">Prédiction 1 durcie — Compromis budgétaire directionnel L₁ (X vs Y)</div>
                         <p class="text-slate-300 leading-relaxed">À profondeur $Z$ et ressources concurrentes constantes ($|X|+|Y|=2Z-2$), augmenter l'allocation sur le Contrôle ($Y$) ou l'Attente ($X$) entraîne une diminution mesurable de l'autre voie.</p>
                     </div>
                     <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
@@ -596,7 +603,7 @@
                     <div class="p-4 rounded-2xl bg-emerald-950/25 border border-emerald-500/25 space-y-1.5">
                         <div class="font-bold text-white">Vérification Formelle &amp; Propriété Intellectuelle</div>
                         <p class="text-slate-300 leading-relaxed">
-                            L'ensemble des <span data-payload="lean_modules_count">10</span> modules Lean 4 (<code>Cartograffect</code>, <code>PredictiveEngine</code>, <code>CoreAffect</code>, <code>AffectiveMatrix</code>, <code>AffectiveTaxonomy</code>, <code>AffectiveDynamics</code>, <code>Lexicon176</code>, <code>PredictiveCircuit</code>, <code>AuditTests</code>, <code>OperantFactorization</code>) vérifie <strong data-payload-group="theorems"><span data-payload="theorems_verified">120</span> théorèmes constructifs (<span data-payload="sorry_count">0</span> <code>sorry</code>)</strong> sous <strong>6 prouveurs indépendants</strong> (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19 ; DOI Zenodo : <code>10.5281/zenodo.23833938</code> &bull; Marque déposée OPIC n° <code>1233199</code>).
+                            Les <span data-payload="normative_modules_count">8</span> modules normatifs Lean <span data-payload="prover_version">4.35.0</span> (<code>PredictiveEngine</code>, <code>CoreAffect</code>, <code>AffectiveMatrix</code>, <code>AffectiveTaxonomy</code>, <code>AffectiveDynamics</code>, <code>PredictiveCircuit</code>, <code>OperantFactorization</code>, <code>EndToEndBridge</code>) vérifient <strong data-payload-group="theorems"><span data-payload="theorems_substantial">148</span> théorèmes substantiels / <span data-payload="exported_declarations">169</span> déclarations (<span data-payload="pillar_theorems_count">8</span> piliers, <span data-payload="sorry_count">0</span> <code>sorry</code>)</strong> (utilise <code>Classical.choice</code> ; plus extension <code>PredictiveEngineCanonical.lean</code> 16+5=21 décl. et 11 tests Python ; annexe exploratoire <code>Lexicon176.lean</code> ; DOI Zenodo : <code>10.5281/zenodo.23833938</code> &bull; Enregistrement OPIC n° <code>1233199</code>).
                         </p>
                     </div>
                 </div>
@@ -625,13 +632,13 @@
             <div class="md:col-span-5 space-y-3">
                 <div class="flex items-center gap-2.5">
                     <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
-                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed max-w-md">
                     Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
                 </p>
                 <div class="text-[11px] text-slate-500">
-                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; OPIC n&deg; 1233199 (expression littéraire et graphique)
                 </div>
             </div>
 
@@ -645,9 +652,15 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-indigo-300 font-semibold transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.1.0</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v3.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="index.html#statut-epistemique" class="hover:text-indigo-300 transition-colors">Statut V1/V2/V3</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="article.html#declaration-ia" class="hover:text-indigo-300 transition-colors">Déclaration IA</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/blob/main/FORMAL_AUDIT_PACK.md" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition-colors">FORMAL_AUDIT_PACK.md</a>
                 </div>
             </div>
 
@@ -656,11 +669,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.1.0</span> :
+                        Article <span data-payload="tag">v3.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Compendium formel <span data-payload="tag">v2.1.0</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v3.0.0</span> (<span data-payload="theorems_substantial">148</span> th. / <span data-payload="exported_declarations">169</span> décl. &middot; Lean <span data-payload="prover_version">4.35.0</span> &middot; <span data-payload="normative_modules_count">8</span> modules) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
@@ -1300,7 +1313,7 @@
                     injustice: {
                         title: 'Compensation Ergotrope : Frustration → Colère → Apaisement',
                         titleEn: 'Ergotropic Compensation: Frustration → Anger → Appeasement',
-                        badge: 'Z=1 → Z=2 → Z=6 → Z=2 → Z=0',
+                        badge: 'Z=1 → Z=2 → Z=3 → Z=2 → Z=0 (Option 2a)',
                         text: 'Obstacle imprévu (Surprise Z=1) → Compensation motrice sur attente négative (Colère −1,+1,2) → Escalade identitaire si non résorbée (Fureur −4,+6,6) → Bascule trophotrope vers l\'économie d\'effort (Calme +1,−1,2) → Point de Veille.',
                         textEn: 'Unexpected obstacle (Surprise Z=1) → Motor compensation on negative expectation (Anger −1,+1,2) → Identity escalation if unresolved (Fury −4,+6,6) → Trophotropic shift toward effort economy (Calm +1,−1,2) → Wake Point.',
                         names: ['Surprise', 'Colère', 'Fureur', 'Calme', 'Point de Veille']

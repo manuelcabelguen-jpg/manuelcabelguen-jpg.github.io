@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
-    <script src="maintenance_guard.js"></script>
     <title>Modèles Théoriques : Affects, Émotions &amp; Sentiments | CARTOGRAFFECT</title>
     <meta name="description" content="Modèles Théoriques et Fondements : distinction conceptuelle et computationnelle entre Affects, Émotions et Sentiments, modèles historiques comparés et Algorithme Cartograffect de Manuel Cabelguen (Ph. D.).">
     <link rel="canonical" href="https://www.cartograffect.com/scholar_drive.html">
@@ -20,7 +19,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.cartograffect.com/scholar_drive.html">
     <meta property="og:title" content="Modèles Théoriques : Affects, Émotions &amp; Sentiments | CARTOGRAFFECT">
-    <meta property="og:description" content="Fondements conceptuels des affects, émotions et sentiments, modèles historiques comparés et Compendium formel CARTOGRAFFECT (120 théorèmes, 6 prouveurs, 10 modules .lean) par Manuel Cabelguen, Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada.">
+    <meta property="og:description" content="Fondements conceptuels des affects, émotions et sentiments, modèles historiques comparés et Compendium formel CARTOGRAFFECT v3.0.0 (Lean 4.35.0 : 8 modules normatifs, 148 théorèmes substantiels / 169 déclarations, 0 sorry) par Manuel Cabelguen, Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada.">
     <meta property="og:image" content="https://www.cartograffect.com/assets/og-preview.png">
     <meta property="og:locale" content="fr_FR">
 
@@ -35,8 +34,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="assets/tailwind.config.js"></script>
+    <link rel="stylesheet" href="assets/styles.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-cosmic-900 text-slate-200 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
@@ -47,7 +45,7 @@
         <button type="button" class="floating-dot active" data-target="#hero-theorie-resume" title="Vue d'Ensemble" aria-label="Vue d'Ensemble"></button>
         <button type="button" class="floating-dot" data-target="#triade-definitions" title="1. Affect vs Émotion vs Sentiment" aria-label="1. Affect vs Émotion vs Sentiment"></button>
         <button type="button" class="floating-dot" data-target="#modeles-historiques" title="2. Modèles Historiques Comparés" aria-label="2. Modèles Historiques Comparés"></button>
-        <button type="button" class="floating-dot" data-target="#algorithme-36" title="3. Architecture Certifiée & Norme L1" aria-label="3. Architecture Certifiée & Norme L1"></button>
+        <button type="button" class="floating-dot" data-target="#noyau-formel-v3" title="3. Architecture Certifiée & Norme L1" aria-label="3. Architecture Certifiée & Norme L1"></button>
         <button type="button" class="floating-dot" data-target="#scholar-drive-docs" title="4. Documents & Publications" aria-label="4. Documents & Publications"></button>
         <button type="button" class="floating-dot" data-target="#bibliographie" title="5. Corpus Bibliographique" aria-label="5. Corpus Bibliographique"></button>
     </nav>
@@ -58,7 +56,7 @@
             <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
-                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique affective</span>
                 </div>
             </a>
@@ -123,7 +121,7 @@
 
                 <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
                     <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                    <span>FR | EN</span>
+                    <span>FR | EN (UI only)</span>
                 </button>
 
                 <a href="taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
@@ -171,7 +169,7 @@
             <a href="#hero-theorie-resume" class="sticky-tab-btn active"><span class="tab-badge font-mono text-[10px] opacity-75">00</span> Vue d'Ensemble</a>
             <a href="#triade-definitions" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">01</span> Affect vs Émotion vs Sentiment</a>
             <a href="#modeles-historiques" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">02</span> Modèles Historiques Comparés</a>
-            <a href="#algorithme-36" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">03</span> Architecture Certifiée &amp; Norme L1</a>
+            <a href="#noyau-formel-v3" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">03</span> Architecture Certifiée &amp; Norme L1</a>
             <a href="#scholar-drive-docs" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">04</span> Publications &amp; Documents</a>
             <a href="#bibliographie" class="sticky-tab-btn"><span class="tab-badge font-mono text-[10px] opacity-75">05</span> Corpus Bibliographique</a>
         </div>
@@ -206,7 +204,7 @@
                     <a href="#modeles-historiques" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
                         <span>Modèles Historiques Comparés</span>
                     </a>
-                    <a href="#algorithme-36" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
+                    <a href="#noyau-formel-v3" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
                         <span>Architecture Certifiée &amp; Norme L1</span>
                     </a>
                     <a href="#scholar-drive-docs" class="px-3.5 py-2 rounded-xl font-semibold text-slate-200 hover:text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 transition-colors text-xs flex items-center gap-1.5">
@@ -253,14 +251,14 @@
                             </span>
                         </div>
                         <h3 class="text-xl font-heading font-extrabold text-white">1. L'AFFECT</h3>
-                        <div class="text-xs font-semibold text-purple-300">Le Flux Intéroceptif Brut &amp; la Charge Adaptative</div>
+                        <div class="text-xs font-semibold text-purple-300">Incertitude de Résolution Pré-Valencée &amp; Canal Autonome A &ge; 0</div>
                         <p class="text-xs text-slate-300 leading-relaxed font-light">
-                            L'affect est le tonus psychologique de fond et l'état de base de l'organisme. C'est le baromètre intéroceptif continu de notre équilibre intérieur (vitalité, tension corporelle, bien-être ou malaise diffus). Il n'a pas besoin de mots ni d'objet précis : il est simplement agréable ou désagréable, tonique ou léthargique.
+                            Dans l'architecture v3.0, l'affect désigne le régime pré-valencé et pré-directionnel qui précède la discrimination en coordonnées (X, Y). L'éveil physiologique et la mobilisation allostatique sont isolés dans un canal autonome non négatif <code>A &ge; 0</code>, découplé de la contrôlabilité instrumentale stricte <code>Y</code>.
                         </p>
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-1.5 text-[11px]">
                             <div class="text-slate-400"><strong class="text-purple-300">Vecteur computationnel :</strong> Écart de prédiction intéroceptif brut ($\epsilon_p$) non catégorisé.</div>
                             <div class="text-slate-400"><strong class="text-purple-300">Échelle de temps :</strong> Permanente et continue (bruit de fond psychophysique).</div>
-                            <div class="text-slate-400"><strong class="text-purple-300">Substrat Psychologique :</strong> Intéroception diffuse, valence hédonique élémentaire (plaisir / déplaisir) et niveau d'activation.</div>
+                            <div class="text-slate-400"><strong class="text-purple-300">Substrat Psychologique :</strong> État pré-valencé découplé de la direction instrumentale <code>Y</code>, associé au canal d'activation autonome <code>A &ge; 0</code>.</div>
                         </div>
                     </div>
                     <div class="pt-3 border-t border-slate-800/80 text-[11px] text-purple-200/80 italic">
@@ -330,7 +328,7 @@
                         <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         <span>Matrice Comparative Synoptique</span>
                     </h3>
-                    <span class="text-xs text-purple-400 font-mono">Modélisation en Inférence Active (Friston &amp; Cabelguen)</span>
+                    <span class="text-xs text-purple-400 font-mono">Cadre inspiré de l'inférence active (Friston, 2010 ; Hesp et al., 2021)</span>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -371,7 +369,7 @@
                             <tr>
                                 <td class="py-3 px-4 font-semibold text-white">Levier Thérapeutique</td>
                                 <td class="py-3 px-4">Somatique, sommeil, respiration, intéroception</td>
-                                <td class="py-3 px-4">Désescalade émotionnelle, règle des 90s, désamorçage</td>
+                                <td class="py-3 px-4">Désescalade émotionnelle, retour allostatique progressif, désamorçage</td>
                                 <td class="py-3 px-4">Restructuration cognitive, réévaluation narrative, thérapie d'acceptation</td>
                             </tr>
                         </tbody>
@@ -483,7 +481,7 @@
                         L'esprit ne "détecte" pas passivement des émotions toutes faites : il les construit activement en projetant des concepts émotionnels et des schémas d'interprétation acquis sur des ressentis corporels de base (Core Affect).
                     </p>
                     <div class="space-y-2 text-[11px] pt-3 border-t border-slate-850">
-                        <div class="text-emerald-400"><strong>+ Apport :</strong> Révolution conceptuelle réconciliant esprit prédictif, régulation adaptative interne et malléabilité culturelle de l'expérience affective.</div>
+                        <div class="text-emerald-400"><strong>+ Apport :</strong> Architecture théorique formalisée articulant traitement prédictif, séparation Y / A &ge; 0 et vérification formelle V1 (en attente de validation V3).</div>
                         <div class="text-rose-400"><strong>- Limite :</strong> Manque d'une cartographie géométrique opérationnelle et d'une règle métrique formelle pour les applications cliniques.</div>
                     </div>
                 </div>
@@ -492,7 +490,7 @@
                 <div class="md:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-indigo-950/60 via-cosmic-900 to-slate-900 border border-indigo-500/40 hover:border-indigo-400/70 transition-all space-y-4 shadow-xl">
                     <div class="flex items-center justify-between">
                         <span class="px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-indigo-600 text-white shadow-sm">
-                            2026 &bull; Synthèse Définitive
+                            2026 &bull; Architecture v3.0.0
                         </span>
                         <span class="text-xs font-mono text-indigo-300">OPIC n° 1233199</span>
                     </div>
@@ -528,7 +526,57 @@
         <!-- ======================================================== -->
         <!-- SECTION 3 : ARCHITECTURE FORMELLE CERTIFIÉE LEAN 4     -->
         <!-- ======================================================== -->
-        <section id="algorithme-36" class="page-section rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
+        
+<!-- Encadré global : Statut épistémique (V1 / V2 / V3) & Déclaration transparente d'usage de l'IA -->
+<section id="statut-epistemique" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="rounded-2xl bg-slate-900/90 border border-indigo-500/30 p-6 sm:p-8 shadow-xl space-y-5">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <h2 class="text-lg sm:text-xl font-heading font-bold text-white flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-indigo-400"></span>
+        <span>Statut épistémique (V1 / V2 / V3) &amp; Déclaration transparente d'usage de l'IA</span>
+      </h2>
+      <span class="text-xs font-mono px-2.5 py-1 rounded-full bg-indigo-950/80 text-indigo-200 border border-indigo-500/30" data-payload="tag">v3.0.0</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+      <div class="rounded-xl bg-slate-950/70 border border-emerald-500/25 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-emerald-300 uppercase tracking-wider text-xs">V1 — Cohérence formelle</div>
+        <p class="text-slate-300 leading-relaxed">
+          Noyau <strong class="text-white" data-payload="reference_prover">Lean 4</strong> (<span data-payload="prover_version">4.35.0</span>) minimal vérifié (<span data-payload="normative_modules_count">8</span> modules normatifs,
+          <strong class="text-white" data-payload="theorems_substantial">148</strong> théorèmes substantiels /
+          <span data-payload="exported_declarations">169</span> déclarations,
+          <span data-payload="pillar_theorems_count">8</span> piliers prioritaires,
+          <code class="text-emerald-300" data-payload="sorry_count">0</code> sorry ; utilise <code>Classical.choice</code>).
+          Extension canonique : <span data-payload="canonical_ext_theorems">16</span>+<span data-payload="canonical_ext_aux">5</span>=<span data-payload="canonical_ext_declarations">21</span> décl.,
+          <span data-payload="python_unit_tests_count">11</span> tests Python. Les 5 autres prouveurs v2.1 (Rocq, Agda, Dafny, Z3, TLA+/TLC en <em>bounded model checking</em> fini) sont archivés hors cœur actif.
+        </p>
+      </div>
+      <div class="rounded-xl bg-slate-950/70 border border-indigo-500/25 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-indigo-300 uppercase tracking-wider text-xs">V2 — Cadre théorique</div>
+        <p class="text-slate-300 leading-relaxed">
+          Architecture v3.0 (Options 1A, 2a, 3b) : contrôlabilité instrumentale stricte <span class="font-mono text-white">Y</span> découplée du canal autonome <span class="font-mono text-white">A &ge; 0</span>,
+          discrétisation canonique <span class="font-mono">Z &isin; {0, 1, 2}</span> (<span data-payload="canonical_states_count">11</span> états), profondeur continue <span class="font-mono">Z &isin; [0, 5]</span>,
+          annexe exploratoire <span data-payload="states_count">176</span> états hors cœur normatif, et <strong class="text-white" data-payload="predictions_count">5</strong> prédictions durcies (<span class="font-mono">P1–P5</span>).
+        </p>
+      </div>
+      <div class="rounded-xl bg-slate-950/70 border border-amber-500/30 p-4 space-y-1.5">
+        <div class="font-mono font-bold text-amber-300 uppercase tracking-wider text-xs">V3 — Corroboration empirique</div>
+        <p class="text-slate-300 leading-relaxed">
+          <strong class="text-amber-200">0 donnée humaine ou clinique à ce stade</strong> (architecture théorique non diagnostique ; la preuve Lean 4 garantit uniquement la cohérence interne, jamais la validité psychologique ou neurobiologique).
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 pt-1 text-xs">
+      <a href="article.html#declaration-ia" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-800 text-indigo-200 border border-indigo-500/30 transition-colors">
+        <span>Déclaration transparente d'usage de l'IA</span> &rarr;
+      </a>
+      <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/blob/main/FORMAL_AUDIT_PACK.md" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-800 text-emerald-200 border border-emerald-500/30 transition-colors">
+        <span>FORMAL_AUDIT_PACK.md (parcours relecteur 30 min)</span> &nearr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="noyau-formel-v3" class="page-section rounded-3xl bg-slate-850/95 border border-purple-700/40 p-6 sm:p-10 shadow-2xl space-y-8">
             <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-750 pb-4">
                 <div>
                     <span class="text-xs uppercase font-bold tracking-widest text-purple-400">Axiomatique &amp; Computation</span>
@@ -595,7 +643,7 @@
                             $$\|(X, Y)\|_1 = |X| + |Y| = 2Z - 2, \quad \forall Z \ge 2$$
                         </div>
                         <p class="text-slate-400 text-[11px]">
-                            À strate $Z$ fixée, la ressource attentionnelle est strictement conservée (théorème <code>z2_budget_conservation</code> et loi des 176 positions).
+                            À strate canonique $Z=2$, la ressource attentionnelle est conservée sur les 8 prototypes primaires (théorème <code>z2_budget_conservation</code>) et se généralise en géométrie sur l'annexe exploratoire des 176 positions.
                         </p>
                     </div>
 
@@ -643,7 +691,7 @@
                 <div class="space-y-3 max-w-3xl">
                     <div class="flex flex-wrap items-center gap-2">
                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-600 text-white shadow-sm">
-                            Publication de Référence &bull; <span data-payload="tag">v2.1.0</span>
+                            Publication de Référence &bull; <span data-payload="tag">v3.0.0</span>
                         </span>
                         <span class="text-xs font-mono text-indigo-300">
                             Manuel Cabelguen, Ph. D. &bull; OPIC n° <span data-payload="cipo_registration">1233199</span>
@@ -653,7 +701,7 @@
                         Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif
                     </h3>
                     <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                        Article théorique de référence établissant la grammaire fonctionnelle unifiée en 4 volets (Moteur prédictif, Noyau affectif L1, Matrice affective et Taxonomie hiérarchique), résolvant les clivages historiques (Russell, Ekman, Scherer, Barrett) et posant <span data-payload="predictions_count">5</span> prédictions empiriques falsifiables (P1–P5).
+                        Article théorique de référence établissant la grammaire fonctionnelle unifiée en 4 volets (Moteur prédictif, Noyau affectif L1, Matrice affective et Taxonomie hiérarchique), proposant une intégration formelle de dimensions issues de Russell, Ekman, Scherer et Barrett et posant <span data-payload="predictions_count">5</span> prédictions empiriques falsifiables (P1–P5).
                     </p>
                 </div>
                 <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto">
@@ -676,11 +724,11 @@
                             <span class="w-9 h-9 rounded-xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-300">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </span>
-                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/40">Vérification formelle (6 prouveurs)</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800/40">Noyau formel vérifié V1 (Lean 4.35.0)</span>
                         </div>
                         <h3 class="text-base font-bold text-white">Preuves Formelles Mécanisées</h3>
                         <p class="text-xs text-slate-300">
-                            Compendium officiel certifié (DOI : 10.5281/zenodo.23833938) : <strong data-payload-group="theorems"><span data-payload="theorems_verified">120</span> théorèmes constructifs</strong> vérifiés sous <strong data-payload="provers_count">6</strong> prouveurs indépendants (Lean 4.35.0, Rocq 9.0, Agda 2.9.0, Dafny 4.11.0, SMT/Z3 5.3.3, TLA+/TLC 2.19), <span data-payload="lean_modules_count">10</span> modules <code>.lean</code> (<span data-payload="sorry_count">0</span> sorry, 0 axiome ad hoc).
+                            Compendium officiel v3.0 (DOI : 10.5281/zenodo.23833938) : <strong data-payload-group="theorems"><span data-payload="theorems_substantial">148</span> théorèmes substantiels</strong> (<span data-payload="exported_declarations">169</span> déclarations exportées, <span data-payload="pillar_theorems_count">8</span> piliers prioritaires) vérifiés sous l'assistant de preuve de référence <strong data-payload="reference_prover">Lean 4</strong> (<span data-payload="prover_version">4.35.0</span>, <span data-payload="normative_modules_count">8</span> modules normatifs <code>.lean</code>, <code data-payload="sorry_count">0</code> sorry, utilise <code>Classical.choice</code>). Extension canonique : <span data-payload="canonical_ext_theorems">16</span>+<span data-payload="canonical_ext_aux">5</span>=<span data-payload="canonical_ext_declarations">21</span> décl. ; <span data-payload="python_unit_tests_count">11</span> tests Python. Les 5 autres prouveurs v2.1 (Rocq, Agda, Dafny, Z3, TLA+/TLC en <em>bounded model checking</em> fini) sont archivés hors cœur actif.
                         </p>
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
@@ -704,7 +752,7 @@
                             </span>
                             <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950 text-purple-300 border border-purple-800/40">Zenodo &bull; OSF</span>
                         </div>
-                        <h3 class="text-base font-bold text-white">Manuscrit Théorique <span data-payload="tag">v2.1.0</span></h3>
+                        <h3 class="text-base font-bold text-white">Manuscrit Théorique <span data-payload="tag">v3.0.0</span></h3>
                         <p class="text-xs text-slate-300">
                             Prépublication intégrale (DOI: 10.5281/zenodo.24022795 / OSF: osf.io/z89sg) : architecture hiérarchique de l'expérience affective fondée sur le traitement prédictif, analyse des 4 théories historiques.
                         </p>
@@ -755,11 +803,10 @@
                         </div>
                         <h3 class="text-base font-bold text-white">Dépôt GitHub du Site Web</h3>
                         <p class="text-xs text-slate-300">
-                            Code source complet de la plateforme web sous licence GNU AGPLv3 (<code class="text-[11px] font-mono">cartograffect_model.js</code> hybride : code AGPLv3, taxonomie des 176 états CC BY-NC-SA 4.0) : canevas interactif D3.js, navigateur octaédrique et Service Worker.
-                        </p>
+                            Séparation physique Phase 3 : code source, scripts et preuves Lean 4 sous licence OSI GNU AGPLv3 (<code class="text-[11px] font-mono">AGPL-3.0-or-later</code>) ; textes, manuscrit et tables sous <code class="text-[11px] font-mono">CC-BY-4.0</code>.</p>
                     </div>
                     <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
-                        <span class="text-slate-400 font-mono text-[10px]" data-payload="spdx_expression">AGPL-3.0-or-later AND CC-BY-NC-SA-4.0</span>
+                        <span class="text-slate-400 font-mono text-[10px]" data-payload="spdx_expression">AGPL-3.0-or-later AND CC-BY-4.0</span>
                         <a href="https://github.com/manuelcabelguen-jpg/manuelcabelguen-jpg.github.io" target="_blank" rel="noopener noreferrer" class="font-semibold text-purple-300 hover:text-white flex items-center gap-1">
                             <span>GitHub</span>
                             <span>&nearr;</span>
@@ -783,7 +830,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="px-3 py-1 rounded-full text-xs font-mono bg-purple-950/80 text-purple-300 border border-purple-700/50" id="corpusCountBadge">
-                                72 références
+                                71 références
                             </span>
                             <button onclick="downloadBibtexFile()" class="px-3.5 py-1.5 rounded-xl font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 shadow-md transition-all flex items-center gap-1.5" title="Télécharger l'intégralité du corpus au format BibTeX">
                                 <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -823,7 +870,7 @@
                         </div>
                     </div>
 
-                    <!-- Grille unifiée des 72 références APA 7 -->
+                    <!-- Grille unifiée des 71 références APA 7 -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs" id="corpusCardsContainer">
 
                 <!-- 1. Adolphs, R., Mlodinow, L., &amp; Barrett, L. F. (2019) -->
@@ -864,7 +911,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Frustration theory: An analysis of dispositional learning and memory</div>
                         <p class="text-slate-400 text-[11px]">Cambridge University Press.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s&#x27;effondre.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Formalise les mécanismes de frustration par omission ou retrait d&#x27;une récompense attendue (Rew−, Rolls 2014), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s&#x27;effondre.
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -2174,33 +2221,8 @@
                     </div>
                 </div>
 
-                <!-- 50. Martin-Löf, P. (1984) -->
-                <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="predictive">
-                    <div class="space-y-1.5">
-                        <div class="flex items-center justify-between gap-2">
-                            <span class="font-bold text-white text-sm">Martin-Löf, P. (1984)</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-300 border-indigo-800/40 border shrink-0">Inférence Active</span>
-                        </div>
-                        <div class="text-purple-300 italic font-medium leading-snug">Intuitionistic type theory</div>
-                        <p class="text-slate-400 text-[11px]">Bibliopolis.</p>
-                        <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Fournit le socle constructif de la théorie des types dépendants sur lequel reposent les assistants de preuve compagnon (Lean 4, Rocq, Agda).
-                        </p>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
-                        <div class="flex items-center gap-1.5">
-                            <button onclick="copyPaperCitation('martinlof1984intuitionistic', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier la référence au format APA 7">
-                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span>APA</span>
-                            </button>
-                            <button onclick="copyPaperBibtex('martinlof1984intuitionistic', this)" class="px-2 py-1 rounded bg-slate-850 hover:bg-slate-800 border border-slate-750 text-slate-300 hover:text-white text-[10px] transition-colors flex items-center gap-1" title="Copier l'entrée BibTeX">
-                                <svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> <span>BibTeX</span>
-                            </button>
-                        </div>
-                        <span class="text-[10px] text-slate-500 font-mono">Ouvrage / référence canonique</span>
-                    </div>
-                </div>
 
-                <!-- 51. Mesquita, B., Boiger, M., &amp; De Leersnyder, J. (2017) -->
+                <!-- 50. Mesquita, B., Boiger, M., &amp; De Leersnyder, J. (2017) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="affectivism">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2228,7 +2250,7 @@
                     </div>
                 </div>
 
-                <!-- 52. Panksepp, J. (1998) -->
+                <!-- 51. Panksepp, J. (1998) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2254,7 +2276,7 @@
                     </div>
                 </div>
 
-                <!-- 53. Panksepp, J. (2000) -->
+                <!-- 52. Panksepp, J. (2000) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2282,7 +2304,7 @@
                     </div>
                 </div>
 
-                <!-- 54. Parr, T., Pezzulo, G., &amp; Friston, K. J. (2022) -->
+                <!-- 53. Parr, T., Pezzulo, G., &amp; Friston, K. J. (2022) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="predictive">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2310,7 +2332,7 @@
                     </div>
                 </div>
 
-                <!-- 55. Pezzulo, G., Rigoli, F., &amp; Friston, K. (2015) -->
+                <!-- 54. Pezzulo, G., Rigoli, F., &amp; Friston, K. (2015) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="interoception">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2338,7 +2360,7 @@
                     </div>
                 </div>
 
-                <!-- 56. Rao, R. P., &amp; Ballard, D. H. (1999) -->
+                <!-- 55. Rao, R. P., &amp; Ballard, D. H. (1999) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="predictive">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2366,7 +2388,7 @@
                     </div>
                 </div>
 
-                <!-- 57. Robinaugh, D. J., Haslbeck, J. M. B., Ryan, O., Fried, E. I., &amp; Waldorp, L. J. (2021) -->
+                <!-- 56. Robinaugh, D. J., Haslbeck, J. M. B., Ryan, O., Fried, E. I., &amp; Waldorp, L. J. (2021) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="affectivism">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2394,7 +2416,7 @@
                     </div>
                 </div>
 
-                <!-- 58. Rolls, E. T. (2005) -->
+                <!-- 57. Rolls, E. T. (2005) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2404,7 +2426,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Emotion explained</div>
                         <p class="text-slate-400 text-[11px]">Oxford University Press.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Analyse les émotions comme états déclenchés par des renforcements instrumentaux et des punitions (R+, R-, P+, P-) en appui des quadrants Z=2.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Analyse les émotions comme états déclenchés par les contingences de récompense et de punition (Rew+, Rew−, Pun+, Pun−) en bijection exacte 2&times;2 sur les diagonales Z=2.
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -2420,7 +2442,7 @@
                     </div>
                 </div>
 
-                <!-- 59. Rolls, E. T. (2014) -->
+                <!-- 58. Rolls, E. T. (2014) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2430,7 +2452,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Emotion and decision-making explained</div>
                         <p class="text-slate-400 text-[11px]">Oxford University Press.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Relie l&#x27;évaluation des contingences de renforcement aux processus décisionnels et à l&#x27;orientation comportementale d&#x27;approche ou de retrait.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Fonde la matrice 2&times;2 des contingences de stimuli (Rew+, Rew−, Pun+, Pun−) bornée à Z=2 et la symétrie d&#x27;antagonisme (Rew+ &harr; Pun+, Rew− &harr; Pun−).
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -2446,7 +2468,7 @@
                     </div>
                 </div>
 
-                <!-- 60. Rothbaum, F., Weisz, J. R., &amp; Snyder, S. S. (1982) -->
+                <!-- 59. Rothbaum, F., Weisz, J. R., &amp; Snyder, S. S. (1982) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2474,7 +2496,7 @@
                     </div>
                 </div>
 
-                <!-- 61. Russell, J. A. (1980) -->
+                <!-- 60. Russell, J. A. (1980) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2502,7 +2524,7 @@
                     </div>
                 </div>
 
-                <!-- 62. Russell, J. A. (2003) -->
+                <!-- 61. Russell, J. A. (2003) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2530,7 +2552,7 @@
                     </div>
                 </div>
 
-                <!-- 63. Russell, J. A., &amp; Barrett, L. F. (1999) -->
+                <!-- 62. Russell, J. A., &amp; Barrett, L. F. (1999) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2558,7 +2580,7 @@
                     </div>
                 </div>
 
-                <!-- 64. Scherer, K. R. (2005) -->
+                <!-- 63. Scherer, K. R. (2005) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2586,7 +2608,7 @@
                     </div>
                 </div>
 
-                <!-- 65. Schiller, D., Yu, A. N. C., Alia-Klein, N., Becker, S., Cromwell, H. C., Dolcos, F., Eslinger, P. J., Frewen, P., Kemp, A. H., Pace-Schott, E. F., Raber, J., Silton, R. L., Stefanova, E., Williams, J. H. G., Abe, N., Aghajani, M., Albrecht, F., Alexander, R., Anders, S., ... Gross, J. J. (2024) -->
+                <!-- 64. Schiller, D., Yu, A. N. C., Alia-Klein, N., Becker, S., Cromwell, H. C., Dolcos, F., Eslinger, P. J., Frewen, P., Kemp, A. H., Pace-Schott, E. F., Raber, J., Silton, R. L., Stefanova, E., Williams, J. H. G., Abe, N., Aghajani, M., Albrecht, F., Alexander, R., Anders, S., ... Gross, J. J. (2024) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="affectivism">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2614,7 +2636,7 @@
                     </div>
                 </div>
 
-                <!-- 66. Seth, A. K. (2013) -->
+                <!-- 65. Seth, A. K. (2013) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="interoception">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2642,7 +2664,7 @@
                     </div>
                 </div>
 
-                <!-- 67. Seth, A. K., &amp; Friston, K. J. (2016) -->
+                <!-- 66. Seth, A. K., &amp; Friston, K. J. (2016) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="interoception">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2670,7 +2692,7 @@
                     </div>
                 </div>
 
-                <!-- 68. Skinner, B. F. (1953) -->
+                <!-- 67. Skinner, B. F. (1953) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="emotions">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2680,7 +2702,7 @@
                         <div class="text-purple-300 italic font-medium leading-snug">Science and human behavior</div>
                         <p class="text-slate-400 text-[11px]">Macmillan.</p>
                         <p class="text-slate-300 text-[11px] leading-relaxed pt-1">
-                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Définit les quatre opérateurs du conditionnement opérant (renforcement et punition positifs/négatifs) arrimés aux quatre prototypes combinés Z=2.
+                            <strong class="text-indigo-300">Apport à Cartograffect :</strong> Analyse du comportement opérant d&#x27;après la fréquence de réponse (R− actif d&#x27;échappement en Y&gt;0), explicitement dissociée au &sect;6.2 de la matrice de stimuli Rew&plusmn;/Pun&plusmn; de Rolls (2014).
                         </p>
                     </div>
                     <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
@@ -2696,7 +2718,7 @@
                     </div>
                 </div>
 
-                <!-- 69. Smith, R., Parr, T., &amp; Friston, K. J. (2019) -->
+                <!-- 68. Smith, R., Parr, T., &amp; Friston, K. J. (2019) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="psychiatry">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2724,7 +2746,7 @@
                     </div>
                 </div>
 
-                <!-- 70. Sterling, P. (2012) -->
+                <!-- 69. Sterling, P. (2012) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="interoception">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2752,7 +2774,7 @@
                     </div>
                 </div>
 
-                <!-- 71. Tschantz, A., Barca, L., Maisto, D., Buckley, C. L., Seth, A. K., &amp; Pezzulo, G. (2022) -->
+                <!-- 70. Tschantz, A., Barca, L., Maisto, D., Buckley, C. L., Seth, A. K., &amp; Pezzulo, G. (2022) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="interoception">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2780,7 +2802,7 @@
                     </div>
                 </div>
 
-                <!-- 72. van Heijst, K., Kret, M. E., &amp; Ploeger, A. (2025) -->
+                <!-- 71. van Heijst, K., Kret, M. E., &amp; Ploeger, A. (2025) -->
                 <div class="corpus-card p-4 rounded-2xl bg-cosmic-900 border border-slate-800 hover:border-indigo-500/50 transition-all space-y-2.5 flex flex-col justify-between" data-domain="affectivism">
                     <div class="space-y-1.5">
                         <div class="flex items-center justify-between gap-2">
@@ -2829,13 +2851,13 @@
             <div class="md:col-span-5 space-y-3">
                 <div class="flex items-center gap-2.5">
                     <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
-                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed max-w-md">
                     Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
                 </p>
                 <div class="text-[11px] text-slate-500">
-                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; OPIC n&deg; 1233199 (expression littéraire et graphique)
                 </div>
             </div>
 
@@ -2849,7 +2871,7 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-slate-300 hover:text-white transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.1.0</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v3.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-indigo-300 font-semibold transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
                 </div>
@@ -2860,11 +2882,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.1.0</span> :
+                        Article <span data-payload="tag">v3.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Compendium formel <span data-payload="tag">v2.1.0</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v3.0.0</span> (<span data-payload="theorems_substantial">148</span> th. / <span data-payload="exported_declarations">169</span> décl. &middot; Lean <span data-payload="prover_version">4.35.0</span> &middot; <span data-payload="normative_modules_count">8</span> modules) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">
@@ -2887,11 +2909,11 @@
     <script>
         function copyScholarCitation(btn) {
             const P = window.CartograffectPayload;
-            const ver = P ? P.get('release.version', '2.1.0') : '2.1.0';
+            const ver = P ? P.get('release.version', '3.0.0') : '3.0.0';
             const artDoi = P ? P.get('identifiers.zenodo_article_doi', '10.5281/zenodo.24022795') : '10.5281/zenodo.24022795';
             const codeDoi = P ? P.get('identifiers.zenodo_code_doi', '10.5281/zenodo.23833938') : '10.5281/zenodo.23833938';
             const osfUrl = P ? P.get('identifiers.osf_url', 'https://osf.io/z89sg') : 'https://osf.io/z89sg';
-            const theorems = P ? P.get('strate_0_core.theorems_verified', 120) : 120;
+            const theorems = P ? P.get('strate_0_core.theorems_substantial', 148) : 148;
             const provers = P ? P.get('strate_0_core.provers_count', 6) : 6;
             const en = Boolean(window.CartograffectI18n && window.CartograffectI18n.getLang() === 'en');
             const text = `Cabelguen, M. (2026). Cartographie des affects : une architecture hiérarchique de l’expérience affective fondée sur le traitement prédictif (Version ${ver}). Zenodo DOI: ${artDoi} | OSF: ${osfUrl} | Compendium formel (${theorems} théorèmes, ${provers} prouveurs): https://doi.org/${codeDoi}`;

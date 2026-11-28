@@ -1,85 +1,21 @@
-CARTOGRAFFECT® — Double Licence SPDX & Propriété Intellectuelle (v2.0.0)
-==========================================================================
+# LICENSES — CARTOGRAFFECT Web Showcase (v3.0.0)
 
-SPDX-License-Identifier: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0
+Copyright (c) 2024–2026 Manuel Cabelguen, Ph. D. in Psychology, Clinical Psychologist, Independent Researcher (Sainte-Agathe-des-Monts, Québec, Canada).
 
-Copyright © 2024–2026 Manuel Cabelguen, Ph. D.
-Psychologue clinicien, chercheur indépendant en psychologie,
-Sainte-Agathe-des-Monts, Québec, Canada.
-Tous droits réservés.
+SPDX-License-Identifier: AGPL-3.0-or-later AND CC-BY-4.0
 
---------------------------------------------------------------------------------
-1. MARQUE DÉPOSÉE & ENREGISTREMENT OPIC / CIPO
---------------------------------------------------------------------------------
-CARTOGRAFFECT® est une marque déposée de Manuel Cabelguen.
-L'utilisation du nom, du logo et des signes distinctifs de CARTOGRAFFECT® demeure
-exclusivement réservée à son titulaire, sauf autorisation écrite préalable.
-Aucune des licences ci-dessous n'accorde de droits sur la marque déposée.
+## Strict Physical License Separation (Phase 3)
 
-Enregistrement officiel de droit d'auteur :
-  Office de la propriété intellectuelle du Canada (OPIC / CIPO) — N° 1233199
-  Compendium unifié : https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT
-  Archive OSF : https://osf.io/z89sg
+No hybrid Non-Commercial (NC) restriction applies to any source code, script, or active v3.0.0 artifact in this repository:
 
---------------------------------------------------------------------------------
-2. ARCHITECTURE THÉORIQUE, TAXONOMIE DES 176 ÉTATS & TEXTES — CC BY-NC-SA 4.0
---------------------------------------------------------------------------------
-L'architecture théorique, le modèle hiérarchique (Z in {0..7}), la géométrie
-discrète L1, la taxonomie des 176 positions affectives, l'ontologie, les fiches
-conceptuelles et l'ensemble des contenus textuels scientifiques (DOI article :
-10.5281/zenodo.24022795 ; OPIC n° 1233199) sont distribués sous licence :
+1. **Source Code, Scripts, Interactive Visualizers & Tools (`*.js`, `scripts/*.py`, build/UI logic)**
+   Licensed strictly under the OSI-approved **GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)**.
+   Full license text: <https://www.gnu.org/licenses/agpl-3.0.html>
 
-  Creative Commons Attribution - Pas d'Utilisation Commerciale - Partage dans
-  les Mêmes Conditions 4.0 International (CC-BY-NC-SA-4.0)
+2. **Scientific Texts, Preprint Manuscript, Educational Content, SVG Diagrams & Data (`*.html` prose, `*.md`, `data/*.json`, `assets/*.pdf`)**
+   Licensed under **Creative Commons Attribution 4.0 International (`CC-BY-4.0`)**.
+   Full license text: <https://creativecommons.org/licenses/by/4.0/>
 
-Texte juridique complet :
-  https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+## Copyright Registration Notice (CIPO / OPIC No. 1233199)
 
-Conditions impératives :
-- Attribution : créditer Manuel Cabelguen, mentionner CARTOGRAFFECT® et lier
-  la source (https://www.cartograffect.com / DOI : 10.5281/zenodo.24022795).
-- Pas d'Utilisation Commerciale (NC) : aucune exploitation commerciale directe
-  ou indirecte sans autorisation écrite préalable de l'auteur.
-- Partage dans les Mêmes Conditions (SA) : toute œuvre dérivée autorisée à des
-  fins non commerciales doit être partagée sous licence CC BY-NC-SA 4.0.
-
---------------------------------------------------------------------------------
-3. CODE SOURCE, ALGORITHMES & PREUVES FORMELLES — GNU AGPLv3
---------------------------------------------------------------------------------
-Le code source applicatif (HTML, CSS, JavaScript, Python de synchronisation),
-les algorithmes de calcul et de visualisation ainsi que les preuves formelles
-mécanisées du compendium CARTOGRAFFECT v2.1.0 (120 théorèmes constructifs,
-0 sorry, 10 modules .lean, 6 prouveurs indépendants : Lean 4.35.0, Rocq 9.0,
-Agda 2.9.0, Dafny 4.11.0, SMT-LIB/Z3 5.3.3, TLA+/TLC 2.19 ; DOI compendium :
-10.5281/zenodo.23833938) sont distribués sous les termes de la licence :
-
-  GNU Affero General Public License, version 3 ou ultérieure (AGPL-3.0-or-later)
-
-Texte officiel de la licence :
-  https://www.gnu.org/licenses/agpl-3.0.txt
-
-Note sur la disponibilité réseau (AGPLv3, section 13) : si vous modifiez le
-code source et permettez à des utilisateurs d'interagir avec le logiciel à
-distance via un réseau informatique, vous devez mettre le code source complet
-correspondant à disposition de ces utilisateurs sous GNU AGPLv3.
-
---------------------------------------------------------------------------------
-4. CLAUSE DE SÉPARATION DES FICHIERS HYBRIDES (`cartograffect_model.js`)
---------------------------------------------------------------------------------
-Les fichiers hybrides embarquant conjointement des structures logicielles
-exécutables/formelles et la taxonomie ou nomenclature des 176 états affectifs
-— en particulier `cartograffect_model.js` sur le présent site web (ainsi que
-`Lexicon176` et `lexicon_176.json` dans le compendium `CARTOGRAFFECT`) —
-sont soumis à la clause de séparation stricte suivante :
-
-  a) La structure logicielle (exports UMD/CommonJS, accesseurs, indexation et
-     code d'interface) relève de GNU AGPLv3 (`AGPL-3.0-or-later`).
-  b) La nomenclature affective, les libellés canoniques, les coordonnées
-     (X, Y, Z), les appariements antagonistes et l'architecture taxonomique des
-     176 états demeurent exclusivement régis par `CC BY-NC-SA 4.0`.
-
-Toute extraction, réempaquetage, redistribution ou exploitation commerciale
-(y compris l'entraînement de modèles ou l'intégration dans un produit commercial)
-de la taxonomie à partir de `cartograffect_model.js` ou de tout autre fichier
-hybride est strictement interdite sans autorisation écrite préalable de Manuel
-Cabelguen (manuelcabelguen@gmail.com).
+The original literary and graphic expression of CARTOGRAFFECT is registered with the Canadian Intellectual Property Office (CIPO / OPIC Registration No. 1233199). In accordance with copyright law principles, this registration covers only the original literary formulation, prose, and graphic illustrations — never scientific ideas, mathematical coordinates, geometric structures, formulas, or theoretical concepts, which remain freely usable for academic research, discussion, and replication. Including the registration number is never required for scientific citations.

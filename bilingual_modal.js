@@ -1,5 +1,5 @@
 /**
- * CARTOGRAFFECT® - Guide Bilingue & Lexique International (FR <-> EN)
+ * CARTOGRAFFECT - Guide Bilingue & Lexique International (FR <-> EN)
  * SPDX-License-Identifier: AGPL-3.0-or-later
  * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
  * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
@@ -9,9 +9,9 @@
     function getPayloadMeta() {
         const P = (typeof window !== "undefined" && window.CartograffectPayload) ? window.CartograffectPayload : null;
         return {
-            version: P ? P.get("release.version", "2.1.0") : "2.1.0",
-            tag: P ? P.get("release.tag", "v2.1.0") : "v2.1.0",
-            theorems: P ? P.get("strate_0_core.theorems_verified", 120) : 120,
+            version: P ? P.get("release.version", "3.0.0") : "3.0.0",
+            tag: P ? P.get("release.tag", "v3.0.0") : "v3.0.0",
+            theorems: P ? P.get("strate_0_core.theorems_substantial", 148) : 148,
             proversCount: P ? P.get("strate_0_core.provers_count", 6) : 6,
             leanModulesCount: P ? P.get("strate_0_core.lean_modules_count", 10) : 10,
             statesCount: P ? P.get("strate_0_core.states_count", 176) : 176,
@@ -41,7 +41,7 @@
                         <span>Lexique Bilingue &amp; Terminologie Internationale</span>
                     </h3>
                     <p class="text-xs text-slate-400 mt-1">
-                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et vérification formelle (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
+                        Correspondances scientifiques Français ⇄ Anglais et passerelle entre vécu phénoménologique et vérification formelle (<span data-payload="strate_0_core.theorems_substantial">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules <code>.lean</code>, 0 sorry).
                     </p>
                 </div>
                 <button type="button" onclick="closeLangModal()" aria-label="Fermer le lexique" class="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-xl leading-none cursor-pointer">
@@ -198,7 +198,7 @@
                         <div class="term-card space-y-1.5">
                             <span class="text-[11px] font-bold text-sky-300 uppercase">2. Compendium &amp; Vérification Formelle (<span data-payload="release.tag">${meta.tag}</span>) :</span>
                             <p class="text-xs text-slate-300 leading-relaxed font-mono bg-cosmic-950 p-3 rounded-lg border border-slate-800/80">
-                                Cabelguen, M. (2026). <em>CARTOGRAFFECT® : Compendium unifié — Vérification formelle (<span data-payload="strate_0_core.theorems_verified">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules .lean, 0 sorry)</em> (version <span data-payload="release.tag">${meta.tag}</span>) [Logiciel]. Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_code_doi">${meta.codeDoi}</span>
+                                Cabelguen, M. (2026). <em>CARTOGRAFFECT : Compendium unifié — Vérification formelle (<span data-payload="strate_0_core.theorems_substantial">${meta.theorems}</span> théorèmes, <span data-payload="strate_0_core.provers_count">${meta.proversCount}</span> prouveurs, <span data-payload="strate_0_core.lean_modules_count">${meta.leanModulesCount}</span> modules .lean, 0 sorry)</em> (version <span data-payload="release.tag">${meta.tag}</span>) [Logiciel]. Zenodo. https://doi.org/<span data-payload="identifiers.zenodo_code_doi">${meta.codeDoi}</span>
                             </p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3 pt-1">
@@ -218,7 +218,7 @@
 
             <!-- Modal Footer -->
             <div class="p-4 border-t border-slate-800 bg-cosmic-850 flex items-center justify-between text-xs text-slate-400">
-                <span>CARTOGRAFFECT&reg; &bull; OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span> &bull; &copy; 2024–2026 Manuel Cabelguen</span>
+                <span>CARTOGRAFFECT &bull; OPIC n° <span data-payload="identifiers.cipo_registration">${meta.cipo}</span> &bull; &copy; 2024–2026 Manuel Cabelguen</span>
                 <button type="button" onclick="closeLangModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors cursor-pointer">
                     Fermer
                 </button>

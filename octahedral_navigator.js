@@ -2,7 +2,7 @@
  * CARTOGRAFFECT - Navigateur Géométrique Octaédrique
  * Basé rigoureusement sur le document :
  * "Algorithme du système émotionnel par catégories et groupes" (Manuel Cabelguen, Ph. D. en psychologie, psychologue clinicien)
- * 176 entrées (8 opérateurs centraux + 168 positions sur 6 couronnes Z=2..7)
+ * Discrétisation canonique Z ∈ {0,1,2} (11 états), profondeur continue Z ∈ [0,5], annexe exploratoire 176 états (Z=0..7)
  */
 
 (function() {
@@ -521,7 +521,7 @@
             <div class="pt-2 flex flex-wrap items-center gap-2">
                 <a href="taxonomie-affective.html?highlight=${encodeURIComponent(affect.name)}&z=${affect.z}" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all inline-flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                    <span>${en ? 'Explore in the Full 176-State Map' : 'Explorer dans la Carte Complète des 176 États'}</span>
+                    <span>${en ? 'Explore in the 176-State Map (Exploratory Annex)' : 'Explorer dans l\'Annexe Exploratoire 176 États'}</span>
                 </a>
             </div>
         `;

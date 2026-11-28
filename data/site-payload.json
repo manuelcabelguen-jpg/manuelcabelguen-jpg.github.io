@@ -1,34 +1,109 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
   "release": {
-    "version": "2.1.0",
-    "tag": "v2.1.0",
-    "date": "2026-11-22",
+    "version": "3.0.0",
+    "tag": "v3.0.0",
+    "date": "2026-11-26",
     "changelog_highlights": [
       {
-        "section": "Added",
-        "title": "End-to-End Formal Bridge Across All 6 Provers (`EndToEndBridge`, `130/130` Strate 0 theorems, `0 sorry`)",
-        "summary": "added `Cartograffect/EndToEndBridge.lean` (`11` Lean modules, `130/130` theorems + `all176Entries_unique_labels`), `rocq/theories/EndToEndBridge.v` (`11/11` `.v` modules, `131/131` `Closed under the global context`, `Axioms: <none>`), `agda/src/Cartograffect/EndToEndBridge.agda` (`12/12` `.agda` modules `--safe --without-K`, `130/130` theorems + `all176Entries_unique_labels` + `11/11` evaluation blocks), `dafny/src/EndToEndBridge.dfy` (`11/11` modules, `132/132` lemmas, `3,021` verified obligations, `0` errors), `smt/theories/10_EndToEndBridge.smt2` (`10/10` `.smt2` files, `10/10` `sat` consistency, `130/130` `unsat` theorems, `2/2` `unsat` AUX, `11/11` `unsat` evals), and `tla/specs/EndToEndBridge.tla` + `Model_EndToEndBridge.tla` (`18/18` SANY modules, `132/132` predicates, `8/8` TLC models including liveness `<>(pt.z = 7)` across 598 states / 175 distinct)."
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "**Phase 0 — Locking of the 4 Irreversible v3.0 Arbitrations (`DECISIONS_V3.md`)*",
+        "summary": "**Phase 0 — Locking of the 4 Irreversible v3.0 Arbitrations (`DECISIONS_V3.md`)**:"
       },
       {
-        "section": "Added",
-        "title": "Canonical Predictive Engine Extension (`extensions/predictive_engine/PredictiveEngineCanonical.lean`, `extensions/predictive_engine/EPISTEMIC_STATUS.md`)",
-        "summary": "Lean 4 canonical extension (`21/21` theorems, `0 sorry`) formalizing arbitrations A1–A4 (isolated 3-circuit responses, direct projection of operability level `Z >= 1`, possible-set symbolic domains `{±X, ±Y, Z}`, information reduction `ΔH >= 0`, crown law, strict exclusion of `Veille (0,0,0)` from the Attentional Interface, active resolution vs. passive extinction, and operant/taxonomy/lexicon bridges)."
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Option 1A (Strict Instrumental Controllability `Y` & Autonomous Activation Channel `A >= 0`)",
+        "summary": "redefined `Y` strictly as perceived instrumental controllability, externalized physiological arousal / allostatic mobilization into an independent non-negative channel `A >= 0`, removed `computeActivation(p.y)` from `Cartograffect/AffectiveMatrix.lean`, refactored `isCoherentTerminalState` / `end_to_end_coherence` in `Cartograffect/AffectiveTaxonomy.lean`, and restored semantic symmetry on `Y-` (accommodation under objective action limits in `(X > 0, Y < 0)`; aversive low-control states relocated to `Y < 0` with elevated `A`)."
       },
       {
-        "section": "Added",
-        "title": "Single-Source-of-Truth Vector Diagram & Python Engine Alignment (`docs/assets/moteur_predictif_canonique.html`, `docs/assets/moteur_predictif_article.svg`, `python/cartograffect_predictive_engine.py`, `python/test_predictive_engine.py`)",
-        "summary": "canonical `#moteur-svg` vector source and standalone light-theme manuscript SVG export paired with isolated-response assembly, direct `Z` projection, `ΔH >= 0` entropy reduction, automated diagnosis of the 5 ergodicity breaks, `EndToEndBridge` operant helpers, and 18 unit tests."
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Option 2a (Strict Stepwise Vertical Dynamics)",
+        "summary": "unified vertical transitions under `ΔZ ∈ {-1, 0, +1}` with the sole downward short-circuit `2 → 0` bypassing `Surprise (Z = 1)`, removing direct multi-stratum jump projections from the manuscript, vector figures, Python engine, and `PredictiveEngineCanonical.lean`."
       },
       {
-        "section": "Changed",
-        "title": "Editorial Alignment & Companion Website Sync (`docs/01-Article_Cartograffect.md`, `README.md`, `VALIDATION.md`, `docs/CONVERGENCE_MATRIX.md`, `manuelcabelguen-jpg.github.io`)",
-        "summary": "aligned Section 4 and Figure 1 on the canonical two-loop / six-circuit Predictive Engine (`v2.1.0`), updated Hexa-Prover verification counters (`130/130` Strate 0 theorems + `36/36` Strate 1 lexicon Lean theorems), regenerated `site-payload.json`, and synchronized companion web pages."
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Option 3b (Charge/Discharge Symmetry Breaking for P2)",
+        "summary": "restricted axial instability (`χ > 0`) exclusively to the two negative Charge poles (`Peur (-2,0,2)` and `Tristesse (0,-2,2)`), while positive Discharge poles (`Joie (0,2,2)` and `Courage (2,0,2)`) relax directly toward `Veille (0,0,0)` without spontaneous diagonal destabilization; removed `DepthTransitionKernel.antagonist_equivariant`."
       },
       {
-        "section": "Verified",
-        "title": "Strate 0 Hexa-Prover Core & Strate 1 Lean Extensions (`0 sorry`, `0` custom axioms)",
-        "summary": "full 6-prover parity (`11` `.lean` modules, `130/130` verified Strate 0 theorems + `21/21` in `PredictiveEngineCanonical.lean`, and `4/4` Strate 1 lexicon Lean modules with `36/36` audited theorems in `PolarityAntipodal3D.lean` [4], `AuditGeometricLexicalPlacement.lean` [4], `EmotionWheelsChallenge.lean` [7], and `SchererGRID.lean` [21])."
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Arbitration 4 (Publishable Scope `Z ∈ [0, 5]`, Canonical Discretization `Z ∈ {0, 1, 2}`)",
+        "summary": "bounded the normative discretization to `Z ∈ {0, 1, 2}` (11 canonical positions: `Point de Veille`, `Surprise`, `Anticipation`, and the 8 primary crown prototypes) and `Z = 2` Rolls (2014) reward/punishment bijection (`Rew+`, `Rew−`, `Pun+`, `Pun−`, `rolls_contingencies_z2_bound`, `z2_rolls_bijection_2x2`), separating `Cartograffect/Lexicon176.lean` and `docs/02-Inventaire_176.md` (`Z = 0..7`) strictly as exploratory annexes outside the normative core."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "**Phase 1 — Probative Integrity Purges**:",
+        "summary": "**Phase 1 — Probative Integrity Purges**:"
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Removal of Synthetic GRID-24 / CPM-142 Artifacts & Hardcoded Statistical Constants",
+        "summary": "retired and archived `grid_cpm_integration.py`, `validate_grid_cartograffect_stats.py`, `build_full_cartograffect_dictionary.py`, `generate_publication_report.py`, and `SchererGRID.lean` (along with all hardcoded Python statistical scores certified by `decide`) into `archive/deprecated_synthetic_v2/`."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Sanitization of GEW 3.0 / Plutchik Exploratory Benchmark",
+        "summary": "removed circular 2D refutation claims and hardcoded statistical scores from `extensions/lexicon/lean/EmotionWheelsChallenge.lean` (retaining 2 pure geometric invariants), removed hardcoded manual overrides in `extensions/lexicon/src/validate_emotion_wheels.py`, and reported hypotheses `H2` and `H4` strictly as non-corroborated without post-hoc reframing."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Quarantine of Synthetic DSM-5 / HiTOP Simulations & Requalification of In-Silico Exp 1",
+        "summary": "isolated Experiments 4 and 5 (`04_dsm5_phenotyping.py`, `05_dsm5_full_nosology.py`, companion text) in `extensions/in_silico/exploratory_synthetic/` under explicit `SYNTHETIC EXPLORATORY ONLY — V3 = 0` banners, and requalified in-silico P1 as a numerical consistency check of the implemented budget projector `apply_budget_constraint`."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Exact Piecewise Antagonist Formula",
+        "summary": "corrected the antagonist definition across code and documentation to `(-X, -Y, Z)` when `XY = 0` and `(-sgn(X)|Y|, -sgn(Y)|X|, Z)` when `XY ≠ 0`."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "**Phase 2 — Single Reference Prover Lean 4 Core & Manuscript Realignment**:",
+        "summary": "**Phase 2 — Single Reference Prover Lean 4 Core & Manuscript Realignment**:"
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Lean 4 Normative Core (`Cartograffect/`, Lean `v4.35.0`, Lake `5.0.0`, `Init` only, `warningAsError := true`)",
+        "summary": "consolidated into **8 normative modules** certifying **148 substantial theorems** (**169 exported declarations**, **21 elementary/auxiliary lemmas**), highlighted by **8 pillar theorems** (`P1..P8`), with **0 `sorryAx`**, **0 `native_decide`**, **0 custom axioms**, and explicit axiomatic transparency on `Classical.choice` (removing the \"constructive\" epithet for classical theorems and retiring Martin-Löf intuitionistic claims from `docs/01-Article_Cartograffect.md`)."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Dedicated Canonical Extension (`extensions/predictive_engine/PredictiveEngineCanonical.lean`)",
+        "summary": "realigned to v3.0.0 (**16 own theorems `C1..C16`** + **5 auxiliary lemmas `CE1..CE5`** = **21 exported declarations**, `0 sorryAx`, `0 native_decide`, zero import of `Lexicon176`)."
+      },
+      {
+        "section": "Breaking Changes & Architectural Realignment (Phases 0–2)",
+        "title": "Audit Pack & Isomorphic Python Engine",
+        "summary": "published `FORMAL_AUDIT_PACK.md` (exhaustive deduplicated theorem inventory with raw `#print axioms` traces), updated `docs/01-Article_Cartograffect.md`, `docs/02-Inventaire_176.md`, vector figures (`moteur_predictif_canonique.html`, `moteur_predictif_article.svg`), and `python/cartograffect_predictive_engine.py` verified by **11 unit tests** (`python/test_predictive_engine.py`)."
+      },
+      {
+        "section": "Added (Phase 3 — Governance, CI, FAIR4RS & Licensing)",
+        "title": "Legacy Hybrid-Y Lexicon Archive Warning (`extensions/lexicon/ARCHIVE_V2_HYBRID_Y_WARNING.md`)",
+        "summary": "explicitly flags unmodified historical v2.1.0 tables (`CARTOGRAFFECT_Full_Dictionary_MultiStrata.tsv`, `nrc_llm_classified.tsv`, `nrc_candidates_filtered.tsv`) as exploratory archives generated under the deprecated v2 hybrid `Y` axis."
+      },
+      {
+        "section": "Added (Phase 3 — Governance, CI, FAIR4RS & Licensing)",
+        "title": "FAIR4RS Reproducibility & Data Provenance",
+        "summary": "pinned exact dependency versions (`==`) in `extensions/in_silico/pyproject.toml` and `extensions/in_silico/requirements.txt` with a reproducible lockfile, added `DATA_PROVENANCE.md` documenting canonical URLs, original licenses, and local SHA-256 verification instructions for non-redistributable third-party datasets (`NRC-VAD-Lexicon-v2.1.txt`, `DIMA_GROUPE_*.xlsx`, `FANCatdatabaseRevisee.xlsx`), and ensured graceful explicit `[SKIP]` behavior when raw third-party datasets are absent locally."
+      },
+      {
+        "section": "Added (Phase 3 — Governance, CI, FAIR4RS & Licensing)",
+        "title": "Physical License Separation (OSI Code / CC-BY-4.0 Texts & Tables)",
+        "summary": "added `LICENSE-CC-BY-4.0.md`, removed `LICENSE-CC-BY-NC-SA-4.0.md` and every `CC-BY-NC-SA-4.0` hybrid clause from source code and active v3.0.0 metadata; all source code and Lean 4 proofs are now licensed strictly under OSI-approved **GNU AGPLv3 (`AGPL-3.0-or-later`)** while manuscript, documentation, and taxonomic tables are licensed under **CC BY 4.0 (`CC-BY-4.0`)**."
+      },
+      {
+        "section": "Changed (Phase 3)",
+        "title": "CI Workflows Unified & Legacy Provers Archived (Principle of Economy)",
+        "summary": "updated `.github/workflows/lean.yml` to run both `lake build` and `lake env lean Cartograffect/AuditTests.lean`, aligned `.github/workflows/compendium-ci.yml` on the 11 Python unit tests and strict consistency checks, and switched legacy v2.1 secondary-prover workflows (`rocq-ci.yml`, `agda-ci.yml`, `dafny-ci.yml`, `smt-ci.yml`, `tla-ci.yml`) to manual `workflow_dispatch` only with prefix `[LEGACY v2.1 — ARCHIVED]` without modifying frozen secondary proof files."
+      },
+      {
+        "section": "Changed (Phase 3)",
+        "title": "Consistency Scripts, Metadata & Documentation Realigned",
+        "summary": "updated `scripts/sync_metadata.py`, `scripts/export_site_payload.py`, `scripts/check_consistency.py`, `scripts/test_check_consistency.py`, `.zenodo.json`, `CITATION.cff`, `manifest.json`, `NOTICE`, `README.md`, `VALIDATION.md`, `docs/CONVERGENCE_MATRIX.md`, `docs/02-Inventaire_176.md`, and all `EPISTEMIC_STATUS.md` files to v3.0.0 counters, AI transparency disclosures, Top 8 pillar theorem links (`FORMAL_AUDIT_PACK.md`), corrected invalid `gemini-3.8-flash` reference, and removed unregistered `®` symbols across active files (retaining CIPO / OPIC copyright registration No. `1233199`)."
+      },
+      {
+        "section": "Changed (Phase 3)",
+        "title": "Pre-Release v3.0.0 Consolidation (Filled-Surface Geometry, Rolls Bijection & 17-Subsector Taxonomy)",
+        "summary": "standardized the planar filled-surface geometry $|x| + |y| \\le R(Z)$ with capacity boundary at $A = 1$, finalized the Rolls (2014) $2 \\times 2$ bijection (`Rew+`, `Rew−`, `Pun+`, `Pun−`) and **Calme** prototype bounded strictly to $Z = 2$, and restructured Table 1b in `docs/01-Article_Cartograffect.md` into **17 functional subsectors** (fixed center `(0, 0, Z)` plus 8 conjugate antagonist pairs `A1, A2, D1, D2` and `L1, L2, L3, L4` matching Lean 4 `FunctionalSubsector` and `contralateral_swaps_amplitudes`), aligned with `DECISIONS_V3.md`, `README.md`, `FORMAL_AUDIT_PACK.md`, `VALIDATION.md`, and `docs/CONVERGENCE_MATRIX.md`."
       }
     ]
   },
@@ -38,106 +113,103 @@
     "osf_url": "https://osf.io/z89sg",
     "cipo_registration": "1233199",
     "github_repo_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT",
-    "github_release_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/releases/tag/v2.1.0"
+    "github_release_url": "https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/releases/tag/v3.0.0"
   },
   "strate_0_core": {
-    "theorems_verified": 130,
-    "sorry_count": 0,
-    "custom_axioms_count": 0,
-    "provers": [
-      {
-        "name": "Lean 4",
-        "version": "4.35.0",
-        "entrypoint": "Cartograffect.lean",
-        "directory": "Cartograffect",
-        "modules_count": 11,
-        "theorems_count": 130
-      },
-      {
-        "name": "Rocq",
-        "version": "9.1.0",
-        "entrypoint": "rocq/theories/Cartograffect.v",
-        "directory": "rocq",
-        "modules_count": 11,
-        "theorems_count": 130,
-        "closed_assumptions_count": 131
-      },
-      {
-        "name": "Agda",
-        "version": "2.9.0",
-        "entrypoint": "agda/src/Cartograffect.agda",
-        "directory": "agda",
-        "modules_count": 12,
-        "theorems_count": 130,
-        "eval_blocks_count": 11
-      },
-      {
-        "name": "Dafny",
-        "version": "4.11.0",
-        "entrypoint": "dafny/src/Cartograffect.dfy",
-        "directory": "dafny",
-        "modules_count": 11,
-        "theorems_count": 130,
-        "lemmas_count": 132,
-        "obligations_verified": 3021,
-        "eval_blocks_count": 11
-      },
-      {
-        "name": "SMT/Z3",
-        "version": "5.3.3",
-        "entrypoint": "smt/theories/10_EndToEndBridge.smt2",
-        "directory": "smt",
-        "modules_count": 10,
-        "theorems_count": 130,
-        "consistency_sat_count": 10,
-        "aux_unsat_count": 2,
-        "eval_blocks_count": 11
-      },
-      {
-        "name": "TLA+/TLC",
-        "version": "2.19",
-        "entrypoint": "tla/specs/Cartograffect.tla",
-        "directory": "tla",
-        "modules_count": 18,
-        "theorems_count": 130,
-        "predicates_count": 132,
-        "eval_blocks_count": 11,
-        "tlc_models_count": 8
-      }
-    ],
-    "lean_modules_count": 11,
-    "lean_modules": [
-      "Cartograffect.lean",
+    "reference_prover": "Lean 4",
+    "prover_version": "4.35.0",
+    "normative_modules_count": 8,
+    "normative_lean_modules": [
       "Cartograffect/PredictiveEngine.lean",
       "Cartograffect/CoreAffect.lean",
       "Cartograffect/AffectiveMatrix.lean",
       "Cartograffect/AffectiveTaxonomy.lean",
       "Cartograffect/AffectiveDynamics.lean",
-      "Cartograffect/Lexicon176.lean",
       "Cartograffect/PredictiveCircuit.lean",
-      "Cartograffect/AuditTests.lean",
       "Cartograffect/OperantFactorization.lean",
       "Cartograffect/EndToEndBridge.lean"
     ],
-    "states_count": 176,
+    "theorems_substantial": 148,
+    "exported_declarations": 169,
+    "auxiliary_lemmas": 21,
+    "pillar_theorems_count": 8,
+    "sorry_count": 0,
+    "native_decide_count": 0,
+    "custom_axioms_count": 0,
+    "audit_pack": "FORMAL_AUDIT_PACK.md",
+    "canonical_extension": {
+      "path": "extensions/predictive_engine/PredictiveEngineCanonical.lean",
+      "theorems_own": 16,
+      "auxiliary_lemmas": 5,
+      "exported_declarations": 21
+    },
+    "python_unit_tests_count": 11,
+    "manuscript_path": "docs/01-Article_Cartograffect.md",
+    "inventory_annex_path": "docs/02-Inventaire_176.md",
+    "continuous_depth_range": "Z in [0, 5]",
+    "canonical_discretization": "Z in {0, 1, 2}",
+    "canonical_states_count": 11,
     "predictions_count": 5,
-    "lexicon176_sha256": "e66dbd6b6630e11d72f786b00025dd909f80ad98331083f3c5f80802f1755b65",
-    "author_affiliation": "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada"
+    "author_affiliation": "Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada",
+    "legacy_v2_1_archived_provers": [
+      {
+        "name": "Rocq",
+        "version": "9.1.0",
+        "status": "archived_v2_1_frozen",
+        "directory": "rocq"
+      },
+      {
+        "name": "Agda",
+        "version": "2.9.0",
+        "status": "archived_v2_1_frozen",
+        "directory": "agda"
+      },
+      {
+        "name": "Dafny",
+        "version": "4.11.0",
+        "status": "archived_v2_1_frozen",
+        "directory": "dafny"
+      },
+      {
+        "name": "SMT/Z3",
+        "version": "5.3.3",
+        "status": "archived_v2_1_frozen",
+        "directory": "smt"
+      },
+      {
+        "name": "TLA+/TLC",
+        "version": "2.19",
+        "status": "archived_v2_1_frozen_bounded_model_checking",
+        "directory": "tla"
+      }
+    ]
+  },
+  "exploratory_annexes": {
+    "lexicon_176": {
+      "status": "exploratory_annex_outside_normative_core",
+      "path": "Cartograffect/Lexicon176.lean",
+      "inventory_doc": "docs/02-Inventaire_176.md",
+      "states_count": 176,
+      "sha256": "e318b1d02750b82c1d86859e7af1be81459c604099283d3b7c2a11af4987771a"
+    }
   },
   "strate_1_extensions": {
     "lexicon": {
       "path": "extensions/lexicon",
       "status": "exploratory_subordinate",
       "epistemic_status_file": "extensions/lexicon/EPISTEMIC_STATUS.md",
+      "archive_warning_file": "extensions/lexicon/ARCHIVE_V2_HYBRID_Y_WARNING.md",
+      "data_provenance_file": "DATA_PROVENANCE.md",
       "theorems_verified": 10,
       "sorry_count": 0,
       "lean_challenges_count": 3,
-      "summary": "Audit lexical et géométrique exploratoire de Strate 1 (10/10 théorèmes géométriques Lean 4 dans extensions/lexicon/lean/, 0 sorry, 0 constante statistique Python codée en dur ; banc GEW 3.0 / Plutchik sans surcharges manuelles avec H2 et H4 rapportées comme non corroborées) ; statut exploratoire subordonné à la Strate 0 ; extension axiologique Z- (« Diamant 303 ») strictement cloisonnée hors de l'axiomatique Z in {0..7}."
+      "summary": "Audit lexical et géométrique exploratoire de Strate 1 (3 modules actifs dans extensions/lexicon/lean/, 10/10 théorèmes géométriques Lean 4, 0 sorry, 0 constante statistique Python codée en dur ; banc GEW 3.0 / Plutchik sans surcharges manuelles avec H2 et H4 rapportées comme non corroborées ; tables TSV v2.1.0 signalées comme archive historique sous ancien axe Y hybride)."
     },
     "in_silico": {
       "path": "extensions/in_silico",
       "status": "exploratory_subordinate",
       "epistemic_status_file": "extensions/in_silico/EPISTEMIC_STATUS.md",
+      "lockfile": "extensions/in_silico/uv.lock",
       "predictions_tested": [
         "P1",
         "P2",
@@ -145,21 +217,25 @@
         "P4",
         "P5"
       ],
-      "experiments_count": 5,
-      "a4_sanctuaire_policy": "Respect absolu de l'arbitrage A4-Sanctuaire : aucune métrique quantitative in silico (PXP, min r) n'est injectée dans le corps théorique de l'article canonique ; Exp 4–5 DSM-5 / HiTOP isolées en quarantaine dans exploratory_synthetic/ (SYNTHETIC EXPLORATORY ONLY — V3 = 0).",
-      "summary": "Banc compagnon de simulation Active Inference (Exp 1–3 : test de cohérence numérique du projecteur budgétaire P1, cohérence générative interne P2–P5 et identifiabilité bayésienne ; Exp 4–5 DSM-5 / HiTOP en quarantaine exploratory_synthetic/ — SYNTHETIC EXPLORATORY ONLY, V3 = 0), strictement subordonné à la Strate 0."
+      "active_experiments_count": 3,
+      "quarantined_experiments_count": 2,
+      "a4_sanctuaire_policy": "Respect absolu de l'arbitrage A4-Sanctuaire : aucune métrique quantitative in silico (PXP, min r) n'est injectée dans le corps théorique de l'article canonique ; Exp 4-5 DSM-5 / HiTOP isolées en quarantaine dans exploratory_synthetic/ (SYNTHETIC EXPLORATORY ONLY — V3 = 0).",
+      "summary": "Banc compagnon de simulation Active Inference (Exp 1-3 : test de cohérence numérique du projecteur budgétaire P1, cohérence générative interne P2-P5 et identifiabilité bayésienne ; Exp 4-5 DSM-5 / HiTOP en quarantaine exploratory_synthetic/ — SYNTHETIC EXPLORATORY ONLY, V3 = 0), strictement subordonné à la Strate 0."
     }
   },
   "ai_disclosure": {
-    "author_ownership": "L’architecture conceptuelle, la psychologie affective, la taxonomie des 176 états et l’orientation théorique de CARTOGRAFFECT® sont entièrement conçues et assumées par l’auteur.",
-    "ai_assistance_scope": "Des outils d’IA générative ont servi d’assistants techniques pour la rédaction, le site web, la traduction et la transposition exploratoire de propriétés du modèle vers des assistants de preuve formelle (Lean 4, Rocq, Agda, Dafny, Z3, TLA+) et des scripts sur GitHub.",
-    "verification_and_audit_status": "Psychologue clinicien et non mathématicien formel, l’auteur n’a pas vérifié manuellement ligne par ligne le code mathématique/formel généré ; la validité technique repose sur la compilation mécanique des prouveurs et les tests automatisés. Ce matériel est publié en accès libre sur GitHub pour inviter l’audit indépendant de mathématiciens et de spécialistes des méthodes formelles.",
-    "summary_en": "The conceptual architecture, affective psychology, taxonomy, and theoretical orientation of CARTOGRAFFECT® are conceived and owned entirely by the author. Generative AI served as a technical assistant for writing, website engineering, translation, and exploratory formal-method transposition (Lean 4, Rocq, Agda, Dafny, Z3, TLA+) and GitHub scripts. As a clinical psychologist and not a formal mathematician, the author has not manually verified generated formal code line by line; technical validity relies on mechanical prover compilation and automated tests, and the code is open-sourced on GitHub to invite independent specialist audit."
+    "author_ownership": "L'architecture conceptuelle, la psychologie affective, les arbitrages taxonomiques et l'orientation théorique de CARTOGRAFFECT sont entièrement conçus et assumés par l'auteur.",
+    "ai_assistance_scope": "Des outils d'IA générative ont servi d'assistants techniques pour l'aide à la rédaction, la réalisation du site web vitrine, la traduction et la formalisation sous l'assistant de preuve de référence Lean 4 (ainsi que pour les annexes exploratoires archivées sur GitHub).",
+    "verification_and_audit_status": "Psychologue clinicien et non mathématicien formel, l'auteur n'a pas vérifié manuellement ligne par ligne le code mathématique et formel généré ; la validité technique repose sur la compilation et vérification mécanique par les prouveurs ainsi que sur les tests automatisés. L'ensemble est publié en accès libre sur GitHub pour inviter l'audit indépendant de mathématiciens et de spécialistes des méthodes formelles.",
+    "summary_en": "The conceptual architecture, affective psychology, taxonomic decisions, and theoretical orientation of CARTOGRAFFECT are conceived and owned entirely by the author. Generative AI served as a technical assistant for writing, website engineering, translation, and formalization in the reference Lean 4 proof assistant (and archived exploratory annexes). As a clinical psychologist and not a formal mathematician, the author has not manually verified generated formal code line by line; technical validity relies on mechanical prover compilation and automated tests, and all artifacts are open-sourced on GitHub to invite independent specialist audit."
   },
   "licenses": {
-    "spdx_expression": "AGPL-3.0-or-later AND CC-BY-NC-SA-4.0",
-    "code_license": "GNU AGPLv3",
-    "theory_license": "CC BY-NC-SA 4.0",
-    "hybrid_clause_summary": "For hybrid files containing both executable/formal structures and the theoretical taxonomy/coordinates, the formal/software structure is licensed under AGPL-3.0-or-later while the nomenclature, coordinates, and 176-state/303-pole taxonomic architecture remain exclusively governed by CC BY-NC-SA 4.0 (commercial extraction of the taxonomy is strictly prohibited)."
+    "code_spdx": "AGPL-3.0-or-later",
+    "docs_and_data_spdx": "CC-BY-4.0",
+    "spdx_expression": "AGPL-3.0-or-later AND CC-BY-4.0",
+    "code_license": "GNU AGPLv3 (AGPL-3.0-or-later)",
+    "docs_and_taxonomy_license": "Creative Commons Attribution 4.0 International (CC-BY-4.0)",
+    "physical_separation_policy": "Strict physical separation by file type (no hybrid NC clause): all source code, scripts, and formal proofs are licensed solely under OSI-approved AGPL-3.0-or-later; all texts, manuscript (docs/), documentation, and taxonomic tables are licensed under CC-BY-4.0. Zero non-commercial (NC) restriction applies to any source code or v3.0.0 artifact.",
+    "non_commercial_clauses_in_code": false
   }
 }

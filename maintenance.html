@@ -20,7 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/styles.min.css">
     <script>
         tailwind.config = {
             theme: {
@@ -72,7 +72,6 @@
     </script>
 
     <!-- Guard Script (Gère la détection de déverrouillage) -->
-    <script src="maintenance_guard.js"></script>
 
     <style>
         /* Halo lumineux d'arrière-plan */
@@ -291,7 +290,7 @@
                         Preuves Formelles Mécanisées
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                        Vérification formelle mécanisée de l'architecture (120 théorèmes constructifs, 6 prouveurs indépendants : Lean 4, Rocq, Agda, Dafny, Z3, TLA+ ; 10 modules .lean, 0 sorry, 0 axiome ad hoc) : norme L1, 84 paires antagonistes involutives et dissipation allostatique (Zenodo DOI: 10.5281/zenodo.23833938).
+                        Vérification formelle mécanisée V1 sous Lean 4.35.0 (8 modules normatifs, 148 théorèmes substantiels / 169 déclarations, 8 piliers, 0 sorry, Classical.choice ; 5 prouveurs v2.1 archivés) : norme L1, 84 paires antagonistes involutives et dissipation allostatique (Zenodo DOI: 10.5281/zenodo.23833938).
                     </p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2 text-xs font-mono text-rose-400">
@@ -310,7 +309,7 @@
                         Scholar Drive &amp; Prépublication
                     </h2>
                     <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                        Mise à disposition de la prépublication v2.1.0 (Zenodo DOI: 10.5281/zenodo.24022795), du modèle géométrique complet des 176 positions, des 5 prédictions falsifiables P1–P5 et du texte intégral.
+                        Mise à disposition de la prépublication v3.0.0 (Zenodo DOI: 10.5281/zenodo.24022795), du modèle géométrique complet des 176 positions, des 5 prédictions falsifiables P1–P5 et du texte intégral.
                     </p>
                 </div>
                 <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2 text-xs font-mono text-sky-400">
@@ -357,13 +356,19 @@
                 <span class="hidden sm:inline text-slate-700">•</span>
                 <span>Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada (Ph. D. en psychologie)</span>
                 <span class="hidden sm:inline text-slate-700">•</span>
-                <span>&copy; 2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT&reg;</strong> (Marque déposée)</span>
+                <span>&copy; 2026 Manuel Cabelguen &bull; <strong>CARTOGRAFFECT</strong></span>
             </div>
 
             <div class="flex items-center gap-4">
                 <a href="mentions-legales.html" class="hover:text-slate-300 transition-colors">
                     Mentions Légales
                 </a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="index.html#statut-epistemique" class="hover:text-indigo-300 transition-colors">Statut V1/V2/V3</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="article.html#declaration-ia" class="hover:text-indigo-300 transition-colors">Déclaration IA</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/blob/main/FORMAL_AUDIT_PACK.md" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition-colors">FORMAL_AUDIT_PACK.md</a>
                 <span class="text-slate-700">•</span>
                 <!-- Bouton d'accès réservé -->
                 <button type="button" id="btnOpenUnlockModal" class="flex items-center gap-1.5 text-slate-400 hover:text-purple-300 transition-colors font-mono cursor-pointer" title="Accès réservé pour prévisualiser les travaux en cours">

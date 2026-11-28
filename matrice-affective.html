@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Guard de maintenance temporaire -->
-    <script src="maintenance_guard.js"></script>
     <title>3. La Matrice Affective : Valence Lexicographique &amp; Prototypes Z=2 | CARTOGRAFFECT</title>
     <meta name="description" content="Composante 3 de Cartograffect : la Matrice Affective (AffectiveMatrix.lean, Fig. 3). Primauté hédonique lexicographique de l'Axe X, 6 régimes énergétiques, 8 prototypes Z=2 (Joie, Tristesse, Peur, Courage, Désir, Colère, Calme, Dégoût) et dissipation allostatique.">
     <link rel="canonical" href="https://www.cartograffect.com/matrice-affective.html">
@@ -36,8 +35,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(typeof katex!=='undefined'&&typeof renderMathInElement==='function'){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});}"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="assets/tailwind.config.js"></script>
+    <link rel="stylesheet" href="assets/styles.min.css">
     <link rel="stylesheet" href="style.css">
     <style>
         .matrix-node {
@@ -65,7 +63,7 @@
             <a href="index.html" class="flex items-center gap-2.5 group shrink-0">
                 <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105" loading="eager">
                 <div class="flex flex-col leading-none">
-                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-lg tracking-wider text-white">CARTOGRAFFECT</span>
                     <span class="text-[10px] font-mono text-slate-400 tracking-tight hidden sm:block mt-0.5">Architecture hi&eacute;rarchique affective</span>
                 </div>
             </a>
@@ -130,7 +128,7 @@
 
                 <button type="button" id="langToggleBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 transition-colors" title="English / Français Summary">
                     <svg class="w-3.5 h-3.5 text-indigo-300 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-                    <span>FR | EN</span>
+                    <span>FR | EN (UI only)</span>
                 </button>
 
                 <a href="taxonomie-affective.html#carte-interactive" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold text-xs text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/40 shadow-sm transition-colors">
@@ -573,10 +571,9 @@
                 </article>
 
                 <article class="rounded-3xl bg-cosmic-850 border border-slate-800 p-6 space-y-3">
-                    <div class="text-xs font-mono text-purple-400">STATUT DE L'ACTIVATION</div>
-                    <h3 class="text-lg font-bold text-white">Un qualificatif dynamique, pas un axe</h3>
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        Contrairement aux modèles bidimensionnels classiques (Russell 1980), l'<strong>activation physiologique (arousal)</strong> n'est pas un axe orthogonal : elle qualifie la <em>dynamique transversale</em> des trajectoires (rapidité d'ascension en Z, amplitude et persistance allostatique).
+                    <div class="text-xs font-mono text-purple-400">STATUT DE L'ACTIVATION (OPTION 1A : CANAL AUTONOME A &ge; 0)</div>
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        En v3.0 (<strong>Option 1A</strong>), l'<strong>éveil physiologique / mobilisation allostatique</strong> n'est pas dérivé algébriquement de $Y$ (<code>computeActivation(p.y)</code> retiré) : il siège dans un <strong>canal autonome non négatif $A \ge 0$</strong> découplé de la contrôlabilité instrumentale stricte $Y \in [-1, 1]$. Les quadrants mixtes $(-X, +Y)$ (Colère) et $(+X, -Y)$ (Calme) forment des groupes diagonaux distincts, sans rattachement hédonique croisé à la Joie ou à la Tristesse.
                     </p>
                 </article>
             </div>
@@ -651,7 +648,7 @@
 
                 <div class="rounded-3xl bg-cosmic-850 border border-blue-500/25 p-6 space-y-3">
                     <span class="text-xs font-mono uppercase text-blue-400">§6.4 — Piège Conceptuel n°2 (Axe Y)</span>
-                    <h3 class="text-lg font-bold text-white">Tristesse (0,−2,2) vs Joie (0,+2,2) : charge motrice vs décharge</h3>
+                    <h3 class="text-lg font-bold text-white">Tristesse (0,−2,2) vs Joie (0,+2,2) : asymétrie Option 3b Charge vs Décharge</h3>
                     <p class="text-sm text-slate-300 leading-relaxed">
                         La <strong>Tristesse</strong> n'est pas « passive » par vide affectif : c'est une <strong>mise en charge rétentive du contrôle</strong> ($Y<0$) qui inhibe l'action motrice inutile pour préserver les ressources après perte. À l'inverse, la <strong>Joie</strong> ($Y>0$) correspond à la <strong>décharge</strong> qui libère l'énergie retenue dès que l'écart est résorbé.
                     </p>
@@ -676,13 +673,13 @@
             <div class="md:col-span-5 space-y-3">
                 <div class="flex items-center gap-2.5">
                     <img src="assets/logo-96.png" width="96" height="96" alt="Cartograffect" class="h-7 w-auto" loading="lazy">
-                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT<span class="text-[10px] text-indigo-400 font-bold ml-0.5 align-super">&reg;</span></span>
+                    <span class="font-heading font-bold text-white tracking-wider">CARTOGRAFFECT</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed max-w-md">
                     Architecture computationnelle et taxonomique des affects fond&eacute;e sur le traitement pr&eacute;dictif, l'inf&eacute;rence active et la r&eacute;gulation allostatique.
                 </p>
                 <div class="text-[11px] text-slate-500">
-                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; Marque d&eacute;pos&eacute;e &bull; OPIC n&deg; 1233199
+                    &copy; 2024&ndash;2026 Manuel Cabelguen, Ph. D. &bull; OPIC n&deg; 1233199 (expression littéraire et graphique)
                 </div>
             </div>
 
@@ -696,9 +693,15 @@
                     <a href="noyau-affectif.html" class="text-slate-300 hover:text-white transition-colors">2. Noyau Affectif</a>
                     <a href="matrice-affective.html" class="text-indigo-300 font-semibold transition-colors">3. Matrice Affective</a>
                     <a href="taxonomie-affective.html" class="text-slate-300 hover:text-white transition-colors">4. Taxonomie (176)</a>
-                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v2.1.0</span>)</a>
+                    <a href="article.html" class="text-slate-300 hover:text-white transition-colors">L'Article (<span data-payload="tag">v3.0.0</span>)</a>
                     <a href="scholar_drive.html" class="text-slate-300 hover:text-white transition-colors">Corpus &amp; Preuves</a>
                     <a href="mentions-legales.html" class="text-slate-300 hover:text-white transition-colors col-span-2 pt-1">Mentions L&eacute;gales &amp; Propri&eacute;t&eacute; Intellectuelle</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="index.html#statut-epistemique" class="hover:text-indigo-300 transition-colors">Statut V1/V2/V3</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="article.html#declaration-ia" class="hover:text-indigo-300 transition-colors">Déclaration IA</a>
+                    <span class="text-slate-600">&bull;</span>
+                    <a href="https://github.com/manuelcabelguen-jpg/CARTOGRAFFECT/blob/main/FORMAL_AUDIT_PACK.md" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-300 transition-colors">FORMAL_AUDIT_PACK.md</a>
                 </div>
             </div>
 
@@ -707,11 +710,11 @@
                 <div class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold">R&eacute;f&eacute;rences &amp; Preuves</div>
                 <div class="space-y-1.5 text-xs">
                     <div class="text-slate-300">
-                        Article <span data-payload="tag">v2.1.0</span> :
+                        Article <span data-payload="tag">v3.0.0</span> :
                         <a href="https://doi.org/10.5281/zenodo.24022795" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.24022795</a>
                     </div>
                     <div class="text-slate-300">
-                        Compendium formel <span data-payload="tag">v2.1.0</span> (<span data-payload="theorems_verified">120</span> th. &middot; <span data-payload="provers_count">6</span> prouveurs) :
+                        Compendium formel <span data-payload="tag">v3.0.0</span> (<span data-payload="theorems_substantial">148</span> th. / <span data-payload="exported_declarations">169</span> décl. &middot; Lean <span data-payload="prover_version">4.35.0</span> &middot; <span data-payload="normative_modules_count">8</span> modules) :
                         <a href="https://doi.org/10.5281/zenodo.23833938" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:underline font-mono">zenodo.23833938</a>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-[11px] text-slate-400">

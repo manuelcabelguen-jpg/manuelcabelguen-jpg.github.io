@@ -1,8 +1,8 @@
 /**
- * CARTOGRAFFECT® - Corpus Scientifique & Moteur Bibliographique (SPDX: AGPL-3.0-or-later AND CC-BY-NC-SA-4.0)
+ * CARTOGRAFFECT - Corpus Scientifique & Moteur Bibliographique (SPDX: AGPL-3.0-or-later [code] AND CC-BY-4.0 [bibliographie])
  * Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie,
  * Sainte-Agathe-des-Monts, Québec, Canada • OPIC n° 1233199
- * 72 Références Bibliographiques Unifiées APA 7 (Traitement Prédictif, Inférence Intéroceptive, Émotions, Psychiatrie Computationnelle, Affectivisme)
+ * 71 Références Bibliographiques Unifiées APA 7 (Traitement Prédictif, Inférence Intéroceptive, Émotions, Psychiatrie Computationnelle, Affectivisme)
  */
 
 const root = (typeof window !== "undefined") ? window : ((typeof global !== "undefined") ? global : this);
@@ -29,10 +29,10 @@ root.SCIENTIFIC_CORPUS = [
         "title": "Frustration theory: An analysis of dispositional learning and memory",
         "ref": "Cambridge University Press.",
         "doi": "https://doi.org/10.1017/CBO9780511665561",
-        "apport": "Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.",
+        "apport": "Formalise les mécanismes de frustration par omission ou retrait d'une récompense attendue (Rew−, Rolls 2014), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.",
         "theme": "Théories des Émotions",
         "year": 1992,
-        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les contingences de frustration par non-renforcement attendu (P−, punition négative), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.}\n}"
+        "bibtex": "@book{amsel1992frustration,\n  author    = {Amsel, A.},\n  title     = {Frustration theory: An analysis of dispositional learning and memory},\n  publisher = {Cambridge University Press},\n  year      = {1992},\n  doi       = {10.1017/CBO9780511665561},\n  note      = {Fondement Cartograffect: Formalise les mécanismes de frustration par omission ou retrait d'une récompense attendue (Rew−, Rolls 2014), éclairant le prototype Colère (−1, +1, 2) et sa bascule vers le retrait (Tristesse/Dégoût) lorsque la contrôlabilité s'effondre.}\n}"
     },
     {
         "id": "andrews2021the",
@@ -646,21 +646,8 @@ root.SCIENTIFIC_CORPUS = [
         "bibtex": "@book{marr2010vision,\n  author    = {Marr, D.},\n  title     = {Vision: A computational investigation into human representation},\n  year      = {2010},\n  publisher = {MIT Press},\n  note      = {Fondement Cartograffect: Cadre épistémologique tripartite : Cartograffect se situe explicitement au niveau computationnel (problème adaptatif résolu) et algorithmique (gradients X, Y, Z).}\n}"
     },
     {
-        "id": "martinlof1984intuitionistic",
-        "number": 50,
-        "domain": "predictive",
-        "author": "Martin-Löf, P. (1984)",
-        "title": "Intuitionistic type theory",
-        "ref": "Bibliopolis.",
-        "doi": "",
-        "apport": "Fournit le socle constructif de la théorie des types dépendants sur lequel reposent les assistants de preuve compagnon (Lean 4, Rocq, Agda).",
-        "theme": "Inférence Active",
-        "year": 1984,
-        "bibtex": "@book{martinlof1984intuitionistic,\n  author    = {Martin-Löf, P.},\n  title     = {Intuitionistic type theory},\n  publisher = {Bibliopolis},\n  year      = {1984},\n  note      = {Fondement Cartograffect: Fournit le socle constructif de la théorie des types dépendants sur lequel reposent les assistants de preuve compagnon (Lean 4, Rocq, Agda).}\n}"
-    },
-    {
         "id": "mesquita2017doing",
-        "number": 51,
+        "number": 50,
         "domain": "affectivism",
         "author": "Mesquita, B., Boiger, M., & De Leersnyder, J. (2017)",
         "title": "Doing emotions: The role of culture in everyday emotions",
@@ -673,7 +660,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "panksepp1998affective",
-        "number": 52,
+        "number": 51,
         "domain": "emotions",
         "author": "Panksepp, J. (1998)",
         "title": "Affective neuroscience: The foundations of human and animal emotions",
@@ -686,7 +673,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "panksepp2000the",
-        "number": 53,
+        "number": 52,
         "domain": "emotions",
         "author": "Panksepp, J. (2000)",
         "title": "The neuro-evolutionary cusp between emotions and cognitions: Implications for understanding consciousness and the emergence of a unified mind science",
@@ -699,7 +686,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "parr2022active",
-        "number": 54,
+        "number": 53,
         "domain": "predictive",
         "author": "Parr, T., Pezzulo, G., & Friston, K. J. (2022)",
         "title": "Active inference: The free energy principle in mind, brain, and behavior",
@@ -712,7 +699,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "pezzulo2015active",
-        "number": 55,
+        "number": 54,
         "domain": "interoception",
         "author": "Pezzulo, G., Rigoli, F., & Friston, K. (2015)",
         "title": "Active inference, homeostatic regulation and adaptive behavioural control",
@@ -725,7 +712,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "rao1999predictive",
-        "number": 56,
+        "number": 55,
         "domain": "predictive",
         "author": "Rao, R. P., & Ballard, D. H. (1999)",
         "title": "Predictive coding in the visual cortex: A functional interpretation of some extra-classical receptive-field effects",
@@ -738,7 +725,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "robinaugh2021invisible",
-        "number": 57,
+        "number": 56,
         "domain": "affectivism",
         "author": "Robinaugh, D. J., Haslbeck, J. M. B., Ryan, O., Fried, E. I., & Waldorp, L. J. (2021)",
         "title": "Invisible hands and fine calipers: A call to use formal theory as a toolkit for theory construction",
@@ -751,33 +738,33 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "rolls2005emotion",
-        "number": 58,
+        "number": 57,
         "domain": "emotions",
         "author": "Rolls, E. T. (2005)",
         "title": "Emotion explained",
         "ref": "Oxford University Press.",
         "doi": "",
-        "apport": "Analyse les émotions comme états déclenchés par des renforcements instrumentaux et des punitions (R+, R-, P+, P-) en appui des quadrants Z=2.",
+        "apport": "Analyse les émotions comme états déclenchés par les contingences de récompense et de punition (Rew+, Rew−, Pun+, Pun−) en bijection exacte 2×2 sur les diagonales Z=2.",
         "theme": "Théories des Émotions",
         "year": 2005,
-        "bibtex": "@book{rolls2005emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion explained},\n  publisher = {Oxford University Press},\n  year      = {2005},\n  note      = {Fondement Cartograffect: Analyse les émotions comme états déclenchés par des renforcements instrumentaux et des punitions (R+, R-, P+, P-) en appui des quadrants Z=2.}\n}"
+        "bibtex": "@book{rolls2005emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion explained},\n  publisher = {Oxford University Press},\n  year      = {2005},\n  note      = {Fondement Cartograffect: Analyse les émotions comme états déclenchés par les contingences de récompense et de punition (Rew+, Rew−, Pun+, Pun−) en bijection exacte 2x2 sur les diagonales Z=2.}\n}"
     },
     {
         "id": "rolls2014emotion",
-        "number": 59,
+        "number": 58,
         "domain": "emotions",
         "author": "Rolls, E. T. (2014)",
         "title": "Emotion and decision-making explained",
         "ref": "Oxford University Press.",
         "doi": "",
-        "apport": "Relie l'évaluation des contingences de renforcement aux processus décisionnels et à l'orientation comportementale d'approche ou de retrait.",
+        "apport": "Fonde la matrice 2×2 des contingences de stimuli (Rew+, Rew−, Pun+, Pun−) bornée à Z=2 et la symétrie d'antagonisme (Rew+ ↔ Pun+, Rew− ↔ Pun−).",
         "theme": "Théories des Émotions",
         "year": 2014,
-        "bibtex": "@book{rolls2014emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion and decision-making explained},\n  publisher = {Oxford University Press},\n  year      = {2014},\n  note      = {Fondement Cartograffect: Relie l'évaluation des contingences de renforcement aux processus décisionnels et à l'orientation comportementale d'approche ou de retrait.}\n}"
+        "bibtex": "@book{rolls2014emotion,\n  author    = {Rolls, E. T.},\n  title     = {Emotion and decision-making explained},\n  publisher = {Oxford University Press},\n  year      = {2014},\n  note      = {Fondement Cartograffect: Fonde la matrice 2x2 des contingences de stimuli (Rew+, Rew-, Pun+, Pun-) bornée à Z=2 et la symétrie d'antagonisme (Rew+ <-> Pun+, Rew- <-> Pun-).}\n}"
     },
     {
         "id": "rothbaum1982changing",
-        "number": 60,
+        "number": 59,
         "domain": "emotions",
         "author": "Rothbaum, F., Weisz, J. R., & Snyder, S. S. (1982)",
         "title": "Changing the world and changing the self: A two-process model of perceived control",
@@ -790,7 +777,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "russell1980a",
-        "number": 61,
+        "number": 60,
         "domain": "emotions",
         "author": "Russell, J. A. (1980)",
         "title": "A circumplex model of affect",
@@ -803,7 +790,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "russell2003core",
-        "number": 62,
+        "number": 61,
         "domain": "emotions",
         "author": "Russell, J. A. (2003)",
         "title": "Core affect and the psychological construction of emotion",
@@ -816,7 +803,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "russell1999core",
-        "number": 63,
+        "number": 62,
         "domain": "emotions",
         "author": "Russell, J. A., & Barrett, L. F. (1999)",
         "title": "Core affect, prototypical emotional episodes, and other things called emotion: Dissecting the elephant",
@@ -829,7 +816,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "scherer2005what",
-        "number": 64,
+        "number": 63,
         "domain": "emotions",
         "author": "Scherer, K. R. (2005)",
         "title": "What are emotions? And how can they be measured?",
@@ -842,7 +829,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "schiller2024the",
-        "number": 65,
+        "number": 64,
         "domain": "affectivism",
         "author": "Schiller, D., Yu, A. N. C., Alia-Klein, N., Becker, S., Cromwell, H. C., Dolcos, F., Eslinger, P. J., Frewen, P., Kemp, A. H., Pace-Schott, E. F., Raber, J., Silton, R. L., Stefanova, E., Williams, J. H. G., Abe, N., Aghajani, M., Albrecht, F., Alexander, R., Anders, S., ... Gross, J. J. (2024)",
         "title": "The human affectome",
@@ -855,7 +842,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "seth2013interoceptive",
-        "number": 66,
+        "number": 65,
         "domain": "interoception",
         "author": "Seth, A. K. (2013)",
         "title": "Interoceptive inference, emotion, and the embodied self",
@@ -868,7 +855,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "seth2016active",
-        "number": 67,
+        "number": 66,
         "domain": "interoception",
         "author": "Seth, A. K., & Friston, K. J. (2016)",
         "title": "Active interoceptive inference and the emotional brain",
@@ -881,20 +868,20 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "skinner1953science",
-        "number": 68,
+        "number": 67,
         "domain": "emotions",
         "author": "Skinner, B. F. (1953)",
         "title": "Science and human behavior",
         "ref": "Macmillan.",
         "doi": "",
-        "apport": "Définit les quatre opérateurs du conditionnement opérant (renforcement et punition positifs/négatifs) arrimés aux quatre prototypes combinés Z=2.",
+        "apport": "Analyse du comportement opérant d'après la fréquence de réponse (R− actif d'échappement en Y>0), explicitement dissociée au §6.2 de la matrice de stimuli Rew±/Pun± de Rolls (2014).",
         "theme": "Théories des Émotions",
         "year": 1953,
-        "bibtex": "@book{skinner1953science,\n  author    = {Skinner, B. F.},\n  title     = {Science and human behavior},\n  publisher = {Macmillan},\n  year      = {1953},\n  note      = {Fondement Cartograffect: Définit les quatre opérateurs du conditionnement opérant (renforcement et punition positifs/négatifs) arrimés aux quatre prototypes combinés Z=2.}\n}"
+        "bibtex": "@book{skinner1953science,\n  author    = {Skinner, B. F.},\n  title     = {Science and human behavior},\n  publisher = {Macmillan},\n  year      = {1953},\n  note      = {Fondement Cartograffect: Analyse du comportement opérant d'après la fréquence de réponse (R- actif d'échappement en Y>0), explicitement dissociée au §6.2 de la matrice de stimuli Rew±/Pun± de Rolls (2014).}\n}"
     },
     {
         "id": "smith2019simulating",
-        "number": 69,
+        "number": 68,
         "domain": "psychiatry",
         "author": "Smith, R., Parr, T., & Friston, K. J. (2019)",
         "title": "Simulating emotions: An active inference model of emotional state inference and emotion concept learning",
@@ -907,7 +894,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "sterling2012allostasis",
-        "number": 70,
+        "number": 69,
         "domain": "interoception",
         "author": "Sterling, P. (2012)",
         "title": "Allostasis: A model of predictive regulation",
@@ -920,7 +907,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "tschantz2022simulating",
-        "number": 71,
+        "number": 70,
         "domain": "interoception",
         "author": "Tschantz, A., Barca, L., Maisto, D., Buckley, C. L., Seth, A. K., & Pezzulo, G. (2022)",
         "title": "Simulating homeostatic, allostatic and goal-directed forms of interoceptive control using active inference",
@@ -933,7 +920,7 @@ root.SCIENTIFIC_CORPUS = [
     },
     {
         "id": "vanheijst2025basic",
-        "number": 72,
+        "number": 71,
         "domain": "affectivism",
         "author": "van Heijst, K., Kret, M. E., & Ploeger, A. (2025)",
         "title": "Basic emotions or constructed emotions: Insights from taking an evolutionary perspective",
@@ -957,10 +944,10 @@ root.DOMAIN_LABELS = {
 
 root.downloadBibtexFile = function() {
     const relVer = (typeof window !== 'undefined' && window.CartograffectPayload)
-        ? window.CartograffectPayload.get('release.version', '2.1.0')
-        : '2.1.0';
+        ? window.CartograffectPayload.get('release.version', '3.0.0')
+        : '3.0.0';
     const header = "% ==============================================================================\n" +
-                   "% CARTOGRAFFECT® - Bibliographie Scientifique Unifiée APA 7 (72 références)\n" +
+                   "% CARTOGRAFFECT - Bibliographie Scientifique Unifiée APA 7 (71 références)\n" +
                    "% Auteur du modèle : Manuel Cabelguen, Ph. D., Psychologue clinicien, chercheur indépendant en psychologie, Sainte-Agathe-des-Monts, Québec, Canada\n" +
                    "% Droit d'auteur OPIC n° 1233199 • https://www.cartograffect.com\n" +
                    "% Référence principale : Cabelguen, M. (2026). Cartographie des affects : une architecture\n" +
